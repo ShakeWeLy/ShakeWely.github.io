@@ -3,23 +3,29 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Weakliy_Blog</title>
+  <title>朴素贝叶斯1 | Weakliy_Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="title:朴素贝叶斯  朴素贝叶斯0X1 概念-1. 条件概率    2.贝叶斯定理—逆概率思维1                                           &lt;img src&#x3D;&quot;C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808164650855.png&amp;quo">
+  <meta name="description" content="朴素贝叶斯1  0X1 概念-  1. 条件概率   2.贝叶斯定理—逆概率思维 1 										&lt;img src&#x3D;&quot;C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808164650855.png&quot; alt&#x3D;&quot;image-20230808164650855&amp;quo">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Weakliy_Blog">
+<meta property="og:title" content="朴素贝叶斯1">
 <meta property="og:url" content="https://shakewely.github.io/2023/08/08/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/index.html">
 <meta property="og:site_name" content="Weakliy_Blog">
-<meta property="og:description" content="title:朴素贝叶斯  朴素贝叶斯0X1 概念-1. 条件概率    2.贝叶斯定理—逆概率思维1                                           &lt;img src&#x3D;&quot;C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808164650855.png&amp;quo">
+<meta property="og:description" content="朴素贝叶斯1  0X1 概念-  1. 条件概率   2.贝叶斯定理—逆概率思维 1 										&lt;img src&#x3D;&quot;C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808164650855.png&quot; alt&#x3D;&quot;image-20230808164650855&amp;quo">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="c:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808163209631.png">
-<meta property="og:image" content="c:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808165504803.png">
-<meta property="og:image" content="c:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808165526844.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/08/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230808163209631.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/08/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230808165504803.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/08/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230808165526844.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/08/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230809161257184.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/08/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/.Hexo/MyBlog/source/_posts/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/image-20230809164213626.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/08/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/.Hexo/MyBlog/source/_posts/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/image-20230809164353651.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/08/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/.Hexo/MyBlog/source/_posts/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/image-20230809164823920.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/08/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/.Hexo/MyBlog/source/_posts/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/image-20230809165328883.png">
 <meta property="article:published_time" content="2023-08-08T05:33:14.772Z">
-<meta property="article:modified_time" content="2023-08-08T11:12:32.610Z">
+<meta property="article:modified_time" content="2023-08-09T11:31:38.071Z">
 <meta property="article:author" content="Weakliy">
+<meta property="article:tag" content="机器学习">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="c:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808163209631.png">
+<meta name="twitter:image" content="https://shakewely.github.io/2023/08/08/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20230808163209631.png">
   
     <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
   
@@ -90,54 +96,82 @@
   <div class="article-inner">
     
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      朴素贝叶斯1
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
     <div class="article-entry" itemprop="articleBody">
       
-        <hr>
-<p>title:朴素贝叶斯</p>
-<hr>
-<h2 id="朴素贝叶斯"><a href="#朴素贝叶斯" class="headerlink" title="朴素贝叶斯"></a>朴素贝叶斯</h2><h2 id="0X1-概念"><a href="#0X1-概念" class="headerlink" title="0X1 概念-"></a>0X1 概念-</h2><h3 id="1-条件概率"><a href="#1-条件概率" class="headerlink" title="1. 条件概率"></a>1. 条件概率</h3><img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808163209631.png" alt="image-20230808163209631" style="zoom:33%;" />
-
-
-
-<h3 id="2-贝叶斯定理—逆概率思维"><a href="#2-贝叶斯定理—逆概率思维" class="headerlink" title="2.贝叶斯定理—逆概率思维"></a>2.贝叶斯定理—逆概率思维</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-
-<pre><code>                                         &lt;img src=&quot;C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808164650855.png&quot; alt=&quot;image-20230808164650855&quot; style=&quot;zoom: 25%;&quot; /&gt;	
+        <h2 id="朴素贝叶斯1"><a class="markdownIt-Anchor" href="#朴素贝叶斯1"></a> 朴素贝叶斯1</h2>
+<h2 id="0x1-概念-"><a class="markdownIt-Anchor" href="#0x1-概念-"></a> 0X1 概念-</h2>
+<h3 id="1-条件概率"><a class="markdownIt-Anchor" href="#1-条件概率"></a> 1. 条件概率</h3>
+<img src="/2023/08/08/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808163209631.png" alt="image-20230808163209631" style="zoom:33%;">
+<h3 id="2贝叶斯定理逆概率思维"><a class="markdownIt-Anchor" href="#2贝叶斯定理逆概率思维"></a> 2.贝叶斯定理—逆概率思维</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+<pre><code>										&lt;img src=&quot;C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808164650855.png&quot; alt=&quot;image-20230808164650855&quot; style=&quot;zoom: 25%;&quot; /&gt;	
 </code></pre>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-
-<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808165504803.png" alt="image-20230808165504803" style="zoom:25%;" />
-
+<img src="/2023/08/08/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808165504803.png" alt="image-20230808165504803" style="zoom:25%;">
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">贝叶斯分类</span><br></pre></td></tr></table></figure>
-
-
-
-<h3 id="3-朴素贝叶斯"><a href="#3-朴素贝叶斯" class="headerlink" title="3.朴素贝叶斯"></a>3.朴素贝叶斯</h3><p>​			</p>
+<h3 id="3朴素贝叶斯"><a class="markdownIt-Anchor" href="#3朴素贝叶斯"></a> 3.朴素贝叶斯</h3>
+<p>​</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">样本之间相互独立</span><br></pre></td></tr></table></figure>
-
-<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808165526844.png" alt="image-20230808165526844" style="zoom:25%;" />
-
+<img src="/2023/08/08/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808165526844.png" alt="image-20230808165526844" style="zoom:25%;">
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2023年8月8日16点51分</span><br></pre></td></tr></table></figure>
+<h2 id="0x2-朴素贝叶斯"><a class="markdownIt-Anchor" href="#0x2-朴素贝叶斯"></a> 0X2 朴素贝叶斯</h2>
+<h3 id="1朴素"><a class="markdownIt-Anchor" href="#1朴素"></a> 1.朴素？</h3>
+<p>​			生成方法</p>
+<p>​</p>
+<h3 id="2后验概率最大化"><a class="markdownIt-Anchor" href="#2后验概率最大化"></a> 2.后验概率最大化</h3>
+<img src="/2023/08/08/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230809161257184.png" alt="image-20230809161257184" style="zoom:25%;">
+<h2 id="0x3-极大似然估计"><a class="markdownIt-Anchor" href="#0x3-极大似然估计"></a> 0X3 极大似然估计</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">前一篇</span><br></pre></td></tr></table></figure>
+<h2 id="0x4-朴素贝叶斯算法"><a class="markdownIt-Anchor" href="#0x4-朴素贝叶斯算法"></a> 0X4 朴素贝叶斯算法</h2>
+<h3 id="1模型"><a class="markdownIt-Anchor" href="#1模型"></a> 1.模型</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 求出后验概率最大化 ---&gt;分类</span></span><br></pre></td></tr></table></figure>
+<img src="/2023/08/08/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/.Hexo\MyBlog\source\_posts\朴素贝叶斯\image-20230809164213626.png" alt="image-20230809164213626" style="zoom:25%;">
+<h3 id="2例题"><a class="markdownIt-Anchor" href="#2例题"></a> 2.例题</h3>
+<h4 id="1数据"><a class="markdownIt-Anchor" href="#1数据"></a> 1.数据</h4>
+<img src="/2023/08/08/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/.Hexo\MyBlog\source\_posts\朴素贝叶斯\image-20230809164353651.png" alt="image-20230809164353651" style="zoom:25%;">
+<h4 id="2计算"><a class="markdownIt-Anchor" href="#2计算"></a> 2.计算</h4>
+<img src="/2023/08/08/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/.Hexo\MyBlog\source\_posts\朴素贝叶斯\image-20230809164823920.png" alt="image-20230809164823920" style="zoom:25%;">
+<h2 id="0x5-贝叶斯估计"><a class="markdownIt-Anchor" href="#0x5-贝叶斯估计"></a> 0x5 贝叶斯估计</h2>
+<h3 id="1估计方法"><a class="markdownIt-Anchor" href="#1估计方法"></a> 1.估计方法</h3>
+<img src="/2023/08/08/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/.Hexo\MyBlog\source\_posts\朴素贝叶斯\image-20230809165328883.png" alt="image-20230809165328883" style="zoom:25%;">	
+<h2 id="2例题-2"><a class="markdownIt-Anchor" href="#2例题-2"></a> 2.例题</h2>
 
-<h2 id="0X2-朴素贝叶斯"><a href="#0X2-朴素贝叶斯" class="headerlink" title="0X2 朴素贝叶斯"></a>0X2 朴素贝叶斯</h2><h3 id="1-朴素？"><a href="#1-朴素？" class="headerlink" title="1.朴素？"></a>1.朴素？</h3><p>​			生成方法</p>
-<p>​			</p>
-<h3 id="2-后验概率最大化"><a href="#2-后验概率最大化" class="headerlink" title="2.后验概率最大化"></a>2.后验概率最大化</h3>
       
     </div>
     <footer class="article-footer">
       <a data-url="https://shakewely.github.io/2023/08/08/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/" data-id="cll203xpl0002jkv44z395d2k" class="article-share-link">分享</a>
       
       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li></ul>
+
     </footer>
   </div>
   
     
 <nav id="article-nav">
   
-    <a href="/2023/08/08/%E6%9C%80%E4%BC%98/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2023/08/09/%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF-1/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">上一篇</strong>
       <div class="article-nav-title">
         
-          (no title)
+          朴素贝叶斯2
         
       </div>
     </a>
