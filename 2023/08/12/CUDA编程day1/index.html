@@ -3,26 +3,29 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Weakliy_Blog</title>
+  <title>cuda编程day1 | Weakliy_Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="CUDA编程day1一、WSL无法成功安装Ubuntu二、问题如下图：Ubuntu初始化无法正常输入密码  三、无法编译​			nvcc : 无法将“nvcc”项识别为 cmdlet、函数、脚本文件或可运行程序的名称。请检查名称的拼写 ，如果包括路径，请确保路径正确，然后再试一次。 所在位置 行:1 字符: 1 + nvcc test.cu -o test + ~~~~    + Category">
+  <meta name="description" content="Ubuntu配置以及问题总结  一、WSL无法成功安装Ubuntu   二、问题如下图：  2.1Ubuntu初始化无法正常输入密码   2.2.更改密码 1231. 以管理员身份打开 PowerShell2. 输入命令 wsl -u root3. 输入命令 passwd username 修改用户密码，username即待重置的用户的名称 ​	切换用户 1ubuntu1804 config -">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Weakliy_Blog">
-<meta property="og:url" content="https://shakewely.github.io/2023/07/21/day1/index.html">
+<meta property="og:title" content="cuda编程day1">
+<meta property="og:url" content="https://shakewely.github.io/2023/08/12/CUDA%E7%BC%96%E7%A8%8Bday1/index.html">
 <meta property="og:site_name" content="Weakliy_Blog">
-<meta property="og:description" content="CUDA编程day1一、WSL无法成功安装Ubuntu二、问题如下图：Ubuntu初始化无法正常输入密码  三、无法编译​			nvcc : 无法将“nvcc”项识别为 cmdlet、函数、脚本文件或可运行程序的名称。请检查名称的拼写 ，如果包括路径，请确保路径正确，然后再试一次。 所在位置 行:1 字符: 1 + nvcc test.cu -o test + ~~~~    + Category">
+<meta property="og:description" content="Ubuntu配置以及问题总结  一、WSL无法成功安装Ubuntu   二、问题如下图：  2.1Ubuntu初始化无法正常输入密码   2.2.更改密码 1231. 以管理员身份打开 PowerShell2. 输入命令 wsl -u root3. 输入命令 passwd username 修改用户密码，username即待重置的用户的名称 ​	切换用户 1ubuntu1804 config -">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="c:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230721161517622.png">
-<meta property="og:image" content="c:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230721161727189.png">
-<meta property="og:image" content="c:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230721161742699.png">
-<meta property="og:image" content="c:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230721200225628.png">
-<meta property="og:image" content="c:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230721201352618.png">
-<meta property="og:image" content="c:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230721195714775.png">
-<meta property="article:published_time" content="2023-07-21T13:34:55.418Z">
-<meta property="article:modified_time" content="2023-07-21T14:15:06.168Z">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/12/CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812132357377.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/12/CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812132341798.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/12/CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812160508642.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/12/CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812161248349.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/12/CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812132330526.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/12/CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812132313546.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/12/CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812160618750.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/12/CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812132246556.png">
+<meta property="article:published_time" content="2023-08-12T08:18:24.000Z">
+<meta property="article:modified_time" content="2023-08-12T08:19:13.325Z">
 <meta property="article:author" content="Weakliy">
+<meta property="article:tag" content="cuda">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="c:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230721161517622.png">
+<meta name="twitter:image" content="https://shakewely.github.io/2023/08/12/CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812132357377.png">
   
     <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
   
@@ -54,9 +57,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>18</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>21</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>4</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>6</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -80,12 +83,12 @@
   </div>
 </div>
 
-        <section id="main"><article id="post-day1" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-CUDA编程day1" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2023/07/21/day1/" class="article-date">
-  <time class="post-time" datetime="2023-07-21T13:34:55.418Z" itemprop="datePublished">
-    <span class="post-month">7月</span><br/>
-    <span class="post-day">21</span>
+    <a href="/2023/08/12/CUDA%E7%BC%96%E7%A8%8Bday1/" class="article-date">
+  <time class="post-time" datetime="2023-08-12T08:18:24.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">12</span>
   </time>
 </a>
    
@@ -93,58 +96,88 @@
   <div class="article-inner">
     
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      cuda编程day1
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="CUDA编程day1"><a href="#CUDA编程day1" class="headerlink" title="CUDA编程day1"></a>CUDA编程day1</h1><h2 id="一、WSL无法成功安装Ubuntu"><a href="#一、WSL无法成功安装Ubuntu" class="headerlink" title="一、WSL无法成功安装Ubuntu"></a>一、WSL无法成功安装Ubuntu<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230721161517622.png" alt="image-20230721161517622"></h2><h2 id="二、问题如下图：Ubuntu初始化无法正常输入密码"><a href="#二、问题如下图：Ubuntu初始化无法正常输入密码" class="headerlink" title="二、问题如下图：Ubuntu初始化无法正常输入密码"></a>二、问题如下图：Ubuntu初始化无法正常输入密码</h2><p><img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230721161727189.png" alt="image-20230721161727189"></p>
-<p><img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230721161742699.png" alt="image-20230721161742699"></p>
-<h2 id="三、无法编译"><a href="#三、无法编译" class="headerlink" title="三、无法编译"></a>三、无法编译</h2><p>​			nvcc : 无法将“nvcc”项识别为 cmdlet、函数、脚本文件或可运行程序的名称。请检查名称的拼写 ，如果包括路径，请确保路径正确，然后再试一次。 所在位置 行:1 字符: 1 + nvcc test.cu -o test + ~~~~    + CategoryInfo          : ObjectNotFound: (nvcc:String) [], CommandNotFoundExceptio     n    + FullyQualifiedErrorId : CommandNotFoundException cuda</p>
-<p>​		cuda安装成功但是出现上面报错（nvcc-v成功运行）</p>
-<h3 id="一、可能存在的问题：环境变量未配置、cuda是否安装成功、"><a href="#一、可能存在的问题：环境变量未配置、cuda是否安装成功、" class="headerlink" title="一、	可能存在的问题：环境变量未配置、cuda是否安装成功、"></a>一、	可能存在的问题：环境变量未配置、cuda是否安装成功、</h3><img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230721200225628.png" alt="image-20230721200225628" style="zoom: 50%;" />
-
-<h3 id="二、-代码未保存、"><a href="#二、-代码未保存、" class="headerlink" title="二、 代码未保存、"></a>二、 代码未保存、</h3><p>​	用vscode编写cuda代码，写完却一直无法成功编译，经检查才发现忘记保存，但是保存的时候才发现vscode无权限无法保存、百般调试后可能的问题：1. vscode无权限， 2. 未给创建的文件赋予读写权限。</p>
+        <h1 id="ubuntu配置以及问题总结"><a class="markdownIt-Anchor" href="#ubuntu配置以及问题总结"></a> Ubuntu配置以及问题总结</h1>
+<h2 id="一-wsl无法成功安装ubuntu"><a class="markdownIt-Anchor" href="#一-wsl无法成功安装ubuntu"></a> 一、WSL无法成功安装Ubuntu</h2>
+<p><img src="/2023/08/12/CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812132357377.png" alt="image-20230812132357377"></p>
+<h2 id="二-问题如下图"><a class="markdownIt-Anchor" href="#二-问题如下图"></a> 二、问题如下图：</h2>
+<h2 id="21ubuntu初始化无法正常输入密码"><a class="markdownIt-Anchor" href="#21ubuntu初始化无法正常输入密码"></a> 2.1Ubuntu初始化无法正常输入密码</h2>
+<p><img src="/2023/08/12/CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812132341798.png" alt></p>
+<h2 id="22更改密码"><a class="markdownIt-Anchor" href="#22更改密码"></a> 2.2.更改密码</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1. 以管理员身份打开 PowerShell</span><br><span class="line">2. 输入命令 wsl -u root</span><br><span class="line">3. 输入命令 passwd username 修改用户密码，username即待重置的用户的名称</span><br></pre></td></tr></table></figure>
+<p>​	<strong>切换用户</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ubuntu1804 config --default-user ubuntu1804</span><br></pre></td></tr></table></figure>
+<p>​	成功！</p>
+<p><img src="/2023/08/12/CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812160508642.png" alt="image-20230812160508642"></p>
+<h2 id="三-无法编译"><a class="markdownIt-Anchor" href="#三-无法编译"></a> 三、无法编译</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">			nvcc : 无法将“nvcc”项识别为 cmdlet、函数、脚本文件或可运行程序的名称。请检查名称的拼写 ，如果包括路径，请确保路径正确，然后再试一次。 所在位置 行:1 字符: 1 + nvcc test.cu -o test + ~~~~    + CategoryInfo          : ObjectNotFound: (nvcc:String) [], CommandNotFoundExceptio     n    + FullyQualifiedErrorId : CommandNotFoundException cuda</span><br><span class="line"></span><br><span class="line">​		cuda安装成功但是出现上面报错（nvcc-v成功运行）</span><br></pre></td></tr></table></figure>
+<p><strong>文件目录：</strong></p>
+<p><img src="/2023/08/12/CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812161248349.png" alt="image-20230812161248349"></p>
+<h3 id="31-可能存在的问题环境变量未配置-cuda是否安装成功"><a class="markdownIt-Anchor" href="#31-可能存在的问题环境变量未配置-cuda是否安装成功"></a> 3.1 可能存在的问题：环境变量未配置、cuda是否安装成功、</h3>
+<p><img src="/2023/08/12/CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812132330526.png" alt="image-20230812132330526"></p>
+<h3 id="32-代码未保存"><a class="markdownIt-Anchor" href="#32-代码未保存"></a> 3.2 代码未保存、</h3>
+<p>​	用vscode编写cuda代码，写完却一直无法成功编译，经检查才发现忘记保存，但是保存的时候才发现vscode无权限无法保存、百般调试后可能的问题：1. vscode无权限， 2. 未给创建的文件赋予读写权限。</p>
 <p>​	基于上面的两种可能，解决办法。1：重新创建文件，赋予权限，重新编写代码。2：改用nano编写（nano在ubuntu上安装）</p>
 <p>创建新文件</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir cudalesson</span><br><span class="line">chmod 777 cudalesson  # 赋予读写权限</span><br></pre></td></tr></table></figure>
-
 <p>在nano上编写代码</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nano test.cu</span><br></pre></td></tr></table></figure>
-
-<p>发现代码有误，更改：<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230721201352618.png" alt="image-20230721201352618" style="zoom:50%;" /></p>
+<p>发现代码有误，更改：<img src="/2023/08/12/CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812132313546.png" alt="image-20230812132313546" style="zoom:50%;"></p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">hello_from_gpu</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;hello world from the GPU\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    hello_from_gpu&lt;&lt;&lt;<span class="number">4</span>, <span class="number">4</span>&gt;&gt;&gt;();</span><br><span class="line">    <span class="built_in">cudaDeviceSynchronize</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="三、编译："><a href="#三、编译：" class="headerlink" title="三、编译："></a>三、编译：</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvcc test.cu -o test</span><br></pre></td></tr></table></figure>
-
+<h2 id="四-配置"><a class="markdownIt-Anchor" href="#四-配置"></a> 四、配置</h2>
+<h3 id="41-链接vscode"><a class="markdownIt-Anchor" href="#41-链接vscode"></a> 4.1 链接vscode</h3>
+<p><img src="/2023/08/12/CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812160618750.png" alt="image-20230812160618750"></p>
+<h2 id="五-编译"><a class="markdownIt-Anchor" href="#五-编译"></a> 五、编译：</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvcc test.cu -o test</span><br></pre></td></tr></table></figure>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./test	 # 运行</span><br></pre></td></tr></table></figure>
-
-<h3 id="成功！"><a href="#成功！" class="headerlink" title="成功！"></a>成功！</h3><p><img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230721195714775.png"></p>
+<h3 id="成功"><a class="markdownIt-Anchor" href="#成功"></a> 成功！</h3>
+<p>!<img src="/2023/08/12/CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812132246556.png" alt="image-20230812132246556"></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2023/07/21/day1/" data-id="clkcmimi80000h8v4fjs08z4d" class="article-share-link">分享</a>
+      <a data-url="https://shakewely.github.io/2023/08/12/CUDA%E7%BC%96%E7%A8%8Bday1/" data-id="cll7r2x7o0004w8v4hfyogwil" class="article-share-link">分享</a>
       
       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cuda/" rel="tag">cuda</a></li></ul>
+
     </footer>
   </div>
   
     
 <nav id="article-nav">
   
-    <a href="/2023/08/01/test/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">上一篇</strong>
       <div class="article-nav-title">
         
-          seg掩码
+          cuda编程day2
         
       </div>
     </a>
   
   
-    <a href="/2023/07/21/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-tensorRT/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">下一篇</strong>
-      <div class="article-nav-title">Hello World</div>
+      <div class="article-nav-title">tensorRT 安装</div>
     </a>
   
 </nav>
@@ -193,9 +226,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>18</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>21</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>4</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>6</strong><br>标签</div></a>
     </div>
 
 
