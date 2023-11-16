@@ -3,18 +3,23 @@
 <head>
   <meta charset="utf-8">
   
-  <title>最优化方法 | Weakliy_Blog</title>
+  <title>2023年11月17日 什么是chatGLM | Weakliy_Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="article">
-<meta property="og:title" content="最优化方法">
-<meta property="og:url" content="https://shakewely.github.io/2023/08/09/2023%E5%B9%B48%E6%9C%8811%E6%97%A5%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/index.html">
+  <meta name="description" content="（源码来自于[https:&#x2F;&#x2F;huggingface.co&#x2F;THUDM&#x2F;chatglm-6b&#x2F;blob&#x2F;main&#x2F;modeling_chatglm.py]）  1、什么是chatGLM ​	ChatGLM-6B是清华大学知识工程和数据挖掘小组（Knowledge Engineering Group (KEG) &amp; Data Mining at Tsinghua University）发布的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2023年11月17日 什么是chatGLM">
+<meta property="og:url" content="https://shakewely.github.io/2023/11/17/2023%E5%B9%B411%E6%9C%8817%E6%97%A5-%E4%BB%80%E4%B9%88%E6%98%AFchatGLM/index.html">
 <meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="（源码来自于[https:&#x2F;&#x2F;huggingface.co&#x2F;THUDM&#x2F;chatglm-6b&#x2F;blob&#x2F;main&#x2F;modeling_chatglm.py]）  1、什么是chatGLM ​	ChatGLM-6B是清华大学知识工程和数据挖掘小组（Knowledge Engineering Group (KEG) &amp; Data Mining at Tsinghua University）发布的">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2023-08-09T02:25:31.000Z">
-<meta property="article:modified_time" content="2023-08-09T11:34:40.955Z">
+<meta property="og:image" content="https://shakewely.github.io/2023/11/17/2023%E5%B9%B411%E6%9C%8817%E6%97%A5-%E4%BB%80%E4%B9%88%E6%98%AFchatGLM/v2-a0ba01f09b6024c6c5b696a6f0988ef7_720w.webp">
+<meta property="og:image" content="https://shakewely.github.io/2023/11/17/2023%E5%B9%B411%E6%9C%8817%E6%97%A5-%E4%BB%80%E4%B9%88%E6%98%AFchatGLM/image-20231117005544552.png">
+<meta property="article:published_time" content="2023-11-16T16:07:05.000Z">
+<meta property="article:modified_time" content="2023-11-16T17:24:42.280Z">
 <meta property="article:author" content="Weakliy">
-<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="dl_model">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shakewely.github.io/2023/11/17/2023%E5%B9%B411%E6%9C%8817%E6%97%A5-%E4%BB%80%E4%B9%88%E6%98%AFchatGLM/v2-a0ba01f09b6024c6c5b696a6f0988ef7_720w.webp">
   
     <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
   
@@ -72,12 +77,12 @@
   </div>
 </div>
 
-        <section id="main"><article id="post-2023年8月11日逻辑回归" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-2023年11月17日-什么是chatGLM" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2023/08/09/2023%E5%B9%B48%E6%9C%8811%E6%97%A5%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/" class="article-date">
-  <time class="post-time" datetime="2023-08-09T02:25:31.000Z" itemprop="datePublished">
-    <span class="post-month">8月</span><br/>
-    <span class="post-day">09</span>
+    <a href="/2023/11/17/2023%E5%B9%B411%E6%9C%8817%E6%97%A5-%E4%BB%80%E4%B9%88%E6%98%AFchatGLM/" class="article-date">
+  <time class="post-time" datetime="2023-11-16T16:07:05.000Z" itemprop="datePublished">
+    <span class="post-month">11月</span><br/>
+    <span class="post-day">17</span>
   </time>
 </a>
    
@@ -89,7 +94,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      最优化方法
+      2023年11月17日 什么是chatGLM
     </h1>
   
 
@@ -104,15 +109,20 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id><a class="markdownIt-Anchor" href="#"></a> </h1>
+        <p>（源码来自于[<a target="_blank" rel="noopener" href="https://huggingface.co/THUDM/chatglm-6b/blob/main/modeling_chatglm.py">https://huggingface.co/THUDM/chatglm-6b/blob/main/modeling_chatglm.py</a>]）</p>
+<h2 id="1-什么是chatglm"><a class="markdownIt-Anchor" href="#1-什么是chatglm"></a> 1、什么是chatGLM</h2>
+<p>​	ChatGLM-6B是清华大学知识工程和数据挖掘小组（Knowledge Engineering Group (KEG) &amp; Data Mining at Tsinghua University）发布的一个开源的对话机器人。基于<a href="https://link.zhihu.com/?target=https%3A//github.com/THUDM/GLM">General Language Model (GLM)</a>架构</p>
+<p><img src="/2023/11/17/2023%E5%B9%B411%E6%9C%8817%E6%97%A5-%E4%BB%80%E4%B9%88%E6%98%AFchatGLM/v2-a0ba01f09b6024c6c5b696a6f0988ef7_720w.webp" alt="img"></p>
+<p>ChatGLM-6B虽然参数很少，但是效果很好。对于硬件的需求也很低</p>
+<p><img src="/2023/11/17/2023%E5%B9%B411%E6%9C%8817%E6%97%A5-%E4%BB%80%E4%B9%88%E6%98%AFchatGLM/image-20231117005544552.png" alt="image-20231117005544552"></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2023/08/09/2023%E5%B9%B48%E6%9C%8811%E6%97%A5%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/" data-id="cll6as0cr0003e8v4d4aeb4du" class="article-share-link">分享</a>
+      <a data-url="https://shakewely.github.io/2023/11/17/2023%E5%B9%B411%E6%9C%8817%E6%97%A5-%E4%BB%80%E4%B9%88%E6%98%AFchatGLM/" data-id="clp1hne3a0001dsv4f2cpdkyj" class="article-share-link">分享</a>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl-model/" rel="tag">dl_model</a></li></ul>
 
     </footer>
   </div>
@@ -120,19 +130,10 @@
     
 <nav id="article-nav">
   
-    <a href="/2023/08/09/pyinstaller/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">上一篇</strong>
-      <div class="article-nav-title">
-        
-          pyinstaller
-        
-      </div>
-    </a>
   
-  
-    <a href="/2023/08/08/2023%E5%B9%B48%E6%9C%888%E6%97%A5%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2023/11/07/2023%E5%B9%B411%E6%9C%887%E6%97%A5-%E9%87%8F%E5%8C%963-Question/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">下一篇</strong>
-      <div class="article-nav-title">朴素贝叶斯1</div>
+      <div class="article-nav-title">2023年11月7日 量化3 Question</div>
     </a>
   
 </nav>
