@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Weakliy_Blog">
+<meta property="og:url" content="https://shakewely.github.io/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="Weakliy">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>60</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>16</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main">
+  
+    <article id="post-2024年1月27日-gradio实践" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/" class="article-date">
+  <time class="post-time" datetime="2024-01-27T14:28:32.000Z" itemprop="datePublished">
+    <span class="post-month">1月</span><br/>
+    <span class="post-day">27</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/">2024年1月27日 gradio实践</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="gradio-实践"><a class="markdownIt-Anchor" href="#gradio-实践"></a> Gradio 实践</h1>
+<h2 id="demo1"><a class="markdownIt-Anchor" href="#demo1"></a> demo1</h2>
+<h3 id="1测试运行"><a class="markdownIt-Anchor" href="#1测试运行"></a> <strong>1.测试运行</strong></h3>
+<p>gradio的核心是它的<code>gr.Interface</code>函数，用来构建可视化界面。</p>
+<ul>
+<li>
+<p>fn：放你用来处理的函数</p>
+</li>
+<li>
+<p>inputs：写你的输入类型，这里输入的是图像，所以是&quot;image&quot;</p>
+</li>
+<li>
+<p>outputs：写你的输出类型，这里输出的是图像，所以是&quot;image&quot;</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># 作者：Weakliy</span><br><span class="line"># 创建日期：2024/1/27 0027 下午 22:42</span><br><span class="line"># 描述：测试运行</span><br><span class="line"></span><br><span class="line">import gradio as gr</span><br><span class="line">import cv2</span><br><span class="line"></span><br><span class="line">def to_black(image):</span><br><span class="line">    output = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)</span><br><span class="line">    return output</span><br><span class="line">interface = gr.Interface(fn=to_black, inputs=&quot;image&quot;, outputs=&quot;image&quot;)</span><br><span class="line">interface.launch()</span><br></pre></td></tr></table></figure>
+<img src="./2024年1月27日-gradio实践/image-20240127224425399.png" alt="image-20240127224425399" style="zoom: 50%;" />
+<img src="./2024年1月27日-gradio实践/image-20240127224627553.png" alt="image-20240127224627553" style="zoom:50%;" />
+<h3 id="2增加example"><a class="markdownIt-Anchor" href="#2增加example"></a> <strong>2.增加example</strong></h3>
+<p>我们可以在页面下方添加供用户选择的测试样例。</p>
+<p>在<code>gr.Interface</code>里的<code>examples</code>中放入图片路径</p>
+<p><code>examples=[[&quot;test.png&quot;] </code>or 1examples=&quot;path&quot;1</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">import gradio as gr</span><br><span class="line">import cv2</span><br><span class="line">​</span><br><span class="line">def to_black(image):</span><br><span class="line">    output = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)</span><br><span class="line">    return output</span><br><span class="line">​</span><br><span class="line">interface = gr.Interface(fn=to_black, inputs=&quot;image&quot;, outputs=&quot;image&quot;,</span><br><span class="line">                        examples=[[&quot;test.png&quot;]])</span><br><span class="line">interface.launch()</span><br></pre></td></tr></table></figure>
+<h3 id="3创建一个外部访问链接"><a class="markdownIt-Anchor" href="#3创建一个外部访问链接"></a> <strong>3.创建一个外部访问链接</strong></h3>
+<p>创建外部访问链接非常简单，只需要<code>launch(share=True)</code>即可，在打印信息中会看到你的外部访问链接。</p>
+<p><strong>免费用户的链接可以使用24小时，想要长期的话需要在gradio官方购买云服务</strong></p>
+<h2 id="demo2-文本输入"><a class="markdownIt-Anchor" href="#demo2-文本输入"></a> demo2 文本输入</h2>
+<h3 id="1-同理"><a class="markdownIt-Anchor" href="#1-同理"></a> 1 同理</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">import gradio as gr</span><br><span class="line">#输入文本处理程序</span><br><span class="line">def greet(name):</span><br><span class="line">    return &quot;Hello &quot; + name + &quot;!&quot;</span><br><span class="line">demo = gr.Interface(fn=greet, inputs=&quot;text&quot;, outputs=&quot;text&quot;)</span><br><span class="line">demo.launch()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="demo3-interface类"><a class="markdownIt-Anchor" href="#demo3-interface类"></a> demo3 Interface类</h2>
+<h3 id="1基础"><a class="markdownIt-Anchor" href="#1基础"></a> 1.基础</h3>
+<h4 id="11-interface需要通过以下三个参数进行初始化"><a class="markdownIt-Anchor" href="#11-interface需要通过以下三个参数进行初始化"></a> 1.1 <strong>interface需要通过以下三个参数进行初始化：</strong></h4>
+<ul>
+<li>fn：包装的函数</li>
+<li>inputs：输入组件类型，（例如：“text”、&quot;image）</li>
+<li>ouputs：输出组件类型，（例如：“text”、&quot;image）</li>
+</ul>
+<h4 id="12-控件列表"><a class="markdownIt-Anchor" href="#12-控件列表"></a> 1.2 控件列表</h4>
+<ul>
+<li>
+<p><strong>输入输出</strong>：gr.Image(图像), gr.Textbox(文本框), gr.DataFrame(数据框), gr.Dropdown(下拉选项), gr.Number(数字), gr.Markdown, gr.Files</p>
+</li>
+<li>
+<p><strong>控制组件</strong>：gr.Button(按钮)</p>
+</li>
+<li>
+<p><strong>布局组件</strong>：gr.Tab(标签页), gr.Row(行布局), gr.Column(列布局)</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">__all__ = [</span><br><span class="line">    &quot;Audio&quot;,</span><br><span class="line">    &quot;BarPlot&quot;,</span><br><span class="line">    &quot;Button&quot;,</span><br><span class="line">    &quot;Chatbot&quot;,</span><br><span class="line">    &quot;ClearButton&quot;,</span><br><span class="line">    &quot;Component&quot;,</span><br><span class="line">    &quot;component&quot;,</span><br><span class="line">    &quot;get_component_instance&quot;,</span><br><span class="line">    &quot;_Keywords&quot;,</span><br><span class="line">    &quot;Checkbox&quot;,</span><br><span class="line">    &quot;CheckboxGroup&quot;,</span><br><span class="line">    &quot;Code&quot;,</span><br><span class="line">    &quot;ColorPicker&quot;,</span><br><span class="line">    &quot;Dataframe&quot;,</span><br><span class="line">    &quot;DataFrame&quot;,</span><br><span class="line">    &quot;Dataset&quot;,</span><br><span class="line">    &quot;DuplicateButton&quot;,</span><br><span class="line">    &quot;Fallback&quot;,</span><br><span class="line">    &quot;Form&quot;,</span><br><span class="line">    &quot;FormComponent&quot;,</span><br><span class="line">    &quot;Gallery&quot;,</span><br><span class="line">    &quot;HTML&quot;,</span><br><span class="line">    &quot;FileExplorer&quot;,</span><br><span class="line">    &quot;Image&quot;,</span><br><span class="line">    &quot;JSON&quot;,</span><br><span class="line">    &quot;Json&quot;,</span><br><span class="line">    &quot;Label&quot;,</span><br><span class="line">    &quot;LinePlot&quot;,</span><br><span class="line">    &quot;LoginButton&quot;,</span><br><span class="line">    &quot;LogoutButton&quot;,</span><br><span class="line">    &quot;Markdown&quot;,</span><br><span class="line">    &quot;Textbox&quot;,</span><br><span class="line">    &quot;Dropdown&quot;,</span><br><span class="line">    &quot;Model3D&quot;,</span><br><span class="line">    &quot;File&quot;,</span><br><span class="line">    &quot;HighlightedText&quot;,</span><br><span class="line">    &quot;AnnotatedImage&quot;,</span><br><span class="line">    &quot;CheckboxGroup&quot;,</span><br><span class="line">    &quot;Text&quot;,</span><br><span class="line">    &quot;Highlightedtext&quot;,</span><br><span class="line">    &quot;Annotatedimage&quot;,</span><br><span class="line">    &quot;Highlight&quot;,</span><br><span class="line">    &quot;Checkboxgroup&quot;,</span><br><span class="line">    &quot;Number&quot;,</span><br><span class="line">    &quot;Plot&quot;,</span><br><span class="line">    &quot;Radio&quot;,</span><br><span class="line">    &quot;ScatterPlot&quot;,</span><br><span class="line">    &quot;Slider&quot;,</span><br><span class="line">    &quot;State&quot;,</span><br><span class="line">    &quot;UploadButton&quot;,</span><br><span class="line">    &quot;Video&quot;,</span><br><span class="line">    &quot;StreamingInput&quot;,</span><br><span class="line">    &quot;StreamingOutput&quot;,</span><br><span class="line">    &quot;ImageEditor&quot;,</span><br><span class="line">    &quot;ParamViewer&quot;,</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<h5 id="121-控件参数"><a class="markdownIt-Anchor" href="#121-控件参数"></a> 1.2.1 控件参数</h5>
+<p>​</p>
+<h4 id="13-interfacelaunch方法返回三个值"><a class="markdownIt-Anchor" href="#13-interfacelaunch方法返回三个值"></a> 1.3 <strong>Interface.launch()方法返回三个值</strong></h4>
+<ul>
+<li>app，为 Gradio 演示提供支持的 FastAPI 应用程序</li>
+<li>local_url，本地地址</li>
+<li>share_url，公共地址，当share=True时生成</li>
+</ul>
+<h4 id="14-多输入输出"><a class="markdownIt-Anchor" href="#14-多输入输出"></a> 1.4 多输入输出</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import gradio as gr</span><br><span class="line">#该函数有3个输入参数和2个输出参数</span><br><span class="line">def greet(name, is_morning, temperature):</span><br><span class="line">    salutation = &quot;Good morning&quot; if is_morning else &quot;Good evening&quot;</span><br><span class="line">    greeting = f&quot;&#123;salutation&#125; &#123;name&#125;. It is &#123;temperature&#125; degrees today&quot;</span><br><span class="line">    celsius = (temperature - 32) * 5 / 9</span><br><span class="line">    return greeting, round(celsius, 2)</span><br><span class="line">demo = gr.Interface(</span><br><span class="line">    fn=greet,</span><br><span class="line">    #按照处理程序设置输入组件</span><br><span class="line">    inputs=[gr.Textbox(lines=3, placeholder=&quot;preName Here...&quot;,label=&quot;your name&quot;),</span><br><span class="line">            gr.Checkbox(min_width=100), gr.Slider(0, 100)],</span><br><span class="line">    #按照处理程序设置输出组件</span><br><span class="line">    outputs=[&quot;text&quot;, &quot;number&quot;],</span><br><span class="line">)</span><br><span class="line">demo.launch()</span><br></pre></td></tr></table></figure>
+<p><img src="./2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/image-20240127231747733.png" alt="image-20240127231747733" /></p>
+<h3 id="2-进阶"><a class="markdownIt-Anchor" href="#2-进阶"></a> 2 进阶</h3>
+<h4 id="21-interface状态"><a class="markdownIt-Anchor" href="#21-interface状态"></a> 2.1 interface状态</h4>
+<h5 id="全局变量"><a class="markdownIt-Anchor" href="#全局变量"></a> 全局变量</h5>
+<p>pass</p>
+<h5 id="state状态保留"><a class="markdownIt-Anchor" href="#state状态保留"></a> state状态保留</h5>
+<p>Gradio支持的另一种数据持久性是会话状态，数据在一个页面会话中的多次提交中持久存在</p>
+<h4 id="22-interface交互"><a class="markdownIt-Anchor" href="#22-interface交互"></a> 2.2 interface交互</h4>
+<h5 id="实时变化"><a class="markdownIt-Anchor" href="#实时变化"></a> 实时变化</h5>
+<p>在Interface中设置live=True，则输出会跟随输入实时变化。这个时候界面不会有submit按钮，因为不需要手动提交输入。</p>
+<h5 id="流模式"><a class="markdownIt-Anchor" href="#流模式"></a> 流模式</h5>
+<p>在许多情形下，我们的输入是实时视频流或者音频流，那么意味这数据不停地发送到后端，这是可以采用streaming模式处理数据。</p>
+<p>添加<code>(streaming=True)</code>and <code> live=True</code>即可</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># import gradio as gr</span><br><span class="line"># import numpy as np</span><br><span class="line"># def flip(im):</span><br><span class="line">#     return np.flipud(im)</span><br><span class="line"># demo = gr.Interface(</span><br><span class="line">#     flip,</span><br><span class="line">#     gr.Image(streaming=True),</span><br><span class="line">#     &quot;image&quot;,</span><br><span class="line">#     live=True</span><br><span class="line"># )</span><br><span class="line"># demo.launch()</span><br></pre></td></tr></table></figure>
+<p><img src="./2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/image-20240127233945848.png" alt="image-20240127233945848" /></p>
+<h3 id="3-自定义"><a class="markdownIt-Anchor" href="#3-自定义"></a> 3 自定义</h3>
+<h4 id="31-自定义"><a class="markdownIt-Anchor" href="#31-自定义"></a> 3.1 自定义</h4>
+<p>Blocks提供了一个低级别的API，用于设计具有更灵活布局和数据流的网络应用。Blocks允许控制组件在页面上出现的位置，处理复杂的数据流（例如，输出可以作为其他函数的输入），并根据用户交互更新组件的属性可见性。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">import gradio as gr</span><br><span class="line">def greet(name):</span><br><span class="line">    return &quot;Hello &quot; + name + &quot;!&quot;</span><br><span class="line">with gr.Blocks() as demo:</span><br><span class="line">    #设置输入组件</span><br><span class="line">    name = gr.Textbox(label=&quot;Name&quot;)</span><br><span class="line">    # 设置输出组件</span><br><span class="line">    output = gr.Textbox(label=&quot;Output Box&quot;)</span><br><span class="line">    #设置按钮</span><br><span class="line">    greet_btn = gr.Button(&quot;Greet&quot;)</span><br><span class="line">    #设置按钮点击事件</span><br><span class="line">    greet_btn.click(fn=greet, inputs=name, outputs=output)</span><br><span class="line">demo.launch()</span><br></pre></td></tr></table></figure>
+<h4 id="32-tab"><a class="markdownIt-Anchor" href="#32-tab"></a> 3.2 tab</h4>
+<p>通过自定义实现不同的标签页内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line">import gradio as gr</span><br><span class="line">def flip_text(x):</span><br><span class="line">    return x[::-1]</span><br><span class="line">def flip_image(x):</span><br><span class="line">    return np.fliplr(x)</span><br><span class="line">with gr.Blocks() as demo:</span><br><span class="line">    #用markdown语法编辑输出一段话</span><br><span class="line">    gr.Markdown(&quot;Flip text or image files using this demo.&quot;)</span><br><span class="line">    # 设置tab选项卡</span><br><span class="line">    with gr.Tab(&quot;Flip Text&quot;):</span><br><span class="line">        #Blocks特有组件，设置所有子组件按垂直排列</span><br><span class="line">        #垂直排列是默认情况，不加也没关系</span><br><span class="line">        with gr.Column():</span><br><span class="line">            text_input = gr.Textbox()</span><br><span class="line">            text_output = gr.Textbox()</span><br><span class="line">            text_button = gr.Button(&quot;Flip&quot;)</span><br><span class="line">    with gr.Tab(&quot;Flip Image&quot;):</span><br><span class="line">        #Blocks特有组件，设置所有子组件按水平排列</span><br><span class="line">        with gr.Row():</span><br><span class="line">            image_input = gr.Image()</span><br><span class="line">            image_output = gr.Image()</span><br><span class="line">        image_button = gr.Button(&quot;Flip&quot;)</span><br><span class="line">    #设置折叠内容</span><br><span class="line">    with gr.Accordion(&quot;Open for More!&quot;):</span><br><span class="line">        gr.Markdown(&quot;Look at me...&quot;)</span><br><span class="line">    text_button.click(flip_text, inputs=text_input, outputs=text_output)</span><br><span class="line">    image_button.click(flip_image, inputs=image_input, outputs=image_output)</span><br><span class="line">demo.launch()</span><br></pre></td></tr></table></figure>
+<p><img src="./2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/image-20240127234217252.png" alt="image-20240127234217252" /></p>
+<h3 id="4-flagging标记"><a class="markdownIt-Anchor" href="#4-flagging标记"></a> 4 Flagging标记</h3>
+<p>输出框下有个Flag按钮。</p>
+<p>当测试您的模型的用户看到某个输入导致输出错误或意外的模型行为，他们可以标记这个输入让开发者知道。这个文件夹由Interface的flagging_dir参数指定，默认为’flagged’</p>
+<p><img src="./2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/image-20240127234521491.png" alt="image-20240127234521491" /></p>
+<h3 id="5-样式-队列-生成器"><a class="markdownIt-Anchor" href="#5-样式-队列-生成器"></a> 5 样式、队列、生成器</h3>
+<ul>
+<li>样式</li>
+</ul>
+<p>在Gradio官方文档，搜索不同的组件加.style（如image.style），可以获取该组件的样式参数设置样例。例如image组件的设置如下：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">img = gr.Image(&quot;lion.jpg&quot;).style(height=&#x27;24&#x27;, rounded=False)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>队列 如果函数推理时间较长，比如目标检测；或者应用程序处理流量过大，则需要使用queue方法进行排队。queue方法使用websockets，可以防止网络超时。使用方式如下：</li>
+</ul>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">demo = gr.Interface(...).queue()</span><br><span class="line">demo.launch()</span><br><span class="line">#或</span><br><span class="line">with gr.Blocks() as demo:</span><br><span class="line">    #...</span><br><span class="line">demo.queue()</span><br><span class="line">demo.launch()</span><br></pre></td></tr></table></figure>
+<ul>
+<li>生成器</li>
+</ul>
+<p>在某些情况下，你可能想显示一连串的输出，而不是单一的输出。例如，你可能有一个图像生成模型，如果你想显示在每个步骤中生成的图像，从而得到最终的图像。在这种情况下，你可以向Gradio提供一个生成器函数，而不是一个常规函数。下面是一个生成器的例子，每隔1秒返回1张图片。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import gradio as gr</span><br><span class="line">import numpy as np</span><br><span class="line">import time</span><br><span class="line">#生成steps张图片，每隔1秒钟返回</span><br><span class="line">def fake_diffusion(steps):</span><br><span class="line">    for _ in range(steps):</span><br><span class="line">        time.sleep(1)</span><br><span class="line">        image = np.random.randint(255, size=(300, 600, 3))</span><br><span class="line">        yield image</span><br><span class="line">demo = gr.Interface(fake_diffusion,</span><br><span class="line">                    #设置滑窗，最小值为1，最大值为10，初始值为3，每次改动增减1位</span><br><span class="line">                    inputs=gr.Slider(1, 10, value=3, step=1),</span><br><span class="line">                    outputs=&quot;image&quot;)</span><br><span class="line">#生成器必须要queue函数</span><br><span class="line">demo.queue()</span><br><span class="line">demo.launch()</span><br></pre></td></tr></table></figure>
+<h2 id="demo4-blocks进阶使用"><a class="markdownIt-Anchor" href="#demo4-blocks进阶使用"></a> demo4 Blocks进阶使用</h2>
+<h3 id="1-blocks事件"><a class="markdownIt-Anchor" href="#1-blocks事件"></a> 1 Blocks事件</h3>
+<h3 id="可交互设置"><a class="markdownIt-Anchor" href="#可交互设置"></a> 可交互设置</h3>
+<p>任何输入的组件内容都是可编辑的，而输出组件默认是不能编辑的。如果想要使得输出组件内容可编辑，设置interactive=True即可。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">import gradio as gr</span><br><span class="line">def greet(name):</span><br><span class="line">    return &quot;Hello &quot; + name + &quot;!&quot;</span><br><span class="line">with gr.Blocks() as demo:</span><br><span class="line">    name = gr.Textbox(label=&quot;Name&quot;)</span><br><span class="line">    # 不可交互</span><br><span class="line">    # output = gr.Textbox(label=&quot;Output Box&quot;)</span><br><span class="line">    # 可交互</span><br><span class="line">    output = gr.Textbox(label=&quot;Output&quot;, interactive=True)</span><br><span class="line">    greet_btn = gr.Button(&quot;Greet&quot;)</span><br><span class="line">    greet_btn.click(fn=greet, inputs=name, outputs=output)</span><br><span class="line">demo.launch()</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/" data-id="clrwazlri003g7ov48i2dd58c" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2024年1月23日-python之不常用总结" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-python%E4%B9%8B%E4%B8%8D%E5%B8%B8%E7%94%A8%E6%80%BB%E7%BB%93/" class="article-date">
+  <time class="post-time" datetime="2024-01-23T06:00:53.000Z" itemprop="datePublished">
+    <span class="post-month">1月</span><br/>
+    <span class="post-day">23</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-python%E4%B9%8B%E4%B8%8D%E5%B8%B8%E7%94%A8%E6%80%BB%E7%BB%93/">2024年1月23日 python之不常用总结</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">low_mask = matrix &lt; low_value</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-python%E4%B9%8B%E4%B8%8D%E5%B8%B8%E7%94%A8%E6%80%BB%E7%BB%93/" data-id="clrwazlri003f7ov4hlo7ckjw" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2024年1月23日-python之cv库总结" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-python%E4%B9%8Bcv%E5%BA%93%E6%80%BB%E7%BB%93/" class="article-date">
+  <time class="post-time" datetime="2024-01-23T05:53:18.000Z" itemprop="datePublished">
+    <span class="post-month">1月</span><br/>
+    <span class="post-day">23</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-python%E4%B9%8Bcv%E5%BA%93%E6%80%BB%E7%BB%93/">2024年1月23日 python之cv库总结</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="将输入图像拆分为rgb通道"><a class="markdownIt-Anchor" href="#将输入图像拆分为rgb通道"></a> 将输入图像拆分为RGB通道</h3>
+<p><code>channels = cv2.split(img)</code></p>
+<h3 id="将2d数组重新形状为1d数组"><a class="markdownIt-Anchor" href="#将2d数组重新形状为1d数组"></a> # 将2D数组重新形状为1D数组</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">height, width = channel.shape        </span><br><span class="line"></span><br><span class="line">vec_size = width * height       </span><br><span class="line"></span><br><span class="line">flat = channel.reshape(vec_size)</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-python%E4%B9%8Bcv%E5%BA%93%E6%80%BB%E7%BB%93/" data-id="clrwazlrh003e7ov4f1ydfzmv" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2024年1月23日-parser库" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-parser%E5%BA%93/" class="article-date">
+  <time class="post-time" datetime="2024-01-23T05:24:11.000Z" itemprop="datePublished">
+    <span class="post-month">1月</span><br/>
+    <span class="post-day">23</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-parser%E5%BA%93/">2024年1月23日 parser库</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1"><a class="markdownIt-Anchor" href="#1"></a> 1</h2>
+<p>使用 <code>argparse.ArgumentParser</code> 创建了一个命令行解析器对象（<code>parser</code>）</p>
+<h2 id="2-定义了命令行参数的规则"><a class="markdownIt-Anchor" href="#2-定义了命令行参数的规则"></a> 2 定义了命令行参数的规则</h2>
+<p><code>parser.add_argument</code></p>
+<h2 id="3-解析命令行参数"><a class="markdownIt-Anchor" href="#3-解析命令行参数"></a> 3 解析命令行参数</h2>
+<p><code>args = parser.parse_args()</code></p>
+<h2 id="4-获取参数的值"><a class="markdownIt-Anchor" href="#4-获取参数的值"></a> 4 获取参数的值</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">inputpath = args.input </span><br><span class="line"></span><br><span class="line">outputpath = args.output </span><br><span class="line"></span><br><span class="line">show = args.show</span><br></pre></td></tr></table></figure>
+<p>布尔掩码（Boolean mask）</p>
+<p><img src="./2024%E5%B9%B41%E6%9C%8823%E6%97%A5-parser%E5%BA%93/image-20240123134714991.png" alt="image-20240123134714991" /></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-parser%E5%BA%93/" data-id="clrwazlrh003d7ov46xbz0txl" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2024年1月18日-考研" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2024/01/18/2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/" class="article-date">
+  <time class="post-time" datetime="2024-01-18T06:42:52.000Z" itemprop="datePublished">
+    <span class="post-month">1月</span><br/>
+    <span class="post-day">18</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2024/01/18/2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/">2024年1月18日 考研</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="25考研"><a class="markdownIt-Anchor" href="#25考研"></a> 25考研</h1>
+<h2 id="时间线"><a class="markdownIt-Anchor" href="#时间线"></a> 时间线：</h2>
+<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118144330538.png" alt="image-20240118144330538" /></p>
+<h2 id="院校信息"><a class="markdownIt-Anchor" href="#院校信息"></a> 院校信息</h2>
+<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118151329192.png" alt="image-20240118151329192" /></p>
+<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118150436505.png" alt="image-20240118150436505" /></p>
+<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118150448354.png" alt="image-20240118150448354" /></p>
+<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118150614884.png" alt="image-20240118150614884" /></p>
+<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118150630984.png" alt="image-20240118150630984" /></p>
+<hr />
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118150757967.png" alt="image-20240118150757967" /></p>
+<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118150828555.png" alt="image-20240118150828555" /></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118150953031.png" alt="image-20240118150953031" /></p>
+<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118151004637.png" alt="image-20240118151004637" /></p>
+<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118151018382.png" alt="image-20240118151018382" /></p>
+<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118151035216.png" alt="image-20240118151035216" /></p>
+<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118151113427.png" alt="image-20240118151113427" /></p>
+<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118151150736.png" alt="image-20240118151150736" /></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118151615259.png" alt="image-20240118151456474" /></p>
+<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118151816305.png" alt="image-20240118151816305" /></p>
+<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118151916400.png" alt="image-20240118151916400" /></p>
+<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118151932816.png" alt="image-20240118151932816" /></p>
+<h2 id="专业信息"><a class="markdownIt-Anchor" href="#专业信息"></a> 专业信息</h2>
+<h3 id="404"><a class="markdownIt-Anchor" href="#404"></a> 404</h3>
+<h3 id="848"><a class="markdownIt-Anchor" href="#848"></a> 848</h3>
+<p>人工智能：848：数据结构和C语言</p>
+<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118154838300.png" alt="image-20240118154838300" /></p>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzIwMTgzMTQ5MA==&amp;mid=2247620649&amp;idx=1&amp;sn=15a856982e80fc64595cedc9104ea118&amp;chksm=96e4bd04a1933412b9c2b950c43d3a4ae3cc56828f44a3884456517ad088c7a73fe17b439c9a&amp;scene=21#wechat_redirect">暨南大学真人经历</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/633535696">https://zhuanlan.zhihu.com/p/633535696</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/633535696">https://zhuanlan.zhihu.com/p/633535696</a></p>
+<h3 id="942"><a class="markdownIt-Anchor" href="#942"></a> 942</h3>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/653697778">https://zhuanlan.zhihu.com/p/653697778</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2024/01/18/2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/" data-id="clrwazlrh003b7ov4avonclvh" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2024年1月6日-2023总结" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2024/01/06/2024%E5%B9%B41%E6%9C%886%E6%97%A5-2023%E6%80%BB%E7%BB%93/" class="article-date">
+  <time class="post-time" datetime="2024-01-05T17:12:20.000Z" itemprop="datePublished">
+    <span class="post-month">1月</span><br/>
+    <span class="post-day">06</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2024/01/06/2024%E5%B9%B41%E6%9C%886%E6%97%A5-2023%E6%80%BB%E7%BB%93/">2023总结</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="2023总结"><a class="markdownIt-Anchor" href="#2023总结"></a> 2023总结</h1>
+<blockquote>
+<p>第一次写总结, 用于总结我23年一年的经历.</p>
+<ul>
+<li>每一个月分为上中下,1~10号 11~20号 20~月末</li>
+<li>主要记录每个月都做了写啥(<s>因为我真的很喜欢总结但是很少记录</s>)</li>
+<li>记录内容主要以学习为主,如果没有学习,那只能用<s>其他</s>重要事件来替代了(bushi)</li>
+<li>时间: 2024年1月6日 01点30分—02点36分</li>
+<li>因为第一次写比较有格式的内容,部分由GPT生成</li>
+<li>写完了:发现有点大便,</li>
+<li>给自己做总结: 游戏人生\ 假期学习能手\ 大部分时间无聊\</li>
+</ul>
+</blockquote>
+<h3 id="目录"><a class="markdownIt-Anchor" href="#目录"></a> 目录</h3>
+<ul>
+<li><a href="#1">一月</a></li>
+<li><a href="#2">二月</a></li>
+<li><a href="#3">三月</a></li>
+<li><a href="#4">四月</a></li>
+<li><a href="#5">五月</a></li>
+<li><a href="#6">六月</a></li>
+<li><a href="#7">七月</a></li>
+<li><a href="#8">八月</a></li>
+<li><a href="#9">九月</a></li>
+<li><a href="#10">十月</a></li>
+<li><a href="#11">十一月</a></li>
+<li><a href="#12">十二月</a></li>
+</ul>
+<h4 id="1">一月</h4>
+<blockquote>
+<p>上</p>
+<p><code>放寒假中</code></p>
+<ul>
+<li>
+<p>在玩游戏天际线~~~</p>
+</li>
+<li>
+<p>弄了一个桌面备忘录</p>
+</li>
+<li>
+<img src="./2024年1月6日-2023总结/image-20240106014902618.png" alt="image-20240106014902618" style="zoom:33%;" />
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>中</p>
+<ul>
+<li>在玩鹅鸦杀!(好玩)</li>
+<li>pycharm专业版<strong>了解了一些后端</strong>, flask,django</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>下</p>
+<ul>
+<li>
+<p>浅学C++</p>
+</li>
+<li>
+<p>很忙, 在老家到处玩~~</p>
+</li>
+</ul>
+</blockquote>
+<h4 id="2">二月</h4>
+<blockquote>
+<p>上</p>
+<ul>
+<li>学pyqt</li>
+<li>和老姐去打了一天的临时工 真很累!!</li>
+<li><img src="./2024%E5%B9%B41%E6%9C%886%E6%97%A5-2023%E6%80%BB%E7%BB%93/image-20240106015152253.png" alt="image-20240106015152253" /></li>
+</ul>
+</blockquote>
+<blockquote>
+<p>中</p>
+<ul>
+<li><code>准备回学校</code> 玩了一会天际线</li>
+<li>看了电影<code>河畔须臾</code>,<code>刺客信条</code></li>
+<li>回学校</li>
+<li>安装stable diffusion 画画,并发布了视频</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>下</p>
+<ul>
+<li>尝试使用lora但是一直失败,之后摆烂</li>
+<li>玩禁闭求生</li>
+</ul>
+</blockquote>
+<h4 id="4">四月</h4>
+<blockquote>
+<h5 id="上"><a class="markdownIt-Anchor" href="#上"></a> 上</h5>
+<ul>
+<li>跑stable diffusion 动漫~~?~~图!</li>
+</ul>
+<h5 id="中"><a class="markdownIt-Anchor" href="#中"></a> 中</h5>
+<ul>
+<li>准备校数据比赛:鱼类识别</li>
+</ul>
+<p>下</p>
+<ul>
+<li>无情地跑stable diffusion 动漫~~?~~图!\发布抖音</li>
+<li>成功使用lora训练<img src="./2024%E5%B9%B41%E6%9C%886%E6%97%A5-2023%E6%80%BB%E7%BB%93/image-20240106151112227.png" alt="image-20240106151112227" /></li>
+</ul>
+</blockquote>
+<ul>
+<li></li>
+</ul>
+<h4 id="5">五月</h4> 
+<blockquote>
+<h5 id="上-2"><a class="markdownIt-Anchor" href="#上-2"></a> 上</h5>
+<ul>
+<li>第一次去漫展!!<img src="./2024年1月6日-2023总结/image-20240106151604089.png" alt="image-20240106151604089" style="zoom:50%;" /></li>
+</ul>
+<h5 id="中-2"><a class="markdownIt-Anchor" href="#中-2"></a> 中</h5>
+<ul>
+<li>玩重塑火星!</li>
+</ul>
+<p>下</p>
+<ul>
+<li>玩幸福工厂!</li>
+</ul>
+</blockquote>
+<ul>
+<li></li>
+</ul>
+<h4 id="6">六月</h4> 
+<blockquote>
+<h5 id="上-3"><a class="markdownIt-Anchor" href="#上-3"></a> 上</h5>
+<ul>
+<li>
+<p>发疯玩三国杀到<s>四点</s>?</p>
+</li>
+<li>
+<p>探索新游戏~!<img src="./2024年1月6日-2023总结/e2ef64c8fe23824958146798a9cf3ea.jpg" alt="e2ef64c8fe23824958146798a9cf3ea" style="zoom: 33%;" /></p>
+</li>
+</ul>
+<h5 id="中-3"><a class="markdownIt-Anchor" href="#中-3"></a> 中</h5>
+<ul>
+<li>第一次玩瓦洛兰特!</li>
+<li>继续玩幸福工厂!</li>
+</ul>
+<p>下</p>
+<ul>
+<li>玩瓦洛兰特!</li>
+<li>继续玩幸福工厂!</li>
+</ul>
+</blockquote>
+<ul>
+<li></li>
+</ul>
+<h4 id="7">七月</h4> 
+<img src="./2024年1月6日-2023总结/image-20240106021805435.png" alt="image-20240106021805435" style="zoom:50%;" />
+<blockquote>
+<h5 id="主要事件"><a class="markdownIt-Anchor" href="#主要事件"></a> &gt; 主要事件:</h5>
+<ul>
+<li>
+<p>异星旅人</p>
+</li>
+<li>
+<p>第一次搭Blog网站</p>
+</li>
+<li>
+<p><s>被姗姗发现</s></p>
+</li>
+</ul>
+</blockquote>
+<ul>
+<li></li>
+</ul>
+<h4 id="8">八月</h4> 
+<img src="./2024年1月6日-2023总结/image-20240106021916287.png" alt="image-20240106021916287" style="zoom:50%;" />
+<h5 id=""><a class="markdownIt-Anchor" href="#"></a> </h5>
+<blockquote>
+<p>主要事件:</p>
+<ul>
+<li>
+<p>看机器学习统计基础</p>
+</li>
+<li>
+<p>看阿里天池</p>
+</li>
+<li>
+<p>开学玩<code>森林之子</code></p>
+</li>
+</ul>
+</blockquote>
+<ul>
+<li></li>
+</ul>
+<h4 id="9">九月</h4> 
+<blockquote>
+<p><code>APEX</code>游戏中</p>
+<h5 id="上-4"><a class="markdownIt-Anchor" href="#上-4"></a> 上</h5>
+<ul>
+<li>第一次LOL上钻石!<img src="./2024年1月6日-2023总结/Screenshot_20230905_144132_edit_271038665702911.jpg" alt="Screenshot_20230905_144132_edit_271038665702911" style="zoom:50%;" /></li>
+<li>剪辑UZI视频! 赚了<strong>1200</strong></li>
+</ul>
+<h5 id="中-4"><a class="markdownIt-Anchor" href="#中-4"></a> 中</h5>
+<ul>
+<li>玩星空(<s>不好玩</s>)</li>
+<li>玩星核工厂(还可以)</li>
+</ul>
+<p>下</p>
+<ul>
+<li>弄 Flask 大创接口</li>
+<li>看<code>孤独摇滚</code></li>
+</ul>
+</blockquote>
+<ul>
+<li></li>
+</ul>
+<h4 id="10">十月</h4> 
+<blockquote>
+<p><code>APEX\无畏契约</code>在玩</p>
+<h5 id="上-5"><a class="markdownIt-Anchor" href="#上-5"></a> 上</h5>
+<ul>
+<li>玩APEX</li>
+</ul>
+<h5 id="中-5"><a class="markdownIt-Anchor" href="#中-5"></a> 中</h5>
+<ul>
+<li>看<code>约战</code></li>
+</ul>
+<p>下</p>
+<ul>
+<li>玩<code>天际线2</code>(<s>答辩</s>)</li>
+<li>玩无畏契约</li>
+</ul>
+</blockquote>
+<ul>
+<li></li>
+</ul>
+<h4 id="11">十一月</h4> 
+<blockquote>
+<p><code>无畏契约</code>在玩</p>
+<h5 id="上-6"><a class="markdownIt-Anchor" href="#上-6"></a> 上</h5>
+<ul>
+<li>玩 <code>THE FINALS</code>(还可以)</li>
+</ul>
+<h5 id="中-6"><a class="markdownIt-Anchor" href="#中-6"></a> 中</h5>
+<ul>
+<li>学模型量化</li>
+<li>看<code>五等份</code></li>
+</ul>
+<p>下</p>
+<ul>
+<li>
+<p>实习初尝试~~失败告终</p>
+</li>
+<li>
+<p>去看世界赛Faker!!</p>
+</li>
+</ul>
+</blockquote>
+<h4 id="12">十二月</h4>
+<blockquote>
+<h5 id="上-7"><a class="markdownIt-Anchor" href="#上-7"></a> 上</h5>
+<ul>
+<li>生气了!!</li>
+<li>去看了广州<strong>邓紫棋演唱会</strong>!!!</li>
+</ul>
+<h5 id="中-7"><a class="markdownIt-Anchor" href="#中-7"></a> 中</h5>
+<ul>
+<li><strong>大学生特种兵:上沙—武汉—上海</strong></li>
+</ul>
+<p>下</p>
+<ul>
+<li>
+<p>在家玩云顶和PVZ</p>
+</li>
+<li>
+<p>车牌识别项目!</p>
+</li>
+<li>
+<p><code>回学校考试</code></p>
+</li>
+</ul>
+</blockquote>
+<ul>
+<li></li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2024/01/06/2024%E5%B9%B41%E6%9C%886%E6%97%A5-2023%E6%80%BB%E7%BB%93/" data-id="clrwazlri003h7ov4hila0kd3" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2023年12月22日-python之os库" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/12/22/2023%E5%B9%B412%E6%9C%8822%E6%97%A5-python%E4%B9%8Bos%E5%BA%93/" class="article-date">
+  <time class="post-time" datetime="2023-12-21T17:43:34.000Z" itemprop="datePublished">
+    <span class="post-month">12月</span><br/>
+    <span class="post-day">22</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/12/22/2023%E5%B9%B412%E6%9C%8822%E6%97%A5-python%E4%B9%8Bos%E5%BA%93/">2023年12月22日 python的一些实用的库</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="1-库"><a class="markdownIt-Anchor" href="#1-库"></a> 1、 库</h1>
+<h2 id="1-shutil库"><a class="markdownIt-Anchor" href="#1-shutil库"></a> 1、shutil库</h2>
+<h4 id="shutilcopy"><a class="markdownIt-Anchor" href="#shutilcopy"></a> <code>shutil.copy()</code></h4>
+<p>用于将文件内容从一个位置复制到另一个位置。</p>
+<p>示例：<code>shutil.copy('source.txt', 'destination.txt')</code></p>
+<p>将 <code>source.txt</code> 文件的内容复制到 <code>destination.txt</code> 中。</p>
+<h4 id="shutilmove"><a class="markdownIt-Anchor" href="#shutilmove"></a> <code>shutil.move()</code></h4>
+<p>用于移动文件或重命名文件。</p>
+<p>示例：<code>shutil.move('old_file.txt', 'new_directory/new_file.txt')</code></p>
+<p>将 <code>old_file.txt</code> 移动到 <code>new_directory</code> 中，并重命名为 <code>new_file.txt</code>。</p>
+<h4 id="shutilrmtree"><a class="markdownIt-Anchor" href="#shutilrmtree"></a> <code>shutil.rmtree()</code></h4>
+<p>用于删除文件夹及其内容。 示例：<code>shutil.rmtree('folder_to_delete')</code></p>
+<p>递归删除 <code>folder_to_delete</code> 文件夹及其所有内容。</p>
+<h4 id="shutilmake_archive"><a class="markdownIt-Anchor" href="#shutilmake_archive"></a> <code>shutil.make_archive()</code></h4>
+<p>用于创建归档文件（例如 ZIP 文件）。</p>
+<p>示例：<code>shutil.make_archive('archive_name', 'zip', 'folder_to_archive')</code></p>
+<p>将 <code>folder_to_archive</code> 文件夹打包为名为 <code>archive_name.zip</code> 的ZIP归档文件。</p>
+<h4 id="shutilunpack_archive"><a class="markdownIt-Anchor" href="#shutilunpack_archive"></a> <code>shutil.unpack_archive()</code></h4>
+<p>用于解压缩归档文件。</p>
+<p>示例：<code>shutil.unpack_archive('archive_name.zip', 'extracted_folder')</code> 将 <code>archive_name.zip</code> 解压缩到 <code>extracted_folder</code>。</p>
+<h4 id="shutildisk_usage"><a class="markdownIt-Anchor" href="#shutildisk_usage"></a> <code>shutil.disk_usage()</code></h4>
+<p>用于获取磁盘使用情况。</p>
+<p>示例：<code>usage = shutil.disk_usage('/')</code> 返回根目录 <code>/</code> 的磁盘使用情况，包括总空间、已用空间和可用空间。</p>
+<h2 id="2-os库"><a class="markdownIt-Anchor" href="#2-os库"></a> 2、os库</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os.path.expanduser()`</span><br></pre></td></tr></table></figure>
+<pre><code>`os.path` 模块提供的一个函数，用于展开用户路径中的波浪号 (`~`) 或类似的表示家目录的符号。
+</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os.path.basename()</span><br></pre></td></tr></table></figure>
+<p>​	对于路径 <code>/path/to/some/file.txt</code>，<code>os.path.basename()</code> 将返回 <code>file.txt</code>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os.path.splitext()</span><br></pre></td></tr></table></figure>
+<p>​	对于文件名 <code>example.txt</code>， 将返回一个元组 <code>('example', '.txt')</code>，其中 <code>'example'</code> 是文件名部分，<code>.txt</code> 是扩展名部分。</p>
+<h2 id="3-imutils"><a class="markdownIt-Anchor" href="#3-imutils"></a> 3、imutils</h2>
+<h4 id="imutilspathslist_images"><a class="markdownIt-Anchor" href="#imutilspathslist_images"></a> <code>imutils.paths.list_images()</code></h4>
+<p><code>imutils.paths</code> 列出指定目录中的图像文件路径。</p>
+<h4 id="imutilsresize"><a class="markdownIt-Anchor" href="#imutilsresize"></a> <code>imutils.resize()</code></h4>
+<p>用于调整图像大小的函数。可以使用 <code>imutils.resize(image, width=new_width)</code> 来调整图像的宽度为指定的 <code>new_width</code>，同时保持纵横比。</p>
+<h4 id="imutilsrotate"><a class="markdownIt-Anchor" href="#imutilsrotate"></a> <code>imutils.rotate()</code></h4>
+<p>用于旋转图像的函数。<code>imutils.rotate(image, angle=degree)</code> 可以将图像按照给定的角度 <code>degree</code> 进行旋转。</p>
+<h4 id="imutilsopencv2matplotlib"><a class="markdownIt-Anchor" href="#imutilsopencv2matplotlib"></a> <code>imutils.opencv2matplotlib()</code></h4>
+<p>用于将 OpenCV 格式的图像转换为 Matplotlib 可以显示的格式。</p>
+<p>当涉及到图像处理和计算机视觉任务时，<code>imutils</code> 库提供了一系列实用的功能函数。以下是一些其他常用的 <code>imutils</code> 函数：</p>
+<h4 id="imutilsresize-2"><a class="markdownIt-Anchor" href="#imutilsresize-2"></a> <code>imutils.resize()</code></h4>
+<p>用于调整图像大小的函数。可以使用 <code>imutils.resize(image, width=new_width)</code> 来调整图像的宽度为指定的 <code>new_width</code>，同时保持纵横比。</p>
+<h4 id="imutilsrotate_bound"><a class="markdownIt-Anchor" href="#imutilsrotate_bound"></a> <code>imutils.rotate_bound()</code></h4>
+<p>与 <code>imutils.rotate()</code> 类似，但是 <code>imutils.rotate_bound(image, angle=degree)</code> 会自动调整图像的大小，确保旋转后的图像完整显示在新的画布内。</p>
+<h4 id="imutilsauto_canny"><a class="markdownIt-Anchor" href="#imutilsauto_canny"></a> <code>imutils.auto_canny()</code></h4>
+<p>自适应边缘检测算法，<code>imutils.auto_canny(image, sigma=0.33)</code> 可以根据图像的梯度值智能地计算边缘检测的低阈值和高阈值。</p>
+<h4 id="imutilsgrab_contours"><a class="markdownIt-Anchor" href="#imutilsgrab_contours"></a> <code>imutils.grab_contours()</code></h4>
+<p>用于从不同版本的 OpenCV 中提取轮廓的兼容函数。可以使用 <code>contours = imutils.grab_contours(cnts)</code> 从轮廓对象 <code>cnts</code> 中提取实际的轮廓。</p>
+<h4 id="imutilsincrease_brightness"><a class="markdownIt-Anchor" href="#imutilsincrease_brightness"></a> <code>imutils.increase_brightness()</code></h4>
+<p>用于增加图像亮度的函数。<code>imutils.increase_brightness(image, value=25)</code> 可以通过添加 <code>value</code> 值来提高图像的亮度。</p>
+<h4 id="imutilstranslate"><a class="markdownIt-Anchor" href="#imutilstranslate"></a> <code>imutils.translate()</code></h4>
+<p>用于平移图像的函数。<code>imutils.translate(image, x=shift_x, y=shift_y)</code> 可以将图像沿着 x 和 y 轴平移指定的偏移量。</p>
+<h2 id="4-uuid"><a class="markdownIt-Anchor" href="#4-uuid"></a> 4、uuid</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uuid.uuid1()</span><br></pre></td></tr></table></figure>
+<p>​	<code>uuid</code>库中的<code>uuid1()</code>函数用于生成基于主机ID和当前时间的UUID。它基于主机的MAC地址和当前时间戳来生成UUID，因此它是基于时间的UUID。这个函数返回的UUID是32个字符的字符串，表示为32个长度的十六进制数字，通常显示为8-4-4-4-12的分段形式。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uuid.uuid4()</span><br></pre></td></tr></table></figure>
+<p><code>	uuid4()</code>函数用于生成随机UUID。它使用伪随机数来生成UUID，所以它是不可预测的。返回的UUID也是一个32个字符的字符串，通常显示为8-4-4-4-12的分段形式。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uuid.UUID()</span><br></pre></td></tr></table></figure>
+<p><code>	UUID()</code>函数用于将字符串形式的UUID转换为UUID对象。这对于将来自外部来源的UUID字符串转换为Python中的UUID对象很有用。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2023/12/22/2023%E5%B9%B412%E6%9C%8822%E6%97%A5-python%E4%B9%8Bos%E5%BA%93/" data-id="clrwazlr2000u7ov40oxkbtph" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2023年12月22日-车牌识别项目" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/12/22/2023%E5%B9%B412%E6%9C%8822%E6%97%A5-%E8%BD%A6%E7%89%8C%E8%AF%86%E5%88%AB%E9%A1%B9%E7%9B%AE/" class="article-date">
+  <time class="post-time" datetime="2023-12-21T17:02:33.000Z" itemprop="datePublished">
+    <span class="post-month">12月</span><br/>
+    <span class="post-day">22</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/12/22/2023%E5%B9%B412%E6%9C%8822%E6%97%A5-%E8%BD%A6%E7%89%8C%E8%AF%86%E5%88%AB%E9%A1%B9%E7%9B%AE/">2023年12月16-10日 五日车牌识别项目</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="车牌识别项目"><a class="markdownIt-Anchor" href="#车牌识别项目"></a> 车牌识别项目</h1>
+<h2 id="1"><a class="markdownIt-Anchor" href="#1"></a> 1、</h2>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2023/12/22/2023%E5%B9%B412%E6%9C%8822%E6%97%A5-%E8%BD%A6%E7%89%8C%E8%AF%86%E5%88%AB%E9%A1%B9%E7%9B%AE/" data-id="clrwazlr2000x7ov40u57687h" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl/" rel="tag">dl</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2023年12月8日-深度学习训练总结" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/12/08/2023%E5%B9%B412%E6%9C%888%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AE%AD%E7%BB%83%E6%80%BB%E7%BB%93/" class="article-date">
+  <time class="post-time" datetime="2023-12-08T12:27:25.000Z" itemprop="datePublished">
+    <span class="post-month">12月</span><br/>
+    <span class="post-day">08</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/12/08/2023%E5%B9%B412%E6%9C%888%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AE%AD%E7%BB%83%E6%80%BB%E7%BB%93/">2023年12月8日 深度学习训练总结</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-如何不用卷积对图片分类"><a class="markdownIt-Anchor" href="#1-如何不用卷积对图片分类"></a> 1 如何不用卷积对图片分类</h3>
+<p>全连接神经网络，</p>
+<p>HOG</p>
+<h3 id="2-断点继续训练数据集是否保证不变比较好"><a class="markdownIt-Anchor" href="#2-断点继续训练数据集是否保证不变比较好"></a> 2 断点继续训练，数据集是否保证不变比较好</h3>
+<h4 id="数据集不变的好处"><a class="markdownIt-Anchor" href="#数据集不变的好处"></a> 数据集不变的好处：</h4>
+<ol>
+<li><strong>一致性</strong>：在继续训练时使用相同的数据集，可以确保模型在相同的数据分布上进行训练，保持了训练的一致性。</li>
+<li><strong>避免分布变化</strong>：如果数据集发生变化，可能会引入新的数据分布，导致模型在新数据上表现不佳。</li>
+<li><strong>追溯性</strong>：如果需要回溯到特定训练点以排查问题或者进行对比实验，保持数据集不变会更容易复现相同的训练状态。</li>
+</ol>
+<h4 id="数据集变化的情况"><a class="markdownIt-Anchor" href="#数据集变化的情况"></a> 数据集变化的情况：</h4>
+<ol>
+<li><strong>数据扩充</strong>：有时候会对现有数据进行扩充、修正或更新，这种情况下训练过程中可能会引入新的数据。</li>
+<li><strong>实时学习</strong>：某些场景下，模型需要不断从实时流数据中学习，此时数据集可能会不断变化。</li>
+</ol>
+<h3 id="3-训练的数据集不同加载预训练模型参数还有用吗"><a class="markdownIt-Anchor" href="#3-训练的数据集不同加载预训练模型参数还有用吗"></a> 3 训练的数据集不同，加载预训练模型参数还有用吗</h3>
+<p>预训练模型在大规模数据集上进行了训练，学习到了<strong>通用的特征表示</strong>，可能有助于加速模型收敛并提高模型的表现。</p>
+<p>如果你的训练数据集与预训练模型的训练数据集<strong>非常不同</strong>（，可能需要更多的微调或者甚至完全冻结预训练模型的参数。</p>
+<h4 id="4-model-val准确率再80上不去"><a class="markdownIt-Anchor" href="#4-model-val准确率再80上不去"></a> 4 model val准确率再80上不去？</h4>
+<img src="./2023年12月8日-深度学习训练总结/image-20231208224957461.png" alt="image-20231208224957461" style="zoom: 80%;" />
+<h4 id="5-什么是梯度消失"><a class="markdownIt-Anchor" href="#5-什么是梯度消失"></a> 5 什么是梯度消失</h4>
+<p>进行反向传播算法时，较低层的权重更新变得非常小甚至消失的现象。这种情况通常发生在很深的神经网络中</p>
+<p>在反向传播期间，梯度会随着每一层的权重更新而逐渐减小。对于某些激活函数，特别是 Sigmoid 函数在输入很大或很小时会饱和，导致函数的梯度非常接近于零。</p>
+<p><img src="./2023%E5%B9%B412%E6%9C%888%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AE%AD%E7%BB%83%E6%80%BB%E7%BB%93/image-20231208233827091.png" alt="image-20231208233827091" /></p>
+<h4 id="6-如何设置学习率衰减"><a class="markdownIt-Anchor" href="#6-如何设置学习率衰减"></a> 6 如何设置学习率衰减</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">import torch.optim as optim</span><br><span class="line">from torch.optim import lr_scheduler</span><br><span class="line"></span><br><span class="line"># 定义模型和优化器</span><br><span class="line">model = YourModel()  # 请替换成您的模型</span><br><span class="line">optimizer = optim.SGD(model.parameters(), lr=0.1)  # 设置初始学习率</span><br><span class="line"></span><br><span class="line"># 定义学习率衰减器，例如 StepLR</span><br><span class="line"># StepLR 每隔 step_size 个epoch将学习率乘以 gamma</span><br><span class="line"># 这里可以根据需要选择其他的学习率衰减策略，如使用其他的调度器类</span><br><span class="line">scheduler = lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.1)</span><br><span class="line"></span><br><span class="line"># 在训练过程中，每个 epoch 结束后更新学习率</span><br><span class="line">for epoch in range(num_epochs):</span><br><span class="line">    # 训练步骤，包括前向传播、损失计算、反向传播等</span><br><span class="line"></span><br><span class="line">    # 更新学习率</span><br><span class="line">    scheduler.step()</span><br><span class="line"></span><br><span class="line">    # 其他训练步骤</span><br><span class="line">    # ...</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2023/12/08/2023%E5%B9%B412%E6%9C%888%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AE%AD%E7%BB%83%E6%80%BB%E7%BB%93/" data-id="clrwazlr300117ov4fgy3an0d" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl/" rel="tag">dl</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2023年12月4日-PCA" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/12/04/2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/" class="article-date">
+  <time class="post-time" datetime="2023-12-04T13:06:58.000Z" itemprop="datePublished">
+    <span class="post-month">12月</span><br/>
+    <span class="post-day">04</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/12/04/2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/">2023年12月4日 PCA</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="pca"><a class="markdownIt-Anchor" href="#pca"></a> PCA</h1>
+<h2 id="1-pca原理"><a class="markdownIt-Anchor" href="#1-pca原理"></a> 1、PCA原理</h2>
+<p>参考：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1E5411E71z/?spm_id_from=333.337.search-card.all.click&amp;vd_source=d3c0d5e026e5b0637b219503cea5513e">https://www.bilibili.com/video/BV1E5411E71z/?spm_id_from=333.337.search-card.all.click&amp;vd_source=d3c0d5e026e5b0637b219503cea5513e</a></p>
+<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204211124849.png" alt="image-20231204211124849" /></p>
+<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204211048339.png" alt="image-20231204211048339" /></p>
+<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204211113027.png" alt="image-20231204211113027" /></p>
+<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204211258728.png" alt="image-20231204211258728" /></p>
+<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204211356758.png" alt="image-20231204211356758" /></p>
+<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204211402550.png" alt="image-20231204211402550" /></p>
+<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204211416402.png" alt="image-20231204211416402" /><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204211427283.png" alt="image-20231204211427283" /></p>
+<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204211423299.png" alt="image-20231204211423299" /></p>
+<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204211505125.png" alt="image-20231204211505125" /><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204211617375.png" alt="image-20231204211617375" /></p>
+<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204211650063.png" alt="image-20231204211650063" /></p>
+<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204211739123.png" alt="image-20231204211739123" /></p>
+<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204211747417.png" alt="image-20231204211747417" /></p>
+<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204211757163.png" alt="image-20231204211757163" /></p>
+<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204212108183.png" alt="image-20231204212108183" /></p>
+<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204212313493.png" alt="image-20231204212313493" /></p>
+<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204212518333.png" alt="image-20231204212518333" /></p>
+<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204212506525.png" alt="image-20231204212506525" /></p>
+<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204212512462.png" alt="image-20231204212512462" /></p>
+<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204212542766.png" alt="image-20231204212542766" /></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2023/12/04/2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/" data-id="clrwazlr3000y7ov4a2g29mne" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+
+
+  <nav id="page-nav">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/">next &amp;raquo;</a>
+  </nav>
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>60</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>16</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2023 - 2024 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

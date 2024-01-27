@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>cuda编程day1 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Ubuntu配置以及问题总结  一、WSL无法成功安装Ubuntu   二、问题如下图：  2.1Ubuntu初始化无法正常输入密码   2.2.更改密码 1231. 以管理员身份打开 PowerShell2. 输入命令 wsl -u root3. 输入命令 passwd username 修改用户密码，username即待重置的用户的名称 ​	切换用户 1ubuntu1804 config -">
+<meta property="og:type" content="article">
+<meta property="og:title" content="cuda编程day1">
+<meta property="og:url" content="https://shakewely.github.io/2023/08/12/CUDA%E7%BC%96%E7%A8%8Bday1/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="Ubuntu配置以及问题总结  一、WSL无法成功安装Ubuntu   二、问题如下图：  2.1Ubuntu初始化无法正常输入密码   2.2.更改密码 1231. 以管理员身份打开 PowerShell2. 输入命令 wsl -u root3. 输入命令 passwd username 修改用户密码，username即待重置的用户的名称 ​	切换用户 1ubuntu1804 config -">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/12/CUDA%E7%BC%96%E7%A8%8Bday1/CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812132357377.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/12/CUDA%E7%BC%96%E7%A8%8Bday1/CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812132341798.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/12/CUDA%E7%BC%96%E7%A8%8Bday1/CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812160508642.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/12/CUDA%E7%BC%96%E7%A8%8Bday1/CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812161248349.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/12/CUDA%E7%BC%96%E7%A8%8Bday1/CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812132330526.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/12/CUDA%E7%BC%96%E7%A8%8Bday1/CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812132313546.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/12/CUDA%E7%BC%96%E7%A8%8Bday1/CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812160618750.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/12/CUDA%E7%BC%96%E7%A8%8Bday1/CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812162902769.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/12/CUDA%E7%BC%96%E7%A8%8Bday1/CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812132246556.png">
+<meta property="article:published_time" content="2023-08-12T08:18:24.000Z">
+<meta property="article:modified_time" content="2023-08-25T15:07:15.737Z">
+<meta property="article:author" content="Weakliy">
+<meta property="article:tag" content="cuda">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shakewely.github.io/2023/08/12/CUDA%E7%BC%96%E7%A8%8Bday1/CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812132357377.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>60</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>16</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-CUDA编程day1" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/08/12/CUDA%E7%BC%96%E7%A8%8Bday1/" class="article-date">
+  <time class="post-time" datetime="2023-08-12T08:18:24.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">12</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      cuda编程day1
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="ubuntu配置以及问题总结"><a class="markdownIt-Anchor" href="#ubuntu配置以及问题总结"></a> Ubuntu配置以及问题总结</h1>
+<h2 id="一-wsl无法成功安装ubuntu"><a class="markdownIt-Anchor" href="#一-wsl无法成功安装ubuntu"></a> 一、WSL无法成功安装Ubuntu</h2>
+<p><img src="./CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812132357377.png" alt="image-20230812132357377" /></p>
+<h2 id="二-问题如下图"><a class="markdownIt-Anchor" href="#二-问题如下图"></a> 二、问题如下图：</h2>
+<h2 id="21ubuntu初始化无法正常输入密码"><a class="markdownIt-Anchor" href="#21ubuntu初始化无法正常输入密码"></a> 2.1Ubuntu初始化无法正常输入密码</h2>
+<p><img src="./CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812132341798.png" alt="" /></p>
+<h2 id="22更改密码"><a class="markdownIt-Anchor" href="#22更改密码"></a> 2.2.更改密码</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1. 以管理员身份打开 PowerShell</span><br><span class="line">2. 输入命令 wsl -u root</span><br><span class="line">3. 输入命令 passwd username 修改用户密码，username即待重置的用户的名称</span><br></pre></td></tr></table></figure>
+<p>​	<strong>切换用户</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ubuntu1804 config --default-user ubuntu1804</span><br></pre></td></tr></table></figure>
+<p>​	成功！</p>
+<p><img src="./CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812160508642.png" alt="image-20230812160508642" /></p>
+<h2 id="三-无法编译"><a class="markdownIt-Anchor" href="#三-无法编译"></a> 三、无法编译</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">			nvcc : 无法将“nvcc”项识别为 cmdlet、函数、脚本文件或可运行程序的名称。请检查名称的拼写 ，如果包括路径，请确保路径正确，然后再试一次。 所在位置 行:1 字符: 1 + nvcc test.cu -o test + ~~~~    + CategoryInfo          : ObjectNotFound: (nvcc:String) [], CommandNotFoundExceptio     n    + FullyQualifiedErrorId : CommandNotFoundException cuda</span><br><span class="line"></span><br><span class="line">​		cuda安装成功但是出现上面报错（nvcc-v成功运行）</span><br></pre></td></tr></table></figure>
+<p><strong>文件目录：</strong></p>
+<p><img src="./CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812161248349.png" alt="image-20230812161248349" /></p>
+<h3 id="31-可能存在的问题环境变量未配置-cuda是否安装成功"><a class="markdownIt-Anchor" href="#31-可能存在的问题环境变量未配置-cuda是否安装成功"></a> 3.1 可能存在的问题：环境变量未配置、cuda是否安装成功、</h3>
+<p><img src="./CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812132330526.png" alt="image-20230812132330526" /></p>
+<h3 id="32-代码未保存"><a class="markdownIt-Anchor" href="#32-代码未保存"></a> 3.2 代码未保存、</h3>
+<p>​	用vscode编写cuda代码，写完却一直无法成功编译，经检查才发现忘记保存，但是保存的时候才发现vscode无权限无法保存、百般调试后可能的问题：1. vscode无权限， 2. 未给创建的文件赋予读写权限。</p>
+<p>​	基于上面的两种可能，解决办法。1：重新创建文件，赋予权限，重新编写代码。2：改用nano编写（nano在ubuntu上安装）</p>
+<p>创建新文件</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir cudalesson</span><br><span class="line">chmod <span class="number">777</span> cudalesson  <span class="comment"># 赋予读写权限</span></span><br></pre></td></tr></table></figure>
+<p>在nano上编写代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nano test.cu</span><br></pre></td></tr></table></figure>
+<p>发现代码有误，更改：<img src="./CUDA编程day1/image-20230812132313546.png" alt="image-20230812132313546" style="zoom:50%;" /></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">hello_from_gpu</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;hello world from the GPU\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    hello_from_gpu&lt;&lt;&lt;<span class="number">4</span>, <span class="number">4</span>&gt;&gt;&gt;();</span><br><span class="line">    <span class="built_in">cudaDeviceSynchronize</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="四-配置"><a class="markdownIt-Anchor" href="#四-配置"></a> 四、配置</h2>
+<h3 id="41-链接vscode"><a class="markdownIt-Anchor" href="#41-链接vscode"></a> 4.1 链接vscode</h3>
+<p><strong>完美解决window11 wsl ubuntu下code.出现code：commandnot found的问题</strong></p>
+<p><img src="./CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812160618750.png" alt="image-20230812160618750" /></p>
+<p><strong>解决办法</strong></p>
+<p>安装 <a target="_blank" rel="noopener" href="https://code.visualstudio.com/download">VS Code 安装页</a></p>
+<p>选中“添加到 PATH”选项</p>
+<p>安装<a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack">远程开发扩展包</a></p>
+<p>更新Ubuntu</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure>
+<p>输入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">code .   # 注意code空格.</span><br></pre></td></tr></table></figure>
+<p>成功运行：</p>
+<img src="./CUDA编程day1/image-20230812162902769.png" alt="image-20230812162902769" style="zoom:25%;" />
+<h2 id="五-编译"><a class="markdownIt-Anchor" href="#五-编译"></a> 五、编译：</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvcc test.cu -o test</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./test	 # 运行</span><br></pre></td></tr></table></figure>
+<h3 id="成功"><a class="markdownIt-Anchor" href="#成功"></a> 成功！</h3>
+<p>!<img src="./CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812132246556.png" alt="image-20230812132246556" /></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2023/08/12/CUDA%E7%BC%96%E7%A8%8Bday1/" data-id="clrwazlri003i7ov44ctbe5qr" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cuda/" rel="tag">cuda</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          cuda编程day2
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-tensorRT/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">tensorRT 安装</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>60</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>16</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2023 - 2024 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

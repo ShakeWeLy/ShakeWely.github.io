@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>大创云服务器部署总结 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="大创云服务器部署总结  1 背景 ​	服务器：阿里云测试，腾讯云运用 ​	最终网站：https:&#x2F;&#x2F;www.dachuangchatang.cn ​	api：https:&#x2F;&#x2F;www.dachuangchatang.cn&#x2F;process_image  2 步骤  1. 编写flask网页代码  1.设置主界面 1234主界面：1. 选择图片按钮2. 上传图片按钮（运行api）3. 返回结果并展示">
+<meta property="og:type" content="article">
+<meta property="og:title" content="大创云服务器部署总结">
+<meta property="og:url" content="https://shakewely.github.io/2023/09/24/2023%E5%B9%B49%E6%9C%8824%E6%97%A5-%E9%98%BF%E9%87%8C%E4%BA%91%E5%A4%A7%E5%88%9B%E9%83%A8%E7%BD%B2%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="大创云服务器部署总结  1 背景 ​	服务器：阿里云测试，腾讯云运用 ​	最终网站：https:&#x2F;&#x2F;www.dachuangchatang.cn ​	api：https:&#x2F;&#x2F;www.dachuangchatang.cn&#x2F;process_image  2 步骤  1. 编写flask网页代码  1.设置主界面 1234主界面：1. 选择图片按钮2. 上传图片按钮（运行api）3. 返回结果并展示">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2023/09/24/2023%E5%B9%B49%E6%9C%8824%E6%97%A5-%E9%98%BF%E9%87%8C%E4%BA%91%E5%A4%A7%E5%88%9B%E9%83%A8%E7%BD%B2%E6%80%BB%E7%BB%93/2023%E5%B9%B49%E6%9C%8824%E6%97%A5-%E9%98%BF%E9%87%8C%E4%BA%91%E5%A4%A7%E5%88%9B%E9%83%A8%E7%BD%B2%E6%80%BB%E7%BB%93/image-20230924221945390.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/09/24/2023%E5%B9%B49%E6%9C%8824%E6%97%A5-%E9%98%BF%E9%87%8C%E4%BA%91%E5%A4%A7%E5%88%9B%E9%83%A8%E7%BD%B2%E6%80%BB%E7%BB%93/2023%E5%B9%B49%E6%9C%8824%E6%97%A5-%E9%98%BF%E9%87%8C%E4%BA%91%E5%A4%A7%E5%88%9B%E9%83%A8%E7%BD%B2%E6%80%BB%E7%BB%93/image-20230924222102922.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/09/24/2023%E5%B9%B49%E6%9C%8824%E6%97%A5-%E9%98%BF%E9%87%8C%E4%BA%91%E5%A4%A7%E5%88%9B%E9%83%A8%E7%BD%B2%E6%80%BB%E7%BB%93/2023%E5%B9%B49%E6%9C%8824%E6%97%A5-%E9%98%BF%E9%87%8C%E4%BA%91%E5%A4%A7%E5%88%9B%E9%83%A8%E7%BD%B2%E6%80%BB%E7%BB%93/image-20230924222010169.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/09/24/2023%E5%B9%B49%E6%9C%8824%E6%97%A5-%E9%98%BF%E9%87%8C%E4%BA%91%E5%A4%A7%E5%88%9B%E9%83%A8%E7%BD%B2%E6%80%BB%E7%BB%93/2023%E5%B9%B49%E6%9C%8824%E6%97%A5-%E9%98%BF%E9%87%8C%E4%BA%91%E5%A4%A7%E5%88%9B%E9%83%A8%E7%BD%B2%E6%80%BB%E7%BB%93/image-20230924222031482.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/09/24/2023%E5%B9%B49%E6%9C%8824%E6%97%A5-%E9%98%BF%E9%87%8C%E4%BA%91%E5%A4%A7%E5%88%9B%E9%83%A8%E7%BD%B2%E6%80%BB%E7%BB%93/2023%E5%B9%B49%E6%9C%8824%E6%97%A5-%E9%98%BF%E9%87%8C%E4%BA%91%E5%A4%A7%E5%88%9B%E9%83%A8%E7%BD%B2%E6%80%BB%E7%BB%93/image-20230924222534666.png">
+<meta property="article:published_time" content="2023-09-24T14:16:36.000Z">
+<meta property="article:modified_time" content="2023-10-29T07:05:21.884Z">
+<meta property="article:author" content="Weakliy">
+<meta property="article:tag" content="杂">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shakewely.github.io/2023/09/24/2023%E5%B9%B49%E6%9C%8824%E6%97%A5-%E9%98%BF%E9%87%8C%E4%BA%91%E5%A4%A7%E5%88%9B%E9%83%A8%E7%BD%B2%E6%80%BB%E7%BB%93/2023%E5%B9%B49%E6%9C%8824%E6%97%A5-%E9%98%BF%E9%87%8C%E4%BA%91%E5%A4%A7%E5%88%9B%E9%83%A8%E7%BD%B2%E6%80%BB%E7%BB%93/image-20230924221945390.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>60</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>16</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2023年9月24日-阿里云大创部署总结" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/09/24/2023%E5%B9%B49%E6%9C%8824%E6%97%A5-%E9%98%BF%E9%87%8C%E4%BA%91%E5%A4%A7%E5%88%9B%E9%83%A8%E7%BD%B2%E6%80%BB%E7%BB%93/" class="article-date">
+  <time class="post-time" datetime="2023-09-24T14:16:36.000Z" itemprop="datePublished">
+    <span class="post-month">9月</span><br/>
+    <span class="post-day">24</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      大创云服务器部署总结
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="大创云服务器部署总结"><a class="markdownIt-Anchor" href="#大创云服务器部署总结"></a> 大创云服务器部署总结</h1>
+<h2 id="1-背景"><a class="markdownIt-Anchor" href="#1-背景"></a> 1 背景</h2>
+<p>​	服务器：阿里云测试，腾讯云运用</p>
+<p>​	最终网站：<a target="_blank" rel="noopener" href="https://www.dachuangchatang.cn">https://www.dachuangchatang.cn</a></p>
+<p>​	api：<a target="_blank" rel="noopener" href="https://www.dachuangchatang.cn/process_image">https://www.dachuangchatang.cn/process_image</a></p>
+<h2 id="2-步骤"><a class="markdownIt-Anchor" href="#2-步骤"></a> 2 步骤</h2>
+<h3 id="1-编写flask网页代码"><a class="markdownIt-Anchor" href="#1-编写flask网页代码"></a> 1. 编写flask网页代码</h3>
+<h4 id="1设置主界面"><a class="markdownIt-Anchor" href="#1设置主界面"></a> 1.设置主界面</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">主界面：</span><br><span class="line">1. 选择图片按钮</span><br><span class="line">2. 上传图片按钮（运行api）</span><br><span class="line">3. 返回结果并展示</span><br></pre></td></tr></table></figure>
+<p><a target="_blank" rel="noopener" href="http://app.py">app.py</a>:</p>
+<p><img src="./2023%E5%B9%B49%E6%9C%8824%E6%97%A5-%E9%98%BF%E9%87%8C%E4%BA%91%E5%A4%A7%E5%88%9B%E9%83%A8%E7%BD%B2%E6%80%BB%E7%BB%93/image-20230924221945390.png" alt="image-20230924221945390" /></p>
+<p>index.html:</p>
+<p><img src="./2023%E5%B9%B49%E6%9C%8824%E6%97%A5-%E9%98%BF%E9%87%8C%E4%BA%91%E5%A4%A7%E5%88%9B%E9%83%A8%E7%BD%B2%E6%80%BB%E7%BB%93/image-20230924222102922.png" alt="image-20230924222102922" /></p>
+<h4 id="2编写api"><a class="markdownIt-Anchor" href="#2编写api"></a> 2.编写api</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">传输格式：</span><br><span class="line">data = &#123;&#x27;encoded_data&#x27;: encoded_image&#125;</span><br><span class="line">其中：encoded_image是进行 Base64 编码后的图像文件</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B49%E6%9C%8824%E6%97%A5-%E9%98%BF%E9%87%8C%E4%BA%91%E5%A4%A7%E5%88%9B%E9%83%A8%E7%BD%B2%E6%80%BB%E7%BB%93/image-20230924222010169.png" alt="image-20230924222010169" /></p>
+<h4 id="3实现功能函数"><a class="markdownIt-Anchor" href="#3实现功能函数"></a> 3.实现功能函数</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">功能列表：</span><br><span class="line">1. 解码base64编码的图片</span><br><span class="line">2. 图片备份与预处理</span><br><span class="line">3. 加载model预测</span><br><span class="line">4. 返回结果（process后的图片和预测结果）</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B49%E6%9C%8824%E6%97%A5-%E9%98%BF%E9%87%8C%E4%BA%91%E5%A4%A7%E5%88%9B%E9%83%A8%E7%BD%B2%E6%80%BB%E7%BB%93/image-20230924222031482.png" alt="image-20230924222031482" /></p>
+<h4 id="4问题总结"><a class="markdownIt-Anchor" href="#4问题总结"></a> 4.问题总结：</h4>
+<h5 id="1-函数返回值以及页面显示"><a class="markdownIt-Anchor" href="#1-函数返回值以及页面显示"></a> 1. 函数返回值以及页面显示</h5>
+<h5 id="2显示图像处理"><a class="markdownIt-Anchor" href="#2显示图像处理"></a> 2.显示图像处理</h5>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 2023年9月24日修改</span></span><br><span class="line"><span class="comment"># 设定最大宽度和最大高度</span></span><br><span class="line">max_width = <span class="number">512</span></span><br><span class="line">max_height = <span class="number">512</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算按比例缩放后的新尺寸</span></span><br><span class="line">width, height = image.size</span><br><span class="line"><span class="keyword">if</span> width &gt; max_width <span class="keyword">or</span> height &gt; max_height:</span><br><span class="line">    ratio = <span class="built_in">min</span>(max_width / width, max_height / height)</span><br><span class="line">    new_width = <span class="built_in">int</span>(width * ratio)</span><br><span class="line">    new_height = <span class="built_in">int</span>(height * ratio)</span><br><span class="line">    image.thumbnail((new_width, new_height))</span><br><span class="line"><span class="keyword">elif</span> width &lt;= max_width <span class="keyword">or</span> height &lt;= max_height:</span><br><span class="line">    <span class="comment"># 如果宽度和高度都小于512像素，将图像等比例放大至512像素</span></span><br><span class="line">    ratio = <span class="built_in">min</span>(max_width / width, max_height / height)</span><br><span class="line">    new_width = <span class="built_in">int</span>(width * ratio)</span><br><span class="line">    new_height = <span class="built_in">int</span>(height * ratio)</span><br><span class="line">    image = image.resize((new_width, new_height), Image.ANTIALIAS)</span><br><span class="line">image_save = image.resize((<span class="built_in">int</span>(image.width * <span class="number">0.5</span>), <span class="built_in">int</span>(image.height * <span class="number">0.5</span>)), Image.ANTIALIAS)</span><br><span class="line"><span class="comment"># print(image.width,image.height)</span></span><br><span class="line">save_path = os.path.join(<span class="string">&#x27;./static&#x27;</span>, filename)</span><br><span class="line">image_save.save(save_path, <span class="built_in">format</span>=<span class="string">&quot;PNG&quot;</span>)</span><br></pre></td></tr></table></figure>
+<h5 id="3"><a class="markdownIt-Anchor" href="#3"></a> 3.</h5>
+<h3 id="2部署到云服务器"><a class="markdownIt-Anchor" href="#2部署到云服务器"></a> 2.部署到云服务器</h3>
+<h4 id="1-注册服务器"><a class="markdownIt-Anchor" href="#1-注册服务器"></a> 1 注册服务器</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="2-配置环境"><a class="markdownIt-Anchor" href="#2-配置环境"></a> 2 配置环境</h4>
+<p>传输文件：</p>
+<p><img src="./2023%E5%B9%B49%E6%9C%8824%E6%97%A5-%E9%98%BF%E9%87%8C%E4%BA%91%E5%A4%A7%E5%88%9B%E9%83%A8%E7%BD%B2%E6%80%BB%E7%BB%93/image-20230924222534666.png" alt="image-20230924222534666" /></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">配置环境</span><br><span class="line">1. python安装</span><br><span class="line">2. 创建虚拟环境</span><br><span class="line">3. 安装环境依赖</span><br><span class="line">4. 运行测试代码</span><br><span class="line">5. 设置安全组，开放端口（重要！）</span><br></pre></td></tr></table></figure>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sudo yum install python3-virtualenv</span><br><span class="line">python3 -m venv myenv</span><br><span class="line">source myenv/bin/activate</span><br><span class="line">pip install ./torch-<span class="number">1</span>.<span class="number">8</span>.<span class="number">0</span>-cp36-cp36m-manylinux1_x86_64.whl </span><br><span class="line">pip install pillow onnxruntime numpy flask</span><br><span class="line">pip install torchvision==<span class="number">0</span>.<span class="number">9</span>.<span class="number">0</span></span><br><span class="line">deactivate # 退出环境 </span><br></pre></td></tr></table></figure>
+<h4 id="3-注册域名与备案"><a class="markdownIt-Anchor" href="#3-注册域名与备案"></a> 3 注册域名与备案</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">步骤：</span><br><span class="line">1. 注册域名</span><br><span class="line">2. 域名绑定ip</span><br></pre></td></tr></table></figure>
+<h4 id=""><a class="markdownIt-Anchor" href="#"></a> </h4>
+<h4 id="4-域名证书与域名绑定"><a class="markdownIt-Anchor" href="#4-域名证书与域名绑定"></a> 4 域名证书与域名绑定</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">步骤：</span><br><span class="line">1. 生成证书，并下载相关的密钥（nigix）</span><br><span class="line">2. 网站备案和公安备案</span><br><span class="line">3. 配置conf文件（ip链接域名，配置密钥，）</span><br></pre></td></tr></table></figure>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sudo yum update</span><br><span class="line">sudo yum install nginx # 安装 nginx</span><br><span class="line"># 编辑conf文件</span><br><span class="line">nginx -t  # 检查错误</span><br><span class="line">service nginx restart  # 重启并检查状态</span><br><span class="line">sudo systemctl <span class="built_in">start</span> nginx</span><br><span class="line">sudo systemctl status nginx</span><br></pre></td></tr></table></figure>
+<h3 id="3部署与测试"><a class="markdownIt-Anchor" href="#3部署与测试"></a> 3.部署与测试</h3>
+<h4 id="1-用flask部署"><a class="markdownIt-Anchor" href="#1-用flask部署"></a> 1. 用flask部署，</h4>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 app.py</span><br></pre></td></tr></table></figure>
+<h4 id="2爬虫测试"><a class="markdownIt-Anchor" href="#2爬虫测试"></a> 2.爬虫测试</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 作者：Weakliy</span></span><br><span class="line"><span class="comment"># 创建日期：2023/8/28 22:00</span></span><br><span class="line"><span class="comment"># 描述：这个文件实现了爬虫测试网站。</span></span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取图像文件并进行 Base64 编码</span></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">r&quot;F:\Pydata\tea_flask\bigimg.jpg&quot;</span>, <span class="string">&#x27;rb&#x27;</span>) <span class="keyword">as</span> image_file:</span><br><span class="line">    encoded_image = base64.b64encode(image_file.read()).decode(<span class="string">&#x27;utf-8&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 构造请求数据</span></span><br><span class="line">data = &#123;<span class="string">&#x27;encoded_data&#x27;</span>: encoded_image&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 发送 POST 请求到 /process_image 路由</span></span><br><span class="line">response = requests.post(<span class="string">&#x27;https://www.dachuangchatang.cn/process_image&#x27;</span>, json=data)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解析响应</span></span><br><span class="line"><span class="keyword">if</span> response.status_code == <span class="number">200</span>:</span><br><span class="line">    result = response.json()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Result:&quot;</span>, result[<span class="string">&#x27;result&#x27;</span>])</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Prediction:&quot;</span>, result[<span class="string">&#x27;res&#x27;</span>])</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Error:&quot;</span>, response.status_code)</span><br><span class="line">    <span class="built_in">print</span>(response.text)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="3-程序挂起"><a class="markdownIt-Anchor" href="#3-程序挂起"></a> 3. 程序挂起</h4>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">nohup python3 app.py &amp;</span><br><span class="line">ps <span class="built_in">aux</span> | grep python # 查找进程</span><br><span class="line">kill <span class="number">25360</span> # 杀死进程</span><br></pre></td></tr></table></figure>
+<h4 id="4-解决程序自动关闭"><a class="markdownIt-Anchor" href="#4-解决程序自动关闭"></a> 4. 解决：程序自动关闭</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">修改/etc/ssh/sshd_config的conf：</span><br><span class="line"></span><br><span class="line">ClientAliveInterval 30</span><br><span class="line">ClientAliveCountMax 86400</span><br></pre></td></tr></table></figure>
+<h4 id="5-解决传输文件大小限制"><a class="markdownIt-Anchor" href="#5-解决传输文件大小限制"></a> 5. 解决：传输文件大小限制</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">修改nginx.conf</span><br><span class="line">添加代码：</span><br><span class="line">client_max_body_size 20M;</span><br></pre></td></tr></table></figure>
+<h1 id="编写日期2023年9月24日22点38分"><a class="markdownIt-Anchor" href="#编写日期2023年9月24日22点38分"></a> 编写日期：2023年9月24日22点38分</h1>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2023/09/24/2023%E5%B9%B49%E6%9C%8824%E6%97%A5-%E9%98%BF%E9%87%8C%E4%BA%91%E5%A4%A7%E5%88%9B%E9%83%A8%E7%BD%B2%E6%80%BB%E7%BB%93/" data-id="clrwazlrd002h7ov4bfc8e6n6" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9D%82/" rel="tag">杂</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/09/24/2023%E5%B9%B49%E6%9C%8824%E6%97%A5-%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%91%BD%E4%BB%A4%E6%95%B4%E7%90%86/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          命令行命令整理
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/09/19/2023%E5%B9%B49%E6%9C%8819%E6%97%A5-c-QT/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">c++QT</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>60</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>16</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2023 - 2024 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

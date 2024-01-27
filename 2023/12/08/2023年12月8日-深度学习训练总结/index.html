@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2023年12月8日 深度学习训练总结 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1 如何不用卷积对图片分类 全连接神经网络， HOG  2 断点继续训练，数据集是否保证不变比较好  数据集不变的好处：  一致性：在继续训练时使用相同的数据集，可以确保模型在相同的数据分布上进行训练，保持了训练的一致性。 避免分布变化：如果数据集发生变化，可能会引入新的数据分布，导致模型在新数据上表现不佳。 追溯性：如果需要回溯到特定训练点以排查问题或者进行对比实验，保持数据集不变会更容易复现">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2023年12月8日 深度学习训练总结">
+<meta property="og:url" content="https://shakewely.github.io/2023/12/08/2023%E5%B9%B412%E6%9C%888%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AE%AD%E7%BB%83%E6%80%BB%E7%BB%93/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="1 如何不用卷积对图片分类 全连接神经网络， HOG  2 断点继续训练，数据集是否保证不变比较好  数据集不变的好处：  一致性：在继续训练时使用相同的数据集，可以确保模型在相同的数据分布上进行训练，保持了训练的一致性。 避免分布变化：如果数据集发生变化，可能会引入新的数据分布，导致模型在新数据上表现不佳。 追溯性：如果需要回溯到特定训练点以排查问题或者进行对比实验，保持数据集不变会更容易复现">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2023/12/08/2023%E5%B9%B412%E6%9C%888%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AE%AD%E7%BB%83%E6%80%BB%E7%BB%93/2023%E5%B9%B412%E6%9C%888%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AE%AD%E7%BB%83%E6%80%BB%E7%BB%93/image-20231208224957461.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/12/08/2023%E5%B9%B412%E6%9C%888%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AE%AD%E7%BB%83%E6%80%BB%E7%BB%93/2023%E5%B9%B412%E6%9C%888%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AE%AD%E7%BB%83%E6%80%BB%E7%BB%93/image-20231208233827091.png">
+<meta property="article:published_time" content="2023-12-08T12:27:25.000Z">
+<meta property="article:modified_time" content="2023-12-21T17:00:09.112Z">
+<meta property="article:author" content="Weakliy">
+<meta property="article:tag" content="dl">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shakewely.github.io/2023/12/08/2023%E5%B9%B412%E6%9C%888%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AE%AD%E7%BB%83%E6%80%BB%E7%BB%93/2023%E5%B9%B412%E6%9C%888%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AE%AD%E7%BB%83%E6%80%BB%E7%BB%93/image-20231208224957461.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>60</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>16</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2023年12月8日-深度学习训练总结" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/12/08/2023%E5%B9%B412%E6%9C%888%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AE%AD%E7%BB%83%E6%80%BB%E7%BB%93/" class="article-date">
+  <time class="post-time" datetime="2023-12-08T12:27:25.000Z" itemprop="datePublished">
+    <span class="post-month">12月</span><br/>
+    <span class="post-day">08</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2023年12月8日 深度学习训练总结
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-如何不用卷积对图片分类"><a class="markdownIt-Anchor" href="#1-如何不用卷积对图片分类"></a> 1 如何不用卷积对图片分类</h3>
+<p>全连接神经网络，</p>
+<p>HOG</p>
+<h3 id="2-断点继续训练数据集是否保证不变比较好"><a class="markdownIt-Anchor" href="#2-断点继续训练数据集是否保证不变比较好"></a> 2 断点继续训练，数据集是否保证不变比较好</h3>
+<h4 id="数据集不变的好处"><a class="markdownIt-Anchor" href="#数据集不变的好处"></a> 数据集不变的好处：</h4>
+<ol>
+<li><strong>一致性</strong>：在继续训练时使用相同的数据集，可以确保模型在相同的数据分布上进行训练，保持了训练的一致性。</li>
+<li><strong>避免分布变化</strong>：如果数据集发生变化，可能会引入新的数据分布，导致模型在新数据上表现不佳。</li>
+<li><strong>追溯性</strong>：如果需要回溯到特定训练点以排查问题或者进行对比实验，保持数据集不变会更容易复现相同的训练状态。</li>
+</ol>
+<h4 id="数据集变化的情况"><a class="markdownIt-Anchor" href="#数据集变化的情况"></a> 数据集变化的情况：</h4>
+<ol>
+<li><strong>数据扩充</strong>：有时候会对现有数据进行扩充、修正或更新，这种情况下训练过程中可能会引入新的数据。</li>
+<li><strong>实时学习</strong>：某些场景下，模型需要不断从实时流数据中学习，此时数据集可能会不断变化。</li>
+</ol>
+<h3 id="3-训练的数据集不同加载预训练模型参数还有用吗"><a class="markdownIt-Anchor" href="#3-训练的数据集不同加载预训练模型参数还有用吗"></a> 3 训练的数据集不同，加载预训练模型参数还有用吗</h3>
+<p>预训练模型在大规模数据集上进行了训练，学习到了<strong>通用的特征表示</strong>，可能有助于加速模型收敛并提高模型的表现。</p>
+<p>如果你的训练数据集与预训练模型的训练数据集<strong>非常不同</strong>（，可能需要更多的微调或者甚至完全冻结预训练模型的参数。</p>
+<h4 id="4-model-val准确率再80上不去"><a class="markdownIt-Anchor" href="#4-model-val准确率再80上不去"></a> 4 model val准确率再80上不去？</h4>
+<img src="./2023年12月8日-深度学习训练总结/image-20231208224957461.png" alt="image-20231208224957461" style="zoom: 80%;" />
+<h4 id="5-什么是梯度消失"><a class="markdownIt-Anchor" href="#5-什么是梯度消失"></a> 5 什么是梯度消失</h4>
+<p>进行反向传播算法时，较低层的权重更新变得非常小甚至消失的现象。这种情况通常发生在很深的神经网络中</p>
+<p>在反向传播期间，梯度会随着每一层的权重更新而逐渐减小。对于某些激活函数，特别是 Sigmoid 函数在输入很大或很小时会饱和，导致函数的梯度非常接近于零。</p>
+<p><img src="./2023%E5%B9%B412%E6%9C%888%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AE%AD%E7%BB%83%E6%80%BB%E7%BB%93/image-20231208233827091.png" alt="image-20231208233827091" /></p>
+<h4 id="6-如何设置学习率衰减"><a class="markdownIt-Anchor" href="#6-如何设置学习率衰减"></a> 6 如何设置学习率衰减</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">import torch.optim as optim</span><br><span class="line">from torch.optim import lr_scheduler</span><br><span class="line"></span><br><span class="line"># 定义模型和优化器</span><br><span class="line">model = YourModel()  # 请替换成您的模型</span><br><span class="line">optimizer = optim.SGD(model.parameters(), lr=0.1)  # 设置初始学习率</span><br><span class="line"></span><br><span class="line"># 定义学习率衰减器，例如 StepLR</span><br><span class="line"># StepLR 每隔 step_size 个epoch将学习率乘以 gamma</span><br><span class="line"># 这里可以根据需要选择其他的学习率衰减策略，如使用其他的调度器类</span><br><span class="line">scheduler = lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.1)</span><br><span class="line"></span><br><span class="line"># 在训练过程中，每个 epoch 结束后更新学习率</span><br><span class="line">for epoch in range(num_epochs):</span><br><span class="line">    # 训练步骤，包括前向传播、损失计算、反向传播等</span><br><span class="line"></span><br><span class="line">    # 更新学习率</span><br><span class="line">    scheduler.step()</span><br><span class="line"></span><br><span class="line">    # 其他训练步骤</span><br><span class="line">    # ...</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2023/12/08/2023%E5%B9%B412%E6%9C%888%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AE%AD%E7%BB%83%E6%80%BB%E7%BB%93/" data-id="clrwazlr300117ov4fgy3an0d" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl/" rel="tag">dl</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/12/22/2023%E5%B9%B412%E6%9C%8822%E6%97%A5-%E8%BD%A6%E7%89%8C%E8%AF%86%E5%88%AB%E9%A1%B9%E7%9B%AE/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          2023年12月16-10日 五日车牌识别项目
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/12/04/2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2023年12月4日 PCA</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>60</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>16</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2023 - 2024 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

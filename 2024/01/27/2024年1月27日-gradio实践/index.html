@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2024年1月27日 gradio实践 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Gradio 实践  demo1  1.测试运行 gradio的核心是它的gr.Interface函数，用来构建可视化界面。   fn：放你用来处理的函数   inputs：写你的输入类型，这里输入的是图像，所以是&quot;image&quot;   outputs：写你的输出类型，这里输出的是图像，所以是&quot;image&quot;   123456789101112# 作者：Weak">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2024年1月27日 gradio实践">
+<meta property="og:url" content="https://shakewely.github.io/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="Gradio 实践  demo1  1.测试运行 gradio的核心是它的gr.Interface函数，用来构建可视化界面。   fn：放你用来处理的函数   inputs：写你的输入类型，这里输入的是图像，所以是&quot;image&quot;   outputs：写你的输出类型，这里输出的是图像，所以是&quot;image&quot;   123456789101112# 作者：Weak">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/image-20240127224425399.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/image-20240127224627553.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/image-20240127231747733.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/image-20240127233945848.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/image-20240127234217252.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/image-20240127234521491.png">
+<meta property="article:published_time" content="2024-01-27T14:28:32.000Z">
+<meta property="article:modified_time" content="2024-01-27T15:56:58.483Z">
+<meta property="article:author" content="Weakliy">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shakewely.github.io/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/image-20240127224425399.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>60</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>16</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2024年1月27日-gradio实践" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/" class="article-date">
+  <time class="post-time" datetime="2024-01-27T14:28:32.000Z" itemprop="datePublished">
+    <span class="post-month">1月</span><br/>
+    <span class="post-day">27</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2024年1月27日 gradio实践
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="gradio-实践"><a class="markdownIt-Anchor" href="#gradio-实践"></a> Gradio 实践</h1>
+<h2 id="demo1"><a class="markdownIt-Anchor" href="#demo1"></a> demo1</h2>
+<h3 id="1测试运行"><a class="markdownIt-Anchor" href="#1测试运行"></a> <strong>1.测试运行</strong></h3>
+<p>gradio的核心是它的<code>gr.Interface</code>函数，用来构建可视化界面。</p>
+<ul>
+<li>
+<p>fn：放你用来处理的函数</p>
+</li>
+<li>
+<p>inputs：写你的输入类型，这里输入的是图像，所以是&quot;image&quot;</p>
+</li>
+<li>
+<p>outputs：写你的输出类型，这里输出的是图像，所以是&quot;image&quot;</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># 作者：Weakliy</span><br><span class="line"># 创建日期：2024/1/27 0027 下午 22:42</span><br><span class="line"># 描述：测试运行</span><br><span class="line"></span><br><span class="line">import gradio as gr</span><br><span class="line">import cv2</span><br><span class="line"></span><br><span class="line">def to_black(image):</span><br><span class="line">    output = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)</span><br><span class="line">    return output</span><br><span class="line">interface = gr.Interface(fn=to_black, inputs=&quot;image&quot;, outputs=&quot;image&quot;)</span><br><span class="line">interface.launch()</span><br></pre></td></tr></table></figure>
+<img src="./2024年1月27日-gradio实践/image-20240127224425399.png" alt="image-20240127224425399" style="zoom: 50%;" />
+<img src="./2024年1月27日-gradio实践/image-20240127224627553.png" alt="image-20240127224627553" style="zoom:50%;" />
+<h3 id="2增加example"><a class="markdownIt-Anchor" href="#2增加example"></a> <strong>2.增加example</strong></h3>
+<p>我们可以在页面下方添加供用户选择的测试样例。</p>
+<p>在<code>gr.Interface</code>里的<code>examples</code>中放入图片路径</p>
+<p><code>examples=[[&quot;test.png&quot;] </code>or 1examples=&quot;path&quot;1</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">import gradio as gr</span><br><span class="line">import cv2</span><br><span class="line">​</span><br><span class="line">def to_black(image):</span><br><span class="line">    output = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)</span><br><span class="line">    return output</span><br><span class="line">​</span><br><span class="line">interface = gr.Interface(fn=to_black, inputs=&quot;image&quot;, outputs=&quot;image&quot;,</span><br><span class="line">                        examples=[[&quot;test.png&quot;]])</span><br><span class="line">interface.launch()</span><br></pre></td></tr></table></figure>
+<h3 id="3创建一个外部访问链接"><a class="markdownIt-Anchor" href="#3创建一个外部访问链接"></a> <strong>3.创建一个外部访问链接</strong></h3>
+<p>创建外部访问链接非常简单，只需要<code>launch(share=True)</code>即可，在打印信息中会看到你的外部访问链接。</p>
+<p><strong>免费用户的链接可以使用24小时，想要长期的话需要在gradio官方购买云服务</strong></p>
+<h2 id="demo2-文本输入"><a class="markdownIt-Anchor" href="#demo2-文本输入"></a> demo2 文本输入</h2>
+<h3 id="1-同理"><a class="markdownIt-Anchor" href="#1-同理"></a> 1 同理</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">import gradio as gr</span><br><span class="line">#输入文本处理程序</span><br><span class="line">def greet(name):</span><br><span class="line">    return &quot;Hello &quot; + name + &quot;!&quot;</span><br><span class="line">demo = gr.Interface(fn=greet, inputs=&quot;text&quot;, outputs=&quot;text&quot;)</span><br><span class="line">demo.launch()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="demo3-interface类"><a class="markdownIt-Anchor" href="#demo3-interface类"></a> demo3 Interface类</h2>
+<h3 id="1基础"><a class="markdownIt-Anchor" href="#1基础"></a> 1.基础</h3>
+<h4 id="11-interface需要通过以下三个参数进行初始化"><a class="markdownIt-Anchor" href="#11-interface需要通过以下三个参数进行初始化"></a> 1.1 <strong>interface需要通过以下三个参数进行初始化：</strong></h4>
+<ul>
+<li>fn：包装的函数</li>
+<li>inputs：输入组件类型，（例如：“text”、&quot;image）</li>
+<li>ouputs：输出组件类型，（例如：“text”、&quot;image）</li>
+</ul>
+<h4 id="12-控件列表"><a class="markdownIt-Anchor" href="#12-控件列表"></a> 1.2 控件列表</h4>
+<ul>
+<li>
+<p><strong>输入输出</strong>：gr.Image(图像), gr.Textbox(文本框), gr.DataFrame(数据框), gr.Dropdown(下拉选项), gr.Number(数字), gr.Markdown, gr.Files</p>
+</li>
+<li>
+<p><strong>控制组件</strong>：gr.Button(按钮)</p>
+</li>
+<li>
+<p><strong>布局组件</strong>：gr.Tab(标签页), gr.Row(行布局), gr.Column(列布局)</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">__all__ = [</span><br><span class="line">    &quot;Audio&quot;,</span><br><span class="line">    &quot;BarPlot&quot;,</span><br><span class="line">    &quot;Button&quot;,</span><br><span class="line">    &quot;Chatbot&quot;,</span><br><span class="line">    &quot;ClearButton&quot;,</span><br><span class="line">    &quot;Component&quot;,</span><br><span class="line">    &quot;component&quot;,</span><br><span class="line">    &quot;get_component_instance&quot;,</span><br><span class="line">    &quot;_Keywords&quot;,</span><br><span class="line">    &quot;Checkbox&quot;,</span><br><span class="line">    &quot;CheckboxGroup&quot;,</span><br><span class="line">    &quot;Code&quot;,</span><br><span class="line">    &quot;ColorPicker&quot;,</span><br><span class="line">    &quot;Dataframe&quot;,</span><br><span class="line">    &quot;DataFrame&quot;,</span><br><span class="line">    &quot;Dataset&quot;,</span><br><span class="line">    &quot;DuplicateButton&quot;,</span><br><span class="line">    &quot;Fallback&quot;,</span><br><span class="line">    &quot;Form&quot;,</span><br><span class="line">    &quot;FormComponent&quot;,</span><br><span class="line">    &quot;Gallery&quot;,</span><br><span class="line">    &quot;HTML&quot;,</span><br><span class="line">    &quot;FileExplorer&quot;,</span><br><span class="line">    &quot;Image&quot;,</span><br><span class="line">    &quot;JSON&quot;,</span><br><span class="line">    &quot;Json&quot;,</span><br><span class="line">    &quot;Label&quot;,</span><br><span class="line">    &quot;LinePlot&quot;,</span><br><span class="line">    &quot;LoginButton&quot;,</span><br><span class="line">    &quot;LogoutButton&quot;,</span><br><span class="line">    &quot;Markdown&quot;,</span><br><span class="line">    &quot;Textbox&quot;,</span><br><span class="line">    &quot;Dropdown&quot;,</span><br><span class="line">    &quot;Model3D&quot;,</span><br><span class="line">    &quot;File&quot;,</span><br><span class="line">    &quot;HighlightedText&quot;,</span><br><span class="line">    &quot;AnnotatedImage&quot;,</span><br><span class="line">    &quot;CheckboxGroup&quot;,</span><br><span class="line">    &quot;Text&quot;,</span><br><span class="line">    &quot;Highlightedtext&quot;,</span><br><span class="line">    &quot;Annotatedimage&quot;,</span><br><span class="line">    &quot;Highlight&quot;,</span><br><span class="line">    &quot;Checkboxgroup&quot;,</span><br><span class="line">    &quot;Number&quot;,</span><br><span class="line">    &quot;Plot&quot;,</span><br><span class="line">    &quot;Radio&quot;,</span><br><span class="line">    &quot;ScatterPlot&quot;,</span><br><span class="line">    &quot;Slider&quot;,</span><br><span class="line">    &quot;State&quot;,</span><br><span class="line">    &quot;UploadButton&quot;,</span><br><span class="line">    &quot;Video&quot;,</span><br><span class="line">    &quot;StreamingInput&quot;,</span><br><span class="line">    &quot;StreamingOutput&quot;,</span><br><span class="line">    &quot;ImageEditor&quot;,</span><br><span class="line">    &quot;ParamViewer&quot;,</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<h5 id="121-控件参数"><a class="markdownIt-Anchor" href="#121-控件参数"></a> 1.2.1 控件参数</h5>
+<p>​</p>
+<h4 id="13-interfacelaunch方法返回三个值"><a class="markdownIt-Anchor" href="#13-interfacelaunch方法返回三个值"></a> 1.3 <strong>Interface.launch()方法返回三个值</strong></h4>
+<ul>
+<li>app，为 Gradio 演示提供支持的 FastAPI 应用程序</li>
+<li>local_url，本地地址</li>
+<li>share_url，公共地址，当share=True时生成</li>
+</ul>
+<h4 id="14-多输入输出"><a class="markdownIt-Anchor" href="#14-多输入输出"></a> 1.4 多输入输出</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import gradio as gr</span><br><span class="line">#该函数有3个输入参数和2个输出参数</span><br><span class="line">def greet(name, is_morning, temperature):</span><br><span class="line">    salutation = &quot;Good morning&quot; if is_morning else &quot;Good evening&quot;</span><br><span class="line">    greeting = f&quot;&#123;salutation&#125; &#123;name&#125;. It is &#123;temperature&#125; degrees today&quot;</span><br><span class="line">    celsius = (temperature - 32) * 5 / 9</span><br><span class="line">    return greeting, round(celsius, 2)</span><br><span class="line">demo = gr.Interface(</span><br><span class="line">    fn=greet,</span><br><span class="line">    #按照处理程序设置输入组件</span><br><span class="line">    inputs=[gr.Textbox(lines=3, placeholder=&quot;preName Here...&quot;,label=&quot;your name&quot;),</span><br><span class="line">            gr.Checkbox(min_width=100), gr.Slider(0, 100)],</span><br><span class="line">    #按照处理程序设置输出组件</span><br><span class="line">    outputs=[&quot;text&quot;, &quot;number&quot;],</span><br><span class="line">)</span><br><span class="line">demo.launch()</span><br></pre></td></tr></table></figure>
+<p><img src="./2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/image-20240127231747733.png" alt="image-20240127231747733" /></p>
+<h3 id="2-进阶"><a class="markdownIt-Anchor" href="#2-进阶"></a> 2 进阶</h3>
+<h4 id="21-interface状态"><a class="markdownIt-Anchor" href="#21-interface状态"></a> 2.1 interface状态</h4>
+<h5 id="全局变量"><a class="markdownIt-Anchor" href="#全局变量"></a> 全局变量</h5>
+<p>pass</p>
+<h5 id="state状态保留"><a class="markdownIt-Anchor" href="#state状态保留"></a> state状态保留</h5>
+<p>Gradio支持的另一种数据持久性是会话状态，数据在一个页面会话中的多次提交中持久存在</p>
+<h4 id="22-interface交互"><a class="markdownIt-Anchor" href="#22-interface交互"></a> 2.2 interface交互</h4>
+<h5 id="实时变化"><a class="markdownIt-Anchor" href="#实时变化"></a> 实时变化</h5>
+<p>在Interface中设置live=True，则输出会跟随输入实时变化。这个时候界面不会有submit按钮，因为不需要手动提交输入。</p>
+<h5 id="流模式"><a class="markdownIt-Anchor" href="#流模式"></a> 流模式</h5>
+<p>在许多情形下，我们的输入是实时视频流或者音频流，那么意味这数据不停地发送到后端，这是可以采用streaming模式处理数据。</p>
+<p>添加<code>(streaming=True)</code>and <code> live=True</code>即可</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># import gradio as gr</span><br><span class="line"># import numpy as np</span><br><span class="line"># def flip(im):</span><br><span class="line">#     return np.flipud(im)</span><br><span class="line"># demo = gr.Interface(</span><br><span class="line">#     flip,</span><br><span class="line">#     gr.Image(streaming=True),</span><br><span class="line">#     &quot;image&quot;,</span><br><span class="line">#     live=True</span><br><span class="line"># )</span><br><span class="line"># demo.launch()</span><br></pre></td></tr></table></figure>
+<p><img src="./2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/image-20240127233945848.png" alt="image-20240127233945848" /></p>
+<h3 id="3-自定义"><a class="markdownIt-Anchor" href="#3-自定义"></a> 3 自定义</h3>
+<h4 id="31-自定义"><a class="markdownIt-Anchor" href="#31-自定义"></a> 3.1 自定义</h4>
+<p>Blocks提供了一个低级别的API，用于设计具有更灵活布局和数据流的网络应用。Blocks允许控制组件在页面上出现的位置，处理复杂的数据流（例如，输出可以作为其他函数的输入），并根据用户交互更新组件的属性可见性。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">import gradio as gr</span><br><span class="line">def greet(name):</span><br><span class="line">    return &quot;Hello &quot; + name + &quot;!&quot;</span><br><span class="line">with gr.Blocks() as demo:</span><br><span class="line">    #设置输入组件</span><br><span class="line">    name = gr.Textbox(label=&quot;Name&quot;)</span><br><span class="line">    # 设置输出组件</span><br><span class="line">    output = gr.Textbox(label=&quot;Output Box&quot;)</span><br><span class="line">    #设置按钮</span><br><span class="line">    greet_btn = gr.Button(&quot;Greet&quot;)</span><br><span class="line">    #设置按钮点击事件</span><br><span class="line">    greet_btn.click(fn=greet, inputs=name, outputs=output)</span><br><span class="line">demo.launch()</span><br></pre></td></tr></table></figure>
+<h4 id="32-tab"><a class="markdownIt-Anchor" href="#32-tab"></a> 3.2 tab</h4>
+<p>通过自定义实现不同的标签页内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line">import gradio as gr</span><br><span class="line">def flip_text(x):</span><br><span class="line">    return x[::-1]</span><br><span class="line">def flip_image(x):</span><br><span class="line">    return np.fliplr(x)</span><br><span class="line">with gr.Blocks() as demo:</span><br><span class="line">    #用markdown语法编辑输出一段话</span><br><span class="line">    gr.Markdown(&quot;Flip text or image files using this demo.&quot;)</span><br><span class="line">    # 设置tab选项卡</span><br><span class="line">    with gr.Tab(&quot;Flip Text&quot;):</span><br><span class="line">        #Blocks特有组件，设置所有子组件按垂直排列</span><br><span class="line">        #垂直排列是默认情况，不加也没关系</span><br><span class="line">        with gr.Column():</span><br><span class="line">            text_input = gr.Textbox()</span><br><span class="line">            text_output = gr.Textbox()</span><br><span class="line">            text_button = gr.Button(&quot;Flip&quot;)</span><br><span class="line">    with gr.Tab(&quot;Flip Image&quot;):</span><br><span class="line">        #Blocks特有组件，设置所有子组件按水平排列</span><br><span class="line">        with gr.Row():</span><br><span class="line">            image_input = gr.Image()</span><br><span class="line">            image_output = gr.Image()</span><br><span class="line">        image_button = gr.Button(&quot;Flip&quot;)</span><br><span class="line">    #设置折叠内容</span><br><span class="line">    with gr.Accordion(&quot;Open for More!&quot;):</span><br><span class="line">        gr.Markdown(&quot;Look at me...&quot;)</span><br><span class="line">    text_button.click(flip_text, inputs=text_input, outputs=text_output)</span><br><span class="line">    image_button.click(flip_image, inputs=image_input, outputs=image_output)</span><br><span class="line">demo.launch()</span><br></pre></td></tr></table></figure>
+<p><img src="./2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/image-20240127234217252.png" alt="image-20240127234217252" /></p>
+<h3 id="4-flagging标记"><a class="markdownIt-Anchor" href="#4-flagging标记"></a> 4 Flagging标记</h3>
+<p>输出框下有个Flag按钮。</p>
+<p>当测试您的模型的用户看到某个输入导致输出错误或意外的模型行为，他们可以标记这个输入让开发者知道。这个文件夹由Interface的flagging_dir参数指定，默认为’flagged’</p>
+<p><img src="./2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/image-20240127234521491.png" alt="image-20240127234521491" /></p>
+<h3 id="5-样式-队列-生成器"><a class="markdownIt-Anchor" href="#5-样式-队列-生成器"></a> 5 样式、队列、生成器</h3>
+<ul>
+<li>样式</li>
+</ul>
+<p>在Gradio官方文档，搜索不同的组件加.style（如image.style），可以获取该组件的样式参数设置样例。例如image组件的设置如下：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">img = gr.Image(&quot;lion.jpg&quot;).style(height=&#x27;24&#x27;, rounded=False)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>队列 如果函数推理时间较长，比如目标检测；或者应用程序处理流量过大，则需要使用queue方法进行排队。queue方法使用websockets，可以防止网络超时。使用方式如下：</li>
+</ul>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">demo = gr.Interface(...).queue()</span><br><span class="line">demo.launch()</span><br><span class="line">#或</span><br><span class="line">with gr.Blocks() as demo:</span><br><span class="line">    #...</span><br><span class="line">demo.queue()</span><br><span class="line">demo.launch()</span><br></pre></td></tr></table></figure>
+<ul>
+<li>生成器</li>
+</ul>
+<p>在某些情况下，你可能想显示一连串的输出，而不是单一的输出。例如，你可能有一个图像生成模型，如果你想显示在每个步骤中生成的图像，从而得到最终的图像。在这种情况下，你可以向Gradio提供一个生成器函数，而不是一个常规函数。下面是一个生成器的例子，每隔1秒返回1张图片。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import gradio as gr</span><br><span class="line">import numpy as np</span><br><span class="line">import time</span><br><span class="line">#生成steps张图片，每隔1秒钟返回</span><br><span class="line">def fake_diffusion(steps):</span><br><span class="line">    for _ in range(steps):</span><br><span class="line">        time.sleep(1)</span><br><span class="line">        image = np.random.randint(255, size=(300, 600, 3))</span><br><span class="line">        yield image</span><br><span class="line">demo = gr.Interface(fake_diffusion,</span><br><span class="line">                    #设置滑窗，最小值为1，最大值为10，初始值为3，每次改动增减1位</span><br><span class="line">                    inputs=gr.Slider(1, 10, value=3, step=1),</span><br><span class="line">                    outputs=&quot;image&quot;)</span><br><span class="line">#生成器必须要queue函数</span><br><span class="line">demo.queue()</span><br><span class="line">demo.launch()</span><br></pre></td></tr></table></figure>
+<h2 id="demo4-blocks进阶使用"><a class="markdownIt-Anchor" href="#demo4-blocks进阶使用"></a> demo4 Blocks进阶使用</h2>
+<h3 id="1-blocks事件"><a class="markdownIt-Anchor" href="#1-blocks事件"></a> 1 Blocks事件</h3>
+<h3 id="可交互设置"><a class="markdownIt-Anchor" href="#可交互设置"></a> 可交互设置</h3>
+<p>任何输入的组件内容都是可编辑的，而输出组件默认是不能编辑的。如果想要使得输出组件内容可编辑，设置interactive=True即可。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">import gradio as gr</span><br><span class="line">def greet(name):</span><br><span class="line">    return &quot;Hello &quot; + name + &quot;!&quot;</span><br><span class="line">with gr.Blocks() as demo:</span><br><span class="line">    name = gr.Textbox(label=&quot;Name&quot;)</span><br><span class="line">    # 不可交互</span><br><span class="line">    # output = gr.Textbox(label=&quot;Output Box&quot;)</span><br><span class="line">    # 可交互</span><br><span class="line">    output = gr.Textbox(label=&quot;Output&quot;, interactive=True)</span><br><span class="line">    greet_btn = gr.Button(&quot;Greet&quot;)</span><br><span class="line">    greet_btn.click(fn=greet, inputs=name, outputs=output)</span><br><span class="line">demo.launch()</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/" data-id="clrwazlri003g7ov48i2dd58c" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-python%E4%B9%8B%E4%B8%8D%E5%B8%B8%E7%94%A8%E6%80%BB%E7%BB%93/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2024年1月23日 python之不常用总结</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>60</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>16</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2023 - 2024 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

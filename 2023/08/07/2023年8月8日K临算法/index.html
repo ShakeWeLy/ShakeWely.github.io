@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>K近邻法 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="K近邻法 1234# 概念K近邻法 (k-nearest neighbor，k-NN) 是一种基本的分类与回归方法。主要思想: 假定给定一个训练数据集，其中实例标签已定，当输入新的实例时，可以根据其最近的 k 个训练实例的标签，预测新实例对应的标注信息。分类问题:对新的实例，根据与之相邻的 k 个训练实例的类别，通过多数表决等方式进行预测。回归问题: 对新的实例，根据与之相邻的 k 个训练实例的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="K近邻法">
+<meta property="og:url" content="https://shakewely.github.io/2023/08/07/2023%E5%B9%B48%E6%9C%888%E6%97%A5K%E4%B8%B4%E7%AE%97%E6%B3%95/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="K近邻法 1234# 概念K近邻法 (k-nearest neighbor，k-NN) 是一种基本的分类与回归方法。主要思想: 假定给定一个训练数据集，其中实例标签已定，当输入新的实例时，可以根据其最近的 k 个训练实例的标签，预测新实例对应的标注信息。分类问题:对新的实例，根据与之相邻的 k 个训练实例的类别，通过多数表决等方式进行预测。回归问题: 对新的实例，根据与之相邻的 k 个训练实例的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/07/2023%E5%B9%B48%E6%9C%888%E6%97%A5K%E4%B8%B4%E7%AE%97%E6%B3%95/K%E4%B8%B4%E7%AE%97%E6%B3%95/image-20230809195539760.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/07/2023%E5%B9%B48%E6%9C%888%E6%97%A5K%E4%B8%B4%E7%AE%97%E6%B3%95/K%E4%B8%B4%E7%AE%97%E6%B3%95/image-20230809195555386.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/07/2023%E5%B9%B48%E6%9C%888%E6%97%A5K%E4%B8%B4%E7%AE%97%E6%B3%95/K%E4%B8%B4%E7%AE%97%E6%B3%95/image-20230809195600717.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/07/2023%E5%B9%B48%E6%9C%888%E6%97%A5K%E4%B8%B4%E7%AE%97%E6%B3%95/K%E4%B8%B4%E7%AE%97%E6%B3%95/image-20230809195619673.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/07/2023%E5%B9%B48%E6%9C%888%E6%97%A5K%E4%B8%B4%E7%AE%97%E6%B3%95/K%E4%B8%B4%E7%AE%97%E6%B3%95/image-20230809195626591.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/07/2023%E5%B9%B48%E6%9C%888%E6%97%A5K%E4%B8%B4%E7%AE%97%E6%B3%95/K%E4%B8%B4%E7%AE%97%E6%B3%95/image-20230809195633498.png">
+<meta property="og:image" content="c:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808142018060.png">
+<meta property="og:image" content="c:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808141722543.png">
+<meta property="og:image" content="c:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808141732507.png">
+<meta property="og:image" content="c:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808143250462.png">
+<meta property="og:image" content="c:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808143222812.png">
+<meta property="og:image" content="c:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808151948890.png">
+<meta property="og:image" content="c:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808151925879.png">
+<meta property="og:image" content="c:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808151934628.png">
+<meta property="og:image" content="c:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808154234530.png">
+<meta property="og:image" content="c:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808154437522.png">
+<meta property="og:image" content="c:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808154442954.png">
+<meta property="article:published_time" content="2023-08-07T13:19:22.000Z">
+<meta property="article:modified_time" content="2023-08-11T08:26:35.717Z">
+<meta property="article:author" content="Weakliy">
+<meta property="article:tag" content="机器学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shakewely.github.io/2023/08/07/2023%E5%B9%B48%E6%9C%888%E6%97%A5K%E4%B8%B4%E7%AE%97%E6%B3%95/K%E4%B8%B4%E7%AE%97%E6%B3%95/image-20230809195539760.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>60</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>16</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2023年8月8日K临算法" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/08/07/2023%E5%B9%B48%E6%9C%888%E6%97%A5K%E4%B8%B4%E7%AE%97%E6%B3%95/" class="article-date">
+  <time class="post-time" datetime="2023-08-07T13:19:22.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">07</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      K近邻法
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="k近邻法"><a class="markdownIt-Anchor" href="#k近邻法"></a> K近邻法</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 概念</span><br><span class="line">K近邻法 (k-nearest neighbor，k-NN) 是一种基本的分类与回归方法。主要思想: 假定给定一个训练数据集，其中实例标签已定，当输入新的实例时，可以根据其最近的 k 个训练实例的标签，预测新实例对应的标注信息。</span><br><span class="line">分类问题:对新的实例，根据与之相邻的 k 个训练实例的类别，通过多数表决等方式进行预测。</span><br><span class="line">回归问题: 对新的实例，根据与之相邻的 k 个训练实例的标签，通过均值计算进行预测。</span><br></pre></td></tr></table></figure>
+<h2 id="0x1图像理解"><a class="markdownIt-Anchor" href="#0x1图像理解"></a> 0X1图像理解：</h2>
+<p><img src="./K%E4%B8%B4%E7%AE%97%E6%B3%95/image-20230809195539760.png" alt="image-20230809195539760" /></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(1) k=3，绿色圆点属于红色三角形类别;</span><br><span class="line">(2) k=5，绿色圆点属于蓝色正方形类别;</span><br><span class="line">较小的 k 值，学习的近似误差减小，但估计误差增大，敏感性增强，而且模型复杂，容易过拟合</span><br><span class="line">较大的 k 值，减少学习的估计误差，但近似误差增大，而且模型简单</span><br><span class="line">注: k 的取值可通过交叉验证来选择，一般低于训练集样本量的平方</span><br></pre></td></tr></table></figure>
+<h4 id="拓展欧氏距离三维等等"><a class="markdownIt-Anchor" href="#拓展欧氏距离三维等等"></a> 拓展：欧氏距离，三维等等</h4>
+<h2 id="0x2-算法"><a class="markdownIt-Anchor" href="#0x2-算法"></a> 0X2 算法</h2>
+<p>​	<img src="./K%E4%B8%B4%E7%AE%97%E6%B3%95/image-20230809195555386.png" alt="image-20230809195555386" /></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">输入:训练集:</span><br><span class="line">T=[(x1,y1),(x2,y2)·.·,(xN,yN)&#125;其中，XiEXCR”，yEy=&#123;c,C2,···,CK&#125;，实例x;输出:实例x所属类别 y</span><br><span class="line">(1)r根据给定的距离度量，计算X与 T中点的距离:</span><br><span class="line">(2)在 T中找到与x 最邻近的 k 个点，涵盖这 k 个点的x 的邻域记作Nk(x);</span><br><span class="line">(3)在Nk(x)中根据分类决策规则 (如多数表决) 决定 的类别 y。</span><br></pre></td></tr></table></figure>
+<h2 id="0x3-误差率"><a class="markdownIt-Anchor" href="#0x3-误差率"></a> 0X3 误差率</h2>
+<p><img src="./K%E4%B8%B4%E7%AE%97%E6%B3%95/image-20230809195600717.png" alt="image-20230809195600717" /></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">概率类别求和</span><br></pre></td></tr></table></figure>
+<p><img src="./K%E4%B8%B4%E7%AE%97%E6%B3%95/image-20230809195619673.png" alt="image-20230809195619673" /></p>
+<p><img src="./K%E4%B8%B4%E7%AE%97%E6%B3%95/image-20230809195626591.png" alt="image-20230809195626591" /></p>
+<p><img src="./K%E4%B8%B4%E7%AE%97%E6%B3%95/image-20230809195633498.png" alt="image-20230809195633498" /></p>
+<h2 id="0x4-三要素"><a class="markdownIt-Anchor" href="#0x4-三要素"></a> 0X4 三要素</h2>
+<h3 id="1距离度量lp距离"><a class="markdownIt-Anchor" href="#1距离度量lp距离"></a> 1.距离度量lp距离</h3>
+<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808142018060.png" alt="image-20230808142018060" style="zoom:25%;" />
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">	欧氏距离 p=2</span><br><span class="line"></span><br><span class="line">​	曼哈顿距离 p=1</span><br><span class="line"></span><br><span class="line">​	切比雪夫距离 p=∞</span><br></pre></td></tr></table></figure>
+<h3 id="2p范式取不同值时所计算的距离不相同"><a class="markdownIt-Anchor" href="#2p范式取不同值时所计算的距离不相同"></a> 2.p范式取不同值时，所计算的距离不相同：</h3>
+<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808141722543.png" alt="image-20230808141722543" style="zoom:25%;" />
+<p>​	<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808141732507.png" alt="image-20230808141732507" style="zoom:25%;" /></p>
+<h3 id="3分类决策选择"><a class="markdownIt-Anchor" href="#3分类决策选择"></a> 3.分类决策选择</h3>
+<h4 id="多数表决规则由输入实例的-k-个邻近的训练实例中的多数类决定输入实例的类"><a class="markdownIt-Anchor" href="#多数表决规则由输入实例的-k-个邻近的训练实例中的多数类决定输入实例的类"></a> 多数表决规则:由输入实例的 k 个邻近的训练实例中的多数类决定输入实例的类。</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">分类函数f:Rn=&#123;c1,C2,··,CK&#125;</span><br><span class="line">损失函数L(Y,F(x)=  Y = f(X) or Y≠f(X)</span><br><span class="line">误分类概率P(Y ≠f(X))=1- P(Y = f(X))</span><br></pre></td></tr></table></figure>
+<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808143250462.png" alt="image-20230808143250462" style="zoom:25%;" />
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808143222812.png" alt="image-20230808143222812" style="zoom:25%;" />
+<h2 id="0x5-kd树"><a class="markdownIt-Anchor" href="#0x5-kd树"></a> 0X5 kd树</h2>
+<h3 id="1构造kd树"><a class="markdownIt-Anchor" href="#1构造kd树"></a> 1.构造kd树</h3>
+<h4 id="1概念"><a class="markdownIt-Anchor" href="#1概念"></a> 1.概念</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">概念</span><br><span class="line">kd 树是一种对 k 维空间中的实例点进行储存以便对其进行快速检索的树形数据结构。</span><br><span class="line"></span><br><span class="line">本质:二叉树，表示对 k 维空间的一个划分</span><br><span class="line">构造过程:不断地用垂直于坐标轴的超平面将 k 维空间切分，形成k 维超矩形区域</span><br><span class="line">kd 树的每一个结点对应于一个 k 维超矩形区</span><br></pre></td></tr></table></figure>
+<h4 id="2算法"><a class="markdownIt-Anchor" href="#2算法"></a> 2.算法</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">输入: k 维空间数据集:</span><br><span class="line">T=&#123;x1,X2,···,XN</span><br><span class="line">其中，X;=(x;输出:kd 树</span><br><span class="line">(1) 开始:构造根节点。</span><br><span class="line">选取 x(1)为坐标轴，以训练集中的所有数据 (1) 坐标中的中位数作为切分点，将超矩形区域切割成两个子区域将该切分点作为根结点。由根结点生出深度为 1的左右子结点，左节点对应坐标小于切分点，右结点对应坐标大于切分点。</span><br><span class="line">(2) 重复</span><br><span class="line">对深度为j的结点，选择 x(0)为切分坐标轴,] = ( mod k)+1，以该结点区域中所有实例 ()坐标的中位数</span><br><span class="line">作为切分点，将区域分为两个子区域。</span><br><span class="line">生成深度为i+1的左、右子结点。左节点对应坐标小于切分点，右结点对应坐标大于切分点。</span><br><span class="line">直到两个子区域没有实例时停止。</span><br></pre></td></tr></table></figure>
+ <img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808151948890.png" alt="image-20230808151948890" style="zoom:25%;" />
+<h4 id="3例子"><a class="markdownIt-Anchor" href="#3例子"></a> 3.例子</h4>
+<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808151925879.png" alt="image-20230808151925879" style="zoom:25%;" />
+<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808151934628.png" alt="image-20230808151934628" style="zoom:25%;" />
+<h3 id="2搜索kd树"><a class="markdownIt-Anchor" href="#2搜索kd树"></a> 2.搜索KD树</h3>
+<pre><code>寻找“当前最近点”
+	寻找最近邻的子结点作为目标点的“当前最近点9
+回溯
+	以目标点和“当前最近点”的距离沿树根部进行回溯和迭代
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">输入:已构造的 kd 树，目标点X</span><br><span class="line">输出:X的最近邻</span><br><span class="line">寻找“当前最近点</span><br><span class="line">	从根结点出发，递归访问 kd 树，找出包含X的叶结点:以此叶结点为“当前最近点”</span><br><span class="line">回溯</span><br><span class="line">	若该结点比“当前最近点”距离目标点更近，更新“当前最近点”</span><br><span class="line">	当前最近点一定存在于该结点一个子结点对应的区域，检查子结点的父结点的另一子结点对应的区域是否有更近的点。</span><br><span class="line">当回退到根结点时，搜索结束，最后的“当前最近点”即为 X 的最近邻部o</span><br></pre></td></tr></table></figure>
+<h4 id="1-寻找"><a class="markdownIt-Anchor" href="#1-寻找"></a> 1 寻找</h4>
+<p>根据分离点寻找</p>
+<h4 id="2-回溯"><a class="markdownIt-Anchor" href="#2-回溯"></a> 2 回溯</h4>
+<p>先看最近点—半径画圆—相交父节点超平面—是则：检查兄弟节点–判断距离–迭代回到最初判断；否：确定该点—得到最临点</p>
+<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808154234530.png" alt="image-20230808154234530" style="zoom:25%;" />
+<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808154437522.png" alt="image-20230808154437522" style="zoom:25%;" />
+<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808154442954.png" alt="image-20230808154442954" style="zoom:25%;" />
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2023年8月8日</span><br></pre></td></tr></table></figure>
+<h2 id="0x6-代码实现"><a class="markdownIt-Anchor" href="#0x6-代码实现"></a> 0X6 代码实现</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 作者：Weakliy</span></span><br><span class="line"><span class="comment"># 创建日期：2023/8/11 15:50</span></span><br><span class="line"><span class="comment"># 描述：这个文件实现了分类。</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.neighbors <span class="keyword">import</span> KNeighborsClassifier</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score, confusion_matrix</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载鸢尾花数据集</span></span><br><span class="line">data = load_iris()</span><br><span class="line">X = data.data</span><br><span class="line">y = data.target</span><br><span class="line">target_names = data.target_names</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将数据集分为训练集和测试集</span></span><br><span class="line">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.2</span>, random_state=<span class="number">42</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建k临近法分类器，这里选择k=3</span></span><br><span class="line">k = <span class="number">3</span></span><br><span class="line">knn_classifier = KNeighborsClassifier(n_neighbors=k)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在训练集上训练分类器</span></span><br><span class="line">knn_classifier.fit(X_train, y_train)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在测试集上进行预测</span></span><br><span class="line">y_pred = knn_classifier.predict(X_test)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算分类器的准确率</span></span><br><span class="line">accuracy = accuracy_score(y_test, y_pred)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Accuracy: <span class="subst">&#123;accuracy:<span class="number">.2</span>f&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 可视化数据分布</span></span><br><span class="line">sns.<span class="built_in">set</span>(style=<span class="string">&quot;whitegrid&quot;</span>)</span><br><span class="line">sns.pairplot(sns.load_dataset(<span class="string">&quot;iris&quot;</span>), hue=<span class="string">&quot;species&quot;</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 可视化混淆矩阵</span></span><br><span class="line">cm = confusion_matrix(y_test, y_pred)</span><br><span class="line">plt.figure(figsize=(<span class="number">8</span>, <span class="number">6</span>))</span><br><span class="line">sns.heatmap(cm, annot=<span class="literal">True</span>, cmap=<span class="string">&quot;Blues&quot;</span>, fmt=<span class="string">&quot;d&quot;</span>, xticklabels=target_names, yticklabels=target_names)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Predicted&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;True&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;Confusion Matrix&#x27;</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 作者：Weakliy</span></span><br><span class="line"><span class="comment"># 创建日期：2023/8/11 15:51</span></span><br><span class="line"><span class="comment"># 描述：这个文件实现了回归功能。</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> make_regression</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.neighbors <span class="keyword">import</span> KNeighborsRegressor</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> mean_squared_error</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成模拟的回归数据集</span></span><br><span class="line">X, y = make_regression(n_samples=<span class="number">100</span>, n_features=<span class="number">1</span>, noise=<span class="number">10</span>, random_state=<span class="number">42</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将数据集分为训练集和测试集</span></span><br><span class="line">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.2</span>, random_state=<span class="number">42</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建k临近法回归器，这里选择k=3</span></span><br><span class="line">k = <span class="number">3</span></span><br><span class="line">knn_regressor = KNeighborsRegressor(n_neighbors=k)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在训练集上训练回归器</span></span><br><span class="line">knn_regressor.fit(X_train, y_train)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在测试集上进行预测</span></span><br><span class="line">y_pred = knn_regressor.predict(X_test)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算均方误差</span></span><br><span class="line">mse = mean_squared_error(y_test, y_pred)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Mean Squared Error: <span class="subst">&#123;mse:<span class="number">.2</span>f&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 可视化回归结果</span></span><br><span class="line">plt.scatter(X_test, y_test, color=<span class="string">&#x27;blue&#x27;</span>, label=<span class="string">&#x27;True values&#x27;</span>)</span><br><span class="line">plt.scatter(X_test, y_pred, color=<span class="string">&#x27;red&#x27;</span>, label=<span class="string">&#x27;Predicted values&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;X&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;y&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;K-Nearest Neighbors Regression&#x27;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2023/08/07/2023%E5%B9%B48%E6%9C%888%E6%97%A5K%E4%B8%B4%E7%AE%97%E6%B3%95/" data-id="clrwazlra00207ov422yeebh9" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/08/08/2023%E5%B9%B48%E6%9C%887%E6%97%A5%E6%84%9F%E7%9F%A5%E6%9C%BA/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          感知机
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/08/07/2023%E5%B9%B48%E6%9C%887%E6%97%A5%E5%86%B3%E7%AD%96%E6%A0%91/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">感知机</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>60</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>16</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2023 - 2024 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

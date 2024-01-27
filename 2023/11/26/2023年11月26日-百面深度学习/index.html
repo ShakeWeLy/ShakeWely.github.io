@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2023年11月26日 百面深度学习 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1、解释GAN模型  1. 概述 GAN由两个网络组成，它们相互竞争、相互博弈，一方努力生成逼真的数据样本，而另一方则试图区分真实数据和生成器生成的假数据。  2. 组成部分  生成器（Generator）：  生成器负责生成与真实数据类似的假数据样本。 它接收随机噪声或潜在空间中的点作为输入，通过反向传播逐渐提高生成数据的逼真程度，使其能够欺骗判别器。 生成器的目标是尽可能地使生成的假样本通过">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2023年11月26日 百面深度学习">
+<meta property="og:url" content="https://shakewely.github.io/2023/11/26/2023%E5%B9%B411%E6%9C%8826%E6%97%A5-%E7%99%BE%E9%9D%A2%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="1、解释GAN模型  1. 概述 GAN由两个网络组成，它们相互竞争、相互博弈，一方努力生成逼真的数据样本，而另一方则试图区分真实数据和生成器生成的假数据。  2. 组成部分  生成器（Generator）：  生成器负责生成与真实数据类似的假数据样本。 它接收随机噪声或潜在空间中的点作为输入，通过反向传播逐渐提高生成数据的逼真程度，使其能够欺骗判别器。 生成器的目标是尽可能地使生成的假样本通过">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-11-25T19:00:53.000Z">
+<meta property="article:modified_time" content="2024-01-27T16:12:07.724Z">
+<meta property="article:author" content="Weakliy">
+<meta property="article:tag" content="面试总结">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>60</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>16</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2023年11月26日-百面深度学习" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/11/26/2023%E5%B9%B411%E6%9C%8826%E6%97%A5-%E7%99%BE%E9%9D%A2%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" class="article-date">
+  <time class="post-time" datetime="2023-11-25T19:00:53.000Z" itemprop="datePublished">
+    <span class="post-month">11月</span><br/>
+    <span class="post-day">26</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2023年11月26日 百面深度学习
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1-解释gan模型"><a class="markdownIt-Anchor" href="#1-解释gan模型"></a> 1、解释GAN模型</h2>
+<h3 id="1-概述"><a class="markdownIt-Anchor" href="#1-概述"></a> 1. 概述</h3>
+<p>GAN由两个网络组成，它们相互竞争、相互博弈，一方努力生成逼真的数据样本，而另一方则试图区分真实数据和生成器生成的假数据。</p>
+<h3 id="2-组成部分"><a class="markdownIt-Anchor" href="#2-组成部分"></a> 2. 组成部分</h3>
+<ul>
+<li><strong>生成器（Generator）</strong>：
+<ul>
+<li>生成器负责生成与真实数据类似的假数据样本。</li>
+<li>它接收随机噪声或潜在空间中的点作为输入，通过反向传播逐渐提高生成数据的逼真程度，使其能够欺骗判别器。</li>
+<li>生成器的目标是尽可能地使生成的假样本通过判别器的检测。</li>
+</ul>
+</li>
+<li><strong>判别器（Discriminator）</strong>：
+<ul>
+<li>判别器是一个二分类器，其目标是区分真实数据和生成器生成的假数据。</li>
+<li>它接收真实数据和生成器生成的假数据，通过训练不断提高对真假样本的辨别能力。</li>
+<li>判别器的目标是最大化正确地将真实数据和生成的假数据区分开来。</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-工作原理"><a class="markdownIt-Anchor" href="#3-工作原理"></a> 3. 工作原理</h3>
+<ul>
+<li>对抗训练（Adversarial Training）：
+<ul>
+<li>生成器和判别器相互对抗地进行训练，形成一个零和博弈的过程。</li>
+<li>在训练过程中，生成器试图尽可能地生成逼真的假样本来欺骗判别器，而判别器则试图更好地区分真实数据和生成的假数据。</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-应用领域"><a class="markdownIt-Anchor" href="#4-应用领域"></a> 4. 应用领域</h3>
+<ul>
+<li>图像生成：
+<ul>
+<li>GAN可用于生成逼真的图像，如人脸、艺术作品等。</li>
+</ul>
+</li>
+<li>数据增强：
+<ul>
+<li>可以用于生成扩增的训练数据，改善模型性能。</li>
+</ul>
+</li>
+<li>样本合成：
+<ul>
+<li>在医学图像处理等领域，用于合成新的数据样本以扩展数据集。</li>
+</ul>
+</li>
+</ul>
+<h3 id="5-挑战和应对方法"><a class="markdownIt-Anchor" href="#5-挑战和应对方法"></a> 5. 挑战和应对方法</h3>
+<ul>
+<li><strong>训练不稳定</strong>：
+<ul>
+<li>GAN训练过程可能不稳定，容易出现训练中的崩溃问题。</li>
+<li>对抗训练需要细致的超参数调整、网络架构设计和训练技巧。</li>
+</ul>
+</li>
+<li><strong>模式崩溃和模式塌陷</strong>：
+<ul>
+<li>生成器可能陷入模式塌陷（mode collapse）的情况，即只生成局部特定的样本模式。</li>
+<li>采用改进的GAN结构、损失函数设计、更复杂的网络等方法来缓解这个问题。</li>
+</ul>
+</li>
+</ul>
+<h2 id="2"><a class="markdownIt-Anchor" href="#2"></a> 2、</h2>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2023/11/26/2023%E5%B9%B411%E6%9C%8826%E6%97%A5-%E7%99%BE%E9%9D%A2%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/" data-id="clrwazlqz000m7ov4h71795ds" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93/" rel="tag">面试总结</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/12/01/2023%E5%B9%B412%E6%9C%881%E6%97%A5-%E8%AE%A1%E7%AE%97%E6%99%BA%E8%83%BD/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          2023年12月1日 计算智能
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/11/26/2023%E5%B9%B411%E6%9C%8826%E6%97%A5-%E7%99%BE%E9%9D%A2%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A02/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2023年11月26日 百面机器学习2</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>60</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>16</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2023 - 2024 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

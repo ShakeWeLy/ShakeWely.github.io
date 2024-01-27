@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>阿里天池3特征工程 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="3 阿里天池特征工程  3.1  概念和作用 1“数据和特征决定了机器学习的上限，而模型和算法只是逼近这个上限而已” 1什么是有用特征和无用特征？  3.2 处理  3.2.1 预处理 123采集清洗采样（正负样本不均匀） 1为什么要采样？作用？   3.2.2 特征处理 1标准化、区间缩放法、归一化、定量特征二值化、特征呀编码、缺失值处理、数据转换？？   3.3 降维  3.3.1 特征选择">
+<meta property="og:type" content="article">
+<meta property="og:title" content="阿里天池3特征工程">
+<meta property="og:url" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="3 阿里天池特征工程  3.1  概念和作用 1“数据和特征决定了机器学习的上限，而模型和算法只是逼近这个上限而已” 1什么是有用特征和无用特征？  3.2 处理  3.2.1 预处理 123采集清洗采样（正负样本不均匀） 1为什么要采样？作用？   3.2.2 特征处理 1标准化、区间缩放法、归一化、定量特征二值化、特征呀编码、缺失值处理、数据转换？？   3.3 降维  3.3.1 特征选择">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817191501628.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817191740199.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817192041473.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817192234449.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817192248023.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817192303599.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817192418065.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817192447014.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817192832869.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817193220113.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817193231124.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817193415567.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817193837689.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817193726743.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817194022043.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817195841657.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817194301272.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817194320336.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817194442261.png">
+<meta property="article:published_time" content="2023-08-17T09:47:39.000Z">
+<meta property="article:modified_time" content="2023-08-18T08:50:43.617Z">
+<meta property="article:author" content="Weakliy">
+<meta property="article:tag" content="阿里天池学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817191501628.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>60</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>16</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2023年8月17日-阿里天池1特征工程" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/" class="article-date">
+  <time class="post-time" datetime="2023-08-17T09:47:39.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">17</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      阿里天池3特征工程
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="3-阿里天池特征工程"><a class="markdownIt-Anchor" href="#3-阿里天池特征工程"></a> 3 阿里天池特征工程</h1>
+<h2 id="31-概念和作用image-20230817191501628"><a class="markdownIt-Anchor" href="#31-概念和作用image-20230817191501628"></a> 3.1  概念和作用<img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817191501628.png" alt="image-20230817191501628" /></h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">“数据和特征决定了机器学习的上限，而模型和算法只是逼近这个上限而已”</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">什么是有用特征和无用特征？</span><br></pre></td></tr></table></figure>
+<h2 id="32-处理"><a class="markdownIt-Anchor" href="#32-处理"></a> 3.2 处理</h2>
+<h3 id="321-预处理"><a class="markdownIt-Anchor" href="#321-预处理"></a> 3.2.1 预处理</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">采集</span><br><span class="line">清洗</span><br><span class="line">采样（正负样本不均匀）</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">为什么要采样？作用？</span><br></pre></td></tr></table></figure>
+<img src="./2023年8月17日-阿里天池1特征工程/image-20230817191740199.png" alt="image-20230817191740199" style="zoom: 67%;" />
+<h3 id="322-特征处理"><a class="markdownIt-Anchor" href="#322-特征处理"></a> 3.2.2 特征处理</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">标准化、区间缩放法、归一化、定量特征二值化、特征呀编码、缺失值处理、数据转换？？</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817192041473.png" alt="image-20230817192041473" /></p>
+<h2 id="33-降维"><a class="markdownIt-Anchor" href="#33-降维"></a> 3.3 降维</h2>
+<h3 id="331-特征选择"><a class="markdownIt-Anchor" href="#331-特征选择"></a> 3.3.1 特征选择</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">定义：</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817192234449.png" alt="image-20230817192144446" /></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">方法：</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817192248023.png" alt="image-20230817192248023" /></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">实现：</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817192303599.png" alt="image-20230817192303599" /></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">，，，代码？</span><br></pre></td></tr></table></figure>
+<h3 id="332-线性降维"><a class="markdownIt-Anchor" href="#332-线性降维"></a> 3.3.2 线性降维</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;占位符  不懂&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+<h4 id="1-主成分分析"><a class="markdownIt-Anchor" href="#1-主成分分析"></a> 1 主成分分析</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">定义</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817192418065.png" alt="image-20230817192418065" /></p>
+<h4 id="2-线性判别"><a class="markdownIt-Anchor" href="#2-线性判别"></a> 2 线性判别</h4>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817192447014.png" alt="image-20230817192447014" /></p>
+<h2 id="34-实战"><a class="markdownIt-Anchor" href="#34-实战"></a> 3.4 实战</h2>
+<h3 id="341-异常分析"><a class="markdownIt-Anchor" href="#341-异常分析"></a> 3.4.1 异常分析</h3>
+<img src="./2023年8月17日-阿里天池1特征工程/image-20230817192832869.png" alt="image-20230817192832869" style="zoom: 67%;" />
+<p><strong>差异过大删除</strong></p>
+<h3 id="342-最大最小值归一化"><a class="markdownIt-Anchor" href="#342-最大最小值归一化"></a> 3.4.2 最大最小值归一化</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">如何操作的？看代码</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> preprocessing </span><br><span class="line"></span><br><span class="line">features_columns = [col <span class="keyword">for</span> col <span class="keyword">in</span> train_data.columns <span class="keyword">if</span> col <span class="keyword">not</span> <span class="keyword">in</span> [<span class="string">&#x27;target&#x27;</span>]]</span><br><span class="line"></span><br><span class="line">min_max_scaler = preprocessing.MinMaxScaler()</span><br><span class="line"></span><br><span class="line">min_max_scaler = min_max_scaler.fit(train_data[features_columns])</span><br><span class="line"></span><br><span class="line">train_data_scaler = min_max_scaler.transform(train_data[features_columns])</span><br><span class="line">test_data_scaler = min_max_scaler.transform(test_data[features_columns])</span><br><span class="line"></span><br><span class="line">train_data_scaler = pd.DataFrame(train_data_scaler)</span><br><span class="line">train_data_scaler.columns = features_columns</span><br><span class="line"></span><br><span class="line">test_data_scaler = pd.DataFrame(test_data_scaler)</span><br><span class="line">test_data_scaler.columns = features_columns</span><br><span class="line"></span><br><span class="line">train_data_scaler[<span class="string">&#x27;target&#x27;</span>] = train_data[<span class="string">&#x27;target&#x27;</span>]</span><br></pre></td></tr></table></figure>
+<p><strong>比较：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">主要看什么？</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817193220113.png" alt="image-20230817193220113" /></p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817193231124.png" alt="image-20230817193231124" /></p>
+<h4 id="343-查看数据分布"><a class="markdownIt-Anchor" href="#343-查看数据分布"></a> 3.4.3 查看数据分布</h4>
+<p><strong>和前面的一样</strong> 删除特征’V5’, ‘V17’, ‘V28’, ‘V22’, ‘V11’, 'V9’数据的数据分布</p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817193415567.png" alt="image-20230817193415567" /></p>
+<h4 id="344-特征相关性"><a class="markdownIt-Anchor" href="#344-特征相关性"></a> 3.4.4 特征相关性</h4>
+<p><strong>一样</strong></p>
+<h4 id="345-特征降维"><a class="markdownIt-Anchor" href="#345-特征降维"></a> 3.4.5 特征降维</h4>
+<ol>
+<li>
+<p><strong>筛选出相关性大于0.1的特征变量</strong>*</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mcorr=mcorr.<span class="built_in">abs</span>()</span><br><span class="line">numerical_corr=mcorr[mcorr[<span class="string">&#x27;target&#x27;</span>]&gt;<span class="number">0.1</span>][<span class="string">&#x27;target&#x27;</span>]</span><br><span class="line"><span class="built_in">print</span>(numerical_corr.sort_values(ascending=<span class="literal">False</span>))</span><br><span class="line"></span><br><span class="line">index0 = numerical_corr.sort_values(ascending=<span class="literal">False</span>).index</span><br><span class="line"><span class="built_in">print</span>(train_data_scaler[index0].corr(<span class="string">&#x27;spearman&#x27;</span>))</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817193837689.png" alt="image-20230817193837689" /></p>
+<ol start="2">
+<li>
+<p>相关性排序并修改为&gt;0.3的</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">features_corr = numerical_corr.sort_values(ascending=<span class="literal">False</span>).reset_index()</span><br><span class="line">features_corr.columns = [<span class="string">&#x27;features_and_target&#x27;</span>, <span class="string">&#x27;corr&#x27;</span>]</span><br><span class="line">features_corr_select = features_corr[features_corr[<span class="string">&#x27;corr&#x27;</span>]&gt;<span class="number">0.3</span>] <span class="comment"># 筛选出大于相关性大于0.3的特征</span></span><br><span class="line"><span class="built_in">print</span>(features_corr_select)</span><br><span class="line">select_features = [col <span class="keyword">for</span> col <span class="keyword">in</span> features_corr_select[<span class="string">&#x27;features_and_target&#x27;</span>] <span class="keyword">if</span> col <span class="keyword">not</span> <span class="keyword">in</span> [<span class="string">&#x27;target&#x27;</span>]]</span><br><span class="line">new_train_data_corr_select = train_data_scaler[select_features+[<span class="string">&#x27;target&#x27;</span>]]</span><br><span class="line">new_test_data_corr_select = test_data_scaler[select_features]</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817193726743.png" alt="image-20230817193726743" /></p>
+<h3 id="346-多重共线性分析"><a class="markdownIt-Anchor" href="#346-多重共线性分析"></a> 3.4.6 多重共线性分析</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">原因： 特征之间相关性大</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817194022043.png" alt="image-20230817194022043" /></p>
+<h4 id="查看"><a class="markdownIt-Anchor" href="#查看"></a> 查看</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">怎么辨别？筛选？</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817195841657.png" alt="image-20230817195841657" /></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> statsmodels.stats.outliers_influence <span class="keyword">import</span> variance_inflation_factor <span class="comment">#多重共线性方差膨胀因子</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#多重共线性</span></span><br><span class="line">new_numerical=[<span class="string">&#x27;V0&#x27;</span>, <span class="string">&#x27;V2&#x27;</span>, <span class="string">&#x27;V3&#x27;</span>, <span class="string">&#x27;V4&#x27;</span>, <span class="string">&#x27;V5&#x27;</span>, <span class="string">&#x27;V6&#x27;</span>, <span class="string">&#x27;V10&#x27;</span>, <span class="string">&#x27;V11&#x27;</span>, </span><br><span class="line">                         <span class="string">&#x27;V13&#x27;</span>, <span class="string">&#x27;V15&#x27;</span>, <span class="string">&#x27;V16&#x27;</span>, <span class="string">&#x27;V18&#x27;</span>, <span class="string">&#x27;V19&#x27;</span>, <span class="string">&#x27;V20&#x27;</span>, <span class="string">&#x27;V22&#x27;</span>,<span class="string">&#x27;V24&#x27;</span>,<span class="string">&#x27;V30&#x27;</span>, <span class="string">&#x27;V31&#x27;</span>, <span class="string">&#x27;V37&#x27;</span>]</span><br><span class="line">X=np.matrix(train_data_scaler[new_numerical])</span><br><span class="line">VIF_list=[variance_inflation_factor(X, i) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(X.shape[<span class="number">1</span>])]</span><br><span class="line">VIF_list</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="处理"><a class="markdownIt-Anchor" href="#处理"></a> 处理</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.decomposition import PCA   #主成分分析法</span><br><span class="line"></span><br><span class="line">#PCA方法降维</span><br><span class="line">#保持90%的信息</span><br><span class="line">pca = PCA(n_components=0.9)</span><br><span class="line">new_train_pca_90 = pca.fit_transform(train_data_scaler.iloc[:,0:-1])</span><br><span class="line">new_test_pca_90 = pca.transform(test_data_scaler)</span><br><span class="line">new_train_pca_90 = pd.DataFrame(new_train_pca_90)</span><br><span class="line">new_test_pca_90 = pd.DataFrame(new_test_pca_90)</span><br><span class="line">new_train_pca_90[&#x27;target&#x27;] = train_data_scaler[&#x27;target&#x27;]</span><br><span class="line">new_train_pca_90.describe()</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817194301272.png" alt="image-20230817194301272" /></p>
+<h4 id="对比原来的"><a class="markdownIt-Anchor" href="#对比原来的"></a> 对比原来的</h4>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817194320336.png" alt="image-20230817194320336" /></p>
+<h4 id="保留16个主成分"><a class="markdownIt-Anchor" href="#保留16个主成分"></a> 保留16个主成分</h4>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817194442261.png" alt="image-20230817194442261" /></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/" data-id="clrwazlr8001m7ov4g0v0fav6" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A0%E5%AD%A6%E4%B9%A0/" rel="tag">阿里天池学习</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A02%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          阿里天池4模型训练
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">阿里天池2数据探索</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>60</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>16</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2023 - 2024 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

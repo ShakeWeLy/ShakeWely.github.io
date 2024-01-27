@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>阿里天池5模型验证 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="5模型验证  5.1 模型评估方法  5.1.1 过拟合与欠拟合 不多解释  5.1.2 泛化和正则化  泛化   正则化  1这个是什么意思？？？  123代价函数是干什么用的？   岭回归和lasso回归   作用 1这个图是什么意思？？？   不同之处   5.1.3 评估指标和调用方法   5.1.4 交叉验证   ![image-20230817221548567](.&#x2F;2023年8月">
+<meta property="og:type" content="article">
+<meta property="og:title" content="阿里天池5模型验证">
+<meta property="og:url" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="5模型验证  5.1 模型评估方法  5.1.1 过拟合与欠拟合 不多解释  5.1.2 泛化和正则化  泛化   正则化  1这个是什么意思？？？  123代价函数是干什么用的？   岭回归和lasso回归   作用 1这个图是什么意思？？？   不同之处   5.1.3 评估指标和调用方法   5.1.4 交叉验证   ![image-20230817221548567](.&#x2F;2023年8月">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817220349891.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817220337462.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817220434322.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817220459962.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817220811340.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817220857389.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817221246937.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817221323046.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817221453685.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817221543141.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817221633694.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817221806284.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817221837802.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817222120114.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817222343606.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817222445188.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817222539311.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817222607117.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817222659040.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817223242271.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817230231178.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817223459791.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817230350524.png">
+<meta property="article:published_time" content="2023-08-17T13:54:01.000Z">
+<meta property="article:modified_time" content="2023-08-18T08:50:50.423Z">
+<meta property="article:author" content="Weakliy">
+<meta property="article:tag" content="阿里天池学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817220349891.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>60</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>16</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2023年8月17日-阿里天池3模型验证" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/" class="article-date">
+  <time class="post-time" datetime="2023-08-17T13:54:01.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">17</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      阿里天池5模型验证
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="5模型验证"><a class="markdownIt-Anchor" href="#5模型验证"></a> 5模型验证</h1>
+<h2 id="51-模型评估方法"><a class="markdownIt-Anchor" href="#51-模型评估方法"></a> 5.1 模型评估方法</h2>
+<h3 id="511-过拟合与欠拟合"><a class="markdownIt-Anchor" href="#511-过拟合与欠拟合"></a> 5.1.1 过拟合与欠拟合</h3>
+<p>不多解释</p>
+<h3 id="512-泛化和正则化"><a class="markdownIt-Anchor" href="#512-泛化和正则化"></a> 5.1.2 泛化和正则化</h3>
+<h4 id="泛化"><a class="markdownIt-Anchor" href="#泛化"></a> 泛化</h4>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817220349891.png" alt="image-20230817220349891" /></p>
+<h4 id="正则化"><a class="markdownIt-Anchor" href="#正则化"></a> 正则化</h4>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817220337462.png" alt="image-20230817220337462" /></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">这个是什么意思？？？</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817220434322.png" alt="image-20230817220434322" /></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">代价函数是干什么用的？</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817220459962.png" alt="image-20230817220459962" /></p>
+<h4 id="岭回归和lasso回归"><a class="markdownIt-Anchor" href="#岭回归和lasso回归"></a> 岭回归和lasso回归</h4>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817220811340.png" alt="image-20230817220811340" /></p>
+<h5 id="作用"><a class="markdownIt-Anchor" href="#作用"></a> 作用</h5>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">这个图是什么意思？？？</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817220857389.png" alt="image-20230817220857389" /></p>
+<h5 id="不同之处"><a class="markdownIt-Anchor" href="#不同之处"></a> 不同之处</h5>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817221246937.png" alt="image-20230817221246937" /></p>
+<h3 id="513-评估指标和调用方法"><a class="markdownIt-Anchor" href="#513-评估指标和调用方法"></a> 5.1.3 评估指标和调用方法</h3>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817221323046.png" alt="image-20230817221323046" /></p>
+<h3 id="514-交叉验证"><a class="markdownIt-Anchor" href="#514-交叉验证"></a> 5.1.4 交叉验证</h3>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817221453685.png" alt="image-20230817221453685" /></p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817221543141.png" alt="image-20230817221543141" /></p>
+<p>![image-20230817221548567](./2023年8月17日-阿里天池3模型验证/image-20230817221548567.png</p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817221633694.png" alt="image-20230817221633694" /></p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817221806284.png" alt="image-20230817221806284" /></p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817221837802.png" alt="image-20230817221837802" /></p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817222120114.png" alt="" /></p>
+<p>​        <strong>K折交叉验证</strong>： KFold         将所有的样例划分为 k 个组，称为折叠 (fold) （如果 k = n， 这等价于 Leave One Out（留一）         策略），都具有相同的大小（如果可能）。预测函数学习时使用 k - 1 个折叠中的数据，最后一个剩下的折叠会用于测试。</p>
+<p>​        <strong>K折重复多次</strong>：         RepeatedKFold 重复 K-Fold n 次。当需要运行时可以使用它 KFold n 次，在每次重复中产生不同的分割。</p>
+<p>​        <strong>留一交叉验证</strong>：         LeaveOneOut (或 LOO) 是一个简单的交叉验证。每个学习集都是通过除了一个样本以外的所有样本创建的，测试集是被留下的样本。         因此，对于 n 个样本，我们有 n 个不同的训练集和 n         个不同的测试集。这种交叉验证程序不会浪费太多数据，因为只有一个样本是从训练集中删除掉的:</p>
+<p>​        <strong>留P交叉验证</strong>： LeavePOut         与 LeaveOneOut 非常相似，因为它通过从整个集合中删除 p 个样本来创建所有可能的 训练/测试集。对于 n 个样本，这产生了 {n         \choose p} 个 训练-测试 对。与 LeaveOneOut 和 KFold 不同，当 p &gt; 1 时，测试集会重叠。</p>
+<p>​        <strong>用户自定义数据集划分： ShuffleSplit</strong>         迭代器将会生成一个用户给定数量的独立的训练/测试数据划分。样例首先被打散然后划分为一对训练测试集合。</p>
+<p>​        <strong>设置每次生成的随机数相同</strong>：         可以通过设定明确的 random_state ，使得伪随机生成器的结果可以重复。</p>
+<h4 id="基于类标签-具有分层的交叉验证迭代器"><a class="markdownIt-Anchor" href="#基于类标签-具有分层的交叉验证迭代器"></a> 基于类标签、具有分层的交叉验证迭代器</h4>
+<p>​        如何解决样本不平衡问题？ 使用StratifiedKFold和StratifiedShuffleSplit 分层抽样。         一些分类问题在目标类别的分布上可能表现出很大的不平衡性：例如，可能会出现比正样本多数倍的负样本。在这种情况下，建议采用如         StratifiedKFold 和 StratifiedShuffleSplit 中实现的分层抽样方法，确保相对的类别频率在每个训练和验证         折叠 中大致保留。</p>
+<p>​        <strong>StratifiedKFold</strong>是 k-fold 的变种，会返回 stratified（分层）         的折叠：每个小集合中， 各个类别的样例比例大致和完整数据集中相同。</p>
+<p>​        <strong>StratifiedShuffleSplit</strong>是 ShuffleSplit         的一个变种，会返回直接的划分，比如： 创建一个划分，但是划分中每个类的比例和完整数据集中的相同。</p>
+<h4 id="用于分组数据的交叉验证迭代器"><a class="markdownIt-Anchor" href="#用于分组数据的交叉验证迭代器"></a> 用于分组数据的交叉验证迭代器</h4>
+<p>​        如何进一步测试模型的泛化能力？ 留出一组特定的不属于测试集和训练集的数据。有时我们想知道在一组特定的 groups         上训练的模型是否能很好地适用于看不见的 group 。为了衡量这一点，我们需要确保验证对象中的所有样本来自配对训练折叠中完全没有表示的组。</p>
+<p>​        <strong>GroupKFold</strong>是 k-fold 的变体，它确保同一个 group 在测试和训练集中都不被表示。         例如，如果数据是从不同的 subjects 获得的，每个 subject         有多个样本，并且如果模型足够灵活以高度人物指定的特征中学习，则可能无法推广到新的 subject 。 GroupKFold         可以检测到这种过拟合的情况。</p>
+<p>​        <strong>LeaveOneGroupOut</strong>是一个交叉验证方案，它根据第三方提供的 array of integer         groups （整数组的数组）来提供样本。这个组信息可以用来编码任意域特定的预定义交叉验证折叠。</p>
+<p>​        每个训练集都是由除特定组别以外的所有样本构成的。</p>
+<p>​        <strong>LeavePGroupsOut</strong>类似于 LeaveOneGroupOut ，但为每个训练/测试集删除与 P         组有关的样本。</p>
+<p>​        <strong>GroupShuffleSplit</strong>迭代器是 ShuffleSplit 和 LeavePGroupsOut         的组合，它生成一个随机划分分区的序列，其中为每个分组提供了一个组子集。</p>
+<h4 id="时间序列分割"><a class="markdownIt-Anchor" href="#时间序列分割"></a> 时间序列分割</h4>
+<p>​        <strong>TimeSeriesSplit</strong>是 k-fold 的一个变体，它首先返回 k 折作为训练数据集，并且         (k+1) 折作为测试数据集。 请注意，与标准的交叉验证方法不同，连续的训练集是超越前者的超集。         另外，它将所有的剩余数据添加到第一个训练分区，它总是用来训练模型。</p>
+<h2 id="52-模型调参"><a class="markdownIt-Anchor" href="#52-模型调参"></a> 5.2 模型调参</h2>
+<h3 id="521-调参"><a class="markdownIt-Anchor" href="#521-调参"></a> 5.2.1 调参</h3>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817222343606.png" alt="image-20230817222343606" /></p>
+<img src="./2023年8月17日-阿里天池3模型验证/image-20230817222445188.png" alt="image-20230817222445188"  />
+<h4 id="例子"><a class="markdownIt-Anchor" href="#例子"></a> 例子</h4>
+<img src="./2023年8月17日-阿里天池3模型验证/image-20230817222539311.png" alt="image-20230817222539311" style="zoom:33%;" />
+<img src="./image-20230817222607117.png" alt="image-20230817222607117" style="zoom:33%;" />
+<h3 id="522-网格搜索"><a class="markdownIt-Anchor" href="#522-网格搜索"></a> 5.2.2 网格搜索</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">作用：</span><br></pre></td></tr></table></figure>
+<p>​	<img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817222659040.png" alt="image-20230817222659040" /></p>
+<h3 id="523-学习曲线"><a class="markdownIt-Anchor" href="#523-学习曲线"></a> 5.2.3 学习曲线</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">作用：</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817223242271.png" alt="image-20230817223242271" /></p>
+<img src="./2023年8月17日-阿里天池3模型验证/image-20230817230231178.png" alt="image-20230817230231178" style="zoom:50%;" />
+<h3 id="523-验证曲线"><a class="markdownIt-Anchor" href="#523-验证曲线"></a> 5.2.3 验证曲线</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">和网格搜索的区别？？</span><br><span class="line"></span><br><span class="line">验证曲线关注于单个超参数的影响，帮助你理解如何调整某个特定参数以获得更好的模型性能。</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817223459791.png" alt="image-20230817223459791" /></p>
+<img src="./2023年8月17日-阿里天池3模型验证/image-20230817230350524.png" alt="image-20230817230350524" style="zoom:50%;" />
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/" data-id="clrwazlr8001o7ov44cz25h98" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A0%E5%AD%A6%E4%B9%A0/" rel="tag">阿里天池学习</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/08/18/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A06%E7%89%B9%E5%BE%81%E4%BC%98%E5%8C%96%E4%B8%8E%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88%E5%93%A6/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          阿里天池6特征优化与7模型融合
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A02%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">阿里天池4模型训练</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>60</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>16</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2023 - 2024 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
