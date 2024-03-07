@@ -43,9 +43,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>61</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>69</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>16</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>17</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -71,11 +71,317 @@
 
         <section id="main">
   
-    <article id="post-2024年1月28日-Git连接出错" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2024年3月3日-面试更新——代码模型" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2024/01/28/2024%E5%B9%B41%E6%9C%8828%E6%97%A5-Git%E8%BF%9E%E6%8E%A5%E5%87%BA%E9%94%99/" class="article-date">
-  <time class="post-time" datetime="2024-01-27T16:55:09.000Z" itemprop="datePublished">
-    <span class="post-month">1月</span><br/>
+    <a href="/2024/03/03/2024%E5%B9%B43%E6%9C%883%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%9B%B4%E6%96%B0%E2%80%94%E2%80%94%E4%BB%A3%E7%A0%81%E6%A8%A1%E5%9E%8B/" class="article-date">
+  <time class="post-time" datetime="2024-03-03T06:16:37.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">03</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2024/03/03/2024%E5%B9%B43%E6%9C%883%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%9B%B4%E6%96%B0%E2%80%94%E2%80%94%E4%BB%A3%E7%A0%81%E6%A8%A1%E5%9E%8B/">2024年3月3日 面试更新——代码模型</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="代码模型"><a class="markdownIt-Anchor" href="#代码模型"></a> 代码模型</h1>
+<h2 id="模型加密"><a class="markdownIt-Anchor" href="#模型加密"></a> 模型加密</h2>
+<p>模型加密的几个方式：</p>
+<ul>
+<li>模型文件直接加密，把模型的二进制文件直接加密，一般都会有加密算法，对模型的前xx字节进行加密，解密的时候对前xx字节进行解密即可，这种加密只在load时候做，会影响模型加载速度，但是不影响运行速度</li>
+<li>模型结构不加密，模型权重加密，有的可以采用类似于模型压缩的方法把权重压缩了，推理时以自定义协议读取加载推理</li>
+<li>也需要对解密模型的代码进行加密，代码混淆要做，不过这样会影响解密代码也就是load模型过程，会变慢，就看你代码混淆做到什么程度</li>
+</ul>
+<h2 id="模型转换"><a class="markdownIt-Anchor" href="#模型转换"></a> 模型转换</h2>
+<p>模型可能是各种格式的：</p>
+<ul>
+<li>Caffe</li>
+<li>ONNX</li>
+<li>Pytorch</li>
+<li>TFLITE</li>
+<li>NCNN、MNN</li>
+</ul>
+<h4 id="模型转换后一般要做"><a class="markdownIt-Anchor" href="#模型转换后一般要做"></a> 模型转换后一般要做</h4>
+<ul>
+<li>转换后看一下模型的输入输出类型、维度、名称、数量啥的是否和之前一致</li>
+<li>转换后首先跑一张训练时的图（或者一批图），看下新模型的输出和旧模型差多少，一定要保证最终输入到模型的tensor一致（也可以使用random输入或者ones输入测试，不过对于模型权重分布特殊的模型来说，对于这种输入可能评测不是很准确）</li>
+<li>批量跑测试集测一下精度是否一致</li>
+<li>benchmark转换后模型的速度是否符合预期</li>
+</ul>
+<h4 id="常见的问题"><a class="markdownIt-Anchor" href="#常见的问题"></a> 常见的问题</h4>
+<ul>
+<li>转换后模型精度问题，输出为nan、精度完全错乱</li>
+<li>转换后模型batch=1正常，多batch结果错乱</li>
+<li>转换后输入/输出类型维度啥的错误</li>
+<li>转换后模型速度未达到预期</li>
+<li>未完待续</li>
+</ul>
+<h2 id="模型优化"><a class="markdownIt-Anchor" href="#模型优化"></a> 模型优化</h2>
+<p>小到优化一个<a target="_blank" rel="noopener" href="https://blog.csdn.net/agq358/article/details/125095432"><strong>op</strong></a>（Op就是Kernel的集合，一个Op代表的是有一定共性的多个Kernel便于在<a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2306404">计算图和图优化</a>中进行表示），大概优化整个推理pipeline，可以干的事情很多。</p>
+<h3 id="合并-替换op算子"><a class="markdownIt-Anchor" href="#合并-替换op算子"></a> 合并、替换op算子</h3>
+<p>很多框架在导出的时候就会<strong>自动合并一些操作</strong>，比如torch.onnx在导出<strong>conv+bn</strong>的时候会将bn吸到前面的conv中，比较常见了。<br>
+但也有一些<strong>可以合并的操作，<strong>假如框架代码还没有实现该pattern则不会合并，不过我们也可以自己合并，这里需要经验了，需要我们熟知各种op的合并方式。<br>
+可以自己合并一些操作，比如下图中的</strong>convTranspose+Add+BN</strong>，是不常见的Squence(序列)的pattern，如果自己愿意的话，可以直接在ONNX中进行合并，把权重关系搞对就行</p>
+<p><img src="/2024/03/03/2024%E5%B9%B43%E6%9C%883%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%9B%B4%E6%96%B0%E2%80%94%E2%80%94%E4%BB%A3%E7%A0%81%E6%A8%A1%E5%9E%8B/image-20240303145240993.png" alt="image-20240303145240993"></p>
+<p>列举一些合并的例子，总之就是将多个op合成大op，节省计算量以及数据搬运的时间：</p>
+<ul>
+<li>conv/transposeConv+bn</li>
+<li>多个支路的conv合并为group conv</li>
+<li>gemm + bias -&gt; conv</li>
+</ul>
+<p><img src="/2024/03/03/2024%E5%B9%B43%E6%9C%883%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%9B%B4%E6%96%B0%E2%80%94%E2%80%94%E4%BB%A3%E7%A0%81%E6%A8%A1%E5%9E%8B/image-20240303145305875.png" alt="image-20240303145305875"></p>
+<p>多路合并</p>
+<p><img src="/2024/03/03/2024%E5%B9%B43%E6%9C%883%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%9B%B4%E6%96%B0%E2%80%94%E2%80%94%E4%BB%A3%E7%A0%81%E6%A8%A1%E5%9E%8B/image-20240303145254628.png" alt="image-20240303145254628"></p>
+<p>既可以融合一些算子，当然也可以替换一些算子：</p>
+<ul>
+<li>relu6替换为max(0,6)</li>
+</ul>
+<h3 id="蒸馏-剪枝"><a class="markdownIt-Anchor" href="#蒸馏-剪枝"></a> 蒸馏、剪枝</h3>
+<p>剪枝后的模型比未剪枝的同等size大小精度更高。<br>
+具体的可以参考这篇：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1710.01878">https://arxiv.org/abs/1710.01878</a></p>
+<p>剪枝的方法可以看zomi总结的ppt(来自 <a target="_blank" rel="noopener" href="https://github.com/chenzomi12/DeepLearningSystem">https://github.com/chenzomi12/DeepLearningSystem</a>)：</p>
+<p><img src="/2024/03/03/2024%E5%B9%B43%E6%9C%883%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%9B%B4%E6%96%B0%E2%80%94%E2%80%94%E4%BB%A3%E7%A0%81%E6%A8%A1%E5%9E%8B/image-20240303145428861.png" alt="image-20240303145428861"></p>
+<p>​</p>
+<p>蒸馏可以使同结构的小模型精度提升接近大模型的精度。</p>
+<h4 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h4>
+<p>剪枝类似于模型搜索，如果直接<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/127194745">NAS</a>的话，就没有必要剪枝了。</p>
+<h4 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h4>
+<ul>
+<li>to prune or not to prune exploring the efficacy of pruning for model compression</li>
+<li>DAMO-YOLO</li>
+</ul>
+<h3 id="量化"><a class="markdownIt-Anchor" href="#量化"></a> 量化</h3>
+<p>量化目前比较成熟，也有很好的教程（PPQ），很成熟的库（PPQ）</p>
+<ul>
+<li>量化基本概念，与硬件的关系</li>
+<li>PTQ量化和QAT量化，两种量化还有很多方法。PTQ有  EasyQuant（EQ）、；QAT有LSQ(Learned Step Size Quantization)、DSQ(Differentiable Soft Quantization)</li>
+</ul>
+<p>不是所有模型、所有op都适合量化：</p>
+<ul>
+<li>重参数量化 <a target="_blank" rel="noopener" href="https://tech.meituan.com/2022/09/22/yolov6-quantization-in-meituan.html">https://tech.meituan.com/2022/09/22/yolov6-quantization-in-meituan.html</a></li>
+<li>量化模型直接输入int8 进行测试</li>
+</ul>
+<p>注意点：</p>
+<ul>
+<li>有些模型量化后，虽然整体指标没有变化（某个评价标准，比如coco的mAP），但是实际使用中，发现之前的一些效果变差了，这种情况大多是调用模型的策略效果与这个模型的耦合度比较高了。举个例子，比如之前这个模型对小目标检测效果好，但是量化后，小目标检测效果差了（然而中目标效果好了）所以导致与小目标耦合度比较高的策略兼容度不高，导致算法的整体精度下降。这种情况就比较尴尬，你可以调整策略，或者重新量化模型，加上一些约束使其在某些场景下尽可能和原始模型表现一致，但这个需要时间去优化了，有较高的时间成本。</li>
+</ul>
+<h4 id="参考-2"><a class="markdownIt-Anchor" href="#参考-2"></a> 参考</h4>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=Mzg3ODU2MzY5MA==&amp;mid=2247488318&amp;idx=1&amp;sn=048c1b78f3b2cb25c05abb115f20d6c6&amp;chksm=cf108b3bf867022d1b214928102d65ed691c81955b59ca02bccdee92584ad9aa8e390e1d2978&amp;token=1097456929&amp;lang=zh_CN&amp;scene=21#wechat_redirect">必看部署系列~懂你的神经网络量化教程：第一讲！</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=Mzg3ODU2MzY5MA==&amp;mid=2247488838&amp;idx=1&amp;sn=56107c468d5b683a574e6046af3a541f&amp;chksm=cf108d43f8670455736a83546eb5ed81abc9194d7d4c2359af393f26e3bddd1379f777e35f35&amp;token=1097456929&amp;lang=zh_CN&amp;scene=21#wechat_redirect">量化番外篇——TensorRT-8的量化细节</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=Mzg3ODU2MzY5MA==&amp;mid=2247489317&amp;idx=1&amp;sn=797e32276bd4f55948d992f455415943&amp;chksm=cf108f20f8670636b27be2431d5a4fdef1689eaa672e59ffc7d6181d2afb13a9a050d9b6b4a5&amp;token=1097456929&amp;lang=zh_CN&amp;scene=21#wechat_redirect">实践torch.fx第二篇——基于FX的PTQ量化实操</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/openppl-public/ppq">https://github.com/openppl-public/ppq</a></li>
+</ul>
+<h3 id="算子op优化"><a class="markdownIt-Anchor" href="#算子op优化"></a> 算子op优化</h3>
+<p>性能计算的一些入门问题，可以看下这个的回答：</p>
+<ul>
+<li>想进大厂的高性能计算岗位需要做哪些准备？</li>
+</ul>
+<p>大部分优化op的场景，很多原因是<strong>原生op的实现可能不是最优</strong>的，有很大的优化空间。<br>
+比如LayerNorm这个操作，Pytorch原生的实现比较慢，于是就有了优化空间：</p>
+<ul>
+<li>CUDA优化之LayerNorm性能优化实践</li>
+</ul>
+<p>同理，很多CUDA实现的OP可能不是最优的，只有你有精力，就可以进行优化。也要考虑是这个优化值不值，在整个模型中的占比大不大，投入产出比怎么样blabla。</p>
+<p>对于CUDA还好些，资料很多，很多op网上都有开源的不错的实现（尤其是gemm），抄抄改改就可以了。</p>
+<p>不过对于一些没有CUDA那么火的平台或者语言，比如arm平台的neon或者npu，这些开源的算子实现少一些，大部分需要自己手写。分析模型哪些op慢之后，手动优化一下。</p>
+<p>知乎上也有很多优化系列的教程，跟着一步一步来吧：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/478846788">cuda 入门的正确姿势：how-to-optimize-gemm</a></li>
+<li>深入浅出GPU优化系列：elementwise优化及CUDA工具链介绍</li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/441146275">[施工中] CUDA GEMM 理论性能分析与 kernel 优化</a></li>
+<li>深入浅出GPU优化系列：reduce优化</li>
+</ul>
+<p>有几种可以自动生成op的框架：</p>
+<ul>
+<li>TVM</li>
+<li>triton（此triton非彼triton）</li>
+</ul>
+<h3 id="调优可视化工具"><a class="markdownIt-Anchor" href="#调优可视化工具"></a> 调优可视化工具</h3>
+<p>可视化工具</p>
+<ul>
+<li>画模型图的工具，graphvis</li>
+<li>NVIDIA的nsight system和nsight compute</li>
+<li>pytorch的profiler</li>
+</ul>
+<h2 id="更多推理框架ai编译器"><a class="markdownIt-Anchor" href="#更多推理框架ai编译器"></a> 更多推理框架/AI编译器</h2>
+<p><a target="_blank" rel="noopener" href="https://github.com/merrymercy/awesome-tensor-compilers">https://github.com/merrymercy/awesome-tensor-compilers</a></p>
+<h3 id="onnx"><a class="markdownIt-Anchor" href="#onnx"></a> ONNX</h3>
+<h4 id="相关文章"><a class="markdownIt-Anchor" href="#相关文章"></a> 相关文章：</h4>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/daquexian/onnx-simplifier">https://github.com/daquexian/onnx-simplifier</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/ZhangGe6/onnx-modifier">https://github.com/ZhangGe6/onnx-modifier</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT/tree/master/tools/onnx-graphsurgeon">https://github.com/NVIDIA/TensorRT/tree/master/tools/onnx-graphsurgeon</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/onnx/onnx">https://github.com/onnx/onnx</a></li>
+<li>模型部署入门教程（五）：ONNX 模型的修改与调试</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/onnx/onnx/blob/main/docs/Operators.md">https://github.com/onnx/onnx/blob/main/docs/Operators.md</a></li>
+</ul>
+<h3 id="tvm"><a class="markdownIt-Anchor" href="#tvm"></a> TVM</h3>
+<ul>
+<li>如何评测模型的速度</li>
+<li>如何benchmark模型各层的错误</li>
+<li>解析trtexec中的benchmark</li>
+<li>解析TVM中的graph和VM</li>
+</ul>
+<h3 id="tensorrt"><a class="markdownIt-Anchor" href="#tensorrt"></a> TensorRT</h3>
+<ul>
+<li>python端口调用</li>
+<li>C++端口调用</li>
+<li>多线程调用</li>
+<li>各种模型转换TensorRT（ONNX、Pytorch、TensorFLow）</li>
+<li>各种和TensorRT相关的转换库</li>
+</ul>
+<h4 id="自定义插件"><a class="markdownIt-Anchor" href="#自定义插件"></a> 自定义插件</h4>
+<p>如果模型中保存TensorRT不支持的算子，就需要自己实现cuda操作并且集成到TensorRT中。<br>
+现在也有很多可以生成插件的工具：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/NVIDIA-AI-IOT/tensorrt_plugin_generator">https://github.com/NVIDIA-AI-IOT/tensorrt_plugin_generator</a></li>
+</ul>
+<p>相关资料：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/NVIDIA/trt-samples-for-hackathon-cn">https://github.com/NVIDIA/trt-samples-for-hackathon-cn</a></li>
+</ul>
+<h3 id="libtorch"><a class="markdownIt-Anchor" href="#libtorch"></a> libtorch</h3>
+<p>简单好用的对Pytorch模型友好的C++推理库。</p>
+<ul>
+<li>torch.jit.trace</li>
+<li>torch.jit.script</li>
+<li>python导出libtorch模型，C++加载libtorch模型</li>
+</ul>
+<h3 id="aitemplate"><a class="markdownIt-Anchor" href="#aitemplate"></a> AITemplate</h3>
+<p>AITemplate 加速Stable Diffusion的效果比TensorRT要好不少。<br>
+测试了一个res50的模型，利用<code>TensorRT-8.5.1.7</code>和<code>AITemplate-0.1dev</code>转化后简单测试了下速度，精度都是FP16，显卡是A4000。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th style="text-align:left">4x3x224x224</th>
+<th style="text-align:left">8x3x224x224</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">TensorRT</td>
+<td style="text-align:left">2.07885 ms</td>
+<td style="text-align:left">3.49877 ms</td>
+</tr>
+<tr>
+<td style="text-align:left">AITemplate</td>
+<td style="text-align:left">1.36401 ms</td>
+<td style="text-align:left">2.38946 ms</td>
+</tr>
+</tbody>
+</table>
+<h2 id="高性能计算"><a class="markdownIt-Anchor" href="#高性能计算"></a> 高性能计算</h2>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2024/03/03/2024%E5%B9%B43%E6%9C%883%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%9B%B4%E6%96%B0%E2%80%94%E2%80%94%E4%BB%A3%E7%A0%81%E6%A8%A1%E5%9E%8B/" data-id="cltgreey5000rw8v4e1zv3zw6" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93/" rel="tag">面试总结</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2024年3月3日-面试更新" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2024/03/03/2024%E5%B9%B43%E6%9C%883%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%9B%B4%E6%96%B0/" class="article-date">
+  <time class="post-time" datetime="2024-03-03T04:42:53.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">03</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2024/03/03/2024%E5%B9%B43%E6%9C%883%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%9B%B4%E6%96%B0/">2024年3月3日 面试更新——大模型</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="大模型面试总结"><a class="markdownIt-Anchor" href="#大模型面试总结"></a> 大模型面试总结</h1>
+<h2 id="大模型"><a class="markdownIt-Anchor" href="#大模型"></a> 大模型</h2>
+<h3 id="项目"><a class="markdownIt-Anchor" href="#项目"></a> 项目</h3>
+<p>现在简历上搞一些什么使用unet训练一个分割网络实现某个任务，或者说使用yolov7检测某个目标已经不是什么亮点了。不过这种也不是不行，但你需要<strong>更多的深度</strong>我才会感兴趣：</p>
+<ul>
+<li>网络结构有无值得说明的改进</li>
+<li>为什么这样做可以明确说出原因和数据证明</li>
+<li>对使用这个方法以及和其他方法做过比较详细的对比，选择这个模型是有理由的</li>
+</ul>
+<h3 id="推理相关"><a class="markdownIt-Anchor" href="#推理相关"></a> 推理相关</h3>
+<p>要求：</p>
+<ul>
+<li>搞上层编译器的（类似于torch-tensorrt的利用pytorch生态和TensorRT生态的在nvidia显卡加速的编译器，不需要自己写codegen），会针对不同的后端（比如onnx和torchscript）写parser，针对计算图写一些pass；也有搞基于MLIR的编译器的，在自己的公司硬件上跑，前端中端后端需要都搞</li>
+<li>搞推理框架的，就是优化训练和部署中的一些性能问题、精度溢出问题；有些公司喜欢搞统一的框架（训练和部署都解决了），不喜欢用现有的轮子，要自己造；对于加速类的推理框架，会实现比如模拟量化功能、精度对比功能等等</li>
+<li>搞加速的，就是对任务中各种瓶颈的算子进行加速，C<ins>转cuda，python转c</ins>等等，使用C++封装一些项目blabla</li>
+<li>项目优化op的细节</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2024/03/03/2024%E5%B9%B43%E6%9C%883%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%9B%B4%E6%96%B0/" data-id="cltgreey3000lw8v49zyk0xav" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93/" rel="tag">面试总结</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2024年2月28日-高数" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/" class="article-date">
+  <time class="post-time" datetime="2024-02-28T04:39:40.000Z" itemprop="datePublished">
+    <span class="post-month">2月</span><br/>
     <span class="post-day">28</span>
   </time>
 </a>
@@ -88,7 +394,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2024/01/28/2024%E5%B9%B41%E6%9C%8828%E6%97%A5-Git%E8%BF%9E%E6%8E%A5%E5%87%BA%E9%94%99/">2024年1月28日 Git连接出错</a>
+      <a class="article-title" href="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/">2024年2月28日 高数</a>
     </h1>
   
 
@@ -103,185 +409,883 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues/2767">https://github.com/hexojs/hexo/issues/2767</a></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com</span><br></pre></td></tr></table></figure>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/the__future/article/details/130038818">https://blog.csdn.net/the__future/article/details/130038818</a></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$ git clone git@github.com:ShakeWeLy/ShakeWely.github.io.git</span><br><span class="line">Cloning into &#x27;ShakeWely.github.io&#x27;...</span><br><span class="line">ssh: Could not resolve hostname github.com: Name or service not known</span><br><span class="line">fatal: Could not read from remote repository.</span><br><span class="line"></span><br><span class="line">Please make sure you have the correct access rights</span><br><span class="line">and the repository exists.</span><br><span class="line">(base)</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">$ ssh-add ~/.ssh/id_rsa</span><br><span class="line"></span><br><span class="line">Could not open a connection to your authentication agent.</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">eval &quot;$(ssh-agent -s)&quot;</span><br><span class="line">ssh-add ~/.ssh/id_rsa</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p><img src="/2024/01/28/2024%E5%B9%B41%E6%9C%8828%E6%97%A5-Git%E8%BF%9E%E6%8E%A5%E5%87%BA%E9%94%99/image-20240128013153361.png" alt="image-20240128013153361"></p>
-<p><img src="/2024/01/28/2024%E5%B9%B41%E6%9C%8828%E6%97%A5-Git%E8%BF%9E%E6%8E%A5%E5%87%BA%E9%94%99/image-20240128014016280.png" alt="image-20240128014016280"></p>
-<p><img src="/2024/01/28/2024%E5%B9%B41%E6%9C%8828%E6%97%A5-Git%E8%BF%9E%E6%8E%A5%E5%87%BA%E9%94%99/image-20240128014544122.png" alt="image-20240128014544122"></p>
-<p><img src="/2024/01/28/2024%E5%B9%B41%E6%9C%8828%E6%97%A5-Git%E8%BF%9E%E6%8E%A5%E5%87%BA%E9%94%99/image-20240128014525556.png" alt="image-20240128014525556"></p>
-<p>不行 换回来</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">ssh: Could not resolve hostname ssh.github.com: Name or service not known</span><br><span class="line">fatal: Could not read from remote repository.</span><br><span class="line"></span><br><span class="line">Please make sure you have the correct access rights</span><br><span class="line">and the repository exists.</span><br><span class="line">[41mFATAL[49m Something&#x27;s wrong. Maybe you can find the solution here: [4mhttps://hexo.io/docs/troubleshooting.html[24m</span><br><span class="line">[33mError: Spawn failed</span><br><span class="line">    at ChildProcess.&lt;anonymous&gt; (F:\.Hexo\MyBlog\node_modules\hexo-util\lib\spawn.js:51:21)</span><br><span class="line">    at ChildProcess.emit (node:events:514:28)</span><br><span class="line">    at cp.emit (F:\.Hexo\MyBlog\node_modules\cross-spawn\lib\enoent.js:34:29)</span><br><span class="line">    at ChildProcess._handle.onexit (node:internal/child_process:291:12)[39m</span><br></pre></td></tr></table></figure>
-<p>ssh: Could not resolve hostname <a target="_blank" rel="noopener" href="http://ssh.github.com">ssh.github.com</a>: Name or service not known<br>
-fatal: Could not read from remote repository.不一样</p>
-<p><img src="/2024/01/28/2024%E5%B9%B41%E6%9C%8828%E6%97%A5-Git%E8%BF%9E%E6%8E%A5%E5%87%BA%E9%94%99/image-20240128015804141.png" alt="image-20240128015804141"></p>
-<p><img src="/2024/01/28/2024%E5%B9%B41%E6%9C%8828%E6%97%A5-Git%E8%BF%9E%E6%8E%A5%E5%87%BA%E9%94%99/image-20240128015729455.png" alt="image-20240128015729455"></p>
-<p><img src="/2024/01/28/2024%E5%B9%B41%E6%9C%8828%E6%97%A5-Git%E8%BF%9E%E6%8E%A5%E5%87%BA%E9%94%99/image-20240128015713513.png" alt="image-20240128015713513"></p>
-<p><img src="/2024/01/28/2024%E5%B9%B41%E6%9C%8828%E6%97%A5-Git%E8%BF%9E%E6%8E%A5%E5%87%BA%E9%94%99/image-20240128015706261.png" alt="image-20240128015706261"></p>
-<p><img src="/2024/01/28/2024%E5%B9%B41%E6%9C%8828%E6%97%A5-Git%E8%BF%9E%E6%8E%A5%E5%87%BA%E9%94%99/image-20240128020330252.png" alt="image-20240128020330252"></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2024/01/28/2024%E5%B9%B41%E6%9C%8828%E6%97%A5-Git%E8%BF%9E%E6%8E%A5%E5%87%BA%E9%94%99/" data-id="clrwbbrv80000rsv483mkbnhr" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2024年1月27日-gradio实践" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/" class="article-date">
-  <time class="post-time" datetime="2024-01-27T14:28:32.000Z" itemprop="datePublished">
-    <span class="post-month">1月</span><br/>
-    <span class="post-day">27</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/">2024年1月27日 gradio实践</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="gradio-实践"><a class="markdownIt-Anchor" href="#gradio-实践"></a> Gradio 实践</h1>
-<h2 id="demo1"><a class="markdownIt-Anchor" href="#demo1"></a> demo1</h2>
-<h3 id="1测试运行"><a class="markdownIt-Anchor" href="#1测试运行"></a> <strong>1.测试运行</strong></h3>
-<p>gradio的核心是它的<code>gr.Interface</code>函数，用来构建可视化界面。</p>
+        <h1 id="高数"><a class="markdownIt-Anchor" href="#高数"></a> 高数</h1>
+<h2 id="1-前言"><a class="markdownIt-Anchor" href="#1-前言"></a> 1 前言</h2>
+<h3 id="11资料"><a class="markdownIt-Anchor" href="#11资料"></a> 1.1资料</h3>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240228124111025.png" alt="image-20240228124111025"></p>
+<h3 id><a class="markdownIt-Anchor" href="#"></a> </h3>
+<h3 id="12安排"><a class="markdownIt-Anchor" href="#12安排"></a> 1.2安排</h3>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240228124504771.png" alt><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240228124959221.png" alt="image-20240228124959221"></p>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240228125018008.png" alt="image-20240228125018008"><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240228125043033.png" alt="image-20240228125043033"></p>
+<p>时间线<img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240228125356390.png" alt="image-20240228125356390"></p>
+<h2 id="2-考点"><a class="markdownIt-Anchor" href="#2-考点"></a> 2 考点</h2>
+<h2 id="3-笔记"><a class="markdownIt-Anchor" href="#3-笔记"></a> 3 笔记</h2>
+<h3 id="1-函数"><a class="markdownIt-Anchor" href="#1-函数"></a> 1 函数</h3>
+<h5 id="11-单调性"><a class="markdownIt-Anchor" href="#11-单调性"></a> 1.1 单调性</h5>
+<h5 id="12-奇偶性"><a class="markdownIt-Anchor" href="#12-奇偶性"></a> 1.2 奇偶性</h5>
 <ul>
-<li>
-<p>fn：放你用来处理的函数</p>
-</li>
-<li>
-<p>inputs：写你的输入类型，这里输入的是图像，所以是&quot;image&quot;</p>
-</li>
-<li>
-<p>outputs：写你的输出类型，这里输出的是图像，所以是&quot;image&quot;</p>
-</li>
+<li>奇函数f(0)=0</li>
+<li></li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># 作者：Weakliy</span><br><span class="line"># 创建日期：2024/1/27 0027 下午 22:42</span><br><span class="line"># 描述：测试运行</span><br><span class="line"></span><br><span class="line">import gradio as gr</span><br><span class="line">import cv2</span><br><span class="line"></span><br><span class="line">def to_black(image):</span><br><span class="line">    output = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)</span><br><span class="line">    return output</span><br><span class="line">interface = gr.Interface(fn=to_black, inputs=&quot;image&quot;, outputs=&quot;image&quot;)</span><br><span class="line">interface.launch()</span><br></pre></td></tr></table></figure>
-<img src="./2024年1月27日-gradio实践/image-20240127224425399.png" alt="image-20240127224425399" style="zoom: 50%;" />
-<img src="./2024年1月27日-gradio实践/image-20240127224627553.png" alt="image-20240127224627553" style="zoom:50%;" />
-<h3 id="2增加example"><a class="markdownIt-Anchor" href="#2增加example"></a> <strong>2.增加example</strong></h3>
-<p>我们可以在页面下方添加供用户选择的测试样例。</p>
-<p>在<code>gr.Interface</code>里的<code>examples</code>中放入图片路径</p>
-<p><code>examples=[[&quot;test.png&quot;] </code>or 1examples=&quot;path&quot;1</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">import gradio as gr</span><br><span class="line">import cv2</span><br><span class="line">​</span><br><span class="line">def to_black(image):</span><br><span class="line">    output = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)</span><br><span class="line">    return output</span><br><span class="line">​</span><br><span class="line">interface = gr.Interface(fn=to_black, inputs=&quot;image&quot;, outputs=&quot;image&quot;,</span><br><span class="line">                        examples=[[&quot;test.png&quot;]])</span><br><span class="line">interface.launch()</span><br></pre></td></tr></table></figure>
-<h3 id="3创建一个外部访问链接"><a class="markdownIt-Anchor" href="#3创建一个外部访问链接"></a> <strong>3.创建一个外部访问链接</strong></h3>
-<p>创建外部访问链接非常简单，只需要<code>launch(share=True)</code>即可，在打印信息中会看到你的外部访问链接。</p>
-<p><strong>免费用户的链接可以使用24小时，想要长期的话需要在gradio官方购买云服务</strong></p>
-<h2 id="demo2-文本输入"><a class="markdownIt-Anchor" href="#demo2-文本输入"></a> demo2 文本输入</h2>
-<h3 id="1-同理"><a class="markdownIt-Anchor" href="#1-同理"></a> 1 同理</h3>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">import gradio as gr</span><br><span class="line">#输入文本处理程序</span><br><span class="line">def greet(name):</span><br><span class="line">    return &quot;Hello &quot; + name + &quot;!&quot;</span><br><span class="line">demo = gr.Interface(fn=greet, inputs=&quot;text&quot;, outputs=&quot;text&quot;)</span><br><span class="line">demo.launch()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="demo3-interface类"><a class="markdownIt-Anchor" href="#demo3-interface类"></a> demo3 Interface类</h2>
-<h3 id="1基础"><a class="markdownIt-Anchor" href="#1基础"></a> 1.基础</h3>
-<h4 id="11-interface需要通过以下三个参数进行初始化"><a class="markdownIt-Anchor" href="#11-interface需要通过以下三个参数进行初始化"></a> 1.1 <strong>interface需要通过以下三个参数进行初始化：</strong></h4>
+<h5 id="13-周期性"><a class="markdownIt-Anchor" href="#13-周期性"></a> 1.3 周期性</h5>
+<h5 id="14-有界性"><a class="markdownIt-Anchor" href="#14-有界性"></a> 1.4 有界性</h5>
+<h3 id="2-极限"><a class="markdownIt-Anchor" href="#2-极限"></a> 2 极限</h3>
+<h4 id="21-考题"><a class="markdownIt-Anchor" href="#21-考题"></a> 2.1 考题</h4>
+<h5 id="极限概念"><a class="markdownIt-Anchor" href="#极限概念"></a> 极限概念</h5>
 <ul>
-<li>fn：包装的函数</li>
-<li>inputs：输入组件类型，（例如：“text”、&quot;image）</li>
-<li>ouputs：输出组件类型，（例如：“text”、&quot;image）</li>
+<li>选择题</li>
+<li>证明题</li>
 </ul>
-<h4 id="12-控件列表"><a class="markdownIt-Anchor" href="#12-控件列表"></a> 1.2 控件列表</h4>
-<ul>
-<li>
-<p><strong>输入输出</strong>：gr.Image(图像), gr.Textbox(文本框), gr.DataFrame(数据框), gr.Dropdown(下拉选项), gr.Number(数字), gr.Markdown, gr.Files</p>
-</li>
-<li>
-<p><strong>控制组件</strong>：gr.Button(按钮)</p>
-</li>
-<li>
-<p><strong>布局组件</strong>：gr.Tab(标签页), gr.Row(行布局), gr.Column(列布局)</p>
-</li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">__all__ = [</span><br><span class="line">    &quot;Audio&quot;,</span><br><span class="line">    &quot;BarPlot&quot;,</span><br><span class="line">    &quot;Button&quot;,</span><br><span class="line">    &quot;Chatbot&quot;,</span><br><span class="line">    &quot;ClearButton&quot;,</span><br><span class="line">    &quot;Component&quot;,</span><br><span class="line">    &quot;component&quot;,</span><br><span class="line">    &quot;get_component_instance&quot;,</span><br><span class="line">    &quot;_Keywords&quot;,</span><br><span class="line">    &quot;Checkbox&quot;,</span><br><span class="line">    &quot;CheckboxGroup&quot;,</span><br><span class="line">    &quot;Code&quot;,</span><br><span class="line">    &quot;ColorPicker&quot;,</span><br><span class="line">    &quot;Dataframe&quot;,</span><br><span class="line">    &quot;DataFrame&quot;,</span><br><span class="line">    &quot;Dataset&quot;,</span><br><span class="line">    &quot;DuplicateButton&quot;,</span><br><span class="line">    &quot;Fallback&quot;,</span><br><span class="line">    &quot;Form&quot;,</span><br><span class="line">    &quot;FormComponent&quot;,</span><br><span class="line">    &quot;Gallery&quot;,</span><br><span class="line">    &quot;HTML&quot;,</span><br><span class="line">    &quot;FileExplorer&quot;,</span><br><span class="line">    &quot;Image&quot;,</span><br><span class="line">    &quot;JSON&quot;,</span><br><span class="line">    &quot;Json&quot;,</span><br><span class="line">    &quot;Label&quot;,</span><br><span class="line">    &quot;LinePlot&quot;,</span><br><span class="line">    &quot;LoginButton&quot;,</span><br><span class="line">    &quot;LogoutButton&quot;,</span><br><span class="line">    &quot;Markdown&quot;,</span><br><span class="line">    &quot;Textbox&quot;,</span><br><span class="line">    &quot;Dropdown&quot;,</span><br><span class="line">    &quot;Model3D&quot;,</span><br><span class="line">    &quot;File&quot;,</span><br><span class="line">    &quot;HighlightedText&quot;,</span><br><span class="line">    &quot;AnnotatedImage&quot;,</span><br><span class="line">    &quot;CheckboxGroup&quot;,</span><br><span class="line">    &quot;Text&quot;,</span><br><span class="line">    &quot;Highlightedtext&quot;,</span><br><span class="line">    &quot;Annotatedimage&quot;,</span><br><span class="line">    &quot;Highlight&quot;,</span><br><span class="line">    &quot;Checkboxgroup&quot;,</span><br><span class="line">    &quot;Number&quot;,</span><br><span class="line">    &quot;Plot&quot;,</span><br><span class="line">    &quot;Radio&quot;,</span><br><span class="line">    &quot;ScatterPlot&quot;,</span><br><span class="line">    &quot;Slider&quot;,</span><br><span class="line">    &quot;State&quot;,</span><br><span class="line">    &quot;UploadButton&quot;,</span><br><span class="line">    &quot;Video&quot;,</span><br><span class="line">    &quot;StreamingInput&quot;,</span><br><span class="line">    &quot;StreamingOutput&quot;,</span><br><span class="line">    &quot;ImageEditor&quot;,</span><br><span class="line">    &quot;ParamViewer&quot;,</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-<h5 id="121-控件参数"><a class="markdownIt-Anchor" href="#121-控件参数"></a> 1.2.1 控件参数</h5>
+<h5 id="求极限"><a class="markdownIt-Anchor" href="#求极限"></a> 求极限</h5>
+<h4 id="22-极限概念"><a class="markdownIt-Anchor" href="#22-极限概念"></a> 2.2 极限概念</h4>
 <p>​</p>
-<h4 id="13-interfacelaunch方法返回三个值"><a class="markdownIt-Anchor" href="#13-interfacelaunch方法返回三个值"></a> 1.3 <strong>Interface.launch()方法返回三个值</strong></h4>
+<h4 id="23-性质"><a class="markdownIt-Anchor" href="#23-性质"></a> 2.3 性质</h4>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302141703721.png" alt="image-20240302141703721"></p>
+<p>夹逼准则 n项和</p>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302141724447.png" alt="image-20240302141724447"><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302141935122.png" alt="image-20240302141935122"><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302142309455.png" alt="image-20240302142309455"><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302142503414.png" alt="image-20240302142503414"></p>
+<h4 id="24-无穷小量"><a class="markdownIt-Anchor" href="#24-无穷小量"></a> 2.4 无穷小量</h4>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302142921823.png" alt="image-20240302142921823"></p>
+<h4 id="25-无穷大"><a class="markdownIt-Anchor" href="#25-无穷大"></a> 2.5 无穷大</h4>
+<h5 id="1-概念"><a class="markdownIt-Anchor" href="#1-概念"></a> 1 概念</h5>
+<p>​	<strong>绝对值趋向无穷大</strong></p>
+<h5 id="2-比较"><a class="markdownIt-Anchor" href="#2-比较"></a> 2 比较</h5>
+<p><strong>函数</strong><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302144235705.png" alt="image-20240302144235705"></p>
+<p><strong>数列</strong></p>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302144416896.png" alt="image-20240302144416896"></p>
+<h6 id="21-题目"><a class="markdownIt-Anchor" href="#21-题目"></a> 2.1 题目</h6>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302144453586.png" alt="image-20240302144453586"></p>
+<h5 id="3-无穷大性质"><a class="markdownIt-Anchor" href="#3-无穷大性质"></a> 3 无穷大性质</h5>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302144905897.png" alt="image-20240302144905897"></p>
+<h5 id="4-无穷大量和无界变量"><a class="markdownIt-Anchor" href="#4-无穷大量和无界变量"></a> 4 无穷大量和无界变量</h5>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302145136587.png" alt="image-20240302145136587"><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302145405884.png" alt="image-20240302145405884"></p>
+<h5 id="5-无穷大和无穷小的关系"><a class="markdownIt-Anchor" href="#5-无穷大和无穷小的关系"></a> 5 无穷大和无穷小的关系</h5>
+<p>​</p>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302145611300.png" alt="image-20240302145611300"></p>
+<h4 id="3-求极限"><a class="markdownIt-Anchor" href="#3-求极限"></a> 3 求极限</h4>
+<h5 id="31-极限概念"><a class="markdownIt-Anchor" href="#31-极限概念"></a> 3.1 极限概念</h5>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302160105372.png" alt="image-20240302160105372"><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302155959354.png" alt="image-20240302155959354"><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302160126467.png" alt="image-20240302160126467"></p>
+<h5 id="32-求极限"><a class="markdownIt-Anchor" href="#32-求极限"></a> 3.2 求极限</h5>
+<h6 id="320-常用方法8"><a class="markdownIt-Anchor" href="#320-常用方法8"></a> 3.2.0 常用方法8</h6>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302160532168.png" alt="image-20240302160532168"></p>
+<h6 id="321-基本极限求极限"><a class="markdownIt-Anchor" href="#321-基本极限求极限"></a> 3.2.1 基本极限求极限</h6>
+<p><strong>常用基本极限</strong></p>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302161420187.png" alt="image-20240302161420187"><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302161801006.png" alt="image-20240302161801006"><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304161115468.png" alt="image-20240304161115468"></p>
+<p><strong>负数的无理数次方无意义</strong></p>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302161030517.png" alt="image-20240302161030517"></p>
+<p><strong>倒代换</strong></p>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302161144290.png" alt="image-20240302161144290"></p>
+<p><strong>注意实现</strong></p>
 <ul>
-<li>app，为 Gradio 演示提供支持的 FastAPI 应用程序</li>
-<li>local_url，本地地址</li>
-<li>share_url，公共地址，当share=True时生成</li>
+<li><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302161526965.png" alt="image-20240302161526965"></li>
 </ul>
-<h4 id="14-多输入输出"><a class="markdownIt-Anchor" href="#14-多输入输出"></a> 1.4 多输入输出</h4>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import gradio as gr</span><br><span class="line">#该函数有3个输入参数和2个输出参数</span><br><span class="line">def greet(name, is_morning, temperature):</span><br><span class="line">    salutation = &quot;Good morning&quot; if is_morning else &quot;Good evening&quot;</span><br><span class="line">    greeting = f&quot;&#123;salutation&#125; &#123;name&#125;. It is &#123;temperature&#125; degrees today&quot;</span><br><span class="line">    celsius = (temperature - 32) * 5 / 9</span><br><span class="line">    return greeting, round(celsius, 2)</span><br><span class="line">demo = gr.Interface(</span><br><span class="line">    fn=greet,</span><br><span class="line">    #按照处理程序设置输入组件</span><br><span class="line">    inputs=[gr.Textbox(lines=3, placeholder=&quot;preName Here...&quot;,label=&quot;your name&quot;),</span><br><span class="line">            gr.Checkbox(min_width=100), gr.Slider(0, 100)],</span><br><span class="line">    #按照处理程序设置输出组件</span><br><span class="line">    outputs=[&quot;text&quot;, &quot;number&quot;],</span><br><span class="line">)</span><br><span class="line">demo.launch()</span><br></pre></td></tr></table></figure>
-<p><img src="./2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/image-20240127231747733.png" alt="image-20240127231747733" /></p>
-<h3 id="2-进阶"><a class="markdownIt-Anchor" href="#2-进阶"></a> 2 进阶</h3>
-<h4 id="21-interface状态"><a class="markdownIt-Anchor" href="#21-interface状态"></a> 2.1 interface状态</h4>
-<h5 id="全局变量"><a class="markdownIt-Anchor" href="#全局变量"></a> 全局变量</h5>
-<p>pass</p>
-<h5 id="state状态保留"><a class="markdownIt-Anchor" href="#state状态保留"></a> state状态保留</h5>
-<p>Gradio支持的另一种数据持久性是会话状态，数据在一个页面会话中的多次提交中持久存在</p>
-<h4 id="22-interface交互"><a class="markdownIt-Anchor" href="#22-interface交互"></a> 2.2 interface交互</h4>
-<h5 id="实时变化"><a class="markdownIt-Anchor" href="#实时变化"></a> 实时变化</h5>
-<p>在Interface中设置live=True，则输出会跟随输入实时变化。这个时候界面不会有submit按钮，因为不需要手动提交输入。</p>
-<h5 id="流模式"><a class="markdownIt-Anchor" href="#流模式"></a> 流模式</h5>
-<p>在许多情形下，我们的输入是实时视频流或者音频流，那么意味这数据不停地发送到后端，这是可以采用streaming模式处理数据。</p>
-<p>添加<code>(streaming=True)</code>and <code> live=True</code>即可</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># import gradio as gr</span><br><span class="line"># import numpy as np</span><br><span class="line"># def flip(im):</span><br><span class="line">#     return np.flipud(im)</span><br><span class="line"># demo = gr.Interface(</span><br><span class="line">#     flip,</span><br><span class="line">#     gr.Image(streaming=True),</span><br><span class="line">#     &quot;image&quot;,</span><br><span class="line">#     live=True</span><br><span class="line"># )</span><br><span class="line"># demo.launch()</span><br></pre></td></tr></table></figure>
-<p><img src="./2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/image-20240127233945848.png" alt="image-20240127233945848" /></p>
-<h3 id="3-自定义"><a class="markdownIt-Anchor" href="#3-自定义"></a> 3 自定义</h3>
-<h4 id="31-自定义"><a class="markdownIt-Anchor" href="#31-自定义"></a> 3.1 自定义</h4>
-<p>Blocks提供了一个低级别的API，用于设计具有更灵活布局和数据流的网络应用。Blocks允许控制组件在页面上出现的位置，处理复杂的数据流（例如，输出可以作为其他函数的输入），并根据用户交互更新组件的属性可见性。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">import gradio as gr</span><br><span class="line">def greet(name):</span><br><span class="line">    return &quot;Hello &quot; + name + &quot;!&quot;</span><br><span class="line">with gr.Blocks() as demo:</span><br><span class="line">    #设置输入组件</span><br><span class="line">    name = gr.Textbox(label=&quot;Name&quot;)</span><br><span class="line">    # 设置输出组件</span><br><span class="line">    output = gr.Textbox(label=&quot;Output Box&quot;)</span><br><span class="line">    #设置按钮</span><br><span class="line">    greet_btn = gr.Button(&quot;Greet&quot;)</span><br><span class="line">    #设置按钮点击事件</span><br><span class="line">    greet_btn.click(fn=greet, inputs=name, outputs=output)</span><br><span class="line">demo.launch()</span><br></pre></td></tr></table></figure>
-<h4 id="32-tab"><a class="markdownIt-Anchor" href="#32-tab"></a> 3.2 tab</h4>
-<p>通过自定义实现不同的标签页内容</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line">import gradio as gr</span><br><span class="line">def flip_text(x):</span><br><span class="line">    return x[::-1]</span><br><span class="line">def flip_image(x):</span><br><span class="line">    return np.fliplr(x)</span><br><span class="line">with gr.Blocks() as demo:</span><br><span class="line">    #用markdown语法编辑输出一段话</span><br><span class="line">    gr.Markdown(&quot;Flip text or image files using this demo.&quot;)</span><br><span class="line">    # 设置tab选项卡</span><br><span class="line">    with gr.Tab(&quot;Flip Text&quot;):</span><br><span class="line">        #Blocks特有组件，设置所有子组件按垂直排列</span><br><span class="line">        #垂直排列是默认情况，不加也没关系</span><br><span class="line">        with gr.Column():</span><br><span class="line">            text_input = gr.Textbox()</span><br><span class="line">            text_output = gr.Textbox()</span><br><span class="line">            text_button = gr.Button(&quot;Flip&quot;)</span><br><span class="line">    with gr.Tab(&quot;Flip Image&quot;):</span><br><span class="line">        #Blocks特有组件，设置所有子组件按水平排列</span><br><span class="line">        with gr.Row():</span><br><span class="line">            image_input = gr.Image()</span><br><span class="line">            image_output = gr.Image()</span><br><span class="line">        image_button = gr.Button(&quot;Flip&quot;)</span><br><span class="line">    #设置折叠内容</span><br><span class="line">    with gr.Accordion(&quot;Open for More!&quot;):</span><br><span class="line">        gr.Markdown(&quot;Look at me...&quot;)</span><br><span class="line">    text_button.click(flip_text, inputs=text_input, outputs=text_output)</span><br><span class="line">    image_button.click(flip_image, inputs=image_input, outputs=image_output)</span><br><span class="line">demo.launch()</span><br></pre></td></tr></table></figure>
-<p><img src="./2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/image-20240127234217252.png" alt="image-20240127234217252" /></p>
-<h3 id="4-flagging标记"><a class="markdownIt-Anchor" href="#4-flagging标记"></a> 4 Flagging标记</h3>
-<p>输出框下有个Flag按钮。</p>
-<p>当测试您的模型的用户看到某个输入导致输出错误或意外的模型行为，他们可以标记这个输入让开发者知道。这个文件夹由Interface的flagging_dir参数指定，默认为’flagged’</p>
-<p><img src="./2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/image-20240127234521491.png" alt="image-20240127234521491" /></p>
-<h3 id="5-样式-队列-生成器"><a class="markdownIt-Anchor" href="#5-样式-队列-生成器"></a> 5 样式、队列、生成器</h3>
-<ul>
-<li>样式</li>
-</ul>
-<p>在Gradio官方文档，搜索不同的组件加.style（如image.style），可以获取该组件的样式参数设置样例。例如image组件的设置如下：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">img = gr.Image(&quot;lion.jpg&quot;).style(height=&#x27;24&#x27;, rounded=False)</span><br></pre></td></tr></table></figure>
-<ul>
-<li>队列 如果函数推理时间较长，比如目标检测；或者应用程序处理流量过大，则需要使用queue方法进行排队。queue方法使用websockets，可以防止网络超时。使用方式如下：</li>
-</ul>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">demo = gr.Interface(...).queue()</span><br><span class="line">demo.launch()</span><br><span class="line">#或</span><br><span class="line">with gr.Blocks() as demo:</span><br><span class="line">    #...</span><br><span class="line">demo.queue()</span><br><span class="line">demo.launch()</span><br></pre></td></tr></table></figure>
-<ul>
-<li>生成器</li>
-</ul>
-<p>在某些情况下，你可能想显示一连串的输出，而不是单一的输出。例如，你可能有一个图像生成模型，如果你想显示在每个步骤中生成的图像，从而得到最终的图像。在这种情况下，你可以向Gradio提供一个生成器函数，而不是一个常规函数。下面是一个生成器的例子，每隔1秒返回1张图片。</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import gradio as gr</span><br><span class="line">import numpy as np</span><br><span class="line">import time</span><br><span class="line">#生成steps张图片，每隔1秒钟返回</span><br><span class="line">def fake_diffusion(steps):</span><br><span class="line">    for _ in range(steps):</span><br><span class="line">        time.sleep(1)</span><br><span class="line">        image = np.random.randint(255, size=(300, 600, 3))</span><br><span class="line">        yield image</span><br><span class="line">demo = gr.Interface(fake_diffusion,</span><br><span class="line">                    #设置滑窗，最小值为1，最大值为10，初始值为3，每次改动增减1位</span><br><span class="line">                    inputs=gr.Slider(1, 10, value=3, step=1),</span><br><span class="line">                    outputs=&quot;image&quot;)</span><br><span class="line">#生成器必须要queue函数</span><br><span class="line">demo.queue()</span><br><span class="line">demo.launch()</span><br></pre></td></tr></table></figure>
-<h2 id="demo4-blocks进阶使用"><a class="markdownIt-Anchor" href="#demo4-blocks进阶使用"></a> demo4 Blocks进阶使用</h2>
-<h3 id="1-blocks事件"><a class="markdownIt-Anchor" href="#1-blocks事件"></a> 1 Blocks事件</h3>
-<h3 id="可交互设置"><a class="markdownIt-Anchor" href="#可交互设置"></a> 可交互设置</h3>
-<p>任何输入的组件内容都是可编辑的，而输出组件默认是不能编辑的。如果想要使得输出组件内容可编辑，设置interactive=True即可。</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">import gradio as gr</span><br><span class="line">def greet(name):</span><br><span class="line">    return &quot;Hello &quot; + name + &quot;!&quot;</span><br><span class="line">with gr.Blocks() as demo:</span><br><span class="line">    name = gr.Textbox(label=&quot;Name&quot;)</span><br><span class="line">    # 不可交互</span><br><span class="line">    # output = gr.Textbox(label=&quot;Output Box&quot;)</span><br><span class="line">    # 可交互</span><br><span class="line">    output = gr.Textbox(label=&quot;Output&quot;, interactive=True)</span><br><span class="line">    greet_btn = gr.Button(&quot;Greet&quot;)</span><br><span class="line">    greet_btn.click(fn=greet, inputs=name, outputs=output)</span><br><span class="line">demo.launch()</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 与无穷</span><br></pre></td></tr></table></figure>
+<p><strong>常用方法</strong></p>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302161920455.png" alt="image-20240302161920455"></p>
+<p><strong>结论</strong></p>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302161938520.png" alt="image-20240302161938520"><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302162024055.png" alt="image-20240302162024055"></p>
+<p><strong>例子</strong></p>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302162105438.png" alt="image-20240302162105438"><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304160816366.png" alt="image-20240304160816366"><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304161003051.png" alt="image-20240304161003051"></p>
+<h6 id="322-利用等价无穷小代换求极限"><a class="markdownIt-Anchor" href="#322-利用等价无穷小代换求极限"></a> 3.2.2 利用等价无穷小代换求极限</h6>
+<p>一般原则实在乘除</p>
+<p>但是一定条件下可以加减</p>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304161548113.png" alt="image-20240304161548113"><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304161911099.png" alt="image-20240304161911099"></p>
+<p>减法</p>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304161846657.png" alt="image-20240304161846657"><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304161850377.png" alt="image-20240304161850377"></p>
+<p>加分</p>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304161940499.png" alt="image-20240304161940499"></p>
+<p>2 常见等价无穷小</p>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304162039665.png" alt="image-20240304162039665"><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304162059082.png" alt="image-20240304162059082"><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304162140194.png" alt="image-20240304162140194"></p>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304162329500.png" alt="image-20240304162329500"></p>
+<p>Tip：熵存在，分母趋向0，分子也趋向0。</p>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304162641040.png" alt="image-20240304162641040"></p>
+<p>Tip：快速解决</p>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304162832538.png" alt="image-20240304162832538"></p>
+<p>Tip：拉格朗日</p>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304163105415.png" alt="image-20240304163105415"></p>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304162752738.png" alt="image-20240304162752738"></p>
+<p>Tip：</p>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304163312013.png" alt="image-20240304163312013"></p>
+<p>Tip：蜜汁函数 等价代换e-1<img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304163558552.png" alt="image-20240304163558552"></p>
+<p>Tip：lnx趋向1</p>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304163648590.png" alt="image-20240304163648590"></p>
+<p>Tip：结论推广<img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304163921580.png" alt="image-20240304163921580"></p>
+<p>例题23</p>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304163522800.png" alt="image-20240304163522800"></p>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304164251534.png" alt="image-20240304164251534"></p>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304164318003.png" alt="image-20240304164318003"></p>
+<p>Tip 0/0 方法<img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304164342165.png" alt="image-20240304164342165"></p>
+<h6 id="323-利用有理运算法则"><a class="markdownIt-Anchor" href="#323-利用有理运算法则"></a> 3.2.3 利用有理运算法则</h6>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304164831814.png" alt="image-20240304164831814"></p>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304165035356.png" alt="image-20240304165035356"></p>
+<p>常用结论</p>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304165243683.png" alt="image-20240304165243683"><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304165335922.png" alt="image-20240304165335922"></p>
+<p>Tip：把存在的极限单独分出<img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304165713077.png" alt="image-20240304165713077"></p>
+<p>为什么？<img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304165903838.png" alt="image-20240304165903838"></p>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304165503383.png" alt="image-20240304165503383"></p>
+<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304165628235.png" alt="image-20240304165628235"></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/" data-id="clrwazlri003g7ov48i2dd58c" class="article-share-link">分享</a>
+      <a data-url="https://shakewely.github.io/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/" data-id="cltgreey6000uw8v46mhu7cbf" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%80%83%E7%A0%94/" rel="tag">考研</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2024年2月15日-数据结构总结" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/" class="article-date">
+  <time class="post-time" datetime="2024-02-15T13:55:09.000Z" itemprop="datePublished">
+    <span class="post-month">2月</span><br/>
+    <span class="post-day">15</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/">2024年2月15日 数据结构总结</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="数据结构"><a class="markdownIt-Anchor" href="#数据结构"></a> 数据结构</h1>
+<h2 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h2>
+<p><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240215215544374.png" alt="image-20240215215544374"></p>
+<h4 id="111-数据结构研究内容"><a class="markdownIt-Anchor" href="#111-数据结构研究内容"></a> 1.1.1 数据结构研究内容</h4>
+<p><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240215215736287.png" alt="image-20240215215736287"></p>
+<p>例如 学籍信息管理表</p>
+<p><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240215215818892.png" alt="image-20240215215818892"></p>
+<p><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240215215849975.png" alt="image-20240215215849975"></p>
+<h4 id="121-数据"><a class="markdownIt-Anchor" href="#121-数据"></a> 1.2.1 数据</h4>
+<img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240215220151793.png" alt="image-20240215220151793" style="zoom: 50%;">
+<p><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240215220243788.png" alt="image-20240215220243788"></p>
+<p>数据对象</p>
+<p><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240215220316580.png" alt="image-20240215220316580"></p>
+<p>关系</p>
+<p><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240215220430166.png" alt="image-20240215220430166"></p>
+<h4 id="122-数据结构"><a class="markdownIt-Anchor" href="#122-数据结构"></a> 1.2.2 数据结构</h4>
+<ul>
+<li>
+<p><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240215220529412.png" alt="image-20240215220529412"></p>
+</li>
+<li>
+<p><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240215220616955.png" alt="image-20240215220616955"></p>
+</li>
+<li>
+<p><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240215220714076.png" alt="image-20240215220714076"></p>
+</li>
+<li>
+<p><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240215220729711.png" alt="image-20240215220729711"></p>
+</li>
+<li>
+<p><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240215220745544.png" alt="image-20240215220745544"></p>
+</li>
+</ul>
+<h5 id="1221-逻辑结构"><a class="markdownIt-Anchor" href="#1221-逻辑结构"></a> 1.2.2.1 逻辑结构</h5>
+<p>​	划分方式一</p>
+<ul>
+<li>
+<p><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240215220938630.png" alt="image-20240215220938630"></p>
+</li>
+<li>
+<p><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240215221025227.png" alt="image-20240215221025227"></p>
+<p>划分方式二</p>
+</li>
+<li>
+<p><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240215221149015.png" alt="image-20240215221149015"></p>
+</li>
+</ul>
+<h5 id="1221-存储结构"><a class="markdownIt-Anchor" href="#1221-存储结构"></a> 1.2.2.1 存储结构</h5>
+<ul>
+<li><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240215221428919.png" alt="image-20240215221428919"></li>
+<li><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240215221510432.png" alt="image-20240215221510432"></li>
+<li></li>
+</ul>
+<h2 id="数据结构-2"><a class="markdownIt-Anchor" href="#数据结构-2"></a> 数据结构</h2>
+<h3 id="线性表"><a class="markdownIt-Anchor" href="#线性表"></a> 线性表</h3>
+<h4 id="21-线性表定义和特点"><a class="markdownIt-Anchor" href="#21-线性表定义和特点"></a> 2.1 线性表定义和特点</h4>
+<h4 id="22案例"><a class="markdownIt-Anchor" href="#22案例"></a> 2.2案例</h4>
+<h5 id="221-案例1"><a class="markdownIt-Anchor" href="#221-案例1"></a> 2.2.1 案例1</h5>
+<p><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240225162125059.png" alt="image-20240225162125059"></p>
+<h5 id="222系数多项式"><a class="markdownIt-Anchor" href="#222系数多项式"></a> 2.2.2系数多项式</h5>
+<p><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240225162225377.png" alt="image-20240225162225377"></p>
+<p><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240225162333232.png" alt="image-20240225162333232"></p>
+<p>运算</p>
+<p><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240225162406744.png" alt="image-20240225162406744"></p>
+<p><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240225162543791.png" alt="image-20240225162543791"></p>
+<h5 id="223-链式存储"><a class="markdownIt-Anchor" href="#223-链式存储"></a> 2.2.3 链式存储</h5>
+<p><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240225162608345.png" alt="image-20240225162608345"></p>
+<p><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240225162635197.png" alt="image-20240225162635197"></p>
+<h5 id="224-案例三"><a class="markdownIt-Anchor" href="#224-案例三"></a> 2.2.4 案例三</h5>
+<p><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240225162751151.png" alt="image-20240225162751151"></p>
+<h4 id="23-线性表类型定义"><a class="markdownIt-Anchor" href="#23-线性表类型定义"></a> 2.3 线性表类型定义</h4>
+<h5 id="231-抽象数据类型定义"><a class="markdownIt-Anchor" href="#231-抽象数据类型定义"></a> 2.3.1 抽象数据类型定义</h5>
+<p><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240225163049224.png" alt="image-20240225163049224"></p>
+<h5 id="232-操作"><a class="markdownIt-Anchor" href="#232-操作"></a> 2.3.2 操作</h5>
+<p><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240225163206496.png" alt="image-20240225163206496"></p>
+<p><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240225163307933.png" alt="image-20240225163307933"></p>
+<p><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240225163414941.png" alt="image-20240225163414941"></p>
+<p><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240225163545955.png" alt="image-20240225163545955"><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240225163719435.png" alt="image-20240225163719435"></p>
+<h4 id="24-线性表顺序表示实现"><a class="markdownIt-Anchor" href="#24-线性表顺序表示实现"></a> 2.4 线性表顺序表示实现</h4>
+<h5 id="241"><a class="markdownIt-Anchor" href="#241"></a> 2.4.1</h5>
+<p><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240225164132565.png" alt="image-20240225164132565"></p>
+<h5 id="242-判断是否是线性表"><a class="markdownIt-Anchor" href="#242-判断是否是线性表"></a> 2.4.2 判断是否是线性表</h5>
+<p><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240225164210612.png" alt="image-20240225164210612"></p>
+<p><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240225164318047.png" alt="image-20240225164318047"><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240225164339882.png" alt="image-20240225164339882"><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240225164407795.png" alt="image-20240225164407795"></p>
+<h4 id="25-类c语言补充"><a class="markdownIt-Anchor" href="#25-类c语言补充"></a> 2.5 类C语言补充</h4>
+<h4 id="26-线性表实现增删查改"><a class="markdownIt-Anchor" href="#26-线性表实现增删查改"></a> 2.6 线性表实现增删查改</h4>
+<h5 id="增加"><a class="markdownIt-Anchor" href="#增加"></a> 增加</h5>
+<p><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240227151703249.png" alt="image-20240227151703249"></p>
+<p><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240227151648631.png" alt="image-20240227151648631"></p>
+<p>时间复杂度</p>
+<p><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240227152013114.png" alt="image-20240227152013114"></p>
+<h5 id="删除"><a class="markdownIt-Anchor" href="#删除"></a> 删除</h5>
+<p><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240227152650808.png" alt="image-20240227152650808"></p>
+<p><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240227152829975.png" alt="image-20240227152829975"></p>
+<p>时间复杂度</p>
+<p><img src="/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/image-20240227153015938.png" alt="image-20240227153015938"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2024/02/15/2024%E5%B9%B42%E6%9C%8815%E6%97%A5-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E6%80%BB%E7%BB%93/" data-id="cltgreey2000cw8v4154qepza" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/" rel="tag">数据结构</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2024年2月12日-转载文章" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2024/02/12/2024%E5%B9%B42%E6%9C%8812%E6%97%A5-%E8%BD%AC%E8%BD%BD%E6%96%87%E7%AB%A0/" class="article-date">
+  <time class="post-time" datetime="2024-02-12T14:16:29.000Z" itemprop="datePublished">
+    <span class="post-month">2月</span><br/>
+    <span class="post-day">12</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2024/02/12/2024%E5%B9%B42%E6%9C%8812%E6%97%A5-%E8%BD%AC%E8%BD%BD%E6%96%87%E7%AB%A0/">2024年2月12日 转载文章</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="转载ai文章"><a class="markdownIt-Anchor" href="#转载ai文章"></a> 转载AI文章</h1>
+<h2 id="python"><a class="markdownIt-Anchor" href="#python"></a> python</h2>
+<h3 id="100-个-python-练手项目"><a class="markdownIt-Anchor" href="#100-个-python-练手项目"></a> <strong>100 个 Python 练手项目</strong></h3>
+<p>1、【Python 图片转字符画】</p>
+<p>2、【200行Python代码实现2048】</p>
+<p>3、【Python3 实现火车票查询工具】</p>
+<p>4、【高德API+Python解决租房问题】</p>
+<p>5、【Python3色情图片识别】</p>
+<p>6、【Python 破解验证码】</p>
+<p>7、【Python实现简单的Web服务器】</p>
+<p>8、【pygame开发打飞机游戏】</p>
+<p>9、【Django 搭建简易博客】</p>
+<p>10、【Python基于共现提取《釜山行》人物关系】</p>
+<p>11、【基于scrapy爬虫的天气数据采集（python）】</p>
+<p>12、【Flask 开发轻博客】</p>
+<p>13、【Python3图片隐写术】</p>
+<p>14、【Python 实现简易Shell】</p>
+<p>15、【使用Python解数学方程】</p>
+<p>16、【PyQt 实现简易浏览器】</p>
+<p>17、【神经网络实现手写字符识别系统】</p>
+<p>18、【Python 实现简单画板】</p>
+<p>19、【Python实现3D建模工具】</p>
+<p>20、【NBA常规寒结果预测——利用Python进行比赛数据分析】</p>
+<p>21、【神经网络实现人脸识别任务】</p>
+<p>22、【Python文本解析器】</p>
+<p>23、【Python3&amp;；amp；OpenCV 视频转字符动画】</p>
+<p>24、【Python3 实现淘女郎照片爬虫】</p>
+<p>25、【Python3实现简单的FTP认证服务器】</p>
+<p>26、【基于Flask 与MySQL 实现番剧推荐系统】</p>
+<p>27、【Python 实现端口扫描器】</p>
+<p>28、【使用Python3编写系列实用脚本】</p>
+<p>29、【Python 实现康威生命游戏】</p>
+<p>30、【川普撞脸希拉里（基于OpenCV的面部特征交换）】</p>
+<p>31、【Python 3实现Markdown 解析器】</p>
+<p>32、【Python气象数据分析–《Python 数据分析实战》】</p>
+<p>33、【Python实现键值数据库】</p>
+<p>34、【k-近邻算法实现手写数字识别系统】</p>
+<p>35、【ebay在线拍卖数据分析】</p>
+<p>36、【Python 实现英文新闻摘要自动提取】</p>
+<p>37、【Python实现简易局域网视频聊天工具】</p>
+<p>38、【基于Flask及爬虫实现微信娱乐机器人】</p>
+<p>39、【Python实现Python解释器】</p>
+<p>40、【Python3基于Scapy实现DDos】</p>
+<p>41、【Python 实现密码强度检测器】</p>
+<p>42、【使用Python 实现深度神经网络】</p>
+<p>43、【Python实现从excel读取数据并绘制成精美图像】</p>
+<p>44、【人机对战初体验：Python基于Pygame实现四子棋游戏】</p>
+<p>45、【Python3实现可控制肉鸡的反向Shell】</p>
+<p>46、【Python打造漏洞扫描器】</p>
+<p>47、【Python应用马尔可夫链算法实现随机文本生成】</p>
+<p>48、【数独游戏的Python实现与破解】</p>
+<p>49、【使用Python定制词云】</p>
+<p>50、【Python开发简单计算器】</p>
+<p>50、【Python开发简单计算器】</p>
+<p>51、【Python 实现FTP弱口令扫描器】</p>
+<p>52、【Python实现Huffman编码解压缩文件】</p>
+<p>53、【Python实现Zip文件的暴力破解】</p>
+<p>54、【Python3智能裁切图片】</p>
+<p>55、【Python实现网站模拟登陆】</p>
+<p>56、【给Python3爬虫做一个界面.妹子图网实战】</p>
+<p>57、【Python3实现图片转彩色字符】</p>
+<p>58、【自联想器的Python 实现】</p>
+<p>59、【Python 实现简单流镜】</p>
+<p>60、【Flask实现简单聊天室】</p>
+<p>61、【基于PyQt5实现地图中定位相片拍摄位置】</p>
+<p>62、【Python实现模板引擎】</p>
+<p>63、【Python实现遗传算法求解n-queens问题】</p>
+<p>64、【Python3实现命令行动态进度条】</p>
+<p>65、【Python获取挂号信息并邮件通知】</p>
+<p>66、【Python实现java web项目远端自动化更新部署】</p>
+<p>67、【使用Python3编写Github 自动周报生成器】</p>
+<p>68、【使用Python生成分形图片】</p>
+<p>69、【Python 实现Redis 异步客户端】</p>
+<p>70、【Python 实现中文错别字高亮系统】</p>
+<p>71、【Python自动获取小说工具】</p>
+<p>72、【python自动获取酷狗音乐工具】</p>
+<p>73、【python自动获取海量IP工具】</p>
+<p>74、【Python自动化开发-制作名片卡】</p>
+<p>75、【Python自动化开发-微信统计】</p>
+<p>76、【Python自动化开发-批量发邮件通知】</p>
+<p>77、【Python自动化开发-考勒处理】</p>
+<p>78、【Python双色球系统】</p>
+<p>79、【Python批量获取王者荣耀皮肤】</p>
+<p>80、【Python获取阴阳师壁纸】</p>
+<p>81、【Python获取小说数据并分析】</p>
+<p>82、【python获取拉钩工具】</p>
+<p>83、【Python获取房天下数据】</p>
+<p>84、【Python获取彩票信息】</p>
+<p>85、【Python获取NBA数据】</p>
+<p>86、【Python合成女神图片】</p>
+<p>87、【Python法拍网数据】</p>
+<p>88、【Python操作Excel自动化开发】</p>
+<p>89、【python百行制作登录系统】</p>
+<p>90、【python百行制作查询工具】</p>
+<p>91、【Python百行代码实现点赞系统】</p>
+<p>92、【Python百行代码实现抽奖系统】</p>
+<p>93、【python自动工资条】</p>
+<p>94、【python抓取相亲网数据</p>
+<p>95、【python抓取百合网数据</p>
+<p>96、【python制作12306查票工具</p>
+<p>97、【python游戏开发公开课</p>
+<p>98、【python协程详解公开课</p>
+<p>99、【python吧中30行拿LOL皮肤</p>
+<p>100、【python快速获取斗图表情</p>
+<h3 id="数据分析"><a class="markdownIt-Anchor" href="#数据分析"></a> <a target="_blank" rel="noopener" href="https://blog.csdn.net/qazwsxpy/article/details/128192090?spm=1001.2100.3001.7377&amp;utm_medium=distribute.pc_feed_blog_category.none-task-blog-classify_tag-6-128192090-null-null.nonecase&amp;depth_1-utm_source=distribute.pc_feed_blog_category.none-task-blog-classify_tag-6-128192090-null-null.nonecase">数据分析</a></h3>
+<h2 id="机器学习"><a class="markdownIt-Anchor" href="#机器学习"></a> 机器学习</h2>
+<h3 id="机器学习-梯度下降"><a class="markdownIt-Anchor" href="#机器学习-梯度下降"></a> <a target="_blank" rel="noopener" href="https://techlead.blog.csdn.net/article/details/133819132?spm=1001.2014.3001.5502">机器学习-梯度下降</a></h3>
+<p>目录<br>
+一、简介<br>
+什么是梯度下降？<br>
+为什么梯度下降重要？<br>
+二、梯度下降的数学原理<br>
+代价函数（Cost Function）<br>
+梯度（Gradient）<br>
+更新规则<br>
+代码示例：基础的梯度下降更新规则<br>
+三、批量梯度下降（Batch Gradient Descent）<br>
+基础算法<br>
+代码示例<br>
+四、随机梯度下降（Stochastic Gradient Descent）<br>
+基础算法<br>
+代码示例<br>
+优缺点<br>
+五、小批量梯度下降（Mini-batch Gradient Descent）<br>
+基础算法<br>
+代码示例<br>
+优缺点<br>
+————————————————</p>
+<p>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/magicyangjay111/article/details/133819132">https://blog.csdn.net/magicyangjay111/article/details/133819132</a></p>
+<h3 id><a class="markdownIt-Anchor" href="#"></a> </h3>
+<h3 id="遗传算法可选"><a class="markdownIt-Anchor" href="#遗传算法可选"></a> 遗传算法（可选）</h3>
+<h2 id="深度学习"><a class="markdownIt-Anchor" href="#深度学习"></a> <a target="_blank" rel="noopener" href="https://blog.csdn.net/chenlycly/article/details/134043297?spm=1001.2100.3001.7377&amp;utm_medium=distribute.pc_feed_blog_category.none-task-blog-classify_tag-3-134043297-null-null.nonecase&amp;depth_1-utm_source=distribute.pc_feed_blog_category.none-task-blog-classify_tag-3-134043297-null-null.nonecase">深度学习</a></h2>
+<h3 id="前馈神经网络"><a class="markdownIt-Anchor" href="#前馈神经网络"></a> <a target="_blank" rel="noopener" href="https://techlead.blog.csdn.net/article/details/132421817?spm=1001.2014.3001.5502">前馈神经网络</a></h3>
+<p>目录<br>
+一、前馈神经网络概述<br>
+什么是前馈神经网络<br>
+前馈神经网络的工作原理<br>
+应用场景及优缺点<br>
+二、前馈神经网络的基本结构<br>
+输入层、隐藏层和输出层<br>
+激活函数的选择与作用<br>
+网络权重和偏置<br>
+三、前馈神经网络的训练方法<br>
+损失函数与优化算法<br>
+反向传播算法详解<br>
+避免过拟合的策略<br>
+四、使用Python和PyTorch实现FNN<br>
+4.1 准备数据集<br>
+选择合适的数据集<br>
+数据预处理<br>
+PyTorch数据加载器<br>
+4.2 构建模型结构<br>
+定义网络架构<br>
+选择激活函数<br>
+权重初始化<br>
+构建与任务相匹配的损失函数<br>
+4.3 训练模型<br>
+选择优化器<br>
+训练循环<br>
+模型验证<br>
+调整学习率<br>
+保存和加载模型<br>
+可视化训练过程<br>
+4.4 模型评估与可视化<br>
+评估指标<br>
+模型验证<br>
+混淆矩阵<br>
+ROC和AUC<br>
+特征重要性和模型解释<br>
+可视化隐藏层<br>
+五、前馈神经网络的先进变体与应用<br>
+多层感知器（MLP）<br>
+卷积神经网络（CNN）<br>
+循环神经网络（RNN）<br>
+Transformer结构<br>
+强化学习中的FNN<br>
+生成对抗网络（GAN）<br>
+FNN在医学图像分析中的应用<br>
+六、总结与未来展望<br>
+总结<br>
+未来展望<br>
+结语<br>
+————————————————</p>
+<p>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/magicyangjay111/article/details/132421817">https://blog.csdn.net/magicyangjay111/article/details/132421817</a></p>
+<p>损失函数和优化算法是神经网络训练的基石，决定了网络如何学习和调整其权重。</p>
+<ul>
+<li><strong>损失函数：</strong> 用于衡量网络预测与实际目标之间的差异，常见的损失函数包括均方误差（MSE）、交叉熵损失等。</li>
+<li><strong>优化算法：</strong> 通过最小化损失函数来更新网络权重，常见的优化算法包括随机梯度下降（SGD）、Adam、RMSProp等。</li>
+</ul>
+<h3 id="长短时记忆网络lstm"><a class="markdownIt-Anchor" href="#长短时记忆网络lstm"></a> <a target="_blank" rel="noopener" href="https://techlead.blog.csdn.net/article/details/132480035">长短时记忆网络（LSTM）</a></h3>
+<p>目录</p>
+<ol>
+<li>LSTM的背景<br>
+人工神经网络的进化<br>
+循环神经网络（RNN）的局限性<br>
+LSTM的提出背景</li>
+<li>LSTM的基础理论<br>
+2.1 LSTM的数学原理<br>
+遗忘门（Forget Gate）<br>
+输入门（Input Gate）<br>
+记忆单元（Cell State）<br>
+输出门（Output Gate）<br>
+2.2 LSTM的结构逻辑<br>
+遗忘门：决定丢弃的信息<br>
+输入门：选择性更新记忆单元<br>
+更新单元状态<br>
+输出门：决定输出的隐藏状态<br>
+门的相互作用<br>
+逻辑结构的实际应用<br>
+总结<br>
+2.3 LSTM与GRU的对比</li>
+<li>结构<br>
+LSTM<br>
+GRU</li>
+<li>数学表达<br>
+LSTM<br>
+GRU</li>
+<li>性能和应用<br>
+小结</li>
+<li>LSTM在实际应用中的优势<br>
+处理长期依赖问题<br>
+遗忘门机制<br>
+梯度消失问题的缓解<br>
+广泛的应用领域<br>
+灵活的架构选项<br>
+成熟的开源实现<br>
+小结</li>
+<li>LSTM的实战演示<br>
+4.1 使用PyTorch构建LSTM模型<br>
+定义LSTM模型<br>
+训练模型<br>
+评估和预测</li>
+<li>LSTM总结<br>
+<strong>解决长期依赖问题</strong><br>
+<strong>广泛的应用领域</strong><br>
+<strong>灵活与强大</strong><br>
+<strong>开源支持</strong><br>
+<strong>持战与展望</strong><br>
+总结反思<br>
+————————————————</li>
+</ol>
+<p>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/magicyangjay111/article/details/132480035">https://blog.csdn.net/magicyangjay111/article/details/132480035</a></p>
+<h4 id="lstm的提出背景"><a class="markdownIt-Anchor" href="#lstm的提出背景"></a> LSTM的提出背景</h4>
+<p>长短时记忆网络（LSTM）是一种特殊类型的RNN，由Hochreiter和Schmidhuber于1997年提出，目的是解决传统RNN的问题。</p>
+<ul>
+<li><strong>解决梯度消失问题</strong>: 通过引入“记忆单元”，LSTM能够在长序列中保持信息的流动。</li>
+<li><strong>捕捉长依赖性</strong>: LSTM结构允许网络捕捉和理解长序列中的复杂依赖关系。</li>
+<li><strong>广泛应用</strong>: 由于其强大的性能和灵活性，LSTM已经被广泛应用于许多序列学习任务，如语音识别、机器翻译和时间序列分析等。</li>
+</ul>
+<h4 id="记忆单元的结构"><a class="markdownIt-Anchor" href="#记忆单元的结构"></a> “记忆单元”的结构</h4>
+<h3 id="深度信念网络dbn"><a class="markdownIt-Anchor" href="#深度信念网络dbn"></a> <a target="_blank" rel="noopener" href="https://techlead.blog.csdn.net/article/details/132531255?spm=1001.2014.3001.5502">深度信念网络（DBN）</a></h3>
+<p>一、概述<br>
+1.1 深度信念网络的概述<br>
+1.2 深度信念网络与其他深度学习模型的比较<br>
+结构层次<br>
+学习方式<br>
+训练和优化<br>
+应用领域<br>
+1.3 应用领域<br>
+图像识别与处理<br>
+自然语言处理<br>
+推荐系统<br>
+语音识别<br>
+无监督学习与异常检测<br>
+药物发现与生物信息学<br>
+二、结构<br>
+2.1 受限玻尔兹曼机（RBM）<br>
+结构与组成<br>
+工作原理<br>
+学习算法<br>
+应用<br>
+2.2 DBN的结构和组成<br>
+层次结构<br>
+网络连接<br>
+训练过程<br>
+应用领域<br>
+2.3 训练和学习算法<br>
+预训练<br>
+微调<br>
+优化方法<br>
+评估和验证<br>
+三、实战<br>
+3.1 DBN模型的构建<br>
+定义RBM层<br>
+构建DBN模型<br>
+定义DBN的超参数<br>
+3.2 预训练<br>
+RBM的逐层训练<br>
+对比散度（CD）算法<br>
+3.3 微调<br>
+监督训练<br>
+微调训练<br>
+模型验证和测试<br>
+3.4 应用<br>
+分类或回归任务<br>
+特征学习<br>
+转移学习<br>
+在线应用<br>
+四、总结<br>
+————————————————</p>
+<p>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/magicyangjay111/article/details/132531255">https://blog.csdn.net/magicyangjay111/article/details/132531255</a></p>
+<h2 id="项目实战"><a class="markdownIt-Anchor" href="#项目实战"></a> 项目实战</h2>
+<h3 id="图像分类发展历史-技术全解与实战"><a class="markdownIt-Anchor" href="#图像分类发展历史-技术全解与实战"></a> <a target="_blank" rel="noopener" href="https://blog.csdn.net/magicyangjay111/article/details/134698103">图像分类：发展历史、技术全解与实战</a></h3>
+<ul>
+<li>自动化的神经网络架构搜索（NAS）技术</li>
+<li>轻量级模型和少样本学习也成为研究的热点</li>
+<li>图像分类有望实现更复杂的应用，如情感分析、自动化标注等</li>
+</ul>
+<p><img src="/2024/02/12/2024%E5%B9%B42%E6%9C%8812%E6%97%A5-%E8%BD%AC%E8%BD%BD%E6%96%87%E7%AB%A0/image-20240212222002730.png" alt="image-20240212222002730"></p>
+<h3 id="计算机视觉五大核心研究任务分类识别-检测分割-人体分析-三维视觉-视频分析"><a class="markdownIt-Anchor" href="#计算机视觉五大核心研究任务分类识别-检测分割-人体分析-三维视觉-视频分析"></a> <a target="_blank" rel="noopener" href="https://techlead.blog.csdn.net/article/details/132321843?spm=1001.2014.3001.5502">计算机视觉五大核心研究任务：分类识别、检测分割、人体分析、三维视觉、视频分析</a></h3>
+<p>目录<br>
+一、引言<br>
+1.1 计算机视觉的定义<br>
+1.1.1 核心技术<br>
+1.1.2 应用场景<br>
+1.2 历史背景及发展<br>
+1.2.1 1960s-1980s: 初期阶段<br>
+1.2.2 1990s-2000s: 机器学习时代<br>
+1.2.3 2010s-现在: 深度学习的革命<br>
+1.3 应用领域概览<br>
+1.3.1 工业自动化<br>
+1.3.2 医疗图像分析<br>
+1.3.3 自动驾驶<br>
+1.3.4 虚拟现实与增强现实<br>
+二、计算机视觉五大核心任务<br>
+2.1 图像分类与识别<br>
+2.1.1 图像分类与识别的基本概念<br>
+2.1.2 早期方法与技术演进<br>
+2.1.3 深度学习的引入与革新<br>
+卷积神经网络在图像分类中的应用<br>
+总结<br>
+2.2 物体检测与分割<br>
+2.2.1 物体检测<br>
+早期方法<br>
+深度学习方法<br>
+2.2.2 物体分割<br>
+语义分割<br>
+实例分割<br>
+总结<br>
+2.3 人体分析<br>
+2.3.1 人脸识别<br>
+2.3.2 人体姿态估计<br>
+2.3.3 动作识别<br>
+2.3.4 人体分割<br>
+2.4 三维计算机视觉<br>
+2.4.1 三维重建<br>
+立体视觉<br>
+多视图几何<br>
+点云生成和融合<br>
+2.4.2 3D物体检测和识别<br>
+基于2D图像的方法<br>
+基于点云的方法<br>
+2.4.3 三维语义分割<br>
+基于体素的方法<br>
+基于点云的方法<br>
+2.4.4 三维姿态估计<br>
+单视图方法<br>
+多视图方法<br>
+总结<br>
+2.5 视频理解与分析<br>
+2.5.1 视频分类<br>
+2.5.2 动作识别<br>
+2.5.3 视频物体检测与分割<br>
+2.5.4 视频摘要与高亮检测<br>
+2.5.5 视频生成和编辑<br>
+总结<br>
+三、无监督学习与自监督学习在计算机视觉中的应用<br>
+3.1 无监督学习<br>
+聚类<br>
+降维与表示学习<br>
+3.2 自监督学习<br>
+对比学习<br>
+预训练任务设计<br>
+3.3 跨模态学习</p>
+<ol start="4">
+<li>总结</li>
+</ol>
+<p>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/magicyangjay111/article/details/132321843">https://blog.csdn.net/magicyangjay111/article/details/132321843</a></p>
+<p><img src="/2024/02/12/2024%E5%B9%B42%E6%9C%8812%E6%97%A5-%E8%BD%AC%E8%BD%BD%E6%96%87%E7%AB%A0/image-20240212224535849.png" alt="image-20240212224535849"></p>
+<h3 id="人脸识别"><a class="markdownIt-Anchor" href="#人脸识别"></a> <a target="_blank" rel="noopener" href="https://techlead.blog.csdn.net/article/details/134762161">人脸识别</a>：</h3>
+<p>目录<br>
+一、人脸识别技术的发展历程<br>
+早期探索：20世纪60至80年代<br>
+技术价值点：<br>
+自动化与算法化：20世纪90年代<br>
+技术价值点：<br>
+深度学习的革命：21世纪初至今<br>
+技术价值点：<br>
+二、几何特征方法详解与实战<br>
+几何特征方法的原理<br>
+几何特征方法的局限性<br>
+实战案例：简单的几何特征人脸识别<br>
+环境配置<br>
+代码实现<br>
+代码说明<br>
+三、自动化与算法化详解与实战<br>
+自动化与算法化的进展<br>
+技术创新点：<br>
+实战案例：基于特征匹配的人脸识别<br>
+环境配置<br>
+代码实现<br>
+代码说明<br>
+四、深度学习方法<br>
+深度学习方法的核心概念<br>
+技术创新点<br>
+实战案例：使用深度学习进行人脸识别<br>
+环境配置<br>
+代码实现<br>
+代码说明<br>
+总结<br>
+————————————————</p>
+<p>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/magicyangjay111/article/details/134762161">https://blog.csdn.net/magicyangjay111/article/details/134762161</a></p>
+<p><img src="/2024/02/12/2024%E5%B9%B42%E6%9C%8812%E6%97%A5-%E8%BD%AC%E8%BD%BD%E6%96%87%E7%AB%A0/image-20240212232302240.png" alt="image-20240212232302240"></p>
+<p><img src="/2024/02/12/2024%E5%B9%B42%E6%9C%8812%E6%97%A5-%E8%BD%AC%E8%BD%BD%E6%96%87%E7%AB%A0/image-20240212232432194.png" alt="image-20240212232432194"></p>
+<h3 id="时间序列预测"><a class="markdownIt-Anchor" href="#时间序列预测"></a> <a target="_blank" rel="noopener" href="https://snu77.blog.csdn.net/article/details/133272874?spm=1001.2014.3001.5502">时间序列预测：</a></h3>
+<h2 id="深度学习-前沿"><a class="markdownIt-Anchor" href="#深度学习-前沿"></a> 深度学习 前沿</h2>
+<h3 id="可变形卷积deformable-conv"><a class="markdownIt-Anchor" href="#可变形卷积deformable-conv"></a> <a target="_blank" rel="noopener" href="https://blog.csdn.net/panghuzhenbang/article/details/129816869?spm=1001.2100.3001.7377&amp;utm_medium=distribute.pc_feed_blog_category.none-task-blog-classify_tag-13-129816869-null-null.nonecase&amp;depth_1-utm_source=distribute.pc_feed_blog_category.none-task-blog-classify_tag-13-129816869-null-null.nonecase">可变形卷积(Deformable Conv)</a></h3>
+<p><img src="/2024/02/12/2024%E5%B9%B42%E6%9C%8812%E6%97%A5-%E8%BD%AC%E8%BD%BD%E6%96%87%E7%AB%A0/image-20240212235532908.png" alt="image-20240212235532908"></p>
+<h3 id="llm"><a class="markdownIt-Anchor" href="#llm"></a> LLM</h3>
+<h3 id="sd"><a class="markdownIt-Anchor" href="#sd"></a> SD</h3>
+<h2 id="深度学习-项目优化"><a class="markdownIt-Anchor" href="#深度学习-项目优化"></a> 深度学习 项目优化</h2>
+<h3 id="量化"><a class="markdownIt-Anchor" href="#量化"></a> 量化</h3>
+<h3 id="cuda"><a class="markdownIt-Anchor" href="#cuda"></a> CUDA</h3>
+<h4 id="c-cuda手搓一个简单的神经网络推理"><a class="markdownIt-Anchor" href="#c-cuda手搓一个简单的神经网络推理"></a> <a target="_blank" rel="noopener" href="https://blog.csdn.net/Bartender_VA11/article/details/135999169">C++ CUDA手搓一个简单的神经网络推理</a></h4>
+<h3 id="trt"><a class="markdownIt-Anchor" href="#trt"></a> TRT</h3>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2024/02/12/2024%E5%B9%B42%E6%9C%8812%E6%97%A5-%E8%BD%AC%E8%BD%BD%E6%96%87%E7%AB%A0/" data-id="cltgreey1000aw8v4ahty4aie" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9D%82/" rel="tag">杂</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2024年2月4日-Transformer" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/" class="article-date">
+  <time class="post-time" datetime="2024-02-04T07:45:25.000Z" itemprop="datePublished">
+    <span class="post-month">2月</span><br/>
+    <span class="post-day">04</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/">2024年2月4日 Transformer</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="11"><a class="markdownIt-Anchor" href="#11"></a> 11</h1>
+<p>Transformer</p>
+<p>类似</p>
+<img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204154832886.png" alt="image-20240204154832886" style="zoom: 33%;">
+<p>编码器内部结构</p>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204154915719.png" alt="image-20240204154915719"></p>
+<p>解码器</p>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204154933875.png" alt="image-20240204154933875"></p>
+<p>计算注意力</p>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204155008356.png" alt="image-20240204155008356"></p>
+<p>a embedding 转换成向量</p>
+<p>乘wq wk wv 成为 QKV</p>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204155229925.png" alt="image-20240204155229925"></p>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204155321645.png" alt="image-20240204155321645"></p>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204155426496.png" alt="image-20240204155426496"></p>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204155505816.png" alt="image-20240204155505816"></p>
+<h3 id="多头注意力"><a class="markdownIt-Anchor" href="#多头注意力"></a> 多头注意力</h3>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204155513230.png" alt="image-20240204155513230"></p>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204155611126.png" alt="image-20240204155611126"></p>
+<p>z相加之后乘w 等到 Z</p>
+<h2 id="词向量编码"><a class="markdownIt-Anchor" href="#词向量编码"></a> 词向量编码</h2>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204155845984.png" alt="image-20240204155845984"></p>
+<h3 id="位置编码"><a class="markdownIt-Anchor" href="#位置编码"></a> 位置编码</h3>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204160027009.png" alt="image-20240204160027009"></p>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204160316504.png" alt="image-20240204160316504"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/" data-id="cltgreey3000hw8v46fth0d3s" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl/" rel="tag">dl</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2024年2月4日-VAEmodel" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-VAEmodel/" class="article-date">
+  <time class="post-time" datetime="2024-02-04T07:38:05.000Z" itemprop="datePublished">
+    <span class="post-month">2月</span><br/>
+    <span class="post-day">04</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-VAEmodel/">2024年2月4日 AE.VAEmodel</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="1-ae"><a class="markdownIt-Anchor" href="#1-ae"></a> 1 AE</h1>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-VAEmodel/image-20240205131208025.png" alt="image-20240205131208025"></p>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-VAEmodel/image-20240205131307904.png" alt="image-20240205131307904"></p>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-VAEmodel/image-20240205131344755.png" alt="image-20240205131344755"></p>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-VAEmodel/image-20240205131436686.png" alt="image-20240205131436686"></p>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-VAEmodel/image-20240205131442988.png" alt="image-20240205131442988"></p>
+<h1 id="2-vae"><a class="markdownIt-Anchor" href="#2-vae"></a> 2 vae</h1>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-VAEmodel/image-20240205131914693.png" alt="image-20240205131914693"></p>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-VAEmodel/image-20240205131929419.png" alt="image-20240205131929419"></p>
+<h3 id="正态分布"><a class="markdownIt-Anchor" href="#正态分布"></a> 正态分布</h3>
+<p>Wgan</p>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-VAEmodel/image-20240205163221816.png" alt="image-20240205163221816"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-VAEmodel/" data-id="cltgreey3000jw8v43huzdi8u" class="article-share-link">分享</a>
       
       
     </footer>
@@ -293,12 +1297,179 @@ fatal: Could not read from remote repository.不一样</p>
 
 
   
-    <article id="post-2024年1月23日-python之不常用总结" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2024年2月3日-difussion模型" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-python%E4%B9%8B%E4%B8%8D%E5%B8%B8%E7%94%A8%E6%80%BB%E7%BB%93/" class="article-date">
-  <time class="post-time" datetime="2024-01-23T06:00:53.000Z" itemprop="datePublished">
+    <a href="/2024/02/03/2024%E5%B9%B42%E6%9C%883%E6%97%A5-difussion%E6%A8%A1%E5%9E%8B/" class="article-date">
+  <time class="post-time" datetime="2024-02-03T12:02:30.000Z" itemprop="datePublished">
+    <span class="post-month">2月</span><br/>
+    <span class="post-day">03</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2024/02/03/2024%E5%B9%B42%E6%9C%883%E6%97%A5-difussion%E6%A8%A1%E5%9E%8B/">2024年2月3日 difussion模型</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="difussion模型"><a class="markdownIt-Anchor" href="#difussion模型"></a> difussion模型</h1>
+<h2 id="1-引言"><a class="markdownIt-Anchor" href="#1-引言"></a> 1 引言</h2>
+<h3 id="11目前大模型"><a class="markdownIt-Anchor" href="#11目前大模型"></a> 1.1<a target="_blank" rel="noopener" href="https://runwayml.com/">目前大模型</a></h3>
+<p><img src="/2024/02/03/2024%E5%B9%B42%E6%9C%883%E6%97%A5-difussion%E6%A8%A1%E5%9E%8B/image-20240203200335403.png" alt="image-20240203200335403"></p>
+<h3 id="12-生成式模型"><a class="markdownIt-Anchor" href="#12-生成式模型"></a> 1.2 生成式模型</h3>
+<p>目前有多个生成式model</p>
+<img src="/2024/02/03/2024%E5%B9%B42%E6%9C%883%E6%97%A5-difussion%E6%A8%A1%E5%9E%8B/image-20240203200754458.png" alt="image-20240203200754458" style="zoom:50%;">
+<img src="/2024/02/03/2024%E5%B9%B42%E6%9C%883%E6%97%A5-difussion%E6%A8%A1%E5%9E%8B/image-20240203200902564.png" alt="image-20240203200902564" style="zoom:50%;">
+<h3 id="13-论文复现"><a class="markdownIt-Anchor" href="#13-论文复现"></a> 1.3 论文复现</h3>
+<p><img src="/2024/02/03/2024%E5%B9%B42%E6%9C%883%E6%97%A5-difussion%E6%A8%A1%E5%9E%8B/image-20240203201001759.png" alt="image-20240203201001759"></p>
+<h2 id="2-diffusion介绍"><a class="markdownIt-Anchor" href="#2-diffusion介绍"></a> 2 diffusion介绍</h2>
+<h3 id="21-流程"><a class="markdownIt-Anchor" href="#21-流程"></a> 2.1 流程</h3>
+<p><img src="/2024/02/03/2024%E5%B9%B42%E6%9C%883%E6%97%A5-difussion%E6%A8%A1%E5%9E%8B/image-20240204153923712.png" alt="image-20240204153923712"></p>
+<img src="/2024/02/03/2024%E5%B9%B42%E6%9C%883%E6%97%A5-difussion%E6%A8%A1%E5%9E%8B/image-20240203201210242.png" alt="image-20240203201210242" style="zoom:50%;">
+<img src="/2024/02/03/2024%E5%B9%B42%E6%9C%883%E6%97%A5-difussion%E6%A8%A1%E5%9E%8B/image-20240203201215066.png" alt="image-20240203201215066" style="zoom:50%;">
+<p>引入了model去测这些噪声</p>
+<p><img src="/2024/02/03/2024%E5%B9%B42%E6%9C%883%E6%97%A5-difussion%E6%A8%A1%E5%9E%8B/image-20240203201253109.png" alt="image-20240203201253109"></p>
+<p><img src="/2024/02/03/2024%E5%B9%B42%E6%9C%883%E6%97%A5-difussion%E6%A8%A1%E5%9E%8B/image-20240203201504985.png" alt="image-20240203201504985"><img src="/2024/02/03/2024%E5%B9%B42%E6%9C%883%E6%97%A5-difussion%E6%A8%A1%E5%9E%8B/image-20240203201542674.png" alt="image-20240203201542674"><img src="/2024/02/03/2024%E5%B9%B42%E6%9C%883%E6%97%A5-difussion%E6%A8%A1%E5%9E%8B/image-20240203201511112.png" alt="image-20240203201511112"></p>
+<p>训练方式改变</p>
+<img src="/2024/02/03/2024%E5%B9%B42%E6%9C%883%E6%97%A5-difussion%E6%A8%A1%E5%9E%8B/image-20240203201934285.png" alt="image-20240203201934285" style="zoom:50%;">
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2024/02/03/2024%E5%B9%B42%E6%9C%883%E6%97%A5-difussion%E6%A8%A1%E5%9E%8B/" data-id="cltgreey2000ew8v4ee2s2w7j" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl/" rel="tag">dl</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2024年2月1日-故事会" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2024/02/01/2024%E5%B9%B42%E6%9C%881%E6%97%A5-%E6%95%85%E4%BA%8B%E4%BC%9A/" class="article-date">
+  <time class="post-time" datetime="2024-02-01T08:24:32.000Z" itemprop="datePublished">
+    <span class="post-month">2月</span><br/>
+    <span class="post-day">01</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2024/02/01/2024%E5%B9%B42%E6%9C%881%E6%97%A5-%E6%95%85%E4%BA%8B%E4%BC%9A/">2024年2月1日 故事会</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="故事会"><a class="markdownIt-Anchor" href="#故事会"></a> 故事会</h1>
+<hr>
+<blockquote>
+<p><code>这里用于记录我读过的故事~</code></p>
+</blockquote>
+<hr>
+<h1 id="目录"><a class="markdownIt-Anchor" href="#目录"></a> 目录</h1>
+<p>[TOC]</p>
+<img src="/2024/02/01/2024%E5%B9%B42%E6%9C%881%E6%97%A5-%E6%95%85%E4%BA%8B%E4%BC%9A/image-20240201203215611.png" alt="image-20240201203215611" style="zoom: 50%;">
+<p><img src="/2024/02/01/2024%E5%B9%B42%E6%9C%881%E6%97%A5-%E6%95%85%E4%BA%8B%E4%BC%9A/image-20240201210223764.png" alt="image-20240201210223764"></p>
+<h2 id="知乎"><a class="markdownIt-Anchor" href="#知乎"></a> 知乎</h2>
+<h3 id="2024年2月1日"><a class="markdownIt-Anchor" href="#2024年2月1日"></a> 2024年2月1日</h3>
+<h4 id="阴阳局"><a class="markdownIt-Anchor" href="#阴阳局"></a> 阴阳局</h4>
+<p>给你解决需求的同时留下新的需求</p>
+<p><img src="/2024/02/01/2024%E5%B9%B42%E6%9C%881%E6%97%A5-%E6%95%85%E4%BA%8B%E4%BC%9A/image-20240201163146152.png" alt="image-20240201163146152"></p>
+<hr>
+<h4 id="先赚未来的钱"><a class="markdownIt-Anchor" href="#先赚未来的钱"></a> 先赚未来的钱</h4>
+<p><img src="/2024/02/01/2024%E5%B9%B42%E6%9C%881%E6%97%A5-%E6%95%85%E4%BA%8B%E4%BC%9A/image-20240201163519673.png" alt="image-20240201163519673"></p>
+<hr>
+<h2 id="思维集"><a class="markdownIt-Anchor" href="#思维集"></a> 思维集</h2>
+<h3 id="火星语录"><a class="markdownIt-Anchor" href="#火星语录"></a> <a target="_blank" rel="noopener" href="https://www.zhihu.com/question/358755951/answer/3298050461">火星语录</a></h3>
+<p><img src="/2024/02/01/2024%E5%B9%B42%E6%9C%881%E6%97%A5-%E6%95%85%E4%BA%8B%E4%BC%9A/image-20240201170434680.png" alt="image-20240201170434680"></p>
+<p><img src="/2024/02/01/2024%E5%B9%B42%E6%9C%881%E6%97%A5-%E6%95%85%E4%BA%8B%E4%BC%9A/image-20240201171328211.png" alt="image-20240201171328211"></p>
+<p><img src="/2024/02/01/2024%E5%B9%B42%E6%9C%881%E6%97%A5-%E6%95%85%E4%BA%8B%E4%BC%9A/image-20240201171351259.png" alt="image-20240201171351259"></p>
+<h3 id="社会原子化"><a class="markdownIt-Anchor" href="#社会原子化"></a> 社会原子化</h3>
+<img src="/2024/02/01/2024%E5%B9%B42%E6%9C%881%E6%97%A5-%E6%95%85%E4%BA%8B%E4%BC%9A/image-20240201172431344.png" alt="image-20240201172431344" style="zoom:50%;">
+<h2 id="名称"><a class="markdownIt-Anchor" href="#名称"></a> 名称</h2>
+<h3 id="边际效应与贝勒定论"><a class="markdownIt-Anchor" href="#边际效应与贝勒定论"></a> 边际效应与贝勒定论</h3>
+<h4 id="边际效应"><a class="markdownIt-Anchor" href="#边际效应"></a> 边际效应</h4>
+<p><strong>定义：</strong></p>
+<p>​	随着时间或精力（下文统称为时间/精力）的不断投入，做一件没有变化的事本身所能带给我们的价值或满足感（下文统称为价值/满足感）在达到一个峰值后便开始下降。在这一阶段中，与前面所不同的是，随着时间/精力的投入，这件事的价值/满足感不是在上升，而是在下降，最后无限趋近于0，甚至最后降到了负值。也就是说这时带给我们的不是价值/满足感，反而是痛苦。</p>
+<img src="/2024/02/01/2024%E5%B9%B42%E6%9C%881%E6%97%A5-%E6%95%85%E4%BA%8B%E4%BC%9A/image-20240201171620219.png" alt="image-20240201171620219" style="zoom:50%;">
+<p><strong>荔枝：</strong></p>
+<img src="/2024/02/01/2024%E5%B9%B42%E6%9C%881%E6%97%A5-%E6%95%85%E4%BA%8B%E4%BC%9A/image-20240201171703136.png" alt="image-20240201171703136" style="zoom:50%;">
+<h4 id="贝勒定论"><a class="markdownIt-Anchor" href="#贝勒定论"></a> 贝勒定论</h4>
+<p><strong>定义：</strong></p>
+<p>这个定律说的是当人经历了强烈的刺激后，再施以的刺激就变得微不足道，即第二次的刺激被第一次的刺激冲淡了。</p>
+<hr>
+<h3 id="零和博弈"><a class="markdownIt-Anchor" href="#零和博弈"></a> 零和博弈</h3>
+<h3 id="搞笑的东西"><a class="markdownIt-Anchor" href="#搞笑的东西"></a> 搞笑的东西</h3>
+<p><img src="/2024/02/01/2024%E5%B9%B42%E6%9C%881%E6%97%A5-%E6%95%85%E4%BA%8B%E4%BC%9A/image-20240206203904526.png" alt="image-20240206203904526"></p>
+<p><img src="/2024/02/01/2024%E5%B9%B42%E6%9C%881%E6%97%A5-%E6%95%85%E4%BA%8B%E4%BC%9A/image-20240206203911902.png" alt="image-20240206203911902"></p>
+<p><img src="/2024/02/01/2024%E5%B9%B42%E6%9C%881%E6%97%A5-%E6%95%85%E4%BA%8B%E4%BC%9A/image-20240206203946842.png" alt="image-20240206203946842"></p>
+<p><img src="/2024/02/01/2024%E5%B9%B42%E6%9C%881%E6%97%A5-%E6%95%85%E4%BA%8B%E4%BC%9A/image-20240206204014680.png" alt="image-20240206204014680"></p>
+<p><img src="/2024/02/01/2024%E5%B9%B42%E6%9C%881%E6%97%A5-%E6%95%85%E4%BA%8B%E4%BC%9A/image-20240206204107466.png" alt="image-20240206204107466"></p>
+<p>基本格式就是：节日祝福+过往交情+个人价值+溜须拍马+表达崇敬。</p>
+<p><img src="https://pic1.zhimg.com/v2-2d6756a7874299f79417dd434b05ee84_b.jpg" alt="img"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2024/02/01/2024%E5%B9%B42%E6%9C%881%E6%97%A5-%E6%95%85%E4%BA%8B%E4%BC%9A/" data-id="cltgreey4000ow8v4ff41hj9t" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9D%82/" rel="tag">杂</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2024年1月29日-python之项目总结" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2024/01/29/2024%E5%B9%B41%E6%9C%8829%E6%97%A5-python%E4%B9%8B%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/" class="article-date">
+  <time class="post-time" datetime="2024-01-29T15:12:02.000Z" itemprop="datePublished">
     <span class="post-month">1月</span><br/>
-    <span class="post-day">23</span>
+    <span class="post-day">29</span>
   </time>
 </a>
    
@@ -310,7 +1481,7 @@ fatal: Could not read from remote repository.不一样</p>
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-python%E4%B9%8B%E4%B8%8D%E5%B8%B8%E7%94%A8%E6%80%BB%E7%BB%93/">2024年1月23日 python之不常用总结</a>
+      <a class="article-title" href="/2024/01/29/2024%E5%B9%B41%E6%9C%8829%E6%97%A5-python%E4%B9%8B%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/">2024年1月29日 python之项目总结</a>
     </h1>
   
 
@@ -325,771 +1496,82 @@ fatal: Could not read from remote repository.不一样</p>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">low_mask = matrix &lt; low_value</span><br></pre></td></tr></table></figure>
+        <h1 id="python之项目总结"><a class="markdownIt-Anchor" href="#python之项目总结"></a> python之项目总结</h1>
+<h2 id="0-源码包与二进制包什么区别"><a class="markdownIt-Anchor" href="#0-源码包与二进制包什么区别"></a> 0 源码包与二进制包什么区别？</h2>
+<p>Python 包的分发可以分为两种：</p>
+<p>1、以源码包的方式发布</p>
+<p>源码包安装的过程，是先解压，再编译，最后才安装，所以它是跨平台的，由于每次安装都要进行编译，相对二进包安装方式来说安装速度较慢。<img src="https://pic1.zhimg.com/80/v2-dffd77a245997a841eb426d9c0ce5184_1440w.webp" alt="img"></p>
+<p>2、以二进制包形式发布</p>
+<p>二进制包的安装过程省去了编译的过程，直接进行解压安装，所以安装速度较源码包来说更快。</p>
+<p>由于不同平台的编译出来的包无法通用，所以在发布时，需事先编译好多个平台的包。<img src="https://pic4.zhimg.com/v2-b0a22d8b82eac1f25bc6a1b95f6e0c2f_r.jpg" alt="img"></p>
+<h2 id="1-python-中的-requirementstxt-与-setuppy区别"><a class="markdownIt-Anchor" href="#1-python-中的-requirementstxt-与-setuppy区别"></a> 1 Python 中的 requirements.txt 与 setup.py区别</h2>
+<ol>
+<li>
+<p><strong>requirements.txt</strong>:</p>
+<ul>
+<li>
+<p><strong>作用</strong>: <code>requirements.txt</code>文件通常用于列出项目所依赖的第三方库及其版本信息。</p>
+</li>
+<li>
+<dl>
+<dt>格式</dt>
+<dd>每行一个依赖项，通常包括库的名称和版本号，例如：</dd>
+</dl>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">requests==2.26.0</span><br><span class="line">numpy==1.21.5</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>安装依赖</strong>: 通过运行<code>pip install -r requirements.txt</code>命令，可以一次性安装所有列出的依赖项。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><a target="_blank" rel="noopener" href="http://setup.py">setup.py</a></strong>:</p>
+<hr>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">待解决</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p><strong>我们常见的运行命令</strong>，“pip install  模块名”或者“python <a target="_blank" rel="noopener" href="http://setup.py">setup.py</a> install”，前者是在线安装，会安装该包的相关依赖包；后者是下载源码包然后在本地安装，不会安装该包的相关依赖包。</p>
+</li>
+<li>
+<p><strong>在编写相关系统时，如何实现连同依赖包一起打包发布</strong>？</p>
+</li>
+</ul>
+<p>假如我在本机开发一个程序，需要用到python的redis、mysql模块以及自己编写的redis_run.py模块。我怎么实现在<strong>服务器</strong>上去发布该系统，如何实现依赖模块和自己编写的模块redis_run.py一起打包，实现一键安装呢？同时将自己编写的redis_run.py模块以exe文件格式安装到python的全局执行路径~/Python27/Scripts下呢？</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python setup.py install</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p><strong>作用</strong>: <code>setup.py</code>文件是一个 Python 脚本，用于定义项目的元数据和其他相关配置，例如项目名称、版本、作者信息、依赖关系等。</p>
+</li>
+<li>
+<p><strong>如何编写</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">from setuptools import setup, find_packages</span><br><span class="line"></span><br><span class="line">setup(</span><br><span class="line">    name=&quot;example&quot;,</span><br><span class="line">    version=&quot;0.1&quot;,</span><br><span class="line">    packages=find_packages(),</span><br><span class="line">    install_requires=[</span><br><span class="line">        &#x27;requests&gt;=2.26.0&#x27;,</span><br><span class="line">        &#x27;numpy&gt;=1.21.5&#x27;</span><br><span class="line">    ],</span><br><span class="line">    author=&quot;Your Name&quot;,</span><br><span class="line">    author_email=&quot;your@email.com&quot;,</span><br><span class="line">    description=&quot;Description of your project&quot;,</span><br><span class="line">    ...</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>安装依赖</strong>: 通过在<code>install_requires</code>参数中指定依赖项，可以告诉 <code>setuptools</code> 安装项目所需的依赖项。当用户运行<code>python setup.py install</code>时，<code>setuptools</code>会自动处理依赖项的安装。</p>
+</li>
+<li></li>
+</ul>
+</li>
+</ol>
+<h3 id="inquirer库"><a class="markdownIt-Anchor" href="#inquirer库"></a> <code>inquirer</code>库</h3>
+<p><code>inquirer</code>库是一个用于构建命令行交互式界面的Python库。它提供了各种交互式组件，例如选择列表、多选列表、输入框等，可以让用户通过命令行界面与程序进行交互。</p>
+<h2 id="2-from-pil-import-image-为什么-image会报错找不到呢"><a class="markdownIt-Anchor" href="#2-from-pil-import-image-为什么-image会报错找不到呢"></a> 2 from PIL import Image 为什么 Image会报错找不到呢？</h2>
+<p>如图：</p>
+<img src="/2024/01/29/2024%E5%B9%B41%E6%9C%8829%E6%97%A5-python%E4%B9%8B%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/image-20240131001907043.png" alt="image-20240131001907043" style="zoom:50%;">
+<img src="/2024/01/29/2024%E5%B9%B41%E6%9C%8829%E6%97%A5-python%E4%B9%8B%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/image-20240131001917320.png" alt="image-20240131001917320" style="zoom:50%;">
+<h3 id="解决"><a class="markdownIt-Anchor" href="#解决"></a> <strong>解决：</strong></h3>
+<p>因为：在该函数体内报错代码的后面 又再一次到了和相关库，导致报错！</p>
+<img src="/2024/01/29/2024%E5%B9%B41%E6%9C%8829%E6%97%A5-python%E4%B9%8B%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/image-20240131002107821.png" alt="image-20240131002107821" style="zoom:50%;">
+<img src="/2024/01/29/2024%E5%B9%B41%E6%9C%8829%E6%97%A5-python%E4%B9%8B%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/image-20240131002130243.png" alt="image-20240131002130243" style="zoom:50%;">
+<h2 id="3"><a class="markdownIt-Anchor" href="#3"></a> 3</h2>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-python%E4%B9%8B%E4%B8%8D%E5%B8%B8%E7%94%A8%E6%80%BB%E7%BB%93/" data-id="clrwazlri003f7ov4hlo7ckjw" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2024年1月23日-python之cv库总结" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-python%E4%B9%8Bcv%E5%BA%93%E6%80%BB%E7%BB%93/" class="article-date">
-  <time class="post-time" datetime="2024-01-23T05:53:18.000Z" itemprop="datePublished">
-    <span class="post-month">1月</span><br/>
-    <span class="post-day">23</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-python%E4%B9%8Bcv%E5%BA%93%E6%80%BB%E7%BB%93/">2024年1月23日 python之cv库总结</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="将输入图像拆分为rgb通道"><a class="markdownIt-Anchor" href="#将输入图像拆分为rgb通道"></a> 将输入图像拆分为RGB通道</h3>
-<p><code>channels = cv2.split(img)</code></p>
-<h3 id="将2d数组重新形状为1d数组"><a class="markdownIt-Anchor" href="#将2d数组重新形状为1d数组"></a> # 将2D数组重新形状为1D数组</h3>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">height, width = channel.shape        </span><br><span class="line"></span><br><span class="line">vec_size = width * height       </span><br><span class="line"></span><br><span class="line">flat = channel.reshape(vec_size)</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-python%E4%B9%8Bcv%E5%BA%93%E6%80%BB%E7%BB%93/" data-id="clrwazlrh003e7ov4f1ydfzmv" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2024年1月23日-parser库" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-parser%E5%BA%93/" class="article-date">
-  <time class="post-time" datetime="2024-01-23T05:24:11.000Z" itemprop="datePublished">
-    <span class="post-month">1月</span><br/>
-    <span class="post-day">23</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-parser%E5%BA%93/">2024年1月23日 parser库</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="1"><a class="markdownIt-Anchor" href="#1"></a> 1</h2>
-<p>使用 <code>argparse.ArgumentParser</code> 创建了一个命令行解析器对象（<code>parser</code>）</p>
-<h2 id="2-定义了命令行参数的规则"><a class="markdownIt-Anchor" href="#2-定义了命令行参数的规则"></a> 2 定义了命令行参数的规则</h2>
-<p><code>parser.add_argument</code></p>
-<h2 id="3-解析命令行参数"><a class="markdownIt-Anchor" href="#3-解析命令行参数"></a> 3 解析命令行参数</h2>
-<p><code>args = parser.parse_args()</code></p>
-<h2 id="4-获取参数的值"><a class="markdownIt-Anchor" href="#4-获取参数的值"></a> 4 获取参数的值</h2>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">inputpath = args.input </span><br><span class="line"></span><br><span class="line">outputpath = args.output </span><br><span class="line"></span><br><span class="line">show = args.show</span><br></pre></td></tr></table></figure>
-<p>布尔掩码（Boolean mask）</p>
-<p><img src="./2024%E5%B9%B41%E6%9C%8823%E6%97%A5-parser%E5%BA%93/image-20240123134714991.png" alt="image-20240123134714991" /></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-parser%E5%BA%93/" data-id="clrwazlrh003d7ov46xbz0txl" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2024年1月18日-考研" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2024/01/18/2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/" class="article-date">
-  <time class="post-time" datetime="2024-01-18T06:42:52.000Z" itemprop="datePublished">
-    <span class="post-month">1月</span><br/>
-    <span class="post-day">18</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2024/01/18/2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/">2024年1月18日 考研</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="25考研"><a class="markdownIt-Anchor" href="#25考研"></a> 25考研</h1>
-<h2 id="时间线"><a class="markdownIt-Anchor" href="#时间线"></a> 时间线：</h2>
-<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118144330538.png" alt="image-20240118144330538" /></p>
-<h2 id="院校信息"><a class="markdownIt-Anchor" href="#院校信息"></a> 院校信息</h2>
-<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118151329192.png" alt="image-20240118151329192" /></p>
-<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118150436505.png" alt="image-20240118150436505" /></p>
-<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118150448354.png" alt="image-20240118150448354" /></p>
-<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118150614884.png" alt="image-20240118150614884" /></p>
-<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118150630984.png" alt="image-20240118150630984" /></p>
-<hr />
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118150757967.png" alt="image-20240118150757967" /></p>
-<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118150828555.png" alt="image-20240118150828555" /></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118150953031.png" alt="image-20240118150953031" /></p>
-<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118151004637.png" alt="image-20240118151004637" /></p>
-<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118151018382.png" alt="image-20240118151018382" /></p>
-<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118151035216.png" alt="image-20240118151035216" /></p>
-<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118151113427.png" alt="image-20240118151113427" /></p>
-<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118151150736.png" alt="image-20240118151150736" /></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118151615259.png" alt="image-20240118151456474" /></p>
-<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118151816305.png" alt="image-20240118151816305" /></p>
-<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118151916400.png" alt="image-20240118151916400" /></p>
-<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118151932816.png" alt="image-20240118151932816" /></p>
-<h2 id="专业信息"><a class="markdownIt-Anchor" href="#专业信息"></a> 专业信息</h2>
-<h3 id="404"><a class="markdownIt-Anchor" href="#404"></a> 404</h3>
-<h3 id="848"><a class="markdownIt-Anchor" href="#848"></a> 848</h3>
-<p>人工智能：848：数据结构和C语言</p>
-<p><img src="./2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/image-20240118154838300.png" alt="image-20240118154838300" /></p>
-<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MzIwMTgzMTQ5MA==&amp;mid=2247620649&amp;idx=1&amp;sn=15a856982e80fc64595cedc9104ea118&amp;chksm=96e4bd04a1933412b9c2b950c43d3a4ae3cc56828f44a3884456517ad088c7a73fe17b439c9a&amp;scene=21#wechat_redirect">暨南大学真人经历</a></p>
-<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/633535696">https://zhuanlan.zhihu.com/p/633535696</a></p>
-<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/633535696">https://zhuanlan.zhihu.com/p/633535696</a></p>
-<h3 id="942"><a class="markdownIt-Anchor" href="#942"></a> 942</h3>
-<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/653697778">https://zhuanlan.zhihu.com/p/653697778</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2024/01/18/2024%E5%B9%B41%E6%9C%8818%E6%97%A5-%E8%80%83%E7%A0%94/" data-id="clrwazlrh003b7ov4avonclvh" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2024年1月6日-2023总结" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2024/01/06/2024%E5%B9%B41%E6%9C%886%E6%97%A5-2023%E6%80%BB%E7%BB%93/" class="article-date">
-  <time class="post-time" datetime="2024-01-05T17:12:20.000Z" itemprop="datePublished">
-    <span class="post-month">1月</span><br/>
-    <span class="post-day">06</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2024/01/06/2024%E5%B9%B41%E6%9C%886%E6%97%A5-2023%E6%80%BB%E7%BB%93/">2023总结</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="2023总结"><a class="markdownIt-Anchor" href="#2023总结"></a> 2023总结</h1>
-<blockquote>
-<p>第一次写总结, 用于总结我23年一年的经历.</p>
-<ul>
-<li>每一个月分为上中下,1~10号 11~20号 20~月末</li>
-<li>主要记录每个月都做了写啥(<s>因为我真的很喜欢总结但是很少记录</s>)</li>
-<li>记录内容主要以学习为主,如果没有学习,那只能用<s>其他</s>重要事件来替代了(bushi)</li>
-<li>时间: 2024年1月6日 01点30分—02点36分</li>
-<li>因为第一次写比较有格式的内容,部分由GPT生成</li>
-<li>写完了:发现有点大便,</li>
-<li>给自己做总结: 游戏人生\ 假期学习能手\ 大部分时间无聊\</li>
-</ul>
-</blockquote>
-<h3 id="目录"><a class="markdownIt-Anchor" href="#目录"></a> 目录</h3>
-<ul>
-<li><a href="#1">一月</a></li>
-<li><a href="#2">二月</a></li>
-<li><a href="#3">三月</a></li>
-<li><a href="#4">四月</a></li>
-<li><a href="#5">五月</a></li>
-<li><a href="#6">六月</a></li>
-<li><a href="#7">七月</a></li>
-<li><a href="#8">八月</a></li>
-<li><a href="#9">九月</a></li>
-<li><a href="#10">十月</a></li>
-<li><a href="#11">十一月</a></li>
-<li><a href="#12">十二月</a></li>
-</ul>
-<h4 id="1">一月</h4>
-<blockquote>
-<p>上</p>
-<p><code>放寒假中</code></p>
-<ul>
-<li>
-<p>在玩游戏天际线~~~</p>
-</li>
-<li>
-<p>弄了一个桌面备忘录</p>
-</li>
-<li>
-<img src="./2024年1月6日-2023总结/image-20240106014902618.png" alt="image-20240106014902618" style="zoom:33%;" />
-</li>
-</ul>
-</blockquote>
-<blockquote>
-<p>中</p>
-<ul>
-<li>在玩鹅鸦杀!(好玩)</li>
-<li>pycharm专业版<strong>了解了一些后端</strong>, flask,django</li>
-</ul>
-</blockquote>
-<blockquote>
-<p>下</p>
-<ul>
-<li>
-<p>浅学C++</p>
-</li>
-<li>
-<p>很忙, 在老家到处玩~~</p>
-</li>
-</ul>
-</blockquote>
-<h4 id="2">二月</h4>
-<blockquote>
-<p>上</p>
-<ul>
-<li>学pyqt</li>
-<li>和老姐去打了一天的临时工 真很累!!</li>
-<li><img src="./2024%E5%B9%B41%E6%9C%886%E6%97%A5-2023%E6%80%BB%E7%BB%93/image-20240106015152253.png" alt="image-20240106015152253" /></li>
-</ul>
-</blockquote>
-<blockquote>
-<p>中</p>
-<ul>
-<li><code>准备回学校</code> 玩了一会天际线</li>
-<li>看了电影<code>河畔须臾</code>,<code>刺客信条</code></li>
-<li>回学校</li>
-<li>安装stable diffusion 画画,并发布了视频</li>
-</ul>
-</blockquote>
-<blockquote>
-<p>下</p>
-<ul>
-<li>尝试使用lora但是一直失败,之后摆烂</li>
-<li>玩禁闭求生</li>
-</ul>
-</blockquote>
-<h4 id="4">四月</h4>
-<blockquote>
-<h5 id="上"><a class="markdownIt-Anchor" href="#上"></a> 上</h5>
-<ul>
-<li>跑stable diffusion 动漫~~?~~图!</li>
-</ul>
-<h5 id="中"><a class="markdownIt-Anchor" href="#中"></a> 中</h5>
-<ul>
-<li>准备校数据比赛:鱼类识别</li>
-</ul>
-<p>下</p>
-<ul>
-<li>无情地跑stable diffusion 动漫~~?~~图!\发布抖音</li>
-<li>成功使用lora训练<img src="./2024%E5%B9%B41%E6%9C%886%E6%97%A5-2023%E6%80%BB%E7%BB%93/image-20240106151112227.png" alt="image-20240106151112227" /></li>
-</ul>
-</blockquote>
-<ul>
-<li></li>
-</ul>
-<h4 id="5">五月</h4> 
-<blockquote>
-<h5 id="上-2"><a class="markdownIt-Anchor" href="#上-2"></a> 上</h5>
-<ul>
-<li>第一次去漫展!!<img src="./2024年1月6日-2023总结/image-20240106151604089.png" alt="image-20240106151604089" style="zoom:50%;" /></li>
-</ul>
-<h5 id="中-2"><a class="markdownIt-Anchor" href="#中-2"></a> 中</h5>
-<ul>
-<li>玩重塑火星!</li>
-</ul>
-<p>下</p>
-<ul>
-<li>玩幸福工厂!</li>
-</ul>
-</blockquote>
-<ul>
-<li></li>
-</ul>
-<h4 id="6">六月</h4> 
-<blockquote>
-<h5 id="上-3"><a class="markdownIt-Anchor" href="#上-3"></a> 上</h5>
-<ul>
-<li>
-<p>发疯玩三国杀到<s>四点</s>?</p>
-</li>
-<li>
-<p>探索新游戏~!<img src="./2024年1月6日-2023总结/e2ef64c8fe23824958146798a9cf3ea.jpg" alt="e2ef64c8fe23824958146798a9cf3ea" style="zoom: 33%;" /></p>
-</li>
-</ul>
-<h5 id="中-3"><a class="markdownIt-Anchor" href="#中-3"></a> 中</h5>
-<ul>
-<li>第一次玩瓦洛兰特!</li>
-<li>继续玩幸福工厂!</li>
-</ul>
-<p>下</p>
-<ul>
-<li>玩瓦洛兰特!</li>
-<li>继续玩幸福工厂!</li>
-</ul>
-</blockquote>
-<ul>
-<li></li>
-</ul>
-<h4 id="7">七月</h4> 
-<img src="./2024年1月6日-2023总结/image-20240106021805435.png" alt="image-20240106021805435" style="zoom:50%;" />
-<blockquote>
-<h5 id="主要事件"><a class="markdownIt-Anchor" href="#主要事件"></a> &gt; 主要事件:</h5>
-<ul>
-<li>
-<p>异星旅人</p>
-</li>
-<li>
-<p>第一次搭Blog网站</p>
-</li>
-<li>
-<p><s>被姗姗发现</s></p>
-</li>
-</ul>
-</blockquote>
-<ul>
-<li></li>
-</ul>
-<h4 id="8">八月</h4> 
-<img src="./2024年1月6日-2023总结/image-20240106021916287.png" alt="image-20240106021916287" style="zoom:50%;" />
-<h5 id=""><a class="markdownIt-Anchor" href="#"></a> </h5>
-<blockquote>
-<p>主要事件:</p>
-<ul>
-<li>
-<p>看机器学习统计基础</p>
-</li>
-<li>
-<p>看阿里天池</p>
-</li>
-<li>
-<p>开学玩<code>森林之子</code></p>
-</li>
-</ul>
-</blockquote>
-<ul>
-<li></li>
-</ul>
-<h4 id="9">九月</h4> 
-<blockquote>
-<p><code>APEX</code>游戏中</p>
-<h5 id="上-4"><a class="markdownIt-Anchor" href="#上-4"></a> 上</h5>
-<ul>
-<li>第一次LOL上钻石!<img src="./2024年1月6日-2023总结/Screenshot_20230905_144132_edit_271038665702911.jpg" alt="Screenshot_20230905_144132_edit_271038665702911" style="zoom:50%;" /></li>
-<li>剪辑UZI视频! 赚了<strong>1200</strong></li>
-</ul>
-<h5 id="中-4"><a class="markdownIt-Anchor" href="#中-4"></a> 中</h5>
-<ul>
-<li>玩星空(<s>不好玩</s>)</li>
-<li>玩星核工厂(还可以)</li>
-</ul>
-<p>下</p>
-<ul>
-<li>弄 Flask 大创接口</li>
-<li>看<code>孤独摇滚</code></li>
-</ul>
-</blockquote>
-<ul>
-<li></li>
-</ul>
-<h4 id="10">十月</h4> 
-<blockquote>
-<p><code>APEX\无畏契约</code>在玩</p>
-<h5 id="上-5"><a class="markdownIt-Anchor" href="#上-5"></a> 上</h5>
-<ul>
-<li>玩APEX</li>
-</ul>
-<h5 id="中-5"><a class="markdownIt-Anchor" href="#中-5"></a> 中</h5>
-<ul>
-<li>看<code>约战</code></li>
-</ul>
-<p>下</p>
-<ul>
-<li>玩<code>天际线2</code>(<s>答辩</s>)</li>
-<li>玩无畏契约</li>
-</ul>
-</blockquote>
-<ul>
-<li></li>
-</ul>
-<h4 id="11">十一月</h4> 
-<blockquote>
-<p><code>无畏契约</code>在玩</p>
-<h5 id="上-6"><a class="markdownIt-Anchor" href="#上-6"></a> 上</h5>
-<ul>
-<li>玩 <code>THE FINALS</code>(还可以)</li>
-</ul>
-<h5 id="中-6"><a class="markdownIt-Anchor" href="#中-6"></a> 中</h5>
-<ul>
-<li>学模型量化</li>
-<li>看<code>五等份</code></li>
-</ul>
-<p>下</p>
-<ul>
-<li>
-<p>实习初尝试~~失败告终</p>
-</li>
-<li>
-<p>去看世界赛Faker!!</p>
-</li>
-</ul>
-</blockquote>
-<h4 id="12">十二月</h4>
-<blockquote>
-<h5 id="上-7"><a class="markdownIt-Anchor" href="#上-7"></a> 上</h5>
-<ul>
-<li>生气了!!</li>
-<li>去看了广州<strong>邓紫棋演唱会</strong>!!!</li>
-</ul>
-<h5 id="中-7"><a class="markdownIt-Anchor" href="#中-7"></a> 中</h5>
-<ul>
-<li><strong>大学生特种兵:上沙—武汉—上海</strong></li>
-</ul>
-<p>下</p>
-<ul>
-<li>
-<p>在家玩云顶和PVZ</p>
-</li>
-<li>
-<p>车牌识别项目!</p>
-</li>
-<li>
-<p><code>回学校考试</code></p>
-</li>
-</ul>
-</blockquote>
-<ul>
-<li></li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2024/01/06/2024%E5%B9%B41%E6%9C%886%E6%97%A5-2023%E6%80%BB%E7%BB%93/" data-id="clrwazlri003h7ov4hila0kd3" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2023年12月22日-python之os库" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2023/12/22/2023%E5%B9%B412%E6%9C%8822%E6%97%A5-python%E4%B9%8Bos%E5%BA%93/" class="article-date">
-  <time class="post-time" datetime="2023-12-21T17:43:34.000Z" itemprop="datePublished">
-    <span class="post-month">12月</span><br/>
-    <span class="post-day">22</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/12/22/2023%E5%B9%B412%E6%9C%8822%E6%97%A5-python%E4%B9%8Bos%E5%BA%93/">2023年12月22日 python的一些实用的库</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="1-库"><a class="markdownIt-Anchor" href="#1-库"></a> 1、 库</h1>
-<h2 id="1-shutil库"><a class="markdownIt-Anchor" href="#1-shutil库"></a> 1、shutil库</h2>
-<h4 id="shutilcopy"><a class="markdownIt-Anchor" href="#shutilcopy"></a> <code>shutil.copy()</code></h4>
-<p>用于将文件内容从一个位置复制到另一个位置。</p>
-<p>示例：<code>shutil.copy('source.txt', 'destination.txt')</code></p>
-<p>将 <code>source.txt</code> 文件的内容复制到 <code>destination.txt</code> 中。</p>
-<h4 id="shutilmove"><a class="markdownIt-Anchor" href="#shutilmove"></a> <code>shutil.move()</code></h4>
-<p>用于移动文件或重命名文件。</p>
-<p>示例：<code>shutil.move('old_file.txt', 'new_directory/new_file.txt')</code></p>
-<p>将 <code>old_file.txt</code> 移动到 <code>new_directory</code> 中，并重命名为 <code>new_file.txt</code>。</p>
-<h4 id="shutilrmtree"><a class="markdownIt-Anchor" href="#shutilrmtree"></a> <code>shutil.rmtree()</code></h4>
-<p>用于删除文件夹及其内容。 示例：<code>shutil.rmtree('folder_to_delete')</code></p>
-<p>递归删除 <code>folder_to_delete</code> 文件夹及其所有内容。</p>
-<h4 id="shutilmake_archive"><a class="markdownIt-Anchor" href="#shutilmake_archive"></a> <code>shutil.make_archive()</code></h4>
-<p>用于创建归档文件（例如 ZIP 文件）。</p>
-<p>示例：<code>shutil.make_archive('archive_name', 'zip', 'folder_to_archive')</code></p>
-<p>将 <code>folder_to_archive</code> 文件夹打包为名为 <code>archive_name.zip</code> 的ZIP归档文件。</p>
-<h4 id="shutilunpack_archive"><a class="markdownIt-Anchor" href="#shutilunpack_archive"></a> <code>shutil.unpack_archive()</code></h4>
-<p>用于解压缩归档文件。</p>
-<p>示例：<code>shutil.unpack_archive('archive_name.zip', 'extracted_folder')</code> 将 <code>archive_name.zip</code> 解压缩到 <code>extracted_folder</code>。</p>
-<h4 id="shutildisk_usage"><a class="markdownIt-Anchor" href="#shutildisk_usage"></a> <code>shutil.disk_usage()</code></h4>
-<p>用于获取磁盘使用情况。</p>
-<p>示例：<code>usage = shutil.disk_usage('/')</code> 返回根目录 <code>/</code> 的磁盘使用情况，包括总空间、已用空间和可用空间。</p>
-<h2 id="2-os库"><a class="markdownIt-Anchor" href="#2-os库"></a> 2、os库</h2>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os.path.expanduser()`</span><br></pre></td></tr></table></figure>
-<pre><code>`os.path` 模块提供的一个函数，用于展开用户路径中的波浪号 (`~`) 或类似的表示家目录的符号。
-</code></pre>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os.path.basename()</span><br></pre></td></tr></table></figure>
-<p>​	对于路径 <code>/path/to/some/file.txt</code>，<code>os.path.basename()</code> 将返回 <code>file.txt</code>。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">os.path.splitext()</span><br></pre></td></tr></table></figure>
-<p>​	对于文件名 <code>example.txt</code>， 将返回一个元组 <code>('example', '.txt')</code>，其中 <code>'example'</code> 是文件名部分，<code>.txt</code> 是扩展名部分。</p>
-<h2 id="3-imutils"><a class="markdownIt-Anchor" href="#3-imutils"></a> 3、imutils</h2>
-<h4 id="imutilspathslist_images"><a class="markdownIt-Anchor" href="#imutilspathslist_images"></a> <code>imutils.paths.list_images()</code></h4>
-<p><code>imutils.paths</code> 列出指定目录中的图像文件路径。</p>
-<h4 id="imutilsresize"><a class="markdownIt-Anchor" href="#imutilsresize"></a> <code>imutils.resize()</code></h4>
-<p>用于调整图像大小的函数。可以使用 <code>imutils.resize(image, width=new_width)</code> 来调整图像的宽度为指定的 <code>new_width</code>，同时保持纵横比。</p>
-<h4 id="imutilsrotate"><a class="markdownIt-Anchor" href="#imutilsrotate"></a> <code>imutils.rotate()</code></h4>
-<p>用于旋转图像的函数。<code>imutils.rotate(image, angle=degree)</code> 可以将图像按照给定的角度 <code>degree</code> 进行旋转。</p>
-<h4 id="imutilsopencv2matplotlib"><a class="markdownIt-Anchor" href="#imutilsopencv2matplotlib"></a> <code>imutils.opencv2matplotlib()</code></h4>
-<p>用于将 OpenCV 格式的图像转换为 Matplotlib 可以显示的格式。</p>
-<p>当涉及到图像处理和计算机视觉任务时，<code>imutils</code> 库提供了一系列实用的功能函数。以下是一些其他常用的 <code>imutils</code> 函数：</p>
-<h4 id="imutilsresize-2"><a class="markdownIt-Anchor" href="#imutilsresize-2"></a> <code>imutils.resize()</code></h4>
-<p>用于调整图像大小的函数。可以使用 <code>imutils.resize(image, width=new_width)</code> 来调整图像的宽度为指定的 <code>new_width</code>，同时保持纵横比。</p>
-<h4 id="imutilsrotate_bound"><a class="markdownIt-Anchor" href="#imutilsrotate_bound"></a> <code>imutils.rotate_bound()</code></h4>
-<p>与 <code>imutils.rotate()</code> 类似，但是 <code>imutils.rotate_bound(image, angle=degree)</code> 会自动调整图像的大小，确保旋转后的图像完整显示在新的画布内。</p>
-<h4 id="imutilsauto_canny"><a class="markdownIt-Anchor" href="#imutilsauto_canny"></a> <code>imutils.auto_canny()</code></h4>
-<p>自适应边缘检测算法，<code>imutils.auto_canny(image, sigma=0.33)</code> 可以根据图像的梯度值智能地计算边缘检测的低阈值和高阈值。</p>
-<h4 id="imutilsgrab_contours"><a class="markdownIt-Anchor" href="#imutilsgrab_contours"></a> <code>imutils.grab_contours()</code></h4>
-<p>用于从不同版本的 OpenCV 中提取轮廓的兼容函数。可以使用 <code>contours = imutils.grab_contours(cnts)</code> 从轮廓对象 <code>cnts</code> 中提取实际的轮廓。</p>
-<h4 id="imutilsincrease_brightness"><a class="markdownIt-Anchor" href="#imutilsincrease_brightness"></a> <code>imutils.increase_brightness()</code></h4>
-<p>用于增加图像亮度的函数。<code>imutils.increase_brightness(image, value=25)</code> 可以通过添加 <code>value</code> 值来提高图像的亮度。</p>
-<h4 id="imutilstranslate"><a class="markdownIt-Anchor" href="#imutilstranslate"></a> <code>imutils.translate()</code></h4>
-<p>用于平移图像的函数。<code>imutils.translate(image, x=shift_x, y=shift_y)</code> 可以将图像沿着 x 和 y 轴平移指定的偏移量。</p>
-<h2 id="4-uuid"><a class="markdownIt-Anchor" href="#4-uuid"></a> 4、uuid</h2>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uuid.uuid1()</span><br></pre></td></tr></table></figure>
-<p>​	<code>uuid</code>库中的<code>uuid1()</code>函数用于生成基于主机ID和当前时间的UUID。它基于主机的MAC地址和当前时间戳来生成UUID，因此它是基于时间的UUID。这个函数返回的UUID是32个字符的字符串，表示为32个长度的十六进制数字，通常显示为8-4-4-4-12的分段形式。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uuid.uuid4()</span><br></pre></td></tr></table></figure>
-<p><code>	uuid4()</code>函数用于生成随机UUID。它使用伪随机数来生成UUID，所以它是不可预测的。返回的UUID也是一个32个字符的字符串，通常显示为8-4-4-4-12的分段形式。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uuid.UUID()</span><br></pre></td></tr></table></figure>
-<p><code>	UUID()</code>函数用于将字符串形式的UUID转换为UUID对象。这对于将来自外部来源的UUID字符串转换为Python中的UUID对象很有用。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2023/12/22/2023%E5%B9%B412%E6%9C%8822%E6%97%A5-python%E4%B9%8Bos%E5%BA%93/" data-id="clrwazlr2000u7ov40oxkbtph" class="article-share-link">分享</a>
+      <a data-url="https://shakewely.github.io/2024/01/29/2024%E5%B9%B41%E6%9C%8829%E6%97%A5-python%E4%B9%8B%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/" data-id="cltgreexw0007w8v48jfj3kid" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2023年12月22日-车牌识别项目" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2023/12/22/2023%E5%B9%B412%E6%9C%8822%E6%97%A5-%E8%BD%A6%E7%89%8C%E8%AF%86%E5%88%AB%E9%A1%B9%E7%9B%AE/" class="article-date">
-  <time class="post-time" datetime="2023-12-21T17:02:33.000Z" itemprop="datePublished">
-    <span class="post-month">12月</span><br/>
-    <span class="post-day">22</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/12/22/2023%E5%B9%B412%E6%9C%8822%E6%97%A5-%E8%BD%A6%E7%89%8C%E8%AF%86%E5%88%AB%E9%A1%B9%E7%9B%AE/">2023年12月16-10日 五日车牌识别项目</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="车牌识别项目"><a class="markdownIt-Anchor" href="#车牌识别项目"></a> 车牌识别项目</h1>
-<h2 id="1"><a class="markdownIt-Anchor" href="#1"></a> 1、</h2>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2023/12/22/2023%E5%B9%B412%E6%9C%8822%E6%97%A5-%E8%BD%A6%E7%89%8C%E8%AF%86%E5%88%AB%E9%A1%B9%E7%9B%AE/" data-id="clrwazlr2000x7ov40u57687h" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl/" rel="tag">dl</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2023年12月8日-深度学习训练总结" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2023/12/08/2023%E5%B9%B412%E6%9C%888%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AE%AD%E7%BB%83%E6%80%BB%E7%BB%93/" class="article-date">
-  <time class="post-time" datetime="2023-12-08T12:27:25.000Z" itemprop="datePublished">
-    <span class="post-month">12月</span><br/>
-    <span class="post-day">08</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/12/08/2023%E5%B9%B412%E6%9C%888%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AE%AD%E7%BB%83%E6%80%BB%E7%BB%93/">2023年12月8日 深度学习训练总结</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="1-如何不用卷积对图片分类"><a class="markdownIt-Anchor" href="#1-如何不用卷积对图片分类"></a> 1 如何不用卷积对图片分类</h3>
-<p>全连接神经网络，</p>
-<p>HOG</p>
-<h3 id="2-断点继续训练数据集是否保证不变比较好"><a class="markdownIt-Anchor" href="#2-断点继续训练数据集是否保证不变比较好"></a> 2 断点继续训练，数据集是否保证不变比较好</h3>
-<h4 id="数据集不变的好处"><a class="markdownIt-Anchor" href="#数据集不变的好处"></a> 数据集不变的好处：</h4>
-<ol>
-<li><strong>一致性</strong>：在继续训练时使用相同的数据集，可以确保模型在相同的数据分布上进行训练，保持了训练的一致性。</li>
-<li><strong>避免分布变化</strong>：如果数据集发生变化，可能会引入新的数据分布，导致模型在新数据上表现不佳。</li>
-<li><strong>追溯性</strong>：如果需要回溯到特定训练点以排查问题或者进行对比实验，保持数据集不变会更容易复现相同的训练状态。</li>
-</ol>
-<h4 id="数据集变化的情况"><a class="markdownIt-Anchor" href="#数据集变化的情况"></a> 数据集变化的情况：</h4>
-<ol>
-<li><strong>数据扩充</strong>：有时候会对现有数据进行扩充、修正或更新，这种情况下训练过程中可能会引入新的数据。</li>
-<li><strong>实时学习</strong>：某些场景下，模型需要不断从实时流数据中学习，此时数据集可能会不断变化。</li>
-</ol>
-<h3 id="3-训练的数据集不同加载预训练模型参数还有用吗"><a class="markdownIt-Anchor" href="#3-训练的数据集不同加载预训练模型参数还有用吗"></a> 3 训练的数据集不同，加载预训练模型参数还有用吗</h3>
-<p>预训练模型在大规模数据集上进行了训练，学习到了<strong>通用的特征表示</strong>，可能有助于加速模型收敛并提高模型的表现。</p>
-<p>如果你的训练数据集与预训练模型的训练数据集<strong>非常不同</strong>（，可能需要更多的微调或者甚至完全冻结预训练模型的参数。</p>
-<h4 id="4-model-val准确率再80上不去"><a class="markdownIt-Anchor" href="#4-model-val准确率再80上不去"></a> 4 model val准确率再80上不去？</h4>
-<img src="./2023年12月8日-深度学习训练总结/image-20231208224957461.png" alt="image-20231208224957461" style="zoom: 80%;" />
-<h4 id="5-什么是梯度消失"><a class="markdownIt-Anchor" href="#5-什么是梯度消失"></a> 5 什么是梯度消失</h4>
-<p>进行反向传播算法时，较低层的权重更新变得非常小甚至消失的现象。这种情况通常发生在很深的神经网络中</p>
-<p>在反向传播期间，梯度会随着每一层的权重更新而逐渐减小。对于某些激活函数，特别是 Sigmoid 函数在输入很大或很小时会饱和，导致函数的梯度非常接近于零。</p>
-<p><img src="./2023%E5%B9%B412%E6%9C%888%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AE%AD%E7%BB%83%E6%80%BB%E7%BB%93/image-20231208233827091.png" alt="image-20231208233827091" /></p>
-<h4 id="6-如何设置学习率衰减"><a class="markdownIt-Anchor" href="#6-如何设置学习率衰减"></a> 6 如何设置学习率衰减</h4>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">import torch.optim as optim</span><br><span class="line">from torch.optim import lr_scheduler</span><br><span class="line"></span><br><span class="line"># 定义模型和优化器</span><br><span class="line">model = YourModel()  # 请替换成您的模型</span><br><span class="line">optimizer = optim.SGD(model.parameters(), lr=0.1)  # 设置初始学习率</span><br><span class="line"></span><br><span class="line"># 定义学习率衰减器，例如 StepLR</span><br><span class="line"># StepLR 每隔 step_size 个epoch将学习率乘以 gamma</span><br><span class="line"># 这里可以根据需要选择其他的学习率衰减策略，如使用其他的调度器类</span><br><span class="line">scheduler = lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.1)</span><br><span class="line"></span><br><span class="line"># 在训练过程中，每个 epoch 结束后更新学习率</span><br><span class="line">for epoch in range(num_epochs):</span><br><span class="line">    # 训练步骤，包括前向传播、损失计算、反向传播等</span><br><span class="line"></span><br><span class="line">    # 更新学习率</span><br><span class="line">    scheduler.step()</span><br><span class="line"></span><br><span class="line">    # 其他训练步骤</span><br><span class="line">    # ...</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2023/12/08/2023%E5%B9%B412%E6%9C%888%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AE%AD%E7%BB%83%E6%80%BB%E7%BB%93/" data-id="clrwazlr300117ov4fgy3an0d" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl/" rel="tag">dl</a></li></ul>
 
     </footer>
   </div>
@@ -1144,9 +1626,9 @@ fatal: Could not read from remote repository.不一样</p>
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>61</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>69</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>16</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>17</strong><br>标签</div></a>
     </div>
 
 

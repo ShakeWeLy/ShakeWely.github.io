@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2024年3月3日 面试更新——代码模型 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="代码模型  模型加密 模型加密的几个方式：  模型文件直接加密，把模型的二进制文件直接加密，一般都会有加密算法，对模型的前xx字节进行加密，解密的时候对前xx字节进行解密即可，这种加密只在load时候做，会影响模型加载速度，但是不影响运行速度 模型结构不加密，模型权重加密，有的可以采用类似于模型压缩的方法把权重压缩了，推理时以自定义协议读取加载推理 也需要对解密模型的代码进行加密，代码混淆要做，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2024年3月3日 面试更新——代码模型">
+<meta property="og:url" content="https://shakewely.github.io/2024/03/03/2024%E5%B9%B43%E6%9C%883%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%9B%B4%E6%96%B0%E2%80%94%E2%80%94%E4%BB%A3%E7%A0%81%E6%A8%A1%E5%9E%8B/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="代码模型  模型加密 模型加密的几个方式：  模型文件直接加密，把模型的二进制文件直接加密，一般都会有加密算法，对模型的前xx字节进行加密，解密的时候对前xx字节进行解密即可，这种加密只在load时候做，会影响模型加载速度，但是不影响运行速度 模型结构不加密，模型权重加密，有的可以采用类似于模型压缩的方法把权重压缩了，推理时以自定义协议读取加载推理 也需要对解密模型的代码进行加密，代码混淆要做，">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2024/03/03/2024%E5%B9%B43%E6%9C%883%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%9B%B4%E6%96%B0%E2%80%94%E2%80%94%E4%BB%A3%E7%A0%81%E6%A8%A1%E5%9E%8B/image-20240303145240993.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/03/03/2024%E5%B9%B43%E6%9C%883%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%9B%B4%E6%96%B0%E2%80%94%E2%80%94%E4%BB%A3%E7%A0%81%E6%A8%A1%E5%9E%8B/image-20240303145305875.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/03/03/2024%E5%B9%B43%E6%9C%883%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%9B%B4%E6%96%B0%E2%80%94%E2%80%94%E4%BB%A3%E7%A0%81%E6%A8%A1%E5%9E%8B/image-20240303145254628.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/03/03/2024%E5%B9%B43%E6%9C%883%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%9B%B4%E6%96%B0%E2%80%94%E2%80%94%E4%BB%A3%E7%A0%81%E6%A8%A1%E5%9E%8B/image-20240303145428861.png">
+<meta property="article:published_time" content="2024-03-03T06:16:37.000Z">
+<meta property="article:modified_time" content="2024-03-03T10:15:20.018Z">
+<meta property="article:author" content="Weakliy">
+<meta property="article:tag" content="面试总结">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shakewely.github.io/2024/03/03/2024%E5%B9%B43%E6%9C%883%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%9B%B4%E6%96%B0%E2%80%94%E2%80%94%E4%BB%A3%E7%A0%81%E6%A8%A1%E5%9E%8B/image-20240303145240993.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>69</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>17</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2024年3月3日-面试更新——代码模型" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2024/03/03/2024%E5%B9%B43%E6%9C%883%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%9B%B4%E6%96%B0%E2%80%94%E2%80%94%E4%BB%A3%E7%A0%81%E6%A8%A1%E5%9E%8B/" class="article-date">
+  <time class="post-time" datetime="2024-03-03T06:16:37.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">03</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2024年3月3日 面试更新——代码模型
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="代码模型"><a class="markdownIt-Anchor" href="#代码模型"></a> 代码模型</h1>
+<h2 id="模型加密"><a class="markdownIt-Anchor" href="#模型加密"></a> 模型加密</h2>
+<p>模型加密的几个方式：</p>
+<ul>
+<li>模型文件直接加密，把模型的二进制文件直接加密，一般都会有加密算法，对模型的前xx字节进行加密，解密的时候对前xx字节进行解密即可，这种加密只在load时候做，会影响模型加载速度，但是不影响运行速度</li>
+<li>模型结构不加密，模型权重加密，有的可以采用类似于模型压缩的方法把权重压缩了，推理时以自定义协议读取加载推理</li>
+<li>也需要对解密模型的代码进行加密，代码混淆要做，不过这样会影响解密代码也就是load模型过程，会变慢，就看你代码混淆做到什么程度</li>
+</ul>
+<h2 id="模型转换"><a class="markdownIt-Anchor" href="#模型转换"></a> 模型转换</h2>
+<p>模型可能是各种格式的：</p>
+<ul>
+<li>Caffe</li>
+<li>ONNX</li>
+<li>Pytorch</li>
+<li>TFLITE</li>
+<li>NCNN、MNN</li>
+</ul>
+<h4 id="模型转换后一般要做"><a class="markdownIt-Anchor" href="#模型转换后一般要做"></a> 模型转换后一般要做</h4>
+<ul>
+<li>转换后看一下模型的输入输出类型、维度、名称、数量啥的是否和之前一致</li>
+<li>转换后首先跑一张训练时的图（或者一批图），看下新模型的输出和旧模型差多少，一定要保证最终输入到模型的tensor一致（也可以使用random输入或者ones输入测试，不过对于模型权重分布特殊的模型来说，对于这种输入可能评测不是很准确）</li>
+<li>批量跑测试集测一下精度是否一致</li>
+<li>benchmark转换后模型的速度是否符合预期</li>
+</ul>
+<h4 id="常见的问题"><a class="markdownIt-Anchor" href="#常见的问题"></a> 常见的问题</h4>
+<ul>
+<li>转换后模型精度问题，输出为nan、精度完全错乱</li>
+<li>转换后模型batch=1正常，多batch结果错乱</li>
+<li>转换后输入/输出类型维度啥的错误</li>
+<li>转换后模型速度未达到预期</li>
+<li>未完待续</li>
+</ul>
+<h2 id="模型优化"><a class="markdownIt-Anchor" href="#模型优化"></a> 模型优化</h2>
+<p>小到优化一个<a target="_blank" rel="noopener" href="https://blog.csdn.net/agq358/article/details/125095432"><strong>op</strong></a>（Op就是Kernel的集合，一个Op代表的是有一定共性的多个Kernel便于在<a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2306404">计算图和图优化</a>中进行表示），大概优化整个推理pipeline，可以干的事情很多。</p>
+<h3 id="合并-替换op算子"><a class="markdownIt-Anchor" href="#合并-替换op算子"></a> 合并、替换op算子</h3>
+<p>很多框架在导出的时候就会<strong>自动合并一些操作</strong>，比如torch.onnx在导出<strong>conv+bn</strong>的时候会将bn吸到前面的conv中，比较常见了。<br>
+但也有一些<strong>可以合并的操作，<strong>假如框架代码还没有实现该pattern则不会合并，不过我们也可以自己合并，这里需要经验了，需要我们熟知各种op的合并方式。<br>
+可以自己合并一些操作，比如下图中的</strong>convTranspose+Add+BN</strong>，是不常见的Squence(序列)的pattern，如果自己愿意的话，可以直接在ONNX中进行合并，把权重关系搞对就行</p>
+<p><img src="/2024/03/03/2024%E5%B9%B43%E6%9C%883%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%9B%B4%E6%96%B0%E2%80%94%E2%80%94%E4%BB%A3%E7%A0%81%E6%A8%A1%E5%9E%8B/image-20240303145240993.png" alt="image-20240303145240993"></p>
+<p>列举一些合并的例子，总之就是将多个op合成大op，节省计算量以及数据搬运的时间：</p>
+<ul>
+<li>conv/transposeConv+bn</li>
+<li>多个支路的conv合并为group conv</li>
+<li>gemm + bias -&gt; conv</li>
+</ul>
+<p><img src="/2024/03/03/2024%E5%B9%B43%E6%9C%883%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%9B%B4%E6%96%B0%E2%80%94%E2%80%94%E4%BB%A3%E7%A0%81%E6%A8%A1%E5%9E%8B/image-20240303145305875.png" alt="image-20240303145305875"></p>
+<p>多路合并</p>
+<p><img src="/2024/03/03/2024%E5%B9%B43%E6%9C%883%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%9B%B4%E6%96%B0%E2%80%94%E2%80%94%E4%BB%A3%E7%A0%81%E6%A8%A1%E5%9E%8B/image-20240303145254628.png" alt="image-20240303145254628"></p>
+<p>既可以融合一些算子，当然也可以替换一些算子：</p>
+<ul>
+<li>relu6替换为max(0,6)</li>
+</ul>
+<h3 id="蒸馏-剪枝"><a class="markdownIt-Anchor" href="#蒸馏-剪枝"></a> 蒸馏、剪枝</h3>
+<p>剪枝后的模型比未剪枝的同等size大小精度更高。<br>
+具体的可以参考这篇：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1710.01878">https://arxiv.org/abs/1710.01878</a></p>
+<p>剪枝的方法可以看zomi总结的ppt(来自 <a target="_blank" rel="noopener" href="https://github.com/chenzomi12/DeepLearningSystem">https://github.com/chenzomi12/DeepLearningSystem</a>)：</p>
+<p><img src="/2024/03/03/2024%E5%B9%B43%E6%9C%883%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%9B%B4%E6%96%B0%E2%80%94%E2%80%94%E4%BB%A3%E7%A0%81%E6%A8%A1%E5%9E%8B/image-20240303145428861.png" alt="image-20240303145428861"></p>
+<p>​</p>
+<p>蒸馏可以使同结构的小模型精度提升接近大模型的精度。</p>
+<h4 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h4>
+<p>剪枝类似于模型搜索，如果直接<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/127194745">NAS</a>的话，就没有必要剪枝了。</p>
+<h4 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h4>
+<ul>
+<li>to prune or not to prune exploring the efficacy of pruning for model compression</li>
+<li>DAMO-YOLO</li>
+</ul>
+<h3 id="量化"><a class="markdownIt-Anchor" href="#量化"></a> 量化</h3>
+<p>量化目前比较成熟，也有很好的教程（PPQ），很成熟的库（PPQ）</p>
+<ul>
+<li>量化基本概念，与硬件的关系</li>
+<li>PTQ量化和QAT量化，两种量化还有很多方法。PTQ有  EasyQuant（EQ）、；QAT有LSQ(Learned Step Size Quantization)、DSQ(Differentiable Soft Quantization)</li>
+</ul>
+<p>不是所有模型、所有op都适合量化：</p>
+<ul>
+<li>重参数量化 <a target="_blank" rel="noopener" href="https://tech.meituan.com/2022/09/22/yolov6-quantization-in-meituan.html">https://tech.meituan.com/2022/09/22/yolov6-quantization-in-meituan.html</a></li>
+<li>量化模型直接输入int8 进行测试</li>
+</ul>
+<p>注意点：</p>
+<ul>
+<li>有些模型量化后，虽然整体指标没有变化（某个评价标准，比如coco的mAP），但是实际使用中，发现之前的一些效果变差了，这种情况大多是调用模型的策略效果与这个模型的耦合度比较高了。举个例子，比如之前这个模型对小目标检测效果好，但是量化后，小目标检测效果差了（然而中目标效果好了）所以导致与小目标耦合度比较高的策略兼容度不高，导致算法的整体精度下降。这种情况就比较尴尬，你可以调整策略，或者重新量化模型，加上一些约束使其在某些场景下尽可能和原始模型表现一致，但这个需要时间去优化了，有较高的时间成本。</li>
+</ul>
+<h4 id="参考-2"><a class="markdownIt-Anchor" href="#参考-2"></a> 参考</h4>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=Mzg3ODU2MzY5MA==&amp;mid=2247488318&amp;idx=1&amp;sn=048c1b78f3b2cb25c05abb115f20d6c6&amp;chksm=cf108b3bf867022d1b214928102d65ed691c81955b59ca02bccdee92584ad9aa8e390e1d2978&amp;token=1097456929&amp;lang=zh_CN&amp;scene=21#wechat_redirect">必看部署系列~懂你的神经网络量化教程：第一讲！</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=Mzg3ODU2MzY5MA==&amp;mid=2247488838&amp;idx=1&amp;sn=56107c468d5b683a574e6046af3a541f&amp;chksm=cf108d43f8670455736a83546eb5ed81abc9194d7d4c2359af393f26e3bddd1379f777e35f35&amp;token=1097456929&amp;lang=zh_CN&amp;scene=21#wechat_redirect">量化番外篇——TensorRT-8的量化细节</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=Mzg3ODU2MzY5MA==&amp;mid=2247489317&amp;idx=1&amp;sn=797e32276bd4f55948d992f455415943&amp;chksm=cf108f20f8670636b27be2431d5a4fdef1689eaa672e59ffc7d6181d2afb13a9a050d9b6b4a5&amp;token=1097456929&amp;lang=zh_CN&amp;scene=21#wechat_redirect">实践torch.fx第二篇——基于FX的PTQ量化实操</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/openppl-public/ppq">https://github.com/openppl-public/ppq</a></li>
+</ul>
+<h3 id="算子op优化"><a class="markdownIt-Anchor" href="#算子op优化"></a> 算子op优化</h3>
+<p>性能计算的一些入门问题，可以看下这个的回答：</p>
+<ul>
+<li>想进大厂的高性能计算岗位需要做哪些准备？</li>
+</ul>
+<p>大部分优化op的场景，很多原因是<strong>原生op的实现可能不是最优</strong>的，有很大的优化空间。<br>
+比如LayerNorm这个操作，Pytorch原生的实现比较慢，于是就有了优化空间：</p>
+<ul>
+<li>CUDA优化之LayerNorm性能优化实践</li>
+</ul>
+<p>同理，很多CUDA实现的OP可能不是最优的，只有你有精力，就可以进行优化。也要考虑是这个优化值不值，在整个模型中的占比大不大，投入产出比怎么样blabla。</p>
+<p>对于CUDA还好些，资料很多，很多op网上都有开源的不错的实现（尤其是gemm），抄抄改改就可以了。</p>
+<p>不过对于一些没有CUDA那么火的平台或者语言，比如arm平台的neon或者npu，这些开源的算子实现少一些，大部分需要自己手写。分析模型哪些op慢之后，手动优化一下。</p>
+<p>知乎上也有很多优化系列的教程，跟着一步一步来吧：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/478846788">cuda 入门的正确姿势：how-to-optimize-gemm</a></li>
+<li>深入浅出GPU优化系列：elementwise优化及CUDA工具链介绍</li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/441146275">[施工中] CUDA GEMM 理论性能分析与 kernel 优化</a></li>
+<li>深入浅出GPU优化系列：reduce优化</li>
+</ul>
+<p>有几种可以自动生成op的框架：</p>
+<ul>
+<li>TVM</li>
+<li>triton（此triton非彼triton）</li>
+</ul>
+<h3 id="调优可视化工具"><a class="markdownIt-Anchor" href="#调优可视化工具"></a> 调优可视化工具</h3>
+<p>可视化工具</p>
+<ul>
+<li>画模型图的工具，graphvis</li>
+<li>NVIDIA的nsight system和nsight compute</li>
+<li>pytorch的profiler</li>
+</ul>
+<h2 id="更多推理框架ai编译器"><a class="markdownIt-Anchor" href="#更多推理框架ai编译器"></a> 更多推理框架/AI编译器</h2>
+<p><a target="_blank" rel="noopener" href="https://github.com/merrymercy/awesome-tensor-compilers">https://github.com/merrymercy/awesome-tensor-compilers</a></p>
+<h3 id="onnx"><a class="markdownIt-Anchor" href="#onnx"></a> ONNX</h3>
+<h4 id="相关文章"><a class="markdownIt-Anchor" href="#相关文章"></a> 相关文章：</h4>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/daquexian/onnx-simplifier">https://github.com/daquexian/onnx-simplifier</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/ZhangGe6/onnx-modifier">https://github.com/ZhangGe6/onnx-modifier</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT/tree/master/tools/onnx-graphsurgeon">https://github.com/NVIDIA/TensorRT/tree/master/tools/onnx-graphsurgeon</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/onnx/onnx">https://github.com/onnx/onnx</a></li>
+<li>模型部署入门教程（五）：ONNX 模型的修改与调试</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/onnx/onnx/blob/main/docs/Operators.md">https://github.com/onnx/onnx/blob/main/docs/Operators.md</a></li>
+</ul>
+<h3 id="tvm"><a class="markdownIt-Anchor" href="#tvm"></a> TVM</h3>
+<ul>
+<li>如何评测模型的速度</li>
+<li>如何benchmark模型各层的错误</li>
+<li>解析trtexec中的benchmark</li>
+<li>解析TVM中的graph和VM</li>
+</ul>
+<h3 id="tensorrt"><a class="markdownIt-Anchor" href="#tensorrt"></a> TensorRT</h3>
+<ul>
+<li>python端口调用</li>
+<li>C++端口调用</li>
+<li>多线程调用</li>
+<li>各种模型转换TensorRT（ONNX、Pytorch、TensorFLow）</li>
+<li>各种和TensorRT相关的转换库</li>
+</ul>
+<h4 id="自定义插件"><a class="markdownIt-Anchor" href="#自定义插件"></a> 自定义插件</h4>
+<p>如果模型中保存TensorRT不支持的算子，就需要自己实现cuda操作并且集成到TensorRT中。<br>
+现在也有很多可以生成插件的工具：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/NVIDIA-AI-IOT/tensorrt_plugin_generator">https://github.com/NVIDIA-AI-IOT/tensorrt_plugin_generator</a></li>
+</ul>
+<p>相关资料：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/NVIDIA/trt-samples-for-hackathon-cn">https://github.com/NVIDIA/trt-samples-for-hackathon-cn</a></li>
+</ul>
+<h3 id="libtorch"><a class="markdownIt-Anchor" href="#libtorch"></a> libtorch</h3>
+<p>简单好用的对Pytorch模型友好的C++推理库。</p>
+<ul>
+<li>torch.jit.trace</li>
+<li>torch.jit.script</li>
+<li>python导出libtorch模型，C++加载libtorch模型</li>
+</ul>
+<h3 id="aitemplate"><a class="markdownIt-Anchor" href="#aitemplate"></a> AITemplate</h3>
+<p>AITemplate 加速Stable Diffusion的效果比TensorRT要好不少。<br>
+测试了一个res50的模型，利用<code>TensorRT-8.5.1.7</code>和<code>AITemplate-0.1dev</code>转化后简单测试了下速度，精度都是FP16，显卡是A4000。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th style="text-align:left">4x3x224x224</th>
+<th style="text-align:left">8x3x224x224</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">TensorRT</td>
+<td style="text-align:left">2.07885 ms</td>
+<td style="text-align:left">3.49877 ms</td>
+</tr>
+<tr>
+<td style="text-align:left">AITemplate</td>
+<td style="text-align:left">1.36401 ms</td>
+<td style="text-align:left">2.38946 ms</td>
+</tr>
+</tbody>
+</table>
+<h2 id="高性能计算"><a class="markdownIt-Anchor" href="#高性能计算"></a> 高性能计算</h2>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2024/03/03/2024%E5%B9%B43%E6%9C%883%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%9B%B4%E6%96%B0%E2%80%94%E2%80%94%E4%BB%A3%E7%A0%81%E6%A8%A1%E5%9E%8B/" data-id="cltgreey5000rw8v4e1zv3zw6" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93/" rel="tag">面试总结</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2024/03/03/2024%E5%B9%B43%E6%9C%883%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%9B%B4%E6%96%B0/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2024年3月3日 面试更新——大模型</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>69</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>17</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2023 - 2024 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

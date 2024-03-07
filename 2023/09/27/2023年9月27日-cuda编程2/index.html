@@ -5,42 +5,42 @@
   
   <title>cuda编程2 | Weakliy_Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="1 打印核函数的helloword">
+  <meta name="description" content="1 总结 打印核函数的helloword">
 <meta property="og:type" content="article">
 <meta property="og:title" content="cuda编程2">
 <meta property="og:url" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/index.html">
 <meta property="og:site_name" content="Weakliy_Blog">
-<meta property="og:description" content="1 打印核函数的helloword">
+<meta property="og:description" content="1 总结 打印核函数的helloword">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927013114531.png">
-<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927014405611.png">
-<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927014434932.png">
-<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927014417233.png">
-<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927014503416.png">
-<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927014754011.png">
-<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927014804867.png">
-<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927015027916.png">
-<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927015059462.png">
-<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927015218279.png">
-<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927015258301.png">
-<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927015307806.png">
-<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927020206228.png">
-<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927020351307.png">
-<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927020513187.png">
-<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927020754977.png">
-<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927021106475.png">
-<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927021212837.png">
-<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927021546123.png">
-<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927021555549.png">
-<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927154421445.png">
-<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927154702719.png">
-<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927154740546.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927013114531.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927014405611.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927014434932.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927014417233.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927014503416.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927014754011.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927014804867.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927015027916.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927015059462.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927015218279.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927015258301.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927015307806.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927020206228.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927020351307.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927020513187.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927020754977.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927021106475.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927021212837.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927021546123.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927021555549.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927154421445.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927154702719.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927154740546.png">
 <meta property="article:published_time" content="2023-09-26T17:26:45.000Z">
-<meta property="article:modified_time" content="2023-09-27T07:49:00.763Z">
+<meta property="article:modified_time" content="2024-02-11T14:13:04.596Z">
 <meta property="article:author" content="Weakliy">
 <meta property="article:tag" content="cuda">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927013114531.png">
+<meta name="twitter:image" content="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927013114531.png">
   
     <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
   
@@ -72,9 +72,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>61</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>69</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>16</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>17</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -131,30 +131,31 @@
     <div class="article-entry" itemprop="articleBody">
       
         <p>1</p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/62996995/answer/3369541594">总结</a></p>
 <p>打印核函数的helloword</p>
-<p><img src="./2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927013114531.png" alt="image-20230927013114531" /></p>
-<p><img src="./2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927014405611.png" alt="image-20230927014405611" /></p>
-<p><img src="./2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927014434932.png" alt="image-20230927014434932" /></p>
-<p><img src="./2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927014417233.png" alt="image-20230927014417233" /></p>
-<p><img src="./2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927014503416.png" alt="image-20230927014503416" /></p>
-<p><img src="./2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927014754011.png" alt="image-20230927014754011" /></p>
-<p><img src="./2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927014804867.png" alt="image-20230927014804867" /></p>
-<p><img src="./2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927015027916.png" alt="image-20230927015027916" /></p>
-<p><img src="./2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927015059462.png" alt="image-20230927015059462" /></p>
-<p><img src="./2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927015218279.png" alt="image-20230927015218279" /></p>
-<p><img src="./2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927015258301.png" alt="image-20230927015258301" /></p>
-<p><img src="./2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927015307806.png" alt="image-20230927015307806" /></p>
-<p><img src="./2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927020206228.png" alt="image-20230927020206228" /></p>
-<p><img src="./2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927020351307.png" alt="image-20230927020351307" /></p>
-<p><img src="./2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927020513187.png" alt="image-20230927020513187" /></p>
-<p><img src="./2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927020754977.png" alt="image-20230927020754977" /></p>
-<p><img src="./2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927021106475.png" alt="image-20230927021106475" /></p>
-<p><img src="./2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927021212837.png" alt="image-20230927021212837" /></p>
-<p><img src="./2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927021546123.png" alt="image-20230927021546123" /></p>
-<p><img src="./2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927021555549.png" alt="image-20230927021555549" /></p>
-<p><img src="./2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927154421445.png" alt="image-20230927154421445" /></p>
-<p><img src="./2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927154702719.png" alt="image-20230927154702719" /></p>
-<p><img src="./2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927154740546.png" alt="image-20230927154740546" /></p>
+<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927013114531.png" alt="image-20230927013114531"></p>
+<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927014405611.png" alt="image-20230927014405611"></p>
+<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927014434932.png" alt="image-20230927014434932"></p>
+<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927014417233.png" alt="image-20230927014417233"></p>
+<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927014503416.png" alt="image-20230927014503416"></p>
+<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927014754011.png" alt="image-20230927014754011"></p>
+<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927014804867.png" alt="image-20230927014804867"></p>
+<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927015027916.png" alt="image-20230927015027916"></p>
+<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927015059462.png" alt="image-20230927015059462"></p>
+<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927015218279.png" alt="image-20230927015218279"></p>
+<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927015258301.png" alt="image-20230927015258301"></p>
+<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927015307806.png" alt="image-20230927015307806"></p>
+<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927020206228.png" alt="image-20230927020206228"></p>
+<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927020351307.png" alt="image-20230927020351307"></p>
+<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927020513187.png" alt="image-20230927020513187"></p>
+<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927020754977.png" alt="image-20230927020754977"></p>
+<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927021106475.png" alt="image-20230927021106475"></p>
+<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927021212837.png" alt="image-20230927021212837"></p>
+<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927021546123.png" alt="image-20230927021546123"></p>
+<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927021555549.png" alt="image-20230927021555549"></p>
+<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927154421445.png" alt="image-20230927154421445"></p>
+<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927154702719.png" alt="image-20230927154702719"></p>
+<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2/image-20230927154740546.png" alt="image-20230927154740546"></p>
 
       
     </div>
@@ -231,9 +232,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>61</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>69</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>16</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>17</strong><br>标签</div></a>
     </div>
 
 
