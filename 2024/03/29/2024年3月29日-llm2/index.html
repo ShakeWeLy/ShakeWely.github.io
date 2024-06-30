@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2024年3月29日 llm2 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="2 LLM2  2.1处理流程  输入数据： LLM的输入数据是一段文本，可以是一个句子或一段话。文本通常被表示成单词或字符的序列。  Tokenization： 将文本进行Tokenization，将其切分成单词或字符，形成Token序列。 再将文本映射成模型可理解的输入形式，将文本序列转换为整数索引序列 12345序列化-&gt; [&amp;#x27;BOS&amp;#x27;,&amp;#x27;君&amp;#x27;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2024年3月29日 llm2">
+<meta property="og:url" content="https://shakewely.github.io/2024/03/29/2024%E5%B9%B43%E6%9C%8829%E6%97%A5-llm2/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="2 LLM2  2.1处理流程  输入数据： LLM的输入数据是一段文本，可以是一个句子或一段话。文本通常被表示成单词或字符的序列。  Tokenization： 将文本进行Tokenization，将其切分成单词或字符，形成Token序列。 再将文本映射成模型可理解的输入形式，将文本序列转换为整数索引序列 12345序列化-&gt; [&amp;#x27;BOS&amp;#x27;,&amp;#x27;君&amp;#x27;">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2024/03/29/2024%E5%B9%B43%E6%9C%8829%E6%97%A5-llm2/image-20240329125213908.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/03/29/2024%E5%B9%B43%E6%9C%8829%E6%97%A5-llm2/image-20240329125500103.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/03/29/2024%E5%B9%B43%E6%9C%8829%E6%97%A5-llm2/image-20240329131119065.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/03/29/2024%E5%B9%B43%E6%9C%8829%E6%97%A5-llm2/image-20240329131434662.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/03/29/2024%E5%B9%B43%E6%9C%8829%E6%97%A5-llm2/image-20240329131658979.png">
+<meta property="article:published_time" content="2024-03-29T04:40:45.000Z">
+<meta property="article:modified_time" content="2024-03-29T05:17:17.088Z">
+<meta property="article:author" content="Weakliy">
+<meta property="article:tag" content="dl">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shakewely.github.io/2024/03/29/2024%E5%B9%B43%E6%9C%8829%E6%97%A5-llm2/image-20240329125213908.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>74</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>17</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2024年3月29日-llm2" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2024/03/29/2024%E5%B9%B43%E6%9C%8829%E6%97%A5-llm2/" class="article-date">
+  <time class="post-time" datetime="2024-03-29T04:40:45.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">29</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2024年3月29日 llm2
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="2-llm2"><a class="markdownIt-Anchor" href="#2-llm2"></a> 2 LLM2</h1>
+<h2 id="21处理流程"><a class="markdownIt-Anchor" href="#21处理流程"></a> 2.1处理流程</h2>
+<h3 id="输入数据"><a class="markdownIt-Anchor" href="#输入数据"></a> <strong>输入数据</strong>：</h3>
+<p>LLM的输入数据是一段文本，可以是一个句子或一段话。文本通常被表示成单词或字符的序列。</p>
+<h3 id="tokenization"><a class="markdownIt-Anchor" href="#tokenization"></a> <strong>Tokenization</strong>：</h3>
+<p>将文本进行Tokenization，将其切分成单词或字符，形成Token序列。</p>
+<p>再将文本映射成模型可理解的输入形式，将文本序列转换为整数索引序列</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">序列化-&gt; </span><br><span class="line">[&#x27;BOS&#x27;,&#x27;君&#x27;,&#x27;不&#x27;,&#x27;见&#x27;,&#x27;黄&#x27;,&#x27;河&#x27;,&#x27;之&#x27;,&#x27;水&#x27;,&#x27;天&#x27;,&#x27;上&#x27;,&#x27;来&#x27;,&#x27;，&#x27; ,&#x27;奔&#x27;,&#x27;流&#x27;,&#x27;到&#x27;...&#x27;与&#x27;,&#x27;尔&#x27;,&#x27;同&#x27;,&#x27;销&#x27;,&#x27;万&#x27;,&#x27;古&#x27;,&#x27;愁&#x27;,&#x27;EOS&#x27;]</span><br><span class="line"></span><br><span class="line">假设语料库索引化-&gt;</span><br><span class="line">[&#x27;BOS&#x27;,&#x27;10&#x27;,&#x27;3&#x27;,&#x27;67&#x27;,&#x27;89&#x27;,&#x27;21&#x27;,&#x27;45&#x27;,&#x27;55&#x27;,&#x27;61&#x27;,&#x27;4&#x27;,&#x27;324&#x27;,&#x27;565&#x27; ,&#x27;789&#x27;,&#x27;6567&#x27;,&#x27;786&#x27;...&#x27;7869&#x27;,&#x27;9&#x27;,&#x27;3452&#x27;,&#x27;563&#x27;,&#x27;56&#x27;,&#x27;66&#x27;,&#x27;77&#x27;,&#x27;EOS&#x27;]</span><br></pre></td></tr></table></figure>
+<h3 id="embedding"><a class="markdownIt-Anchor" href="#embedding"></a> <strong>Embedding</strong>：</h3>
+<p>将每个Token映射为一个实数向量，为Embeding Vector</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#x27;BOS&#x27;-&gt; [p_&#123;00&#125;,p_&#123;01&#125;,p_&#123;02&#125;,...,p_&#123;0d-1&#125;]</span><br><span class="line">&#x27;10&#x27; -&gt; [p_&#123;10&#125;,p_&#123;11&#125;,p_&#123;12&#125;,...,p_&#123;1d-1&#125;]</span><br><span class="line">&#x27;3&#x27;  -&gt; [p_&#123;20&#125;,p_&#123;21&#125;,p_&#123;22&#125;,...,p_&#123;2d-1&#125;]</span><br><span class="line">...</span><br><span class="line">&#x27;EOS&#x27;-&gt; [p_&#123;n0&#125;,p_&#123;n1&#125;,p_&#123;n2&#125;,...,p_&#123;nd-1&#125;]</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="位置编码"><a class="markdownIt-Anchor" href="#位置编码"></a> <strong>位置编码</strong>：</h3>
+<p>对于Token序列中的每个位置，添加位置编码（Positional Encoding）向量，以提供关于Token在序列中位置的信息。</p>
+<p>位置编码是为了区分不同位置的Token，并为模型提供上下文关系的信息。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[p_&#123;00&#125;,p_&#123;01&#125;,p_&#123;02&#125;,...,p_&#123;0d-1&#125;]       [pe_&#123;00&#125;,pe_&#123;01&#125;,pe_&#123;02&#125;,...,pe_&#123;0d-1&#125;]</span><br><span class="line">[p_&#123;10&#125;,p_&#123;11&#125;,p_&#123;12&#125;,...,p_&#123;1d-1&#125;]       [pe_&#123;10&#125;,pe_&#123;11&#125;,pe_&#123;12&#125;,...,pe_&#123;1d-1&#125;]</span><br><span class="line">[p_&#123;20&#125;,p_&#123;21&#125;,p_&#123;22&#125;,...,p_&#123;2d-1&#125;]    +  [pe_&#123;20&#125;,pe_&#123;21&#125;,pe_&#123;22&#125;,...,pe_&#123;2d-1&#125;]</span><br><span class="line">...                                       ...  </span><br><span class="line">[p_&#123;n0&#125;,p_&#123;n1&#125;,p_&#123;n2&#125;,...,p_&#123;nd-1&#125;]       [pe_&#123;n0&#125;,pe_&#123;n1&#125;,pe_&#123;n2&#125; ,...,pe_&#123;nd-1&#125;]</span><br></pre></td></tr></table></figure>
+<h3 id="transformer"><a class="markdownIt-Anchor" href="#transformer"></a> <strong>Transformer</strong> ：</h3>
+<p>在生成任务中，模型只需要用到Transformer 的decoder阶段，即Decoder-Only，比如GPT、LLaMA 都是。</p>
+<p><img src="/2024/03/29/2024%E5%B9%B43%E6%9C%8829%E6%97%A5-llm2/image-20240329125213908.png" alt="image-20240329125213908"></p>
+<h3 id="自回归生成"><a class="markdownIt-Anchor" href="#自回归生成"></a> <strong>自回归生成</strong>：</h3>
+<p>在生成任务中，使用自回归（Autoregressive）方式，逐个生成输出序列中的每个Token。</p>
+<p>在解码过程中，每次生成一个Token时，使用前面已生成的内容作为上下文，来帮助预测下一个Token。</p>
+<p><img src="/2024/03/29/2024%E5%B9%B43%E6%9C%8829%E6%97%A5-llm2/image-20240329125500103.png" alt="image-20240329125500103"></p>
+<h2 id="22-相关技术"><a class="markdownIt-Anchor" href="#22-相关技术"></a> 2.2 相关技术</h2>
+<h3 id="rope"><a class="markdownIt-Anchor" href="#rope"></a> <strong>RoPE</strong></h3>
+<p><a href="https://link.zhihu.com/?target=https%3A//arxiv.org/pdf/2104.09864.pdf">RoPE位置编码</a></p>
+<p><img src="/2024/03/29/2024%E5%B9%B43%E6%9C%8829%E6%97%A5-llm2/image-20240329131119065.png" alt="image-20240329131119065"></p>
+<h3 id="kv-cache-gqa"><a class="markdownIt-Anchor" href="#kv-cache-gqa"></a> <strong>KV Cache &amp; GQA</strong></h3>
+<p>Attention计算时的KV</p>
+<p>通过将每次计算的K和V缓存下来，之后新的序列进来时只需要从KV Cache中读取之前的KV值即可，就不需要再去重复计算之前的KV了。</p>
+<p><img src="/2024/03/29/2024%E5%B9%B43%E6%9C%8829%E6%97%A5-llm2/image-20240329131434662.png" alt="image-20240329131434662"></p>
+<p>至于为什么不用缓存Q？</p>
+<p><strong>GQA</strong></p>
+<p><img src="/2024/03/29/2024%E5%B9%B43%E6%9C%8829%E6%97%A5-llm2/image-20240329131658979.png" alt="image-20240329131658979"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2024/03/29/2024%E5%B9%B43%E6%9C%8829%E6%97%A5-llm2/" data-id="clx4fkxni0007n0v4cpjj3kck" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl/" rel="tag">dl</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          2024年4月18日 深度学习自制框架
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2024/03/13/2024%E5%B9%B43%E6%9C%883%E6%97%A5-pythons%E5%88%B7%E9%A2%98/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2024年3月3日 python内存管理</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>74</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>17</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2023 - 2024 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

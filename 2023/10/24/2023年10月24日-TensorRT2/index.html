@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2023年10月24日 transformer学习 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1 什么是TensorRT  1.1 TensorRT介绍  TensorRT干啥的，能做什么 TensorRT与训练框架（Pytorch、TensorFlow）以及推理引擎（onnxruntime、openvino）的比较 学习TensorRT提前要会什么 什么人应该学TensorRT   1.2 基本概念和使用方式  支持模型、数据类型、支持的IO、支持的功能 TensorRT中contex">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2023年10月24日 transformer学习">
+<meta property="og:url" content="https://shakewely.github.io/2023/10/24/2023%E5%B9%B410%E6%9C%8824%E6%97%A5-TensorRT2/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="1 什么是TensorRT  1.1 TensorRT介绍  TensorRT干啥的，能做什么 TensorRT与训练框架（Pytorch、TensorFlow）以及推理引擎（onnxruntime、openvino）的比较 学习TensorRT提前要会什么 什么人应该学TensorRT   1.2 基本概念和使用方式  支持模型、数据类型、支持的IO、支持的功能 TensorRT中contex">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-10-24T11:51:56.000Z">
+<meta property="article:modified_time" content="2024-03-03T04:48:16.820Z">
+<meta property="article:author" content="Weakliy">
+<meta property="article:tag" content="TensorRT">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>74</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>17</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2023年10月24日-TensorRT2" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/10/24/2023%E5%B9%B410%E6%9C%8824%E6%97%A5-TensorRT2/" class="article-date">
+  <time class="post-time" datetime="2023-10-24T11:51:56.000Z" itemprop="datePublished">
+    <span class="post-month">10月</span><br/>
+    <span class="post-day">24</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2023年10月24日 transformer学习
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1-什么是tensorrt"><a class="markdownIt-Anchor" href="#1-什么是tensorrt"></a> 1 什么是TensorRT</h2>
+<h3 id="11-tensorrt介绍"><a class="markdownIt-Anchor" href="#11-tensorrt介绍"></a> 1.1 TensorRT介绍</h3>
+<ul>
+<li>TensorRT干啥的，能做什么</li>
+<li>TensorRT与训练框架（Pytorch、TensorFlow）以及推理引擎（onnxruntime、openvino）的比较</li>
+<li>学习TensorRT提前要会什么</li>
+<li>什么人应该学TensorRT</li>
+</ul>
+<h3 id="12-基本概念和使用方式"><a class="markdownIt-Anchor" href="#12-基本概念和使用方式"></a> 1.2 基本概念和使用方式</h3>
+<ul>
+<li>支持模型、数据类型、支持的IO、支持的功能</li>
+<li>TensorRT中context、engine、builder概念</li>
+<li>环境搭建、运行环境</li>
+</ul>
+<h3 id="13-工作流程"><a class="markdownIt-Anchor" href="#13-工作流程"></a> 1.3 工作流程</h3>
+<ul>
+<li>python端API</li>
+<li>C++端API</li>
+<li>简单的demo</li>
+</ul>
+<h2 id="2-tensorrt完整流程"><a class="markdownIt-Anchor" href="#2-tensorrt完整流程"></a> 2 TensorRT完整流程</h2>
+<h3 id="21-onnx转tensorrt"><a class="markdownIt-Anchor" href="#21-onnx转tensorrt"></a> 2.1 ONNX转TensorRT</h3>
+<ul>
+<li>parser方式转换模型</li>
+<li>onnx2trt简单分析</li>
+<li>graphsurgeon修改onnx网络</li>
+<li>一些注意点</li>
+</ul>
+<h3 id="22-框架内使用tensorrt"><a class="markdownIt-Anchor" href="#22-框架内使用tensorrt"></a> 2.2 框架内使用tensorrt</h3>
+<ul>
+<li>torch_tensorrt介绍、使用</li>
+<li>torch_tensorrt源码解析</li>
+</ul>
+<h2 id="3-tensorrt进阶"><a class="markdownIt-Anchor" href="#3-tensorrt进阶"></a> 3 TensorRT进阶</h2>
+<h3 id="31-如何debug"><a class="markdownIt-Anchor" href="#31-如何debug"></a> 3.1 如何debug</h3>
+<ul>
+<li>精度问题debug（nan、精度不匹配）</li>
+<li>网络可视化（netron、trt-explorer）</li>
+<li>polygraphy（TensorRT官方提供的非常好的工具）</li>
+</ul>
+<h3 id="32-api搭建网络"><a class="markdownIt-Anchor" href="#32-api搭建网络"></a> 3.2 API搭建网络</h3>
+<ul>
+<li>API搭建网络基本方式、权重提取，这部分强烈建议看TensorRTx</li>
+<li>explicit batch vs implicit batch</li>
+</ul>
+<h3 id="33-自定义插件plugin"><a class="markdownIt-Anchor" href="#33-自定义插件plugin"></a> 3.3 自定义插件plugin</h3>
+<ul>
+<li>如何写自定义plugin、Plugin中关键的API与注意点</li>
+<li>自定义插件示例、集成plugin到trt中、参与trt序列化</li>
+<li>plugin的生命周期、资源管理</li>
+<li>dynamic-shape-plugin</li>
+<li>Plugin的FP16和INT8</li>
+</ul>
+<h3 id="34-常见疑难杂症"><a class="markdownIt-Anchor" href="#34-常见疑难杂症"></a> 3.4 常见疑难杂症</h3>
+<ul>
+<li>各种log中的报错</li>
+</ul>
+<h2 id="4-tensorrt最佳使用指南"><a class="markdownIt-Anchor" href="#4-tensorrt最佳使用指南"></a> 4 TensorRT最佳使用指南</h2>
+<h3 id="41-如何正确使用trtexec"><a class="markdownIt-Anchor" href="#41-如何正确使用trtexec"></a> 4.1 如何正确使用trtexec</h3>
+<ul>
+<li>trtexec基本用法</li>
+<li>动态尺度、设置optimization profile以及注意点（min-opt-max）</li>
+<li>trtexec源码解析</li>
+</ul>
+<h3 id="42-提升性能"><a class="markdownIt-Anchor" href="#42-提升性能"></a> 4.2 提升性能</h3>
+<ul>
+<li>多steam（重叠计算和数据拷贝的时间，增加GPU利用率）</li>
+<li>多context（多线程推理）</li>
+<li>多optimization profile</li>
+<li>CUDA Graph（减少kernel launch时间）</li>
+<li>Timing Cache（减少build时间）</li>
+<li>Algorithm Selector</li>
+</ul>
+<h3 id="43-tensorrt转换相关"><a class="markdownIt-Anchor" href="#43-tensorrt转换相关"></a> 4.3 TensorRT转换相关</h3>
+<ul>
+<li>某些Layer选择的算法导致误差大，屏蔽掉该选择 tactic Source</li>
+<li>更新权重refit功能（强化学习用的多）</li>
+<li>构建期/运行期显存占用大（调整参数以及策略）</li>
+</ul>
+<h2 id="5-tensorrt量化"><a class="markdownIt-Anchor" href="#5-tensorrt量化"></a> 5 TensorRT量化</h2>
+<h3 id="tensorrt-fp16"><a class="markdownIt-Anchor" href="#tensorrt-fp16"></a> TensorRT-FP16</h3>
+<ul>
+<li>fp16精度设置与使用</li>
+<li>fp16常见问题</li>
+</ul>
+<h3 id="tensorrt-int8"><a class="markdownIt-Anchor" href="#tensorrt-int8"></a> TensorRT-INT8</h3>
+<ul>
+<li>int8使用</li>
+<li>PTQ校准集</li>
+<li>QAT量化</li>
+</ul>
+<h3 id="混合精度"><a class="markdownIt-Anchor" href="#混合精度"></a> 混合精度</h3>
+<ul>
+<li>fp32和fp16</li>
+<li>fp16和int8</li>
+</ul>
+<h2 id="6-tensorrt拓展"><a class="markdownIt-Anchor" href="#6-tensorrt拓展"></a> 6 TensorRT拓展</h2>
+<h3 id="61-tensorrt转换的几种方式"><a class="markdownIt-Anchor" href="#61-tensorrt转换的几种方式"></a> 6.1 TensorRT转换的几种方式</h3>
+<ul>
+<li>torch2trt</li>
+<li>torchscript2trt</li>
+<li>fx2trt</li>
+</ul>
+<h2 id="7-tensorrt实战"><a class="markdownIt-Anchor" href="#7-tensorrt实战"></a> 7 TensorRT实战</h2>
+<h3 id="61-检测模型转换"><a class="markdownIt-Anchor" href="#61-检测模型转换"></a> 6.1 检测模型转换</h3>
+<ul>
+<li>SSD模型转TensorRT dynamic-shape</li>
+<li>带有自定义DCN-OP的CenterNet转TensorRT</li>
+</ul>
+<h3 id="62-识别-分割-nlp类模型"><a class="markdownIt-Anchor" href="#62-识别-分割-nlp类模型"></a> 6.2 识别、分割、nlp类模型</h3>
+<ul>
+<li>stable diffusion</li>
+<li>GPT</li>
+</ul>
+<h3 id="63-tensorrttriton-inference-server线上线下部署"><a class="markdownIt-Anchor" href="#63-tensorrttriton-inference-server线上线下部署"></a> 6.3 TensorRT+triton-inference-server线上/线下部署</h3>
+<ul>
+<li>基本部署教程</li>
+<li>大规模TensorRT模型部署、多卡、模型调度</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2023/10/24/2023%E5%B9%B410%E6%9C%8824%E6%97%A5-TensorRT2/" data-id="clx4fkxnc0001n0v4h8yzdf2m" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/TensorRT/" rel="tag">TensorRT</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/11/07/2023%E5%B9%B411%E6%9C%887%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%A5%E9%94%99%E6%97%A5%E8%AE%B0/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          2023年11月7日 深度学习报错日记
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%962%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2023年10月19日 量化2代码实现</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>74</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>17</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2023 - 2024 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

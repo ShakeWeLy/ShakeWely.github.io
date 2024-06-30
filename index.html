@@ -43,9 +43,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>73</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>74</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>19</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>17</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -71,12 +71,80 @@
 
         <section id="main">
   
-    <article id="post-2024年3月10日-高数做题总结" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-深度学习问题总结" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2024/03/10/2024%E5%B9%B43%E6%9C%8810%E6%97%A5-%E9%AB%98%E6%95%B0%E5%81%9A%E9%A2%98%E6%80%BB%E7%BB%93/" class="article-date">
-  <time class="post-time" datetime="2024-03-10T07:16:10.000Z" itemprop="datePublished">
-    <span class="post-month">3月</span><br/>
-    <span class="post-day">10</span>
+    <a href="/2024/06/07/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/" class="article-date">
+  <time class="post-time" datetime="2024-06-07T08:37:27.321Z" itemprop="datePublished">
+    <span class="post-month">6月</span><br/>
+    <span class="post-day">07</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="交叉熵为什么常用于机器学习中的分类问题"><a class="markdownIt-Anchor" href="#交叉熵为什么常用于机器学习中的分类问题"></a> 交叉熵为什么常用于机器学习中的分类问题</h3>
+<p>交叉熵在机器学习中的分类问题中广泛使用，尤其是在多分类和二分类任务中，这是由于交叉熵具有以下几个重要特性和优势：</p>
+<h4 id="1-衡量真实分布和预测分布之间的差异"><a class="markdownIt-Anchor" href="#1-衡量真实分布和预测分布之间的差异"></a> 1. 衡量真实分布和预测分布之间的差异</h4>
+<p>交叉熵能够很好地度量模型的预测概率分布与真实概率分布之间的差异。其定义为：</p>
+<p class="katex-block katex-error" title="ParseError: KaTeX parse error: Undefined control sequence: \[ at position 1: \̲[̲ H(p, q) = - \s…">\[ H(p, q) = - \sum_{x} p(x) \log q(x) \]
+</p>
+<p>其中，( p(x) ) 是真实标签的概率分布，通常是one-hot编码（对于正确类别概率为1，其余类别概率为0），( q(x) ) 是模型的预测概率分布。</p>
+<h4 id="2-对错误分类有较大惩罚"><a class="markdownIt-Anchor" href="#2-对错误分类有较大惩罚"></a> 2. 对错误分类有较大惩罚</h4>
+<p>交叉熵损失函数对错误分类的惩罚较大，能够更有效地引导模型进行优化。举个例子，对于一个二分类问题，假设真实标签 ( p = 1 )，而模型预测的概率 ( q ) 很接近0（完全错误的预测），则交叉熵损失值会非常高。这种特性使得交叉熵在训练过程中能够更快速地减少错误分类的概率。</p>
+<h4 id="3-可微性"><a class="markdownIt-Anchor" href="#3-可微性"></a> 3. 可微性</h4>
+<p>交叉熵损失函数是可微的，这使得它非常适合梯度下降等优化算法。通过计算损失函数相对于模型参数的梯度，模型可以逐步更新参数以最小化损失，从而提高分类性能。</p>
+<h4 id="4-与softmax结合良好"><a class="markdownIt-Anchor" href="#4-与softmax结合良好"></a> 4. 与Softmax结合良好</h4>
+<p>在多分类问题中，交叉熵损失函数通常与Softmax激活函数一起使用。Softmax函数将模型的输出转化为一个概率分布：</p>
+<p class="katex-block katex-error" title="ParseError: KaTeX parse error: Undefined control sequence: \[ at position 1: \̲[̲ \sigma(z_i) = …">\[ \sigma(z_i) = \frac{e^{z_i}}{\sum_{j} e^{z_j}} \]
+</p>
+<p>结合Softmax和交叉熵，损失函数的梯度计算更为简便，优化过程更稳定。</p>
+<h4 id="5-适合概率解释"><a class="markdownIt-Anchor" href="#5-适合概率解释"></a> 5. 适合概率解释</h4>
+<p>交叉熵损失函数直接基于概率，因此它能够提供一种自然的方式来解释模型的输出。例如，输出值可以直接解释为某个类别的概率，这在很多实际应用中是非常有用的，如图像分类、自然语言处理等。</p>
+<h4 id="6-数学上的凸性"><a class="markdownIt-Anchor" href="#6-数学上的凸性"></a> 6. 数学上的凸性</h4>
+<p>在二分类问题中，交叉熵损失函数是凸的，这意味着它有唯一的全局最优解。尽管在多分类问题中，交叉熵损失函数可能不是严格凸的，但在实践中通过适当的优化方法（如SGD，Adam等）依然能有效地找到较优解。</p>
+<h3 id="实际例子"><a class="markdownIt-Anchor" href="#实际例子"></a> 实际例子</h3>
+<p>以二分类问题为例，假设真实标签 ( y ) 为1（即正类），模型预测正类的概率为 ( \hat{y} )。交叉熵损失函数为：</p>
+<p class="katex-block katex-error" title="ParseError: KaTeX parse error: Undefined control sequence: \[ at position 1: \̲[̲ L = -[y \log(\…">\[ L = -[y \log(\hat{y}) + (1 - y) \log(1 - \hat{y})] \]
+</p>
+<p>当 ( y = 1 ) 时，损失函数简化为 ( L = -\log(\hat{y}) )。如果模型预测 ( \hat{y} ) 很小，则损失会非常大，从而迫使模型在训练过程中提高对正类的预测概率。</p>
+<p>总的来说，交叉熵损失函数由于其良好的数学性质和对分类问题的适用性，成为机器学习中分类问题的标准选择。</p>
+<h2 id="高维而带来的数据稀疏性问题"><a class="markdownIt-Anchor" href="#高维而带来的数据稀疏性问题"></a> 高维而带来的数据稀疏性问题</h2>
+<p><strong>距离度量失效</strong>：在高维空间中，数据点之间的距离度量（如欧氏距离）可能失去区分性。随着维度增加，不同数据点之间的距离变得越来越相似，从而导致传统的距离度量方法失效。这对基于距离的算法（如K近邻算法、聚类算法等）影响尤为显著。</p>
+<p><strong>计算复杂度增加</strong>：高维数据需要处理的特征数增多，计算复杂度随之增加。这对存储和计算资源都是巨大的挑战，尤其是在处理大规模数据集时。</p>
+<p><strong>维度诅咒</strong>：高维数据通常伴随着“维度诅咒”问题，即随着维度增加，数据点需要的样本量指数级增长，才能维持同样的统计显著性和精度。这导致在高维空间中进行数据建模和分析变得困难，模型容易过拟合。</p>
+<p><strong>模型解释性降低</strong>：高维数据中的特征较多，模型的解释性会降低。人类难以理解和解释高维空间中的特征关系，从而影响决策和分析的透明度。</p>
+<h3 id="解决办法"><a class="markdownIt-Anchor" href="#解决办法"></a> 解决办法：</h3>
+<p><strong>特征选择</strong>：通过选择与目标变量高度相关的特征，去除冗余或不相关的特征，从而降低数据的维度，提高模型的性能。</p>
+<p><strong>特征提取</strong>：通过技术如主成分分析（PCA）、线性判别分析（LDA）和非负矩阵分解（NMF）等方法，将原始高维数据映射到低维空间，同时尽可能保留数据的主要信息。</p>
+<p><strong>稀疏表示</strong>：利用稀疏编码、L1正则化等方法，使得数据在较少的特征上具有较大的表示，从而减少模型的复杂度和过拟合风险。</p>
+<p><strong>核方法</strong>：如支持向量机（SVM）的核技巧，通过在高维空间中进行操作而不显式地计算高维特征，来处理非线性问题。</p>
+<p><strong>深度学习</strong>：深度神经网络，尤其是自动编码器（Autoencoder），可以有效地学习数据的低维表示，从而在高维数据处理中表现出色</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2024/06/07/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/" data-id="cly1c03750000wwv438464fxl" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2024年4月18日-深度学习自制框架" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/" class="article-date">
+  <time class="post-time" datetime="2024-04-18T12:15:29.000Z" itemprop="datePublished">
+    <span class="post-month">4月</span><br/>
+    <span class="post-day">18</span>
   </time>
 </a>
    
@@ -88,7 +156,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2024/03/10/2024%E5%B9%B43%E6%9C%8810%E6%97%A5-%E9%AB%98%E6%95%B0%E5%81%9A%E9%A2%98%E6%80%BB%E7%BB%93/">2024年3月10日 高数做题总结</a>
+      <a class="article-title" href="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/">2024年4月18日 深度学习自制框架</a>
     </h1>
   
 
@@ -103,42 +171,249 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="高数做题总结"><a class="markdownIt-Anchor" href="#高数做题总结"></a> 高数做题总结</h1>
-<h1 id="1-函数"><a class="markdownIt-Anchor" href="#1-函数"></a> 1 函数</h1>
-<h2 id="性质"><a class="markdownIt-Anchor" href="#性质"></a> 性质</h2>
-<h3 id="奇偶数函数运算判断"><a class="markdownIt-Anchor" href="#奇偶数函数运算判断"></a> 奇偶数函数运算判断</h3>
-<p><img src="https://pic4.zhimg.com/80/v2-234124dfb6fb3354a330b156683feceb_720w.webp" alt="img"></p>
-<h3 id="三角函数变换"><a class="markdownIt-Anchor" href="#三角函数变换"></a> 三角函数变换</h3>
-<h1 id="2-极限"><a class="markdownIt-Anchor" href="#2-极限"></a> 2 极限</h1>
-<h2 id="21求极限"><a class="markdownIt-Anchor" href="#21求极限"></a> 2.1求极限</h2>
-<h3 id="211-极限常用结论"><a class="markdownIt-Anchor" href="#211-极限常用结论"></a> 2.1.1 极限常用结论</h3>
-<h3 id="1-无穷减无穷"><a class="markdownIt-Anchor" href="#1-无穷减无穷"></a> 1 无穷减无穷</h3>
-<p><img src="/2024/03/10/2024%E5%B9%B43%E6%9C%8810%E6%97%A5-%E9%AB%98%E6%95%B0%E5%81%9A%E9%A2%98%E6%80%BB%E7%BB%93/image-20240310152620492.png" alt="image-20240310152620492"><img src="/2024/03/10/2024%E5%B9%B43%E6%9C%8810%E6%97%A5-%E9%AB%98%E6%95%B0%E5%81%9A%E9%A2%98%E6%80%BB%E7%BB%93/image-20240310152653548.png" alt="image-20240310152653548"></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">有理化</span><br></pre></td></tr></table></figure>
-<h3 id="2-无穷无穷"><a class="markdownIt-Anchor" href="#2-无穷无穷"></a> 2 无穷×无穷</h3>
-<p><img src="/2024/03/10/2024%E5%B9%B43%E6%9C%8810%E6%97%A5-%E9%AB%98%E6%95%B0%E5%81%9A%E9%A2%98%E6%80%BB%E7%BB%93/image-20240310152643182.png" alt="image-20240310152643182"></p>
-<h3 id="无穷无穷"><a class="markdownIt-Anchor" href="#无穷无穷"></a> 无穷/无穷</h3>
-<p><img src="/2024/03/10/2024%E5%B9%B43%E6%9C%8810%E6%97%A5-%E9%AB%98%E6%95%B0%E5%81%9A%E9%A2%98%E6%80%BB%E7%BB%93/image-20240310162411217.png" alt="image-20240310162411217"></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">提公因式</span><br></pre></td></tr></table></figure>
-<h3 id="2-无穷0"><a class="markdownIt-Anchor" href="#2-无穷0"></a> 2 无穷×0</h3>
-<p><img src="/2024/03/10/2024%E5%B9%B43%E6%9C%8810%E6%97%A5-%E9%AB%98%E6%95%B0%E5%81%9A%E9%A2%98%E6%80%BB%E7%BB%93/image-20240310155721645.png" alt="image-20240310155721645"></p>
-<h3 id="3-抓大头"><a class="markdownIt-Anchor" href="#3-抓大头"></a> 3 抓大头</h3>
-<h4 id="4-有界函数加减"><a class="markdownIt-Anchor" href="#4-有界函数加减"></a> 4 有界函数（加减）	·</h4>
-<p><img src="/2024/03/10/2024%E5%B9%B43%E6%9C%8810%E6%97%A5-%E9%AB%98%E6%95%B0%E5%81%9A%E9%A2%98%E6%80%BB%E7%BB%93/image-20240310155836412.png" alt="image-20240310155836412"></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">分开极限</span><br></pre></td></tr></table></figure>
-<h2 id="22-极限定义"><a class="markdownIt-Anchor" href="#22-极限定义"></a> 2.2 极限定义</h2>
-<h3 id="3-极限存在"><a class="markdownIt-Anchor" href="#3-极限存在"></a> 3 极限存在</h3>
-<p><img src="/2024/03/10/2024%E5%B9%B43%E6%9C%8810%E6%97%A5-%E9%AB%98%E6%95%B0%E5%81%9A%E9%A2%98%E6%80%BB%E7%BB%93/image-20240310152551194.png" alt="image-20240310152551194"></p>
-<p><img src="/2024/03/10/2024%E5%B9%B43%E6%9C%8810%E6%97%A5-%E9%AB%98%E6%95%B0%E5%81%9A%E9%A2%98%E6%80%BB%E7%BB%93/image-20240310152525181.png" alt="image-20240310152525181"></p>
-<h2 id="23-无穷小量"><a class="markdownIt-Anchor" href="#23-无穷小量"></a> 2.3 无穷小量</h2>
+        <p>b</p>
+<p>本书结构</p>
+<img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240418201605770.png" alt="image-20240418201605770" style="zoom:67%;">
+<h1 id="第一阶段-自动微分"><a class="markdownIt-Anchor" href="#第一阶段-自动微分"></a> 第一阶段 自动微分</h1>
+<h2 id="1-变量"><a class="markdownIt-Anchor" href="#1-变量"></a> 1 变量</h2>
+<p>pass</p>
+<h2 id="2-函数"><a class="markdownIt-Anchor" href="#2-函数"></a> 2 函数</h2>
+<p>pass</p>
+<h2 id="3-函数连续调用"><a class="markdownIt-Anchor" href="#3-函数连续调用"></a> 3 函数连续调用</h2>
+<p>pass</p>
+<h2 id="4-数值微分"><a class="markdownIt-Anchor" href="#4-数值微分"></a> 4 数值微分</h2>
+<h3 id="1-导数"><a class="markdownIt-Anchor" href="#1-导数"></a> 1 导数</h3>
+<p>导数表示</p>
+<p><img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240418235609679.png" alt="image-20240418235609679"></p>
+<h3 id="2-数值微分"><a class="markdownIt-Anchor" href="#2-数值微分"></a> 2 数值微分</h3>
+<p>计算机不能处理极限值 。 因此，这里的 h 表示一个近似值来计算 式 4. 1 就叫做数值微分</p>
+<h4 id="21前向差分近似"><a class="markdownIt-Anchor" href="#21前向差分近似"></a> 2.1前向差分近似</h4>
+<p><img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240418235758166.png" alt="image-20240418235758166"></p>
+<h4 id="22中心差分近似"><a class="markdownIt-Anchor" href="#22中心差分近似"></a> 2.2中心差分近似</h4>
+<p><img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240418235805977.png" alt="image-20240418235805977"></p>
+<img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240418235810650.png" alt="image-20240418235810650" style="zoom:67%;">
+<h2 id="5-反向传播"><a class="markdownIt-Anchor" href="#5-反向传播"></a> 5 反向传播</h2>
+<p>y 对 z 的导数 11J 以用式子 5.1 表示：</p>
+<p><img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240418235920234.png" alt="image-20240418235920234"></p>
+<p>也可写成：</p>
+<p><img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240418235944251.png" alt="image-20240418235944251"></p>
+<p>求导流程</p>
+<img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240419000026551.png" alt="image-20240419000026551" style="zoom:50%;">
+<p>求导过程：</p>
+<img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240418214342085.png" alt="image-20240418214342085" style="zoom:80%;">
+<img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240418212406502.png" alt="image-20240418212406502" style="zoom:80%;">
+<p><img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240418214212099.png" alt="image-20240418214212099"></p>
+<p>正向传播</p>
+<p><img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240418213741377.png" alt="image-20240418213741377"></p>
+<p>反向传播</p>
+<p><img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240418214157026.png" alt="image-20240418214157026"></p>
+<p><img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240418220753163.png" alt="image-20240418220753163"></p>
+<p><img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240418221125070.png" alt="image-20240418221125070"></p>
+<p><img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240418221120878.png" alt="image-20240418221120878"></p>
+<p><img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240418221115733.png" alt="image-20240418221115733"></p>
+<p>\</p>
+<p><img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240418235104955.png" alt="image-20240418235104955"></p>
+<p><img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240419220559301.png" alt="image-20240419220559301"></p>
+<p><img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240419224326395.png" alt="image-20240419224326395"></p>
+<p><img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240419224320883.png" alt="image-20240419224320883"></p>
+<p><img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240419224730866.png" alt="image-20240419224730866"></p>
+<p><img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240419225947503.png" alt="image-20240419225947503"></p>
+<p><img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240420153251259.png" alt="image-20240420153251259"></p>
+<h1 id="2"><a class="markdownIt-Anchor" href="#2"></a> 2</h1>
+<h2 id="217-内存管理和循环引用"><a class="markdownIt-Anchor" href="#217-内存管理和循环引用"></a> 2.17 内存管理和循环引用</h2>
+<h3 id="1-内存管理"><a class="markdownIt-Anchor" href="#1-内存管理"></a> 1 内存管理</h3>
+<ul>
+<li>
+<p>一种是引用计数</p>
+</li>
+<li>
+<p>一种是分代垃圾凹收</p>
+</li>
+</ul>
+<h3 id="2-计数方式"><a class="markdownIt-Anchor" href="#2-计数方式"></a> 2 计数方式</h3>
+<p>​	每个对象在被创建时的引用计数为0，当它被另一个对象引用时引用计数加1，当引用停止时，引用计数减1。最终，当引用计数变为0时 python解释器会回收该对象。</p>
+<img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240420155229195.png" alt="image-20240420155229195" style="zoom:67%;">
+<p>当a = b = c = None时，对象之间的关系发生变化 此时a的引用计数变为O(b和c的引用计数为1) 对此. a立即被删除 删除 a 导致b的引用计数从1变成O. 所以b也被删除。</p>
+<h3 id="3-循环引用"><a class="markdownIt-Anchor" href="#3-循环引用"></a> 3 循环引用</h3>
+<img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240420155157415.png" alt="image-20240420155157415" style="zoom:67%;">
+<p>采用 <code>分代垃圾回收</code>处理</p>
+<h3 id="4-弱引用"><a class="markdownIt-Anchor" href="#4-弱引用"></a> 4 弱引用</h3>
+<p>​	用weakref.ref函数来创建弱引用</p>
+<img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240420155447235.png" alt="image-20240420155447235" style="zoom:67%;">
+<img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240420155452283.png" alt="image-20240420155452283" style="zoom:67%;">
+<p>a=None 时，b虽然用了这个对象，但由于是弱引用，所以对引用计数没有影响</p>
+<h3 id="5修改"><a class="markdownIt-Anchor" href="#5修改"></a> 5修改</h3>
+<p><strong>对比：</strong></p>
+<p>之前：</p>
+<p><img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240420160208866.png" alt="image-20240420160208866"></p>
+<p>之后：</p>
+<img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240420160154381.png" alt="image-20240420160154381" style="zoom:67%;">
+<h2 id="218减少内存使用量的模式"><a class="markdownIt-Anchor" href="#218减少内存使用量的模式"></a> 2.18减少内存使用量的模式</h2>
+<p>第1项改进是减少反向传播消耗的内存使用址， 这项改进提供了立即清除元用导数的机制。</p>
+<p><img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240420160709236.png" alt="image-20240420160709236"></p>
+<p><img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240420161151386.png" alt="image-20240420161151386"></p>
+<p>第2项改进是提供&quot;不需要反向 传播时的模式&quot;</p>
+<p><img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240420161534975.png" alt="image-20240420161534975"></p>
+<p><img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240420161630351.png" alt="image-20240420161630351"></p>
+<p>是否 <code>creator</code>也不需要了呢？</p>
+<p>Constant</p>
+<p><img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240420154131602.png" alt="image-20240420154131602"></p>
+<p><img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240420154150170.png" alt="image-20240420154150170"></p>
+<p><img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240420154244033.png" alt="image-20240420154244033"></p>
+<p><img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240420154246451.png" alt="image-20240420154246451"></p>
+<p><img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240420154312677.png" alt="image-20240420154312677"></p>
+<p><img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240420154416108.png" alt="image-20240420154416108"></p>
+<p><img src="/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/image-20240420154432668.png" alt="image-20240420154432668"></p>
+<h1 id="3-高阶导数"><a class="markdownIt-Anchor" href="#3-高阶导数"></a> 3 高阶导数</h1>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2024/03/10/2024%E5%B9%B43%E6%9C%8810%E6%97%A5-%E9%AB%98%E6%95%B0%E5%81%9A%E9%A2%98%E6%80%BB%E7%BB%93/" data-id="cltlpd51r0000ngv40cb61bfd" class="article-share-link">分享</a>
+      <a data-url="https://shakewely.github.io/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/" data-id="clx4fkxnj000dn0v43cmx8t28" class="article-share-link">分享</a>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%80%83%E7%A0%94/" rel="tag">考研</a></li></ul>
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2024年3月29日-llm2" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2024/03/29/2024%E5%B9%B43%E6%9C%8829%E6%97%A5-llm2/" class="article-date">
+  <time class="post-time" datetime="2024-03-29T04:40:45.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">29</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2024/03/29/2024%E5%B9%B43%E6%9C%8829%E6%97%A5-llm2/">2024年3月29日 llm2</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="2-llm2"><a class="markdownIt-Anchor" href="#2-llm2"></a> 2 LLM2</h1>
+<h2 id="21处理流程"><a class="markdownIt-Anchor" href="#21处理流程"></a> 2.1处理流程</h2>
+<h3 id="输入数据"><a class="markdownIt-Anchor" href="#输入数据"></a> <strong>输入数据</strong>：</h3>
+<p>LLM的输入数据是一段文本，可以是一个句子或一段话。文本通常被表示成单词或字符的序列。</p>
+<h3 id="tokenization"><a class="markdownIt-Anchor" href="#tokenization"></a> <strong>Tokenization</strong>：</h3>
+<p>将文本进行Tokenization，将其切分成单词或字符，形成Token序列。</p>
+<p>再将文本映射成模型可理解的输入形式，将文本序列转换为整数索引序列</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">序列化-&gt; </span><br><span class="line">[&#x27;BOS&#x27;,&#x27;君&#x27;,&#x27;不&#x27;,&#x27;见&#x27;,&#x27;黄&#x27;,&#x27;河&#x27;,&#x27;之&#x27;,&#x27;水&#x27;,&#x27;天&#x27;,&#x27;上&#x27;,&#x27;来&#x27;,&#x27;，&#x27; ,&#x27;奔&#x27;,&#x27;流&#x27;,&#x27;到&#x27;...&#x27;与&#x27;,&#x27;尔&#x27;,&#x27;同&#x27;,&#x27;销&#x27;,&#x27;万&#x27;,&#x27;古&#x27;,&#x27;愁&#x27;,&#x27;EOS&#x27;]</span><br><span class="line"></span><br><span class="line">假设语料库索引化-&gt;</span><br><span class="line">[&#x27;BOS&#x27;,&#x27;10&#x27;,&#x27;3&#x27;,&#x27;67&#x27;,&#x27;89&#x27;,&#x27;21&#x27;,&#x27;45&#x27;,&#x27;55&#x27;,&#x27;61&#x27;,&#x27;4&#x27;,&#x27;324&#x27;,&#x27;565&#x27; ,&#x27;789&#x27;,&#x27;6567&#x27;,&#x27;786&#x27;...&#x27;7869&#x27;,&#x27;9&#x27;,&#x27;3452&#x27;,&#x27;563&#x27;,&#x27;56&#x27;,&#x27;66&#x27;,&#x27;77&#x27;,&#x27;EOS&#x27;]</span><br></pre></td></tr></table></figure>
+<h3 id="embedding"><a class="markdownIt-Anchor" href="#embedding"></a> <strong>Embedding</strong>：</h3>
+<p>将每个Token映射为一个实数向量，为Embeding Vector</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#x27;BOS&#x27;-&gt; [p_&#123;00&#125;,p_&#123;01&#125;,p_&#123;02&#125;,...,p_&#123;0d-1&#125;]</span><br><span class="line">&#x27;10&#x27; -&gt; [p_&#123;10&#125;,p_&#123;11&#125;,p_&#123;12&#125;,...,p_&#123;1d-1&#125;]</span><br><span class="line">&#x27;3&#x27;  -&gt; [p_&#123;20&#125;,p_&#123;21&#125;,p_&#123;22&#125;,...,p_&#123;2d-1&#125;]</span><br><span class="line">...</span><br><span class="line">&#x27;EOS&#x27;-&gt; [p_&#123;n0&#125;,p_&#123;n1&#125;,p_&#123;n2&#125;,...,p_&#123;nd-1&#125;]</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="位置编码"><a class="markdownIt-Anchor" href="#位置编码"></a> <strong>位置编码</strong>：</h3>
+<p>对于Token序列中的每个位置，添加位置编码（Positional Encoding）向量，以提供关于Token在序列中位置的信息。</p>
+<p>位置编码是为了区分不同位置的Token，并为模型提供上下文关系的信息。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[p_&#123;00&#125;,p_&#123;01&#125;,p_&#123;02&#125;,...,p_&#123;0d-1&#125;]       [pe_&#123;00&#125;,pe_&#123;01&#125;,pe_&#123;02&#125;,...,pe_&#123;0d-1&#125;]</span><br><span class="line">[p_&#123;10&#125;,p_&#123;11&#125;,p_&#123;12&#125;,...,p_&#123;1d-1&#125;]       [pe_&#123;10&#125;,pe_&#123;11&#125;,pe_&#123;12&#125;,...,pe_&#123;1d-1&#125;]</span><br><span class="line">[p_&#123;20&#125;,p_&#123;21&#125;,p_&#123;22&#125;,...,p_&#123;2d-1&#125;]    +  [pe_&#123;20&#125;,pe_&#123;21&#125;,pe_&#123;22&#125;,...,pe_&#123;2d-1&#125;]</span><br><span class="line">...                                       ...  </span><br><span class="line">[p_&#123;n0&#125;,p_&#123;n1&#125;,p_&#123;n2&#125;,...,p_&#123;nd-1&#125;]       [pe_&#123;n0&#125;,pe_&#123;n1&#125;,pe_&#123;n2&#125; ,...,pe_&#123;nd-1&#125;]</span><br></pre></td></tr></table></figure>
+<h3 id="transformer"><a class="markdownIt-Anchor" href="#transformer"></a> <strong>Transformer</strong> ：</h3>
+<p>在生成任务中，模型只需要用到Transformer 的decoder阶段，即Decoder-Only，比如GPT、LLaMA 都是。</p>
+<p><img src="/2024/03/29/2024%E5%B9%B43%E6%9C%8829%E6%97%A5-llm2/image-20240329125213908.png" alt="image-20240329125213908"></p>
+<h3 id="自回归生成"><a class="markdownIt-Anchor" href="#自回归生成"></a> <strong>自回归生成</strong>：</h3>
+<p>在生成任务中，使用自回归（Autoregressive）方式，逐个生成输出序列中的每个Token。</p>
+<p>在解码过程中，每次生成一个Token时，使用前面已生成的内容作为上下文，来帮助预测下一个Token。</p>
+<p><img src="/2024/03/29/2024%E5%B9%B43%E6%9C%8829%E6%97%A5-llm2/image-20240329125500103.png" alt="image-20240329125500103"></p>
+<h2 id="22-相关技术"><a class="markdownIt-Anchor" href="#22-相关技术"></a> 2.2 相关技术</h2>
+<h3 id="rope"><a class="markdownIt-Anchor" href="#rope"></a> <strong>RoPE</strong></h3>
+<p><a href="https://link.zhihu.com/?target=https%3A//arxiv.org/pdf/2104.09864.pdf">RoPE位置编码</a></p>
+<p><img src="/2024/03/29/2024%E5%B9%B43%E6%9C%8829%E6%97%A5-llm2/image-20240329131119065.png" alt="image-20240329131119065"></p>
+<h3 id="kv-cache-gqa"><a class="markdownIt-Anchor" href="#kv-cache-gqa"></a> <strong>KV Cache &amp; GQA</strong></h3>
+<p>Attention计算时的KV</p>
+<p>通过将每次计算的K和V缓存下来，之后新的序列进来时只需要从KV Cache中读取之前的KV值即可，就不需要再去重复计算之前的KV了。</p>
+<p><img src="/2024/03/29/2024%E5%B9%B43%E6%9C%8829%E6%97%A5-llm2/image-20240329131434662.png" alt="image-20240329131434662"></p>
+<p>至于为什么不用缓存Q？</p>
+<p><strong>GQA</strong></p>
+<p><img src="/2024/03/29/2024%E5%B9%B43%E6%9C%8829%E6%97%A5-llm2/image-20240329131658979.png" alt="image-20240329131658979"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2024/03/29/2024%E5%B9%B43%E6%9C%8829%E6%97%A5-llm2/" data-id="clx4fkxni0007n0v4cpjj3kck" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl/" rel="tag">dl</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2024年3月3日-pythons刷题" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2024/03/13/2024%E5%B9%B43%E6%9C%883%E6%97%A5-pythons%E5%88%B7%E9%A2%98/" class="article-date">
+  <time class="post-time" datetime="2024-03-13T12:51:35.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">13</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2024/03/13/2024%E5%B9%B43%E6%9C%883%E6%97%A5-pythons%E5%88%B7%E9%A2%98/">2024年3月3日 python内存管理</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="python-内存管理"><a class="markdownIt-Anchor" href="#python-内存管理"></a> python 内存管理</h1>
+<h2 id="1-内存管理"><a class="markdownIt-Anchor" href="#1-内存管理"></a> 1 内存管理</h2>
+<h2 id="2-记数引用"><a class="markdownIt-Anchor" href="#2-记数引用"></a> 2 记数引用</h2>
+<h2 id="3-弱引用"><a class="markdownIt-Anchor" href="#3-弱引用"></a> 3 弱引用</h2>
+<p>在不增加引用计数的情况下引用另一个对象的功能</p>
+<img src="/2024/03/13/2024%E5%B9%B43%E6%9C%883%E6%97%A5-pythons%E5%88%B7%E9%A2%98/image-20240419235445781.png" alt="image-20240419235445781" style="zoom:67%;">
+<img src="/2024/03/13/2024%E5%B9%B43%E6%9C%883%E6%97%A5-pythons%E5%88%B7%E9%A2%98/image-20240419235504536.png" alt="image-20240419235504536" style="zoom:67%;">
+<p><img src="/2024/03/13/2024%E5%B9%B43%E6%9C%883%E6%97%A5-pythons%E5%88%B7%E9%A2%98/image-20240419235820695.png" alt="image-20240419235820695"></p>
+<h2 id="4-memory-profiler"><a class="markdownIt-Anchor" href="#4-memory-profiler"></a> 4 memory profiler</h2>
+<p>外部库来监测 Python 中的内存使用情况</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2024/03/13/2024%E5%B9%B43%E6%9C%883%E6%97%A5-pythons%E5%88%B7%E9%A2%98/" data-id="clx4fkxni0009n0v46qrdakx6" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
 
     </footer>
   </div>
@@ -251,273 +526,6 @@
       <a data-url="https://shakewely.github.io/2024/03/08/2024%E5%B9%B43%E6%9C%888%E6%97%A5-%E8%AE%A4%E8%AF%86xTuring/" data-id="cltlpd5230006ngv4fis5f4dl" class="article-share-link">分享</a>
       
       
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2024年3月7日-高数基础总结" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/" class="article-date">
-  <time class="post-time" datetime="2024-03-07T06:21:52.000Z" itemprop="datePublished">
-    <span class="post-month">3月</span><br/>
-    <span class="post-day">07</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/">2024年3月7日 高数基础总结</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="23"><a class="markdownIt-Anchor" href="#23"></a> 23</h1>
-<h2 id><a class="markdownIt-Anchor" href="#"></a> </h2>
-<h2 id="11-极限"><a class="markdownIt-Anchor" href="#11-极限"></a> 1.1 极限</h2>
-<h3 id="111-极限定义"><a class="markdownIt-Anchor" href="#111-极限定义"></a> 1.1.1 极限定义</h3>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240310160057869.png" alt="image-20240310160057869"></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"># 极限判断</span><br></pre></td></tr></table></figure>
-<h3 id="112-极限性质"><a class="markdownIt-Anchor" href="#112-极限性质"></a> 1.1.2 极限性质</h3>
-<h4 id="1-局部有界性"><a class="markdownIt-Anchor" href="#1-局部有界性"></a> 1 局部有界性</h4>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240310160207113.png" alt="image-20240310160207113"></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-<h4 id="2-布局保号性"><a class="markdownIt-Anchor" href="#2-布局保号性"></a> 2 布局保号性</h4>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240310160604147.png" alt="image-20240310160604147"></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="113-极限运算法则"><a class="markdownIt-Anchor" href="#113-极限运算法则"></a> 1.1.3 极限运算法则</h3>
-<h4 id="1-四则运算"><a class="markdownIt-Anchor" href="#1-四则运算"></a> 1 四则运算</h4>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240310161001699.png" alt="image-20240310161001699"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240310161024497.png" alt="image-20240310161024497"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240310161128360.png" alt="image-20240310161128360"></p>
-<p>例如：</p>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240310161048966.png" alt="image-20240310161048966"></p>
-<h4 id="2-复合函数"><a class="markdownIt-Anchor" href="#2-复合函数"></a> 2 复合函数</h4>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240310161209084.png" alt="image-20240310161209084"></p>
-<h4 id="3-无穷小运算法则"><a class="markdownIt-Anchor" href="#3-无穷小运算法则"></a> 3 无穷小运算法则</h4>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240310160933680.png" alt="image-20240310160933680"></p>
-<h4 id="4-夹逼准则"><a class="markdownIt-Anchor" href="#4-夹逼准则"></a> 4 夹逼准则</h4>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240310161320090.png" alt="image-20240310161320090">、</p>
-<h4 id="5"><a class="markdownIt-Anchor" href="#5"></a> 5</h4>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240310161338485.png" alt="image-20240310161338485"></p>
-<h3 id="114-无穷大和无穷小"><a class="markdownIt-Anchor" href="#114-无穷大和无穷小"></a> 1.1.4 无穷大和无穷小</h3>
-<h4 id="1-定义"><a class="markdownIt-Anchor" href="#1-定义"></a> 1 定义</h4>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240310160712291.png" alt="image-20240310160712291"></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 0是无穷小量；但是无穷小量不一定是0</span><br><span class="line"># </span><br></pre></td></tr></table></figure>
-<h4 id="2-无穷小比较"><a class="markdownIt-Anchor" href="#2-无穷小比较"></a> 2 无穷小比较！！</h4>
-<p>高阶无穷小 低阶无穷小 同阶无穷小和等价无穷小，k阶无穷小 k在分母（分子对分母）</p>
-<h4 id="3-常见无穷小"><a class="markdownIt-Anchor" href="#3-常见无穷小"></a> 3 常见无穷小</h4>
-<p><img src="https://pic2.zhimg.com/80/v2-c83c0baa54851fab07125c558a666d41_720w.webp" alt="img"></p>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240309114716701.png" alt="image-20240309114716701"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240309114743977.png" alt="image-20240309114743977"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240309114749778.png" alt="image-20240309114749778"></p>
-<p>2</p>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240309114305473.png" alt="image-20240309114305473"></p>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240309114519658.png" alt="image-20240309114519658"></p>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240309114507256.png" alt="image-20240309114507256"></p>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240309114530069.png" alt="image-20240309114530069"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240309114535180.png" alt="image-20240309114535180"></p>
-<h1 id="21-连续"><a class="markdownIt-Anchor" href="#21-连续"></a> 2.1 连续</h1>
-<h2 id="211-连续定义"><a class="markdownIt-Anchor" href="#211-连续定义"></a> 2.1.1 连续定义</h2>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240310161805826.png" alt="image-20240310161805826"></p>
-<p>极限分左右的情况</p>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240310161836572.png" alt="image-20240310161836572"></p>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240310161854708.png" alt="image-20240310161854708"></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">∞可以是正负无穷 所有要分类讨论</span><br></pre></td></tr></table></figure>
-<h2 id="212-间断点"><a class="markdownIt-Anchor" href="#212-间断点"></a> 2.1.2 间断点</h2>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240310161950305.png" alt="image-20240310161950305"></p>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240310161959086.png" alt="image-20240310161959086"></p>
-<h5 id="可疑点"><a class="markdownIt-Anchor" href="#可疑点"></a> 可疑点</h5>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240310162036231.png" alt="image-20240310162036231"></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 先找可疑点</span><br><span class="line"># 在判断</span><br><span class="line"># 注意：三角函数的周期性 可能有无穷个间断点，所有要判断存在极限的点</span><br></pre></td></tr></table></figure>
-<h2 id="221-连续函数"><a class="markdownIt-Anchor" href="#221-连续函数"></a> 2.2.1 连续函数</h2>
-<h2 id="231-区间性质"><a class="markdownIt-Anchor" href="#231-区间性质"></a> 2.3.1 区间性质</h2>
-<h1 id="3-导数和微分"><a class="markdownIt-Anchor" href="#3-导数和微分"></a> 3 导数和微分</h1>
-<h2 id="31-导数"><a class="markdownIt-Anchor" href="#31-导数"></a> 3.1 导数</h2>
-<h3 id="311-导数定义"><a class="markdownIt-Anchor" href="#311-导数定义"></a> 3.1.1 导数定义</h3>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240310162655198.png" alt="image-20240310162655198"></p>
-<h3 id="313-求导法则"><a class="markdownIt-Anchor" href="#313-求导法则"></a> 3.1.3 求导法则</h3>
-<h4 id="1-公式"><a class="markdownIt-Anchor" href="#1-公式"></a> 1 公式</h4>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240310162718493.png" alt="image-20240310162718493"></p>
-<h4 id="2-四则运算"><a class="markdownIt-Anchor" href="#2-四则运算"></a> 2 四则运算</h4>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240310162748430.png" alt="image-20240310162748430"></p>
-<h4 id="3-反函数求导"><a class="markdownIt-Anchor" href="#3-反函数求导"></a> 3 反函数求导@@</h4>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240310162811851.png" alt="image-20240310162811851"></p>
-<h4 id="4-复合函数求导"><a class="markdownIt-Anchor" href="#4-复合函数求导"></a> 4 复合函数求导</h4>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">链式法则</span><br></pre></td></tr></table></figure>
-<h5 id="a-常用总结"><a class="markdownIt-Anchor" href="#a-常用总结"></a> a 常用总结</h5>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240310163230474.png" alt="image-20240310163230474"></p>
-<h5 id="b-蜜汁函数求导"><a class="markdownIt-Anchor" href="#b-蜜汁函数求导"></a> b 蜜汁函数求导</h5>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240310163316669.png" alt="image-20240310163316669"></p>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240310163256378.png" alt="image-20240310163256378"></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">转换e</span><br></pre></td></tr></table></figure>
-<h4 id="5-隐函数求导"><a class="markdownIt-Anchor" href="#5-隐函数求导"></a> 5 隐函数求导 @@</h4>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240310163343986.png" alt="image-20240310163343986"></p>
-<h4 id="6-取对数求导"><a class="markdownIt-Anchor" href="#6-取对数求导"></a> 6 取对数求导</h4>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240310163422438.png" alt="image-20240310163422438"></p>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240310163438102.png" alt="image-20240310163438102"></p>
-<h4 id="7-参数方程求导"><a class="markdownIt-Anchor" href="#7-参数方程求导"></a> 7 参数方程求导</h4>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240310163657856.png" alt="image-20240310163657856"></p>
-<h2 id="32-微分"><a class="markdownIt-Anchor" href="#32-微分"></a> 3.2 微分</h2>
-<h2 id="32-微分可导连续关系"><a class="markdownIt-Anchor" href="#32-微分可导连续关系"></a> 3.2 微分可导连续关系</h2>
-<h1 id="7-定积分"><a class="markdownIt-Anchor" href="#7-定积分"></a> 7 定积分</h1>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307145231880.png" alt="image-20240307145231880"></p>
-<h3 id="711-定义"><a class="markdownIt-Anchor" href="#711-定义"></a> 7.1.1 定义</h3>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307142800214.png" alt="image-20240307142800214"></p>
-<h4 id="7121-性质"><a class="markdownIt-Anchor" href="#7121-性质"></a> 7.1.2.1 性质</h4>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307143940814.png" alt="image-20240307143940814"></p>
-<ol>
-<li>估值定理<img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307144843120.png" alt="image-20240307144843120"></li>
-<li>积分中值定理<img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307145116137.png" alt="image-20240307145116137"></li>
-<li>偶倍奇0<img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307143524036.png" alt="image-20240307143524036"></li>
-</ol>
-<h4 id="7122-推论"><a class="markdownIt-Anchor" href="#7122-推论"></a> 7.1.2.2 推论</h4>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307144422447.png" alt="image-20240307144422447"></p>
-<h4 id="7122-例题"><a class="markdownIt-Anchor" href="#7122-例题"></a> 7.1.2.2 例题</h4>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307144713104.png" alt="image-20240307144713104"></p>
-<h3 id="72-微积分基本公式"><a class="markdownIt-Anchor" href="#72-微积分基本公式"></a> 7.2 微积分基本公式</h3>
-<h3 id="721"><a class="markdownIt-Anchor" href="#721"></a> 7.2.1</h3>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307145426013.png" alt="image-20240307145426013"></p>
-<h4 id="7221-变上限函数"><a class="markdownIt-Anchor" href="#7221-变上限函数"></a> 7.2.2.1 变上限函数</h4>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307145817966.png" alt="image-20240307145817966"></p>
-<h4 id="7222-变上限函数例题"><a class="markdownIt-Anchor" href="#7222-变上限函数例题"></a> 7.2.2.2 变上限函数例题</h4>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307150215574.png" alt="image-20240307150215574"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307150221297.png" alt="image-20240307150221297"></p>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307150333179.png" alt="image-20240307150333179"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307150335581.png" alt="image-20240307150335581"></p>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307150515517.png" alt="image-20240307150515517"></p>
-<h4 id="7223-牛顿莱布尼兹公式"><a class="markdownIt-Anchor" href="#7223-牛顿莱布尼兹公式"></a> 7.2.2.3 牛顿莱布尼兹公式</h4>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307150625724.png" alt="image-20240307150625724"></p>
-<h4 id="723-定积分计算"><a class="markdownIt-Anchor" href="#723-定积分计算"></a> 7.2.3 定积分计算</h4>
-<h3 id="7231"><a class="markdownIt-Anchor" href="#7231"></a> 7.2.3.1</h3>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307151320612.png" alt="image-20240307151320612"></p>
-<h5 id="72311-例题"><a class="markdownIt-Anchor" href="#72311-例题"></a> 7.2.3.1.1 例题</h5>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307151336203.png" alt="image-20240307151336203"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307151436845.png" alt="image-20240307151436845"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307151710561.png" alt="image-20240307151710561"></p>
-<h3 id="7232-分部积分法"><a class="markdownIt-Anchor" href="#7232-分部积分法"></a> 7.2.3.2 分部积分法</h3>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307152448549.png" alt="image-20240307152448549"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307152859833.png" alt="image-20240307152859833"></p>
-<p><strong>降蜜汁函数次数？</strong></p>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307151714112.png" alt="image-20240307151714112"></p>
-<h5 id="72321-例题"><a class="markdownIt-Anchor" href="#72321-例题"></a> 7.2.3.2.1 例题</h5>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307151809939.png" alt="image-20240307151809939"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307152217206.png" alt="image-20240307152217206"></p>
-<h1 id="8"><a class="markdownIt-Anchor" href="#8"></a> 8</h1>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307153740743.png" alt="image-20240307153740743"></p>
-<h2 id="81-定积分几何上的应用"><a class="markdownIt-Anchor" href="#81-定积分几何上的应用"></a> 8.1 定积分几何上的应用</h2>
-<h3 id="811"><a class="markdownIt-Anchor" href="#811"></a> 8.1.1</h3>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307154423286.png" alt="image-20240307154423286"></p>
-<h4 id="8111-例题"><a class="markdownIt-Anchor" href="#8111-例题"></a> 8.1.1.1 例题</h4>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307154432204.png" alt="image-20240307154432204"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307154446138.png" alt="image-20240307154446138"></p>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307154504012.png" alt="image-20240307154504012"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307154512543.png" alt="image-20240307154512543"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307154602713.png" alt="image-20240307154602713"></p>
-<h4 id="8112-极坐标"><a class="markdownIt-Anchor" href="#8112-极坐标"></a> 8.1.1.2 极坐标</h4>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307154649600.png" alt="image-20240307154649600"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307154837192.png" alt="image-20240307154837192"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307154904996.png" alt="image-20240307154904996" style="zoom: 67%;"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307154930189.png" alt="image-20240307154930189" style="zoom:50%;"></p>
-<h5 id="81121-例题"><a class="markdownIt-Anchor" href="#81121-例题"></a> 8.1.1.2.1 例题</h5>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307155128775.png" alt="image-20240307155128775"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307155140563.png" alt="image-20240307155140563" style="zoom:33%;"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307155452095.png" alt="image-20240307155452095"></p>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307155337141.png" alt="image-20240307155337141"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307155220242.png" alt="image-20240307155220242"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307155255673.png" alt="image-20240307155255673"></p>
-<h3 id="812-旋转体体积"><a class="markdownIt-Anchor" href="#812-旋转体体积"></a> 8.1.2  旋转体体积</h3>
-<h4 id="8121"><a class="markdownIt-Anchor" href="#8121"></a> 8.1.2.1</h4>
-<p>先定义一小部分的d微元 然后找出解决公式，然后进行积分</p>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307160057983.png" alt="image-20240307160057983"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307160231521.png" alt="image-20240307160231521"></p>
-<h4 id="8122-旋转体体积例题"><a class="markdownIt-Anchor" href="#8122-旋转体体积例题"></a> 8.1.2.2  旋转体体积例题</h4>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307160404402.png" alt="image-20240307160404402"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307161034528.png" alt="image-20240307161034528"></p>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307160759738.png" alt="image-20240307160759738"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307160804330.png" alt="image-20240307160804330"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307161224230.png" alt="image-20240307161224230"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307161226770.png" alt="image-20240307161226770"></p>
-<h5 id="81221-推广"><a class="markdownIt-Anchor" href="#81221-推广"></a> 8.1.2.2.1  推广</h5>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307161442036.png" alt="image-20240307161442036"></p>
-<h5 id="81222-华里式公式"><a class="markdownIt-Anchor" href="#81222-华里式公式"></a> 8.1.2.2.2  华里式公式</h5>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307160656013.png" alt="image-20240307160656013"></p>
-<h4 id="8122"><a class="markdownIt-Anchor" href="#8122"></a> 8.1.2.2</h4>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307161525045.png" alt="image-20240307161525045"></p>
-<h4 id="8123-求弧长"><a class="markdownIt-Anchor" href="#8123-求弧长"></a> 8.1.2.3 求弧长</h4>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307161823924.png" alt="image-20240307161823924"></p>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307161631741.png" alt="image-20240307161631741"></p>
-<h2 id="82"><a class="markdownIt-Anchor" href="#82"></a> 8.2</h2>
-<h1 id="9"><a class="markdownIt-Anchor" href="#9"></a> 9</h1>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307164035565.png" alt="image-20240307164035565"></p>
-<h2 id="91-微分方程"><a class="markdownIt-Anchor" href="#91-微分方程"></a> 9.1 微分方程</h2>
-<h3 id="911-概念"><a class="markdownIt-Anchor" href="#911-概念"></a> 9.1.1 概念</h3>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240307164550673.png" alt="image-20240307164550673"></p>
-<h2 id="92"><a class="markdownIt-Anchor" href="#92"></a> 9.2</h2>
-<h2 id="93"><a class="markdownIt-Anchor" href="#93"></a> 9.3</h2>
-<h1 id="10"><a class="markdownIt-Anchor" href="#10"></a> 10</h1>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308104038609.png" alt="image-20240308104038609"></p>
-<h2 id="101-偏导数对多元函数"><a class="markdownIt-Anchor" href="#101-偏导数对多元函数"></a> 10.1 偏导数（对多元函数）</h2>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308104746672.png" alt="image-20240308104746672"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308104936389.png" alt="image-20240308104936389"></p>
-<p>函数表示</p>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308105036482.png" alt="image-20240308105036482"></p>
-<h3 id="1011-例题"><a class="markdownIt-Anchor" href="#1011-例题"></a> 10.1.1 例题</h3>
-<h4 id="10111-例题"><a class="markdownIt-Anchor" href="#10111-例题"></a> 10.1.1.1 例题</h4>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308105137139.png" alt="image-20240308105137139"></p>
-<p>存不存在看骗到定义存不存在==看极限存不存在–&gt; 极限存在判定<img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308105624858.png" alt="image-20240308105624858"></p>
-<h4 id="10112-例题2"><a class="markdownIt-Anchor" href="#10112-例题2"></a> 10.1.1.2 例题2</h4>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308105634448.png" alt="image-20240308105634448"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308105844308.png" alt="image-20240308105844308"></p>
-<h2 id="102-高阶偏导数"><a class="markdownIt-Anchor" href="#102-高阶偏导数"></a> 10.2 高阶偏导数</h2>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308110039810.png" alt="image-20240308110039810"></p>
-<p>中间相等：告诫混合偏导数和求导次序没关系</p>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308110029269.png" alt="image-20240308110029269"></p>
-<h2 id="103-复合函数求导"><a class="markdownIt-Anchor" href="#103-复合函数求导"></a> 10.3 复合函数求导</h2>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308110420298.png" alt="image-20240308110420298"></p>
-<h3 id="1031-例题"><a class="markdownIt-Anchor" href="#1031-例题"></a> 10.3.1 例题</h3>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308110450533.png" alt="image-20240308110450533"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308111340145.png" alt="image-20240308111340145"></p>
-<h2 id="104-隐函数求偏导数"><a class="markdownIt-Anchor" href="#104-隐函数求偏导数"></a> 10.4 隐函数求偏导数</h2>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308111517878.png" alt="image-20240308111517878"></p>
-<h1 id="12"><a class="markdownIt-Anchor" href="#12"></a> 12</h1>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308165641959.png" alt="image-20240308165641959"></p>
-<h3 id="1211-概念"><a class="markdownIt-Anchor" href="#1211-概念"></a> 12.1.1 概念</h3>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308171516647.png" alt="image-20240308171516647" style="zoom: 67%;"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308171549164.png" alt="image-20240308171549164" style="zoom: 67%;"></p>
-<img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308171528679.png" alt="image-20240308171528679" style="zoom:50%;">
-<h3 id="1212-性质"><a class="markdownIt-Anchor" href="#1212-性质"></a> 12.1.2 性质</h3>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308172815921.png" alt="image-20240308172815921"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308172807934.png" alt="image-20240308172807934" style="zoom:50%;"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308172827733.png" alt="image-20240308172827733" style="zoom:50%;"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308172941758.png" alt="image-20240308172941758" style="zoom:50%;"></p>
-<h3 id="1213-对称性"><a class="markdownIt-Anchor" href="#1213-对称性"></a> 12.1.3 对称性</h3>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308172100340.png" alt="image-20240308172100340"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308172142619.png" alt="image-20240308172142619"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308172220177.png" alt="image-20240308172220177"></p>
-<h3 id="1214-计算"><a class="markdownIt-Anchor" href="#1214-计算"></a> 12.1.4 计算</h3>
-<p>选择积分次序</p>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308173206935.png" alt="image-20240308173206935"></p>
-<img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308173806670.png" alt="image-20240308173806670" style="zoom:50%;">
-<img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308173819649.png" alt="image-20240308173819649" style="zoom:50%;">
-<h4 id="12141"><a class="markdownIt-Anchor" href="#12141"></a> 12.1.4.1</h4>
-<p>​     <img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308174036531.png" alt="image-20240308174036531"></p>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308174143474.png" alt="image-20240308174143474"></p>
-<p>例题</p>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308174608370.png" alt="image-20240308174608370"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308174627104.png" alt="image-20240308174627104" style="zoom:67%;"></p>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308174735882.png" alt="image-20240308174735882"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308174909403.png" alt="image-20240308174909403" style="zoom:50%;"></p>
-<h4 id="12142-选择次序"><a class="markdownIt-Anchor" href="#12142-选择次序"></a> 12.1.4.2  选择次序</h4>
-<h5 id="12142-1-画线尽量只有一线"><a class="markdownIt-Anchor" href="#12142-1-画线尽量只有一线"></a> 12.1.4.2 .1 画线，尽量只有一线</h5>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308175007445.png" alt="image-20240308175007445"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308175016574.png" alt="image-20240308175016574"></p>
-<h5 id="12142-2-简单的先积分先积分能积分的"><a class="markdownIt-Anchor" href="#12142-2-简单的先积分先积分能积分的"></a> 12.1.4.2 .2 简单的先积分，先积分能积分的</h5>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308175057579.png" alt="image-20240308175057579"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308175124159.png" alt="image-20240308175124159"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308175209624.png" alt="image-20240308175209624" style="zoom:33%;"></p>
-<p>上面的不要积分，</p>
-<h4 id="12142-极坐标"><a class="markdownIt-Anchor" href="#12142-极坐标"></a> 12.1.4.2 极坐标</h4>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308175435886.png" alt="image-20240308175435886"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308175441538.png" alt="image-20240308175441538"></p>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308175739772.png" alt="image-20240308175739772"></p>
-<p>例三</p>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308175751476.png" alt="image-20240308175751476"></p>
-<img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308175830062.png" alt="image-20240308175830062" style="zoom:50%;">
-<p>另一个积分Θ的表达 ：2rsin(Θ)</p>
-<img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308180034307.png" alt="image-20240308180034307" style="zoom:50%;">
-<p>例四</p>
-<p><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308180239725.png" alt="image-20240308180239725"><img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308180407742.png" alt="image-20240308180407742"></p>
-<h5 id="1215-总结"><a class="markdownIt-Anchor" href="#1215-总结"></a> 12.1.5 总结</h5>
-<img src="/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20240308180555024.png" alt="image-20240308180555024" style="zoom:50%;">
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2024/03/07/2024%E5%B9%B43%E6%9C%887%E6%97%A5-%E9%AB%98%E6%95%B0%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/" data-id="cltlpd51u0001ngv41zv26mmq" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%AB%98%E6%95%B0/" rel="tag">高数</a></li></ul>
-
     </footer>
   </div>
   
@@ -823,170 +831,6 @@
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%93/" rel="tag">面试总结</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2024年2月28日-高数" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/" class="article-date">
-  <time class="post-time" datetime="2024-02-28T04:39:40.000Z" itemprop="datePublished">
-    <span class="post-month">2月</span><br/>
-    <span class="post-day">28</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/">2024年2月28日 高数</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="高数"><a class="markdownIt-Anchor" href="#高数"></a> 高数</h1>
-<h2 id="1-前言"><a class="markdownIt-Anchor" href="#1-前言"></a> 1 前言</h2>
-<h3 id="11资料"><a class="markdownIt-Anchor" href="#11资料"></a> 1.1资料</h3>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240228124111025.png" alt="image-20240228124111025"></p>
-<h3 id><a class="markdownIt-Anchor" href="#"></a> </h3>
-<h3 id="12安排"><a class="markdownIt-Anchor" href="#12安排"></a> 1.2安排</h3>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240228124504771.png" alt><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240228124959221.png" alt="image-20240228124959221"></p>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240228125018008.png" alt="image-20240228125018008"><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240228125043033.png" alt="image-20240228125043033"></p>
-<p>时间线<img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240228125356390.png" alt="image-20240228125356390"></p>
-<h2 id="2-考点"><a class="markdownIt-Anchor" href="#2-考点"></a> 2 考点</h2>
-<h2 id="3-笔记"><a class="markdownIt-Anchor" href="#3-笔记"></a> 3 笔记</h2>
-<h3 id="1-函数"><a class="markdownIt-Anchor" href="#1-函数"></a> 1 函数</h3>
-<h5 id="11-单调性"><a class="markdownIt-Anchor" href="#11-单调性"></a> 1.1 单调性</h5>
-<h5 id="12-奇偶性"><a class="markdownIt-Anchor" href="#12-奇偶性"></a> 1.2 奇偶性</h5>
-<ul>
-<li>奇函数f(0)=0</li>
-<li></li>
-</ul>
-<h5 id="13-周期性"><a class="markdownIt-Anchor" href="#13-周期性"></a> 1.3 周期性</h5>
-<h5 id="14-有界性"><a class="markdownIt-Anchor" href="#14-有界性"></a> 1.4 有界性</h5>
-<h3 id="2-极限"><a class="markdownIt-Anchor" href="#2-极限"></a> 2 极限</h3>
-<h4 id="21-考题"><a class="markdownIt-Anchor" href="#21-考题"></a> 2.1 考题</h4>
-<h5 id="极限概念"><a class="markdownIt-Anchor" href="#极限概念"></a> 极限概念</h5>
-<ul>
-<li>选择题</li>
-<li>证明题</li>
-</ul>
-<h5 id="求极限"><a class="markdownIt-Anchor" href="#求极限"></a> 求极限</h5>
-<h4 id="22-极限概念"><a class="markdownIt-Anchor" href="#22-极限概念"></a> 2.2 极限概念</h4>
-<p>​</p>
-<h4 id="23-性质"><a class="markdownIt-Anchor" href="#23-性质"></a> 2.3 性质</h4>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302141703721.png" alt="image-20240302141703721"></p>
-<p>夹逼准则 n项和</p>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302141724447.png" alt="image-20240302141724447"><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302141935122.png" alt="image-20240302141935122"><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302142309455.png" alt="image-20240302142309455"><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302142503414.png" alt="image-20240302142503414"></p>
-<h4 id="24-无穷小量"><a class="markdownIt-Anchor" href="#24-无穷小量"></a> 2.4 无穷小量</h4>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302142921823.png" alt="image-20240302142921823"></p>
-<h4 id="25-无穷大"><a class="markdownIt-Anchor" href="#25-无穷大"></a> 2.5 无穷大</h4>
-<h5 id="1-概念"><a class="markdownIt-Anchor" href="#1-概念"></a> 1 概念</h5>
-<p>​	<strong>绝对值趋向无穷大</strong></p>
-<h5 id="2-比较"><a class="markdownIt-Anchor" href="#2-比较"></a> 2 比较</h5>
-<p><strong>函数</strong><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302144235705.png" alt="image-20240302144235705"></p>
-<p><strong>数列</strong></p>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302144416896.png" alt="image-20240302144416896"></p>
-<h6 id="21-题目"><a class="markdownIt-Anchor" href="#21-题目"></a> 2.1 题目</h6>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302144453586.png" alt="image-20240302144453586"></p>
-<h5 id="3-无穷大性质"><a class="markdownIt-Anchor" href="#3-无穷大性质"></a> 3 无穷大性质</h5>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302144905897.png" alt="image-20240302144905897"></p>
-<h5 id="4-无穷大量和无界变量"><a class="markdownIt-Anchor" href="#4-无穷大量和无界变量"></a> 4 无穷大量和无界变量</h5>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302145136587.png" alt="image-20240302145136587"><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302145405884.png" alt="image-20240302145405884"></p>
-<h5 id="5-无穷大和无穷小的关系"><a class="markdownIt-Anchor" href="#5-无穷大和无穷小的关系"></a> 5 无穷大和无穷小的关系</h5>
-<p>​</p>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302145611300.png" alt="image-20240302145611300"></p>
-<h4 id="3-求极限"><a class="markdownIt-Anchor" href="#3-求极限"></a> 3 求极限</h4>
-<h5 id="31-极限概念"><a class="markdownIt-Anchor" href="#31-极限概念"></a> 3.1 极限概念</h5>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302160105372.png" alt="image-20240302160105372"><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302155959354.png" alt="image-20240302155959354"><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302160126467.png" alt="image-20240302160126467"></p>
-<h5 id="32-求极限"><a class="markdownIt-Anchor" href="#32-求极限"></a> 3.2 求极限</h5>
-<h6 id="320-常用方法8"><a class="markdownIt-Anchor" href="#320-常用方法8"></a> 3.2.0 常用方法8</h6>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302160532168.png" alt="image-20240302160532168"></p>
-<h6 id="321-基本极限求极限"><a class="markdownIt-Anchor" href="#321-基本极限求极限"></a> 3.2.1 基本极限求极限</h6>
-<p><strong>常用基本极限</strong></p>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302161420187.png" alt="image-20240302161420187"><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302161801006.png" alt="image-20240302161801006"><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304161115468.png" alt="image-20240304161115468"></p>
-<p><strong>负数的无理数次方无意义</strong></p>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302161030517.png" alt="image-20240302161030517"></p>
-<p><strong>倒代换</strong></p>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302161144290.png" alt="image-20240302161144290"></p>
-<p><strong>注意实现</strong></p>
-<ul>
-<li><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302161526965.png" alt="image-20240302161526965"></li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1 与无穷</span><br></pre></td></tr></table></figure>
-<p><strong>常用方法</strong></p>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302161920455.png" alt="image-20240302161920455"></p>
-<p><strong>结论</strong></p>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302161938520.png" alt="image-20240302161938520"><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302162024055.png" alt="image-20240302162024055"></p>
-<p><strong>例子</strong></p>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240302162105438.png" alt="image-20240302162105438"><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304160816366.png" alt="image-20240304160816366"><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304161003051.png" alt="image-20240304161003051"></p>
-<h6 id="322-利用等价无穷小代换求极限"><a class="markdownIt-Anchor" href="#322-利用等价无穷小代换求极限"></a> 3.2.2 利用等价无穷小代换求极限</h6>
-<p>一般原则实在乘除</p>
-<p>但是一定条件下可以加减</p>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304161548113.png" alt="image-20240304161548113"><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304161911099.png" alt="image-20240304161911099"></p>
-<p>减法</p>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304161846657.png" alt="image-20240304161846657"><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304161850377.png" alt="image-20240304161850377"></p>
-<p>加分</p>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304161940499.png" alt="image-20240304161940499"></p>
-<p>2 常见等价无穷小</p>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304162039665.png" alt="image-20240304162039665"><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304162059082.png" alt="image-20240304162059082"><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304162140194.png" alt="image-20240304162140194"></p>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304162329500.png" alt="image-20240304162329500"></p>
-<p>Tip：熵存在，分母趋向0，分子也趋向0。</p>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304162641040.png" alt="image-20240304162641040"></p>
-<p>Tip：快速解决</p>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304162832538.png" alt="image-20240304162832538"></p>
-<p>Tip：拉格朗日</p>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304163105415.png" alt="image-20240304163105415"></p>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304162752738.png" alt="image-20240304162752738"></p>
-<p>Tip：</p>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304163312013.png" alt="image-20240304163312013"></p>
-<p>Tip：蜜汁函数 等价代换e-1<img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304163558552.png" alt="image-20240304163558552"></p>
-<p>Tip：lnx趋向1</p>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304163648590.png" alt="image-20240304163648590"></p>
-<p>Tip：结论推广<img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304163921580.png" alt="image-20240304163921580"></p>
-<p>例题23</p>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304163522800.png" alt="image-20240304163522800"></p>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304164251534.png" alt="image-20240304164251534"></p>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304164318003.png" alt="image-20240304164318003"></p>
-<p>Tip 0/0 方法<img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304164342165.png" alt="image-20240304164342165"></p>
-<h6 id="323-利用有理运算法则"><a class="markdownIt-Anchor" href="#323-利用有理运算法则"></a> 3.2.3 利用有理运算法则</h6>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304164831814.png" alt="image-20240304164831814"></p>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304165035356.png" alt="image-20240304165035356"></p>
-<p>常用结论</p>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304165243683.png" alt="image-20240304165243683"><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304165335922.png" alt="image-20240304165335922"></p>
-<p>Tip：把存在的极限单独分出<img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304165713077.png" alt="image-20240304165713077"></p>
-<p>为什么？<img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304165903838.png" alt="image-20240304165903838"></p>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304165503383.png" alt="image-20240304165503383"></p>
-<p><img src="/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/image-20240304165628235.png" alt="image-20240304165628235"></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2024/02/28/2024%E5%B9%B42%E6%9C%8828%E6%97%A5-%E9%AB%98%E6%95%B0/" data-id="cltgreey6000uw8v46mhu7cbf" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%80%83%E7%A0%94/" rel="tag">考研</a></li></ul>
 
     </footer>
   </div>
@@ -1618,81 +1462,6 @@ RBM的逐层训练<br>
 
 
   
-    <article id="post-2024年2月4日-Transformer" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/" class="article-date">
-  <time class="post-time" datetime="2024-02-04T07:45:25.000Z" itemprop="datePublished">
-    <span class="post-month">2月</span><br/>
-    <span class="post-day">04</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/">2024年2月4日 Transformer</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="11"><a class="markdownIt-Anchor" href="#11"></a> 11</h1>
-<p>Transformer</p>
-<p>类似</p>
-<img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204154832886.png" alt="image-20240204154832886" style="zoom: 33%;">
-<p>编码器内部结构</p>
-<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204154915719.png" alt="image-20240204154915719"></p>
-<p>解码器</p>
-<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204154933875.png" alt="image-20240204154933875"></p>
-<p>计算注意力</p>
-<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204155008356.png" alt="image-20240204155008356"></p>
-<p>a embedding 转换成向量</p>
-<p>乘wq wk wv 成为 QKV</p>
-<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204155229925.png" alt="image-20240204155229925"></p>
-<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204155321645.png" alt="image-20240204155321645"></p>
-<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204155426496.png" alt="image-20240204155426496"></p>
-<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204155505816.png" alt="image-20240204155505816"></p>
-<h3 id="多头注意力"><a class="markdownIt-Anchor" href="#多头注意力"></a> 多头注意力</h3>
-<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204155513230.png" alt="image-20240204155513230"></p>
-<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204155611126.png" alt="image-20240204155611126"></p>
-<p>z相加之后乘w 等到 Z</p>
-<h2 id="词向量编码"><a class="markdownIt-Anchor" href="#词向量编码"></a> 词向量编码</h2>
-<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204155845984.png" alt="image-20240204155845984"></p>
-<h3 id="位置编码"><a class="markdownIt-Anchor" href="#位置编码"></a> 位置编码</h3>
-<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204160027009.png" alt="image-20240204160027009"></p>
-<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204160316504.png" alt="image-20240204160316504"></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/" data-id="cltgreey3000hw8v46fth0d3s" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl/" rel="tag">dl</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -1737,9 +1506,9 @@ RBM的逐层训练<br>
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>73</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>74</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>19</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>17</strong><br>标签</div></a>
     </div>
 
 
