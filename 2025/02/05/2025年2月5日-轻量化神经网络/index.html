@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2025年2月5日 轻量化神经网络1 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="知识蒸馏  soft target   更多信息+   蒸馏温度    训练   量化  剪枝  定义  剪枝方法总结表    剪枝方法 主要剪枝对象 优点 缺点 示例方法&#x2F;应用     权重剪枝（Weight Pruning） 单个权重 剪枝率高，可应用于各种网络 需要稀疏矩阵优化，不适合硬件加速 TensorFlow tf.sparsity, PyTorch torch.nn.utils.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2025年2月5日 轻量化神经网络1">
+<meta property="og:url" content="https://shakewely.github.io/2025/02/05/2025%E5%B9%B42%E6%9C%885%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="知识蒸馏  soft target   更多信息+   蒸馏温度    训练   量化  剪枝  定义  剪枝方法总结表    剪枝方法 主要剪枝对象 优点 缺点 示例方法&#x2F;应用     权重剪枝（Weight Pruning） 单个权重 剪枝率高，可应用于各种网络 需要稀疏矩阵优化，不适合硬件加速 TensorFlow tf.sparsity, PyTorch torch.nn.utils.">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2025/02/05/2025%E5%B9%B42%E6%9C%885%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20250205162820154.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/02/05/2025%E5%B9%B42%E6%9C%885%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20250205163735260.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/02/05/2025%E5%B9%B42%E6%9C%885%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20250205164432943.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/02/05/2025%E5%B9%B42%E6%9C%885%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20250205164308480.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/02/05/2025%E5%B9%B42%E6%9C%885%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20250205164454289.png">
+<meta property="og:image" content="https://ucc.alicdn.com/yysinyik4knec/developer-article1644450/20241207/de25bb1591524da481677d9008ecc078.png?x-oss-process=image/resize,w_1400/format,webp">
+<meta property="article:published_time" content="2025-02-05T08:28:10.000Z">
+<meta property="article:modified_time" content="2025-02-09T07:20:31.303Z">
+<meta property="article:author" content="Weakliy">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shakewely.github.io/2025/02/05/2025%E5%B9%B42%E6%9C%885%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20250205162820154.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>79</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>17</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2025年2月5日-轻量化神经网络" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/02/05/2025%E5%B9%B42%E6%9C%885%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" class="article-date">
+  <time class="post-time" datetime="2025-02-05T08:28:10.000Z" itemprop="datePublished">
+    <span class="post-month">2月</span><br/>
+    <span class="post-day">05</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2025年2月5日 轻量化神经网络1
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><img src="/2025/02/05/2025%E5%B9%B42%E6%9C%885%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20250205162820154.png" alt="image-20250205162820154"></p>
+<h1 id="知识蒸馏"><a class="markdownIt-Anchor" href="#知识蒸馏"></a> 知识蒸馏</h1>
+<h2 id="soft-target"><a class="markdownIt-Anchor" href="#soft-target"></a> soft target</h2>
+<img src="/2025/02/05/2025%E5%B9%B42%E6%9C%885%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20250205163735260.png" alt="image-20250205163735260" style="zoom:33%;">
+<blockquote>
+<p>更多信息+</p>
+</blockquote>
+<h4 id="蒸馏温度"><a class="markdownIt-Anchor" href="#蒸馏温度"></a> 蒸馏温度</h4>
+<img src="/2025/02/05/2025%E5%B9%B42%E6%9C%885%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20250205164432943.png" alt="image-20250205164432943" style="zoom:50%;">
+<img src="/2025/02/05/2025%E5%B9%B42%E6%9C%885%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20250205164308480.png" alt="image-20250205164308480" style="zoom:67%;">
+<h4 id="训练"><a class="markdownIt-Anchor" href="#训练"></a> 训练</h4>
+<img src="/2025/02/05/2025%E5%B9%B42%E6%9C%885%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20250205164454289.png" alt="image-20250205164454289" style="zoom:33%;">
+<h1 id="量化"><a class="markdownIt-Anchor" href="#量化"></a> 量化</h1>
+<h1 id="剪枝"><a class="markdownIt-Anchor" href="#剪枝"></a> 剪枝</h1>
+<h2 id="定义"><a class="markdownIt-Anchor" href="#定义"></a> 定义</h2>
+<h3 id="剪枝方法总结表"><a class="markdownIt-Anchor" href="#剪枝方法总结表"></a> <strong>剪枝方法总结表</strong></h3>
+<table>
+<thead>
+<tr>
+<th>剪枝方法</th>
+<th>主要剪枝对象</th>
+<th>优点</th>
+<th>缺点</th>
+<th>示例方法/应用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>权重剪枝（Weight Pruning）</strong></td>
+<td>单个权重</td>
+<td>剪枝率高，可应用于各种网络</td>
+<td>需要稀疏矩阵优化，不适合硬件加速</td>
+<td>TensorFlow <code>tf.sparsity</code>, PyTorch <code>torch.nn.utils.prune</code></td>
+</tr>
+<tr>
+<td><strong>结构化剪枝（Structured Pruning）</strong></td>
+<td>神经元、通道、卷积核</td>
+<td>适合硬件加速</td>
+<td>剪枝率受限，可能影响模型结构</td>
+<td><code>Channel Pruning</code>, <code>Filter Pruning</code></td>
+</tr>
+<tr>
+<td><strong>低秩分解剪枝（Low-Rank Approximation）</strong></td>
+<td>整体权重矩阵</td>
+<td>计算加速明显</td>
+<td>需要额外的分解计算</td>
+<td>SVD 分解, CP 分解, Tensor Train 分解</td>
+</tr>
+<tr>
+<td><strong>剪枝 + 训练（Prune and Fine-tune）</strong></td>
+<td>结合剪枝和微调</td>
+<td>可恢复精度</td>
+<td>训练时间增加</td>
+<td>迭代剪枝（Iterative Pruning）, 一次性剪枝（One-shot Pruning）</td>
+</tr>
+<tr>
+<td><strong>软剪枝（Soft Pruning）</strong></td>
+<td>权重</td>
+<td>更温和的剪枝方式</td>
+<td>需要更多训练步骤</td>
+<td>逐步缩小权重（Weight Decay），平滑剪枝（Gradual Magnitude Pruning）</td>
+</tr>
+<tr>
+<td><strong>剪枝 + 蒸馏（Pruning with Distillation）</strong></td>
+<td>剪枝后蒸馏</td>
+<td>精度损失小</td>
+<td>需要额外教师模型</td>
+<td><code>Knowledge Distillation (KD)</code>, MobileBERT, TinyBERT</td>
+</tr>
+<tr>
+<td><strong>幸运票剪枝（Lottery Ticket Hypothesis）</strong></td>
+<td>子网络</td>
+<td>保留重要子结构</td>
+<td>训练步骤复杂</td>
+<td>训练大模型后剪枝，重新初始化训练</td>
+</tr>
+<tr>
+<td><strong>正则化剪枝（Regularization-based Pruning）</strong></td>
+<td>L1/L2 约束</td>
+<td>无需额外剪枝步骤</td>
+<td>训练需额外超参数</td>
+<td><code>L1 Regularization</code>, <code>Group Lasso Pruning</code></td>
+</tr>
+<tr>
+<td><strong>动态剪枝（Movement Pruning）</strong></td>
+<td>Transformer 模型</td>
+<td>适合 NLP</td>
+<td>计算复杂度高</td>
+<td><code>BERT Pruning</code>, <code>MobileBERT</code></td>
+</tr>
+<tr>
+<td><strong>自动剪枝（AutoML Pruning）</strong></td>
+<td>NAS/强化学习</td>
+<td>自动优化</td>
+<td>计算成本高</td>
+<td><code>AMC (AutoML for Model Compression)</code>, <code>Meta-Pruning</code></td>
+</tr>
+</tbody>
+</table>
+<img src="https://ucc.alicdn.com/yysinyik4knec/developer-article1644450/20241207/de25bb1591524da481677d9008ecc078.png?x-oss-process=image/resize,w_1400/format,webp" alt="image" style="zoom: 67%;">
+<ul>
+<li><strong>非结构化剪枝（Unstructured Pruning）</strong>：直接删除模型中的某些参数，通常基于参数的绝对值大小。这种方法可以实现较高的压缩比，但可能会破坏模型的整体结构。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 应用权重剪枝</span><br><span class="line">def apply_pruning(model, amount=0.2):</span><br><span class="line">    for name, module in model.named_modules():</span><br><span class="line">        if isinstance(module, nn.Conv2d) or isinstance(module, nn.Linear):</span><br><span class="line">            prune.l1_unstructured(module, name=&#x27;weight&#x27;, amount=amount)</span><br><span class="line">            print(f&quot;Applied pruning on &#123;name&#125;&quot;)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>结构化剪枝（Structured Pruning）</strong>：删除模型中的特定结构单元，如滤波器、通道或层。这种方法不会破坏模型的整体结构，更适合硬件加速。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">threshold = 0.01</span><br><span class="line">for name, module in model.named_modules():</span><br><span class="line">    if isinstance(module, nn.Conv2d):</span><br><span class="line">        # 计算每个卷积核的L2范数</span><br><span class="line">        kernel_norms = torch.norm(module.weight, dim=(1, 2, 3))</span><br><span class="line">        # 找到小于阈值的卷积核索引</span><br><span class="line">        prune_indices = torch.where(kernel_norms &lt; threshold)[0]</span><br><span class="line">        # 将这些卷积核的权重置零</span><br><span class="line">        module.weight[prune_indices] = 0</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<h4 id="基于梯度的剪枝"><a class="markdownIt-Anchor" href="#基于梯度的剪枝"></a> <strong>基于梯度的剪枝</strong></h4>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">import torch</span><br><span class="line"></span><br><span class="line">def gradient_magnitude_pruning(weight, gradient, percentile=0.5):</span><br><span class="line">    &quot;&quot;&quot;基于梯度幅值剪枝权重&quot;&quot;&quot;</span><br><span class="line">    num_zeros = round(weight.numel() * percentile)  # 计算剪枝元素数量</span><br><span class="line">    threshold = gradient.abs().view(-1).kthvalue(num_zeros).values  # 计算剪枝阈值</span><br><span class="line">    mask = gradient.abs() &gt; threshold  # 生成掩码</span><br><span class="line">    weight.mul_(mask.to(weight.device))  # 应用掩码剪枝</span><br><span class="line">    return weight</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h1 id="注意力迁移"><a class="markdownIt-Anchor" href="#注意力迁移"></a> 注意力迁移</h1>
+<p><a target="_blank" rel="noopener" href="https://github.com/szagoruyko/attention-transfer?tab=readme-ov-file">https://github.com/szagoruyko/attention-transfer?tab=readme-ov-file</a></p>
+<h2 id="定义-2"><a class="markdownIt-Anchor" href="#定义-2"></a> 定义</h2>
+<ul>
+<li>注意力迁移的思想来源于知识蒸馏，但与<strong>传统知识蒸馏主要关注最后层的知识不同，注意力迁移关注训练过程中特征图中的知识</strong>。</li>
+<li>其目的是通过将教师网络的注意力图迁移到学生网络，提升学生网络的性能，同时实现模型的轻量化。</li>
+</ul>
+<h2 id="注意力机制"><a class="markdownIt-Anchor" href="#注意力机制"></a> 注意力机制</h2>
+<ul>
+<li><strong>空间域（Spatial Domain）</strong>：关注特征空间信息，决定空间中哪些区域重要。例如，通过动态注意力机制来选择性地关注图像中的特定区域。</li>
+<li><strong>通道域（Channel Domain）</strong>：关注通道信息，如Squeeze-and-Excitation Networks（SENet）。SENet通过全局平均池化、降维再升维的方式为通道分配权重，增强重要通道的特征。</li>
+<li><strong>混合域（Mixed Domain）</strong>：同时关注空间域和通道域，如CBAM等注意力机制，综合考虑特征空间和通道信息来生成注意力图。</li>
+</ul>
+<h2 id="算法部分"><a class="markdownIt-Anchor" href="#算法部分"></a> 算法部分</h2>
+<ul>
+<li><strong>基于激活的注意力迁移（Activation-based Attention Transfer）</strong>：
+<ul>
+<li>在前馈过程中，通过教师网络的激活特征图来引导学生网络的学习。</li>
+<li>教师网络的激活特征图反映了输入数据在不同区域的重要性，<strong>学生网络通过模仿这些激活特征图</strong>来学习关注重要的区域。</li>
+</ul>
+</li>
+<li><strong>基于梯度的注意力迁移（Gradient-based Attention Transfer）</strong>：
+<ul>
+<li>在反馈过程中，对教师网络和学生网络的交叉熵损失函数分别求梯度，<strong>将教师网络的梯度作为注意力图转移到学生网络</strong>。</li>
+<li>关注那些对输出影响大的区域，通过构造损失函数，使得学生网络的梯度注意力图与教师网络的梯度注意力图接近，从而实现知识的迁移。</li>
+</ul>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/02/05/2025%E5%B9%B42%E6%9C%885%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" data-id="cm6rncay50000xgv42v0x1l8p" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          2025年2月9日 轻量化神经网络2
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2025/01/08/2025%E5%B9%B41%E6%9C%889%E6%97%A5-%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2025年1月9日 语言模型</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>79</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>17</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2024 - 2025 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2025年1月2日 视觉模型 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="视觉模型 端到端单阶段 两阶段的 RCNN  RCNN  RCNN  0 原理   1 ss算法   2 提取特征    3 SVM   IOU         4 回归分类器 pass  优缺  冗余 慢 空间大   Fast RCNN   0 原理    1 减少重复计算特征 通过全连接层进行  正负样本   2 分类器 全连接层实现  3 边界框回归器   4 损失计算   Faster">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2025年1月2日 视觉模型">
+<meta property="og:url" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="视觉模型 端到端单阶段 两阶段的 RCNN  RCNN  RCNN  0 原理   1 ss算法   2 提取特征    3 SVM   IOU         4 回归分类器 pass  优缺  冗余 慢 空间大   Fast RCNN   0 原理    1 减少重复计算特征 通过全连接层进行  正负样本   2 分类器 全连接层实现  3 边界框回归器   4 损失计算   Faster">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104184356637.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104184501872.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104184859288.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104184531836.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104184713372.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104185007538.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104185250090.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104185256627.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104185308808.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104185322806.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104190121582.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104190220974.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104191656317.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104192439278.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104192659858.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104194051582.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104194210537.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104194406137.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104194441284.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104194722542.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104194733782.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104194922010.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104195441622.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104195137512.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104200305676.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104171147389.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104171745323.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104172055346.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104170756080.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104170840590.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104172613364.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104172751053.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104172759925.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104172201462.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104172401969.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104151446113.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104154104316.png">
+<meta property="og:image" content="https://i-blog.csdnimg.cn/blog_migrate/64c2116c3e9f6d55b5aa2a8fab982a26.png">
+<meta property="og:image" content="https://i-blog.csdnimg.cn/direct/dba9296aa0d24233abe7b02e75e4b7e9.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104155000144.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104155310820.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104152002611.png">
+<meta property="og:image" content="https://i-blog.csdnimg.cn/blog_migrate/d358fa901b47a00baa710246af0ea197.gif">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104164542277.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104160704522.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104160931404.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104161259611.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105125615278.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105142450863.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105142605476.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105151656124.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105151712577.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105130506026.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105152215756.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105150718121.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105150726295.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105150948205.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105150823004.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105150606229.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105150638919.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105143153315.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105143449548.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105143750945.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105143836518.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105143846925.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105143912123.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105143920723.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105144012738.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105151035854.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105151238032.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105151404902.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105130645146.png">
+<meta property="og:image" content="https://i-blog.csdnimg.cn/blog_migrate/a573a17c82a6a1e3d23469541d3b4afc.jpeg">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105140339482.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105141242384.png">
+<meta property="og:image" content="https://i-blog.csdnimg.cn/blog_migrate/009d2d69aae2b1cb6ecede41530f82bf.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105141341837.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105141346413.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105141515679.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105141525595.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105141614203.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105141619565.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105123929037.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105155647634.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105155624697.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105155734798.png">
+<meta property="og:image" content="https://github.com/facebookresearch/segment-anything/raw/main/assets/model_diagram.png?raw=true">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250107134550384.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250107134129164.png">
+<meta property="og:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105171232310.png">
+<meta property="og:image" content="https://i-blog.csdnimg.cn/blog_migrate/3360fc9f03a84f99067859e2db20ffb5.gif">
+<meta property="og:image" content="https://i-blog.csdnimg.cn/blog_migrate/4835528644ffcb483732678807ab00b6.png#pic_center">
+<meta property="og:image" content="https://i-blog.csdnimg.cn/blog_migrate/a3b29d89bad938bc2475dfca1df80501.png">
+<meta property="og:image" content="https://i-blog.csdnimg.cn/blog_migrate/08dfc09f92ff3766608490fcbcd355b2.png#pic_center">
+<meta property="og:image" content="https://i-blog.csdnimg.cn/blog_migrate/05a8fc43e0f99856f885fd489388136b.png#pic_center">
+<meta property="og:image" content="https://pic2.zhimg.com/v2-e6a970e23f0b03371047a6014a25a175_1440w.jpg">
+<meta property="og:image" content="https://pic1.zhimg.com/v2-56d15a5487853b70a504d7e330f9d074_1440w.jpg">
+<meta property="article:published_time" content="2024-12-31T07:20:05.000Z">
+<meta property="article:modified_time" content="2025-01-07T16:20:25.556Z">
+<meta property="article:author" content="Weakliy">
+<meta property="article:tag" content="论文">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104184356637.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>79</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>17</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-视觉模型" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/" class="article-date">
+  <time class="post-time" datetime="2024-12-31T07:20:05.000Z" itemprop="datePublished">
+    <span class="post-month">12月</span><br/>
+    <span class="post-day">31</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2025年1月2日 视觉模型
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="视觉模型"><a class="markdownIt-Anchor" href="#视觉模型"></a> 视觉模型</h1>
+<p>端到端单阶段</p>
+<p>两阶段的</p>
+<p>RCNN</p>
+<h2 id="rcnn"><a class="markdownIt-Anchor" href="#rcnn"></a> RCNN</h2>
+<h3 id="rcnn-2"><a class="markdownIt-Anchor" href="#rcnn-2"></a> RCNN</h3>
+<h4 id="0-原理"><a class="markdownIt-Anchor" href="#0-原理"></a> 0 原理</h4>
+<p><strong><img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104184356637.png" alt="image-20250104184356637" style="zoom: 33%;"></strong></p>
+<h4 id="1-ss算法"><a class="markdownIt-Anchor" href="#1-ss算法"></a> 1 ss算法</h4>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104184501872.png" alt="image-20250104184501872" style="zoom: 33%;">
+<h4 id="2-提取特征"><a class="markdownIt-Anchor" href="#2-提取特征"></a> 2 提取特征</h4>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104184859288.png" alt="image-20250104184859288" style="zoom: 33%;">
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104184531836.png" alt="image-20250104184531836" style="zoom:50%;">
+<h4 id="3-svm"><a class="markdownIt-Anchor" href="#3-svm"></a> 3 SVM</h4>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104184713372.png" alt="image-20250104184713372" style="zoom: 33%;">
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104185007538.png" alt="image-20250104185007538" style="zoom: 33%;">
+<p><strong>IOU</strong></p>
+<blockquote>
+<p><img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104185250090.png" alt="image-20250104185250090" style="zoom: 50%;"><img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104185256627.png" alt="image-20250104185256627" style="zoom: 25%;"></p>
+</blockquote>
+<blockquote>
+<p><img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104185308808.png" alt="image-20250104185308808" style="zoom: 33%;"> <img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104185322806.png" alt="image-20250104185322806" style="zoom:33%;"></p>
+</blockquote>
+<h4 id="4-回归分类器"><a class="markdownIt-Anchor" href="#4-回归分类器"></a> 4 回归分类器</h4>
+<p>pass</p>
+<h4 id="优缺"><a class="markdownIt-Anchor" href="#优缺"></a> 优缺</h4>
+<ul>
+<li>冗余</li>
+<li>慢</li>
+<li>空间大</li>
+</ul>
+<h3 id="fast-rcnn"><a class="markdownIt-Anchor" href="#fast-rcnn"></a> Fast RCNN</h3>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104190121582.png" alt="image-20250104190121582" style="zoom:50%;">
+<h4 id="0-原理-2"><a class="markdownIt-Anchor" href="#0-原理-2"></a> 0 原理</h4>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104190220974.png" alt="image-20250104190220974" style="zoom:50%;"> 
+<h4 id="1-减少重复计算特征"><a class="markdownIt-Anchor" href="#1-减少重复计算特征"></a> 1 减少重复计算特征</h4>
+<p>通过全连接层进行</p>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104191656317.png" alt="image-20250104191656317" style="zoom:33%;">
+<p><strong>正负样本</strong></p>
+<blockquote></blockquote>
+<h4 id="2-分类器"><a class="markdownIt-Anchor" href="#2-分类器"></a> 2 分类器</h4>
+<p>全连接层实现</p>
+<h4 id="3-边界框回归器"><a class="markdownIt-Anchor" href="#3-边界框回归器"></a> 3 边界框回归器</h4>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104192439278.png" alt="image-20250104192439278" style="zoom: 33%;">
+<h4 id="4-损失计算"><a class="markdownIt-Anchor" href="#4-损失计算"></a> 4 损失计算</h4>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104192659858.png" alt="image-20250104192659858" style="zoom:33%;">
+<h3 id="faster-rcnn"><a class="markdownIt-Anchor" href="#faster-rcnn"></a> Faster RCNN</h3>
+<h4 id="0-原理-3"><a class="markdownIt-Anchor" href="#0-原理-3"></a> 0 原理</h4>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104194051582.png" alt="image-20250104194051582" style="zoom:33%;"> 
+<p><strong>就是用RPN替换SS算法</strong></p>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104194210537.png" alt="image-20250104194210537" style="zoom:33%;">  
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104194406137.png" alt="image-20250104194406137" style="zoom: 33%;">  
+<h4 id="1-rpn"><a class="markdownIt-Anchor" href="#1-rpn"></a> 1 RPN</h4>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104194441284.png" alt="image-20250104194441284" style="zoom: 50%;">	
+<ul>
+<li>3x3 卷积</li>
+<li>在并联两个全连接层 生成:背景和前景 + 4个参数</li>
+<li></li>
+<li></li>
+</ul>
+<h4 id="2-anchor"><a class="markdownIt-Anchor" href="#2-anchor"></a> 2 anchor</h4>
+<p><strong>实现原理</strong></p>
+<p><img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104194722542.png" alt="image-20250104194722542" style="zoom:33%;"><img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104194733782.png" alt="image-20250104194733782" style="zoom:33%;"></p>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104194922010.png" alt="image-20250104194922010" style="zoom: 25%;"> 
+<p>anchor 个数</p>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104195441622.png" alt="image-20250104195441622" style="zoom: 25%;">  
+<p><strong>小感受野也可以预测大特征</strong></p>
+<blockquote>
+ <img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104195137512.png" alt="image-20250104195137512" style="zoom:33%;">  
+</blockquote>
+<h4 id="3-损失计算"><a class="markdownIt-Anchor" href="#3-损失计算"></a> 3 损失计算</h4>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104200305676.png" alt="image-20250104200305676" style="zoom:33%;">
+<h2 id="ssd"><a class="markdownIt-Anchor" href="#ssd"></a> SSD</h2>
+<h3 id="原理"><a class="markdownIt-Anchor" href="#原理"></a> 原理</h3>
+<p>在六个不同的层上预测不同大小的目标[ 因为:卷积程度越深 感受野越大 抽象的特征越大 那么细节就越少]</p>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104171147389.png" alt="image-20250104171147389" style="zoom:33%;">
+<ul>
+<li>b预测小目标 🐱</li>
+<li>C预测大目标 🐕</li>
+</ul>
+<h4 id="default-box"><a class="markdownIt-Anchor" href="#default-box"></a> default box</h4>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104171745323.png" alt="image-20250104171745323" style="zoom:67%;">
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104172055346.png" alt="image-20250104172055346" style="zoom:67%;">
+<h3 id="训练"><a class="markdownIt-Anchor" href="#训练"></a> 训练</h3>
+<h4 id="模型"><a class="markdownIt-Anchor" href="#模型"></a> 模型</h4>
+<p><img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104170756080.png" alt="image-20250104170756080"><img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104170840590.png" alt="image-20250104170840590" style="zoom: 25%;"></p>
+<h4 id="数据处理"><a class="markdownIt-Anchor" href="#数据处理"></a> 数据处理</h4>
+<h4 id="损失计算"><a class="markdownIt-Anchor" href="#损失计算"></a> 损失计算</h4>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104172613364.png" alt="image-20250104172613364" style="zoom:50%;">
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104172751053.png" alt="image-20250104172751053" style="zoom:33%;">
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104172759925.png" alt="image-20250104172759925" style="zoom: 33%;">
+<h4 id="预测"><a class="markdownIt-Anchor" href="#预测"></a> 预测</h4>
+<p><img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104172201462.png" alt="image-20250104172201462"> ]</p>
+<p>参数数目</p>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104172401969.png" alt="image-20250104172401969" style="zoom: 33%;"> 
+<h3 id="优缺-2"><a class="markdownIt-Anchor" href="#优缺-2"></a> 优缺</h3>
+<h3 id="qa"><a class="markdownIt-Anchor" href="#qa"></a> QA</h3>
+<h2 id="yolo"><a class="markdownIt-Anchor" href="#yolo"></a> YOLO</h2>
+<h3 id="yolov1"><a class="markdownIt-Anchor" href="#yolov1"></a> <a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43334693/article/details/129011644?spm=1001.2014.3001.5501">YOLOv1</a></h3>
+<ul>
+<li>端到端单阶段</li>
+<li>目标检测问题看作回归问题</li>
+</ul>
+<h4 id="bounding-box"><a class="markdownIt-Anchor" href="#bounding-box"></a> bounding box</h4>
+<ul>
+<li>x——框中心的横坐标</li>
+<li>y——框中心的纵坐标</li>
+<li>w——框的宽度</li>
+<li>h——框的高度</li>
+<li>置信度（confidence）</li>
+</ul>
+<p>在YOLOV1中S = 7 , B = 2即将每个输入图片分成7 × 7 个网格，每个网格将生成2 个预测框，用来框出图片中的物体。 每个框会预测出5个变量值，所以一个网格生成两个框，一个框带有5个属性，所以一个格就需要预测出5 × 2 = 10 个变量值。<br>
+在YOLOv1中有<strong>20个类别的物体的条件概率</strong>，所以输出结果的后20个值就表示每一个小网格（grid cell）对应每一类物体的概率，即由该网格生产的两个预测框对应每一类物体的概率。 由此，输出的7 × 7 × 30 向量的每一项含义便清楚了。<br>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104151446113.png" alt="image-20250104151446113" style="zoom: 67%;"></p>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104154104316.png" alt="image-20250104154104316" style="zoom: 33%;">
+<h4 id="训练-2"><a class="markdownIt-Anchor" href="#训练-2"></a> 训练</h4>
+<h5 id="网络结构"><a class="markdownIt-Anchor" href="#网络结构"></a> 网络结构</h5>
+<p><img src="https://i-blog.csdnimg.cn/blog_migrate/64c2116c3e9f6d55b5aa2a8fab982a26.png" alt="img"></p>
+<p>YOLOV1的输入为448 × 448 × 3 图像，输出大小为7 × 7 × 30 向量</p>
+<p>在网络结构的最后一层使用的是线性激活函数，其他层使用的是****leaky ReLU****激活函数，YOLOv1中采用的leaky ReLU定义公式如下</p>
+<p><img src="https://i-blog.csdnimg.cn/direct/dba9296aa0d24233abe7b02e75e4b7e9.png" alt="img"></p>
+<h5 id="数据处理-2"><a class="markdownIt-Anchor" href="#数据处理-2"></a> 数据处理</h5>
+<h5 id="损失计算-2"><a class="markdownIt-Anchor" href="#损失计算-2"></a> 损失计算</h5>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104155000144.png" alt="image-20250104155000144" style="zoom:67%;">
+<p><img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104155310820.png" alt="image-20250104155310820" style="zoom:33%;"> 大小目标对偏移影响不同</p>
+<h5 id="预测极大值抑制"><a class="markdownIt-Anchor" href="#预测极大值抑制"></a> 预测–极大值抑制</h5>
+<p>7X7X2个bounding box 进行 过滤与非极大值抑制</p>
+<p><img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104152002611.png" alt></p>
+<p><img src="https://i-blog.csdnimg.cn/blog_migrate/d358fa901b47a00baa710246af0ea197.gif" alt="img"></p>
+<h4 id="优缺-3"><a class="markdownIt-Anchor" href="#优缺-3"></a> 优缺</h4>
+<p>无法很好地处理小目标和重叠目标</p>
+<h4 id="qa-2"><a class="markdownIt-Anchor" href="#qa-2"></a> QA</h4>
+<ol>
+<li>
+<h5 id="为什么两个bounding-box"><a class="markdownIt-Anchor" href="#为什么两个bounding-box"></a> 为什么两个bounding box</h5>
+</li>
+</ol>
+<p>每个 bounding box 都有一组独立的参数，包括中心坐标、宽度、高度和置信度，能够分别拟合不同的目标。</p>
+<h3 id="yolov2"><a class="markdownIt-Anchor" href="#yolov2"></a> YOLOV2</h3>
+<h4 id="1-bn-加入"><a class="markdownIt-Anchor" href="#1-bn-加入"></a> 1 BN 加入</h4>
+<h4 id="2-anchor-2"><a class="markdownIt-Anchor" href="#2-anchor-2"></a> 2 anchor</h4>
+<p>K-mean聚类实现</p>
+<p>模型学习如何调整预定义的 anchor，而不是从零开始预测边界框的所有参数。</p>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104164542277.png" alt="image-20250104164542277" style="zoom: 67%;"> 
+<h4 id="3-pass-through-layer"><a class="markdownIt-Anchor" href="#3-pass-through-layer"></a> 3 pass through layer</h4>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104160704522.png" alt="image-20250104160704522" style="zoom:67%;"> 
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104160931404.png" alt="image-20250104160931404" style="zoom:50%;"> 
+<h5 id="4-多尺度数据输入"><a class="markdownIt-Anchor" href="#4-多尺度数据输入"></a> 4 多尺度数据输入</h5>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104161259611.png" alt="image-20250104161259611" style="zoom:50%;"> 
+<h4 id="faster"><a class="markdownIt-Anchor" href="#faster"></a> Faster</h4>
+<p>1</p>
+<h3 id="yolov3"><a class="markdownIt-Anchor" href="#yolov3"></a> YOLOV3</h3>
+<h4 id="单标签分类改进为多标签分类"><a class="markdownIt-Anchor" href="#单标签分类改进为多标签分类"></a> 单标签分类改进为多标签分类</h4>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105125615278.png" alt="image-20250105125615278" style="zoom:50%;"> 
+<h4 id="pan"><a class="markdownIt-Anchor" href="#pan"></a> PAN</h4>
+<h3 id="yolov4"><a class="markdownIt-Anchor" href="#yolov4"></a> YOLOV4</h3>
+<h4 id="1-原理"><a class="markdownIt-Anchor" href="#1-原理"></a> 1 原理</h4>
+<p><img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105142450863.png" alt="image-20250105142450863"><img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105142605476.png" alt="image-20250105142605476" style="zoom:67%;"></p>
+<h4 id="2-输入端"><a class="markdownIt-Anchor" href="#2-输入端"></a> 2 输入端</h4>
+<h5 id="sat自对抗训练"><a class="markdownIt-Anchor" href="#sat自对抗训练"></a> SAT自对抗训练</h5>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105151656124.png" alt="image-20250105151656124" style="zoom:67%;">
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105151712577.png" alt="image-20250105151712577" style="zoom:67%;">
+<h5 id="label-smoothing类标签平滑"><a class="markdownIt-Anchor" href="#label-smoothing类标签平滑"></a> Label Smoothing类标签平滑</h5>
+<h4 id="3-backbone"><a class="markdownIt-Anchor" href="#3-backbone"></a> 3 Backbone</h4>
+<h5 id="csp"><a class="markdownIt-Anchor" href="#csp"></a> CSP</h5>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105130506026.png" alt="image-20250105130506026" style="zoom:50%;"> 
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105152215756.png" alt="image-20250105152215756" style="zoom:50%;"> 
+<h4 id="4-neck"><a class="markdownIt-Anchor" href="#4-neck"></a> 4 Neck</h4>
+<p>一个颈部neck由几个自下而上的路径和几个自上而下的路径组成。具有该机制的网络包括特征金字塔网络(FPN)、路径汇聚网络(PAN)、BiFPN和NAS-FPN。</p>
+<h5 id="1-fpn"><a class="markdownIt-Anchor" href="#1-fpn"></a> 1 FPN</h5>
+<p>引入了自底向上的路径，使得底层信息更容易传到顶部</p>
+<p><img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105150718121.png" alt="image-20250105150718121"></p>
+<p><img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105150726295.png" alt="image-20250105150726295"></p>
+<h5 id="2-pan"><a class="markdownIt-Anchor" href="#2-pan"></a> 2 PAN</h5>
+<p>特征层之间融合时是直接通过addition的方式进行融合的，而Yolov4中则采用在通道方向concat拼接操作融合的</p>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105150948205.png" alt="image-20250105150948205" style="zoom:67%;">
+<p><img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105150823004.png" alt="image-20250105150823004"></p>
+<h5 id="3-spp"><a class="markdownIt-Anchor" href="#3-spp"></a> 3 SPP</h5>
+<p>来解决不同尺寸的特征图如何进入全连接层的，在网络的最后一层concat所有特征图，后面能够继续接CNN模块。</p>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105150606229.png" alt="image-20250105150606229" style="zoom:50%;">
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105150638919.png" style="zoom: 67%;">
+<h4 id="bof"><a class="markdownIt-Anchor" href="#bof"></a> BoF</h4>
+<p>我们把这些只会改变培训策略或只增加培训成本的方法称为“bag of freebies”。</p>
+<h5 id="1-数据增强"><a class="markdownIt-Anchor" href="#1-数据增强"></a> 1 数据增强</h5>
+<h5 id="2-解决数据集中语义分布偏差问题"><a class="markdownIt-Anchor" href="#2-解决数据集中语义分布偏差问题"></a> 2 解决数据集中语义分布偏差问题</h5>
+<p>不同类之间存在数据不平衡的问题</p>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105143153315.png" alt="image-20250105143153315" style="zoom: 67%;"> 
+<h5 id="3-边界框bbox回归的目标函数"><a class="markdownIt-Anchor" href="#3-边界框bbox回归的目标函数"></a> 3 边界框(BBox)回归的目标函数 ??</h5>
+<p>直接估计BBox中每个点的坐标值是要将这些点作为自变量来处理，但实际上并没有考虑对象本身的完整性</p>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105143449548.png" alt="image-20250105143449548" style="zoom:67%;">
+<h4 id="bos"><a class="markdownIt-Anchor" href="#bos"></a> BoS</h4>
+<p>对于那些只增加少量推理成本但又能显著提高目标检测精度的插件模块和后处理方法，我们称它们为“bag of specials&quot;</p>
+<h5 id="1-增强感受野"><a class="markdownIt-Anchor" href="#1-增强感受野"></a> 1 增强感受野</h5>
+<p><strong>①改进的SPP模块</strong></p>
+<p><img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105143750945.png" alt="image-20250105143750945"></p>
+<p><strong>②ASPP模块</strong></p>
+<p><img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105143836518.png" alt="image-20250105143836518"></p>
+<p><strong>③RFB模块</strong></p>
+<p><img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105143846925.png" alt="image-20250105143846925"></p>
+<h5 id="2-注意力机制"><a class="markdownIt-Anchor" href="#2-注意力机制"></a> 2 注意力机制</h5>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105143912123.png" alt="image-20250105143912123" style="zoom:50%;"> 
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105143920723.png" alt="image-20250105143920723" style="zoom: 50%;"> 
+<h5 id="3-特征融合"><a class="markdownIt-Anchor" href="#3-特征融合"></a> 3 特征融合</h5>
+<p><strong>①SFAM：</strong> 主要思想是利用SE模块在多尺度的拼接特征图上进行信道级重加权。</p>
+<p><strong>②ASFF：</strong> 使用softmax对多尺度拼接特征图在点维度进行加权。</p>
+<p><strong>③BiFPN：</strong> 提出了多输入加权剩余连接来执行按比例的水平重加权，然后添加不同比例的特征图。</p>
+<h5 id="4-激活函数"><a class="markdownIt-Anchor" href="#4-激活函数"></a> 4 激活函数</h5>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105144012738.png" alt="image-20250105144012738" style="zoom:50%;"> 
+<h4 id="注意力机制"><a class="markdownIt-Anchor" href="#注意力机制"></a> 注意力机制</h4>
+<h5 id="cbamconvolutional-block-attention-module注意力机制"><a class="markdownIt-Anchor" href="#cbamconvolutional-block-attention-module注意力机制"></a> **CBAM(Convolutional Block Attention Module)**注意力机制</h5>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105151035854.png" alt="image-20250105151035854" style="zoom: 50%;">
+<h5 id="channel-attention-module通道注意力模块"><a class="markdownIt-Anchor" href="#channel-attention-module通道注意力模块"></a> <strong>Channel attention module(通道注意力模块)</strong></h5>
+<p><img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105151238032.png" alt="image-20250105151238032"></p>
+<h5 id="attention-module空间注意力模块"><a class="markdownIt-Anchor" href="#attention-module空间注意力模块"></a> <strong>attention module(空间注意力模块)</strong></h5>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105151404902.png" alt="image-20250105151404902" style="zoom:80%;">
+<h4 id="dropblock正则化"><a class="markdownIt-Anchor" href="#dropblock正则化"></a> Dropblock正则化</h4>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105130645146.png" alt="image-20250105130645146" style="zoom: 50%;"> 
+<blockquote>
+<p>Q：全连接层上效果很好的Dropout在卷积层上效果并不好？</p>
+<pre><code>中间Dropout的方式会随机的删减丢弃一些信息，但Dropblock的研究者认为，卷积层对于这种随机丢弃并不敏感，因为卷积层通常是三层连用：卷积+激活+池化层，池化层本身就是对相邻单元起作用。
+
+而且即使随机丢弃，卷积层仍然可以从相邻的激活单元学习到相同的信息。因此，在全连接层上效果很好的Dropout在卷积层上效果并不好。所以右图Dropblock的研究者则干脆整个局部区域进行删减丢弃。
+</code></pre>
+</blockquote>
+<h3 id="yolov5"><a class="markdownIt-Anchor" href="#yolov5"></a> <a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43334693/article/details/129312409">YOLOV5</a></h3>
+<h4 id="1-原理-2"><a class="markdownIt-Anchor" href="#1-原理-2"></a> 1 原理</h4>
+<img src="https://i-blog.csdnimg.cn/blog_migrate/a573a17c82a6a1e3d23469541d3b4afc.jpeg" alt="img" style="zoom: 80%;">
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105140339482.png" alt="image-20250105140339482" style="zoom: 80%;"> 
+<h4 id="2-输入"><a class="markdownIt-Anchor" href="#2-输入"></a> 2 输入</h4>
+<h5 id="数据增强"><a class="markdownIt-Anchor" href="#数据增强"></a> 数据增强</h5>
+<h4 id="3-backbone-2"><a class="markdownIt-Anchor" href="#3-backbone-2"></a> 3 Backbone</h4>
+<h5 id="focus"><a class="markdownIt-Anchor" href="#focus"></a> Focus</h5>
+<p><img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105141242384.png" alt="image-20250105141242384"></p>
+<p><img src="https://i-blog.csdnimg.cn/blog_migrate/009d2d69aae2b1cb6ecede41530f82bf.png" alt="img"></p>
+<p><img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105141341837.png" alt="image-20250105141341837"></p>
+<p><img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105141346413.png" alt="image-20250105141346413"></p>
+<h5 id="csp-2"><a class="markdownIt-Anchor" href="#csp-2"></a> CSP</h5>
+<p><img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105141515679.png" alt="image-20250105141515679"></p>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105141525595.png" alt="image-20250105141525595" style="zoom:50%;"> 
+<h4 id="4-neck-2"><a class="markdownIt-Anchor" href="#4-neck-2"></a> 4 Neck</h4>
+<p><img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105141614203.png" alt="image-20250105141614203"></p>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105141619565.png" alt="image-20250105141619565" style="zoom: 50%;">
+<h4 id="5-训练策略"><a class="markdownIt-Anchor" href="#5-训练策略"></a> 5 训练策略</h4>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105123929037.png" alt="image-20250105123929037" style="zoom: 50%;"> 
+<h1 id="segmentation"><a class="markdownIt-Anchor" href="#segmentation"></a> Segmentation</h1>
+<h2 id="unet"><a class="markdownIt-Anchor" href="#unet"></a> UNET</h2>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105155647634.png" alt="image-20250105155647634" style="zoom:33%;"> 
+<h3 id="u2net"><a class="markdownIt-Anchor" href="#u2net"></a> U2NET</h3>
+<p>SOD任务</p>
+<p><img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105155624697.png" alt="image-20250105155624697" style="zoom:50%;"> 整体</p>
+<p><img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105155734798.png" alt="image-20250105155734798" style="zoom: 33%;"> 小块</p>
+<h2 id="sam"><a class="markdownIt-Anchor" href="#sam"></a> SAM</h2>
+<p><img src="https://github.com/facebookresearch/segment-anything/raw/main/assets/model_diagram.png?raw=true" alt="SAM design"></p>
+<p><img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250107134550384.png" alt="image-20250107134550384"></p>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250107134129164.png" alt="image-20250107134129164" style="zoom: 50%;">
+<h1 id="lvm"><a class="markdownIt-Anchor" href="#lvm"></a> LVM</h1>
+<h3 id="vit"><a class="markdownIt-Anchor" href="#vit"></a> VIT</h3>
+<h4 id="原理-2"><a class="markdownIt-Anchor" href="#原理-2"></a> 原理</h4>
+<p><strong>图像分块</strong>：</p>
+<p>小块16*16</p>
+<img src="/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105171232310.png" alt="image-20250105171232310" style="zoom:50%;">
+<p><strong>线性嵌入</strong>：<br>
+使用线性投影将每个图像块映射到固定长度的向量（称为 Patch Embedding），然后通过添加位置编码（Positional Encoding）表示块的位置信息。</p>
+<p><strong>Transformer 编码器</strong>：<br>
+利用标准的 Transformer 编码器（多头自注意力和前馈网络）对这些嵌入进行处理，学习全局的图像特征</p>
+<p><strong>分类头</strong>：<br>
+引入一个特殊的 [CLS] token，用于整合所有块的信息。最后通过 MLP（多层感知机）对 [CLS] token 进行分类。</p>
+<img src="https://i-blog.csdnimg.cn/blog_migrate/3360fc9f03a84f99067859e2db20ffb5.gif" alt="img" style="zoom:60%;">
+<h3 id="swin-transformer"><a class="markdownIt-Anchor" href="#swin-transformer"></a> Swin Transformer</h3>
+<h4 id="核心原理"><a class="markdownIt-Anchor" href="#核心原理"></a> 核心原理：</h4>
+<ol>
+<li><strong>分层架构</strong>：<br>
+Swin Transformer 的结构是分层的，类似于卷积神经网络（CNN）的金字塔设计。随着层数的增加，特征图的分辨率逐渐降低，通道数逐渐增加。</li>
+<li><strong>滑动窗口注意力 (Shifted Window Attention)</strong>：
+<ul>
+<li>将图像划分为多个固定大小的窗口（如 7×77 \times 77×7），在每个窗口内计算自注意力，降低计算复杂度。</li>
+<li>在不同层之间引入“滑动窗口”机制，使窗口之间的信息可以交互，增加全局建模能力。</li>
+</ul>
+</li>
+<li><strong>线性复杂度</strong>：<br>
+通过限制注意力计算在窗口内完成，避免了 ViT 的全局注意力计算带来的高时间和空间复杂度问题。</li>
+<li><strong>Patch 合并</strong>：<br>
+在分层过程中，通过 Patch 合并操作减少特征图分辨率，同时增加通道维度。</li>
+</ol>
+<h4 id="滑动窗口注意力"><a class="markdownIt-Anchor" href="#滑动窗口注意力"></a> 滑动窗口注意力</h4>
+<img src="https://i-blog.csdnimg.cn/blog_migrate/4835528644ffcb483732678807ab00b6.png#pic_center" alt="在这里插入图片描述" style="zoom:33%;">
+<h4 id="patch-merging"><a class="markdownIt-Anchor" href="#patch-merging"></a> <strong>Patch Merging</strong></h4>
+<p><img src="https://i-blog.csdnimg.cn/blog_migrate/a3b29d89bad938bc2475dfca1df80501.png" alt="img"></p>
+<h4 id="w-msa"><a class="markdownIt-Anchor" href="#w-msa"></a> W-MSA</h4>
+<img src="https://i-blog.csdnimg.cn/blog_migrate/08dfc09f92ff3766608490fcbcd355b2.png#pic_center" alt="在这里插入图片描述" style="zoom:50%;">
+<h4 id="sw-msa"><a class="markdownIt-Anchor" href="#sw-msa"></a> SW-MSA</h4>
+<img src="https://i-blog.csdnimg.cn/blog_migrate/05a8fc43e0f99856f885fd489388136b.png#pic_center" alt="在这里插入图片描述" style="zoom:33%;">
+<h3 id="mae"><a class="markdownIt-Anchor" href="#mae"></a> MAE</h3>
+<h4 id="核心原理-2"><a class="markdownIt-Anchor" href="#核心原理-2"></a> 核心原理：</h4>
+<ol>
+<li><strong>随机掩码（Masking）</strong>：
+<ul>
+<li>将输入图像划分为一系列 Patch（例如 16×1616 \times 1616×16），并随机遮掩一定比例的 Patch（如 75%）。</li>
+<li>遮掩的部分从输入中移除，剩余的 Patch 作为输入特征。</li>
+</ul>
+</li>
+<li><strong>编码器（Encoder）</strong>：
+<ul>
+<li>使用 ViT（Vision Transformer）作为编码器，仅处理未被遮掩的 Patch，提取高效的全局特征。</li>
+</ul>
+</li>
+<li><strong>解码器（Decoder）</strong>：
+<ul>
+<li>一个轻量级的解码器负责重建被遮掩的 Patch。</li>
+<li>解码器接受编码器的输出和位置编码，并尝试还原完整的图像。</li>
+</ul>
+</li>
+<li><strong>重建目标（Reconstruction Loss）</strong>：
+<ul>
+<li>模型通过最小化重建误差（通常是均方误差，MSE）来优化，从而学习有意义的图像特征。</li>
+</ul>
+</li>
+</ol>
+<img src="https://pic2.zhimg.com/v2-e6a970e23f0b03371047a6014a25a175_1440w.jpg" alt="img" style="zoom: 50%;">
+<h3 id="igpt"><a class="markdownIt-Anchor" href="#igpt"></a> IGPT</h3>
+<h4 id="核心原理-3"><a class="markdownIt-Anchor" href="#核心原理-3"></a> 核心原理：</h4>
+<ol>
+<li><strong>图像像素序列化</strong>：
+<ul>
+<li>将二维图像展平为一维像素序列，类似于自然语言处理中的文本序列。</li>
+<li>每个像素值被表示为一个离散的类别（如颜色索引或灰度值）。</li>
+</ul>
+</li>
+<li><strong>Transformer 架构</strong>：
+<ul>
+<li>使用标准的 Transformer 模型，将图像像素序列作为输入，学习序列中各像素值之间的依赖关系。</li>
+<li>通过<strong>自回归方式</strong>预测下一个像素值，实现图像生成任务。</li>
+</ul>
+</li>
+<li><strong>无监督学习</strong>：
+<ul>
+<li>模型通过最大化训练数据的对数似然估计进行优化，学习如何生成与训练图像分布一致的新图像。</li>
+</ul>
+</li>
+</ol>
+<img src="https://pic1.zhimg.com/v2-56d15a5487853b70a504d7e330f9d074_1440w.jpg" alt="img" style="zoom:33%;">
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2024/12/31/%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/" data-id="cm5modkti0005xsv40rukfvai" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%AE%BA%E6%96%87/" rel="tag">论文</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2024/12/31/2024%E5%B9%B412%E6%9C%8831%E6%97%A5-GAN%E8%AE%BA%E6%96%87/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          2024年12月31日 GAN论文
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2024/06/07/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E9%97%AE%E9%A2%98%E6%80%BB%E7%BB%93/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title"></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>79</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>17</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2024 - 2025 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
