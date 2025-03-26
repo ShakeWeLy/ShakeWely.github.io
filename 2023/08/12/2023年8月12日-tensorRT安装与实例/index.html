@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>tensorRT 安装 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Ubuntu下的TensorRT 安装 原因：win11 下无法安装  123https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_43573527&#x2F;article&#x2F;details&#x2F;131414861?spm&#x3D;1001.2101.3001.6661.1&amp;utm_medium&#x3D;distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRL">
+<meta property="og:type" content="article">
+<meta property="og:title" content="tensorRT 安装">
+<meta property="og:url" content="https://shakewely.github.io/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-tensorRT%E5%AE%89%E8%A3%85%E4%B8%8E%E5%AE%9E%E4%BE%8B/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="Ubuntu下的TensorRT 安装 原因：win11 下无法安装  123https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_43573527&#x2F;article&#x2F;details&#x2F;131414861?spm&#x3D;1001.2101.3001.6661.1&amp;utm_medium&#x3D;distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRL">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-tensorRT%E5%AE%89%E8%A3%85%E4%B8%8E%E5%AE%9E%E4%BE%8B/image-20230812144645411.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-tensorRT%E5%AE%89%E8%A3%85%E4%B8%8E%E5%AE%9E%E4%BE%8B/image-20230812155830636.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-tensorRT%E5%AE%89%E8%A3%85%E4%B8%8E%E5%AE%9E%E4%BE%8B/image-20230812201136476.png">
+<meta property="article:published_time" content="2023-08-12T05:24:40.000Z">
+<meta property="article:modified_time" content="2025-03-14T11:36:34.665Z">
+<meta property="article:author" content="Weakliy">
+<meta property="article:tag" content="tensorRT">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shakewely.github.io/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-tensorRT%E5%AE%89%E8%A3%85%E4%B8%8E%E5%AE%9E%E4%BE%8B/image-20230812144645411.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>90</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>19</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2023年8月12日-tensorRT安装与实例" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-tensorRT%E5%AE%89%E8%A3%85%E4%B8%8E%E5%AE%9E%E4%BE%8B/" class="article-date">
+  <time class="post-time" datetime="2023-08-12T05:24:40.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">12</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      tensorRT 安装
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="ubuntu下的tensorrt-安装"><a class="markdownIt-Anchor" href="#ubuntu下的tensorrt-安装"></a> Ubuntu下的TensorRT 安装</h1>
+<p><strong>原因：win11 下无法安装</strong></p>
+<img src="/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-tensorRT%E5%AE%89%E8%A3%85%E4%B8%8E%E5%AE%9E%E4%BE%8B/image-20230812144645411.png" alt="image-20230812144645411" style="zoom:33%;">
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">https://blog.csdn.net/qq_43573527/article/details/131414861?spm=1001.2101.3001.6661.1&amp;utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1-131414861-blog-126454422.235%5Ev38%5Epc_relevant_sort_base2&amp;depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1-131414861-blog-126454422.235%5Ev38%5Epc_relevant_sort_base2&amp;utm_relevant_index=1</span><br><span class="line"></span><br><span class="line">https://www.bilibili.com/video/BV1Um4y1w7g6/?share_source=copy_web&amp;vd_source=ef8119f427d19b904b7ce3026143d3f7</span><br></pre></td></tr></table></figure>
+<h2 id="1安装相关工具箱"><a class="markdownIt-Anchor" href="#1安装相关工具箱"></a> 1.安装相关工具箱</h2>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mv</span> /mnt/d/<span class="built_in">nv</span><span class="literal">-tensorrt-local-repo-ubuntu1804-8</span>.<span class="number">6.1</span><span class="literal">-cuda-11</span>.<span class="number">8</span>_1.<span class="number">0</span><span class="literal">-1_amd64</span>.deb download_  <span class="comment"># 移动文件</span></span><br><span class="line">sudo dpkg <span class="literal">-i</span> i <span class="built_in">nv</span><span class="literal">-tensorrt-local-repo-ubuntu1804-8</span>.<span class="number">6.1</span><span class="literal">-cuda-11</span>.<span class="number">8</span>_1.<span class="number">0</span><span class="literal">-1_amd64</span>.deb</span><br><span class="line">sudo apt update</span><br><span class="line">sudo apt install tensorrt</span><br></pre></td></tr></table></figure>
+<h2 id="2安装tensorrt"><a class="markdownIt-Anchor" href="#2安装tensorrt"></a> 2.安装tensorRT</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -m pip install --upgrade setuptools pip</span><br></pre></td></tr></table></figure>
+<p><img src="/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-tensorRT%E5%AE%89%E8%A3%85%E4%B8%8E%E5%AE%9E%E4%BE%8B/image-20230812155830636.png" alt="image-20230812155830636"></p>
+<h3 id="3运行"><a class="markdownIt-Anchor" href="#3运行"></a> 3.运行</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">python3</span><br><span class="line"><span class="keyword">import</span> tensorrt</span><br><span class="line"><span class="built_in">print</span>(tensorrt.__version__)</span><br><span class="line">exit()</span><br></pre></td></tr></table></figure>
+<h3 id="4-在vscode中运行"><a class="markdownIt-Anchor" href="#4-在vscode中运行"></a> 4. 在vscode中运行</h3>
+<p>安装 <a target="_blank" rel="noopener" href="https://code.visualstudio.com/download">VS Code 安装页</a></p>
+<h3 id="5-配置python环境"><a class="markdownIt-Anchor" href="#5-配置python环境"></a> 5. 配置python环境</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install python3-venv</span><br><span class="line">sudo python3 -m venv tensorrt_env</span><br><span class="line"><span class="built_in">cd</span> tensorrt_env</span><br><span class="line"><span class="built_in">source</span> <span class="built_in">cd</span> tensorrt_env/bin/activate</span><br><span class="line">sudo /home/ubuntu1804/tensorrt_env/tensorrt_env/bin/python -m pip install tensorrt</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="6出现问题-vscode拓展无法编译python36"><a class="markdownIt-Anchor" href="#6出现问题-vscode拓展无法编译python36"></a> 6.出现问题： vscode拓展无法编译python3.6</h3>
+<h4 id="解决"><a class="markdownIt-Anchor" href="#解决"></a> 解决：</h4>
+<h5 id="1更换拓展"><a class="markdownIt-Anchor" href="#1更换拓展"></a> 1.更换拓展</h5>
+<p>下载就拓展：<a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/_apis/public/gallery/publishers/ms-python/vsextensions/python/2022.6.0/vspackage">https://marketplace.visualstudio.com/_apis/public/gallery/publishers/ms-python/vsextensions/python/2022.6.0/vspackage</a></p>
+<p><strong>结果：无法正常安装，使用下面的方法2.</strong></p>
+<h5 id="2更换python"><a class="markdownIt-Anchor" href="#2更换python"></a> 2.更换python</h5>
+<p>更换python：</p>
+<p>​	安装编译 Python 3.9 所需的工具和库：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install build-essential zlib1g-dev libffi-dev libssl-dev</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>下载 Python 3.9 源代码并编译安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">wget https://www.python.org/ftp/python/3.9.7/Python-3.9.7.tgz</span><br><span class="line">tar -xf Python-3.9.7.tgz</span><br><span class="line"><span class="built_in">cd</span> Python-3.9.7</span><br><span class="line">./configure --enable-optimizations</span><br><span class="line">make -j$(<span class="built_in">nproc</span>)</span><br><span class="line">sudo make altinstall</span><br></pre></td></tr></table></figure>
+<h3 id="7安装成功-创建环境"><a class="markdownIt-Anchor" href="#7安装成功-创建环境"></a> 7.安装成功 创建环境</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> myenv</span><br><span class="line"><span class="built_in">cd</span> myenv</span><br><span class="line"><span class="built_in">cd</span> Python-3.9.7   <span class="comment"># 这是我的</span></span><br><span class="line">python3.9 -m venv tensorrt3.9</span><br><span class="line"><span class="built_in">source</span> tensorrt3.9/bin/activate</span><br><span class="line">pip install tensorrt -H  <span class="comment"># 安装</span></span><br><span class="line">deactivate  <span class="comment"># 退出环境</span></span><br><span class="line"></span><br><span class="line">sudo -H pip install tensorrt  <span class="comment"># 不要用sudo安装，安装成功后无法使用，该怎么办因为使用了 sudo 来安装包会导致文件权限问题，使得虚拟环境无法正常访问已安装的库。 </span></span><br></pre></td></tr></table></figure>
+<img src="/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-tensorRT%E5%AE%89%E8%A3%85%E4%B8%8E%E5%AE%9E%E4%BE%8B/image-20230812201136476.png" alt="image-20230812201136476" style="zoom: 50%;">
+<p>创建文件夹来编写代码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> rtlesson</span><br><span class="line"><span class="built_in">chmod</span> 777 rtlesson  <span class="comment"># 赋予读写权限</span></span><br></pre></td></tr></table></figure>
+<h3 id="8-打开vscode并激活环境"><a class="markdownIt-Anchor" href="#8-打开vscode并激活环境"></a> 8. 打开vscode并激活环境</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">code .</span><br><span class="line">Ctrl + ~ 来打开终端。</span><br><span class="line"><span class="built_in">source</span> /Python-3.9.7/tensorrt3.9/bin/activate</span><br></pre></td></tr></table></figure>
+<h3 id="9检查安装是否成功-trtexec-version"><a class="markdownIt-Anchor" href="#9检查安装是否成功-trtexec-version"></a> 9.检查安装是否成功 <strong>trtexec --version</strong></h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 代码验证</span></span><br><span class="line"><span class="keyword">import</span> tensorrt <span class="keyword">as</span> trt</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;TensorRT imported successfully!&quot;</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="10安装一些常用的库"><a class="markdownIt-Anchor" href="#10安装一些常用的库"></a> 10.安装一些常用的库</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install pycuda onnx onnxruntime torch torchvision opencv-python torchaudio numpy -i https://pypi.tuna.tsinghua.edu.cn/simple</span><br></pre></td></tr></table></figure>
+<h3 id="11转移windows上的文件"><a class="markdownIt-Anchor" href="#11转移windows上的文件"></a> 11.转移windows上的文件</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/rtlesson</span><br><span class="line"><span class="comment"># 复制</span></span><br><span class="line"><span class="built_in">cp</span> <span class="string">&quot;/mnt/f/Pydata/Project/鱼类识别+onnx/my_model.onnx&quot;</span> . </span><br><span class="line"><span class="comment"># 移动</span></span><br><span class="line"><span class="built_in">mv</span> <span class="string">&quot;/mnt/f/Pydata/Project/鱼类识别+onnx/fish_classes_list.json&quot;</span> . </span><br><span class="line"><span class="comment"># 查看</span></span><br><span class="line"><span class="built_in">ls</span> ~/rtlesson</span><br></pre></td></tr></table></figure>
+<h2 id="12运行代码-onxx转tensorrt运行"><a class="markdownIt-Anchor" href="#12运行代码-onxx转tensorrt运行"></a> 12.运行代码 onxx转TensorRt运行</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 占位符	</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">查看下一篇博客</span>：</span><br><span class="line">	<span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-tensorRT%E5%AE%89%E8%A3%85%E4%B8%8E%E5%AE%9E%E4%BE%8B/" data-id="cm8q1tfhc0004pcv479pmgin5" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tensorRT/" rel="tag">tensorRT</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/08/12/CUDA%E7%BC%96%E7%A8%8Bday1/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          cuda编程day1
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/08/11/2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">最大熵模型</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>90</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>19</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2024 - 2025 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

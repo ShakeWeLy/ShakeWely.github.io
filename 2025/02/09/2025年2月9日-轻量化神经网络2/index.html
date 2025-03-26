@@ -5,13 +5,14 @@
   
   <title>2025年2月9日 轻量化神经网络2 | Weakliy_Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="SqueezeNet  Fire Module Fire Module：每个 Fire Module 由两个主要部分组成：  Squeeze层：一个1x1的卷积层，用来减少特征图的深度。 Expand层：两个分支，一个是1x1卷积，另一个是3x3卷积，用来增加特征图的深度。  通过这种结构，SqueezeNet能够有效地减少参数量，而不牺牲太多的准确度。 减少全连接层的参数：SqueezeNet">
+  <meta name="description" content="LCNet  CPU端的最强轻量型架构    主要解决方案：  采用H-Swish作为激活函数，性能大幅提升，而推理速度几乎不变。 在网络合适的位置添加少量的SE模块可以进一步提升模型性能；实验表明：当把SE置于模型的尾部时，它具有更好的效果。因此，我们仅将SE模块添加到接近网络尾部的模块即可, 这种处理方式具有更好的精度-速度平衡。 根据MixNet的实验论证结果:在一定范围内大的卷积核可以提">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2025年2月9日 轻量化神经网络2">
 <meta property="og:url" content="https://shakewely.github.io/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/index.html">
 <meta property="og:site_name" content="Weakliy_Blog">
-<meta property="og:description" content="SqueezeNet  Fire Module Fire Module：每个 Fire Module 由两个主要部分组成：  Squeeze层：一个1x1的卷积层，用来减少特征图的深度。 Expand层：两个分支，一个是1x1卷积，另一个是3x3卷积，用来增加特征图的深度。  通过这种结构，SqueezeNet能够有效地减少参数量，而不牺牲太多的准确度。 减少全连接层的参数：SqueezeNet">
+<meta property="og:description" content="LCNet  CPU端的最强轻量型架构    主要解决方案：  采用H-Swish作为激活函数，性能大幅提升，而推理速度几乎不变。 在网络合适的位置添加少量的SE模块可以进一步提升模型性能；实验表明：当把SE置于模型的尾部时，它具有更好的效果。因此，我们仅将SE模块添加到接近网络尾部的模块即可, 这种处理方式具有更好的精度-速度平衡。 根据MixNet的实验论证结果:在一定范围内大的卷积核可以提">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250219133119899.png">
 <meta property="og:image" content="https://shakewely.github.io/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209162740618.png">
 <meta property="og:image" content="https://shakewely.github.io/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209172824970.png">
 <meta property="og:image" content="https://shakewely.github.io/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209172918099.png">
@@ -22,13 +23,15 @@
 <meta property="og:image" content="https://pic2.zhimg.com/v2-7c42cff2fa3c346d2e41be95848fc619_1440w.jpg">
 <meta property="og:image" content="https://shakewely.github.io/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209174719710.png">
 <meta property="og:image" content="https://shakewely.github.io/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209183640934.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250303211827687.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250303211752599.png">
 <meta property="og:image" content="https://shakewely.github.io/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209184403579.png">
 <meta property="og:image" content="https://shakewely.github.io/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209184638406.png">
 <meta property="og:image" content="https://pic4.zhimg.com/v2-31d05dfac01c6ae64bd5bf4e52ffc069_1440w.jpg">
 <meta property="og:image" content="https://pic4.zhimg.com/v2-dc2339ac78de452e286317dd259070f5_1440w.jpg">
 <meta property="og:image" content="https://pic3.zhimg.com/v2-104058d724746316b12298ec27fafe26_1440w.jpg">
-<meta property="og:image" content="https://shakewely.github.io/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209224653761.png">
 <meta property="og:image" content="https://shakewely.github.io/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209190732084.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209224653761.png">
 <meta property="og:image" content="https://shakewely.github.io/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209223353104.png">
 <meta property="og:image" content="https://shakewely.github.io/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209224903212.png">
 <meta property="og:image" content="https://shakewely.github.io/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209224555819.png">
@@ -40,11 +43,17 @@
 <meta property="og:image" content="https://shakewely.github.io/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209230157789.png">
 <meta property="og:image" content="https://shakewely.github.io/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209230342459.png">
 <meta property="og:image" content="https://shakewely.github.io/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209231222947.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250303184803366.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250210155707027.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250210155825206.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250210160135377.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250210160342687.png">
 <meta property="article:published_time" content="2025-02-09T07:21:36.000Z">
-<meta property="article:modified_time" content="2025-02-09T15:30:23.813Z">
+<meta property="article:modified_time" content="2025-03-04T12:46:25.116Z">
 <meta property="article:author" content="Weakliy">
+<meta property="article:tag" content="轻量化神经网络">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://shakewely.github.io/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209162740618.png">
+<meta name="twitter:image" content="https://shakewely.github.io/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250219133119899.png">
   
     <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
   
@@ -76,9 +85,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>79</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>90</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>17</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>19</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -134,8 +143,41 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="squeezenet"><a class="markdownIt-Anchor" href="#squeezenet"></a> SqueezeNet</h1>
-<h3 id="fire-module"><a class="markdownIt-Anchor" href="#fire-module"></a> Fire Module</h3>
+        <h1 id="lcnet"><a class="markdownIt-Anchor" href="#lcnet"></a> LCNet</h1>
+<blockquote>
+<p>CPU端的最强轻量型架构</p>
+</blockquote>
+<img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250219133119899.png" alt="image-20250219133119899" style="zoom:33%;">
+<h3 id="主要解决方案"><a class="markdownIt-Anchor" href="#主要解决方案"></a> 主要解决方案：</h3>
+<ol>
+<li>采用H-Swish作为激活函数，性能大幅提升，而推理速度几乎不变。</li>
+<li>在网络合适的位置添加少量的SE模块可以进一步提升模型性能；实验表明：当把SE置于模型的尾部时，它具有更好的效果。因此，我们仅将SE模块添加到接近网络尾部的模块即可, 这种处理方式具有更好的精度-速度平衡。</li>
+<li>根据MixNet的实验论证结果:在一定范围内大的卷积核可以提升模型的性能，但是超过这个范围会有损模型的性能。本文通过实验总结了一些更大的卷积核在不同位置的作用，类似SE模块的位置，更大的卷积核在网络的中后部作用更明显。比如5x5卷积。</li>
+<li>GAP后使用更大的1x1卷积层；在GoogLeNet之后，GAP（Global-Average-Pooling）后往往直接接分类层，但是在轻量级网络中，这样会导致GAP后提取的特征没有得到进一步的融合和加工。如果在此后使用一个更大的1x1卷积层（等同于FC层），GAP后的特征便不会直接经过分类层，而是先进行了融合，并将融合的特征进行分类。这样可以在不影响模型推理速度的同时大大提升准确率。</li>
+<li>使用dropout技术可以进一步提升模型的精度。</li>
+</ol>
+<p><strong>低秩卷积的引入</strong>：</p>
+<ul>
+<li>低秩卷积的引入是 LCNet 的最大创新之一。通过矩阵低秩分解，LCNet 能够将卷积操作的计算复杂度降到最低，从而显著减少了卷积神经网络的计算负担和内存消耗。</li>
+</ul>
+<p><strong>高效的通道剪枝</strong>：</p>
+<ul>
+<li>LCNet 提出了通道剪枝的概念，即对卷积层中的不重要通道进行剪枝，减少冗余计算。这个过程通过分析每个通道的贡献，剔除那些对最终输出没有显著影响的通道，从而大幅减小模型的规模。</li>
+</ul>
+<p><strong>集成深度可分离卷积</strong>：</p>
+<ul>
+<li>深度可分离卷积已经被证明是提升计算效率的一种有效手段，LCNet 将其应用到各个卷积层中，通过拆解卷积操作来减少计算量和参数量，提高了模型的运行效率。</li>
+</ul>
+<p><strong>硬件友好设计</strong>：</p>
+<ul>
+<li>LCNet 强调了硬件友好的设计理念，特别是在移动设备和嵌入式设备上。网络架构通过采用低计算量的卷积和模块化设计，使得 LCNet 在计算资源受限的设备上表现更好。</li>
+</ul>
+<p><strong>优化的注意力机制</strong>：</p>
+<ul>
+<li>LCNet 在设计中还结合了高效的注意力机制，通过优化网络对输入信息的加权方式，使得网络能够更好地关注到重要特征，从而提升分类性能，同时保持较低的计算开销。</li>
+</ul>
+<h1 id="squeezenet"><a class="markdownIt-Anchor" href="#squeezenet"></a> SqueezeNet</h1>
+<h2 id="fire-module"><a class="markdownIt-Anchor" href="#fire-module"></a> Fire Module</h2>
 <p><strong>Fire Module</strong>：每个 Fire Module 由两个主要部分组成：</p>
 <ul>
 <li><strong>Squeeze层</strong>：一个1x1的卷积层，用来减少特征图的深度。</li>
@@ -222,6 +264,9 @@
 <p>人类的视觉注意力更多的是<strong>空间注意力</strong>，也就是对图片上不同区域赋予不同的权重</p>
 </blockquote>
 <img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209183640934.png" alt="image-20250209183640934" style="zoom:67%;">
+<p><img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250303211827687.png" alt="image-20250303211827687"></p>
+<h4 id="通道注意力机制"><a class="markdownIt-Anchor" href="#通道注意力机制"></a> 通道注意力机制</h4>
+<p><img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250303211752599.png" alt="image-20250303211752599"></p>
 <h4 id="cbam注意力"><a class="markdownIt-Anchor" href="#cbam注意力"></a> CBAM注意力</h4>
 <p>CBAM 通过融合 <strong>通道注意力机制</strong> 和 <strong>空间注意力机制</strong></p>
 <h4 id="视觉自注意力non-local"><a class="markdownIt-Anchor" href="#视觉自注意力non-local"></a> 视觉自注意力(Non Local))</h4>
@@ -259,34 +304,30 @@
 <p>与查询（点）无关的依赖（query-independent dependency）。那么这是否意味着原始Non Local中<strong>query分支可以剪去不要</strong>呢</p>
 <img src="https://pic4.zhimg.com/v2-dc2339ac78de452e286317dd259070f5_1440w.jpg" alt="img" style="zoom: 50%;">
 <img src="https://pic3.zhimg.com/v2-104058d724746316b12298ec27fafe26_1440w.jpg" alt="img" style="zoom:50%;">
+<h3 id="dfc-注意力模块"><a class="markdownIt-Anchor" href="#dfc-注意力模块"></a> DFC 注意力模块</h3>
+<p>利用固定权重的全连接层来创建具有全局感受野的注意力图，以捕 获长距离空间位置的依赖关系</p>
 <h1 id="efficientdet"><a class="markdownIt-Anchor" href="#efficientdet"></a> EfficientDet</h1>
 <h2 id="结构概述"><a class="markdownIt-Anchor" href="#结构概述"></a> <strong>结构概述</strong></h2>
-<ol>
-<li><strong>Backbone（EfficientNet）</strong>
+<h3 id="1-backboneefficientnet"><a class="markdownIt-Anchor" href="#1-backboneefficientnet"></a> 1 Backbone（EfficientNet）</h3>
 <ul>
 <li>EfficientDet 的 backbone 使用了 EfficientNet 作为特征提取器。EfficientNet 是一种使用<strong>复合缩放</strong>策略的高效网络，在目标检测任务中，EfficientDet 对 EfficientNet 进行调整和优化，使得其能更好地适应目标检测的要求。</li>
 </ul>
-</li>
-<li><strong>BiFPN（双向特征金字塔网络）</strong>
+<p>BiFPN（双向特征金字塔网络）**</p>
 <ul>
 <li>BiFPN 通过对低层和高层特征的加权融合，使得低层和高层的特征能够互相补充，提升了多尺度特征的利用率。</li>
 </ul>
-</li>
-<li><strong>Head</strong>
+<h3 id="2-head"><a class="markdownIt-Anchor" href="#2-head"></a> 2 Head</h3>
 <ul>
 <li><strong>分类头</strong>：用于对目标进行分类，预测每个框的类别。</li>
 <li><strong>回归头</strong>：用于回归目标的边界框坐标。</li>
 </ul>
-</li>
-<li><strong>复合缩放</strong>
+<h3 id="3-复合缩放"><a class="markdownIt-Anchor" href="#3-复合缩放"></a> 3 复合缩放</h3>
 <ul>
 <li>EfficientDet 通过复合缩放策略调整模型的深度、宽度和输入分辨率，使得模型可以在不同的硬件环境下进行灵活的调整，同时提升了精度和效率。</li>
 </ul>
-</li>
-</ol>
 <h2 id="fpn到bifpn"><a class="markdownIt-Anchor" href="#fpn到bifpn"></a> FPN.到BiFPN</h2>
-<img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209224653761.png" style="zoom: 80%;">
 <img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209190732084.png" style="zoom: 80%;">
+<img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209224653761.png" style="zoom: 80%;">
 <blockquote>
 <p>a. 网络只是针对某一特点的分辨率进行训练, 如果只是在测试和推理阶段使用图像金字塔的话, 可能导致训练和测试推理过程不匹配</p>
 <p>b. 利用单个高层特征图(主干网络产生)进行物体的分类和bounding box的回归</p>
@@ -341,6 +382,68 @@
 <p><img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209230342459.png" alt></p>
 <p><strong>复合缩放的总结图:</strong></p>
 <p><img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209231222947.png" alt="image-20250209231222947"></p>
+<h1 id="ghostnet"><a class="markdownIt-Anchor" href="#ghostnet"></a> GhostNet</h1>
+<p>特征图存在<strong>冗余性</strong> 廉价操作 生成 Ghost 特征图</p>
+<h2 id="原理-2"><a class="markdownIt-Anchor" href="#原理-2"></a> 原理</h2>
+<h2 id="ghost-卷积"><a class="markdownIt-Anchor" href="#ghost-卷积"></a> Ghost 卷积</h2>
+<p>利用计算量较低的线性操作来增加特征图的数量， 从而在保持输出特征图不变的同时，显著地降低了计算复杂度</p>
+<ol>
+<li>使用1×1卷积对输入特征进行压缩，以获取少量特征图</li>
+<li>这部分特征图通过线性变换生成另一部分特征图</li>
+<li>将两部分特征图进行拼接，形 成最终的输出特征图</li>
+</ol>
+<img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250303184803366.png" alt="image-20250303184803366" style="zoom:67%;">
+<h1 id="mobilevit"><a class="markdownIt-Anchor" href="#mobilevit"></a> MobileViT</h1>
+<p><strong>融合 CNN 和 Transformer</strong>：通过将卷积操作与 Transformer 结合，模型能够同时捕捉局部和全局特征，提高了特征表达能力。</p>
+<p><strong>高效的特征处理</strong>：通过<strong>展开和折叠操作</strong>(unfold )，将特征映射到序列空间进行处理，然后再映射回原始空间，实现了高效的特征处理。</p>
+<p><strong>模型图：</strong></p>
+<img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250210155707027.png" alt="image-20250210155707027" style="zoom:50%;">
+<h2 id="mobile-vit-块"><a class="markdownIt-Anchor" href="#mobile-vit-块"></a> Mobile ViT 块</h2>
+<img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250210155825206.png" alt="image-20250210155825206" style="zoom: 50%;">
+<blockquote>
+<p>…</p>
+</blockquote>
+<p>减少self-attention</p>
+<img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250210160135377.png" alt="image-20250210160135377" style="zoom:50%;"> 
+<blockquote>
+<p>冗余信息多,相邻token信息差异小</p>
+</blockquote>
+<h3 id="fold"><a class="markdownIt-Anchor" href="#fold"></a> fold</h3>
+<img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250210160342687.png" alt="image-20250210160342687" style="zoom:33%;">
+<h1 id="emo结合-cnn-和-transformerhttpsdeveloperaliyuncomarticle1210407"><a class="markdownIt-Anchor" href="#emo结合-cnn-和-transformerhttpsdeveloperaliyuncomarticle1210407"></a> [EMO：结合 CNN 和 Transformer][<a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/1210407">https://developer.aliyun.com/article/1210407</a>]</h1>
+<h3 id="1-特征提取网络sd-ghostnet"><a class="markdownIt-Anchor" href="#1-特征提取网络sd-ghostnet"></a> 1. 特征提取网络（SD-Ghostnet）</h3>
+<ul>
+<li><strong>输入图像</strong>：原始图像作为输入。</li>
+<li><strong>Conv(64,6,2,2)</strong>：首先通过一个卷积层，输出通道数为64，核大小为6x6，步长为2，填充为2。</li>
+<li><strong>S-GhostConv (128,3,2)</strong> 和 <strong>SD-Ghost(128)</strong>：经过一系列的S-GhostConv和SD-Ghost模块，逐步增加通道数到128。</li>
+<li><strong>S-GhostConv (256,3,2)</strong> 和 <strong>SD-Ghost(256)</strong>：进一步通过S-GhostConv和SD-Ghost模块，通道数增加到256。</li>
+<li><strong>S-GhostConv (512,3,2)</strong> 和 <strong>SD-Ghost(512)</strong>：继续通过S-GhostConv和SD-Ghost模块，通道数增加到512。</li>
+<li><strong>S-GhostConv (1024,3,2)</strong> 和 <strong>SD-Ghost(1024)</strong>：最后通过S-GhostConv和SD-Ghost模块，通道数增加到1024。</li>
+<li><strong>SPPF(1024,5)</strong>：空间金字塔池化模块，进一步增强特征表示。</li>
+</ul>
+<h3 id="2-特征融合网络ffn"><a class="markdownIt-Anchor" href="#2-特征融合网络ffn"></a> 2. 特征融合网络（FFN）</h3>
+<ul>
+<li><strong>Concat(512)</strong>：将特征提取网络中不同层次的特征进行拼接，形成512通道的特征图。</li>
+<li><strong>Upsample(256)</strong>：对特征图进行上采样，通道数减少到256。</li>
+<li><strong>GSCovn (256,1,1)</strong>：通过一个1x1的卷积层调整通道数。</li>
+<li><strong>VOVGSCSP (256)</strong>：通过VOVGSCSP模块进一步处理特征。</li>
+<li><strong>GSCovn (256,3,2)</strong>：通过一个1x1的卷积层调整通道数。</li>
+<li><strong>Concat(512)</strong>：再次拼接特征，形成512通道的特征图。</li>
+<li><strong>VOVGSCSP (512)</strong>：通过VOVGSCSP模块进一步处理特征。</li>
+<li><strong>GSCovn (512,3,2)</strong>：通过一个1x1的卷积层调整通道数。</li>
+<li><strong>Concat(1024)</strong>：再次拼接特征，形成1024通道的特征图。</li>
+<li><strong>VOVGSCSP (1024)</strong>：通过VOVGSCSP模块进一步处理特征。</li>
+</ul>
+<h3 id="3-多尺度检测网络mdn"><a class="markdownIt-Anchor" href="#3-多尺度检测网络mdn"></a> 3. 多尺度检测网络（MDN）</h3>
+<ul>
+<li><strong>CBAM (256)</strong>：通过CBAM注意力机制模块，增强特征表示。</li>
+<li><strong>Conv2d (256)</strong>：通过一个卷积层，输出通道数为256。</li>
+<li><strong>CBAM (512)</strong>：通过CBAM注意力机制模块，增强特征表示。</li>
+<li><strong>Conv2d (512)</strong>：通过一个卷积层，输出通道数为512。</li>
+<li><strong>CBAM (1024)</strong>：通过CBAM注意力机制模块，增强特征表示。</li>
+<li><strong>Conv2d (1024)</strong>：通过一个卷积层，输出通道数为1024。</li>
+<li><strong>输出图像</strong>：最终生成输出图像。</li>
+</ul>
 
       
     </div>
@@ -348,11 +451,22 @@
       <a data-url="https://shakewely.github.io/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/" data-id="cm6yfcd2b0000mcv4hi073hzf" class="article-share-link">分享</a>
       
       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag">轻量化神经网络</a></li></ul>
+
     </footer>
   </div>
   
     
 <nav id="article-nav">
+  
+    <a href="/2025/02/10/2025%E5%B9%B42%E6%9C%8810%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C3/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          2025年2月10日 轻量化神经网络3
+        
+      </div>
+    </a>
   
   
     <a href="/2025/02/05/2025%E5%B9%B42%E6%9C%885%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" id="article-nav-older" class="article-nav-link-wrap">
@@ -406,9 +520,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>79</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>90</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>17</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>19</strong><br>标签</div></a>
     </div>
 
 

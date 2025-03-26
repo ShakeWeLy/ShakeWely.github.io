@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2023年10月19日 量化1 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="https:&#x2F;&#x2F;blog.csdn.net&#x2F;purple_love&#x2F;article&#x2F;details&#x2F;127254449  1、模型量化是什么？ 简而言之，所谓的模型量化就是将浮点存储（运算）转换为整型存储（运算）的一种模型压缩技术。简单直白点讲，即原来表示一个权重需要使用float32表示，量化后只需要使用int8来表示就可以啦，仅仅这一个操作，我们就可以获得接近4倍的网络加速！  2、为什么需要">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2023年10月19日 量化1">
+<meta property="og:url" content="https://shakewely.github.io/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="https:&#x2F;&#x2F;blog.csdn.net&#x2F;purple_love&#x2F;article&#x2F;details&#x2F;127254449  1、模型量化是什么？ 简而言之，所谓的模型量化就是将浮点存储（运算）转换为整型存储（运算）的一种模型压缩技术。简单直白点讲，即原来表示一个权重需要使用float32表示，量化后只需要使用int8来表示就可以啦，仅仅这一个操作，我们就可以获得接近4倍的网络加速！  2、为什么需要">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/image-20231019161721639.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/image-20231019161927584.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/image-20231019162041599.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/image-20231019162119689.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/image-20231019162306723.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/image-20231019162300497.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/image-20231019162349206.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/image-20231019162416109.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/image-20231019163959165.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/image-20231019164222886.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/image-20231019164247159.png">
+<meta property="og:image" content="https://shakewely.github.io/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/image-20231019161437726.png">
+<meta property="article:published_time" content="2023-10-19T07:37:02.000Z">
+<meta property="article:modified_time" content="2025-03-14T11:42:02.921Z">
+<meta property="article:author" content="Weakliy">
+<meta property="article:tag" content="量化">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shakewely.github.io/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/image-20231019161721639.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>90</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>19</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2023年10月19日-量化1介绍" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/" class="article-date">
+  <time class="post-time" datetime="2023-10-19T07:37:02.000Z" itemprop="datePublished">
+    <span class="post-month">10月</span><br/>
+    <span class="post-day">19</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2023年10月19日 量化1
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/purple_love/article/details/127254449">https://blog.csdn.net/purple_love/article/details/127254449</a></p>
+<h2 id="1-模型量化是什么"><a class="markdownIt-Anchor" href="#1-模型量化是什么"></a> 1、<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96&amp;spm=1001.2101.3001.7020">模型量化</a>是什么？</h2>
+<p>简而言之，所谓的模型量化就是将浮点存储（运算）转换为整型存储（运算）的一种<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9&amp;spm=1001.2101.3001.7020">模型压缩</a>技术。<strong>简单直白点讲，即原来表示一个权重需要使用float32表示，量化后只需要使用int8来表示就可以啦，仅仅这一个操作，我们就可以获得接近4倍的网络加速</strong>！</p>
+<h2 id="2-为什么需要做模型量化模型量化动机是什么"><a class="markdownIt-Anchor" href="#2-为什么需要做模型量化模型量化动机是什么"></a> 2、为什么需要做模型量化？模型量化动机是什么？</h2>
+<ul>
+<li><strong>更少的存储开销和带宽需求</strong>。即使用更少的比特数存储数据，有效减少应用对存储资源的依赖，但现代系统往往拥有相对丰富的存储资源，这一点已经不算是采用量化的主要动机；</li>
+<li><strong>更快的计算速度</strong>。即对大多数处理器而言，整型运算的速度一般（但不总是）</li>
+</ul>
+<p><img src="/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/image-20231019161721639.png" alt="image-20231019161721639"></p>
+<pre><code>**FP32乘法运算的能耗是INT8乘法运算能耗的18.5倍，芯片占用面积则是int8的27.3倍**，
+
+**尚可接受的精度损失**。**即量化相当于对模型权重引入噪声，所幸CNN本身对噪声不敏感（在模型训练过程中，模拟量化所引入的权重加噪还有利于防止过拟合），在合适的比特数下量化后的模型并不会带来很严重的精度损失**。
+</code></pre>
+<h2 id="3-模型量化的方案"><a class="markdownIt-Anchor" href="#3-模型量化的方案"></a> 3、模型量化的方案</h2>
+<ol>
+<li><code>data free</code>：不使用校准集，传统的方法直接将浮点参数转化成量化数，使用上非常简单，但是一般会带来很大的精度损失，但是高通最新的论文 <code>DFQ</code> 不使用校准集也得到了很高的精度。</li>
+<li><code>calibration</code>：基于校准集方案，通过输入少量真实数据进行统计分析。很多芯片厂商都提供这样的功能，如 <code>tensorRT</code>、高通、海思、地平线、寒武纪</li>
+<li><code>finetune</code>：基于训练 <code>finetune</code> 的方案，将量化误差在训练时仿真建模，调整权重使其更适合量化。好处是能带来更大的精度提升，缺点是要修改模型训练代码，开发周期较长。</li>
+</ol>
+<h2 id="4-模型量化分类"><a class="markdownIt-Anchor" href="#4-模型量化分类"></a> 4、模型量化分类</h2>
+<h3 id="41-线性量化"><a class="markdownIt-Anchor" href="#41-线性量化"></a> 4.1 线性量化</h3>
+<p><img src="/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/image-20231019161927584.png" alt="image-20231019161927584"></p>
+<p>​	<strong>q 表示的是原始的float32数值；</strong><br>
+​	<strong>Z表示的是float32数值的偏移量，在很多地方又叫Zero Point；</strong><img src="/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/image-20231019162041599.png" alt="image-20231019162041599"></p>
+<p>**	S表示的是float32的缩放因子，在很多地方又叫Scale；**</p>
+<p><img src="/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/image-20231019162119689.png" alt="image-20231019162119689">	<strong>Round(⋅) 表示的是四舍五入近似取整的数学函数，除了四舍五入，使用向上或者向下取整也是可以的；</strong><br>
+<strong>r表示的是量化后的一个整数值。</strong></p>
+<p><strong>根据参数 Z 是否为零可以将线性量化分为两类—即对称量化和非对称量化</strong>。</p>
+<h4 id="411-对称量化"><a class="markdownIt-Anchor" href="#411-对称量化"></a> 4.1.1 对称量化</h4>
+<p><img src="/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/image-20231019162306723.png" alt="image-20231019162306723"></p>
+<p>​	使用一个映射公式将输入数据映射到[-128,127]的范围内</p>
+<p>在对称量化中，r 是用有符号的整型数值(int8)来表示的，此时 Z=0，且 q=0时恰好有r=0。在对称量化中，我们可以取Z=0，S的取值可以使用如下的公式，也可以采用其它的公式。其中，n 是用来表示该数值的位宽，x 是数据集的总体样本。</p>
+<p><img src="/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/image-20231019162300497.png" alt="image-20231019162300497"></p>
+<h4 id="412-非对称量化"><a class="markdownIt-Anchor" href="#412-非对称量化"></a> 4.1.2 非对称量化</h4>
+<p><img src="/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/image-20231019162349206.png" alt="image-20231019162349206"></p>
+<p>​	使用一个映射公式将输入数据映射到[0,255]的范围内</p>
+<p><img src="/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/image-20231019162416109.png" alt="image-20231019162416109"></p>
+<h3 id="43-在线量化和离线量化"><a class="markdownIt-Anchor" href="#43-在线量化和离线量化"></a> 4.3 在线量化和离线量化</h3>
+<p><strong>根据激活值的量化方式，可以分为在线（online）量化和离线（offline）量化。</strong></p>
+<ul>
+<li><strong>在线量化</strong>，即指激活值的S和Z<strong>在实际推断过程中根据实际的激活值动态计算</strong>；Z表示Zero Point的数值，S表示Scale的数值</li>
+<li><strong>离线量化</strong>，即指<strong>提前确定好</strong>激活值的S和Z；</li>
+</ul>
+<p>​	由于不需要动态计算量化参数，通常离线量化的推断速度更快些，通常通过以下的三种方法来确定相关的量化参数。</p>
+<ol>
+<li>
+<pre class="highlight"><code class>1. **指数平滑法**。即将校准数据集送入模型，收集每个量化层的输出特征图，计算每个batch的S和Z值，并**通过指数平滑法来更新S和Z值**。
+2. **直方图截断法**。即在计算量化参数Z和S的过程中，由于**有的特征图**会出现偏离较远的奇异值，导致max非常大，所以可以通过直方图截取的形式，比如**抛弃最大的前1%数据，以前1%分界点的数值作为max计算量化参数**。
+3. **KL散度校准法**。-即通过计算KL散度（也称为**相对熵**，用以描述两个分布之间的差异）来评估量化前后的两个分布之间存在的差异，**搜索并选取KL散度最小的量化参数Z和S作为最终的结果**。
+
+
+</code></pre>
+</li>
+</ol>
+<h3 id="44-比特量化"><a class="markdownIt-Anchor" href="#44-比特量化"></a> 4.4 比特量化</h3>
+<p><strong>根据存储一个权重元素所需的位数，可以将其分为8bit量化、4bit量化、2bit量化和1bit量化等。</strong></p>
+<ul>
+<li><strong>二进制神经网络</strong>。即在运行时具有二进制权重和激活的神经网络，以及在训练时计算参数的梯度。</li>
+<li><strong>三元权重网络</strong>。即权重约束为+1,0和-1的神经网络。</li>
+<li><strong>XNOR网络</strong>。即过滤器和卷积层的输入是二进制的。XNOR 网络主要使用二进制运算来近似卷积。</li>
+</ul>
+<h3 id="45-权重量化和权重激活量化"><a class="markdownIt-Anchor" href="#45-权重量化和权重激活量化"></a> 4.5 权重量化和权重激活量化</h3>
+<p><strong>根据需要量化的参数可以分类两类-权重量化和权重激活量化</strong>。</p>
+<ul>
+<li><strong>权重量化</strong>，即仅仅需要对网络中的权重执行量化操作。由于网络的权重一般都保存下来了，因而我们可以提前根据权重获得相应的量化参数S和Z。由于仅仅对权重执行了量化，这种量化方法的压缩力度不是很大</li>
+<li><strong>权重激活量化</strong>，即不仅对网络中的权重进行量化，还对激活值进行量化。由于激活层的范围通常不容易提前获得，因而需要在网络推理的过程中进行计算或者根据模型进行大致的预测</li>
+</ul>
+<h3 id="46-对数量化一种比较特殊的量化方法"><a class="markdownIt-Anchor" href="#46-对数量化一种比较特殊的量化方法"></a> 4.6 **对数量化，**一种比较特殊的量化方法。</h3>
+<p>​	两个同底的幂指数进行相乘，那么等价于其指数相加，降低了计算强度。同时加法也被转变为索引计算。目前 nvdia gpu，x86、arm 三大平台上没有实现对数量化的加速库，但是目前已知海思 351X 系列芯片上使用了对数量化</p>
+<h2 id="5-模型量化原理"><a class="markdownIt-Anchor" href="#5-模型量化原理"></a> 5、模型量化原理</h2>
+<h3 id="51-原理详解"><a class="markdownIt-Anchor" href="#51-原理详解"></a> 5.1 原理详解</h3>
+<p><strong>模型量化桥接了定点与浮点，建立了一种有效的数据映射关系，使得以较小的精度损失代价获得了较好的收益</strong>，要弄懂模型量化的原理就是要弄懂这种数据映射关系。<br>
+浮点转换为定点的公式如下所示：</p>
+<p><img src="/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/image-20231019163959165.png" alt="image-20231019163959165"></p>
+<p><strong>其中R表示输入的浮点数据，Q表示量化之后的定点数据，Z表示Zero Point的数值，S表示Scale的数值，我们可以根据S和Z这两个参数来确定这个映射关系</strong>。</p>
+<p>求解S和Z有很多种方法，这里列举中其中的一种求解方式如下：</p>
+<p><img src="/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/image-20231019164222886.png" alt="image-20231019164222886"></p>
+<h3 id="52-具体案例"><a class="markdownIt-Anchor" href="#52-具体案例"></a> 5.2 具体案例</h3>
+<p><img src="/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/image-20231019164247159.png" alt="image-20231019164247159"></p>
+<h2 id="6-量化功能"><a class="markdownIt-Anchor" href="#6-量化功能"></a> 6、量化功能</h2>
+<p>具体包括训练后动态量化、训练后静态量化和训练时量化。</p>
+<h3 id="训练后动态量化"><a class="markdownIt-Anchor" href="#训练后动态量化"></a> 训练后动态量化。</h3>
+<p>这是最简单的量化形式，其中权重被提前量化，而激活在推理过程中被动态量化。这种方法用于模型执行时间由从内存加载权重而不是计算矩阵乘法所支配的情况，这适用于批量较小的LSTM和Transformer类型。对整个模型应用动态量化只需要调用一次torch.quantization.quantize_dynamic()函数即可完成具体的细节请参考该量化教程。</p>
+<p><strong>实现对某些层进行量化，量化后的模型只能用于推理验证，不能用作训练</strong></p>
+<h3 id="训练后静态量化"><a class="markdownIt-Anchor" href="#训练后静态量化"></a> <strong>训练后静态量化。</strong></h3>
+<p>这是最常用的量化形式，其中权重是提前量化的，并且基于在校准过程中观察模型的行为来预先计算激活张量的比例因子和偏差。CNN是一个典型的用例，训练后量化通常是在内存带宽和计算节省都很重要的情况下进行的。进<strong>行训练后量化的一般过程如下所示：</strong><br>
+步骤1-准备模型：通过添加QuantStub和DeQuantStub模块，指定在何处显式量化和反量化激活值；确保不重复使用模块；将需要重新量化的任何操作转换为模块的模式；<br>
+步骤2-将诸如conv + relu或conv + batchnorm + relu之类的组合操作融合在一起，以提高模型的准确性和性能；<br>
+步骤3-指定量化方法的配置，例如选择对称或非对称量化以及MinMax或L2Norm校准技术；<br>
+步骤4- 插入torch.quantization.prepare()模块来在校准期间观察激活张量；<br>
+步骤5-使用校准数据集对模型执行校准操作；<br>
+步骤6-使用torch.quantization.convert() 模块来转化模型，具体包括计算并存储每个激活张量要使用的比例和偏差值，并替换关键算子的量化实现等。</p>
+<h3 id="训练时量化"><a class="markdownIt-Anchor" href="#训练时量化"></a> 训练时量化。</h3>
+<p>在极少数情况下，训练后量化不能提供足够的准确性，可以插入torch.quantization.FakeQuantize()模块执行训练时量化。计算将在FP32中进行，但将值取整并四舍五入以模拟INT8的量化效果。具体的量化步骤如下所示：<br>
+步骤1-准备模型：通过添加QuantStub和DeQuantStub模块，指定在何处显式量化和反量化激活值；确保不重复使用模块；将需要重新量化的任何操作转换为模块的模式；<br>
+步骤2-将诸如conv + relu或conv + batchnorm + relu之类的组合操作融合在一起，以提高模型的准确性和性能；<br>
+步骤3-指定伪量化方法的配置，例如选择对称或非对称量化以及MinMax或L2Norm校准技术；<br>
+步骤4-插入torch.quantization.prepare_qat() 模块，该模块用来在训练过程中的模拟量化；<br>
+步骤5-训练或者微调模型；<br>
+步骤6-使用torch.quantization.convert() 模块来转化模型，具体包括计算并存储每个激活张量要使用的比例和偏差值，并替换关键算子的量化实现等。</p>
+<p>量化步骤</p>
+<p>![image-20231019153830100](./2023年10月19日-量化1/image-20231019153830100.png</p>
+<p><img src="/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/image-20231019161437726.png" alt="image-20231019161437726"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/" data-id="cm8q1tfhd0008pcv45prr2jai" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%87%8F%E5%8C%96/" rel="tag">量化</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%962%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          2023年10月19日 量化2代码实现
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2023/10/12/2023%E5%B9%B410%E6%9C%8812%E6%97%A5-TensorRT1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2023年10月12日 TensorRT1</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>90</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>19</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2024 - 2025 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

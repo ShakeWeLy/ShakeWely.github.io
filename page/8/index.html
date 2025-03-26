@@ -43,9 +43,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>79</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>90</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>17</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>19</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -71,12 +71,12 @@
 
         <section id="main">
   
-    <article id="post-2023年8月8日朴素贝叶斯" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2023年8月19日-阿里总结" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2023/08/08/2023%E5%B9%B48%E6%9C%888%E6%97%A5%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/" class="article-date">
-  <time class="post-time" datetime="2023-08-08T05:33:14.772Z" itemprop="datePublished">
+    <a href="/2023/08/18/2023%E5%B9%B48%E6%9C%8819%E6%97%A5-%E9%98%BF%E9%87%8C%E6%80%BB%E7%BB%93/" class="article-date">
+  <time class="post-time" datetime="2023-08-18T13:21:06.000Z" itemprop="datePublished">
     <span class="post-month">8月</span><br/>
-    <span class="post-day">08</span>
+    <span class="post-day">18</span>
   </time>
 </a>
    
@@ -88,7 +88,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2023/08/08/2023%E5%B9%B48%E6%9C%888%E6%97%A5%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/">朴素贝叶斯1</a>
+      <a class="article-title" href="/2023/08/18/2023%E5%B9%B48%E6%9C%8819%E6%97%A5-%E9%98%BF%E9%87%8C%E6%80%BB%E7%BB%93/">2023年8月19日 阿里总结</a>
     </h1>
   
 
@@ -103,69 +103,25 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="朴素贝叶斯1"><a class="markdownIt-Anchor" href="#朴素贝叶斯1"></a> 朴素贝叶斯1</h1>
-<h2 id="0x1-概念-"><a class="markdownIt-Anchor" href="#0x1-概念-"></a> 0X1 概念-</h2>
-<h3 id="1-条件概率"><a class="markdownIt-Anchor" href="#1-条件概率"></a> 1. 条件概率</h3>
-<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808163209631.png" alt="image-20230808163209631" style="zoom:33%;" />
-<h3 id="2贝叶斯定理逆概率思维"><a class="markdownIt-Anchor" href="#2贝叶斯定理逆概率思维"></a> 2.贝叶斯定理—逆概率思维</h3>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-<pre><code>										&lt;img src=&quot;C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808164650855.png&quot; alt=&quot;image-20230808164650855&quot; style=&quot;zoom: 25%;&quot; /&gt;	
-</code></pre>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808165504803.png" alt="image-20230808165504803" style="zoom:25%;" />
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">贝叶斯分类</span><br></pre></td></tr></table></figure>
-<h3 id="3朴素贝叶斯"><a class="markdownIt-Anchor" href="#3朴素贝叶斯"></a> 3.朴素贝叶斯</h3>
+        <h2 id="1-查看缺失值"><a class="markdownIt-Anchor" href="#1-查看缺失值"></a> 1 查看缺失值</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line"></span><br><span class="line"># 创建一个包含缺失值的示例数据</span><br><span class="line">data = &#123;&#x27;A&#x27;: [1, 2, None, 4, 5],</span><br><span class="line">        &#x27;B&#x27;: [None, 2, 3, 4, 5],</span><br><span class="line">        &#x27;C&#x27;: [1, 2, 3, 4, None]&#125;</span><br><span class="line">df = pd.DataFrame(data)</span><br><span class="line"></span><br><span class="line"># 检查数据中是否有缺失值</span><br><span class="line">missing_values = df.isnull().sum()</span><br><span class="line">print(missing_values)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>​	处理</p>
 <p>​</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">样本之间相互独立</span><br></pre></td></tr></table></figure>
-<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808165526844.png" alt="image-20230808165526844" style="zoom:25%;" />
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2023年8月8日16点51分</span><br></pre></td></tr></table></figure>
-<h2 id="0x2-朴素贝叶斯"><a class="markdownIt-Anchor" href="#0x2-朴素贝叶斯"></a> 0X2 朴素贝叶斯</h2>
-<h3 id="1朴素"><a class="markdownIt-Anchor" href="#1朴素"></a> 1.朴素？</h3>
-<p>​			生成方法</p>
-<p>​</p>
-<h3 id="2后验概率最大化"><a class="markdownIt-Anchor" href="#2后验概率最大化"></a> 2.后验概率最大化</h3>
-<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230809161257184.png" alt="image-20230809161257184" style="zoom:25%;" />
-<h2 id="0x3-极大似然估计"><a class="markdownIt-Anchor" href="#0x3-极大似然估计"></a> 0X3 极大似然估计</h2>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">朴素贝叶斯2</span><br></pre></td></tr></table></figure>
-<h2 id="0x4-朴素贝叶斯算法"><a class="markdownIt-Anchor" href="#0x4-朴素贝叶斯算法"></a> 0X4 朴素贝叶斯算法</h2>
-<h3 id="1模型"><a class="markdownIt-Anchor" href="#1模型"></a> 1.模型</h3>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 求出后验概率最大化 ---&gt;分类</span></span><br></pre></td></tr></table></figure>
-<img src="F:\.Hexo\MyBlog\source\_posts\朴素贝叶斯\image-20230809164213626.png" alt="image-20230809164213626" style="zoom:25%;" />
-<h3 id="2例题"><a class="markdownIt-Anchor" href="#2例题"></a> 2.例题</h3>
-<h4 id="1数据"><a class="markdownIt-Anchor" href="#1数据"></a> 1.数据</h4>
-<img src="F:\.Hexo\MyBlog\source\_posts\朴素贝叶斯\image-20230809164353651.png" alt="image-20230809164353651" style="zoom:25%;" />
-<h4 id="2计算"><a class="markdownIt-Anchor" href="#2计算"></a> 2.计算</h4>
-<img src="F:\.Hexo\MyBlog\source\_posts\朴素贝叶斯\image-20230809164823920.png" alt="image-20230809164823920" style="zoom:25%;" />
-<h2 id="0x5-贝叶斯估计"><a class="markdownIt-Anchor" href="#0x5-贝叶斯估计"></a> 0x5 贝叶斯估计</h2>
-<h3 id="1估计方法"><a class="markdownIt-Anchor" href="#1估计方法"></a> 1.估计方法</h3>
-<img src="F:\.Hexo\MyBlog\source\_posts\朴素贝叶斯\image-20230809165328883.png" alt="image-20230809165328883" style="zoom:25%;" />	
-<h1 id="朴素贝叶斯2"><a class="markdownIt-Anchor" href="#朴素贝叶斯2"></a> 朴素贝叶斯2</h1>
-<h3 id="0x1-极大似然估计"><a class="markdownIt-Anchor" href="#0x1-极大似然估计"></a> 0X1 极大似然估计</h3>
-<p>​	样本</p>
-<img src="\image-20230809161514684.png" alt="image-20230809161514684" style="zoom:25%;" />
-<p><img src="./2023%E5%B9%B48%E6%9C%888%E6%97%A5%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/image-20230809194817736.png" alt="" /></p>
-<h3 id="0x2-实例1"><a class="markdownIt-Anchor" href="#0x2-实例1"></a> 0X2 实例1</h3>
-<h4 id="1-求出概率函数"><a class="markdownIt-Anchor" href="#1-求出概率函数"></a> 1. 求出概率函数</h4>
-<p>​	<img src="./2023年8月8日朴素贝叶斯/image-20230809162507251.png" alt="image-20230809162507251" style="zoom:25%;" /></p>
-<h4 id="2根据样本求出似然函数"><a class="markdownIt-Anchor" href="#2根据样本求出似然函数"></a> 2.根据样本求出似然函数</h4>
-<img src="./2023年8月8日朴素贝叶斯/image-20230809162726485.png" alt="image-20230809162726485" style="zoom:33%;" />
-<h4 id="3通过遍历求偏导或者迭代求出极大值"><a class="markdownIt-Anchor" href="#3通过遍历求偏导或者迭代求出极大值"></a> 3.通过遍历，求偏导或者迭代求出极大值</h4>
-<img src="./2023年8月8日朴素贝叶斯/image-20230809163009019.png" alt="image-20230809163009019" style="zoom:25%;" />
-<h4 id="4-如下"><a class="markdownIt-Anchor" href="#4-如下"></a> 4. 如下</h4>
-<img src="./2023年8月8日朴素贝叶斯/image-20230809163338052.png" alt="image-20230809163338052" style="zoom:25%;" />
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="0x2-实例2"><a class="markdownIt-Anchor" href="#0x2-实例2"></a> 0X2 实例2</h3>
-<h4 id="极大似然估计"><a class="markdownIt-Anchor" href="#极大似然估计"></a> 极大似然估计</h4>
-<img src="./2023年8月8日朴素贝叶斯/image-20230809163741725.png" alt="image-20230809163741725" style="zoom:33%;" />
-<p>​</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 使用平均值填充缺失值</span><br><span class="line">df_filled_mean = df.fillna(df.mean())</span><br><span class="line"># 使用前向填充或后向填充</span><br><span class="line">df_forward_filled = df.fillna(method=&#x27;ffill&#x27;)  # 前向填充</span><br><span class="line">df_backward_filled = df.fillna(method=&#x27;bfill&#x27;)  # 后向填充</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#不需要指定特定的行。</span><br><span class="line"># 删除包含缺失值的行</span><br><span class="line">df_cleaned_rows = df.dropna()</span><br><span class="line"></span><br><span class="line"># 删除包含缺失值的列</span><br><span class="line">df_cleaned_columns = df.dropna(axis=1)</span><br></pre></td></tr></table></figure>
+<p>对数转换</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># </span><br><span class="line">import numpy as np</span><br><span class="line">import pandas as pd</span><br><span class="line"></span><br><span class="line"># 假设 df 是包含异常值的数据框</span><br><span class="line">data = &#123;&#x27;A&#x27;: [1, 2, 3, 4, 20, 30],</span><br><span class="line">        &#x27;B&#x27;: [5, 10, 15, 25, 100, 200]&#125;</span><br><span class="line">df = pd.DataFrame(data)</span><br><span class="line"></span><br><span class="line"># 进行对数转换</span><br><span class="line">df_log_transformed = np.log(df)</span><br><span class="line"></span><br><span class="line">print(&quot;原始数据框:&quot;)</span><br><span class="line">print(df)</span><br><span class="line">print(&quot;\n对数转换后的数据框:&quot;)</span><br><span class="line">print(df_log_transformed)</span><br></pre></td></tr></table></figure>
+<p>QQ图与正态分布</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line">import matplotlib.pyplot as plt</span><br><span class="line">import scipy.stats as stats</span><br><span class="line"></span><br><span class="line"># 生成随机样本数据</span><br><span class="line">np.random.seed(0)</span><br><span class="line">sample_data = np.random.normal(loc=0, scale=1, size=100)</span><br><span class="line"></span><br><span class="line"># 绘制正态分布QQ图</span><br><span class="line">plt.figure(figsize=(8, 6))</span><br><span class="line"></span><br><span class="line"># 绘制QQ图，使用正态分布作为理论分布（dist=&quot;norm&quot;）</span><br><span class="line"># 将随机样本数据与正态分布的理论分布进行比较，并在图上绘制结果</span><br><span class="line">stats.probplot(sample_data, dist=&quot;norm&quot;, plot=plt)</span><br><span class="line"></span><br><span class="line"># 添加标题和坐标轴标签</span><br><span class="line">plt.title(&quot;QQ Plot - Normal Distribution&quot;)</span><br><span class="line">plt.xlabel(&quot;Theoretical Quantiles&quot;)</span><br><span class="line">plt.ylabel(&quot;Sample Quantiles&quot;)</span><br><span class="line"></span><br><span class="line"># 显示网格</span><br><span class="line">plt.grid(True)</span><br><span class="line"></span><br><span class="line"># 显示绘制的图</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line">import matplotlib.pyplot as plt</span><br><span class="line">import seaborn as sns</span><br><span class="line">import scipy.stats as stats</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 假设 train_data 是你的数据框</span><br><span class="line"># 设置图表的大小</span><br><span class="line">plt.figure(figsize=(10, 5))</span><br><span class="line"># 创建子图，1 行 2 列，第一个子图</span><br><span class="line">ax = plt.subplot(1, 2, 1)</span><br><span class="line"># 使用 Seaborn 绘制数据分布图数据线，并拟合正态分布曲线</span><br><span class="line">sns.distplot(train_data[&#x27;vo&#x27;], fit=stats.norm)</span><br><span class="line"># 添加标题和标签</span><br><span class="line">ax.set_title(&quot;Distribution Plot with Normal Fit&quot;)</span><br><span class="line">ax.set_xlabel(&quot;Value&quot;)</span><br><span class="line">ax.set_ylabel(&quot;Density&quot;)</span><br><span class="line"># 创建子图，1 行 2 列，第二个子图</span><br><span class="line">ax = plt.subplot(1, 2, 2)</span><br><span class="line"># 使用 Scipy 绘制 QQ 图</span><br><span class="line">res = stats.probplot(train_data[&#x27;vo&#x27;], plot=plt)</span><br><span class="line"># 显示图表</span><br><span class="line">plt.tight_layout()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2023/08/08/2023%E5%B9%B48%E6%9C%888%E6%97%A5%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/" data-id="clrwazlrb00237ov4gf7dbclx" class="article-share-link">分享</a>
+      <a data-url="https://shakewely.github.io/2023/08/18/2023%E5%B9%B48%E6%9C%8819%E6%97%A5-%E9%98%BF%E9%87%8C%E6%80%BB%E7%BB%93/" data-id="clrwazlr9001s7ov40bssfvxw" class="article-share-link">分享</a>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A0%E5%AD%A6%E4%B9%A0/" rel="tag">阿里天池学习</a></li></ul>
 
     </footer>
   </div>
@@ -176,12 +132,12 @@
 
 
   
-    <article id="post-2023年8月7日感知机" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2023年8月17日-阿里天池6特征优化与模型融合哦" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2023/08/08/2023%E5%B9%B48%E6%9C%887%E6%97%A5%E6%84%9F%E7%9F%A5%E6%9C%BA/" class="article-date">
-  <time class="post-time" datetime="2023-08-08T02:25:31.000Z" itemprop="datePublished">
+    <a href="/2023/08/18/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A06%E7%89%B9%E5%BE%81%E4%BC%98%E5%8C%96%E4%B8%8E%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88%E5%93%A6/" class="article-date">
+  <time class="post-time" datetime="2023-08-18T08:47:01.000Z" itemprop="datePublished">
     <span class="post-month">8月</span><br/>
-    <span class="post-day">08</span>
+    <span class="post-day">18</span>
   </time>
 </a>
    
@@ -193,7 +149,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2023/08/08/2023%E5%B9%B48%E6%9C%887%E6%97%A5%E6%84%9F%E7%9F%A5%E6%9C%BA/">感知机</a>
+      <a class="article-title" href="/2023/08/18/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A06%E7%89%B9%E5%BE%81%E4%BC%98%E5%8C%96%E4%B8%8E%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88%E5%93%A6/">阿里天池6特征优化与7模型融合</a>
     </h1>
   
 
@@ -208,15 +164,101 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="todo"><a class="markdownIt-Anchor" href="#todo"></a> Todo</h1>
+        <h1 id="6-特征优化"><a class="markdownIt-Anchor" href="#6-特征优化"></a> 6 特征优化</h1>
+<h2 id="61"><a class="markdownIt-Anchor" href="#61"></a> 6.1</h2>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A06%E7%89%B9%E5%BE%81%E4%BC%98%E5%8C%96%E4%B8%8E%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88%E5%93%A6/image-20230818152943626.png" alt="image-20230818152943626" /></p>
+<h3 id="611-合成特征"><a class="markdownIt-Anchor" href="#611-合成特征"></a> 6.1.1 合成特征</h3>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A06%E7%89%B9%E5%BE%81%E4%BC%98%E5%8C%96%E4%B8%8E%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88%E5%93%A6/image-20230818153023793.png" alt="image-20230818153023793" /></p>
+<img src="./2023年8月17日-阿里天池6特征优化与模型融合哦/image-20230818153059139.png" alt="image-20230818153059139" style="zoom:80%;" />
+<h3 id="612-特征变化"><a class="markdownIt-Anchor" href="#612-特征变化"></a> 6.1.2 特征变化</h3>
+<h4 id="数值特征"><a class="markdownIt-Anchor" href="#数值特征"></a> 数值特征</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">不懂</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A06%E7%89%B9%E5%BE%81%E4%BC%98%E5%8C%96%E4%B8%8E%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88%E5%93%A6/image-20230818153416125.png" alt="image-20230818153416125" /></p>
+<h4 id="类别特征"><a class="markdownIt-Anchor" href="#类别特征"></a> 类别特征</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">不懂</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A06%E7%89%B9%E5%BE%81%E4%BC%98%E5%8C%96%E4%B8%8E%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88%E5%93%A6/image-20230818153446118.png" alt="image-20230818153446118" /></p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A06%E7%89%B9%E5%BE%81%E4%BC%98%E5%8C%96%E4%B8%8E%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88%E5%93%A6/image-20230818153542308.png" alt="image-20230818153542308" /></p>
+<h3 id="613-创造特征"><a class="markdownIt-Anchor" href="#613-创造特征"></a> 6.1.3 创造特征</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">似乎适用性很窄</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A06%E7%89%B9%E5%BE%81%E4%BC%98%E5%8C%96%E4%B8%8E%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88%E5%93%A6/image-20230818153602524.png" alt="image-20230818153602524" /></p>
+<h3 id="614-特征组合"><a class="markdownIt-Anchor" href="#614-特征组合"></a> 6.1.4 特征组合</h3>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A06%E7%89%B9%E5%BE%81%E4%BC%98%E5%8C%96%E4%B8%8E%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88%E5%93%A6/image-20230818153710014.png" alt="image-20230818153710014" /></p>
+<h5 id="1"><a class="markdownIt-Anchor" href="#1"></a> 1</h5>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">如果在别的模型下该如何处理呢？？</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A06%E7%89%B9%E5%BE%81%E4%BC%98%E5%8C%96%E4%B8%8E%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88%E5%93%A6/image-20230818153843530.png" alt="image-20230818153843530" /></p>
+<h4 id="2-独热编码"><a class="markdownIt-Anchor" href="#2-独热编码"></a> 2 独热编码</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pass </span><br></pre></td></tr></table></figure>
+<h4 id="3-分桶特征"><a class="markdownIt-Anchor" href="#3-分桶特征"></a> 3 分桶特征</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">看起来很简单</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A06%E7%89%B9%E5%BE%81%E4%BC%98%E5%8C%96%E4%B8%8E%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88%E5%93%A6/image-20230818154012044.png" alt="image-20230818154012044" /></p>
+<h2 id="62-实战"><a class="markdownIt-Anchor" href="#62-实战"></a> 6.2 实战</h2>
+<p>构造特征</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">epsilon=<span class="number">1e-5</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#组交叉特征，可以自行定义，如增加： x*x/y, log(x)/y 等等</span></span><br><span class="line">func_dict = &#123;</span><br><span class="line">        <span class="string">&#x27;add&#x27;</span>: <span class="keyword">lambda</span> x,y: x+y,</span><br><span class="line">        <span class="string">&#x27;mins&#x27;</span>: <span class="keyword">lambda</span> x,y: x-y,</span><br><span class="line">        <span class="string">&#x27;div&#x27;</span>: <span class="keyword">lambda</span> x,y: x/(y+epsilon),</span><br><span class="line">        <span class="string">&#x27;multi&#x27;</span>: <span class="keyword">lambda</span> x,y: x*y</span><br><span class="line">        &#125;</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">auto_features_make</span>(<span class="params">train_data,test_data,func_dict,col_list</span>):</span><br><span class="line">    train_data, test_data = train_data.copy(), test_data.copy()</span><br><span class="line">    <span class="keyword">for</span> col_i <span class="keyword">in</span> col_list:</span><br><span class="line">        <span class="keyword">for</span> col_j <span class="keyword">in</span> col_list:</span><br><span class="line">            <span class="keyword">for</span> func_name, func <span class="keyword">in</span> func_dict.items():</span><br><span class="line">                <span class="keyword">for</span> data <span class="keyword">in</span> [train_data,test_data]:</span><br><span class="line">                    func_features = func(data[col_i],data[col_j])</span><br><span class="line">                    col_func_features = <span class="string">&#x27;-&#x27;</span>.join([col_i,func_name,col_j])</span><br><span class="line">                    data[col_func_features] = func_features</span><br><span class="line">    <span class="keyword">return</span> train_data,test_data</span><br></pre></td></tr></table></figure>
+<p>主成分分析</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.decomposition <span class="keyword">import</span> PCA   <span class="comment"># 导入主成分分析法</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># PCA方法降维</span></span><br><span class="line">pca = PCA(n_components=<span class="number">500</span>)  <span class="comment"># 创建一个PCA对象，设置要保留的主成分数量为500</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 对训练数据进行PCA降维</span></span><br><span class="line">train_data2_pca = pca.fit_transform(train_data2.iloc[:,<span class="number">0</span>:-<span class="number">1</span>])  <span class="comment"># 将训练数据进行PCA降维，并保存降维后的结果</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 对测试数据进行PCA降维</span></span><br><span class="line">test_data2_pca = pca.transform(test_data2)  <span class="comment"># 对测试数据进行PCA降维，并保存降维后的结果</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 将降维后的训练数据转换为DataFrame</span></span><br><span class="line">train_data2_pca = pd.DataFrame(train_data2_pca)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将降维后的测试数据转换为DataFrame</span></span><br><span class="line">test_data2_pca = pd.DataFrame(test_data2_pca)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将原始训练数据的目标列（通常是标签列）添加到降维后的训练数据中</span></span><br><span class="line">train_data2_pca[<span class="string">&#x27;target&#x27;</span>] = train_data2[<span class="string">&#x27;target&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 从训练数据中选择与测试数据相同的特征列，并将其转换为NumPy数组</span></span><br><span class="line"><span class="comment"># 防止训练集中有测试集里没有的特征</span></span><br><span class="line">X_train2 = train_data2[test_data2.columns].values</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将原始训练数据的目标列（通常是标签列）存储在y_train中</span></span><br><span class="line">y_train = train_data2[<span class="string">&#x27;target&#x27;</span>]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>结果</p>
+<h1 id="7-模型融合"><a class="markdownIt-Anchor" href="#7-模型融合"></a> 7 模型融合</h1>
+<h2 id="71-模型优化"><a class="markdownIt-Anchor" href="#71-模型优化"></a> 7.1 模型优化</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">具体如何操作？？</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A06%E7%89%B9%E5%BE%81%E4%BC%98%E5%8C%96%E4%B8%8E%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88%E5%93%A6/image-20230818160049419.png" alt="image-20230818160049419" /></p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A06%E7%89%B9%E5%BE%81%E4%BC%98%E5%8C%96%E4%B8%8E%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88%E5%93%A6/image-20230818160059996.png" alt="image-20230818160059996" /></p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A06%E7%89%B9%E5%BE%81%E4%BC%98%E5%8C%96%E4%B8%8E%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88%E5%93%A6/image-20230818160106333.png" alt="image-20230818160106333" /></p>
+<h3 id="711-看拟合程度"><a class="markdownIt-Anchor" href="#711-看拟合程度"></a> 7.1.1 看拟合程度</h3>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A06%E7%89%B9%E5%BE%81%E4%BC%98%E5%8C%96%E4%B8%8E%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88%E5%93%A6/image-20230818160206967.png" alt="image-20230818160206967" /></p>
+<h3 id="712-模型融合技术"><a class="markdownIt-Anchor" href="#712-模型融合技术"></a> 7.1.2 模型融合技术</h3>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A06%E7%89%B9%E5%BE%81%E4%BC%98%E5%8C%96%E4%B8%8E%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88%E5%93%A6/image-20230818160233852.png" alt="image-20230818160233852" /></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">为什么模型融合？？</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A06%E7%89%B9%E5%BE%81%E4%BC%98%E5%8C%96%E4%B8%8E%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88%E5%93%A6/image-20230818160314743.png" alt="image-20230818160314743" /></p>
+<img src="./2023年8月17日-阿里天池6特征优化与模型融合哦/image-20230818160536161.png" alt="image-20230818160536161" style="zoom:80%;" />
+<p>按照个体学习器的关系，模型融合提升技术可以分为两类:<br />
+(1)个体学习器间不存在强依赖关系可同时生成的并行化方法，代表是 Bagging 方法和随机森林。<br />
+(2)个体学习器间存在强依赖关系必须串行生成的序列化方法，代表是Boosting 方法。</p>
+<h4 id="1-bagging-和随机森林"><a class="markdownIt-Anchor" href="#1-bagging-和随机森林"></a> 1 Bagging 和随机森林。</h4>
+<p>放回的抽样</p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A06%E7%89%B9%E5%BE%81%E4%BC%98%E5%8C%96%E4%B8%8E%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88%E5%93%A6/image-20230818160646637.png" alt="image-20230818160646637" /></p>
+<p><strong>随机森林只限于决策树</strong></p>
+<h4 id="2-boosting-方法"><a class="markdownIt-Anchor" href="#2-boosting-方法"></a> 2 Boosting 方法。</h4>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A06%E7%89%B9%E5%BE%81%E4%BC%98%E5%8C%96%E4%B8%8E%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88%E5%93%A6/image-20230818160916974.png" alt="image-20230818160916974" /></p>
+<img src="./2023年8月17日-阿里天池6特征优化与模型融合哦/image-20230818160937259.png" alt="image-20230818160937259" style="zoom:50%;" />
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">算法和Boosting方法有什么关系？</span><br><span class="line">AdaBoost、提升树、梯度提升树，都是 Boosting 方法的三种实现方法</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A06%E7%89%B9%E5%BE%81%E4%BC%98%E5%8C%96%E4%B8%8E%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88%E5%93%A6/image-20230818161009011.png" alt="image-20230818161009011" /></p>
+<img src="./2023年8月17日-阿里天池6特征优化与模型融合哦/image-20230818161230881.png" alt="image-20230818161230881"  />
+<img src="./2023年8月17日-阿里天池6特征优化与模型融合哦/image-20230818161621477.png" alt="image-20230818161621477" style="zoom:50%;" />
+<img src="./2023年8月17日-阿里天池6特征优化与模型融合哦/image-20230818161627192.png" alt="image-20230818161627192" style="zoom:50%;" />
+<img src="./2023年8月17日-阿里天池6特征优化与模型融合哦/image-20230818161646807.png" alt="image-20230818161646807" style="zoom:50%;" />
+<h3 id="713-模型融合策略"><a class="markdownIt-Anchor" href="#713-模型融合策略"></a> 7.1.3 模型融合策略</h3>
+<h4 id="1-投票"><a class="markdownIt-Anchor" href="#1-投票"></a> 1 投票</h4>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A06%E7%89%B9%E5%BE%81%E4%BC%98%E5%8C%96%E4%B8%8E%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88%E5%93%A6/image-20230818162434817.png" alt="image-20230818162434817" /></p>
+<img src="./2023年8月17日-阿里天池6特征优化与模型融合哦/image-20230818162459258.png" alt="image-20230818162459258" style="zoom: 67%;" />
+<h4 id="软投票方法"><a class="markdownIt-Anchor" href="#软投票方法"></a> 软投票方法</h4>
+<h5 id="1-averaging"><a class="markdownIt-Anchor" href="#1-averaging"></a> 1 averaging</h5>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A06%E7%89%B9%E5%BE%81%E4%BC%98%E5%8C%96%E4%B8%8E%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88%E5%93%A6/image-20230818165220855.png" alt="image-20230818165220855" /></p>
+<h5 id="2-ranking"><a class="markdownIt-Anchor" href="#2-ranking"></a> 2 ranking</h5>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">排名权重通常是自行设置的</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A06%E7%89%B9%E5%BE%81%E4%BC%98%E5%8C%96%E4%B8%8E%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88%E5%93%A6/image-20230818165256792.png" alt="image-20230818165256792" /></p>
+<h5 id="3-blending"><a class="markdownIt-Anchor" href="#3-blending"></a> 3 blending</h5>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">似乎是训练方法也是融合方法</span><br><span class="line"></span><br><span class="line">多模型融合下的训练方法</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A06%E7%89%B9%E5%BE%81%E4%BC%98%E5%8C%96%E4%B8%8E%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88%E5%93%A6/image-20230818165454494.png" alt="image-20230818165454494" /></p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A06%E7%89%B9%E5%BE%81%E4%BC%98%E5%8C%96%E4%B8%8E%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88%E5%93%A6/image-20230818165936048.png" alt="image-20230818165936048" /></p>
+<h5 id="4-stacking"><a class="markdownIt-Anchor" href="#4-stacking"></a> 4 stacking</h5>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">基学习器和基模型是指同一件事情</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A06%E7%89%B9%E5%BE%81%E4%BC%98%E5%8C%96%E4%B8%8E%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88%E5%93%A6/image-20230818165900105.png" alt="image-20230818165900105" /></p>
+<p>图解</p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A06%E7%89%B9%E5%BE%81%E4%BC%98%E5%8C%96%E4%B8%8E%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88%E5%93%A6/image-20230818170154718.png" alt="image-20230818170154718" /></p>
+<h2 id="72代码演示"><a class="markdownIt-Anchor" href="#72代码演示"></a> 7.2代码演示</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 模型预测–多模型Bagging</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">model_predict</span>(<span class="params">test_data,test_y=[],stack=<span class="literal">False</span></span>):</span><br><span class="line">    <span class="comment">#poly_trans=PolynomialFeatures(degree=2)</span></span><br><span class="line">    <span class="comment">#test_data1=poly_trans.fit_transform(test_data)</span></span><br><span class="line">    <span class="comment">#test_data=MinMaxScaler().fit_transform(test_data)</span></span><br><span class="line">    i=<span class="number">0</span></span><br><span class="line">    y_predict_total=np.zeros((test_data.shape[<span class="number">0</span>],))</span><br><span class="line">    <span class="keyword">for</span> model <span class="keyword">in</span> opt_models.keys():</span><br><span class="line">        <span class="keyword">if</span> model!=<span class="string">&quot;LinearSVR&quot;</span> <span class="keyword">and</span> model!=<span class="string">&quot;KNeighbors&quot;</span>:</span><br><span class="line">            y_predict=opt_models[model].predict(test_data)</span><br><span class="line">            y_predict_total+=y_predict</span><br><span class="line">            i+=<span class="number">1</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(test_y)&gt;<span class="number">0</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;&#123;&#125;_mse:&quot;</span>.<span class="built_in">format</span>(model),mean_squared_error(y_predict,test_y))</span><br><span class="line">    y_predict_mean=np.<span class="built_in">round</span>(y_predict_total/i,<span class="number">3</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(test_y)&gt;<span class="number">0</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;mean_mse:&quot;</span>,mean_squared_error(y_predict_mean,test_y))</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        y_predict_mean=pd.Series(y_predict_mean)</span><br><span class="line">        <span class="keyword">return</span> y_predict_mean</span><br></pre></td></tr></table></figure>
+<img src="./2023年8月17日-阿里天池6特征优化与模型融合哦/image-20230818170402155.png" alt="image-20230818170402155" style="zoom:50%;" />
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 模型软投票</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> matplotlib.gridspec <span class="keyword">as</span> gridspec</span><br><span class="line"><span class="keyword">import</span> itertools</span><br><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LogisticRegression</span><br><span class="line"><span class="keyword">from</span> sklearn.svm <span class="keyword">import</span> SVC</span><br><span class="line"><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestClassifier</span><br><span class="line"></span><br><span class="line"><span class="comment">##主要使用pip install mlxtend安装mlxtend</span></span><br><span class="line"><span class="keyword">from</span> mlxtend.classifier <span class="keyword">import</span> EnsembleVoteClassifier</span><br><span class="line"><span class="keyword">from</span> mlxtend.data <span class="keyword">import</span> iris_data</span><br><span class="line"><span class="keyword">from</span> mlxtend.plotting <span class="keyword">import</span> plot_decision_regions</span><br><span class="line">%matplotlib inline</span><br><span class="line"></span><br><span class="line"><span class="comment"># Initializing Classifiers</span></span><br><span class="line">clf1 = LogisticRegression(random_state=<span class="number">0</span>)</span><br><span class="line">clf2 = RandomForestClassifier(random_state=<span class="number">0</span>)</span><br><span class="line">clf3 = SVC(random_state=<span class="number">0</span>, probability=<span class="literal">True</span>)</span><br><span class="line">eclf = EnsembleVoteClassifier(clfs=[clf1, clf2, clf3], weights=[<span class="number">2</span>, <span class="number">1</span>, <span class="number">1</span>], voting=<span class="string">&#x27;soft&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Loading some example data</span></span><br><span class="line">X, y = iris_data()</span><br><span class="line">X = X[:,[<span class="number">0</span>, <span class="number">2</span>]]</span><br><span class="line"></span><br><span class="line"><span class="comment"># Plotting Decision Regions</span></span><br><span class="line">gs = gridspec.GridSpec(<span class="number">2</span>, <span class="number">2</span>)</span><br><span class="line">fig = plt.figure(figsize=(<span class="number">10</span>, <span class="number">8</span>))</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> clf, lab, grd <span class="keyword">in</span> <span class="built_in">zip</span>([clf1, clf2, clf3, eclf],</span><br><span class="line">                         [<span class="string">&#x27;Logistic Regression&#x27;</span>, <span class="string">&#x27;Random Forest&#x27;</span>, <span class="string">&#x27;RBF kernel SVM&#x27;</span>, <span class="string">&#x27;Ensemble&#x27;</span>],</span><br><span class="line">                         itertools.product([<span class="number">0</span>, <span class="number">1</span>], repeat=<span class="number">2</span>)):</span><br><span class="line">    clf.fit(X, y)</span><br><span class="line">    ax = plt.subplot(gs[grd[<span class="number">0</span>], grd[<span class="number">1</span>]])</span><br><span class="line">    fig = plot_decision_regions(X=X, y=y, clf=clf, legend=<span class="number">2</span>)</span><br><span class="line">    plt.title(lab)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<img src="./2023年8月17日-阿里天池6特征优化与模型融合哦/image-20230818170539905.png" alt="image-20230818170539905" style="zoom:80%;" />
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2023年8月18日17点11分</span><br></pre></td></tr></table></figure>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2023/08/08/2023%E5%B9%B48%E6%9C%887%E6%97%A5%E6%84%9F%E7%9F%A5%E6%9C%BA/" data-id="clrwazlra001y7ov49dis7omw" class="article-share-link">分享</a>
+      <a data-url="https://shakewely.github.io/2023/08/18/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A06%E7%89%B9%E5%BE%81%E4%BC%98%E5%8C%96%E4%B8%8E%E6%A8%A1%E5%9E%8B%E8%9E%8D%E5%90%88%E5%93%A6/" data-id="clrwazlr8001q7ov4520q5ydc" class="article-share-link">分享</a>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A0%E5%AD%A6%E4%B9%A0/" rel="tag">阿里天池学习</a></li></ul>
 
     </footer>
   </div>
@@ -227,12 +269,12 @@
 
 
   
-    <article id="post-2023年8月8日K临算法" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2023年8月17日-阿里天池3模型验证" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2023/08/07/2023%E5%B9%B48%E6%9C%888%E6%97%A5K%E4%B8%B4%E7%AE%97%E6%B3%95/" class="article-date">
-  <time class="post-time" datetime="2023-08-07T13:19:22.000Z" itemprop="datePublished">
+    <a href="/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/" class="article-date">
+  <time class="post-time" datetime="2023-08-17T13:54:01.000Z" itemprop="datePublished">
     <span class="post-month">8月</span><br/>
-    <span class="post-day">07</span>
+    <span class="post-day">17</span>
   </time>
 </a>
    
@@ -244,7 +286,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2023/08/07/2023%E5%B9%B48%E6%9C%888%E6%97%A5K%E4%B8%B4%E7%AE%97%E6%B3%95/">K近邻法</a>
+      <a class="article-title" href="/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/">阿里天池5模型验证</a>
     </h1>
   
 
@@ -259,70 +301,81 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="k近邻法"><a class="markdownIt-Anchor" href="#k近邻法"></a> K近邻法</h2>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 概念</span><br><span class="line">K近邻法 (k-nearest neighbor，k-NN) 是一种基本的分类与回归方法。主要思想: 假定给定一个训练数据集，其中实例标签已定，当输入新的实例时，可以根据其最近的 k 个训练实例的标签，预测新实例对应的标注信息。</span><br><span class="line">分类问题:对新的实例，根据与之相邻的 k 个训练实例的类别，通过多数表决等方式进行预测。</span><br><span class="line">回归问题: 对新的实例，根据与之相邻的 k 个训练实例的标签，通过均值计算进行预测。</span><br></pre></td></tr></table></figure>
-<h2 id="0x1图像理解"><a class="markdownIt-Anchor" href="#0x1图像理解"></a> 0X1图像理解：</h2>
-<p><img src="./K%E4%B8%B4%E7%AE%97%E6%B3%95/image-20230809195539760.png" alt="image-20230809195539760" /></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(1) k=3，绿色圆点属于红色三角形类别;</span><br><span class="line">(2) k=5，绿色圆点属于蓝色正方形类别;</span><br><span class="line">较小的 k 值，学习的近似误差减小，但估计误差增大，敏感性增强，而且模型复杂，容易过拟合</span><br><span class="line">较大的 k 值，减少学习的估计误差，但近似误差增大，而且模型简单</span><br><span class="line">注: k 的取值可通过交叉验证来选择，一般低于训练集样本量的平方</span><br></pre></td></tr></table></figure>
-<h4 id="拓展欧氏距离三维等等"><a class="markdownIt-Anchor" href="#拓展欧氏距离三维等等"></a> 拓展：欧氏距离，三维等等</h4>
-<h2 id="0x2-算法"><a class="markdownIt-Anchor" href="#0x2-算法"></a> 0X2 算法</h2>
-<p>​	<img src="./K%E4%B8%B4%E7%AE%97%E6%B3%95/image-20230809195555386.png" alt="image-20230809195555386" /></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">输入:训练集:</span><br><span class="line">T=[(x1,y1),(x2,y2)·.·,(xN,yN)&#125;其中，XiEXCR”，yEy=&#123;c,C2,···,CK&#125;，实例x;输出:实例x所属类别 y</span><br><span class="line">(1)r根据给定的距离度量，计算X与 T中点的距离:</span><br><span class="line">(2)在 T中找到与x 最邻近的 k 个点，涵盖这 k 个点的x 的邻域记作Nk(x);</span><br><span class="line">(3)在Nk(x)中根据分类决策规则 (如多数表决) 决定 的类别 y。</span><br></pre></td></tr></table></figure>
-<h2 id="0x3-误差率"><a class="markdownIt-Anchor" href="#0x3-误差率"></a> 0X3 误差率</h2>
-<p><img src="./K%E4%B8%B4%E7%AE%97%E6%B3%95/image-20230809195600717.png" alt="image-20230809195600717" /></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">概率类别求和</span><br></pre></td></tr></table></figure>
-<p><img src="./K%E4%B8%B4%E7%AE%97%E6%B3%95/image-20230809195619673.png" alt="image-20230809195619673" /></p>
-<p><img src="./K%E4%B8%B4%E7%AE%97%E6%B3%95/image-20230809195626591.png" alt="image-20230809195626591" /></p>
-<p><img src="./K%E4%B8%B4%E7%AE%97%E6%B3%95/image-20230809195633498.png" alt="image-20230809195633498" /></p>
-<h2 id="0x4-三要素"><a class="markdownIt-Anchor" href="#0x4-三要素"></a> 0X4 三要素</h2>
-<h3 id="1距离度量lp距离"><a class="markdownIt-Anchor" href="#1距离度量lp距离"></a> 1.距离度量lp距离</h3>
-<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808142018060.png" alt="image-20230808142018060" style="zoom:25%;" />
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">	欧氏距离 p=2</span><br><span class="line"></span><br><span class="line">​	曼哈顿距离 p=1</span><br><span class="line"></span><br><span class="line">​	切比雪夫距离 p=∞</span><br></pre></td></tr></table></figure>
-<h3 id="2p范式取不同值时所计算的距离不相同"><a class="markdownIt-Anchor" href="#2p范式取不同值时所计算的距离不相同"></a> 2.p范式取不同值时，所计算的距离不相同：</h3>
-<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808141722543.png" alt="image-20230808141722543" style="zoom:25%;" />
-<p>​	<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808141732507.png" alt="image-20230808141732507" style="zoom:25%;" /></p>
-<h3 id="3分类决策选择"><a class="markdownIt-Anchor" href="#3分类决策选择"></a> 3.分类决策选择</h3>
-<h4 id="多数表决规则由输入实例的-k-个邻近的训练实例中的多数类决定输入实例的类"><a class="markdownIt-Anchor" href="#多数表决规则由输入实例的-k-个邻近的训练实例中的多数类决定输入实例的类"></a> 多数表决规则:由输入实例的 k 个邻近的训练实例中的多数类决定输入实例的类。</h4>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">分类函数f:Rn=&#123;c1,C2,··,CK&#125;</span><br><span class="line">损失函数L(Y,F(x)=  Y = f(X) or Y≠f(X)</span><br><span class="line">误分类概率P(Y ≠f(X))=1- P(Y = f(X))</span><br></pre></td></tr></table></figure>
-<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808143250462.png" alt="image-20230808143250462" style="zoom:25%;" />
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808143222812.png" alt="image-20230808143222812" style="zoom:25%;" />
-<h2 id="0x5-kd树"><a class="markdownIt-Anchor" href="#0x5-kd树"></a> 0X5 kd树</h2>
-<h3 id="1构造kd树"><a class="markdownIt-Anchor" href="#1构造kd树"></a> 1.构造kd树</h3>
-<h4 id="1概念"><a class="markdownIt-Anchor" href="#1概念"></a> 1.概念</h4>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">概念</span><br><span class="line">kd 树是一种对 k 维空间中的实例点进行储存以便对其进行快速检索的树形数据结构。</span><br><span class="line"></span><br><span class="line">本质:二叉树，表示对 k 维空间的一个划分</span><br><span class="line">构造过程:不断地用垂直于坐标轴的超平面将 k 维空间切分，形成k 维超矩形区域</span><br><span class="line">kd 树的每一个结点对应于一个 k 维超矩形区</span><br></pre></td></tr></table></figure>
-<h4 id="2算法"><a class="markdownIt-Anchor" href="#2算法"></a> 2.算法</h4>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">输入: k 维空间数据集:</span><br><span class="line">T=&#123;x1,X2,···,XN</span><br><span class="line">其中，X;=(x;输出:kd 树</span><br><span class="line">(1) 开始:构造根节点。</span><br><span class="line">选取 x(1)为坐标轴，以训练集中的所有数据 (1) 坐标中的中位数作为切分点，将超矩形区域切割成两个子区域将该切分点作为根结点。由根结点生出深度为 1的左右子结点，左节点对应坐标小于切分点，右结点对应坐标大于切分点。</span><br><span class="line">(2) 重复</span><br><span class="line">对深度为j的结点，选择 x(0)为切分坐标轴,] = ( mod k)+1，以该结点区域中所有实例 ()坐标的中位数</span><br><span class="line">作为切分点，将区域分为两个子区域。</span><br><span class="line">生成深度为i+1的左、右子结点。左节点对应坐标小于切分点，右结点对应坐标大于切分点。</span><br><span class="line">直到两个子区域没有实例时停止。</span><br></pre></td></tr></table></figure>
- <img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808151948890.png" alt="image-20230808151948890" style="zoom:25%;" />
-<h4 id="3例子"><a class="markdownIt-Anchor" href="#3例子"></a> 3.例子</h4>
-<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808151925879.png" alt="image-20230808151925879" style="zoom:25%;" />
-<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808151934628.png" alt="image-20230808151934628" style="zoom:25%;" />
-<h3 id="2搜索kd树"><a class="markdownIt-Anchor" href="#2搜索kd树"></a> 2.搜索KD树</h3>
-<pre><code>寻找“当前最近点”
-	寻找最近邻的子结点作为目标点的“当前最近点9
-回溯
-	以目标点和“当前最近点”的距离沿树根部进行回溯和迭代
-</code></pre>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">输入:已构造的 kd 树，目标点X</span><br><span class="line">输出:X的最近邻</span><br><span class="line">寻找“当前最近点</span><br><span class="line">	从根结点出发，递归访问 kd 树，找出包含X的叶结点:以此叶结点为“当前最近点”</span><br><span class="line">回溯</span><br><span class="line">	若该结点比“当前最近点”距离目标点更近，更新“当前最近点”</span><br><span class="line">	当前最近点一定存在于该结点一个子结点对应的区域，检查子结点的父结点的另一子结点对应的区域是否有更近的点。</span><br><span class="line">当回退到根结点时，搜索结束，最后的“当前最近点”即为 X 的最近邻部o</span><br></pre></td></tr></table></figure>
-<h4 id="1-寻找"><a class="markdownIt-Anchor" href="#1-寻找"></a> 1 寻找</h4>
-<p>根据分离点寻找</p>
-<h4 id="2-回溯"><a class="markdownIt-Anchor" href="#2-回溯"></a> 2 回溯</h4>
-<p>先看最近点—半径画圆—相交父节点超平面—是则：检查兄弟节点–判断距离–迭代回到最初判断；否：确定该点—得到最临点</p>
-<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808154234530.png" alt="image-20230808154234530" style="zoom:25%;" />
-<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808154437522.png" alt="image-20230808154437522" style="zoom:25%;" />
-<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808154442954.png" alt="image-20230808154442954" style="zoom:25%;" />
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2023年8月8日</span><br></pre></td></tr></table></figure>
-<h2 id="0x6-代码实现"><a class="markdownIt-Anchor" href="#0x6-代码实现"></a> 0X6 代码实现</h2>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 作者：Weakliy</span></span><br><span class="line"><span class="comment"># 创建日期：2023/8/11 15:50</span></span><br><span class="line"><span class="comment"># 描述：这个文件实现了分类。</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.neighbors <span class="keyword">import</span> KNeighborsClassifier</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score, confusion_matrix</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载鸢尾花数据集</span></span><br><span class="line">data = load_iris()</span><br><span class="line">X = data.data</span><br><span class="line">y = data.target</span><br><span class="line">target_names = data.target_names</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将数据集分为训练集和测试集</span></span><br><span class="line">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.2</span>, random_state=<span class="number">42</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建k临近法分类器，这里选择k=3</span></span><br><span class="line">k = <span class="number">3</span></span><br><span class="line">knn_classifier = KNeighborsClassifier(n_neighbors=k)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在训练集上训练分类器</span></span><br><span class="line">knn_classifier.fit(X_train, y_train)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在测试集上进行预测</span></span><br><span class="line">y_pred = knn_classifier.predict(X_test)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算分类器的准确率</span></span><br><span class="line">accuracy = accuracy_score(y_test, y_pred)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Accuracy: <span class="subst">&#123;accuracy:<span class="number">.2</span>f&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 可视化数据分布</span></span><br><span class="line">sns.<span class="built_in">set</span>(style=<span class="string">&quot;whitegrid&quot;</span>)</span><br><span class="line">sns.pairplot(sns.load_dataset(<span class="string">&quot;iris&quot;</span>), hue=<span class="string">&quot;species&quot;</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 可视化混淆矩阵</span></span><br><span class="line">cm = confusion_matrix(y_test, y_pred)</span><br><span class="line">plt.figure(figsize=(<span class="number">8</span>, <span class="number">6</span>))</span><br><span class="line">sns.heatmap(cm, annot=<span class="literal">True</span>, cmap=<span class="string">&quot;Blues&quot;</span>, fmt=<span class="string">&quot;d&quot;</span>, xticklabels=target_names, yticklabels=target_names)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Predicted&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;True&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;Confusion Matrix&#x27;</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 作者：Weakliy</span></span><br><span class="line"><span class="comment"># 创建日期：2023/8/11 15:51</span></span><br><span class="line"><span class="comment"># 描述：这个文件实现了回归功能。</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> make_regression</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.neighbors <span class="keyword">import</span> KNeighborsRegressor</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> mean_squared_error</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成模拟的回归数据集</span></span><br><span class="line">X, y = make_regression(n_samples=<span class="number">100</span>, n_features=<span class="number">1</span>, noise=<span class="number">10</span>, random_state=<span class="number">42</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将数据集分为训练集和测试集</span></span><br><span class="line">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.2</span>, random_state=<span class="number">42</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建k临近法回归器，这里选择k=3</span></span><br><span class="line">k = <span class="number">3</span></span><br><span class="line">knn_regressor = KNeighborsRegressor(n_neighbors=k)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在训练集上训练回归器</span></span><br><span class="line">knn_regressor.fit(X_train, y_train)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在测试集上进行预测</span></span><br><span class="line">y_pred = knn_regressor.predict(X_test)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算均方误差</span></span><br><span class="line">mse = mean_squared_error(y_test, y_pred)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Mean Squared Error: <span class="subst">&#123;mse:<span class="number">.2</span>f&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 可视化回归结果</span></span><br><span class="line">plt.scatter(X_test, y_test, color=<span class="string">&#x27;blue&#x27;</span>, label=<span class="string">&#x27;True values&#x27;</span>)</span><br><span class="line">plt.scatter(X_test, y_pred, color=<span class="string">&#x27;red&#x27;</span>, label=<span class="string">&#x27;Predicted values&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;X&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;y&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;K-Nearest Neighbors Regression&#x27;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+        <h1 id="5模型验证"><a class="markdownIt-Anchor" href="#5模型验证"></a> 5模型验证</h1>
+<h2 id="51-模型评估方法"><a class="markdownIt-Anchor" href="#51-模型评估方法"></a> 5.1 模型评估方法</h2>
+<h3 id="511-过拟合与欠拟合"><a class="markdownIt-Anchor" href="#511-过拟合与欠拟合"></a> 5.1.1 过拟合与欠拟合</h3>
+<p>不多解释</p>
+<h3 id="512-泛化和正则化"><a class="markdownIt-Anchor" href="#512-泛化和正则化"></a> 5.1.2 泛化和正则化</h3>
+<h4 id="泛化"><a class="markdownIt-Anchor" href="#泛化"></a> 泛化</h4>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817220349891.png" alt="image-20230817220349891" /></p>
+<h4 id="正则化"><a class="markdownIt-Anchor" href="#正则化"></a> 正则化</h4>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817220337462.png" alt="image-20230817220337462" /></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">这个是什么意思？？？</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817220434322.png" alt="image-20230817220434322" /></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">代价函数是干什么用的？</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817220459962.png" alt="image-20230817220459962" /></p>
+<h4 id="岭回归和lasso回归"><a class="markdownIt-Anchor" href="#岭回归和lasso回归"></a> 岭回归和lasso回归</h4>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817220811340.png" alt="image-20230817220811340" /></p>
+<h5 id="作用"><a class="markdownIt-Anchor" href="#作用"></a> 作用</h5>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">这个图是什么意思？？？</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817220857389.png" alt="image-20230817220857389" /></p>
+<h5 id="不同之处"><a class="markdownIt-Anchor" href="#不同之处"></a> 不同之处</h5>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817221246937.png" alt="image-20230817221246937" /></p>
+<h3 id="513-评估指标和调用方法"><a class="markdownIt-Anchor" href="#513-评估指标和调用方法"></a> 5.1.3 评估指标和调用方法</h3>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817221323046.png" alt="image-20230817221323046" /></p>
+<h3 id="514-交叉验证"><a class="markdownIt-Anchor" href="#514-交叉验证"></a> 5.1.4 交叉验证</h3>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817221453685.png" alt="image-20230817221453685" /></p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817221543141.png" alt="image-20230817221543141" /></p>
+<p>![image-20230817221548567](./2023年8月17日-阿里天池3模型验证/image-20230817221548567.png</p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817221633694.png" alt="image-20230817221633694" /></p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817221806284.png" alt="image-20230817221806284" /></p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817221837802.png" alt="image-20230817221837802" /></p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817222120114.png" alt="" /></p>
+<p>​        <strong>K折交叉验证</strong>： KFold         将所有的样例划分为 k 个组，称为折叠 (fold) （如果 k = n， 这等价于 Leave One Out（留一）         策略），都具有相同的大小（如果可能）。预测函数学习时使用 k - 1 个折叠中的数据，最后一个剩下的折叠会用于测试。</p>
+<p>​        <strong>K折重复多次</strong>：         RepeatedKFold 重复 K-Fold n 次。当需要运行时可以使用它 KFold n 次，在每次重复中产生不同的分割。</p>
+<p>​        <strong>留一交叉验证</strong>：         LeaveOneOut (或 LOO) 是一个简单的交叉验证。每个学习集都是通过除了一个样本以外的所有样本创建的，测试集是被留下的样本。         因此，对于 n 个样本，我们有 n 个不同的训练集和 n         个不同的测试集。这种交叉验证程序不会浪费太多数据，因为只有一个样本是从训练集中删除掉的:</p>
+<p>​        <strong>留P交叉验证</strong>： LeavePOut         与 LeaveOneOut 非常相似，因为它通过从整个集合中删除 p 个样本来创建所有可能的 训练/测试集。对于 n 个样本，这产生了 {n         \choose p} 个 训练-测试 对。与 LeaveOneOut 和 KFold 不同，当 p &gt; 1 时，测试集会重叠。</p>
+<p>​        <strong>用户自定义数据集划分： ShuffleSplit</strong>         迭代器将会生成一个用户给定数量的独立的训练/测试数据划分。样例首先被打散然后划分为一对训练测试集合。</p>
+<p>​        <strong>设置每次生成的随机数相同</strong>：         可以通过设定明确的 random_state ，使得伪随机生成器的结果可以重复。</p>
+<h4 id="基于类标签-具有分层的交叉验证迭代器"><a class="markdownIt-Anchor" href="#基于类标签-具有分层的交叉验证迭代器"></a> 基于类标签、具有分层的交叉验证迭代器</h4>
+<p>​        如何解决样本不平衡问题？ 使用StratifiedKFold和StratifiedShuffleSplit 分层抽样。         一些分类问题在目标类别的分布上可能表现出很大的不平衡性：例如，可能会出现比正样本多数倍的负样本。在这种情况下，建议采用如         StratifiedKFold 和 StratifiedShuffleSplit 中实现的分层抽样方法，确保相对的类别频率在每个训练和验证         折叠 中大致保留。</p>
+<p>​        <strong>StratifiedKFold</strong>是 k-fold 的变种，会返回 stratified（分层）         的折叠：每个小集合中， 各个类别的样例比例大致和完整数据集中相同。</p>
+<p>​        <strong>StratifiedShuffleSplit</strong>是 ShuffleSplit         的一个变种，会返回直接的划分，比如： 创建一个划分，但是划分中每个类的比例和完整数据集中的相同。</p>
+<h4 id="用于分组数据的交叉验证迭代器"><a class="markdownIt-Anchor" href="#用于分组数据的交叉验证迭代器"></a> 用于分组数据的交叉验证迭代器</h4>
+<p>​        如何进一步测试模型的泛化能力？ 留出一组特定的不属于测试集和训练集的数据。有时我们想知道在一组特定的 groups         上训练的模型是否能很好地适用于看不见的 group 。为了衡量这一点，我们需要确保验证对象中的所有样本来自配对训练折叠中完全没有表示的组。</p>
+<p>​        <strong>GroupKFold</strong>是 k-fold 的变体，它确保同一个 group 在测试和训练集中都不被表示。         例如，如果数据是从不同的 subjects 获得的，每个 subject         有多个样本，并且如果模型足够灵活以高度人物指定的特征中学习，则可能无法推广到新的 subject 。 GroupKFold         可以检测到这种过拟合的情况。</p>
+<p>​        <strong>LeaveOneGroupOut</strong>是一个交叉验证方案，它根据第三方提供的 array of integer         groups （整数组的数组）来提供样本。这个组信息可以用来编码任意域特定的预定义交叉验证折叠。</p>
+<p>​        每个训练集都是由除特定组别以外的所有样本构成的。</p>
+<p>​        <strong>LeavePGroupsOut</strong>类似于 LeaveOneGroupOut ，但为每个训练/测试集删除与 P         组有关的样本。</p>
+<p>​        <strong>GroupShuffleSplit</strong>迭代器是 ShuffleSplit 和 LeavePGroupsOut         的组合，它生成一个随机划分分区的序列，其中为每个分组提供了一个组子集。</p>
+<h4 id="时间序列分割"><a class="markdownIt-Anchor" href="#时间序列分割"></a> 时间序列分割</h4>
+<p>​        <strong>TimeSeriesSplit</strong>是 k-fold 的一个变体，它首先返回 k 折作为训练数据集，并且         (k+1) 折作为测试数据集。 请注意，与标准的交叉验证方法不同，连续的训练集是超越前者的超集。         另外，它将所有的剩余数据添加到第一个训练分区，它总是用来训练模型。</p>
+<h2 id="52-模型调参"><a class="markdownIt-Anchor" href="#52-模型调参"></a> 5.2 模型调参</h2>
+<h3 id="521-调参"><a class="markdownIt-Anchor" href="#521-调参"></a> 5.2.1 调参</h3>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817222343606.png" alt="image-20230817222343606" /></p>
+<img src="./2023年8月17日-阿里天池3模型验证/image-20230817222445188.png" alt="image-20230817222445188"  />
+<h4 id="例子"><a class="markdownIt-Anchor" href="#例子"></a> 例子</h4>
+<img src="./2023年8月17日-阿里天池3模型验证/image-20230817222539311.png" alt="image-20230817222539311" style="zoom:33%;" />
+<img src="./image-20230817222607117.png" alt="image-20230817222607117" style="zoom:33%;" />
+<h3 id="522-网格搜索"><a class="markdownIt-Anchor" href="#522-网格搜索"></a> 5.2.2 网格搜索</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">作用：</span><br></pre></td></tr></table></figure>
+<p>​	<img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817222659040.png" alt="image-20230817222659040" /></p>
+<h3 id="523-学习曲线"><a class="markdownIt-Anchor" href="#523-学习曲线"></a> 5.2.3 学习曲线</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">作用：</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817223242271.png" alt="image-20230817223242271" /></p>
+<img src="./2023年8月17日-阿里天池3模型验证/image-20230817230231178.png" alt="image-20230817230231178" style="zoom:50%;" />
+<h3 id="523-验证曲线"><a class="markdownIt-Anchor" href="#523-验证曲线"></a> 5.2.3 验证曲线</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">和网格搜索的区别？？</span><br><span class="line"></span><br><span class="line">验证曲线关注于单个超参数的影响，帮助你理解如何调整某个特定参数以获得更好的模型性能。</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/image-20230817223459791.png" alt="image-20230817223459791" /></p>
+<img src="./2023年8月17日-阿里天池3模型验证/image-20230817230350524.png" alt="image-20230817230350524" style="zoom:50%;" />
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2023/08/07/2023%E5%B9%B48%E6%9C%888%E6%97%A5K%E4%B8%B4%E7%AE%97%E6%B3%95/" data-id="clrwazlra00207ov422yeebh9" class="article-share-link">分享</a>
+      <a data-url="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A03%E6%A8%A1%E5%9E%8B%E9%AA%8C%E8%AF%81/" data-id="clrwazlr8001o7ov44cz25h98" class="article-share-link">分享</a>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A0%E5%AD%A6%E4%B9%A0/" rel="tag">阿里天池学习</a></li></ul>
 
     </footer>
   </div>
@@ -333,12 +386,12 @@
 
 
   
-    <article id="post-2023年8月7日决策树" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2023年8月17日-阿里天池2模型训练" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2023/08/07/2023%E5%B9%B48%E6%9C%887%E6%97%A5%E5%86%B3%E7%AD%96%E6%A0%91/" class="article-date">
-  <time class="post-time" datetime="2023-08-07T02:25:31.000Z" itemprop="datePublished">
+    <a href="/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A02%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83/" class="article-date">
+  <time class="post-time" datetime="2023-08-17T11:50:50.000Z" itemprop="datePublished">
     <span class="post-month">8月</span><br/>
-    <span class="post-day">07</span>
+    <span class="post-day">17</span>
   </time>
 </a>
    
@@ -350,7 +403,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2023/08/07/2023%E5%B9%B48%E6%9C%887%E6%97%A5%E5%86%B3%E7%AD%96%E6%A0%91/">感知机</a>
+      <a class="article-title" href="/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A02%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83/">阿里天池4模型训练</a>
     </h1>
   
 
@@ -365,23 +418,51 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="机器学习-统计学习方法决策树"><a class="markdownIt-Anchor" href="#机器学习-统计学习方法决策树"></a> 机器学习-统计学习方法–决策树</h1>
-<h5 id="p55后剪枝悲观原理"><a class="markdownIt-Anchor" href="#p55后剪枝悲观原理"></a> p5.5后剪枝——悲观原理</h5>
-<h5 id="后剪枝悲观原理"><a class="markdownIt-Anchor" href="#后剪枝悲观原理"></a> 后剪枝——悲观原理</h5>
-<p><img src="C:%5CUsers%5Cadmin%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20230805141501903.png" alt="image-20230805141501903" /></p>
-<h5 id="p56最小误差剪枝"><a class="markdownIt-Anchor" href="#p56最小误差剪枝"></a> p5.6最小误差剪枝</h5>
-<h5 id="p67基于错误剪枝"><a class="markdownIt-Anchor" href="#p67基于错误剪枝"></a> p6.7基于错误剪枝</h5>
-<p><img src="C:%5CUsers%5Cadmin%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20230805144911556.png" alt="image-20230805144911556" /></p>
-<h5 id="p57代价复杂剪枝"><a class="markdownIt-Anchor" href="#p57代价复杂剪枝"></a> p5.7代价复杂剪枝</h5>
-<p><img src="C:%5CUsers%5Cadmin%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20230805151828628.png" alt="image-20230805151828628" /></p>
+        <h1 id="4-模型训练"><a class="markdownIt-Anchor" href="#4-模型训练"></a> 4 模型训练</h1>
+<h2 id="41-回归"><a class="markdownIt-Anchor" href="#41-回归"></a> 4.1 回归</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;不多介绍&quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+<h3 id="413-线性多元回归"><a class="markdownIt-Anchor" href="#413-线性多元回归"></a> 4.1.3 线性多元回归</h3>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A02%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83/image-20230817195523848.png" alt="image-20230817195523848" /></p>
+<h4 id="普通结果"><a class="markdownIt-Anchor" href="#普通结果"></a> 普通结果</h4>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A02%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83/image-20230817195934775.png" alt="image-20230817195934775" /></p>
+<h4 id="不同训练量结果"><a class="markdownIt-Anchor" href="#不同训练量结果"></a> 不同训练量结果</h4>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A02%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83/image-20230817200259771.png" alt="image-20230817200259771" /></p>
+<h4 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h4>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A02%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83/image-20230817215213997.png" alt="image-20230817215213997" /></p>
+<h3 id="415-k近邻回归"><a class="markdownIt-Anchor" href="#415-k近邻回归"></a> 4.1.5 K近邻回归</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">距离采用欧式距离</span><br></pre></td></tr></table></figure>
+<h4 id="结果"><a class="markdownIt-Anchor" href="#结果"></a> 结果</h4>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A02%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83/image-20230817200603098.png" alt="image-20230817200603098" /></p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A02%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83/image-20230817200613446.png" alt="image-20230817200613446" /></p>
+<h4 id="总结-2"><a class="markdownIt-Anchor" href="#总结-2"></a> 总结</h4>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A02%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83/image-20230817215232487.png" alt="image-20230817215232487" /></p>
+<h3 id="416-决策树回归"><a class="markdownIt-Anchor" href="#416-决策树回归"></a> 4.1.6 决策树回归</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">解释一下： 具体计算过程</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A02%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83/image-20230817214102778.png" alt="image-20230817214102778" /></p>
+<h4 id="结果-2"><a class="markdownIt-Anchor" href="#结果-2"></a> 结果</h4>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A02%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83/image-20230817200714485.png" alt="image-20230817200714485" /></p>
+<h3 id="416-集成学习之随机森林"><a class="markdownIt-Anchor" href="#416-集成学习之随机森林"></a> 4.1.6 集成学习之随机森林</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">解释一下：</span><br></pre></td></tr></table></figure>
+<img src="./2023年8月17日-阿里天池2模型训练/image-20230817213949150.png" alt="image-20230817213949150" style="zoom:50%;" />
+<img src="./2023年8月17日-阿里天池2模型训练/image-20230817214012375.png" alt="image-20230817214012375" style="zoom:67%;" />
+<h4 id="结果很慢"><a class="markdownIt-Anchor" href="#结果很慢"></a> 结果：很慢</h4>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A02%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83/image-20230817211546997.png" alt="image-20230817211546997" /></p>
+<h4 id="总结-3"><a class="markdownIt-Anchor" href="#总结-3"></a> 总结</h4>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A02%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83/image-20230817215300545.png" alt="image-20230817215300545" /></p>
+<h3 id="417-集成学习之lightgbm"><a class="markdownIt-Anchor" href="#417-集成学习之lightgbm"></a> 4.1.7 集成学习之lightGBM</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">解释一下：</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A02%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83/image-20230817213302242.png" alt="image-20230817213302242" /></p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A02%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83/image-20230817213253441.png" alt="image-20230817213253441" /></p>
+<h4 id="总结-4"><a class="markdownIt-Anchor" href="#总结-4"></a> 总结</h4>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A02%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83/image-20230817215315962.png" alt="image-20230817215315962" /></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2023/08/07/2023%E5%B9%B48%E6%9C%887%E6%97%A5%E5%86%B3%E7%AD%96%E6%A0%91/" data-id="clrwazlr9001w7ov408dqabx8" class="article-share-link">分享</a>
+      <a data-url="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A02%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83/" data-id="clrwazlr7001k7ov4ac8h2bn2" class="article-share-link">分享</a>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A0%E5%AD%A6%E4%B9%A0/" rel="tag">阿里天池学习</a></li></ul>
 
     </footer>
   </div>
@@ -392,12 +473,12 @@
 
 
   
-    <article id="post-ONNX2" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2023年8月17日-阿里天池1特征工程" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2023/08/02/ONNX2/" class="article-date">
-  <time class="post-time" datetime="2023-08-02T13:44:13.979Z" itemprop="datePublished">
+    <a href="/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/" class="article-date">
+  <time class="post-time" datetime="2023-08-17T09:47:39.000Z" itemprop="datePublished">
     <span class="post-month">8月</span><br/>
-    <span class="post-day">02</span>
+    <span class="post-day">17</span>
   </time>
 </a>
    
@@ -409,7 +490,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2023/08/02/ONNX2/">ONNX2</a>
+      <a class="article-title" href="/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/">阿里天池3特征工程</a>
     </h1>
   
 
@@ -424,514 +505,592 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="0x1-onnx代码操作"><a class="markdownIt-Anchor" href="#0x1-onnx代码操作"></a> <strong>0x1. ONNX代码操作</strong></h2>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 导出模型为ONNX__2</span><br><span class="line">with torch.no_grad():</span><br><span class="line">    torch.onnx.export(</span><br><span class="line">        model,                       # 要转换的模型</span><br><span class="line">        example_input,               # 模型的任意一组输入</span><br><span class="line">        &#x27;resnet18.onnx&#x27;,    # 导出的 ONNX 文件名</span><br><span class="line">        opset_version=11,            # ONNX 算子集版本</span><br><span class="line">        input_names=[&#x27;input&#x27;],       # 输入 Tensor 的名称（自己起名字）</span><br><span class="line">        output_names=[&#x27;output&#x27;]      # 输出 Tensor 的名称（自己起名字）</span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
-<p><code>torch.onnx.export()</code>的主要作用是将模型转换为ONNX格式，它不会执行任何需要梯度的操作，因此没有必要关闭梯度跟踪</p>
-<p><strong>with torch.no_grad():</strong>。</p>
-<p>可以用一下：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 导出模型为ONNX__1</span><br><span class="line">torch.onnx.export(model, example_input, onnx_path, verbose=True)</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 检查模型格式是否正确</span><br><span class="line">print(onnx.checker.check_model(onnx_model))</span><br></pre></td></tr></table></figure>
-<p>用于验证导出的ONNX模型是否<strong>符合ONNX规范的函数</strong></p>
-<p>出现错误时会抛出异常</p>
+        <h1 id="3-阿里天池特征工程"><a class="markdownIt-Anchor" href="#3-阿里天池特征工程"></a> 3 阿里天池特征工程</h1>
+<h2 id="31-概念和作用image-20230817191501628"><a class="markdownIt-Anchor" href="#31-概念和作用image-20230817191501628"></a> 3.1  概念和作用<img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817191501628.png" alt="image-20230817191501628" /></h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">“数据和特征决定了机器学习的上限，而模型和算法只是逼近这个上限而已”</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">什么是有用特征和无用特征？</span><br></pre></td></tr></table></figure>
+<h2 id="32-处理"><a class="markdownIt-Anchor" href="#32-处理"></a> 3.2 处理</h2>
+<h3 id="321-预处理"><a class="markdownIt-Anchor" href="#321-预处理"></a> 3.2.1 预处理</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">采集</span><br><span class="line">清洗</span><br><span class="line">采样（正负样本不均匀）</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">为什么要采样？作用？</span><br></pre></td></tr></table></figure>
+<img src="./2023年8月17日-阿里天池1特征工程/image-20230817191740199.png" alt="image-20230817191740199" style="zoom: 67%;" />
+<h3 id="322-特征处理"><a class="markdownIt-Anchor" href="#322-特征处理"></a> 3.2.2 特征处理</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">标准化、区间缩放法、归一化、定量特征二值化、特征呀编码、缺失值处理、数据转换？？</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817192041473.png" alt="image-20230817192041473" /></p>
+<h2 id="33-降维"><a class="markdownIt-Anchor" href="#33-降维"></a> 3.3 降维</h2>
+<h3 id="331-特征选择"><a class="markdownIt-Anchor" href="#331-特征选择"></a> 3.3.1 特征选择</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">定义：</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817192234449.png" alt="image-20230817192144446" /></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">方法：</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817192248023.png" alt="image-20230817192248023" /></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">实现：</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817192303599.png" alt="image-20230817192303599" /></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">，，，代码？</span><br></pre></td></tr></table></figure>
+<h3 id="332-线性降维"><a class="markdownIt-Anchor" href="#332-线性降维"></a> 3.3.2 线性降维</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;占位符  不懂&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+<h4 id="1-主成分分析"><a class="markdownIt-Anchor" href="#1-主成分分析"></a> 1 主成分分析</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">定义</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817192418065.png" alt="image-20230817192418065" /></p>
+<h4 id="2-线性判别"><a class="markdownIt-Anchor" href="#2-线性判别"></a> 2 线性判别</h4>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817192447014.png" alt="image-20230817192447014" /></p>
+<h2 id="34-实战"><a class="markdownIt-Anchor" href="#34-实战"></a> 3.4 实战</h2>
+<h3 id="341-异常分析"><a class="markdownIt-Anchor" href="#341-异常分析"></a> 3.4.1 异常分析</h3>
+<img src="./2023年8月17日-阿里天池1特征工程/image-20230817192832869.png" alt="image-20230817192832869" style="zoom: 67%;" />
+<p><strong>差异过大删除</strong></p>
+<h3 id="342-最大最小值归一化"><a class="markdownIt-Anchor" href="#342-最大最小值归一化"></a> 3.4.2 最大最小值归一化</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">如何操作的？看代码</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> preprocessing </span><br><span class="line"></span><br><span class="line">features_columns = [col <span class="keyword">for</span> col <span class="keyword">in</span> train_data.columns <span class="keyword">if</span> col <span class="keyword">not</span> <span class="keyword">in</span> [<span class="string">&#x27;target&#x27;</span>]]</span><br><span class="line"></span><br><span class="line">min_max_scaler = preprocessing.MinMaxScaler()</span><br><span class="line"></span><br><span class="line">min_max_scaler = min_max_scaler.fit(train_data[features_columns])</span><br><span class="line"></span><br><span class="line">train_data_scaler = min_max_scaler.transform(train_data[features_columns])</span><br><span class="line">test_data_scaler = min_max_scaler.transform(test_data[features_columns])</span><br><span class="line"></span><br><span class="line">train_data_scaler = pd.DataFrame(train_data_scaler)</span><br><span class="line">train_data_scaler.columns = features_columns</span><br><span class="line"></span><br><span class="line">test_data_scaler = pd.DataFrame(test_data_scaler)</span><br><span class="line">test_data_scaler.columns = features_columns</span><br><span class="line"></span><br><span class="line">train_data_scaler[<span class="string">&#x27;target&#x27;</span>] = train_data[<span class="string">&#x27;target&#x27;</span>]</span><br></pre></td></tr></table></figure>
+<p><strong>比较：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">主要看什么？</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817193220113.png" alt="image-20230817193220113" /></p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817193231124.png" alt="image-20230817193231124" /></p>
+<h4 id="343-查看数据分布"><a class="markdownIt-Anchor" href="#343-查看数据分布"></a> 3.4.3 查看数据分布</h4>
+<p><strong>和前面的一样</strong> 删除特征’V5’, ‘V17’, ‘V28’, ‘V22’, ‘V11’, 'V9’数据的数据分布</p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817193415567.png" alt="image-20230817193415567" /></p>
+<h4 id="344-特征相关性"><a class="markdownIt-Anchor" href="#344-特征相关性"></a> 3.4.4 特征相关性</h4>
+<p><strong>一样</strong></p>
+<h4 id="345-特征降维"><a class="markdownIt-Anchor" href="#345-特征降维"></a> 3.4.5 特征降维</h4>
 <ol>
-<li><strong>验证模型结构</strong>：检查模型的计算图是否按照ONNX规范正确构建。</li>
-<li><strong>验证数据类型和形状</strong>：检查模型输入和输出节点的数据类型和形状是否与ONNX规范相符。</li>
-<li><strong>检查操作符的支持</strong>：检查模型中使用的操作符是否是ONNX支持的版本。</li>
-<li><strong>检查属性和元属性</strong>：检查模型节点的属性和元属性是否正确设置。</li>
+<li>
+<p><strong>筛选出相关性大于0.1的特征变量</strong>*</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mcorr=mcorr.<span class="built_in">abs</span>()</span><br><span class="line">numerical_corr=mcorr[mcorr[<span class="string">&#x27;target&#x27;</span>]&gt;<span class="number">0.1</span>][<span class="string">&#x27;target&#x27;</span>]</span><br><span class="line"><span class="built_in">print</span>(numerical_corr.sort_values(ascending=<span class="literal">False</span>))</span><br><span class="line"></span><br><span class="line">index0 = numerical_corr.sort_values(ascending=<span class="literal">False</span>).index</span><br><span class="line"><span class="built_in">print</span>(train_data_scaler[index0].corr(<span class="string">&#x27;spearman&#x27;</span>))</span><br></pre></td></tr></table></figure>
+</li>
 </ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 以可读的形式打印计算图</span><br><span class="line">print(onnx.helper.printable_graph(onnx_model.graph))</span><br></pre></td></tr></table></figure>
-<p>用于可视化<strong>ONNX模型计算图</strong>的函数。</p>
-<p>将ONNX模型的计算图以人类可读的形式打印出来，以便于查看模型的结构和流程。</p>
-<h3 id="全部代码"><a class="markdownIt-Anchor" href="#全部代码"></a> 全部代码</h3>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"># 作者：Weakliy</span><br><span class="line"># 创建日期：2023/8/2 22:09</span><br><span class="line"># 描述：这个文件实现了一些功能。</span><br><span class="line"></span><br><span class="line">import torch</span><br><span class="line">from torchvision import models</span><br><span class="line">from config import Common, Train  # 你需要导入相应的配置模块</span><br><span class="line"></span><br><span class="line"># 加载模型状态字典</span><br><span class="line">model = torch.load(r&#x27;../model/cress0.0001482023-04-18-08-40-11.pth&#x27;)</span><br><span class="line"></span><br><span class="line"># 构建模型实例</span><br><span class="line">model = model.eval()</span><br><span class="line"></span><br><span class="line"># 示例输入数据</span><br><span class="line">x = torch.randn(1, 3, 224, 224).to(&quot;cuda&quot;)</span><br><span class="line"></span><br><span class="line"># 导出为ONNX模型</span><br><span class="line">onnx_path = &quot;../my_model.onnx&quot;</span><br><span class="line">torch.onnx.export(</span><br><span class="line">    model,</span><br><span class="line">    x,</span><br><span class="line">    onnx_path,</span><br><span class="line">    opset_version=11,</span><br><span class="line">    input_names=[&quot;input&quot;],</span><br><span class="line">    output_names=[&quot;output&quot;]</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<h2 id="0x2-疑问"><a class="markdownIt-Anchor" href="#0x2-疑问"></a> 0x2: 疑问</h2>
-<h3 id="21"><a class="markdownIt-Anchor" href="#21"></a> 2.1</h3>
-<p>如果我的model有预训练的文件，那我用于预训练的model文件似乎不能删除</p>
-<p>你的预训练文件必须存在，不然无法正常转onnx模型，或进行使用</p>
-<p>但是如果转成onnx后，我的预训练model文件不见了，我的onnx模型能否正常使用呢？</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">net.load_state_dict(torch.load(&quot;model/resnet50-19c8e357.pth&quot;))</span><br></pre></td></tr></table></figure>
-<h4 id="解决办法"><a class="markdownIt-Anchor" href="#解决办法"></a> 解决办法</h4>
-<p>​		一、将预训练文件和训练后的模型一起保存成一个文件</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 创建一个字典，包含预训练权重和训练后权重	</span><br><span class="line">combined_dict = &#123;</span><br><span class="line">    &#x27;pretrained_state_dict&#x27;: pretrained_net.state_dict(),</span><br><span class="line">    &#x27;trained_state_dict&#x27;: model.state_dict()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 保存字典到文件</span><br><span class="line">torch.save(combined_dict, &quot;combined_model.pth&quot;)</span><br></pre></td></tr></table></figure>
-<p>​		二、通过checkpoints到处数据导出onnx</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">check</span><br></pre></td></tr></table></figure>
-<h3 id="22"><a class="markdownIt-Anchor" href="#22"></a> 2.2</h3>
-<p>为什么预训练后保存的model需要预训练文件才能运行，但是checkpoints不用呢？</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">？</span><br></pre></td></tr></table></figure>
-<h2 id="0x3报错统计"><a class="markdownIt-Anchor" href="#0x3报错统计"></a> 0x3.报错统计</h2>
-<p>​	ox1：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">D:\Pydata\anacondai\envs\pytorch_gpu\lib\site-packages\torchvision\models\_utils.py:208: UserWarning: The parameter &#x27;pretrained&#x27; is deprecated since 0.13 and may be removed in the future, please use &#x27;weights&#x27; instead.</span><br><span class="line">  warnings.warn(</span><br><span class="line">D:\Pydata\anacondai\envs\pytorch_gpu\lib\site-packages\torchvision\models\_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for &#x27;weights&#x27; are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet18_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet18_Weights.DEFAULT` to get the most up-to-date weights.</span><br><span class="line">  warnings.warn(msg)</span><br></pre></td></tr></table></figure>
-<p>修改为：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">model = models.resnet18(weights=True)</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817193837689.png" alt="image-20230817193837689" /></p>
+<ol start="2">
+<li>
+<p>相关性排序并修改为&gt;0.3的</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">features_corr = numerical_corr.sort_values(ascending=<span class="literal">False</span>).reset_index()</span><br><span class="line">features_corr.columns = [<span class="string">&#x27;features_and_target&#x27;</span>, <span class="string">&#x27;corr&#x27;</span>]</span><br><span class="line">features_corr_select = features_corr[features_corr[<span class="string">&#x27;corr&#x27;</span>]&gt;<span class="number">0.3</span>] <span class="comment"># 筛选出大于相关性大于0.3的特征</span></span><br><span class="line"><span class="built_in">print</span>(features_corr_select)</span><br><span class="line">select_features = [col <span class="keyword">for</span> col <span class="keyword">in</span> features_corr_select[<span class="string">&#x27;features_and_target&#x27;</span>] <span class="keyword">if</span> col <span class="keyword">not</span> <span class="keyword">in</span> [<span class="string">&#x27;target&#x27;</span>]]</span><br><span class="line">new_train_data_corr_select = train_data_scaler[select_features+[<span class="string">&#x27;target&#x27;</span>]]</span><br><span class="line">new_test_data_corr_select = test_data_scaler[select_features]</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817193726743.png" alt="image-20230817193726743" /></p>
+<h3 id="346-多重共线性分析"><a class="markdownIt-Anchor" href="#346-多重共线性分析"></a> 3.4.6 多重共线性分析</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">原因： 特征之间相关性大</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817194022043.png" alt="image-20230817194022043" /></p>
+<h4 id="查看"><a class="markdownIt-Anchor" href="#查看"></a> 查看</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">怎么辨别？筛选？</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817195841657.png" alt="image-20230817195841657" /></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> statsmodels.stats.outliers_influence <span class="keyword">import</span> variance_inflation_factor <span class="comment">#多重共线性方差膨胀因子</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#多重共线性</span></span><br><span class="line">new_numerical=[<span class="string">&#x27;V0&#x27;</span>, <span class="string">&#x27;V2&#x27;</span>, <span class="string">&#x27;V3&#x27;</span>, <span class="string">&#x27;V4&#x27;</span>, <span class="string">&#x27;V5&#x27;</span>, <span class="string">&#x27;V6&#x27;</span>, <span class="string">&#x27;V10&#x27;</span>, <span class="string">&#x27;V11&#x27;</span>, </span><br><span class="line">                         <span class="string">&#x27;V13&#x27;</span>, <span class="string">&#x27;V15&#x27;</span>, <span class="string">&#x27;V16&#x27;</span>, <span class="string">&#x27;V18&#x27;</span>, <span class="string">&#x27;V19&#x27;</span>, <span class="string">&#x27;V20&#x27;</span>, <span class="string">&#x27;V22&#x27;</span>,<span class="string">&#x27;V24&#x27;</span>,<span class="string">&#x27;V30&#x27;</span>, <span class="string">&#x27;V31&#x27;</span>, <span class="string">&#x27;V37&#x27;</span>]</span><br><span class="line">X=np.matrix(train_data_scaler[new_numerical])</span><br><span class="line">VIF_list=[variance_inflation_factor(X, i) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(X.shape[<span class="number">1</span>])]</span><br><span class="line">VIF_list</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id="处理"><a class="markdownIt-Anchor" href="#处理"></a> 处理</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">from sklearn.decomposition import PCA   #主成分分析法</span><br><span class="line"></span><br><span class="line">#PCA方法降维</span><br><span class="line">#保持90%的信息</span><br><span class="line">pca = PCA(n_components=0.9)</span><br><span class="line">new_train_pca_90 = pca.fit_transform(train_data_scaler.iloc[:,0:-1])</span><br><span class="line">new_test_pca_90 = pca.transform(test_data_scaler)</span><br><span class="line">new_train_pca_90 = pd.DataFrame(new_train_pca_90)</span><br><span class="line">new_test_pca_90 = pd.DataFrame(new_test_pca_90)</span><br><span class="line">new_train_pca_90[&#x27;target&#x27;] = train_data_scaler[&#x27;target&#x27;]</span><br><span class="line">new_train_pca_90.describe()</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817194301272.png" alt="image-20230817194301272" /></p>
+<h4 id="对比原来的"><a class="markdownIt-Anchor" href="#对比原来的"></a> 对比原来的</h4>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817194320336.png" alt="image-20230817194320336" /></p>
+<h4 id="保留16个主成分"><a class="markdownIt-Anchor" href="#保留16个主成分"></a> 保留16个主成分</h4>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/image-20230817194442261.png" alt="image-20230817194442261" /></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A01%E7%89%B9%E5%BE%81%E5%B7%A5%E7%A8%8B/" data-id="clrwazlr8001m7ov4g0v0fav6" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A0%E5%AD%A6%E4%B9%A0/" rel="tag">阿里天池学习</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2023年8月17日-阿里天池0" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/" class="article-date">
+  <time class="post-time" datetime="2023-08-17T08:27:27.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">17</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/">阿里天池2数据探索</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="2-阿里天池数据探索"><a class="markdownIt-Anchor" href="#2-阿里天池数据探索"></a> 2 阿里天池数据探索</h1>
+<h2 id="21-变量"><a class="markdownIt-Anchor" href="#21-变量"></a> 2.1 变量</h2>
+<p>​	输入变量与输出变量</p>
+<p>​	数据类型</p>
+<p>​	连续型变量和类别型变量</p>
+<img src="./2023年8月17日-阿里天池0/image-20230817164226059.png" alt="image-20230817164226059" style="zoom:25%;" />
+<h2 id="212-变量分析"><a class="markdownIt-Anchor" href="#212-变量分析"></a> 2.1.2 变量分析</h2>
+<p>单变量分析</p>
+<p>​	<img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817164412109.png" alt="image-20230817164412109" /></p>
+<p>双变量分析</p>
+<p>​	<img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817164427231.png" alt="image-20230817164427231" /></p>
+<p>​	<img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817164521115.png" alt="image-20230817164521115" /></p>
+<p>散点图和相关性</p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817164542597.png" alt="image-20230817164542597" /></p>
+<p>双向表、柱状图和<strong>卡方检验</strong></p>
+<h2 id="213-缺失值处理"><a class="markdownIt-Anchor" href="#213-缺失值处理"></a> 2.1.3 缺失值处理</h2>
+<p>分类</p>
+<img src="./2023年8月17日-阿里天池0/image-20230817164831138.png" alt="image-20230817164831138" style="zoom:25%;" />
+<p>处理方法</p>
+<p>删除、平均、补充</p>
+<h2 id="214-异常值处理"><a class="markdownIt-Anchor" href="#214-异常值处理"></a> 2.1.4 异常值处理</h2>
+<h3 id="1-产生原因与影响"><a class="markdownIt-Anchor" href="#1-产生原因与影响"></a> 1 产生原因与影响</h3>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817165411065.png" alt="image-20230817165411065" /></p>
+<h3 id="2-检测"><a class="markdownIt-Anchor" href="#2-检测"></a> 2 检测</h3>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817165342911.png" alt="image-20230817165342911" /></p>
+<h3 id="3-处理办法"><a class="markdownIt-Anchor" href="#3-处理办法"></a> 3 处理办法</h3>
+<h4 id="删除"><a class="markdownIt-Anchor" href="#删除"></a> 删除</h4>
+<h4 id="转换"><a class="markdownIt-Anchor" href="#转换"></a> 转换</h4>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817165525164.png" alt="image-20230817165525164" /></p>
+<h4 id="补充"><a class="markdownIt-Anchor" href="#补充"></a> 补充</h4>
+<h3 id="215-变量转换"><a class="markdownIt-Anchor" href="#215-变量转换"></a> 2.1.5 变量转换</h3>
+<h4 id="1-目的"><a class="markdownIt-Anchor" href="#1-目的"></a> 1 目的</h4>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817165602744.png" alt="image-20230817165602744" /></p>
+<h4 id="2-方法"><a class="markdownIt-Anchor" href="#2-方法"></a> 2 方法</h4>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817165614476.png" alt="image-20230817165614476" /></p>
+<h3 id="216新变量生成"><a class="markdownIt-Anchor" href="#216新变量生成"></a> 2.1.6新变量生成</h3>
+<h4 id="1-目的-2"><a class="markdownIt-Anchor" href="#1-目的-2"></a> 1 目的</h4>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817165701957.png" alt="image-20230817165701957" /></p>
+<h4 id="2-方法-2"><a class="markdownIt-Anchor" href="#2-方法-2"></a> 2 方法</h4>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817165745953.png" alt="image-20230817165745953" /></p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817165724771.png" alt="image-20230817165724771" /></p>
+<h2 id="22"><a class="markdownIt-Anchor" href="#22"></a> 2.2</h2>
+<h3 id="221"><a class="markdownIt-Anchor" href="#221"></a> 2.2.1</h3>
+<h3 id="224-数据分布"><a class="markdownIt-Anchor" href="#224-数据分布"></a> 2.2.4 数据分布</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">目的？判断依据？</span><br></pre></td></tr></table></figure>
+<p>​		<img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817170040902.png" alt="image-20230817170040902" /><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817170017686.png" alt="image-20230817170017686" /></p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817170053581.png" alt="image-20230817170053581" /></p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817170008594.png" alt="image-20230817170008594" /></p>
+<h3 id="image-20230817170205154"><a class="markdownIt-Anchor" href="#image-20230817170205154"></a> <img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817170205154.png" alt="image-20230817170205154" /></h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">目的？作用？</span><br></pre></td></tr></table></figure>
+<h3 id="image-20230817170233696"><a class="markdownIt-Anchor" href="#image-20230817170233696"></a> <img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817170233696.png" alt="image-20230817170233696" /></h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">目的？</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817170405432.png" alt="image-20230817170405432" /></p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817170432541.png" alt="image-20230817170432541" /></p>
+<p>全部</p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817170603472.png" alt="image-20230817170603472" /></p>
+<h3 id="image-20230817170655441"><a class="markdownIt-Anchor" href="#image-20230817170655441"></a> <img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817170655441.png" alt="image-20230817170655441" /></h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">查看是否有不一致的特征变量</span><br></pre></td></tr></table></figure>
+<p>V0基本一直：</p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817170733218.png" alt="image-20230817170733218" /></p>
+<p>全部：</p>
+<p>​	需要删除的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">判断依据？</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817170930812.png" alt="image-20230817170930812" /></p>
+<p>不合格的：</p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817171306613.png" alt="image-20230817171306613" /></p>
+<h3 id="image-20230817171055477"><a class="markdownIt-Anchor" href="#image-20230817171055477"></a> <img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817171055477.png" alt="image-20230817171055477" /></h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">为什么要？</span><br></pre></td></tr></table></figure>
+<p>v0线性关系：</p>
+<p>​	<img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817171333440.png" alt="image-20230817171333440" /></p>
+<p>全部的：</p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817171544073.png" alt="image-20230817171544073" /></p>
+<h3 id="225-查看特征变量的相关性"><a class="markdownIt-Anchor" href="#225-查看特征变量的相关性"></a> 2.2.5 查看特征变量的相关性</h3>
+<h4 id="1-相关系数"><a class="markdownIt-Anchor" href="#1-相关系数"></a> 1 相关系数</h4>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817171651952.png" alt="image-20230817171651952" /></p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817171727053.png" alt="image-20230817171727053" /></p>
+<h4 id="2相关性热力图"><a class="markdownIt-Anchor" href="#2相关性热力图"></a> 2.相关性热力图</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">如何看？</span><br></pre></td></tr></table></figure>
+<img src="./2023年8月17日-阿里天池0/image-20230817171956077.png" alt="image-20230817171956077" style="zoom: 80%;" />
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817171940321.png" alt="image-20230817171940321" /></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">占位修改，判断依据</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817172204349.png" alt="image-20230817172204349" /></p>
+<h4 id="3-筛选"><a class="markdownIt-Anchor" href="#3-筛选"></a> 3 筛选</h4>
+<h5 id="31-找出最相关的k个特征"><a class="markdownIt-Anchor" href="#31-找出最相关的k个特征"></a> 3.1 找出最相关的K个特征</h5>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817172401801.png" alt="image-20230817172401801" /></p>
+<h5 id="32查找出特征变量和target变量相关系数大于05的特征变量"><a class="markdownIt-Anchor" href="#32查找出特征变量和target变量相关系数大于05的特征变量"></a> 3.2查找出特征变量和target变量相关系数大于0.5的特征变量</h5>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817172623943.png" alt="image-20230817172623943" /></p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817172645273.png" alt="image-20230817172645273" /></p>
+<h5 id="33-根据相关系数做出处理"><a class="markdownIt-Anchor" href="#33-根据相关系数做出处理"></a> 3.3 根据相关系数做出处理</h5>
+<p>​	<img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817172731774.png" alt="image-20230817172731774" /></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">树模型？</span><br></pre></td></tr></table></figure>
+<h4 id="4-box-cox转换"><a class="markdownIt-Anchor" href="#4-box-cox转换"></a> 4. box-cox转换</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">不知道什么东西？？</span><br></pre></td></tr></table></figure>
+<img src="./2023年8月17日-阿里天池0/image-20230817173200220.png" alt="image-20230817173200220" style="zoom:50%;" />
+<h5 id="41-归一化"><a class="markdownIt-Anchor" href="#41-归一化"></a> 4.1 归一化、</h5>
+<p>合并</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">为什么合并？</span><br></pre></td></tr></table></figure>
+<img src="./2023年8月17日-阿里天池0/image-20230817173550731.png" alt="image-20230817173550731" style="zoom:25%;" />
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817173438922.png" alt="image-20230817173438922" /></p>
+<p>归一化</p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817173525939.png" alt="image-20230817173525939" /></p>
+<h5 id="42"><a class="markdownIt-Anchor" href="#42"></a> 4.2</h5>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817173845978.png" alt="image-20230817173845978" /></p>
+<p>前两个前后变化：</p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/image-20230817174642836.png" alt="image-20230817174642836" /></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2023/08/17/2023%E5%B9%B48%E6%9C%8817%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A00/" data-id="clrwazlr7001i7ov4gj2vd9rj" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A0%E5%AD%A6%E4%B9%A0/" rel="tag">阿里天池学习</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2023年8月12日-cuda编程1" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/" class="article-date">
+  <time class="post-time" datetime="2023-08-12T08:18:24.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">12</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/">cuda编程day2</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/" data-id="clrwazlr6001c7ov43xe39bay" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cuda/" rel="tag">cuda</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-CUDA编程day1" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/08/12/CUDA%E7%BC%96%E7%A8%8Bday1/" class="article-date">
+  <time class="post-time" datetime="2023-08-12T08:18:24.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">12</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/08/12/CUDA%E7%BC%96%E7%A8%8Bday1/">cuda编程day1</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="ubuntu配置以及问题总结"><a class="markdownIt-Anchor" href="#ubuntu配置以及问题总结"></a> Ubuntu配置以及问题总结</h1>
+<h2 id="一-wsl无法成功安装ubuntu"><a class="markdownIt-Anchor" href="#一-wsl无法成功安装ubuntu"></a> 一、WSL无法成功安装Ubuntu</h2>
+<p><img src="./CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812132357377.png" alt="image-20230812132357377" /></p>
+<h2 id="二-问题如下图"><a class="markdownIt-Anchor" href="#二-问题如下图"></a> 二、问题如下图：</h2>
+<h2 id="21ubuntu初始化无法正常输入密码"><a class="markdownIt-Anchor" href="#21ubuntu初始化无法正常输入密码"></a> 2.1Ubuntu初始化无法正常输入密码</h2>
+<p><img src="./CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812132341798.png" alt="" /></p>
+<h2 id="22更改密码"><a class="markdownIt-Anchor" href="#22更改密码"></a> 2.2.更改密码</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1. 以管理员身份打开 PowerShell</span><br><span class="line">2. 输入命令 wsl -u root</span><br><span class="line">3. 输入命令 passwd username 修改用户密码，username即待重置的用户的名称</span><br></pre></td></tr></table></figure>
+<p>​	<strong>切换用户</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ubuntu1804 config --default-user ubuntu1804</span><br></pre></td></tr></table></figure>
+<p>​	成功！</p>
+<p><img src="./CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812160508642.png" alt="image-20230812160508642" /></p>
+<h2 id="三-无法编译"><a class="markdownIt-Anchor" href="#三-无法编译"></a> 三、无法编译</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">			nvcc : 无法将“nvcc”项识别为 cmdlet、函数、脚本文件或可运行程序的名称。请检查名称的拼写 ，如果包括路径，请确保路径正确，然后再试一次。 所在位置 行:1 字符: 1 + nvcc test.cu -o test + ~~~~    + CategoryInfo          : ObjectNotFound: (nvcc:String) [], CommandNotFoundExceptio     n    + FullyQualifiedErrorId : CommandNotFoundException cuda</span><br><span class="line"></span><br><span class="line">​		cuda安装成功但是出现上面报错（nvcc-v成功运行）</span><br></pre></td></tr></table></figure>
+<p><strong>文件目录：</strong></p>
+<p><img src="./CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812161248349.png" alt="image-20230812161248349" /></p>
+<h3 id="31-可能存在的问题环境变量未配置-cuda是否安装成功"><a class="markdownIt-Anchor" href="#31-可能存在的问题环境变量未配置-cuda是否安装成功"></a> 3.1 可能存在的问题：环境变量未配置、cuda是否安装成功、</h3>
+<p><img src="./CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812132330526.png" alt="image-20230812132330526" /></p>
+<h3 id="32-代码未保存"><a class="markdownIt-Anchor" href="#32-代码未保存"></a> 3.2 代码未保存、</h3>
+<p>​	用vscode编写cuda代码，写完却一直无法成功编译，经检查才发现忘记保存，但是保存的时候才发现vscode无权限无法保存、百般调试后可能的问题：1. vscode无权限， 2. 未给创建的文件赋予读写权限。</p>
+<p>​	基于上面的两种可能，解决办法。1：重新创建文件，赋予权限，重新编写代码。2：改用nano编写（nano在ubuntu上安装）</p>
+<p>创建新文件</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir cudalesson</span><br><span class="line">chmod <span class="number">777</span> cudalesson  <span class="comment"># 赋予读写权限</span></span><br></pre></td></tr></table></figure>
+<p>在nano上编写代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nano test.cu</span><br></pre></td></tr></table></figure>
+<p>发现代码有误，更改：<img src="./CUDA编程day1/image-20230812132313546.png" alt="image-20230812132313546" style="zoom:50%;" /></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">hello_from_gpu</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;hello world from the GPU\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    hello_from_gpu&lt;&lt;&lt;<span class="number">4</span>, <span class="number">4</span>&gt;&gt;&gt;();</span><br><span class="line">    <span class="built_in">cudaDeviceSynchronize</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="四-配置"><a class="markdownIt-Anchor" href="#四-配置"></a> 四、配置</h2>
+<h3 id="41-链接vscode"><a class="markdownIt-Anchor" href="#41-链接vscode"></a> 4.1 链接vscode</h3>
+<p><strong>完美解决window11 wsl ubuntu下code.出现code：commandnot found的问题</strong></p>
+<p><img src="./CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812160618750.png" alt="image-20230812160618750" /></p>
+<p><strong>解决办法</strong></p>
+<p>安装 <a target="_blank" rel="noopener" href="https://code.visualstudio.com/download">VS Code 安装页</a></p>
+<p>选中“添加到 PATH”选项</p>
+<p>安装<a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack">远程开发扩展包</a></p>
+<p>更新Ubuntu</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure>
+<p>输入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">code .   # 注意code空格.</span><br></pre></td></tr></table></figure>
+<p>成功运行：</p>
+<img src="./CUDA编程day1/image-20230812162902769.png" alt="image-20230812162902769" style="zoom:25%;" />
+<h2 id="五-编译"><a class="markdownIt-Anchor" href="#五-编译"></a> 五、编译：</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvcc test.cu -o test</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./test	 # 运行</span><br></pre></td></tr></table></figure>
+<h3 id="成功"><a class="markdownIt-Anchor" href="#成功"></a> 成功！</h3>
+<p>!<img src="./CUDA%E7%BC%96%E7%A8%8Bday1/image-20230812132246556.png" alt="image-20230812132246556" /></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2023/08/12/CUDA%E7%BC%96%E7%A8%8Bday1/" data-id="clrwazlri003i7ov44ctbe5qr" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cuda/" rel="tag">cuda</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2023年8月12日-tensorRT安装与实例" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-tensorRT%E5%AE%89%E8%A3%85%E4%B8%8E%E5%AE%9E%E4%BE%8B/" class="article-date">
+  <time class="post-time" datetime="2023-08-12T05:24:40.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">12</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-tensorRT%E5%AE%89%E8%A3%85%E4%B8%8E%E5%AE%9E%E4%BE%8B/">tensorRT 安装</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="ubuntu下的tensorrt-安装"><a class="markdownIt-Anchor" href="#ubuntu下的tensorrt-安装"></a> Ubuntu下的TensorRT 安装</h1>
+<p><strong>原因：win11 下无法安装</strong></p>
+<img src="/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-tensorRT%E5%AE%89%E8%A3%85%E4%B8%8E%E5%AE%9E%E4%BE%8B/image-20230812144645411.png" alt="image-20230812144645411" style="zoom:33%;">
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">https://blog.csdn.net/qq_43573527/article/details/131414861?spm=1001.2101.3001.6661.1&amp;utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1-131414861-blog-126454422.235%5Ev38%5Epc_relevant_sort_base2&amp;depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1-131414861-blog-126454422.235%5Ev38%5Epc_relevant_sort_base2&amp;utm_relevant_index=1</span><br><span class="line"></span><br><span class="line">https://www.bilibili.com/video/BV1Um4y1w7g6/?share_source=copy_web&amp;vd_source=ef8119f427d19b904b7ce3026143d3f7</span><br></pre></td></tr></table></figure>
+<h2 id="1安装相关工具箱"><a class="markdownIt-Anchor" href="#1安装相关工具箱"></a> 1.安装相关工具箱</h2>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mv</span> /mnt/d/<span class="built_in">nv</span><span class="literal">-tensorrt-local-repo-ubuntu1804-8</span>.<span class="number">6.1</span><span class="literal">-cuda-11</span>.<span class="number">8</span>_1.<span class="number">0</span><span class="literal">-1_amd64</span>.deb download_  <span class="comment"># 移动文件</span></span><br><span class="line">sudo dpkg <span class="literal">-i</span> i <span class="built_in">nv</span><span class="literal">-tensorrt-local-repo-ubuntu1804-8</span>.<span class="number">6.1</span><span class="literal">-cuda-11</span>.<span class="number">8</span>_1.<span class="number">0</span><span class="literal">-1_amd64</span>.deb</span><br><span class="line">sudo apt update</span><br><span class="line">sudo apt install tensorrt</span><br></pre></td></tr></table></figure>
+<h2 id="2安装tensorrt"><a class="markdownIt-Anchor" href="#2安装tensorrt"></a> 2.安装tensorRT</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -m pip install --upgrade setuptools pip</span><br></pre></td></tr></table></figure>
+<p><img src="/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-tensorRT%E5%AE%89%E8%A3%85%E4%B8%8E%E5%AE%9E%E4%BE%8B/image-20230812155830636.png" alt="image-20230812155830636"></p>
+<h3 id="3运行"><a class="markdownIt-Anchor" href="#3运行"></a> 3.运行</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">python3</span><br><span class="line"><span class="keyword">import</span> tensorrt</span><br><span class="line"><span class="built_in">print</span>(tensorrt.__version__)</span><br><span class="line">exit()</span><br></pre></td></tr></table></figure>
+<h3 id="4-在vscode中运行"><a class="markdownIt-Anchor" href="#4-在vscode中运行"></a> 4. 在vscode中运行</h3>
+<p>安装 <a target="_blank" rel="noopener" href="https://code.visualstudio.com/download">VS Code 安装页</a></p>
+<h3 id="5-配置python环境"><a class="markdownIt-Anchor" href="#5-配置python环境"></a> 5. 配置python环境</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install python3-venv</span><br><span class="line">sudo python3 -m venv tensorrt_env</span><br><span class="line"><span class="built_in">cd</span> tensorrt_env</span><br><span class="line"><span class="built_in">source</span> <span class="built_in">cd</span> tensorrt_env/bin/activate</span><br><span class="line">sudo /home/ubuntu1804/tensorrt_env/tensorrt_env/bin/python -m pip install tensorrt</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="6出现问题-vscode拓展无法编译python36"><a class="markdownIt-Anchor" href="#6出现问题-vscode拓展无法编译python36"></a> 6.出现问题： vscode拓展无法编译python3.6</h3>
+<h4 id="解决"><a class="markdownIt-Anchor" href="#解决"></a> 解决：</h4>
+<h5 id="1更换拓展"><a class="markdownIt-Anchor" href="#1更换拓展"></a> 1.更换拓展</h5>
+<p>下载就拓展：<a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/_apis/public/gallery/publishers/ms-python/vsextensions/python/2022.6.0/vspackage">https://marketplace.visualstudio.com/_apis/public/gallery/publishers/ms-python/vsextensions/python/2022.6.0/vspackage</a></p>
+<p><strong>结果：无法正常安装，使用下面的方法2.</strong></p>
+<h5 id="2更换python"><a class="markdownIt-Anchor" href="#2更换python"></a> 2.更换python</h5>
+<p>更换python：</p>
+<p>​	安装编译 Python 3.9 所需的工具和库：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install build-essential zlib1g-dev libffi-dev libssl-dev</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>下载 Python 3.9 源代码并编译安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">wget https://www.python.org/ftp/python/3.9.7/Python-3.9.7.tgz</span><br><span class="line">tar -xf Python-3.9.7.tgz</span><br><span class="line"><span class="built_in">cd</span> Python-3.9.7</span><br><span class="line">./configure --enable-optimizations</span><br><span class="line">make -j$(<span class="built_in">nproc</span>)</span><br><span class="line">sudo make altinstall</span><br></pre></td></tr></table></figure>
+<h3 id="7安装成功-创建环境"><a class="markdownIt-Anchor" href="#7安装成功-创建环境"></a> 7.安装成功 创建环境</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> myenv</span><br><span class="line"><span class="built_in">cd</span> myenv</span><br><span class="line"><span class="built_in">cd</span> Python-3.9.7   <span class="comment"># 这是我的</span></span><br><span class="line">python3.9 -m venv tensorrt3.9</span><br><span class="line"><span class="built_in">source</span> tensorrt3.9/bin/activate</span><br><span class="line">pip install tensorrt -H  <span class="comment"># 安装</span></span><br><span class="line">deactivate  <span class="comment"># 退出环境</span></span><br><span class="line"></span><br><span class="line">sudo -H pip install tensorrt  <span class="comment"># 不要用sudo安装，安装成功后无法使用，该怎么办因为使用了 sudo 来安装包会导致文件权限问题，使得虚拟环境无法正常访问已安装的库。 </span></span><br></pre></td></tr></table></figure>
+<img src="/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-tensorRT%E5%AE%89%E8%A3%85%E4%B8%8E%E5%AE%9E%E4%BE%8B/image-20230812201136476.png" alt="image-20230812201136476" style="zoom: 50%;">
+<p>创建文件夹来编写代码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> rtlesson</span><br><span class="line"><span class="built_in">chmod</span> 777 rtlesson  <span class="comment"># 赋予读写权限</span></span><br></pre></td></tr></table></figure>
+<h3 id="8-打开vscode并激活环境"><a class="markdownIt-Anchor" href="#8-打开vscode并激活环境"></a> 8. 打开vscode并激活环境</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">code .</span><br><span class="line">Ctrl + ~ 来打开终端。</span><br><span class="line"><span class="built_in">source</span> /Python-3.9.7/tensorrt3.9/bin/activate</span><br></pre></td></tr></table></figure>
+<h3 id="9检查安装是否成功-trtexec-version"><a class="markdownIt-Anchor" href="#9检查安装是否成功-trtexec-version"></a> 9.检查安装是否成功 <strong>trtexec --version</strong></h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 代码验证</span></span><br><span class="line"><span class="keyword">import</span> tensorrt <span class="keyword">as</span> trt</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;TensorRT imported successfully!&quot;</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="10安装一些常用的库"><a class="markdownIt-Anchor" href="#10安装一些常用的库"></a> 10.安装一些常用的库</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install pycuda onnx onnxruntime torch torchvision opencv-python torchaudio numpy -i https://pypi.tuna.tsinghua.edu.cn/simple</span><br></pre></td></tr></table></figure>
+<h3 id="11转移windows上的文件"><a class="markdownIt-Anchor" href="#11转移windows上的文件"></a> 11.转移windows上的文件</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/rtlesson</span><br><span class="line"><span class="comment"># 复制</span></span><br><span class="line"><span class="built_in">cp</span> <span class="string">&quot;/mnt/f/Pydata/Project/鱼类识别+onnx/my_model.onnx&quot;</span> . </span><br><span class="line"><span class="comment"># 移动</span></span><br><span class="line"><span class="built_in">mv</span> <span class="string">&quot;/mnt/f/Pydata/Project/鱼类识别+onnx/fish_classes_list.json&quot;</span> . </span><br><span class="line"><span class="comment"># 查看</span></span><br><span class="line"><span class="built_in">ls</span> ~/rtlesson</span><br></pre></td></tr></table></figure>
+<h2 id="12运行代码-onxx转tensorrt运行"><a class="markdownIt-Anchor" href="#12运行代码-onxx转tensorrt运行"></a> 12.运行代码 onxx转TensorRt运行</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 占位符	</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">查看下一篇博客</span>：</span><br><span class="line">	<span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-tensorRT%E5%AE%89%E8%A3%85%E4%B8%8E%E5%AE%9E%E4%BE%8B/" data-id="cm8q1tfhc0004pcv479pmgin5" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tensorRT/" rel="tag">tensorRT</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2023年8月10日最大熵模型" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/08/11/2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/" class="article-date">
+  <time class="post-time" datetime="2023-08-11T14:07:44.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">11</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/08/11/2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/">最大熵模型</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#ri</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">日期：2023年8月11日</span></span><br><span class="line"><span class="string">说明：只是做了简单的初步了解和内容总结，并未实际过程推导过程，仅仅只是作于了解，未深层次掌握。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+<h1 id="1-最大熵模型介绍"><a class="markdownIt-Anchor" href="#1-最大熵模型介绍"></a> 1. 最大熵模型介绍</h1>
+<h3 id="介绍"><a class="markdownIt-Anchor" href="#介绍"></a> 介绍</h3>
+<p>所有可能的模型中选择一个模型，使得满足<strong>已知的约束条件</strong>，并且在这些约束条件下熵最大。 即max H（p）</p>
+<img src="./2023年8月10日最大熵模型/image-20230811144506204.png" alt="image-20230811144506204" style="zoom:33%;" />
+<h3 id="例子"><a class="markdownIt-Anchor" href="#例子"></a> 例子</h3>
+<img src="./2023年8月10日最大熵模型/image-20230811144954814.png" alt="image-20230811144954814" style="zoom: 25%;" />
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">	写入拉格朗日 与转对偶问题</span><br><span class="line">拉格朗日例子：</span><br><span class="line">最小化 f(x) = x^2</span><br><span class="line">约束条件 g(x) = x - 2 ≤ 0</span><br><span class="line"></span><br><span class="line">我们构建拉格朗日函数为：</span><br><span class="line"></span><br><span class="line">L(x, λ) = x^2 + λ * (x - 2)</span><br><span class="line"></span><br><span class="line">然后我们要求拉格朗日函数对 x 和 λ 的偏导数等于零：</span><br><span class="line"></span><br><span class="line">对 x 求导数：∂L/∂x = 2x + λ = 0</span><br><span class="line">对 λ 求导数：∂L/∂λ = x - 2 ≤ 0</span><br><span class="line">从第一个方程得到 x = -λ/2，代入第二个方程得到 -λ/2 - 2 ≤ 0，这是因为我们要求拉格朗日函数对应的约束条件 g(x) 必须满足。</span><br><span class="line"></span><br><span class="line">然后，我们将 x = -λ/2 代入到拉格朗日函数 L(x, λ) 中：</span><br><span class="line"></span><br><span class="line">L(x, λ) = (-λ/2)^2 + λ * (-λ/2 - 2)</span><br><span class="line"></span><br><span class="line">这个式子实际上是一个关于 λ 的函数，我们可以将它最小化，从而得到最优的 λ，然后再代入 x = -λ/2 得到最优的 x。</span><br></pre></td></tr></table></figure>
+<img src="./2023年8月10日最大熵模型/image-20230811145120544.png" alt="image-20230811145120544" style="zoom:33%;" />
+<p><img src="./2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/image-20230811145435512.png" alt="image-20230811145435512" /></p>
+<p>得出结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">一般都是约束条件等分</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/image-20230811145508322.png" alt="image-20230811145508322" /></p>
+<h1 id="2-最大熵模型-极大似然估计"><a class="markdownIt-Anchor" href="#2-最大熵模型-极大似然估计"></a> 2. 最大熵模型 极大似然估计</h1>
+<p><strong>条件概率分布 和 逻辑回归类似。</strong></p>
+<p><strong>目的是为了求出最大的w参数</strong><img src="./2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/image-20230810224005109.png" alt="" /></p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/image-20230811145608933.png" alt="image-20230811145608933" /></p>
+<p>条件概率分布—找出似然函数—样本集</p>
+<p>规范化因子其实就是约束条件</p>
+<img src="./2023年8月10日最大熵模型/image-20230811150237433.png" alt="image-20230811150237433" style="zoom:25%;" />
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">最大熵模型最终是求出对数似然函数或对偶函数的极大值</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/image-20230811154201780.png" alt="image-20230811154201780" /></p>
+<h1 id="3最大熵模型-优化算法"><a class="markdownIt-Anchor" href="#3最大熵模型-优化算法"></a> 3.最大熵模型 优化算法</h1>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1.梯度下降</span><br><span class="line">2.牛顿法</span><br><span class="line">3.迭代尺度法</span><br></pre></td></tr></table></figure>
+<h3 id="1梯度下降"><a class="markdownIt-Anchor" href="#1梯度下降"></a> 1.梯度下降</h3>
+<img src="./2023年8月10日最大熵模型/image-20230811151710812.png" alt="image-20230811151710812" style="zoom: 50%;" />
+<h3 id="2牛顿法"><a class="markdownIt-Anchor" href="#2牛顿法"></a> 2.牛顿法</h3>
+<ol>
+<li>
+<p><strong>求根号下精确值</strong></p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/image-20230811151834334.png" alt="" /></p>
+</li>
+</ol>
+<p>​	2. <strong>牛顿法</strong><img src="./2023年8月10日最大熵模型/image-20230811151932299.png" alt="image-20230811151932299" style="zoom:50%;" /><img src="./2023年8月10日最大熵模型/image-20230811151916434.png" alt="image-20230811151916434" style="zoom:50%;" /></p>
+<p>3.<strong>多元情况</strong><img src="./2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/image-20230811152034074.png" alt="image-20230811152034074" /></p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/image-20230811152021558.png" alt="image-20230811152021558" /></p>
+<p>例子<img src="./2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/image-20230811152127868.png" alt="image-20230811152127868" /></p>
+<ol start="4">
+<li>
+<p><strong>拟牛顿法</strong></p>
+<p>原因：标函数的二阶导数（Hessian矩阵）可能在某些情况下非常耗时，并且需要很大的内存。拟牛顿法的思想是通过近似来避免计算真正的二阶导数，从而减少计算复杂性。</p>
+<img src="./2023年8月10日最大熵模型/image-20230811152358180.png" alt="image-20230811152358180" style="zoom:33%;" />
+</li>
+<li>
+<p>DFP算法 XXX</p>
+<p>原因：通过<strong>近似构建</strong>一个拟Hessian矩阵的逆，<img src="./2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/image-20230811152528844.png" alt="image-20230811152528844" /><img src="./2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/image-20230811153549138.png" alt="image-20230811153549138" /><img src="./2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/image-20230811152550032.png" alt="image-20230811152550032" /></p>
+</li>
+<li>
+<p>BFGS算法</p>
+<p>原因：相对于DFP算法，BFGS算法的<strong>更新方式更加稳定，并且具有更好的收敛性质</strong>。<img src="./2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/image-20230811152647719.png" alt="image-20230811152647719" /><img src="./2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/image-20230811152635332.png" alt="image-20230811152635332" /><img src="./2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/image-20230811153530905.png" alt="image-20230811153530905" /></p>
+</li>
+<li>
+<p>Broyden算法</p>
+<p>原因：通过构建一个<strong>逐步逼近</strong>的拟Hessian矩阵逆来实现的。<img src="./2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/image-20230811152721431.png" alt="image-20230811152721431" /><img src="./2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/image-20230811153604188.png" alt="image-20230811153604188" /></p>
+</li>
+</ol>
+<h3 id="3迭代尺度法"><a class="markdownIt-Anchor" href="#3迭代尺度法"></a> 3.迭代尺度法</h3>
+<p>​	原因：计算模型的期望特征数量，用期望特征数量用于满足约束条件。<img src="./2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/image-20230811154257465.png" alt="image-20230811154257465" /></p>
 <p>​</p>
-<h2 id="0x4-运行结果"><a class="markdownIt-Anchor" href="#0x4-运行结果"></a> 0x4. 运行结果</h2>
-<h3 id="41运行代码"><a class="markdownIt-Anchor" href="#41运行代码"></a> 4.1运行代码</h3>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"># 作者：Weakliy</span><br><span class="line"># 创建日期：2023/8/5 21:53</span><br><span class="line"># 描述：这个文件实现了一些功能。</span><br><span class="line"></span><br><span class="line">import onnxruntime</span><br><span class="line">import numpy as np</span><br><span class="line">import torch</span><br><span class="line">import torch.nn.functional as F</span><br><span class="line">import pandas as pd</span><br><span class="line"></span><br><span class="line">ort_session = onnxruntime.InferenceSession(&#x27;my_onnx_from_checkpoint.onnx&#x27;)</span><br><span class="line">x = torch.randn(1, 3, 224, 224).numpy()</span><br><span class="line">print(x.shape)</span><br><span class="line">ort_inputs = &#123;&#x27;input&#x27;: x&#125;</span><br><span class="line">ort_output = ort_session.run([&#x27;output&#x27;], ort_inputs)[0]</span><br><span class="line">print(ort_output.shape)</span><br><span class="line"></span><br><span class="line"># 载入一张真正的测试图像</span><br><span class="line">img_path = r&#x27;F:\Pydata\Project\鱼类识别+onnx\data/test\fish_03\fish_000034930001_03337.png&#x27;</span><br><span class="line">from PIL import Image</span><br><span class="line">img_pil = Image.open(img_path)</span><br><span class="line">from torchvision import transforms</span><br><span class="line">from config import Common</span><br><span class="line"># 测试集图像预处理-RCTN：缩放裁剪、转 Tensor、归一化</span><br><span class="line">test_transform = transforms.Compose([</span><br><span class="line">    transforms.ToTensor(),</span><br><span class="line">    transforms.Resize(Common.imageSize),</span><br><span class="line">    transforms.RandomHorizontalFlip(p=0.5),</span><br><span class="line">    transforms.RandomVerticalFlip(p=0.5),</span><br><span class="line">    transforms.RandomRotation(degrees=10),</span><br><span class="line">])</span><br><span class="line">input_img = test_transform(img_pil)</span><br><span class="line">print(input_img.shape)</span><br><span class="line">input_tensor = input_img.unsqueeze(0).numpy()</span><br><span class="line">print(input_tensor.shape)</span><br><span class="line"></span><br><span class="line"># ONNX Runtime 输入</span><br><span class="line">ort_inputs = &#123;&#x27;input&#x27;: input_tensor&#125;</span><br><span class="line"># ONNX Runtime 输出</span><br><span class="line">pred_logits = ort_session.run([&#x27;output&#x27;], ort_inputs)[0]  # ?</span><br><span class="line">pred_logits = torch.tensor(pred_logits)  # ?</span><br><span class="line">print(pred_logits.shape)</span><br><span class="line"># 对 logit 分数做 softmax 运算，得到置信度概率</span><br><span class="line">pred_softmax = F.softmax(pred_logits, dim=1)</span><br><span class="line">print(pred_softmax.shape)</span><br><span class="line">output = torch.argmax(pred_softmax)</span><br><span class="line">print(&quot;结果类别：&quot;, output.item())</span><br><span class="line"># 取置信度最高的前 n 个结果</span><br><span class="line">n = 3</span><br><span class="line">top_n = torch.topk(pred_softmax, n)</span><br><span class="line">print(top_n)</span><br><span class="line"># 预测类别</span><br><span class="line">pred_ids = top_n.indices.numpy()[0]</span><br><span class="line">print(pred_ids)</span><br><span class="line"># 预测置信度</span><br><span class="line">confs = top_n.values.numpy()[0]</span><br><span class="line">print(confs)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">输出：</span><br><span class="line">(1, 3, 224, 224)</span><br><span class="line">(1, 22)</span><br><span class="line">torch.Size([3, 224, 224])</span><br><span class="line">(1, 3, 224, 224)</span><br><span class="line">torch.Size([1, 22])</span><br><span class="line">torch.Size([1, 22])</span><br><span class="line">结果类别： 1</span><br><span class="line">torch.return_types.topk(</span><br><span class="line">values=tensor([[0.1146, 0.0422, 0.0422]]),</span><br><span class="line">indices=tensor([[1, 0, 2]]))</span><br><span class="line">[1 0 2]</span><br><span class="line">[0.11460126 0.04216402 0.04216173]</span><br></pre></td></tr></table></figure>
-<h3 id="42结果比较"><a class="markdownIt-Anchor" href="#42结果比较"></a> 4.2结果比较</h3>
-<p>原model：0.977134</p>
-<p><img src="C:%5CUsers%5Cadmin%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20230805222349100.png" alt="image-20230805222349100" /></p>
-<p>转onnx：0.974085</p>
-<p><img src="C:%5CUsers%5Cadmin%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20230805222358859.png" alt="image-20230805222358859" /></p>
-<p>可以看出转ONNX之后，精度下降较少，可以接受，且运行时间较短</p>
+<h1 id="4算法实现"><a class="markdownIt-Anchor" href="#4算法实现"></a> 4.算法实现</h1>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 作者：Weakliy</span></span><br><span class="line"><span class="comment"># 创建日期：2023/8/10 22:28</span></span><br><span class="line"><span class="comment"># 描述：这个文件实现了一些功能。</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> nltk</span><br><span class="line"><span class="keyword">from</span> nltk.classify <span class="keyword">import</span> MaxentClassifier</span><br><span class="line"><span class="keyword">from</span> nltk.corpus <span class="keyword">import</span> movie_reviews</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 下载电影评论数据集</span></span><br><span class="line">nltk.download(<span class="string">&quot;movie_reviews&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取电影评论数据集</span></span><br><span class="line">documents = [(<span class="built_in">list</span>(movie_reviews.words(fileid)), category) <span class="keyword">for</span> category <span class="keyword">in</span> movie_reviews.categories() <span class="keyword">for</span> fileid <span class="keyword">in</span> movie_reviews.fileids(category)]</span><br><span class="line">random.shuffle(documents)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 特征提取</span></span><br><span class="line">all_words = nltk.FreqDist(w.lower() <span class="keyword">for</span> w <span class="keyword">in</span> movie_reviews.words())</span><br><span class="line">word_features = <span class="built_in">list</span>(all_words)[:<span class="number">2000</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">document_features</span>(<span class="params">document</span>):</span><br><span class="line">    document_words = <span class="built_in">set</span>(document)</span><br><span class="line">    features = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> word <span class="keyword">in</span> word_features:</span><br><span class="line">        features[<span class="string">f&quot;contains(<span class="subst">&#123;word&#125;</span>)&quot;</span>] = (word <span class="keyword">in</span> document_words)</span><br><span class="line">    <span class="keyword">return</span> features</span><br><span class="line"></span><br><span class="line"><span class="comment"># 特征集</span></span><br><span class="line">featuresets = [(document_features(d), c) <span class="keyword">for</span> (d, c) <span class="keyword">in</span> documents]</span><br><span class="line">train_set, test_set = featuresets[<span class="number">100</span>:], featuresets[:<span class="number">100</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 训练最大熵模型</span></span><br><span class="line">classifier = MaxentClassifier.train(train_set, algorithm=<span class="string">&#x27;iis&#x27;</span>, trace=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 预测并计数分类结果</span></span><br><span class="line">actual_labels = [actual_label <span class="keyword">for</span> (_, actual_label) <span class="keyword">in</span> test_set]</span><br><span class="line">predicted_labels = [classifier.classify(features) <span class="keyword">for</span> (features, _) <span class="keyword">in</span> test_set]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 统计分类结果</span></span><br><span class="line">unique_labels = <span class="built_in">list</span>(<span class="built_in">set</span>(actual_labels))</span><br><span class="line">label_counts = [predicted_labels.count(label) <span class="keyword">for</span> label <span class="keyword">in</span> unique_labels]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 绘制柱状图 显示了预测结果的分布情况。</span></span><br><span class="line">plt.bar(unique_labels, label_counts)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Label&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Count&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;Predicted Label Distribution&#x27;</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2023/08/02/ONNX2/" data-id="clrwazlrj003l7ov42nxm1dae" class="article-share-link">分享</a>
+      <a data-url="https://shakewely.github.io/2023/08/11/2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/" data-id="clrwazlr400167ov4avi3824b" class="article-share-link">分享</a>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ONNX/" rel="tag">ONNX</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li></ul>
 
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-ONNX1" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2023/08/01/ONNX1/" class="article-date">
-  <time class="post-time" datetime="2023-08-01T06:07:53.000Z" itemprop="datePublished">
-    <span class="post-month">8月</span><br/>
-    <span class="post-day">01</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/08/01/ONNX1/">ONNX1</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="0x1-什么是onnx"><a class="markdownIt-Anchor" href="#0x1-什么是onnx"></a> <strong>0x1. 什么是ONNX？</strong></h2>
-<p>神经网络交换（Open Neural Network Exchange）</p>
-<p>何种训练框架训练模型（比如TensorFlow/Pytorch/OneFlow/Paddle），在训练完毕后你都可以将这些框架的模型统一转换为ONNX这种<strong>统一的格式</strong>进行存储。注意ONNX文件不仅仅存储了神经网络模型的权重，同时也存储了模型的结构信息以及网络中每一层的输入输出和一些其它的辅助信息。</p>
-<h2 id="0x2-protobuf简介"><a class="markdownIt-Anchor" href="#0x2-protobuf简介"></a> <strong>0x2. ProtoBuf简介</strong></h2>
-<p>ONNX使用的是Protobuf这个序列化数据结构去存储神经网络的权重信息。</p>
-<p>Protobuf是一种轻便高效的<strong>结构化数据存储格式</strong>，</p>
-<p><code>*.proto</code>后缀文件  <code>onnx.proto</code>就是ONNX格式文件</p>
-<h2 id="0x3-onnx格式分析"><a class="markdownIt-Anchor" href="#0x3-onnx格式分析"></a> <strong>0x3. ONNX格式分析</strong></h2>
-<p>当我们加载了一个ONNX之后，我们获得的就是一个<code>ModelProto</code>，它包含了一些版本信息，生产者信息和一个<code>GraphProto</code>。在<code>GraphProto</code>里面又包含了四个<code>repeated</code>数组，它们分别是<code>node</code>(<code>NodeProto</code>类型)，<code>input</code>(<code>ValueInfoProto</code>类型)，<code>output</code>(<code>ValueInfoProto</code>类型)和<code>initializer</code>(<code>TensorProto</code>类型)，其中<code>node</code>中存放了模型中所有的计算节点，<code>input</code>存放了模型的输入节点，<code>output</code>存放了模型中所有的输出节点，<code>initializer</code>存放了模型的所有权重参数。</p>
-<h2 id="0x4-onnxhelper"><a class="markdownIt-Anchor" href="#0x4-onnxhelper"></a> <strong>0x4. onnx.helper</strong></h2>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">import onnx</span><br><span class="line">from onnx import helper</span><br><span class="line">from onnx import AttributeProto, TensorProto, GraphProto</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># The protobuf definition can be found here:</span><br><span class="line"># https://github.com/onnx/onnx/blob/master/onnx/onnx.proto</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># Create one input (ValueInfoProto)</span><br><span class="line">X = helper.make_tensor_value_info(&#x27;X&#x27;, TensorProto.FLOAT, [3, 2])</span><br><span class="line">pads = helper.make_tensor_value_info(&#x27;pads&#x27;, TensorProto.FLOAT, [1, 4])</span><br><span class="line"></span><br><span class="line">value = helper.make_tensor_value_info(&#x27;value&#x27;, AttributeProto.FLOAT, [1])</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># Create one output (ValueInfoProto)</span><br><span class="line">Y = helper.make_tensor_value_info(&#x27;Y&#x27;, TensorProto.FLOAT, [3, 4])</span><br><span class="line"></span><br><span class="line"># Create a node (NodeProto) - This is based on Pad-11</span><br><span class="line">node_def = helper.make_node(</span><br><span class="line">    &#x27;Pad&#x27;, # node name</span><br><span class="line">    [&#x27;X&#x27;, &#x27;pads&#x27;, &#x27;value&#x27;], # inputs</span><br><span class="line">    [&#x27;Y&#x27;], # outputs</span><br><span class="line">    mode=&#x27;constant&#x27;, # attributes</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"># Create the graph (GraphProto)</span><br><span class="line">graph_def = helper.make_graph(</span><br><span class="line">    [node_def],</span><br><span class="line">    &#x27;test-model&#x27;,</span><br><span class="line">    [X, pads, value],</span><br><span class="line">    [Y],</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"># Create the model (ModelProto)</span><br><span class="line">model_def = helper.make_model(graph_def, producer_name=&#x27;onnx-example&#x27;)</span><br><span class="line"></span><br><span class="line">print(&#x27;The model is:\n&#123;&#125;&#x27;.format(model_def))</span><br><span class="line">onnx.checker.check_model(model_def)</span><br><span class="line">print(&#x27;The model is checked!&#x27;)</span><br></pre></td></tr></table></figure>
-<h2 id="0x5-onnx-simplifier"><a class="markdownIt-Anchor" href="#0x5-onnx-simplifier"></a> <strong>0x5. onnx-simplifier</strong></h2>
-<p>。</p>
-<h3 id="0x6onnx量化"><a class="markdownIt-Anchor" href="#0x6onnx量化"></a> 0x6.ONNX量化</h3>
-<h4 id="61-量化概述"><a class="markdownIt-Anchor" href="#61-量化概述"></a> 6.1 量化概述</h4>
-<ul>
-<li>
-<p>ONNXRuntime 中的量化是指 ONNX 模型的 8 bit 线性量化。</p>
-</li>
-<li>
-<p>在量化过程中，浮点实数值映射到 8 bit 量化空间，其形式为：<br />
-VAL_fp32 = Scale * （VAL_quantized - Zero_point）</p>
-</li>
-<li>
-<p>Scale 是一个正实数，用于将浮点数映射到量化空间，计算方法如下：</p>
-</li>
-<li>
-<ul>
-<li>对于非对称量化：<br />
-scale = (data_range_max - data_range_min) / (quantization_range_max - quantization_range_min)</li>
-<li>对于对称量化：<br />
-scale = abs(data_range_max, data_range_min) * 2 / (quantization_range_max - quantization_range_min)</li>
-</ul>
-</li>
-<li>
-<p>Zero_point 表示量化空间中的零。</p>
-</li>
-<li>
-<ul>
-<li>重要的是，浮点零值在量化空间中可以精确地表示。这是因为许多 CNN 都使用零填充。</li>
-<li>如果在量化后无法唯一地表示 0，则会导致精度误差。</li>
-</ul>
-</li>
-<li></li>
-<li>
-<h4 id="62-量化方式"><a class="markdownIt-Anchor" href="#62-量化方式"></a> 6.2 量化方式</h4>
-</li>
-<li>
-<ul>
-<li>
-<p>ONNXRuntime 支持两种模型量化方式：</p>
-</li>
-<li>
-<ul>
-<li>
-<p>动态量化：</p>
-</li>
-<li>
-<ul>
-<li>对于动态量化，缩放因子（Scale）和零点（Zero Point）是在推理时计算的，并且特定用于每次激活</li>
-<li>因此它们更准确，但引入了额外的计算开销</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<ul>
-<li>
-<ul>
-<li>
-<p>静态量化：</p>
-</li>
-<li>
-<ul>
-<li>对于静态量化，它们使用校准数据集离线计算</li>
-<li>所有激活都具有相同的缩放因子（Scale）和零点（Zero Point）</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<ul>
-<li>
-<ul>
-<li>
-<p>方法选择：</p>
-</li>
-<li>
-<ul>
-<li>通常，建议对 RNN 和基于 Transformer 的模型使用动态量化，对 CNN 模型使用静态量化</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="63-量化类型"><a class="markdownIt-Anchor" href="#63-量化类型"></a> 6.3 量化类型</h4>
-<ul>
-<li>
-<p>ONNXRuntime 支持两种量化数据类型：</p>
-</li>
-<li>
-<ul>
-<li>
-<p>Int8 (QuantType.QInt8): 有符号 8 bit 整型</p>
-</li>
-<li>
-<p>UInt8 (QuantType.QUInt8): 无符号 8 bit 整型</p>
-</li>
-<li>
-<p>数据类型选择：</p>
-</li>
-<li>
-<ul>
-<li>结合激活和权重，数据格式可以是（activation：uint8，weight：uint8），（activation：uint8，weight：int8）等。</li>
-<li>这里使用 U8U8 作为 （activation：uint8， weight：uint8） 的简写，U8S8 作为 （activation：uint8， weight：int8） 和 S8U8， S8S8 作为其他两种格式的简写。</li>
-<li>CPU 上的 OnnxRuntime Quantization 可以运行 U8U8，U8S8 和 S8S8。</li>
-<li>具有 QDQ 格式的 S8S8 是性能和准确性的默认设置，它应该是第一选择。</li>
-<li>只有在精度下降很多的情况下，才能尝试U8U8。</li>
-<li>请注意，具有 QOperator 格式的 S8S8 在 x86-64 CPU 上会很慢，通常应避免使用。</li>
-<li>GPU 上的 OnnxRuntime Quantization 仅支持 S8S8 格式。</li>
-<li>在具有 AVX2 和 AVX512 扩展的 x86-64 计算机上，OnnxRuntime 使用 U8S8 的 VPMADDUBSW 指令来提高性能，但此指令会遇到饱和问题。</li>
-<li>一般来说，对于最终结果来说，这不是一个大问题。</li>
-<li>如果某些模型的精度大幅下降，则可能是由饱和度引起的。</li>
-<li>在这种情况下，您可以尝试 reduce_range 或 U8U8 格式，没有饱和度问题。</li>
-<li>在其他 CPU 架构（使用 VNNI 和 ARM 的 x64）上没有这样的问题。</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="64-量化格式"><a class="markdownIt-Anchor" href="#64-量化格式"></a> 6.4 量化格式</h4>
-<ul>
-<li>
-<p>ONNXRuntime 支持两种量化模型格式：</p>
-</li>
-<li>
-<ul>
-<li>
-<p>Tensor Oriented, aka Quantize and DeQuantize (QuantFormat.QDQ):</p>
-</li>
-<li>
-<ul>
-<li>该格式使用 DQ (Q (tensor)) 来模拟量化和去量化过程，并且 QuantizeLinear 和DeQuantizeLinear 算子也携带量化参数</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<ul>
-<li>
-<p>Operator Oriented (QuantFormat.QOperator):</p>
-</li>
-<li>
-<ul>
-<li>所有量化运算符都有自己的 ONNX 定义，如QLinearConv、MatMulInteger 等‘</li>
-</ul>
-</li>
-<li></li>
-</ul>
-</li>
-</ul>
-<h4 id="65具体操作"><a class="markdownIt-Anchor" href="#65具体操作"></a> 6.5具体操作</h4>
-<h4 id="66-比较"><a class="markdownIt-Anchor" href="#66-比较"></a> 6.6 比较</h4>
-<ul>
-<li>量化前后的模型文件大小如下表所示：</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>模型</th>
-<th>大小</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>原始模型</td>
-<td>16.3MB</td>
-</tr>
-<tr>
-<td>优化模型</td>
-<td>16.1MB</td>
-</tr>
-<tr>
-<td>动态量化</td>
-<td>4.1MB</td>
-</tr>
-<tr>
-<td>静态量化</td>
-<td>4.1MB</td>
-</tr>
-</tbody>
-</table>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2023/08/01/ONNX1/" data-id="clrwazlrj003j7ov48doxgl56" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ONNX/" rel="tag">ONNX</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-sam" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2023/08/01/sam/" class="article-date">
-  <time class="post-time" datetime="2023-08-01T03:03:45.000Z" itemprop="datePublished">
-    <span class="post-month">8月</span><br/>
-    <span class="post-day">01</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/08/01/sam/">seg掩码</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">image[mask == <span class="number">0</span>] = [<span class="number">255</span>, <span class="number">255</span>, <span class="number">255</span>]</span><br></pre></td></tr></table></figure>
-<p>image：[[[37 36 41]<br>
-[38 37 42]<br>
-[38 37 42]<br>
-…<br>
-[48 46 60]<br>
-[48 46 60]<br>
-[48 46 60]]</p>
-<p>mark：[[False False False … False False False]<br>
-[False False False … False False False]<br>
-[False False False … False False False]<br>
-…<br>
-[False False False … False False False]<br>
-[False False False … False False False]<br>
-[False False False … False False False]]</p>
-<p>表示将 布尔值Falese区域对应的image位置白色，以实现扣图片</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2023/08/01/sam/" data-id="clrwazlrk003q7ov4b2b1ag9f" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-概念学习" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2023/08/01/%E6%A6%82%E5%BF%B5%E5%AD%A6%E4%B9%A0/" class="article-date">
-  <time class="post-time" datetime="2023-08-01T03:03:45.000Z" itemprop="datePublished">
-    <span class="post-month">8月</span><br/>
-    <span class="post-day">01</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/08/01/%E6%A6%82%E5%BF%B5%E5%AD%A6%E4%B9%A0/">概念学习——embedding</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id=""><a class="markdownIt-Anchor" href="#"></a> </h1>
-<h2 id="1-embedding"><a class="markdownIt-Anchor" href="#1-embedding"></a> 1、embedding</h2>
-<p>​	“Embedding”直译是<strong>嵌入式、嵌入层</strong>。</p>
-<h3 id="怎么理解embedding"><a class="markdownIt-Anchor" href="#怎么理解embedding"></a> <strong>怎么理解Embedding</strong></h3>
-<p>嵌入的含义是把一个字或者词转成成一组向量表示，向量里面的每个参数表示在<strong>不同维度上</strong>计算的值，每个值是通过训练得到的，最后这组<strong>向量就可以表示某一个字或者词的含义</strong>，就可以通过这向量里面的参数学习到字与字之间的关系了</p>
-<h4 id="一embedding层在某种程度上就是用来降维的降维的原理就是矩阵乘法"><a class="markdownIt-Anchor" href="#一embedding层在某种程度上就是用来降维的降维的原理就是矩阵乘法"></a> 一：Embedding层，在某种程度上，就是用来降维的，降维的原理就是<strong>矩阵乘法</strong>。</h4>
-<p>首先，我们有一个<strong>one-hot</strong>编码的概念。</p>
-<p>​	原因：<strong>稀疏矩阵，过度占用资源</strong>。</p>
-<p>​	比如：其实我们这篇文章，虽然100W字，但是其实我们整合起来，有99W字是重复的，只有1W字是完全不重复的。</p>
-<p>那我们用100W X 10W的岂不是白白浪费了99W X 10W的矩阵存储空间。</p>
-<p><img src="C:%5CUsers%5Cadmin%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20230725165920389.png" alt="image-20230725165920389" /></p>
-<h4 id="-2"><a class="markdownIt-Anchor" href="#-2"></a> </h4>
-<p>假如我们有一个100W X10W的矩阵，用它乘上一个10W X 20的矩阵，我们可以把它降到100W X 20，瞬间量级降了10W/20=5000倍！！！</p>
-<p>这就是嵌入层的一个作用——<strong>降维</strong>。</p>
-<h4 id="二对低维的数据进行升维时可能把一些其他特征给放大了或者把笼统的特征给分开了"><a class="markdownIt-Anchor" href="#二对低维的数据进行升维时可能把一些其他特征给放大了或者把笼统的特征给分开了"></a> 二：<strong>对低维的数据进行升维时，可能把一些其他特征给放大了，或者把笼统的特征给分开了</strong>。。</h4>
-<p>比如：小普来回靠近和远离屏幕，发现45厘米是最佳观测点，这个距离能10秒就把4个不同点找出来了。</p>
-<p>因此它就是作为这个<strong>桥梁</strong>的存在，让我们手头的东西可伸可缩，变成我们希望的样子。</p>
-<p>链接：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/164502624">https://zhuanlan.zhihu.com/p/164502624</a></p>
-<h4 id="三实体嵌入entity-embeddings类似上面的降维"><a class="markdownIt-Anchor" href="#三实体嵌入entity-embeddings类似上面的降维"></a> 三：实体嵌入(Entity Embeddings)（类似上面的降维）</h4>
-<p>实体嵌入基本上将标签编码方法上升了一个层次，它不仅仅是将一个整数分配给一个类别，而是整个向量。这个向量可以是任意尺寸，通过一个神经网络来学习这个表达。</p>
-<p><em><strong>Embedding的数学本质，就是以one hot为输入的单层全连接中的全连接的参数。</strong></em></p>
-<h2 id="2"><a class="markdownIt-Anchor" href="#2"></a> 2、</h2>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2023/08/01/%E6%A6%82%E5%BF%B5%E5%AD%A6%E4%B9%A0/" data-id="clrwazlrl003v7ov43hdq5fx0" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl/" rel="tag">dl</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-hello-world" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2023/07/21/hello-world/" class="article-date">
-  <time class="post-time" datetime="2023-07-21T13:24:33.897Z" itemprop="datePublished">
-    <span class="post-month">7月</span><br/>
-    <span class="post-day">21</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/07/21/hello-world/">Hello World</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="quick-start"><a class="markdownIt-Anchor" href="#quick-start"></a> Quick Start</h2>
-<h3 id="create-a-new-post"><a class="markdownIt-Anchor" href="#create-a-new-post"></a> Create a new post</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="run-server"><a class="markdownIt-Anchor" href="#run-server"></a> Run server</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="generate-static-files"><a class="markdownIt-Anchor" href="#generate-static-files"></a> Generate static files</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="deploy-to-remote-sites"><a class="markdownIt-Anchor" href="#deploy-to-remote-sites"></a> Deploy to remote sites</h3>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo g</span><br><span class="line">hexo d</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2023/07/21/hello-world/" data-id="clrwazlrk003o7ov45ddtap8k" class="article-share-link">分享</a>
-      
-      
     </footer>
   </div>
   
@@ -944,7 +1103,7 @@ scale = abs(data_range_max, data_range_min) * 2 / (quantization_range_max - quan
 
 
   <nav id="page-nav">
-    <a class="extend prev" rel="prev" href="/page/7/">&amp;laquo; pre</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span>
+    <a class="extend prev" rel="prev" href="/page/7/">&amp;laquo; pre</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/9/">next &amp;raquo;</a>
   </nav>
 </section>
         
@@ -985,9 +1144,9 @@ scale = abs(data_range_max, data_range_min) * 2 / (quantization_range_max - quan
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>79</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>90</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>17</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>19</strong><br>标签</div></a>
     </div>
 
 
