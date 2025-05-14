@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2025年5月13日 TensorRT3infer | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="TensorRT 进行推理的流程   ✅ 一般使用 TensorRT 进行推理的流程（7 步）  🔹 1. 准备模型（通常为 ONNX 格式）  训练好的模型需导出为 ONNX 格式。 常见工具：  PyTorch: torch.onnx.export() TensorFlow → ONNX: 使用 tf2onnx 或 onnx-tf HuggingFace 模型: 直接支持 ONNX 导出">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2025年5月13日 TensorRT3infer">
+<meta property="og:url" content="https://shakewely.github.io/2025/05/13/2025%E5%B9%B45%E6%9C%8813%E6%97%A5-TensorRT3infer/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="TensorRT 进行推理的流程   ✅ 一般使用 TensorRT 进行推理的流程（7 步）  🔹 1. 准备模型（通常为 ONNX 格式）  训练好的模型需导出为 ONNX 格式。 常见工具：  PyTorch: torch.onnx.export() TensorFlow → ONNX: 使用 tf2onnx 或 onnx-tf HuggingFace 模型: 直接支持 ONNX 导出">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-05-13T09:08:00.000Z">
+<meta property="article:modified_time" content="2025-05-13T09:17:49.125Z">
+<meta property="article:author" content="Weakliy">
+<meta property="article:tag" content="TensorRT">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>95</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>27</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2025年5月13日-TensorRT3infer" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/05/13/2025%E5%B9%B45%E6%9C%8813%E6%97%A5-TensorRT3infer/" class="article-date">
+  <time class="post-time" datetime="2025-05-13T09:08:00.000Z" itemprop="datePublished">
+    <span class="post-month">5月</span><br/>
+    <span class="post-day">13</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2025年5月13日 TensorRT3infer
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="tensorrt-进行推理的流程"><a class="markdownIt-Anchor" href="#tensorrt-进行推理的流程"></a> TensorRT 进行推理的流程</h2>
+<blockquote>
+<h2 id="一般使用-tensorrt-进行推理的流程7-步"><a class="markdownIt-Anchor" href="#一般使用-tensorrt-进行推理的流程7-步"></a> ✅ 一般使用 TensorRT 进行推理的流程（7 步）</h2>
+<h3 id="1-准备模型通常为-onnx-格式"><a class="markdownIt-Anchor" href="#1-准备模型通常为-onnx-格式"></a> 🔹 1. <strong>准备模型（通常为 ONNX 格式）</strong></h3>
+<ul>
+<li>训练好的模型需导出为 <code>ONNX</code> 格式。</li>
+<li>常见工具：
+<ul>
+<li>PyTorch: <code>torch.onnx.export()</code></li>
+<li>TensorFlow → ONNX: 使用 <code>tf2onnx</code> 或 <code>onnx-tf</code></li>
+<li>HuggingFace 模型: 直接支持 ONNX 导出</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="2-构建-tensorrt-引擎engine-文件"><a class="markdownIt-Anchor" href="#2-构建-tensorrt-引擎engine-文件"></a> 🔹 2. <strong>构建 TensorRT 引擎（<code>.engine</code> 文件）</strong></h3>
+<p>你可以使用：</p>
+<ul>
+<li>
+<p><strong>trtexec 命令行工具（推荐）</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">bash</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">trtexec --onnx=model.onnx --saveEngine=model.engine --fp16</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>TensorRT Python API（更灵活）</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑builder = trt.Builder(logger)</span><br><span class="line">network = builder.create_network(...)</span><br><span class="line">parser = trt.OnnxParser(network, logger)</span><br><span class="line">parser.parse_from_file(&quot;model.onnx&quot;)</span><br><span class="line">engine = builder.build_cuda_engine(network)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>注意：此步骤可选，如果你已经有 <code>.engine</code> 文件，就无需重复构建。</p>
+</blockquote>
+<hr>
+<h3 id="3-加载引擎文件并反序列化为可执行模型"><a class="markdownIt-Anchor" href="#3-加载引擎文件并反序列化为可执行模型"></a> 🔹 3. <strong>加载引擎文件并反序列化为可执行模型</strong></h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cpp复制编辑std::ifstream engineFile(&quot;model.engine&quot;, std::ios::binary);</span><br><span class="line">IRuntime* runtime = createInferRuntime(logger);</span><br><span class="line">ICudaEngine* engine = runtime-&gt;deserializeCudaEngine(data, size, nullptr);</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="4-创建执行上下文iexecutioncontext"><a class="markdownIt-Anchor" href="#4-创建执行上下文iexecutioncontext"></a> 🔹 4. <strong>创建执行上下文（IExecutionContext）</strong></h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cpp</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">IExecutionContext* context = engine-&gt;createExecutionContext();</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="5-准备输入数据并分配-gpu-内存"><a class="markdownIt-Anchor" href="#5-准备输入数据并分配-gpu-内存"></a> 🔹 5. <strong>准备输入数据并分配 GPU 内存</strong></h3>
+<ul>
+<li>你需要知道输入 tensor 的 shape（通常是 <code>[1, 3, H, W]</code>）</li>
+<li>分配输入/输出的 GPU 内存（<code>cudaMalloc</code>）</li>
+<li>把输入数据拷贝到 GPU（<code>cudaMemcpy</code>）</li>
+</ul>
+<hr>
+<h3 id="6-执行推理inference"><a class="markdownIt-Anchor" href="#6-执行推理inference"></a> 🔹 6. <strong>执行推理（Inference）</strong></h3>
+<ul>
+<li>使用 <code>enqueueV2</code>（异步）或 <code>executeV2</code>（同步）进行推理：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cpp</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">context-&gt;enqueueV2(buffers, stream, nullptr);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>注意：<code>buffers</code> 是输入/输出 tensor 指针数组。</li>
+</ul>
+<hr>
+<h3 id="7-获取并处理输出结果"><a class="markdownIt-Anchor" href="#7-获取并处理输出结果"></a> 🔹 7. <strong>获取并处理输出结果</strong></h3>
+<ul>
+<li>将输出结果从 GPU 拷贝到 Host：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cpp</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">cudaMemcpy(output_host, output_device, size, cudaMemcpyDeviceToHost);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>通常后处理包括：
+<ul>
+<li>分类任务：取最大值 <code>argmax</code></li>
+<li>检测任务：解析 bbox、类别置信度、NMS 等</li>
+<li>分割任务：取最大通道作为 mask</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/05/13/2025%E5%B9%B45%E6%9C%8813%E6%97%A5-TensorRT3infer/" data-id="cmanj8o27000slcv4fgyigr7f" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/TensorRT/" rel="tag">TensorRT</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2025/05/14/2025%E5%B9%B45%E6%9C%8814%E6%97%A5-cmake/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          2025年5月14日 cmake
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2025/05/09/2025%E5%B9%B45%E6%9C%889%E6%97%A5-anchor/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2025年5月9日 anchor</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>95</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>27</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2024 - 2025 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

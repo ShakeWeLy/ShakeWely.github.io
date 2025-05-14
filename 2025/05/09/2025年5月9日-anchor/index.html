@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2025年5月9日 anchor | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="流程 Anchor 生成：  在训练过程中，为了检测不同尺度和长宽比的物体，首先会在特征图的每个位置生成一组 Anchor（锚框）。这些 Anchor 通常具有不同的尺度和长宽比，用于捕捉图像中物体的不同尺寸和形状。  标签分配：  每个生成的 Anchor 会与真实框（ground truth box）进行比较，通常使用 IoU（Intersection over Union） 来计算重叠程度">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2025年5月9日 anchor">
+<meta property="og:url" content="https://shakewely.github.io/2025/05/09/2025%E5%B9%B45%E6%9C%889%E6%97%A5-anchor/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="流程 Anchor 生成：  在训练过程中，为了检测不同尺度和长宽比的物体，首先会在特征图的每个位置生成一组 Anchor（锚框）。这些 Anchor 通常具有不同的尺度和长宽比，用于捕捉图像中物体的不同尺寸和形状。  标签分配：  每个生成的 Anchor 会与真实框（ground truth box）进行比较，通常使用 IoU（Intersection over Union） 来计算重叠程度">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-05-09T07:33:38.000Z">
+<meta property="article:modified_time" content="2025-05-09T07:49:04.773Z">
+<meta property="article:author" content="Weakliy">
+<meta property="article:tag" content="目标检测">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>95</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>27</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2025年5月9日-anchor" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/05/09/2025%E5%B9%B45%E6%9C%889%E6%97%A5-anchor/" class="article-date">
+  <time class="post-time" datetime="2025-05-09T07:33:38.000Z" itemprop="datePublished">
+    <span class="post-month">5月</span><br/>
+    <span class="post-day">09</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2025年5月9日 anchor
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="流程"><a class="markdownIt-Anchor" href="#流程"></a> 流程</h2>
+<p><strong>Anchor 生成</strong>：</p>
+<ul>
+<li>在训练过程中，为了检测不同尺度和长宽比的物体，首先会在特征图的每个位置生成一组 Anchor（锚框）。这些 Anchor 通常具有不同的尺度和长宽比，用于捕捉图像中物体的不同尺寸和形状。</li>
+</ul>
+<p><strong>标签分配</strong>：</p>
+<ul>
+<li>每个生成的 Anchor 会与真实框（ground truth box）进行比较，通常使用 <strong>IoU（Intersection over Union）</strong> 来计算重叠程度。</li>
+<li>根据 IoU 的值将 Anchor 分为三类：
+<ul>
+<li><strong>正样本</strong>：当 Anchor 与真实框的 IoU 大于设定阈值（如 0.5）时，视为正样本。</li>
+<li><strong>负样本</strong>：当 Anchor 与所有真实框的 IoU 小于设定的低阈值（如 0.4）时，视为负样本。</li>
+<li><strong>忽略样本</strong>：IoU 介于这两个阈值之间的 Anchor 通常会被忽略。</li>
+</ul>
+</li>
+</ul>
+<p><strong>回归与分类</strong>：</p>
+<ul>
+<li>对于每个正样本 Anchor，模型需要预测一个目标框（预测框），通常通过回归来预测框的偏移量（例如，中心点坐标、宽度、高度）。</li>
+<li>同时，模型对每个 Anchor 进行分类，判断该 Anchor 代表的物体类别。</li>
+</ul>
+<p><strong>损失函数计算</strong>：</p>
+<ul>
+<li>在训练时，模型通过以下两种损失函数来优化：
+<ul>
+<li><strong>分类损失</strong>：通常使用交叉熵损失来计算每个 Anchor 是否正确分类（正样本或负样本）。</li>
+<li><strong>回归损失</strong>：通常使用平滑 L1 损失来计算预测框与真实框之间的差距。</li>
+</ul>
+</li>
+</ul>
+<p><strong>模型优化</strong>：</p>
+<ul>
+<li>根据计算出的损失（分类损失和回归损失），使用优化算法（如 SGD 或 Adam）来更新模型的权重，使其更好地拟合训练数据。</li>
+</ul>
+<p><strong>推理阶段的非极大值抑制（NMS）</strong>：</p>
+<ul>
+<li>在推理时，多个 Anchor 可能会检测到同一个物体，导致多个重叠的框。通过 <strong>NMS（Non-Maximum Suppression）</strong>，选择具有最高置信度的框，去除冗余框，只保留最佳的预测框。</li>
+</ul>
+<h2 id="anchor-生成算法"><a class="markdownIt-Anchor" href="#anchor-生成算法"></a> anchor 生成算法</h2>
+<p>Faster R-CNN 通过在每个特征图位置生成多个不同尺度、不同长宽比的锚框。具体步骤如下：</p>
+<ul>
+<li>对于每个特征图上的位置，选择多个 <strong>尺度</strong>（如 32px、64px、128px 等）和 <strong>长宽比</strong>（如 1:1、2:1、1:2 等）。</li>
+</ul>
+<ol>
+<li><strong>滑动窗口（Sliding Window）</strong>：</li>
+</ol>
+<p>在 <strong>YOLO</strong> 和 <strong>SSD</strong> 中，Anchor 的生成算法通常会在特征图的每个位置生成固定的 Anchor。具体过程包括：</p>
+<ul>
+<li>在每个位置生成多个尺寸和比例的 Anchor。</li>
+</ul>
+<h2 id="iou"><a class="markdownIt-Anchor" href="#iou"></a> IOU</h2>
+<p>定义:</p>
+<blockquote></blockquote>
+<h2 id="nms"><a class="markdownIt-Anchor" href="#nms"></a> NMS</h2>
+<p>算法流程:</p>
+<blockquote></blockquote>
+<h1 id="anchor-free"><a class="markdownIt-Anchor" href="#anchor-free"></a> Anchor free</h1>
+<h3 id="1-目标中心预测center-prediction"><a class="markdownIt-Anchor" href="#1-目标中心预测center-prediction"></a> 1. <strong>目标中心预测（Center Prediction）</strong></h3>
+<ul>
+<li>在 anchor-free 方法中，最常见的一种做法是预测物体的 <strong>中心点</strong>。</li>
+<li><strong>中心点</strong>：每个物体都有一个中心位置，模型的任务是预测这些中心点的位置。</li>
+<li>这些方法通常会在特征图上为每个像素点预测一个 <strong>热力图（heatmap）</strong>，表示该位置是否是某个物体的中心点。这个热力图的值越高，表示该位置是物体中心的概率越大。</li>
+</ul>
+<h3 id="2-标签分配"><a class="markdownIt-Anchor" href="#2-标签分配"></a> 2. <strong>标签分配</strong></h3>
+<p>在 anchor-free 方法中，标签分配的方式与传统的 anchor-based 方法有所不同。以下是一些常见的 anchor-free 标签分配策略：</p>
+<ul>
+<li><strong>正样本（Positive）</strong>：如果某个像素点的中心与某个真实框的中心位置足够接近（通常使用距离阈值），那么该像素点被视为正样本，模型的目标是回归这个位置。
+<ul>
+<li>例如，物体的中心点离特定像素点的距离小于某个阈值（如 5x5 区域），那么这个像素点就会被认为是正样本。</li>
+</ul>
+</li>
+<li><strong>负样本（Negative）</strong>：那些没有包含任何物体中心的像素点被视为负样本。这些像素点的值应该接近零，表示它们不是物体中心。</li>
+<li><strong>忽略样本（Ignore）</strong>：在某些情况下，靠近物体边界的像素点可能不会分配为正样本，而是被忽略。这是因为这些像素点的中心位置不明确，可能会影响模型的训练。</li>
+</ul>
+<h3 id="3-回归目标"><a class="markdownIt-Anchor" href="#3-回归目标"></a> 3. <strong>回归目标</strong></h3>
+<p>对于每个正样本像素点，模型需要预测：</p>
+<ul>
+<li><strong>物体的中心点</strong>：通过回归来预测目标的中心位置。</li>
+<li><strong>物体的尺寸和形状</strong>：例如，预测物体的宽度、高度、方向（如果是旋转框）等。</li>
+</ul>
+<h3 id="4-热力图损失heatmap-loss"><a class="markdownIt-Anchor" href="#4-热力图损失heatmap-loss"></a> 4. <strong>热力图损失（Heatmap Loss）</strong></h3>
+<p>在 anchor-free 方法中，模型通常会通过 <strong>热力图</strong> 来预测目标中心的概率。每个像素点的热力图值表示该位置是目标中心的概率。</p>
+<ul>
+<li><strong>热力图损失</strong>（通常使用 <strong>均方误差（MSE）</strong> 或 <strong>交叉熵损失</strong>）会计算预测的热力图与真实热力图之间的差异。</li>
+<li>对于正样本，目标热力图在该位置会有较高的值，负样本则会有接近零的值。</li>
+</ul>
+<h3 id="5-回归损失regression-loss"><a class="markdownIt-Anchor" href="#5-回归损失regression-loss"></a> 5. <strong>回归损失（Regression Loss）</strong></h3>
+<p>对于每个正样本，模型不仅预测中心点，还需要回归物体的 <strong>边界框</strong>（例如，物体的宽度、高度，或旋转框的角度）。回归损失通常使用平滑L1损失（smooth L1 loss）或其他回归损失函数来进行计算。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/05/09/2025%E5%B9%B45%E6%9C%889%E6%97%A5-anchor/" data-id="cmanj8o2d0017lcv46e4a18ey" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" rel="tag">目标检测</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2025/05/13/2025%E5%B9%B45%E6%9C%8813%E6%97%A5-TensorRT3infer/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          2025年5月13日 TensorRT3infer
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2025/05/07/2025%E5%B9%B45%E6%9C%888%E6%97%A5-MOT%E6%B1%87%E6%80%BB/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2025年5月8日 MOT汇总</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>95</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>27</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2024 - 2025 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

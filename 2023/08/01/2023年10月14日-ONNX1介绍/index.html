@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>ONNX介绍 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="0x1. ONNX介绍 神经网络交换（Open Neural Network Exchange） 何种训练框架训练模型（比如TensorFlow&#x2F;Pytorch&#x2F;OneFlow&#x2F;Paddle），在训练完毕后你都可以将这些框架的模型统一转换为ONNX这种统一的格式进行存储。注意ONNX文件不仅仅存储了神经网络模型的权重，同时也存储了模型的结构信息以及网络中每一层的输入输出和一些其它的辅助信息。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ONNX介绍">
+<meta property="og:url" content="https://shakewely.github.io/2023/08/01/2023%E5%B9%B410%E6%9C%8814%E6%97%A5-ONNX1%E4%BB%8B%E7%BB%8D/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="0x1. ONNX介绍 神经网络交换（Open Neural Network Exchange） 何种训练框架训练模型（比如TensorFlow&#x2F;Pytorch&#x2F;OneFlow&#x2F;Paddle），在训练完毕后你都可以将这些框架的模型统一转换为ONNX这种统一的格式进行存储。注意ONNX文件不仅仅存储了神经网络模型的权重，同时也存储了模型的结构信息以及网络中每一层的输入输出和一些其它的辅助信息。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2023-08-01T06:07:53.000Z">
+<meta property="article:modified_time" content="2025-05-13T01:10:39.600Z">
+<meta property="article:author" content="Weakliy">
+<meta property="article:tag" content="ONNX">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>95</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>27</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2023年10月14日-ONNX1介绍" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/08/01/2023%E5%B9%B410%E6%9C%8814%E6%97%A5-ONNX1%E4%BB%8B%E7%BB%8D/" class="article-date">
+  <time class="post-time" datetime="2023-08-01T06:07:53.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">01</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      ONNX介绍
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="0x1-onnx介绍"><a class="markdownIt-Anchor" href="#0x1-onnx介绍"></a> <strong>0x1. ONNX介绍</strong></h2>
+<p>神经网络交换（Open Neural Network Exchange）</p>
+<p>何种训练框架训练模型（比如TensorFlow/Pytorch/OneFlow/Paddle），在训练完毕后你都可以将这些框架的模型统一转换为ONNX这种<strong>统一的格式</strong>进行存储。注意ONNX文件不仅仅存储了神经网络模型的权重，同时也存储了模型的结构信息以及网络中每一层的输入输出和一些其它的辅助信息。</p>
+<h2 id="0x2-protobuf简介"><a class="markdownIt-Anchor" href="#0x2-protobuf简介"></a> <strong>0x2. ProtoBuf简介</strong></h2>
+<p>ONNX使用的是Protobuf这个序列化数据结构去存储神经网络的权重信息。</p>
+<p>Protobuf是一种轻便高效的<strong>结构化数据存储格式</strong>，</p>
+<p><code>*.proto</code>后缀文件  <code>onnx.proto</code>就是ONNX格式文件</p>
+<h2 id="0x3-onnx格式分析"><a class="markdownIt-Anchor" href="#0x3-onnx格式分析"></a> <strong>0x3. ONNX格式分析</strong></h2>
+<p>ONNX 模型加载后返回的是一个 <code>ModelProto</code> 对象，其结构如下：</p>
+<ul>
+<li>
+<p><strong>ModelProto</strong></p>
+<ul>
+<li><code>ir_version</code>：IR（中间表示）版本</li>
+<li><code>producer_name/producer_version</code>：创建模型的工具名与版本</li>
+<li><code>graph</code>：GraphProto 对象，定义了网络结构</li>
+</ul>
+</li>
+<li>
+<p><strong>GraphProto</strong></p>
+<ul>
+<li><code>node[]</code>：计算节点数组，每个是一个 NodeProto（例如Conv、Relu等操作）</li>
+<li><code>input[]</code>：模型的输入信息，类型为 ValueInfoProto</li>
+<li><code>output[]</code>：模型的输出信息，类型为 ValueInfoProto</li>
+<li><code>initializer[]</code>：模型的参数（如权重），类型为 TensorProto</li>
+</ul>
+</li>
+</ul>
+<h2 id="0x4-onnxruntime"><a class="markdownIt-Anchor" href="#0x4-onnxruntime"></a> <strong>0x4. onnx.runtime</strong></h2>
+<h2 id="0x5-onnx-simplifier"><a class="markdownIt-Anchor" href="#0x5-onnx-simplifier"></a> <strong>0x5. onnx-simplifier</strong></h2>
+<p><strong>简化 ONNX 模型的计算图结构</strong>，以提升模型推理效率与部署兼容性。主要作用包括：</p>
+<ul>
+<li><strong>图结构优化</strong>：将复杂的计算图变得更简单，例如合并连续的操作（如多个 <code>Transpose</code>）、常量折叠、节点冗余移除等。</li>
+<li><strong>提升兼容性</strong>：有些深度学习推理引擎在面对复杂计算图结构时可能无法正确解析，简化后的模型更容易被不同的推理框架支持。</li>
+<li><strong>提高推理性能</strong>：在保持模型精度不变的前提下，减少冗余计算，提高实际部署中的推理速度。</li>
+<li><strong>如动态输入</strong>：</li>
+</ul>
+<h2 id="0x6onnx量化"><a class="markdownIt-Anchor" href="#0x6onnx量化"></a> 0x6.ONNX量化</h2>
+<h3 id="61-量化概述"><a class="markdownIt-Anchor" href="#61-量化概述"></a> 6.1 量化概述</h3>
+<p>pass</p>
+<h3 id="62-量化方式"><a class="markdownIt-Anchor" href="#62-量化方式"></a> 6.2 量化方式</h3>
+<p>ONNXRuntime 支持两种模型量化方式：</p>
+<ol>
+<li>
+<p>动态量化：</p>
+<p>对于动态量化，缩放因子（Scale）和零点（Zero Point）是在推理时计算的，并且特定用于每次激活</p>
+<p>因此它们更准确，但引入了额外的计算开销</p>
+</li>
+<li>
+<p>静态量化：</p>
+<p>对于静态量化，它们使用校准数据集离线计算</p>
+<p>所有激活都具有相同的缩放因子（Scale）和零点（Zero Point）</p>
+</li>
+</ol>
+<h4 id="63-量化数据类型"><a class="markdownIt-Anchor" href="#63-量化数据类型"></a> 6.3 量化数据类型</h4>
+<ul>
+<li>
+<p>ONNXRuntime 支持两种量化数据类型：</p>
+</li>
+<li>
+<ul>
+<li>
+<p>Int8 (QuantType.QInt8): 有符号 8 bit 整型</p>
+</li>
+<li>
+<p>UInt8 (QuantType.QUInt8): 无符号 8 bit 整型</p>
+</li>
+<li>
+<p>数据类型选择：</p>
+</li>
+<li>
+<ul>
+<li>结合激活和权重，数据格式可以是（activation：uint8，weight：uint8），（activation：uint8，weight：int8）等。</li>
+<li>这里使用 U8U8 作为 （activation：uint8， weight：uint8） 的简写，U8S8 作为 （activation：uint8， weight：int8） 和 S8U8， S8S8 作为其他两种格式的简写。</li>
+<li>CPU 上的 OnnxRuntime Quantization 可以运行 U8U8，U8S8 和 S8S8。</li>
+<li>具有 QDQ 格式的 S8S8 是性能和准确性的默认设置，它应该是第一选择。</li>
+<li>只有在精度下降很多的情况下，才能尝试U8U8。</li>
+<li>题。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="64-量化格式"><a class="markdownIt-Anchor" href="#64-量化格式"></a> 6.4 量化格式</h4>
+<h4 id="1-tensor-orientedquantformatqdq"><a class="markdownIt-Anchor" href="#1-tensor-orientedquantformatqdq"></a> <strong>1. Tensor-Oriented（QuantFormat.QDQ）</strong></h4>
+<ul>
+<li>
+<p>该格式使用 <strong><code>QuantizeLinear</code> 和 <code>DequantizeLinear</code></strong> 两个算子显式地插入在模型计算图中，表示张量的量化与反量化过程。</p>
+</li>
+<li>
+<p>每个量化张量都会通过如下模式处理：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">text</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">original_tensor → QuantizeLinear → Quantized Tensor → DequantizeLinear → dequantized_tensor</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>优点：</p>
+<ul>
+<li>表现形式直观，清晰显示了量化与反量化操作；</li>
+<li>适合用于分析与调试；</li>
+<li>在动态量化（dynamic quantization）和量化感知训练（QAT）中使用广泛；</li>
+</ul>
+</li>
+<li>
+<p>缺点：</p>
+<ul>
+<li>推理图中<strong>节点数较多</strong>，不如 QOperator 紧凑；</li>
+<li>某些后端或引擎（如 TensorRT）不完全支持。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="2-operator-orientedquantformatqoperator"><a class="markdownIt-Anchor" href="#2-operator-orientedquantformatqoperator"></a> <strong>2. Operator-Oriented（QuantFormat.QOperator）</strong></h4>
+<ul>
+<li>
+<p>该格式直接使用专门的量化运算符，例如：</p>
+<ul>
+<li><code>QLinearConv</code></li>
+<li><code>QLinearMatMul</code></li>
+<li><code>MatMulInteger</code></li>
+<li><code>ConvInteger</code></li>
+</ul>
+</li>
+<li>
+<p>每个运算符自带量化参数（如 scale 和 zero point），无需额外的 <code>QuantizeLinear</code> / <code>DequantizeLinear</code> 包裹。</p>
+</li>
+<li>
+<p>优点：</p>
+<ul>
+<li>推理效率高，节点数更少；</li>
+<li>ONNX Runtime 在 CPU 上有良好支持；</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>构建图更复杂，调试不如 QDQ 格式直观；</li>
+<li>某些工具链或后端对该格式支持有限（如部分硬件 NPU）</li>
+</ul>
+</li>
+</ul>
+<h4 id="66-比较"><a class="markdownIt-Anchor" href="#66-比较"></a> 6.6 比较</h4>
+<ul>
+<li>量化前后的模型文件大小如下表所示：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>大小</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>原始模型</td>
+<td>16.3MB</td>
+</tr>
+<tr>
+<td>优化模型</td>
+<td>16.1MB</td>
+</tr>
+<tr>
+<td>动态量化</td>
+<td>4.1MB</td>
+</tr>
+<tr>
+<td>静态量化</td>
+<td>4.1MB</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2023/08/01/2023%E5%B9%B410%E6%9C%8814%E6%97%A5-ONNX1%E4%BB%8B%E7%BB%8D/" data-id="cmanj8o1n0000lcv4h75z5ilu" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ONNX/" rel="tag">ONNX</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2023/08/02/2023%E5%B9%B410%E6%9C%8816%E6%97%A5-ONNX2%E5%AE%9E%E6%93%8D/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          ONNX2
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>95</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>27</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2024 - 2025 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

@@ -5,17 +5,17 @@
   
   <title>2025年3月15日 模型评价指标 | Weakliy_Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="计算量与参数量  定义  计算量-时间复杂度 参数量-空间复杂度   卷积层 计算量 (KxKxWxH) x C_in x C_out  W\H: 输出feature map 的size 回忆卷积操作过程  参数量 KxKxC_inxC_out  卷积核的weight   池化层 计算量 不同池化操作不同  参数量 无  全连接层 参数量＝计算量＝weight_in*weight_out  空洞">
+  <meta name="description" content="计算量与参数量  1 定义  计算量-时间复杂度  乘法和加发的操作次数 参数量-空间复杂度   卷积层 计算量: (KxKxWxH) x C_in x C_out  W\H: 输出feature map 的size 回忆卷积操作过程  参数量: KxKxC_inxC_out  卷积核的weight   池化层 计算量: 不同池化操作不同 Cin x Cout x W x H x K xK  参">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2025年3月15日 模型评价指标">
 <meta property="og:url" content="https://shakewely.github.io/2025/03/14/2025%E5%B9%B43%E6%9C%8815%E6%97%A5-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BB%B7%E6%8C%87%E6%A0%87/index.html">
 <meta property="og:site_name" content="Weakliy_Blog">
-<meta property="og:description" content="计算量与参数量  定义  计算量-时间复杂度 参数量-空间复杂度   卷积层 计算量 (KxKxWxH) x C_in x C_out  W\H: 输出feature map 的size 回忆卷积操作过程  参数量 KxKxC_inxC_out  卷积核的weight   池化层 计算量 不同池化操作不同  参数量 无  全连接层 参数量＝计算量＝weight_in*weight_out  空洞">
+<meta property="og:description" content="计算量与参数量  1 定义  计算量-时间复杂度  乘法和加发的操作次数 参数量-空间复杂度   卷积层 计算量: (KxKxWxH) x C_in x C_out  W\H: 输出feature map 的size 回忆卷积操作过程  参数量: KxKxC_inxC_out  卷积核的weight   池化层 计算量: 不同池化操作不同 Cin x Cout x W x H x K xK  参">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://picx.zhimg.com/70/v2-895d6f8e80c0078c92244158dec97bfc_1440w.image?source=172ae18b&biz_tag=Post">
 <meta property="og:image" content="https://shakewely.github.io/2025/03/14/2025%E5%B9%B43%E6%9C%8815%E6%97%A5-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BB%B7%E6%8C%87%E6%A0%87/image-20250314011150884.png">
 <meta property="article:published_time" content="2025-03-13T16:26:50.000Z">
-<meta property="article:modified_time" content="2025-03-13T17:11:51.901Z">
+<meta property="article:modified_time" content="2025-05-07T14:07:36.055Z">
 <meta property="article:author" content="Weakliy">
 <meta property="article:tag" content="21">
 <meta name="twitter:card" content="summary">
@@ -51,9 +51,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>90</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>95</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>19</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>27</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -110,54 +110,63 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="计算量与参数量"><a class="markdownIt-Anchor" href="#计算量与参数量"></a> 计算量与参数量</h1>
-<h2 id="定义"><a class="markdownIt-Anchor" href="#定义"></a> 定义</h2>
+<h2 id="1-定义"><a class="markdownIt-Anchor" href="#1-定义"></a> 1 定义</h2>
 <ol>
-<li>计算量-时间复杂度</li>
+<li>计算量-时间复杂度  <strong>乘法和加发的操作次数</strong></li>
 <li>参数量-空间复杂度</li>
 </ol>
 <h3 id="卷积层"><a class="markdownIt-Anchor" href="#卷积层"></a> 卷积层</h3>
-<p><strong>计算量</strong><br>
-(KxKxWxH) x C_in x C_out</p>
+<p><strong>计算量</strong>: (KxKxWxH) x C_in x C_out</p>
 <blockquote>
 <p>W\H: 输出feature map 的size</p>
 <p>回忆卷积操作过程</p>
 </blockquote>
-<p><strong>参数量</strong></p>
-<p>KxKxC_inxC_out</p>
+<p><strong>参数量</strong>: KxKxC_inxC_out</p>
 <blockquote>
 <p>卷积核的weight</p>
 </blockquote>
 <h3 id="池化层"><a class="markdownIt-Anchor" href="#池化层"></a> 池化层</h3>
-<p><strong>计算量</strong></p>
-<p>不同池化操作不同</p>
+<p><strong>计算量</strong>: 不同池化操作不同 Cin x Cout x W x H x K xK</p>
 <blockquote></blockquote>
-<p><strong>参数量</strong></p>
-<p>无</p>
+<p><strong>参数量</strong>  无</p>
 <h3 id="全连接层"><a class="markdownIt-Anchor" href="#全连接层"></a> 全连接层</h3>
-<p>参数量＝计算量＝weight_in*weight_out</p>
-<h3 id="空洞卷积"><a class="markdownIt-Anchor" href="#空洞卷积"></a> 空洞卷积</h3>
-<p><strong>计算量</strong></p>
+<p>参数量 weight_in*weight_out</p>
+<p>计算量＝ 2 x Cin x Cout</p>
+<h3 id="batchnorm"><a class="markdownIt-Anchor" href="#batchnorm"></a> BatchNorm</h3>
+<p>计算量: 4WHC</p>
+<blockquote></blockquote>
+<p>参数量: 2C</p>
 <blockquote>
-<p>计算出等效K即可</p>
+<p>(y=ax+b) xC</p>
+</blockquote>
+<h3 id="激活函数"><a class="markdownIt-Anchor" href="#激活函数"></a> 激活函数</h3>
+<p>计算量: H×W×C</p>
+<blockquote>
+<p>path个数</p>
 </blockquote>
 <h2 id="硬件需求"><a class="markdownIt-Anchor" href="#硬件需求"></a> 硬件需求</h2>
 <p>计算量的要求是在于芯片的__（指的是gpu的运算能力）</p>
 <p>参数量取决于__大小</p>
-<h2 id="计算量和参数量查看"><a class="markdownIt-Anchor" href="#计算量和参数量查看"></a> 计算量和参数量查看</h2>
+<h3 id="计算量和参数量查看"><a class="markdownIt-Anchor" href="#计算量和参数量查看"></a> 计算量和参数量查看</h3>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40507857/article/details/118764782">https://blog.csdn.net/qq_40507857/article/details/118764782</a></p>
-<h2 id="输入数据对模型的参数量和计算量的影响"><a class="markdownIt-Anchor" href="#输入数据对模型的参数量和计算量的影响"></a> 输入数据对模型的参数量和计算量的影响</h2>
-<h2 id="code实现"><a class="markdownIt-Anchor" href="#code实现"></a> Code实现</h2>
+<h3 id="输入数据对模型的参数量和计算量的影响"><a class="markdownIt-Anchor" href="#输入数据对模型的参数量和计算量的影响"></a> 输入数据对模型的参数量和计算量的影响</h3>
 <h1 id="tf-fp-fn-tn"><a class="markdownIt-Anchor" href="#tf-fp-fn-tn"></a> TF FP FN TN</h1>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/wzk4869/article/details/127879761">https://blog.csdn.net/wzk4869/article/details/127879761</a></p>
 <img src="https://picx.zhimg.com/70/v2-895d6f8e80c0078c92244158dec97bfc_1440w.image?source=172ae18b&biz_tag=Post" alt="深挖一下F1 score (F-measure, F-score)[根据公式分析]" style="zoom:50%;">
 <h2 id="1-准确率precision"><a class="markdownIt-Anchor" href="#1-准确率precision"></a> 1 准确率（Precision）</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
 <h2 id="2-召回率-recall"><a class="markdownIt-Anchor" href="#2-召回率-recall"></a> 2 召回率 (Recall)</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
 <h1 id="目标检测的评价指标"><a class="markdownIt-Anchor" href="#目标检测的评价指标"></a> 目标检测的评价指标</h1>
-<h2 id="iou"><a class="markdownIt-Anchor" href="#iou"></a> IoU</h2>
-<h2 id="f-score"><a class="markdownIt-Anchor" href="#f-score"></a> F Score</h2>
-<p>Precision 与 Recall 看起来很相似，实际上这两个是“冤家”。为什么这么说呢？因为在大多数情况下，这两者有一定的互斥性。</p>
-<p>F Score 是 Precision 和 Recall 的调和平均数 (harmonic mean)</p>
+<h2 id="1-iou"><a class="markdownIt-Anchor" href="#1-iou"></a> 1: IoU</h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="2-f1-score"><a class="markdownIt-Anchor" href="#2-f1-score"></a> 2: F1 Score</h2>
+<p><strong>定义</strong>: F Score 是 Precision 和 Recall 的调和平均数 (harmonic mean)</p>
 <p><img src="/2025/03/14/2025%E5%B9%B43%E6%9C%8815%E6%97%A5-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BB%B7%E6%8C%87%E6%A0%87/image-20250314011150884.png" alt="image-20250314011150884"></p>
+<blockquote>
+<p>Precision 与 Recall 看起来很相似，实际上这两个是“冤家”。为什么这么说呢？因为在大多数情况下，这两者有一定的互斥性。****</p>
+</blockquote>
+<p><strong>作用:</strong></p>
 <h2 id="平均准确度-average-precisionap"><a class="markdownIt-Anchor" href="#平均准确度-average-precisionap"></a> 平均准确度 (Average Precision，AP)</h2>
 
       
@@ -174,17 +183,17 @@
     
 <nav id="article-nav">
   
-    <a href="/2025/03/14/2025%E5%B9%B43%E6%9C%8816%E6%97%A5-DL%E5%85%AB%E8%82%A1%E6%96%87/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2025/03/14/2025%E5%B9%B43%E6%9C%8814%E6%97%A5-%E6%8D%AE%E5%A2%9E%E5%BC%BA%E6%96%B9%E6%B3%95/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">上一篇</strong>
       <div class="article-nav-title">
         
-          2025年3月16日 DL八股文
+          2025年3月14日 数据增强方法
         
       </div>
     </a>
   
   
-    <a href="/2025/03/12/2025%E5%B9%B43%E6%9C%8812%E6%97%A5-onnx3%E7%AE%97%E5%AD%90/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2025/03/12/2025%E5%B9%B43%E6%9C%8812%E6%97%A5-onnx5-%E7%AE%97%E5%AD%90/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">下一篇</strong>
       <div class="article-nav-title">2025年3月12日 onnx问答</div>
     </a>
@@ -235,9 +244,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>90</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>95</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>19</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>27</strong><br>标签</div></a>
     </div>
 
 

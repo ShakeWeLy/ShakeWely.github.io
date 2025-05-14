@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2025年5月5日 torch汇总 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1️⃣ torch.stack(preds_cls) 把 preds_cls 列表拼起来，增加一个新维度。 例子： 12python复制编辑preds_cls &#x3D; [cls1, cls2, cls3]  # 每个 cls shape (B, C, H, W)torch.stack(preds_cls) → (3, B, C, H, W) 等价于 torch.stack(preds_cls, dim">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2025年5月5日 torch汇总">
+<meta property="og:url" content="https://shakewely.github.io/2025/05/05/2025%E5%B9%B45%E6%9C%885%E6%97%A5-torch%E6%B1%87%E6%80%BB/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="1️⃣ torch.stack(preds_cls) 把 preds_cls 列表拼起来，增加一个新维度。 例子： 12python复制编辑preds_cls &#x3D; [cls1, cls2, cls3]  # 每个 cls shape (B, C, H, W)torch.stack(preds_cls) → (3, B, C, H, W) 等价于 torch.stack(preds_cls, dim">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-05-05T02:35:44.000Z">
+<meta property="article:modified_time" content="2025-05-10T11:52:59.990Z">
+<meta property="article:author" content="Weakliy">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>95</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>27</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2025年5月5日-torch汇总" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/05/05/2025%E5%B9%B45%E6%9C%885%E6%97%A5-torch%E6%B1%87%E6%80%BB/" class="article-date">
+  <time class="post-time" datetime="2025-05-05T02:35:44.000Z" itemprop="datePublished">
+    <span class="post-month">5月</span><br/>
+    <span class="post-day">05</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2025年5月5日 torch汇总
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>1️⃣ <strong>torch.stack(preds_cls)</strong><br>
+把 <code>preds_cls</code> 列表拼起来，增加一个新维度。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑preds_cls = [cls1, cls2, cls3]  # 每个 cls shape (B, C, H, W)</span><br><span class="line">torch.stack(preds_cls) → (3, B, C, H, W)</span><br></pre></td></tr></table></figure>
+<p>等价于 <code>torch.stack(preds_cls, dim=0)</code></p>
+<hr>
+<p>2️⃣ <strong>weights_cls.view(-1,1,1,1,1)</strong><br>
+把 <code>(N,)</code> 的权重 reshape 成 <code>(N,1,1,1,1)</code>，为了和 <code>(N, B, C, H, W)</code> 广播相乘。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑weights_cls = torch.tensor([0.2, 0.3, 0.5])  # (3,)</span><br><span class="line">weights_cls.view(-1,1,1,1,1) → (3,1,1,1,1)</span><br></pre></td></tr></table></figure>
+<hr>
+<p>3️⃣ <strong>torch.sum(…, dim=0)</strong><br>
+沿第0维（分支维度）求和，得到融合后的最终预测。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">final_out = torch.sum(preds_cls * weights_cls, dim=0)  # (B, C, H, W)</span><br></pre></td></tr></table></figure>
+<hr>
+<p>4️⃣ <strong>einsum 计算</strong><br>
+用 <code>torch.einsum</code> 表达更紧凑的计算。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">torch.einsum(&#x27;n,nbchw-&gt;bchw&#x27;, weights_cls, preds_cls)</span><br></pre></td></tr></table></figure>
+<p>等价于：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">torch.sum(weights_cls.view(-1,1,1,1,1) * preds_cls, dim=0)</span><br></pre></td></tr></table></figure>
+<hr>
+<p>5️⃣ <strong><em>*init*</em>(512) → forward(z, x)</strong><br>
+初始化 <code>SiameseRPN</code>，512 是 Conv3 的通道数。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑self.rpn3 = SiameseRPN(512)</span><br><span class="line">cls_out, reg_out = self.rpn3(z, x)  # z, x 是 Conv3 特征</span><br></pre></td></tr></table></figure>
+<hr>
+<p>6️⃣ <strong>torch.chunk(x, 2, dim=1)</strong><br>
+把 <code>x</code> 在通道维（dim=1）一分为二。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x1, x2 = torch.chunk(x, 2, dim=1)</span><br><span class="line"># x1, x2 → (B, C//2, H, W)</span><br></pre></td></tr></table></figure>
+<hr>
+<p>7️⃣ <strong>torch.eye(H, device=x.device, dtype=x.dtype)</strong><br>
+生成一个 H × H 的单位矩阵。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">I = torch.eye(H, device=x.device, dtype=x.dtype)  # (H, H)</span><br></pre></td></tr></table></figure>
+<p>8️⃣ <strong>torch.cat(tensors, dim)</strong><br>
+把 tensor 列表按指定维拼接起来（不增加新维度）。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑tensors = [t1, t2, t3]  # 每个 t shape (B, C, H, W)</span><br><span class="line">torch.cat(tensors, dim=1) → (B, C*3, H, W)</span><br></pre></td></tr></table></figure>
+<hr>
+<p>9️⃣ <strong>torch.unsqueeze(x, dim)</strong><br>
+在 dim 位置增加一个新维度。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x.shape → (B, C, H, W)</span><br><span class="line">torch.unsqueeze(x, dim=1) → (B, 1, C, H, W)</span><br></pre></td></tr></table></figure>
+<hr>
+<p>🔟 <strong>torch.squeeze(x, dim)</strong><br>
+去掉 dim 维度上的1维。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x.shape → (B, 1, C, H, W)</span><br><span class="line">torch.squeeze(x, dim=1) → (B, C, H, W)</span><br></pre></td></tr></table></figure>
+<hr>
+<p>1️⃣1️⃣ <strong>torch.permute(x, dims)</strong><br>
+交换维度顺序。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x.shape → (B, C, H, W)</span><br><span class="line">torch.permute(x, (0,2,3,1)) → (B, H, W, C)</span><br></pre></td></tr></table></figure>
+<hr>
+<p>1️⃣2️⃣ <strong>torch.transpose(x, dim0, dim1)</strong><br>
+交换两个维度。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x.shape → (B, C, H, W)</span><br><span class="line">torch.transpose(x, 1, 2) → (B, H, C, W)</span><br></pre></td></tr></table></figure>
+<hr>
+<p>1️⃣3️⃣ <strong>torch.mean(x, dim, keepdim=False)</strong><br>
+在指定维求平均。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x.shape → (B, C, H, W)</span><br><span class="line">torch.mean(x, dim=2) → (B, C, W)</span><br></pre></td></tr></table></figure>
+<hr>
+<p>1️⃣4️⃣ <strong>torch.max(x, dim, keepdim=False)</strong><br>
+在指定维取最大值（返回值和索引）。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑vals, idxs = torch.max(x, dim=2)</span><br><span class="line">vals.shape → (B, C, W)</span><br><span class="line">idxs.shape → (B, C, W)</span><br></pre></td></tr></table></figure>
+<hr>
+<p>1️⃣5️⃣ <strong>torch.clamp(x, min, max)</strong><br>
+把值裁剪到 [min, max] 区间。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x = torch.tensor([-1, 0.5, 2])</span><br><span class="line">torch.clamp(x, 0, 1) → tensor([0., 0.5, 1.])</span><br></pre></td></tr></table></figure>
+<hr>
+<p>1️⃣6️⃣ <strong>torch.where(condition, x, y)</strong><br>
+按条件选择，condition=True 取 x，否则取 y。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑a = torch.tensor([1, 2, 3])</span><br><span class="line">b = torch.tensor([10, 20, 30])</span><br><span class="line">cond = a &gt; 1</span><br><span class="line">torch.where(cond, a, b) → tensor([10, 2, 3])</span><br></pre></td></tr></table></figure>
+<hr>
+<p>1️⃣7️⃣ <strong>torch.linspace(start, end, steps)</strong><br>
+生成等间隔序列。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">torch.linspace(0,1,5) → tensor([0., 0.25, 0.5, 0.75, 1.])</span><br></pre></td></tr></table></figure>
+<hr>
+<p>1️⃣8️⃣ <strong>torch.arange(start, end, step)</strong><br>
+生成等步长序列。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">torch.arange(0,5,1) → tensor([0,1,2,3,4])</span><br></pre></td></tr></table></figure>
+<hr>
+<p>1️⃣9️⃣ <strong>torch.nn.functional.one_hot(indices, num_classes)</strong><br>
+把索引转为 one-hot 编码。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑idx = torch.tensor([0,2,1])</span><br><span class="line">torch.nn.functional.one_hot(idx, num_classes=3) → </span><br><span class="line">tensor([[1,0,0],</span><br><span class="line">        [0,0,1],</span><br><span class="line">        [0,1,0]])</span><br></pre></td></tr></table></figure>
+<hr>
+<p>2️⃣0️⃣ <strong>x.view_as(y)</strong><br>
+把 x reshape 成和 y 相同的形状。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x = torch.arange(6)</span><br><span class="line">y = torch.zeros(2,3)</span><br><span class="line">x.view_as(y) → shape (2,3)</span><br></pre></td></tr></table></figure>
+<p>1️⃣5️⃣ <strong>torch.cuda.amp.autocast</strong><br>
+混合精度推理 / 训练。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑with torch.cuda.amp.autocast():</span><br><span class="line">    output = model(input)</span><br></pre></td></tr></table></figure>
+<hr>
+<p>1️⃣6️⃣ <strong>torch.nn.utils.clip_grad_norm_</strong><br>
+梯度裁剪（防止梯度爆炸）。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)</span><br></pre></td></tr></table></figure>
+<p>inplace=False</p>
+<p>RuntimeError: one of the variables needed for gradient computation has been modified by an inplace operation: [torch.cuda.FloatTensor [32, 2048, 32, 32]], which is output 0 of ReluBackward0, is at version 3; expected version 1 instead. Hint: enable anomaly detection to find the operation that failed to compute its gradient, with torch.autograd.set_detect_anomaly(True).</p>
+<p>RuntimeError: cuDNN error: CUDNN_STATUS_INTERNAL_ERROR</p>
+<p>GPU 内存不足或 CUDA 操作不当导致的。让我们通过以下方式解决这个问题</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">    if is_pretrain:</span><br><span class="line"></span><br><span class="line">​      \# 预训练时使用较小的学习率</span><br><span class="line"></span><br><span class="line">​      self.optimizer = optim.Adam(model.parameters(), lr=1e-5)</span><br><span class="line"></span><br><span class="line">​    else:</span><br><span class="line"></span><br><span class="line">​      \# 微调时使用较大的学习率</span><br><span class="line"></span><br><span class="line">​      self.optimizer = optim.Adam(model.parameters(), lr=1e-4)</span><br></pre></td></tr></table></figure>
+<h3 id="小结"><a class="markdownIt-Anchor" href="#小结"></a> 📍 小结</h3>
+<table>
+<thead>
+<tr>
+<th>占用部分</th>
+<th>推理占比</th>
+<th>训练占比</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>参数</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>特征图</td>
+<td>✅</td>
+<td>✅✅✅</td>
+</tr>
+<tr>
+<td>梯度</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>优化器状态</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>数据缓存</td>
+<td>✅（CPU）</td>
+<td>✅（CPU）</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line">🌟 深度学习中，哪些因素和内存（memory，占比）有关？</span><br><span class="line">这里说的内存主要指 显存（GPU memory），但有些原则也适用于 CPU 内存。</span><br><span class="line"></span><br><span class="line">我们可以把它拆成几部分：</span><br><span class="line"></span><br><span class="line">✅ 1. 模型参数（parameters）</span><br><span class="line">包含权重、偏置（weights, biases），每个参数通常用 float32（4字节）、float16（2字节）等存储。</span><br><span class="line"></span><br><span class="line">只要模型加载到 GPU，就占用固定显存。</span><br><span class="line"></span><br><span class="line">例子：</span><br><span class="line"></span><br><span class="line">YOLOv8n → ~3M 参数，约 12MB (float32)</span><br><span class="line"></span><br><span class="line">YOLOv8x → ~70M 参数，约 280MB (float32)</span><br><span class="line"></span><br><span class="line">→ 和模型规模直接相关，占固定部分显存。</span><br><span class="line"></span><br><span class="line">✅ 2. 中间特征图（feature maps / activations）</span><br><span class="line">网络前向推理中每层产生的输出张量。</span><br><span class="line"></span><br><span class="line">在训练中需要保存这些特征图来做反向传播，因此训练显存需求大约是推理的 2~3 倍。</span><br><span class="line"></span><br><span class="line">这是训练中主要吃显存的部分。</span><br><span class="line"></span><br><span class="line">影响因素：</span><br><span class="line"></span><br><span class="line">输入图像大小（H × W）</span><br><span class="line"></span><br><span class="line">batch size</span><br><span class="line"></span><br><span class="line">模型的通道数、分辨率、层数</span><br><span class="line"></span><br><span class="line">例子：</span><br><span class="line">640×640 图像，batch=1，YOLOv8n 占用 ≈12GB</span><br><span class="line">640×640 图像，batch=8，YOLOv8n 占用 ≈810GB</span><br><span class="line"></span><br><span class="line">✅ 3. 梯度（gradients）</span><br><span class="line">训练时需要为每个参数存储梯度，用于优化器更新权重。</span><br><span class="line"></span><br><span class="line">通常大小 ≈ 参数大小。</span><br><span class="line"></span><br><span class="line">推理时不需要。</span><br><span class="line"></span><br><span class="line">例子：</span><br><span class="line"></span><br><span class="line">参数 100MB → 梯度也大约 100MB</span><br><span class="line"></span><br><span class="line">✅ 4. 优化器状态（optimizer state）</span><br><span class="line">只有训练时才有，例如 Adam 优化器要存动量和方差。</span><br><span class="line"></span><br><span class="line">通常是参数的 2~4 倍大小。</span><br><span class="line"></span><br><span class="line">例子：</span><br><span class="line"></span><br><span class="line">Adam 优化器，100MB 参数 → 额外约 200MB 优化器状态</span><br><span class="line"></span><br><span class="line">✅ 5. 输入数据缓存（data loading buffer）</span><br><span class="line">如果用 dataloader 预加载数据（比如 PyTorch DataLoader 的 num_workers 大、pin_memory=True），可能占用比较多 CPU 内存。</span><br><span class="line"></span><br><span class="line">对 GPU 内存影响较小，但需要注意。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">占用来源	主要和什么有关</span><br><span class="line">模型权重	模型规模（n、s、m、l、x）</span><br><span class="line">输入数据缓存	batch_size, num_workers, 图像分辨率</span><br><span class="line">数据增强	增强方式、复杂程度</span><br><span class="line">推理输出缓存	推理任务规模、是否及时落盘</span><br><span class="line">框架开销	框架本身（PyTorch, TensorFlow）</span><br><span class="line">系统多进程/线程	任务数、进程数、线程数</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>F.</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/05/05/2025%E5%B9%B45%E6%9C%885%E6%97%A5-torch%E6%B1%87%E6%80%BB/" data-id="cmanj8o28000wlcv4bsx0grzy" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2025/05/07/2025%E5%B9%B45%E6%9C%887%E6%97%A5-ReID%E6%B1%87%E6%80%BB/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          2025年5月7日 ReID汇总
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2025年5月4日 yolo细节详解</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>95</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>27</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2024 - 2025 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

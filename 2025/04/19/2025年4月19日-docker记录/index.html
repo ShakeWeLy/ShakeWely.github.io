@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2025年4月19日 docker记录 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="Docker  1 介绍  1.1 dockerfile 包含了构建 Docker 镜像的所有指令 12docker build -t opencv-detection5 .  1.2 compose 从 YML 文件配置中创建并启动所有服务 1docker-compose up -d # 	后台执行  1.3 参数   使用gpu 1docker run --gpus all xx   版本">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2025年4月19日 docker记录">
+<meta property="og:url" content="https://shakewely.github.io/2025/04/19/2025%E5%B9%B44%E6%9C%8819%E6%97%A5-docker%E8%AE%B0%E5%BD%95/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="Docker  1 介绍  1.1 dockerfile 包含了构建 Docker 镜像的所有指令 12docker build -t opencv-detection5 .  1.2 compose 从 YML 文件配置中创建并启动所有服务 1docker-compose up -d # 	后台执行  1.3 参数   使用gpu 1docker run --gpus all xx   版本">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-04-19T01:41:50.000Z">
+<meta property="article:modified_time" content="2025-05-08T11:55:05.338Z">
+<meta property="article:author" content="Weakliy">
+<meta property="article:tag" content="推理部署">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>95</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>27</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2025年4月19日-docker记录" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/04/19/2025%E5%B9%B44%E6%9C%8819%E6%97%A5-docker%E8%AE%B0%E5%BD%95/" class="article-date">
+  <time class="post-time" datetime="2025-04-19T01:41:50.000Z" itemprop="datePublished">
+    <span class="post-month">4月</span><br/>
+    <span class="post-day">19</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2025年4月19日 docker记录
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="docker"><a class="markdownIt-Anchor" href="#docker"></a> Docker</h1>
+<h2 id="1-介绍"><a class="markdownIt-Anchor" href="#1-介绍"></a> 1 介绍</h2>
+<h3 id="11-dockerfile"><a class="markdownIt-Anchor" href="#11-dockerfile"></a> 1.1 dockerfile</h3>
+<p>包含了构建 Docker 镜像的所有指令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker build -t opencv-detection5 .</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="12-compose"><a class="markdownIt-Anchor" href="#12-compose"></a> 1.2 compose</h3>
+<p>从 YML 文件配置中创建并启动所有服务</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose up -d # 	后台执行</span><br></pre></td></tr></table></figure>
+<h3 id="13-参数"><a class="markdownIt-Anchor" href="#13-参数"></a> 1.3 参数</h3>
+<ul>
+<li>
+<p>使用gpu</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --gpus all xx</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>版本</p>
+</li>
+<li>
+<p>容器退出后自动删除，不保留任何数据或文件系统。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run  --rm xx</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="2-部署"><a class="markdownIt-Anchor" href="#2-部署"></a> 2 部署</h2>
+<h3 id="21-部署报错"><a class="markdownIt-Anchor" href="#21-部署报错"></a> 2.1 部署报错</h3>
+<h4 id="1-尝试使用pytorch-但是不支持python312"><a class="markdownIt-Anchor" href="#1-尝试使用pytorch-但是不支持python312"></a> 1 尝试使用pytorch 但是不支持python312</h4>
+<h4 id="2-尝试使用原始pythoncuda-但是cuda安装超时"><a class="markdownIt-Anchor" href="#2-尝试使用原始pythoncuda-但是cuda安装超时"></a> 2 尝试使用原始python+cuda 但是cuda安装超时</h4>
+<h4 id="3-尝试使用pytorch-自己再安装python312-但是遇到好多问题"><a class="markdownIt-Anchor" href="#3-尝试使用pytorch-自己再安装python312-但是遇到好多问题"></a> 3 尝试使用pytorch 自己再安装python312 但是遇到好多问题。</h4>
+<p>​	多了个时区选择，运行的选择python版本，python 3.12没有正确安装pip，在Ubuntu 22.04上安装Python 3.12有问题等等</p>
+<h4 id="4-修改项目代码-使之支持python311"><a class="markdownIt-Anchor" href="#4-修改项目代码-使之支持python311"></a> 4 修改项目代码 使之支持python311</h4>
+<p>​	改写override</p>
+<h4 id="5-项目代码出现问题-linux大小写敏感"><a class="markdownIt-Anchor" href="#5-项目代码出现问题-linux大小写敏感"></a> 5 项目代码出现问题 linux大小写敏感</h4>
+<h4 id="6-清空给缓存-避免占用空间"><a class="markdownIt-Anchor" href="#6-清空给缓存-避免占用空间"></a> 6 清空给缓存 避免占用空间</h4>
+<p>​	删除未使用的容器、镜像、卷</p>
+<p>​	 查看 Docker 空间使用情况</p>
+<p>使用以下命令查看 Docker 各部分占用的空间：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker system df</span><br></pre></td></tr></table></figure>
+<p>清理 Docker 镜像缓存</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker builder prune</span><br></pre></td></tr></table></figure>
+<h3 id="22-发布-hub"><a class="markdownIt-Anchor" href="#22-发布-hub"></a> 2.2  发布 hub</h3>
+<h4 id="push"><a class="markdownIt-Anchor" href="#push"></a> push</h4>
+<p>docker login</p>
+<p>docker tag opencv-detection8.1:latest weakliy/opencv-detection-gaotie:latest<br>
+docker push weakliy/opencv-detection-gaotie:latest</p>
+<h4 id="pull"><a class="markdownIt-Anchor" href="#pull"></a> pull</h4>
+<blockquote>
+<p>其他机器上</p>
+</blockquote>
+<p>docker pull weakliy/opencv-detection-gaotie2:latest<br>
+docker-compose up -d</p>
+<h3 id="23-打包到本地"><a class="markdownIt-Anchor" href="#23-打包到本地"></a> 2.3 打包到本地</h3>
+<p>docker save -o detection.tar opencv-detection7.1:latest</p>
+<p>docker load -i ./detection-gaotie.tar</p>
+<p>docker-compose up</p>
+<h2 id="3-优化"><a class="markdownIt-Anchor" href="#3-优化"></a> 3 优化</h2>
+<h3 id="31-image层优化"><a class="markdownIt-Anchor" href="#31-image层优化"></a> 3.1 image层优化</h3>
+<h4 id="1-层优化减少不必要的层命令和并"><a class="markdownIt-Anchor" href="#1-层优化减少不必要的层命令和并"></a> 1 层优化减少不必要的层+命令和并</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># 不推荐：每个命令都会创建新层</span><br><span class="line">RUN apt-get update</span><br><span class="line">RUN apt-get install -y python3</span><br><span class="line">RUN pip install numpy</span><br><span class="line">RUN pip install opencv-python</span><br><span class="line"></span><br><span class="line"># 推荐：合并RUN命令</span><br><span class="line">RUN apt-get update &amp;&amp; \</span><br><span class="line">    apt-get install -y python3 &amp;&amp; \</span><br><span class="line">    pip install numpy opencv-python &amp;&amp; \</span><br><span class="line">    apt-get clean &amp;&amp; \</span><br><span class="line">    rm -rf /var/lib/apt/lists/*</span><br></pre></td></tr></table></figure>
+<h4 id="2-dockerignore文件"><a class="markdownIt-Anchor" href="#2-dockerignore文件"></a> 2 .dockerignore文件</h4>
+<h4 id="3-及时清理"><a class="markdownIt-Anchor" href="#3-及时清理"></a> 3 及时清理</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+<h4 id><a class="markdownIt-Anchor" href="#"></a> </h4>
+<h4 id="4-优化copy命令-先复制依赖文件安装依赖再复制代码"><a class="markdownIt-Anchor" href="#4-优化copy命令-先复制依赖文件安装依赖再复制代码"></a> 4 优化COPY命令+ 先复制依赖文件，安装依赖，再复制代码</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 推荐：先复制依赖文件，安装依赖，再复制代码</span><br><span class="line">COPY requirements.txt .</span><br><span class="line">RUN pip install -r requirements.txt</span><br><span class="line">COPY . .</span><br></pre></td></tr></table></figure>
+<h4 id="5-两阶段构建"><a class="markdownIt-Anchor" href="#5-两阶段构建"></a> 5 两阶段构建</h4>
+<ol>
+<li>先构建环境+工具</li>
+<li>只copy环境</li>
+</ol>
+<h3 id="32-标签管理"><a class="markdownIt-Anchor" href="#32-标签管理"></a> 3.2 标签管理</h3>
+<p># 方法1：使用–build-arg参数</p>
+<p>docker build --build-arg VERSION=1.0.0 -t opencv-detection .</p>
+<p>docker build --build-arg VERSION=1.1.0 -t opencv-detection .</p>
+<h3 id="docker都休眠了-pip还在安装呢-没内存了"><a class="markdownIt-Anchor" href="#docker都休眠了-pip还在安装呢-没内存了"></a> <strong>docker都休眠了 pip还在安装呢。。。。——没内存了</strong></h3>
+<h2 id="4-报错"><a class="markdownIt-Anchor" href="#4-报错"></a> 4 报错</h2>
+<p>docker export 和load</p>
+<p>open /var/lib/docker/tmp/docker-import-929897693/blobs/json: no such file or directory</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/04/19/2025%E5%B9%B44%E6%9C%8819%E6%97%A5-docker%E8%AE%B0%E5%BD%95/" data-id="cmanj8o25000klcv45461flou" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%8E%A8%E7%90%86%E9%83%A8%E7%BD%B2/" rel="tag">推理部署</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2025/04/24/2025%E5%B9%B44%E6%9C%8824%E6%97%A5-%E8%AE%AD%E7%BB%83%E4%BC%98%E5%8C%96/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          2025年4月24日 训练优化
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2025/04/02/2025%E5%B9%B44%E6%9C%884%E6%97%A5-triton/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2025年4月4日 triton</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>95</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>27</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2024 - 2025 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

@@ -5,16 +5,17 @@
   
   <title>2025年3月10日 C++记录 | Weakliy_Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="C++  基础知识  1 变量作用域  什么是局部变量 ☑️ 什么是全局变量 ☑️ 什么是块作用域，如何实现？ 类？   2 常量？  定义？ 如何定义常量   3 修饰符   修饰符类型   类型限定符：是什么？    static 用于定义静态变量，表示该变量的作用域仅限于当前文件或当前函数内，不会被其他文件或函数访问。     const             4 C++ 存储类 控制变">
+  <meta name="description" content="✨C++  基础知识  1 变量作用域  什么是局部变量 ☑️ 什么是全局变量 ☑️ 什么是块作用域，如何实现？ 类？   2 常量？  定义？ 如何定义常量   3 修饰符   修饰符类型   类型限定符：是什么？    static 用于定义静态变量，表示该变量的作用域仅限于当前文件或当前函数内，不会被其他文件或函数访问。     const             4 C++ 存储类 控制">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2025年3月10日 C++记录">
 <meta property="og:url" content="https://shakewely.github.io/2025/03/10/2025%E5%B9%B43%E6%9C%8810%E6%97%A5-C-%E8%AE%B0%E5%BD%95/index.html">
 <meta property="og:site_name" content="Weakliy_Blog">
-<meta property="og:description" content="C++  基础知识  1 变量作用域  什么是局部变量 ☑️ 什么是全局变量 ☑️ 什么是块作用域，如何实现？ 类？   2 常量？  定义？ 如何定义常量   3 修饰符   修饰符类型   类型限定符：是什么？    static 用于定义静态变量，表示该变量的作用域仅限于当前文件或当前函数内，不会被其他文件或函数访问。     const             4 C++ 存储类 控制变">
+<meta property="og:description" content="✨C++  基础知识  1 变量作用域  什么是局部变量 ☑️ 什么是全局变量 ☑️ 什么是块作用域，如何实现？ 类？   2 常量？  定义？ 如何定义常量   3 修饰符   修饰符类型   类型限定符：是什么？    static 用于定义静态变量，表示该变量的作用域仅限于当前文件或当前函数内，不会被其他文件或函数访问。     const             4 C++ 存储类 控制">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-03-10T05:29:15.000Z">
-<meta property="article:modified_time" content="2025-03-10T06:10:47.843Z">
+<meta property="article:modified_time" content="2025-05-08T11:56:43.518Z">
 <meta property="article:author" content="Weakliy">
+<meta property="article:tag" content="C++">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
@@ -47,9 +48,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>90</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>95</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>19</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>27</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -105,7 +106,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="c"><a class="markdownIt-Anchor" href="#c"></a> C++</h1>
+        <h1 id="c"><a class="markdownIt-Anchor" href="#c"></a> ✨C++</h1>
 <h2 id="基础知识"><a class="markdownIt-Anchor" href="#基础知识"></a> 基础知识</h2>
 <h3 id="1-变量作用域"><a class="markdownIt-Anchor" href="#1-变量作用域"></a> 1 变量作用域</h3>
 <ol>
@@ -165,12 +166,419 @@
 </ul>
 <h3 id="6-lambda-函数与表达式"><a class="markdownIt-Anchor" href="#6-lambda-函数与表达式"></a> 6 Lambda 函数与表达式</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[](int x, int y) -&gt; int &#123; int z = x + y; return z + x; &#125;</span><br></pre></td></tr></table></figure>
+<p>递归+lamda</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">auto dfs = [&amp;](this auto&amp;&amp; dfs, int i, int j) -&gt; int &#123;   // 递归逻辑  &#125;;</span><br></pre></td></tr></table></figure>
 <h3 id="7-c-引用"><a class="markdownIt-Anchor" href="#7-c-引用"></a> 7 C++ 引用</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int a = 10;</span><br><span class="line">int &amp;ref = a;  // ref 是 a 的引用</span><br></pre></td></tr></table></figure>
 <ul>
 <li><code>int &amp;ref</code> 表示 <code>ref</code> 是一个 <code>int</code> 类型的引用。</li>
 <li><code>ref</code> 是 <code>a</code> 的别名，对 <code>ref</code> 的操作会直接作用于 <code>a</code>。</li>
 </ul>
+<h2 id="code-细节"><a class="markdownIt-Anchor" href="#code-细节"></a> code 细节</h2>
+<h4 id="1-越界"><a class="markdownIt-Anchor" href="#1-越界"></a> 1 越界</h4>
+<ul>
+<li><strong>先判断空栈，再取栈顶元素</strong>。<code>if(val &lt; min_stack.back() || min_stack.empty())</code></li>
+</ul>
+<h2 id="std"><a class="markdownIt-Anchor" href="#std"></a> std</h2>
+<h3 id="1-map-和-set"><a class="markdownIt-Anchor" href="#1-map-和-set"></a> 1 map 和 set</h3>
+<table>
+<thead>
+<tr>
+<th>特点</th>
+<th>unordered_map</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>存储</td>
+<td>键值对 (key, value)</td>
+</tr>
+<tr>
+<td>使用场景</td>
+<td>需要存储键值对，例如统计频率，映射关系</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>map[key]</code></td>
+<td>访问 / 插入元素，若 key 不存在会默认插入一个默认值</td>
+</tr>
+<tr>
+<td><code>map.at(key)</code></td>
+<td>访问元素，key 不存在会抛异常</td>
+</tr>
+<tr>
+<td><code>map.insert(&#123;key, value&#125;)</code></td>
+<td>插入键值对</td>
+</tr>
+<tr>
+<td><code>map.emplace(key, value)</code></td>
+<td>就地构造，效率比 <code>insert</code> 更高</td>
+</tr>
+<tr>
+<td><code>map.erase(key)</code></td>
+<td>删除键为 <code>key</code> 的元素</td>
+</tr>
+<tr>
+<td><code>map.clear()</code></td>
+<td>清空所有元素</td>
+</tr>
+<tr>
+<td><code>map.count(key)</code></td>
+<td>判断 key 是否存在，存在返回 1，不存在返回 0</td>
+</tr>
+<tr>
+<td><code>map.find(key)</code></td>
+<td>查找 key，返回迭代器，等于 <code>map.end()</code> 表示没找到</td>
+</tr>
+<tr>
+<td><code>map.size()</code></td>
+<td>返回元素个数</td>
+</tr>
+<tr>
+<td><code>map.empty()</code></td>
+<td>判断是否为空</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>set.insert(key)</code></td>
+<td>插入元素</td>
+</tr>
+<tr>
+<td><code>set.emplace(key)</code></td>
+<td>就地构造，效率更高</td>
+</tr>
+<tr>
+<td><code>set.erase(key)</code></td>
+<td>删除元素</td>
+</tr>
+<tr>
+<td><code>set.clear()</code></td>
+<td>清空元素</td>
+</tr>
+<tr>
+<td><code>set.count(key)</code></td>
+<td>判断元素是否存在，存在返回 1</td>
+</tr>
+<tr>
+<td><code>set.find(key)</code></td>
+<td>查找元素，返回迭代器</td>
+</tr>
+<tr>
+<td><code>set.size()</code></td>
+<td>返回元素个数</td>
+</tr>
+<tr>
+<td><code>set.empty()</code></td>
+<td>判断是否为空</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-vector"><a class="markdownIt-Anchor" href="#2-vector"></a> 2 vector</h3>
+<table>
+<thead>
+<tr>
+<th>功能类别</th>
+<th>函数名</th>
+<th>作用描述</th>
+<th>时间复杂度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>插入</strong></td>
+<td><code>push_back(val)</code></td>
+<td>在 vector 尾部插入元素 <code>val</code></td>
+<td><strong>摊销 O(1)</strong></td>
+</tr>
+<tr>
+<td><strong>删除</strong></td>
+<td><code>pop_back()</code></td>
+<td>删除 vector 尾部元素</td>
+<td><strong>O(1)</strong></td>
+</tr>
+<tr>
+<td><strong>访问</strong></td>
+<td><code>back()</code></td>
+<td>返回 vector 的最后一个元素（不删除）</td>
+<td><strong>O(1)</strong></td>
+</tr>
+<tr>
+<td></td>
+<td><code>front()</code></td>
+<td>返回 vector 的第一个元素（不删除）</td>
+<td><strong>O(1)</strong></td>
+</tr>
+<tr>
+<td></td>
+<td><code>at(index)</code></td>
+<td>返回指定下标元素，带边界检查</td>
+<td><strong>O(1)</strong></td>
+</tr>
+<tr>
+<td></td>
+<td><code>operator[]</code></td>
+<td>返回指定下标元素（不带边界检查）</td>
+<td><strong>O(1)</strong></td>
+</tr>
+<tr>
+<td><strong>状态</strong></td>
+<td><code>empty()</code></td>
+<td>检查 vector 是否为空</td>
+<td><strong>O(1)</strong></td>
+</tr>
+<tr>
+<td></td>
+<td><code>size()</code></td>
+<td>返回 vector 中元素个数</td>
+<td><strong>O(1)</strong></td>
+</tr>
+<tr>
+<td><strong>清空</strong></td>
+<td><code>clear()</code></td>
+<td>清空 vector 所有元素</td>
+<td><strong>O(n)</strong></td>
+</tr>
+<tr>
+<td><strong>其他</strong></td>
+<td><code>resize(n)</code></td>
+<td>调整 vector 大小为 <code>n</code>，默认填充值为零</td>
+<td><strong>O(n)</strong></td>
+</tr>
+<tr>
+<td></td>
+<td><code>reserve(n)</code></td>
+<td>预留空间，避免多次扩容</td>
+<td><strong>O(n)</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="3-字符串操作函数"><a class="markdownIt-Anchor" href="#3-字符串操作函数"></a> 3、字符串操作函数</h3>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>功能</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>s.length()</code> / <code>s.size()</code></td>
+<td>字符串长度</td>
+<td></td>
+</tr>
+<tr>
+<td><code>s.substr(pos, len)</code></td>
+<td>子串</td>
+<td><code>s.substr(0, 3)</code></td>
+</tr>
+<tr>
+<td><code>s.find(sub)</code></td>
+<td>查找子串位置</td>
+<td><code>s.find(&quot;abc&quot;)</code></td>
+</tr>
+<tr>
+<td><code>s.rfind(sub)</code></td>
+<td>反向查找子串位置</td>
+<td></td>
+</tr>
+<tr>
+<td><code>s.erase(pos, len)</code></td>
+<td>删除子串</td>
+<td></td>
+</tr>
+<tr>
+<td><code>s.insert(pos, sub)</code></td>
+<td>插入子串</td>
+<td></td>
+</tr>
+<tr>
+<td><code>s.replace(pos, len, sub)</code></td>
+<td>替换子串</td>
+<td></td>
+</tr>
+<tr>
+<td><code>reverse(s.begin(), s.end())</code></td>
+<td>字符串反转</td>
+<td></td>
+</tr>
+<tr>
+<td><code>sort(s.begin(), s.end())</code></td>
+<td>字符串排序</td>
+<td></td>
+</tr>
+<tr>
+<td><code>toupper(ch)</code> / <code>tolower(ch)</code></td>
+<td>字符大小写转换</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="4-数字cmath"><a class="markdownIt-Anchor" href="#4-数字cmath"></a> 4、数字（<cmath>`）</cmath></h3>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>功能</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>abs(x)</code></td>
+<td>绝对值</td>
+<td><code>abs(-3) // 3</code></td>
+</tr>
+<tr>
+<td><code>pow(a, b)</code></td>
+<td>幂</td>
+<td><code>pow(2, 3) // 8</code></td>
+</tr>
+<tr>
+<td><code>sqrt(x)</code></td>
+<td>开方</td>
+<td><code>sqrt(16) // 4</code></td>
+</tr>
+<tr>
+<td><code>log(x)</code></td>
+<td>自然对数</td>
+<td></td>
+</tr>
+<tr>
+<td><code>log10(x)</code></td>
+<td>以 10 为底的对数</td>
+<td></td>
+</tr>
+<tr>
+<td><code>ceil(x)</code></td>
+<td>向上取整</td>
+<td><code>ceil(2.3) // 3</code></td>
+</tr>
+<tr>
+<td><code>floor(x)</code></td>
+<td>向下取整</td>
+<td><code>floor(2.7) // 2</code></td>
+</tr>
+<tr>
+<td><code>round(x)</code></td>
+<td>四舍五入</td>
+<td><code>round(2.5) // 3</code></td>
+</tr>
+<tr>
+<td><code>max(a, b)</code> / <code>min(a, b)</code></td>
+<td>最大/最小值</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="5-算法algorithm"><a class="markdownIt-Anchor" href="#5-算法algorithm"></a> 5 算法（<code>&lt;algorithm&gt;</code>）</h3>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>功能</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sort(start, end)</code></td>
+<td>排序</td>
+<td></td>
+</tr>
+<tr>
+<td><code>reverse(start, end)</code></td>
+<td>反转</td>
+<td></td>
+</tr>
+<tr>
+<td><code>next_permutation(start, end)</code></td>
+<td>下一个排列</td>
+<td></td>
+</tr>
+<tr>
+<td><code>prev_permutation(start, end)</code></td>
+<td>上一个排列</td>
+<td></td>
+</tr>
+<tr>
+<td><code>lower_bound(start, end, val)</code></td>
+<td>二分查找，返回 ≥val 的首元素迭代器</td>
+<td></td>
+</tr>
+<tr>
+<td><code>upper_bound(start, end, val)</code></td>
+<td>二分查找，返回 &gt;val 的首元素迭代器</td>
+<td></td>
+</tr>
+<tr>
+<td><code>count(start, end, val)</code></td>
+<td>统计元素出现次数</td>
+<td></td>
+</tr>
+<tr>
+<td><code>find(start, end, val)</code></td>
+<td>查找元素</td>
+<td></td>
+</tr>
+<tr>
+<td><code>accumulate(start, end, init)</code></td>
+<td>元素累加 (需 <code>&lt;numeric&gt;</code>)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h1 id="力扣刷题"><a class="markdownIt-Anchor" href="#力扣刷题"></a> 🚀力扣刷题</h1>
+<h2 id="算法设计"><a class="markdownIt-Anchor" href="#算法设计"></a> 算法设计</h2>
+<h3 id="1-快慢指针算法"><a class="markdownIt-Anchor" href="#1-快慢指针算法"></a> 1 快慢指针算法</h3>
+<ol>
+<li>判断循环</li>
+<li>遍历</li>
+</ol>
+<h3 id="2-贪心算法"><a class="markdownIt-Anchor" href="#2-贪心算法"></a> 2 贪心算法</h3>
+<ol>
+<li>一般用在有cost的</li>
+</ol>
+<h3 id="3-动态规划"><a class="markdownIt-Anchor" href="#3-动态规划"></a> 3 动态规划</h3>
+<ol>
+<li>后面的前面已经解决过了// 重后面开始算起，简单的算起</li>
+<li>背包问题 爬楼梯</li>
+<li>滚动数组</li>
+<li>递归【枚举判断初始条件是否正确】–&gt; 变成动态规划  存储前状态变量</li>
+</ol>
+<h3 id="4-滑动窗口思想总结"><a class="markdownIt-Anchor" href="#4-滑动窗口思想总结"></a> 4 滑动窗口思想总结</h3>
+<p><strong>核心思想：</strong><br>
+滑动窗口是一种高效解决「子数组 / 子区间 / 子串」问题的技巧，</p>
+<p>维护窗口大小，缩小当前维护与扩展窗口</p>
+<p>通常用于：</p>
+<ul>
+<li><strong>连续子序列</strong>：比如最长不重复子串、子数组和等。</li>
+<li></li>
+</ul>
+<h3 id="5-用栈追溯"><a class="markdownIt-Anchor" href="#5-用栈追溯"></a> 5 用栈追溯</h3>
+<h3 id="5-链表"><a class="markdownIt-Anchor" href="#5-链表"></a> 5 链表</h3>
+<ol>
+<li>呀节点 避免nullptr的判断 <code>return dummy-&gt;next</code> 即可</li>
+</ol>
+<h2 id="日期记录"><a class="markdownIt-Anchor" href="#日期记录"></a> 🌏日期记录</h2>
 
       
     </div>
@@ -178,13 +586,15 @@
       <a data-url="https://shakewely.github.io/2025/03/10/2025%E5%B9%B43%E6%9C%8810%E6%97%A5-C-%E8%AE%B0%E5%BD%95/" data-id="cm8q1tfhn000ppcv4eds1bem1" class="article-share-link">分享</a>
       
       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/" rel="tag">C++</a></li></ul>
+
     </footer>
   </div>
   
     
 <nav id="article-nav">
   
-    <a href="/2025/03/10/2025%E5%B9%B43%E6%9C%8810%E6%97%A5-onnx2/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2025/03/10/2025%E5%B9%B43%E6%9C%8810%E6%97%A5-onnx3%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">上一篇</strong>
       <div class="article-nav-title">
         
@@ -245,9 +655,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>90</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>95</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>19</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>27</strong><br>标签</div></a>
     </div>
 
 

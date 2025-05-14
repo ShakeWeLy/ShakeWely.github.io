@@ -43,9 +43,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>90</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>95</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>19</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>27</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -71,12 +71,12 @@
 
         <section id="main">
   
-    <article id="post-2025年3月6日-多尺度特征" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2025年4月16日-TensorRT2export汇总" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2025/03/06/2025%E5%B9%B43%E6%9C%886%E6%97%A5-%E5%A4%9A%E5%B0%BA%E5%BA%A6%E7%89%B9%E5%BE%81/" class="article-date">
-  <time class="post-time" datetime="2025-03-06T02:22:16.000Z" itemprop="datePublished">
+    <a href="/2025/03/16/2025%E5%B9%B44%E6%9C%8816%E6%97%A5-TensorRT2export%E6%B1%87%E6%80%BB/" class="article-date">
+  <time class="post-time" datetime="2025-03-16T09:30:04.000Z" itemprop="datePublished">
     <span class="post-month">3月</span><br/>
-    <span class="post-day">06</span>
+    <span class="post-day">16</span>
   </time>
 </a>
    
@@ -88,7 +88,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2025/03/06/2025%E5%B9%B43%E6%9C%886%E6%97%A5-%E5%A4%9A%E5%B0%BA%E5%BA%A6%E7%89%B9%E5%BE%81/">2025年3月6日 多尺度特征</a>
+      <a class="article-title" href="/2025/03/16/2025%E5%B9%B44%E6%9C%8816%E6%97%A5-TensorRT2export%E6%B1%87%E6%80%BB/">2023年11月16日 TensorRT推理汇总</a>
     </h1>
   
 
@@ -103,664 +103,901 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="混合特征学习feature-fusion"><a class="markdownIt-Anchor" href="#混合特征学习feature-fusion"></a> 混合特征学习（Feature Fusion）</h1>
-<p><strong>混合特征学习（Feature Fusion）</strong> 是指将来自不同来源或不同尺度的特征信息结合在一起，从而提升深度学习模型的表达能力。常见的特征融合方法包括 加权融合（Weighted Fusion） 和 级联融合（Concatenation Fusion）。</p>
+        <p>去</p>
+<h3 id><a class="markdownIt-Anchor" href="#"></a> </h3>
+<h1 id="流程"><a class="markdownIt-Anchor" href="#流程"></a> 流程</h1>
+<p><strong>“ONNX → TensorRT Engine → 加载引擎文件并反序列化为可执行模型 → 分配输入输出 → 推理执行 → 拷出结果 → 后处理”</strong></p>
+<blockquote>
+<ol>
+<li>？反序列化为可执行模型</li>
+<li>？？ 创建执行上下文（IExecutionContext）</li>
+</ol>
+</blockquote>
+<h2 id="1-exe-导出"><a class="markdownIt-Anchor" href="#1-exe-导出"></a> 1 Exe 导出</h2>
+<p><strong>加上 <code>--verbose</code></strong> 运行 <code>trtexec</code></p>
+<p>模型汇总</p>
+<table>
+<thead>
+<tr>
+<th>格式</th>
+<th>文件扩展名</th>
+<th>内容</th>
+<th>用途</th>
+<th>生成方式</th>
+<th>可直接推理？</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>WTS</td>
+<td><code>.wts</code></td>
+<td>网络结构各层的权重（文本或二进制）</td>
+<td>通常用于从 PyTorch 到 TensorRT 的自定义转换流程，如通过 C++ 的 API 加载</td>
+<td>通常通过 PyTorch 脚本导出</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>TRT Engine</td>
+<td><code>.trt</code> / <code>.engine</code></td>
+<td>已优化的推理引擎（含网络结构 + 权重 + TensorRT 优化）</td>
+<td>TensorRT 的最终部署格式</td>
+<td>使用 <code>trtexec</code> 或 TensorRT API 编译 <code>.onnx</code> 或 <code>.wts</code> 模型生成</td>
+<td>✅</td>
+</tr>
+</tbody>
+</table>
+<h1 id="问题汇总"><a class="markdownIt-Anchor" href="#问题汇总"></a> 问题汇总</h1>
+<h3 id="️-自定义层问题"><a class="markdownIt-Anchor" href="#️-自定义层问题"></a> ⚠️ 自定义层问题</h3>
+<h4 id="1-eyelike动态形状"><a class="markdownIt-Anchor" href="#1-eyelike动态形状"></a> 1 EyeLike动态形状</h4>
+<p><code>EyeLike</code> 是 ONNX 中一个用于生成单位矩阵的操作。该错误说明：</p>
+<ul>
+<li>你模型中的某个节点使用了 <code>EyeLike</code> 操作；</li>
+<li>但这个操作的输入张量是动态维度（即维度在推理时不固定）；</li>
+<li>而 TensorRT <strong>不支持对动态维度使用 EyeLike</strong>。</li>
+</ul>
+<p><strong>EyeLike 操作</strong>：这是一个自定义层或特殊层，在某些情况下，TensorRT 不支持动态形状。</p>
+<p><strong>动态形状问题</strong>：TensorRT 不支持动态形状的输入（<code>EyeLike</code> 操作的输入是动态形状），这导致了错误。</p>
+<blockquote>
+<p>使用batch 大小不需要变化的minShapes时没用的！</p>
+</blockquote>
+<h3 id="️-动态输入尺寸问题"><a class="markdownIt-Anchor" href="#️-动态输入尺寸问题"></a> ⚠️ 动态输入尺寸问题：</h3>
+<h4 id="1-onnx参数dynamictrue"><a class="markdownIt-Anchor" href="#1-onnx参数dynamictrue"></a> 1 ONNX参数dynamic=True</h4>
+<p>你导出的 ONNX 模型使用了 <strong>动态输入尺寸</strong>（<code>dynamic=True</code>），导致 <code>trtexec</code> 在构建 TensorRT 引擎时需要你<strong>明确地指定输入尺寸 profile</strong>，否则就会报错。</p>
+<p>解决：</p>
+<blockquote>
+<p>trtexec <br>
+–onnx=best_dynamic.onnx <br>
+–saveEngine=best.engine <br>
+–fp16 <br>
+–minShapes=images:1x3x640x640 <br>
+–optShapes=images:8x3x640x640 <br>
+–maxShapes=images:16x3x640x640</p>
+</blockquote>
+<h3 id="️-量化问题"><a class="markdownIt-Anchor" href="#️-量化问题"></a> ⚠️  量化问题</h3>
+<h4 id="1-int64数据"><a class="markdownIt-Anchor" href="#1-int64数据"></a> 1 INT64数据</h4>
+<p>你的 ONNX 模型中包含了一些 <strong><code>INT64</code> 类型的权重或常量</strong>，而 TensorRT <strong>原生只支持 <code>INT32</code> 及以下的整数类型</strong>，因此它尝试<strong>自动将 <code>INT64</code> 转换为 <code>INT32</code></strong>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">onnx2trt_utils.cpp:374: Your ONNX model has been generated with INT64 weights, while TensorRT does not natively support INT64. Attempting to cast down to INT32.</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="️错误"><a class="markdownIt-Anchor" href="#️错误"></a> ⚠️错误</h3>
+<p>[05/13/2025-15:25:59] [TRT] [E] 1: [defaultAllocator.cpp::nvinfer1::internal::DefaultAllocator::deallocate::61] Error Code 1: Cuda Runtime (invalid argument)</p>
+<h1 id="success"><a class="markdownIt-Anchor" href="#success"></a> success！</h1>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">trtexec --onnx=F:\Pydata\DL_NEW\fuxian\ultralytics\runs\detect\wire-Ghost-C3ghost-GSCSP-CBAM3\weights\best_simplify_dynamic=False.onnx --saveEngine=best_int8.trt --int8 --verbose  --minShapes=images:1x3x640x640 --optShapes=images:8x3x640x640 --maxShapes=images:16x3x640x640trtexec ^</span><br><span class="line">--onnx=F:\Pydata\DL_NEW\fuxian\ultralytics\runs\detect\wire-Ghost-C3ghost-GSCSP-CBAM3\weights\best_simplify_dynamic.onnx ^</span><br><span class="line">--saveEngine=best_int8.trt ^</span><br><span class="line">--int8 ^</span><br><span class="line">--verbose ^</span><br><span class="line">--minShapes=images:1x3x640x640 ^</span><br><span class="line">--optShapes=images:8x3x640x640 ^</span><br><span class="line">--maxShapes=images:16x3x640x640</span><br></pre></td></tr></table></figure>
+<p><img src="/2025/03/16/2025%E5%B9%B44%E6%9C%8816%E6%97%A5-TensorRT2export%E6%B1%87%E6%80%BB/C:%5CUsers%5Cadmin%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20250513135551397.png" alt="image-20250513135551397"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/03/16/2025%E5%B9%B44%E6%9C%8816%E6%97%A5-TensorRT2export%E6%B1%87%E6%80%BB/" data-id="cmanj8o27000plcv44xiw84f2" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/TensorRTe/" rel="tag">TensorRTe</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2025年3月16日-DL八股文" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/03/14/2025%E5%B9%B43%E6%9C%8816%E6%97%A5-DL%E5%85%AB%E8%82%A1%E6%96%87/" class="article-date">
+  <time class="post-time" datetime="2025-03-14T06:44:16.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">14</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/03/14/2025%E5%B9%B43%E6%9C%8816%E6%97%A5-DL%E5%85%AB%E8%82%A1%E6%96%87/">2025年3月16日 DL八股文</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>记录一些学了又忘或是没学的DL八股文知识</p>
+</blockquote>
+<h1 id="dl八股文"><a class="markdownIt-Anchor" href="#dl八股文"></a> DL八股文</h1>
+<h1 id="原理"><a class="markdownIt-Anchor" href="#原理"></a> 原理</h1>
+<p>一种基于深层神经网络的机器学习方法，通过多层次的非线性变换自动提取数据特征，实现复杂模式的识别与预测。核心是模仿人脑神经元的连接方式，构建“输入-隐藏-输出”层级的计算模型，从数据中学习从简单到抽象的特征表示</p>
+<h1 id="训练"><a class="markdownIt-Anchor" href="#训练"></a> 训练</h1>
+<blockquote>
+<p>模型训练的核心是通过调整参数（如权重 <em>w</em> 和偏置 <em>b</em>） 最小化损失函数 L</p>
+</blockquote>
+<h2 id="过拟合"><a class="markdownIt-Anchor" href="#过拟合"></a> 过拟合</h2>
+<h3 id="1-什么是过拟合"><a class="markdownIt-Anchor" href="#1-什么是过拟合"></a> 1 什么是过拟合</h3>
+<p>指模型在训练集上表现优异，但在测试集或新数据上泛化能力显著下降的现象。其核心矛盾是模型过度<strong>学习了训练数据中的噪声和非全局性特征</strong>，而非数据背后的真实规律 。</p>
+<h3 id="2-原因"><a class="markdownIt-Anchor" href="#2-原因"></a> 2 原因</h3>
+<ol>
+<li>数据层面：<strong>数据量不足</strong>，导致没有学到全局特征。<strong>噪声干扰</strong>，数据中存在异常值或错误标签，模型误将其作为学习目标</li>
+<li>模型层面：模型过于复杂，<strong>过度适应训练数据细节</strong></li>
+<li>训练层面：迭代次数过多（未早停）或学习率未优化/</li>
+</ol>
+<h3 id="3-如何解决"><a class="markdownIt-Anchor" href="#3-如何解决"></a> 3 如何解决</h3>
 <ol>
 <li>
-<p><strong>加权融合（Weighted Fusion）</strong><br>
-加权融合是一种<strong>将多个特征图进行加权合并</strong>的方式。不同来源或不同尺度的特征图按照一定的权重加权后合并，从而突出重要的特征。</p>
+<p>：数据增强与数据清洗</p>
 </li>
 <li>
-<p><strong>级联融合（Concatenation Fusion）</strong><br>
-级联融合是将多个特征图在<strong>某一维度（通常是通道维度）上拼接</strong>起来。级联融合的优势是它不会丢失任何信息，所有特征图都被保留下来，虽然拼接后的特征图会变得更加庞大。</p>
+<p>：选用简单模型。添加正则化策略，<strong>Dropout</strong>、<strong>批量归一化</strong>BatchNorm、<strong>池化</strong></p>
+</li>
+<li>
+<p>：早停法、动态学习率、</p>
+</li>
+<li>
+<p><strong>集成方法</strong>：结合多个模型的预测结果（如随机森林投票），减少单个模型方差</p>
+<p><strong>迁移学习等</strong></p>
 </li>
 </ol>
-<h2 id="多尺度卷积神经网络ms-cnn"><a class="markdownIt-Anchor" href="#多尺度卷积神经网络ms-cnn"></a> <strong>多尺度卷积神经网络（MS-CNN）</strong></h2>
-<p>通过将图像<strong>输入多个卷积层或卷积核以不同的尺度处理，可以让模型同时捕获到不同尺寸的特征</strong></p>
-<h3 id="原理"><a class="markdownIt-Anchor" href="#原理"></a> 原理</h3>
-<p><strong>MS-CNN</strong> 通过以下几种方式来实现多尺度特征提取：</p>
-<ul>
-<li><strong>使用多个卷积核：不同的卷积核（大小、步长等）可以提取不同尺度的特征。</strong></li>
-<li><strong>多层次网络结构：不同的层次使用不同尺度的卷积操作来处理输入图像，从而提取多尺度信息。</strong></li>
-<li><strong>输入图像的多尺度处理：将同一张图像通过不同尺度（例如不同的图像缩放比例）进行处理，结合多个尺度的特征。</strong></li>
-</ul>
-<h3 id="实现"><a class="markdownIt-Anchor" href="#实现"></a> 实现</h3>
+<h3 id="4-欠拟合呢"><a class="markdownIt-Anchor" href="#4-欠拟合呢"></a> 4 欠拟合呢？</h3>
+<h2 id="训练方法"><a class="markdownIt-Anchor" href="#训练方法"></a> 训练方法</h2>
+<p>训练方法</p>
+<h3 id="1-监督学习"><a class="markdownIt-Anchor" href="#1-监督学习"></a> 1 监督学习</h3>
+<h3 id="3-自监督学习"><a class="markdownIt-Anchor" href="#3-自监督学习"></a> 3 自监督学习</h3>
+<blockquote>
+<p>参考：<a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/1257862?spm=a2c6h.24874632.expert-profile.15.45a63181v37e02%5C">https://developer.aliyun.com/article/1257862?spm=a2c6h.24874632.expert-profile.15.45a63181v37e02\</a></p>
+</blockquote>
+<h4 id="定义"><a class="markdownIt-Anchor" href="#定义"></a> 定义</h4>
+<p>​	它利用未标记的数据来训练模型，而无需人工标注的标签</p>
+<p>​	利用数据中的自动生成的标签或任务来训练模型</p>
+<h4 id="自监督学习方法"><a class="markdownIt-Anchor" href="#自监督学习方法"></a> 自监督学习方法</h4>
+<h3 id="4-zero-shot-one-shot-and-few-shot-learning概念"><a class="markdownIt-Anchor" href="#4-zero-shot-one-shot-and-few-shot-learning概念"></a> 4 Zero-Shot, One-Shot, and Few-Shot Learning概念</h3>
 <ol>
-<li>使用合适的填充和步长，确保不同卷积核提取的特征图在空间维度上一致。</li>
-<li>在通道维度上拼接特征图，避免空间维度的变化。</li>
-<li>使用1×1卷积进行特征融合，进一步整合多尺度信息。</li>
-<li>使用全局池化将特征图调整为固定尺寸，确保输出的一致性</li>
+<li>Zero-Shot是指训练一个模型来对其从未见过的对象进行分类。其核心思想是利用另一个模型的现有知识，以获得新类别的有意义的表示。</li>
+<li>One-Shot是确定图像A是否等同于图像B。这是通过将模型从先前任务的经验中获得的信息进行概括来实现的。</li>
+<li>Few-Shot Learning它是元学习的一个子领域，旨在开发能够从少量有标签示例中学习的算法</li>
 </ol>
-<h2 id="空间金字塔池化spatial-pyramid-pooling-spp"><a class="markdownIt-Anchor" href="#空间金字塔池化spatial-pyramid-pooling-spp"></a> 空间金字塔池化（Spatial Pyramid Pooling, SPP）</h2>
-<h3 id="原理-2"><a class="markdownIt-Anchor" href="#原理-2"></a> 原理</h3>
-<p>在多个尺度上提取特征</p>
+<h2 id="迁移学习微调-️"><a class="markdownIt-Anchor" href="#迁移学习微调-️"></a> 迁移学习+微调 ☑️</h2>
+<h3 id="1-迁移学习"><a class="markdownIt-Anchor" href="#1-迁移学习"></a> 1 迁移学习</h3>
+<p>在大型数据集上训练好的模型可以被“迁移”到新的任务中，从而避免从零开始训练。大地缩短训练时间，并显著提高性能</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 加载预训练的ResNet模型</span></span><br><span class="line">resnet = models.resnet50(pretrained=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="2-微调"><a class="markdownIt-Anchor" href="#2-微调"></a> 2 微调</h3>
 <ul>
-<li><strong>划分不同大小的网格</strong>：将输入特征图划分为多个不同尺寸的子区域（例如，1x1、2x2、4x4等）。</li>
-<li><strong>在每个子区域上执行池化操作</strong>：对每个子区域使用池化操作（如最大池化或平均池化），生成不同尺度下的特征。</li>
-<li><strong>拼接池化结果</strong>：将所有尺度上的池化结果<strong>展平并</strong>拼接成一个向量，作为最终的特征表示。</li>
+<li>通过对预训练模型<strong>进行部分或全部参数的微调</strong>，模型可以适应新任务中的特定数据。微调的程度取决于新任务的相似性和目标。</li>
+<li>通常会冻结模型的部分层，以保留通用的特征提取能力，针对新任务<strong>只对高层</strong>进行微调。</li>
 </ul>
-<h2 id="多尺度注意力机制multi-scale-attention-mechanism"><a class="markdownIt-Anchor" href="#多尺度注意力机制multi-scale-attention-mechanism"></a> 多尺度注意力机制（Multi-Scale Attention Mechanism）</h2>
-<h3 id="原理-3"><a class="markdownIt-Anchor" href="#原理-3"></a> 原理</h3>
-<p>通过注意力机制对图像的不同尺度或区域进行<strong>加权</strong>，帮助网络聚焦于关键区域，从而更有效地提取特征的方法</p>
-<h3 id="实现-2"><a class="markdownIt-Anchor" href="#实现-2"></a> 实现</h3>
-<h4 id="non-local-attention"><a class="markdownIt-Anchor" href="#non-local-attention"></a> <strong>Non-local Attention</strong></h4>
-<h4 id="squeeze-and-excitation-networks-se-net"><a class="markdownIt-Anchor" href="#squeeze-and-excitation-networks-se-net"></a> Squeeze-and-Excitation Networks (SE-Net)</h4>
-<p>SE-Net）是一种通过引入自适应的<strong>通道注意力机制</strong>来提升模型性能的网络。它通过“压缩”和“激励”两个操作来对不同通道的特征进行加权，使得网络能够自适应地学习哪些通道对特定任务更为重要。</p>
-<h5 id="原理-4"><a class="markdownIt-Anchor" href="#原理-4"></a> 原理</h5>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 冻结所有层的参数，以便只微调最后的全连接层</span></span><br><span class="line"><span class="keyword">for</span> param <span class="keyword">in</span> resnet.parameters():</span><br><span class="line">    param.requires_grad = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 解冻部分层，允许更多层进行训练</span></span><br><span class="line"><span class="keyword">for</span> name, param <span class="keyword">in</span> resnet.named_parameters():</span><br><span class="line">    <span class="keyword">if</span> <span class="string">&quot;layer4&quot;</span> <span class="keyword">in</span> name:  <span class="comment"># 假设只解冻ResNet的最后一层</span></span><br><span class="line">        param.requires_grad = <span class="literal">True</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        param.requires_grad = <span class="literal">False</span></span><br></pre></td></tr></table></figure>
+<h2 id="梯度"><a class="markdownIt-Anchor" href="#梯度"></a> 梯度</h2>
+<p><img src="/2025/03/14/2025%E5%B9%B43%E6%9C%8816%E6%97%A5-DL%E5%85%AB%E8%82%A1%E6%96%87/image-20250320184024743.png" alt></p>
+<h3 id="2-梯度稀疏化问题"><a class="markdownIt-Anchor" href="#2-梯度稀疏化问题"></a> 2 梯度稀疏化问题</h3>
+<h4 id="定义-2"><a class="markdownIt-Anchor" href="#定义-2"></a> 定义</h4>
+<p>在深度学习中，梯度是指损失函数对模型参数的偏导数。通过反向传播算法，我们可以计算得到每个参数的梯度，并使用优化算法（如随机梯度下降）来更新参数。然而，在深层神经网络中，梯度通常具有很高的维度，<strong>其中大部分元素都是接近于零或者非常小的值</strong>。这些接近于零的梯度元素对参数更新几乎没有贡献，并且会占用大量内存空间和计算资源。</p>
 <ul>
-<li><strong>Squeeze：通过全局平均池化（Global Average Pooling），将每个通道的空间信息压缩成一个标量。</strong></li>
-<li><strong>Excitation：通过一个全连接层（或者更深的网络）生成通道的权重，这些权重用于调整每个通道的特征响应。</strong></li>
+<li>
+<p>模型更新偏差：仅部分参数被有效更新，可能偏离全局最优解</p>
+</li>
+<li>
+<p>训练不稳定：梯度分布不均加剧收敛震荡</p>
+</li>
 </ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nn.AdaptiveAvgPool2d(1)</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/03/06/2025%E5%B9%B43%E6%9C%886%E6%97%A5-%E5%A4%9A%E5%B0%BA%E5%BA%A6%E7%89%B9%E5%BE%81/" data-id="cm8q1tfhr0013pcv4fmixa517" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2025年3月6日-多尺度训练" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/03/06/2025%E5%B9%B43%E6%9C%886%E6%97%A5-%E5%A4%9A%E5%B0%BA%E5%BA%A6%E8%AE%AD%E7%BB%83/" class="article-date">
-  <time class="post-time" datetime="2025-03-06T01:50:49.000Z" itemprop="datePublished">
-    <span class="post-month">3月</span><br/>
-    <span class="post-day">06</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/03/06/2025%E5%B9%B43%E6%9C%886%E6%97%A5-%E5%A4%9A%E5%B0%BA%E5%BA%A6%E8%AE%AD%E7%BB%83/">2025年3月6日 多尺度训练</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="/2025/03/06/2025%E5%B9%B43%E6%9C%886%E6%97%A5-%E5%A4%9A%E5%B0%BA%E5%BA%A6%E8%AE%AD%E7%BB%83/image-20250306095133429.png" alt="image-20250306095133429"></p>
-<h2 id="全卷积"><a class="markdownIt-Anchor" href="#全卷积"></a> 全卷积</h2>
-<p>除了最后的分类层是全连接层，而特征提取部分都是卷积或者池化操作，它们可以自适应各种尺寸的图像输入。</p>
-<h2 id="spp-net"><a class="markdownIt-Anchor" href="#spp-net"></a> SPP-Net</h2>
-<p>现有的（传统的） CNNs 由于有全连接层所以必须需要固定输入图片的尺寸，比如 224 × 224 。本文为传统的网络结构增加了一个池化策略，即空间金字塔池化，来突破全连接层对整个网络输入图像的约束。无论输入图像的尺寸是多少，SPP-Net 能够产生一个固定长度的特征向量，且能够适应形变，在分类和物体检测任务中都有很好的表现</p>
-<h3 id="空间金字塔池化-spatial-pyramid-pooling"><a class="markdownIt-Anchor" href="#空间金字塔池化-spatial-pyramid-pooling"></a> 空间金字塔池化 spatial pyramid pooling</h3>
-<p>用于解决传统卷积神经网络（CNN）中输入图像尺寸必须固定的问题。通过将特征图划分为不同粒度的区域，并对每个区域进行池化操作，SPP能够生成固定长度的特征向量，从而允许网络处理任意尺寸的输入图像</p>
-<p>空间金字塔池化的加入，使得模型在预测/测试时可以不限定输入图像的大小，同时在训练阶段，也允许模型实现多尺度训练，这一点很有利于增强尺度不变性并降低过拟合的风险。</p>
-<p><strong>输入特征图的尺寸无关，只与池化级别和通道数有关</strong></p>
-<h4 id="原理"><a class="markdownIt-Anchor" href="#原理"></a> <strong>原理</strong></h4>
-<p>SPP将特征图划分为多个不同大小的区域（如1×1、2×2、3×3、6×6等），并对每个区域进行最大池化或平均池化操作。这些池化后的特征被展平并拼接在一起，形成一个固定长度的特征向量</p>
-<h4 id="实现"><a class="markdownIt-Anchor" href="#实现"></a> <strong>实现</strong></h4>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SpatialPyramidPooling2d</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, num_level, pool_type=<span class="string">&#x27;max_pool&#x27;</span></span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        参数:</span></span><br><span class="line"><span class="string">        num_level: 池化层的级别数量（例如，[1, 2, 4]表示3个级别）</span></span><br><span class="line"><span class="string">        pool_type: 池化类型（&#x27;max_pool&#x27; 或 &#x27;avg_pool&#x27;）</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="built_in">super</span>(SpatialPyramidPooling2d, self).__init__()</span><br><span class="line">        self.num_level = num_level</span><br><span class="line">        self.pool_type = pool_type</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        N, C, H, W = x.size()</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(self.num_level):</span><br><span class="line">            level = i + <span class="number">1</span></span><br><span class="line">            kernel_size = (math.ceil(H / level), math.ceil(W / level))</span><br><span class="line">            stride = (math.ceil(H / level), math.ceil(W / level))</span><br><span class="line">            padding = (</span><br><span class="line">                math.floor((kernel_size[<span class="number">0</span>] * level - H + <span class="number">1</span>) / <span class="number">2</span>),</span><br><span class="line">                math.floor((kernel_size[<span class="number">1</span>] * level - W + <span class="number">1</span>) / <span class="number">2</span>)</span><br><span class="line">            )</span><br><span class="line">            <span class="keyword">if</span> self.pool_type == <span class="string">&#x27;max_pool&#x27;</span>:</span><br><span class="line">                tensor = F.max_pool2d(x, kernel_size=kernel_size, stride=stride, padding=padding).view(N, -<span class="number">1</span>)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                tensor = F.avg_pool2d(x, kernel_size=kernel_size, stride=stride, padding=padding).view(N, -<span class="number">1</span>)</span><br><span class="line">            <span class="keyword">if</span> i == <span class="number">0</span>:</span><br><span class="line">                res = tensor</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                res = torch.cat((res, tensor), <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
-<h3 id="2-自适应池化adaptive-pooling"><a class="markdownIt-Anchor" href="#2-自适应池化adaptive-pooling"></a> 2. <strong>自适应池化（Adaptive Pooling）</strong></h3>
-<h4 id="原理-2"><a class="markdownIt-Anchor" href="#原理-2"></a> 原理</h4>
-<p><strong>自适应池化的目标是根据目标输出尺寸自动调整池化窗口和步长，使得输出尺寸保持一致，不依赖于输入的尺寸</strong>。</p>
-<h4 id="实现-2"><a class="markdownIt-Anchor" href="#实现-2"></a> 实现</h4>
-<p><code>nn.AdaptiveAvgPool2d((32, 32))</code></p>
-<p><code>nn.AdaptiveMaxPool2d((32, 32))</code></p>
-<h3 id="3-全局平均池化或全局最大池化global-pooling"><a class="markdownIt-Anchor" href="#3-全局平均池化或全局最大池化global-pooling"></a> 3. <strong>全局平均池化或全局最大池化（Global Pooling）</strong></h3>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/03/06/2025%E5%B9%B43%E6%9C%886%E6%97%A5-%E5%A4%9A%E5%B0%BA%E5%BA%A6%E8%AE%AD%E7%BB%83/" data-id="cm8q1tfhs0017pcv4eo49boxo" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2025年3月5日-图像匹配" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/03/05/2025%E5%B9%B43%E6%9C%885%E6%97%A5-%E5%9B%BE%E5%83%8F%E5%8C%B9%E9%85%8D/" class="article-date">
-  <time class="post-time" datetime="2025-03-05T02:23:20.000Z" itemprop="datePublished">
-    <span class="post-month">3月</span><br/>
-    <span class="post-day">05</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/03/05/2025%E5%B9%B43%E6%9C%885%E6%97%A5-%E5%9B%BE%E5%83%8F%E5%8C%B9%E9%85%8D/">2025年3月5日 图像匹配</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="图像匹配"><a class="markdownIt-Anchor" href="#图像匹配"></a> 图像匹配</h1>
-<h2 id="行人重识别"><a class="markdownIt-Anchor" href="#行人重识别"></a> 行人重识别</h2>
-<h3 id="什么是reid"><a class="markdownIt-Anchor" href="#什么是reid"></a> 什么是ReID</h3>
-<p>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40608730/article/details/115431791%E3%80%81">https://blog.csdn.net/qq_40608730/article/details/115431791、</a></p>
-<p>判断在不同时间段、不同监控下出现的行人图像是否属于同一人员的技术。行人重识别是最近几年在视频分析领域下热门的研究领域，可以看做是人脸识别应用的拓展。</p>
-<p>本质上可以看做是图像匹配任务，比如给你一张要匹配的行人的图，要你从数据库中搜索出此人的其他照片。</p>
-<h4 id="发展"><a class="markdownIt-Anchor" href="#发展"></a> 发展</h4>
-<p>在行人重识别方向上，2005年到2013年间，传统算法一直都占据主要地位；</p>
-<p>自2014年起，深度学习开始慢慢出现在人们的视线中，并在行人再识别研究中取得了显著性的突破，性能指标远超传统算法。</p>
-<p>但是根据最近的发展来看，虽然最新的算法达到甚至超越了人类的水平，但是性能指标又到达了一个平台期，目前的研究方向主要是复杂环境、开放环境以及无监督学习领域。</p>
-<h4 id="难点"><a class="markdownIt-Anchor" href="#难点"></a> <strong>难点</strong></h4>
-<p>数据集<br>
-评价指标<br>
-实现思路<br>
-研究方式</p>
-<p>未来方向</p>
-<hr>
-<h3 id="一般流程"><a class="markdownIt-Anchor" href="#一般流程"></a> 一般流程</h3>
-<p><img src="/2025/03/05/2025%E5%B9%B43%E6%9C%885%E6%97%A5-%E5%9B%BE%E5%83%8F%E5%8C%B9%E9%85%8D/image-20250305102441329.png" alt="image-20250305102441329"></p>
-<h3 id="实现思路"><a class="markdownIt-Anchor" href="#实现思路"></a> 实现思路</h3>
+<h4 id="成因"><a class="markdownIt-Anchor" href="#成因"></a> <strong>成因</strong></h4>
 <ol>
-<li>先抽取特征再进行比对</li>
-<li>检索图经过网络抽取图片特征（Feature）</li>
-<li>检索库里的所有图片全部抽取图片特征（Feature）</li>
-<li>将检索图与检索库图的特征计算距离（例如欧式距离）</li>
-<li>根据计算距离进行排序，排序越靠前表示是相似率越高</li>
+<li><strong>模型结构与激活函数</strong>
+<ul>
+<li>局部激活稀疏性：ReLU等激活函数在输入为负时输出零梯度，导致大量神经元处于“死亡”状态</li>
+<li>深度网络层间依赖：深层网络中矩阵连乘导致梯度衰减或爆炸，加剧稀疏性</li>
+</ul>
+</li>
+<li><strong>优化策略与正则化</strong>
+<ul>
+<li>L1正则化：通过惩罚权重绝对值，强制稀疏参数分布，间接导致梯度稀疏</li>
+<li>梯度裁剪：限制梯度幅值，抑制小梯度更新</li>
+</ul>
+</li>
+<li><strong>训练数据分布</strong>
+<ul>
+<li>数据不均衡：长尾数据导致部分类别梯度贡献微弱</li>
+<li>特征冗余：输入数据中存在大量无关特征，相关梯度趋近于零</li>
+</ul>
+</li>
 </ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/03/05/2025%E5%B9%B43%E6%9C%885%E6%97%A5-%E5%9B%BE%E5%83%8F%E5%8C%B9%E9%85%8D/" data-id="cm8q1tfhx001bpcv4fxdaau4f" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cv/" rel="tag">cv</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2025年3月5日-目标追踪2MOT" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/03/05/2025%E5%B9%B43%E6%9C%885%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA2MOT/" class="article-date">
-  <time class="post-time" datetime="2025-03-05T01:47:13.000Z" itemprop="datePublished">
-    <span class="post-month">3月</span><br/>
-    <span class="post-day">05</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/03/05/2025%E5%B9%B43%E6%9C%885%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA2MOT/">2025年3月5日 目标追踪2MOT</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="sort"><a class="markdownIt-Anchor" href="#sort"></a> SORT</h1>
-<h2 id="sort-2"><a class="markdownIt-Anchor" href="#sort-2"></a> SORT</h2>
-<p><img src="/2025/03/05/2025%E5%B9%B43%E6%9C%885%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA2MOT/image-20250305101803145.png" alt="image-20250305101803145"></p>
-<h2 id="deepsort"><a class="markdownIt-Anchor" href="#deepsort"></a> DeepSORT</h2>
-<p>查看：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_48764574/article/details/138816891%E3%80%81">https://blog.csdn.net/qq_48764574/article/details/138816891、</a></p>
-<h3 id="原理"><a class="markdownIt-Anchor" href="#原理"></a> 原理</h3>
-<p>DeepSORT算法的核心在于其对目标的外观特征和运动特征的联合使用，以及对目标匹配问题的优化处理。该算法通过融合目标检测的结果，结合<strong>匈牙利算法和卡尔曼滤波</strong>等技术，实现对多个目标的持续跟踪。</p>
-<h4 id="步骤"><a class="markdownIt-Anchor" href="#步骤"></a> 步骤</h4>
-<p>目标检测：DeepSORT算法依赖于目标检测器来确定视频中每一帧的目标位置。常用的目标检测器包括YOLO、Faster R-CNN等。检测器的输出通常包括目标的边界框（bounding box）和类别。</p>
-<p>特征提取：DeepSORT使用深度学习模型来提取目标的外观特征。这些特征对于目标的再识别（re-identification，简称Re-ID）至关重要，因为即使目标在视频中被临时遮挡或丢失，这些特征也能帮助算法重新识别和关联目标。</p>
-<p>匹配和跟踪：DeepSORT算法中的匹配过程涉及到计算检测框和预测框之间的相似度，并使用匈牙利算法来找到最优匹配。这个过程还包括卡尔曼滤波器的使用，它根据目标的历史运动信息来预测其在下一帧中的位置。</p>
-<p><img src="/2025/03/05/2025%E5%B9%B43%E6%9C%885%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA2MOT/image-20250305094942817.png" alt="image-20250305094942817"></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/03/05/2025%E5%B9%B43%E6%9C%885%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA2MOT/" data-id="cm8q1tfhr0016pcv43l0wfu5h" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cv/" rel="tag">cv</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2025年3月3日-目标追踪" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA/" class="article-date">
-  <time class="post-time" datetime="2025-03-03T04:40:32.000Z" itemprop="datePublished">
-    <span class="post-month">3月</span><br/>
-    <span class="post-day">03</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA/">2025年3月3日 目标追踪</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="介绍"><a class="markdownIt-Anchor" href="#介绍"></a> 介绍</h1>
-<p>参考:<a target="_blank" rel="noopener" href="https://blog.csdn.net/Lison_Zhu/article/details/100772541%5Chttps://blog.csdn.net/Yaoyao2024/article/details/136625461">https://blog.csdn.net/Lison_Zhu/article/details/100772541\https://blog.csdn.net/Yaoyao2024/article/details/136625461</a></p>
-<h2 id="方法"><a class="markdownIt-Anchor" href="#方法"></a> 方法</h2>
-<p><img src="/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA/image-20250303124416382.png" alt="image-20250303124416382"></p>
-<p>（1）运动模型：如何产生众多的候选样本。</p>
-<p>（2）特征提取：利用何种特征表示目标。</p>
-<p>（3）观测模型：如何为众多候选样本进行评分。</p>
-<p>（4）模型更新：如何更新观测模型使其适应目标的变化。</p>
-<p>（5）集成方法：如何融合多个决策获得一个更优的决策结果。</p>
-<p>**运动模型（Motion Model）：**生成候选样本的速度与质量直接决定了跟踪系统表现的优劣。常用的有两种方法：粒子滤波（Particle Filter）和滑动窗口（Sliding Window）。粒子滤波是一种序贯贝叶斯推断方法，通过递归的方式推断目标的隐含状态。而滑动窗口是一种穷举搜索方法，它列出目标附近的所有可能的样本作为候选样本。</p>
-<p><strong>特征提取（Feature Extractor）:</strong> 鉴别性的特征表示是目标跟踪的关键之一。常用的特征被分为两种类型：手工设计的特征（Hand-crafted feature）和深度特征（Deep feature）。常用的手工设计的特征有灰度特征（Gray），方向梯度直方图（HOG），哈尔特征（Haar-like），尺度不变特征（SIFT）等。与人为设计的特征不同，深度特征是通过大量的训练样本学习出来的特征，它比手工设计的特征更具有鉴别性。因此，利用深度特征的跟踪方法通常很轻松就能获得一个不错的效果。</p>
-<p>**观测模型（Observation Model）😗*大多数的跟踪方法主要集中在这一块的设计上。根据不同的思路，观测模型可分为两类：生成式模型（Generative Model）和判别式模型（Discriminative Model）. 生成式模型通常寻找与目标模板最相似的候选作为跟踪结果，这一过程可以视为模板匹配。常用的理论方法包括：子空间，稀疏表示，字典学习等。而判别式模型通过训练一个分类器去区分目标与背景，选择置信度最高的候选样本作为预测结果。判别式方法已经成为目标跟踪中的主流方法，因为有大量的机器学习方法可以利用。常用的理论方法包括：逻辑回归，岭回归，支持向量机，多示例学习，相关滤波等。</p>
-<p><strong>模型更新（Model Update）:</strong> 模型更新主要是更新观测模型，以适应目标表观的变化，防止跟踪过程发生漂移。模型更新没有一个统一的标准，通常认为目标的表观连续变化，所以常常会每一帧都更新一次模型。但也有人认为目标过去的表观对跟踪很重要，连续更新可能会丢失过去的表观信息，引入过多的噪音，因此利用长短期更新相结合的方式来解决这一问题。</p>
-<p><strong>集成方法（Ensemble Method）:</strong> 集成方法有利于提高模型的预测精度，也常常被视为一种提高跟踪准确率的有效手段。可以把集成方法笼统的划分为两类：在多个预测结果中选一个最好的，或是利用所有的预测加权平均。</p>
-<h2 id="分类"><a class="markdownIt-Anchor" href="#分类"></a> 分类</h2>
-<h2 id="挑战"><a class="markdownIt-Anchor" href="#挑战"></a> 挑战</h2>
-<img src="/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA/image-20250303124957636.png" alt="image-20250303124957636" style="zoom:67%;">
-<h2 id="视觉目标跟踪方法"><a class="markdownIt-Anchor" href="#视觉目标跟踪方法"></a> <strong>视觉目标跟踪方法</strong></h2>
-<p>视觉目标跟踪方法根据观测模型是生成式模型或判别式模型可以被分为生成式方法（Generative Method）和判别式方法（Discriminative Method）。</p>
-<p>前几年最火的生成式跟踪方法大概是稀疏编码（Sparse Coding）了, 而近来判别式跟踪方法逐渐占据了主流地位，以相关滤波（Correlation Filter）和深度学习（Deep Learning）为代表的判别式方法也取得了令人满意的效果。</p>
-<h3 id="生成式模型"><a class="markdownIt-Anchor" href="#生成式模型"></a> 生成式模型</h3>
-<p>在当前帧对目标区域建模，下一帧寻找与模型最相似的区域就是预测位置，与传统的盲搜不同，它利用<strong>相邻帧之间目标位置变化不大</strong>的特点，采用<strong>迭代逼近</strong>的方式提高算法的搜索速度</p>
-<h3 id="判别式模型"><a class="markdownIt-Anchor" href="#判别式模型"></a> 判别式模型</h3>
-<p><img src="/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA/image-20250303131015672.png" alt="image-20250303131015672"></p>
-<h3 id="深度学习方法"><a class="markdownIt-Anchor" href="#深度学习方法"></a> 深度学习方法</h3>
-<p>如基于卷积神经网络（CNN）和<strong>孪生网络</strong>的跟踪器，其实也可以归类为判别式方法，因为它们通常涉及到<strong>训练一个能够区分目标和背景的网络</strong>。</p>
-<h2 id="发展"><a class="markdownIt-Anchor" href="#发展"></a> 发展</h2>
-<img src="/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA/image-20250303125749159.png" style="zoom:50%;">
-<h1 id="基于孪生网络的单目标跟踪siamfc"><a class="markdownIt-Anchor" href="#基于孪生网络的单目标跟踪siamfc"></a> 基于孪生网络的单目标跟踪SiamFC</h1>
-<p>参考:<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43913124/article/details/123403727">https://blog.csdn.net/weixin_43913124/article/details/123403727</a> \https://github.com/rafellerc/Pytorch-SiamFC <a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43913124/article/details/123545157">https://blog.csdn.net/weixin_43913124/article/details/123545157</a></p>
-<img src="https://i-blog.csdnimg.cn/blog_migrate/60f706a822f46b296fa249f17e0d0554.png" alt="结构图2" style="zoom:50%;">
-<h2 id="0-siamfc"><a class="markdownIt-Anchor" href="#0-siamfc"></a> 0 SiamFC</h2>
-<p>Siamese跟踪器<strong>将视觉目标跟踪问题表述为通过学习目标模板和搜索区域的特征表示之间的相互关联来学习通用的相似性映射</strong></p>
-<p><img src="/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA/image-20250303140047653.png" alt="image-20250303140047653"></p>
-<p><strong>AlexNet</strong></p>
-<p><img src="/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA/image-20250303141401445.png" alt="image-20250303141401445"></p>
-<img src="/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA/image-20250303141444947.png" alt="image-20250303141444947" style="zoom:50%;">
-<p>Logistic<strong>损失函数</strong></p>
-<h2 id="1-siamrpn"><a class="markdownIt-Anchor" href="#1-siamrpn"></a> 1 SiamRPN</h2>
-<p>参考:<a target="_blank" rel="noopener" href="https://blog.csdn.net/fzp95/article/details/80982201">https://blog.csdn.net/fzp95/article/details/80982201</a></p>
-<p><strong>RPN</strong></p>
-<p>网络只需要把这些可能含有物体的区域选取出来就可以了，这些被选取出来的区域又叫做ROI （Region of Interests），即感兴趣的区域</p>
-<p>RPN同时也会在feature map上框定这些ROI感兴趣区域的大致位置</p>
-<p><strong>网络结构</strong></p>
-<img src="/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA/image-20250303141905683.png" alt="image-20250303141905683" style="zoom:67%;">
-<p><strong>损失函数</strong></p>
-<p><img src="/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA/image-20250303142721363.png" alt="image-20250303142721363"></p>
-<h3 id="11-dasiamrpn"><a class="markdownIt-Anchor" href="#11-dasiamrpn"></a> 1.1 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/56254712/bo-li.info/DaSiamRPN">DaSiamRPN</a></h3>
+<h4 id="处理方法"><a class="markdownIt-Anchor" href="#处理方法"></a> <strong>处理方法</strong></h4>
+<p><strong>优化算法改进</strong></p>
 <ul>
-<li>基于SiamRPN，主要是提出更好的使用数据，利用更好的训练方式让tracker变得更鲁邦</li>
-<li>有了更好的分数作为指导后，算法可以扩展到Long-term</li>
+<li><strong>动量修正与误差补偿</strong>：如DGC中的Momentum Correction，缓解因稀疏化导致的梯度滞后问题</li>
+<li><strong>自适应优化器</strong>：Adam等算法动态调整学习率，避免小梯度参数被完全抑制</li>
 </ul>
-<h3 id="12-vot2018-entry-siamrpn"><a class="markdownIt-Anchor" href="#12-vot2018-entry-siamrpn"></a> 1.2 <a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=100630994&amp;content_type=Article&amp;match_order=1&amp;q=VOT2018&amp;zhida_source=entity">VOT2018</a> entry SiamRPN</h3>
+<p><strong>数据与训练策略调整</strong></p>
 <ul>
-<li>基于DaSiamRPN，想通过增强backbone来提升性能，但没能实现，最终通过加厚alexnet提升性能。加厚虽然临时的提升了网络的性能，但网络依然很浅，同时还极大的增加了模型参数量以及计算量。（模型加厚一倍，实际上模型和计算量增加四倍）</li>
+<li><strong>数据增强与重采样</strong>：平衡类别分布，提升尾部数据的梯度贡献</li>
+<li><strong>渐进式稀疏训练</strong>：初期保留更多梯度，逐步增加稀疏率以避免过早信息丢失</li>
 </ul>
-<h2 id="2-siamrpn"><a class="markdownIt-Anchor" href="#2-siamrpn"></a> 2 SiamRPN++</h2>
-<p>参考:<a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_63294504/article/details/145073446%5Chttps://zhuanlan.zhihu.com/p/56254712">https://blog.csdn.net/m0_63294504/article/details/145073446\https://zhuanlan.zhihu.com/p/56254712</a></p>
-<p><strong>打破了<strong><strong>Siamese</strong></strong>网络在目标跟踪时无法使用深度复杂网络</strong>**(VGG****、<strong><strong>ResNet</strong></strong>、**<strong>MobileNet)<strong><strong>的限制</strong></strong>原因来自于对严格平移不变性的破坏</strong></p>
-<p>入了一种**简单而有效的采样策略****(<strong><strong>说白了就是增加了随机平移</strong></strong>shft)**来打破Siamese跟踪器的空间不变性限制 <a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_63294504/article/details/145072710?spm=1001.2014.3001.5501">什么是卷积网络中的平移不变性？平移shft在数据增强中的意义-CSDN博客</a></p>
-<p>提出了一种<strong>分层特征强化结构</strong>用于相互关联操作</p>
-<p>要贡献如下:</p>
-<p>1.我们对Siamese跟踪器进行了深入的分析，并证明了当使用深度网络时，准确性的降低来自于严格的平移不变性的破坏。</p>
-<p>2.我们提出了一种简单而有效的采样策略来打破空间不变性的限制，成功地训练了由ResNet架构驱动的Siamese跟踪器。</p>
-<p>3.我们提出了一种分层特征聚合结构，用于相互关联操作，这有助于跟踪器从多层学习的特征中预测相似的映射。</p>
-<p>4.我们提出了一种深度可分离相关结构，以增强相互关联，从而产生与不同语义相关的多个相似映射。<br>
-————————————————</p>
-<p><img src="/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA/image-20250303144709836.png" alt="image-20250303144709836"></p>
-<h2 id="3-网络更新"><a class="markdownIt-Anchor" href="#3-网络更新"></a> 3 网络更新</h2>
-<h2 id="4-模板更新"><a class="markdownIt-Anchor" href="#4-模板更新"></a> 4 模板更新</h2>
-<h2 id="5-回归更新"><a class="markdownIt-Anchor" href="#5-回归更新"></a> 5 回归更新</h2>
-<h1 id="基于相关滤波_pass"><a class="markdownIt-Anchor" href="#基于相关滤波_pass"></a> 基于相关滤波_pass</h1>
-<h1 id="基于深度学习的目标检测与再识别detection-based-tracking"><a class="markdownIt-Anchor" href="#基于深度学习的目标检测与再识别detection-based-tracking"></a> <strong>基于深度学习的目标检测与再识别（Detection-based Tracking）</strong></h1>
-<p>这类方法利用目标检测器（如Faster R-CNN、YOLO）在每一帧中检测目标，并使用Re-ID（再识别）模型或光流估计方法进行目标匹配。</p>
-<h1 id="基于视觉transformervit-vision-transformer"><a class="markdownIt-Anchor" href="#基于视觉transformervit-vision-transformer"></a> <strong>基于视觉Transformer（ViT, Vision Transformer）</strong></h1>
-<p>deepsort</p>
-<h1 id><a class="markdownIt-Anchor" href="#"></a> </h1>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA/" data-id="cm8q1tfhq0012pcv42b50acci" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cv/" rel="tag">cv</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2025年2月19日-CRNN模型" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/" class="article-date">
-  <time class="post-time" datetime="2025-02-19T06:46:09.000Z" itemprop="datePublished">
-    <span class="post-month">2月</span><br/>
-    <span class="post-day">19</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/">2025年2月19日 CRNN模型</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="ocr"><a class="markdownIt-Anchor" href="#ocr"></a> OCR</h1>
-<h2 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h2>
-<p>CRNN主要是<strong>CNN（卷积神经网络）+ RNN（循环神经网络）+ CTC（连接时序分类）</strong> 的组合，广泛用于 <strong>场景文本识别（STR, Scene Text Recognition）</strong></p>
-<p><img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219145436243.png" alt="image-20250219145436243"></p>
-<p>在早期，OCR任务通常分为两个步骤：单字切割和分类任务。首先，使用投影法等技术将文本文件中的连续文字切割成单个字符，然后将这些字符输入到卷积神经网络（CNN）中进行分类。然而，这种方法现在已经有些过时。</p>
-<p>目前更流行的方法是基于深度学习的端到端的文本识别，这种方法不需要显式地进行文字切割。而是将文字识别转化为序列学习问题。尽管输入的图像尺度和文本长度可能不同，但是通过深度卷积神经网络（DCNN）和循环神经网络（RNN）的处理，以及在输出阶段应用一定的连接时序分类（CTC）翻译转录后，就可以对整个文本图像进行识别。这意味着文字的切割过程已经被融入到深度学习模型中，从而简化了整个OCR流程。</p>
-<p>深度学习在端到端OCR（光学字符识别）技术中的应用，特别是CRNN OCR和attention OCR两种技术。这两种技术都使用了CNN+RNN的网络结构进行特征学习，但在最后的输出层（翻译层）有所不同。CRNN OCR使用CTC（连接时序分类）算法进行序列对齐，而attention OCR则采用attention机制来进行序列对齐。文件中提到，CRNN算法应用更为广泛，因此主要介绍的是CRNN算法。</p>
-<h2 id="crnn"><a class="markdownIt-Anchor" href="#crnn"></a> CRNN</h2>
-<h3 id="网络结构"><a class="markdownIt-Anchor" href="#网络结构"></a> 网络结构</h3>
-<img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219150224189.png" style="zoom: 50%;">
-<h4 id="1cnn"><a class="markdownIt-Anchor" href="#1cnn"></a> 1.CNN</h4>
-<img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219150328966.png" alt="image-20250219150328966" style="zoom: 33%;">
-<h5 id="1x2-池化"><a class="markdownIt-Anchor" href="#1x2-池化"></a> 1x2 池化</h5>
-<h4 id="2map2feature-sequence"><a class="markdownIt-Anchor" href="#2map2feature-sequence"></a> 2.Map2Feature sequence</h4>
-<p><img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219150833633.png" alt="image-20250219150833633"></p>
-<img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219150936041.png" alt="image-20250219150936041" style="zoom:50%;">
-<h4 id="3rnn"><a class="markdownIt-Anchor" href="#3rnn"></a> 3.RNN</h4>
-<h5 id="lstm"><a class="markdownIt-Anchor" href="#lstm"></a> LSTM</h5>
-<img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219150959428.png" alt="image-20250219150959428" style="zoom: 50%;">
-<h5 id="双向lstm"><a class="markdownIt-Anchor" href="#双向lstm"></a> 双向LSTM</h5>
-<h5 id><a class="markdownIt-Anchor" href="#"></a> </h5>
-<h4 id="4ctcloss"><a class="markdownIt-Anchor" href="#4ctcloss"></a> 4.CTCLoss</h4>
-<img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219154341960.png" alt="image-20250219154341960" style="zoom: 80%;">
-<p>如上图，对于最简单的时序为 2 的字符识别，有两个时间步长(t0，t1)和三个可能的字符为“ａ”，“ｂ”和“-”，我们得到两个概率分布向量，如果采取最大概率路径解码的方法，则“–”的概率最大，即真实字符为空的概率为0.6*0.6=0.36。</p>
-<p>但是为字符“ａ”的情况有多种对齐组合，“aa”, “a-“和“-a”都是代表“ａ”，所以，输出“ａ”的概率应该为三种之和：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0.4 * 0.4 + 0.4 * 0.6 + 0.6 * 0.4 = 0.16 + 0.24 + 0.24 = 0.64</span><br></pre></td></tr></table></figure>
-<h4 id="5attention"><a class="markdownIt-Anchor" href="#5attention"></a> 5.Attention</h4>
-<p>基于Attention的OCR解码算法，把OCR文字识别当成文字翻译任务，即通过Attention Decoder出文字序列。</p>
-<h5 id="rnn-seq2seq"><a class="markdownIt-Anchor" href="#rnn-seq2seq"></a> <strong>RNN -&gt; Seq2Seq</strong></h5>
-<p><img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219155949098.png" alt="image-20250219155949098"></p>
-<p>左图是经典的RNN结构，右图是Seq2Seq结构。RNN的输入序列和输出序列必须有相同的时间长度，而机器翻译以及文字识别任务都是输入输出不对齐的，不能直接使用RNN结构进行解码。于是在Seq2Seq结构中，将输入序列进行Encoder编码成一个统一的语义向量Context，然后送入Decoder中一个一个解码出输出序列。在Decoder解码过程中，第一个输入字符为<start>，然后不断将前一个时刻的输出作为下一个时刻的输入，循环解码，直到输出<stop></stop>字符为止</start></p>
-<p><strong>Seq2Seq -&gt; Attention Decoder</strong></p>
-<img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219160050009.png" alt="image-20250219160050009" style="zoom: 50%;">
-<p>Seq2Seq把所有的输入序列都编码成一个统一的语义向量Context，然后再由Decoder解码。由于context包含原始序列中的所有信息，它的长度就成了限制模型性能的瓶颈。</p>
-<p>所以如果要改进Seq2Seq结构，最好的切入角度就是：**利用Encoder所有隐藏层状态解决Context长度限制问题。**于是Attention Decoder在Seq2Seq的基础上，增加了一个Attention Layer，如上图所示。</p>
-<img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219160149932.png" alt="image-20250219160149932" style="zoom: 50%;">
-<p>在Decoder时，每个时刻的解码状态跟Encoder的所有隐藏层状态进行cross-attention计算，cross-attention将当前解码的隐藏层状态和encoder的所有隐藏层状态做相关性计算，然后对encoder的所有隐藏层加权求和，最后和当前解码的隐藏层状态concat得到最终的状态。</p>
-<h4 id="6ace"><a class="markdownIt-Anchor" href="#6ace"></a> 6.ACE</h4>
-<p>基于ACE的解码方法不同于CTC和Attention，ACE的监督信号实际上是一种弱监督(<strong>输入输出没有做形式上的对齐，没有先后顺序信息，倾向于学习表征</strong>)，并且可以用于多行文字识别。</p>
-<p><img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219160702221.png" alt="image-20250219160702221"></p>
-<p><img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219160636874.png" alt="image-20250219160636874"></p>
-<p>从模型设计上来看，可以采用结合上面3种方法的**多任务文本识别模型。在训练时，以CTC为主，Attention Decoder和ACE辅助训练。在预测时，考虑到速度和性能，只采用CTC进行解码预测。**多任务可以提高模型的泛化性，同时如果对预测时间要求不高，多结果也可以提供更多的选择和对比。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    Encoder+Decoder+Attention is implemented from:</span></span><br><span class="line"><span class="string">    https://pytorch.org/tutorials/intermediate/seq2seq_translation_tutorial.html</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CNN</span>(nn.Module):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, channel_size</span>):</span><br><span class="line">        <span class="built_in">super</span>(CNN, self).__init__()</span><br><span class="line">        self.cnn = nn.Sequential(</span><br><span class="line">                      nn.Conv2d(channel_size, <span class="number">64</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">1</span>), nn.ReLU(<span class="literal">True</span>), nn.MaxPool2d(<span class="number">2</span>, <span class="number">2</span>),</span><br><span class="line">                      nn.Conv2d(<span class="number">64</span>, <span class="number">128</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">1</span>), nn.ReLU(<span class="literal">True</span>), nn.MaxPool2d(<span class="number">2</span>, <span class="number">2</span>),</span><br><span class="line">                      nn.Conv2d(<span class="number">128</span>, <span class="number">256</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">1</span>), nn.BatchNorm2d(<span class="number">256</span>), nn.ReLU(<span class="literal">True</span>),</span><br><span class="line">                      nn.Conv2d(<span class="number">256</span>, <span class="number">256</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">1</span>), nn.ReLU(<span class="literal">True</span>), nn.MaxPool2d((<span class="number">2</span>,<span class="number">2</span>), (<span class="number">2</span>,<span class="number">1</span>), (<span class="number">0</span>,<span class="number">1</span>)),</span><br><span class="line">                      nn.Conv2d(<span class="number">256</span>, <span class="number">512</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">1</span>), nn.BatchNorm2d(<span class="number">512</span>), nn.ReLU(<span class="literal">True</span>),</span><br><span class="line">                      nn.Conv2d(<span class="number">512</span>, <span class="number">512</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">1</span>), nn.ReLU(<span class="literal">True</span>), nn.MaxPool2d((<span class="number">2</span>,<span class="number">2</span>), (<span class="number">2</span>,<span class="number">1</span>), (<span class="number">0</span>,<span class="number">1</span>)),</span><br><span class="line">                      nn.Conv2d(<span class="number">512</span>, <span class="number">512</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">0</span>), nn.BatchNorm2d(<span class="number">512</span>), nn.ReLU(<span class="literal">True</span>))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, <span class="built_in">input</span></span>):</span><br><span class="line">        <span class="comment"># [n, channel_size, 32, 280] -&gt; [n, 512, 1, 71]</span></span><br><span class="line">        conv = self.cnn(<span class="built_in">input</span>)</span><br><span class="line">        <span class="keyword">return</span> conv</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">BidirectionalLSTM</span>(nn.Module):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, input_size, hidden_size, output_size</span>):</span><br><span class="line">        <span class="built_in">super</span>(BidirectionalLSTM, self).__init__()</span><br><span class="line"></span><br><span class="line">        self.rnn = nn.LSTM(input_size, hidden_size, bidirectional=<span class="literal">True</span>)</span><br><span class="line">        self.embedding = nn.Linear(hidden_size * <span class="number">2</span>, output_size)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, <span class="built_in">input</span></span>):</span><br><span class="line">        recurrent, _ = self.rnn(<span class="built_in">input</span>)</span><br><span class="line">        T, b, h = recurrent.size()</span><br><span class="line">        t_rec = recurrent.view(T * b, h)</span><br><span class="line"></span><br><span class="line">        output = self.embedding(t_rec)  <span class="comment"># [T * b, output_size]</span></span><br><span class="line">        output = output.view(T, b, -<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> output</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">AttnDecoderRNN</span>(nn.Module):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, hidden_size, output_size, dropout_p=<span class="number">0.1</span>, max_length=<span class="number">71</span></span>):</span><br><span class="line">        <span class="built_in">super</span>(AttnDecoderRNN, self).__init__()</span><br><span class="line">        self.hidden_size = hidden_size</span><br><span class="line">        self.output_size = output_size</span><br><span class="line">        self.dropout_p = dropout_p</span><br><span class="line">        self.max_length = max_length</span><br><span class="line"></span><br><span class="line">        self.embedding = nn.Embedding(self.output_size, self.hidden_size)</span><br><span class="line">        self.attn = nn.Linear(self.hidden_size * <span class="number">2</span>, self.max_length)</span><br><span class="line">        self.attn_combine = nn.Linear(self.hidden_size * <span class="number">2</span>, self.hidden_size)</span><br><span class="line">        self.dropout = nn.Dropout(self.dropout_p)</span><br><span class="line">        self.gru = nn.GRU(self.hidden_size, self.hidden_size)</span><br><span class="line">        self.out = nn.Linear(self.hidden_size, self.output_size)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, <span class="built_in">input</span>, hidden, encoder_outputs</span>):</span><br><span class="line">        embedded = self.embedding(<span class="built_in">input</span>)</span><br><span class="line">        embedded = self.dropout(embedded)</span><br><span class="line"></span><br><span class="line">        attn_weights = F.softmax(self.attn(torch.cat((embedded, hidden[<span class="number">0</span>]), <span class="number">1</span>)), dim=<span class="number">1</span>)</span><br><span class="line">        attn_applied = torch.bmm(attn_weights.unsqueeze(<span class="number">1</span>), encoder_outputs.permute(<span class="number">1</span>, <span class="number">0</span>, <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">        output = torch.cat((embedded, attn_applied.squeeze(<span class="number">1</span>)), <span class="number">1</span>)</span><br><span class="line">        output = self.attn_combine(output).unsqueeze(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">        output = F.relu(output)</span><br><span class="line">        output, hidden = self.gru(output, hidden)</span><br><span class="line"></span><br><span class="line">        output = F.log_softmax(self.out(output[<span class="number">0</span>]), dim=<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> output, hidden, attn_weights</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">initHidden</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> torch.zeros(<span class="number">1</span>, <span class="number">1</span>, self.hidden_size, device=device)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Encoder</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, channel_size, hidden_size</span>):</span><br><span class="line">        <span class="built_in">super</span>(Encoder, self).__init__()</span><br><span class="line">        self.cnn = CNN(channel_size)</span><br><span class="line">        self.rnn = nn.Sequential(</span><br><span class="line">            BidirectionalLSTM(<span class="number">512</span>, hidden_size, hidden_size),</span><br><span class="line">            BidirectionalLSTM(hidden_size, hidden_size, hidden_size))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, <span class="built_in">input</span></span>):</span><br><span class="line">        <span class="comment"># conv features</span></span><br><span class="line">        conv = self.cnn(<span class="built_in">input</span>)</span><br><span class="line">        b, c, h, w = conv.size()</span><br><span class="line">        <span class="keyword">assert</span> h == <span class="number">1</span>, <span class="string">&quot;the height of conv must be 1&quot;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># rnn feature</span></span><br><span class="line">        conv = conv.squeeze(<span class="number">2</span>)        <span class="comment"># [b, c, 1, w] -&gt; [b, c, w]</span></span><br><span class="line">        conv = conv.permute(<span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>)  <span class="comment"># [b, c, w] -&gt; [w, b, c]</span></span><br><span class="line">        output = self.rnn(conv)</span><br><span class="line">        <span class="keyword">return</span> output</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Decoder</span>(nn.Module):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, hidden_size, output_size, dropout_p=<span class="number">0.1</span>, max_length=<span class="number">71</span></span>):</span><br><span class="line">        <span class="built_in">super</span>(Decoder, self).__init__()</span><br><span class="line">        self.hidden_size = hidden_size</span><br><span class="line">        self.decoder = AttnDecoderRNN(hidden_size, output_size, dropout_p, max_length)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, <span class="built_in">input</span>, hidden, encoder_outputs</span>):</span><br><span class="line">        <span class="keyword">return</span> self.decoder(<span class="built_in">input</span>, hidden, encoder_outputs)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">initHidden</span>(<span class="params">self, batch_size</span>):</span><br><span class="line">        result = torch.autograd.Variable(torch.zeros(<span class="number">1</span>, batch_size, self.hidden_size))</span><br><span class="line">        <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="model改进"><a class="markdownIt-Anchor" href="#model改进"></a> Model改进</h2>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/" data-id="cm8q1tfhm000mpcv41rh6e84u" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2025年2月19日-pytorch2" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-pytorch2/" class="article-date">
-  <time class="post-time" datetime="2025-02-19T03:10:27.000Z" itemprop="datePublished">
-    <span class="post-month">2月</span><br/>
-    <span class="post-day">19</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-pytorch2/">2025年2月19日 pytorch2</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>TorchScript是PyTorch中实现**即时编译（JIT）**的核心工具，它通过将动态图模型转换为静态图形式，解决了PyTorch模型在部署、性能优化和多平台支持等方面的关键问题</p>
-<p><strong>即时编译（JIT）</strong>：一种程序优化技术，通过将代码在运行时编译为机器码来提升性能。PyTorch JIT通过TorchScript实现这一机制</p>
-<p>动态图是在运行时动态构建计算图，允许灵活修改，适合开发和调试；</p>
-<p>而静态图是预先定义完整的计算图，然后进行优化和执行，适合部署和性能优化</p>
-<p>例如，PyTorch的动态图允许在训练循环中修改模型结构，而TensorFlow的静态图一旦编译后无法更改。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-pytorch2/" data-id="cm8q1tfhh000jpcv4fh4o5snj" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2025年2月14日-推理框架2" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/02/13/2025%E5%B9%B42%E6%9C%8814%E6%97%A5-%E6%8E%A8%E7%90%86%E6%A1%86%E6%9E%B62/" class="article-date">
-  <time class="post-time" datetime="2025-02-13T14:12:11.000Z" itemprop="datePublished">
-    <span class="post-month">2月</span><br/>
-    <span class="post-day">13</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/02/13/2025%E5%B9%B42%E6%9C%8814%E6%97%A5-%E6%8E%A8%E7%90%86%E6%A1%86%E6%9E%B62/">2025年2月14日 推理框架2——MNN</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="mnn"><a class="markdownIt-Anchor" href="#mnn"></a> MNN</h1>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/02/13/2025%E5%B9%B42%E6%9C%8814%E6%97%A5-%E6%8E%A8%E7%90%86%E6%A1%86%E6%9E%B62/" data-id="cm8q1tfhm000npcv4gkf71mcg" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2025年2月13日-推理框架" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/02/13/2025%E5%B9%B42%E6%9C%8813%E6%97%A5-%E6%8E%A8%E7%90%86%E6%A1%86%E6%9E%B6/" class="article-date">
-  <time class="post-time" datetime="2025-02-13T06:43:20.000Z" itemprop="datePublished">
-    <span class="post-month">2月</span><br/>
-    <span class="post-day">13</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/02/13/2025%E5%B9%B42%E6%9C%8813%E6%97%A5-%E6%8E%A8%E7%90%86%E6%A1%86%E6%9E%B6/">2025年2月13日 推理框架1-OpenVINO</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="openvino"><a class="markdownIt-Anchor" href="#openvino"></a> OpenVINO</h2>
-<h2 id="introduce"><a class="markdownIt-Anchor" href="#introduce"></a> Introduce</h2>
-<h3 id="openvino-工具"><a class="markdownIt-Anchor" href="#openvino-工具"></a> OpenVINO 工具</h3>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://github.com/openvinotoolkit/nncf">神经网络压缩框架 （NNCF）</a> - 高级模型优化技术，包括量化、滤波器修剪、二值化和稀疏性。</li>
-<li><a target="_blank" rel="noopener" href="https://github.com/openvinotoolkit/openvino.genai">GenAI 存储库</a>和 <a target="_blank" rel="noopener" href="https://github.com/openvinotoolkit/openvino_tokenizers">OpenVINO Tokenizers</a> - 用于开发和优化生成式 AI 应用程序的资源和工具。</li>
-<li><a target="_blank" rel="noopener" href="https://github.com/openvinotoolkit/model_server">OpenVINO™ 模型服务器 （OVMS）</a> - 一种可扩展的高性能解决方案，用于为针对 Intel 架构优化的模型提供服务。</li>
-<li><a target="_blank" rel="noopener" href="https://geti.intel.com/">Intel® Geti™</a> - 适用于计算机视觉用例的交互式视频和图像注释工具。</li>
-</ul>
-<h3 id="如何优化的"><a class="markdownIt-Anchor" href="#如何优化的"></a> 如何优化的</h3>
-<img src="/2025/02/13/2025%E5%B9%B42%E6%9C%8813%E6%97%A5-%E6%8E%A8%E7%90%86%E6%A1%86%E6%9E%B6/image-20250213215109749.png" alt="image-20250213215109749"> 
+<h4 id="应用"><a class="markdownIt-Anchor" href="#应用"></a> 应用</h4>
 <ol>
-<li>模型压缩、层融合（Layer Fusion）、量化（Quantization）等技术优化模型</li>
-<li>自动利用硬件加速特性</li>
+<li>剪枝与梯度量化</li>
+<li></li>
 </ol>
-<h2 id="workflow"><a class="markdownIt-Anchor" href="#workflow"></a> Workflow</h2>
-<p><img src="/2025/02/13/2025%E5%B9%B42%E6%9C%8813%E6%97%A5-%E6%8E%A8%E7%90%86%E6%A1%86%E6%9E%B6/image-20250213214620596.png" alt></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">训练模型 (TF/PyTorch) → 转换为 IR → 优化 → 部署到 CPU/GPU/VPU → 推理 → 性能调优</span><br></pre></td></tr></table></figure>
-<p>Openvino整体框架为：<strong>Openvino前端→ Plugin中间层→ Backend后端</strong></p>
-<img src="/2025/02/13/2025%E5%B9%B42%E6%9C%8813%E6%97%A5-%E6%8E%A8%E7%90%86%E6%A1%86%E6%9E%B6/image-20250213220750908.png" alt="image-20250213220750908" style="zoom:50%;">
-<h2 id="code"><a class="markdownIt-Anchor" href="#code"></a> Code</h2>
-<p>Python：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44613415/article/details/143507060">https://blog.csdn.net/weixin_44613415/article/details/143507060</a></p>
-<p>​	<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_38739735/article/details/137099211=">https://blog.csdn.net/weixin_38739735/article/details/137099211=</a></p>
-<p>C：<a target="_blank" rel="noopener" href="https://blog.csdn.net/bjbz_cxy/article/details/130318904">https://blog.csdn.net/bjbz_cxy/article/details/130318904</a></p>
-<p>​	<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_44732054/article/details/140971622">https://blog.csdn.net/qq_44732054/article/details/140971622</a></p>
-<h1 id="ncnn"><a class="markdownIt-Anchor" href="#ncnn"></a> ncnn</h1>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/PHILICS7/article/details/125430079">https://blog.csdn.net/PHILICS7/article/details/125430079</a></p>
-<p>ncnn是腾讯优图推出的在手机端极致优化的高性能神经网络前向计架框架，适用于手机端的CPU计算且无需依赖第三方计算库，ncnn只用作推理而非边训练边推理。</p>
+<h2 id="激活函数"><a class="markdownIt-Anchor" href="#激活函数"></a> 激活函数</h2>
+<h3 id="1-定义"><a class="markdownIt-Anchor" href="#1-定义"></a> 1 定义</h3>
+<p>引入<strong>非线性因素</strong>,处理复杂的问题</p>
+<h3 id="2-常见激活函数"><a class="markdownIt-Anchor" href="#2-常见激活函数"></a> 2 常见激活函数</h3>
+<h4 id="1-sigmoid"><a class="markdownIt-Anchor" href="#1-sigmoid"></a> 1 Sigmoid</h4>
+<img src="/2025/03/14/2025%E5%B9%B43%E6%9C%8816%E6%97%A5-DL%E5%85%AB%E8%82%A1%E6%96%87/image-20250320185054836.png" alt="image-20250320185054836" style="zoom:33%;"> 
+<h4 id="2-tanh"><a class="markdownIt-Anchor" href="#2-tanh"></a> 2 Tanh</h4>
+<img src="/2025/03/14/2025%E5%B9%B43%E6%9C%8816%E6%97%A5-DL%E5%85%AB%E8%82%A1%E6%96%87/image-20250320185034344.png" alt="image-20250320185034344" style="zoom: 33%;">  
+<blockquote>
+<p>存在梯度消失的问题，因为它们的导数（连乘）在两端会趋近于零，导致深层网络训练困难</p>
+</blockquote>
+<h4 id="3-relu"><a class="markdownIt-Anchor" href="#3-relu"></a> 3 relu</h4>
+<img src="/2025/03/14/2025%E5%B9%B43%E6%9C%8816%E6%97%A5-DL%E5%85%AB%E8%82%A1%E6%96%87/image-20250320184950902.png" alt="image-20250320184950902" style="zoom: 67%;"> 
+<h5 id="优势"><a class="markdownIt-Anchor" href="#优势"></a> 优势</h5>
+<ol>
+<li><strong>缓解梯度消失</strong>：
+<ul>
+<li>Sigmoid/Tanh的饱和区：导数在输入绝对值较大时趋近于0（如Sigmoid导数值最大仅0.25），导致深层网络梯度链式相乘后指数级衰减</li>
+<li>ReLU的非饱和性：<strong>正区间的导数为1</strong>，保证梯度稳定传递，支持深层网络训练</li>
+</ul>
+</li>
+<li><strong>计算高效</strong>：ReLU仅需判断输入是否大于0（<strong>无指数运算</strong>），比Sigmoid/Tanh快6倍以上，适合大规模数据和复杂模型</li>
+<li><strong>稀疏激活</strong>：ReLU将负输入强制置零，使网络<strong>稀疏化</strong>（约50%神经元激活），降低参数依赖性和过拟合风险，增强模型鲁棒性</li>
+</ol>
+<h5 id="不足"><a class="markdownIt-Anchor" href="#不足"></a> 不足</h5>
+<ol>
+<li>为负时，ReLU输出恒为0，梯度为0，导致对应权重无法更新（“<strong>死亡</strong>”）</li>
+</ol>
+<h5 id="改进"><a class="markdownIt-Anchor" href="#改进"></a> 改进</h5>
+<blockquote>
+<p>改进ReLU的方法，比如Leaky ReLU、Parametric ReLU（PReLU）和ELU，</p>
+</blockquote>
+<h2 id="损失函数"><a class="markdownIt-Anchor" href="#损失函数"></a> 损失函数</h2>
+<blockquote>
+<p>解释什么是损失函数，它的作用，常见的损失函数类型，以及如何根据不同的任务选择合适的损失函数，还有在训练过程中如何优化损失。</p>
+</blockquote>
+<h3 id="1-定义-2"><a class="markdownIt-Anchor" href="#1-定义-2"></a> <strong>1 定义</strong>：</h3>
+<p>损失函数是衡量模型预测值与真实值<strong>差异的量化指标</strong>，</p>
+<p><strong>用于指导模型参数优化</strong>。反向传播更新梯度</p>
+<p><img src="/2025/03/14/2025%E5%B9%B43%E6%9C%8816%E6%97%A5-DL%E5%85%AB%E8%82%A1%E6%96%87/image-20250320182842833.png" alt="image-20250320182842833"></p>
+<h3 id="2-常见"><a class="markdownIt-Anchor" href="#2-常见"></a> 2 常见</h3>
+<ol>
+<li><strong>均方误差</strong> 绝对误差等等</li>
+<li>交叉熵</li>
+</ol>
+<h1 id="模型"><a class="markdownIt-Anchor" href="#模型"></a> 模型</h1>
+<h2 id="cnn"><a class="markdownIt-Anchor" href="#cnn"></a> CNN</h2>
+<h3 id="0-图像性质"><a class="markdownIt-Anchor" href="#0-图像性质"></a> 0 图像性质</h3>
+<ol>
+<li><strong>平移不变性</strong>：池化与卷积核滑动使模型对目标位置变化不敏感。</li>
+</ol>
+<h3 id="1-定义-3"><a class="markdownIt-Anchor" href="#1-定义-3"></a> 1 定义</h3>
+<p>核心思想是通过<strong>局部感受野</strong>和<strong>参数共享</strong>，高效提取空间或时序特征。<br>
+从原始像素中学习到“边缘→纹理→物体部件→完整物体”的层次化特征表示</p>
+<h3 id="2-组成"><a class="markdownIt-Anchor" href="#2-组成"></a> 2 组成</h3>
+<h4 id="卷积层"><a class="markdownIt-Anchor" href="#卷积层"></a> <strong>卷积层</strong></h4>
+<p><strong>卷积层堆叠</strong>：</p>
+<ul>
+<li>浅层卷积核提取边缘、颜色等低级特征。</li>
+<li>深层卷积核组合低级特征，形成高级语义（如车轮、车窗</li>
+</ul>
+<h4 id="池化层"><a class="markdownIt-Anchor" href="#池化层"></a> <strong>池化层</strong></h4>
+<blockquote>
+<p>减少计算量并增强平移不变性。</p>
+</blockquote>
+<h2 id="resnet"><a class="markdownIt-Anchor" href="#resnet"></a> resnet</h2>
+<h3 id="1思想"><a class="markdownIt-Anchor" href="#1思想"></a> 1<strong>思想</strong></h3>
+<blockquote>
+<p><strong>学习残差而非直接学习目标映射</strong>   通过（跳跃连接）实现残差学习</p>
+</blockquote>
+<h3 id="2-解决问题"><a class="markdownIt-Anchor" href="#2-解决问题"></a> 2 解决问题</h3>
+<h5 id="1-深层网络退化degradation"><a class="markdownIt-Anchor" href="#1-深层网络退化degradation"></a> 1. <strong>深层网络退化（Degradation）</strong></h5>
+<ul>
+<li><strong>现象</strong>：传统CNN（如VGG）随着层数增加（如20层以上），训练误差和测试误差反而上升，<strong>这不是过拟合，而是模型难以优化</strong>。</li>
+<li><strong>原因</strong>：叠加非线性层导致信息传递效率下降，深层网络难以学习有效的恒等映射（Identity Mapping）。</li>
+<li><strong>解决</strong>：跳跃连接强制网络学习残差 F(x)<em>F</em>(<em>x</em>)，当最优解接近恒等映射时，F(x)<em>F</em>(<em>x</em>) 只需逼近0，比直接拟合 H(x)=x<em>H</em>(<em>x</em>)=<em>x</em> 更简单。</li>
+</ul>
+<h5 id="2-梯度消失vanishing-gradient"><a class="markdownIt-Anchor" href="#2-梯度消失vanishing-gradient"></a> 2. <strong>梯度消失（Vanishing Gradient）</strong></h5>
+<ul>
+<li><strong>现象</strong>：反向传播时，梯度在深层网络中逐层连乘，导致浅层权重更新缓慢甚至停滞。</li>
+<li><strong>解决</strong>：跳跃连接提供<strong>梯度高速公路</strong>，梯度可通过加法操作直接回传至浅层（如公式 ∂L∂x=∂L∂H(x)⋅(1+∂F(x)∂x)∂<em>x</em>∂<em>L</em>=∂<em>H</em>(<em>x</em>)∂<em>L</em>⋅(1+∂<em>x</em>∂<em>F</em>(<em>x</em>))），避免梯度被多次非线性变换稀释。</li>
+</ul>
+<h2 id="模型难以优化"><a class="markdownIt-Anchor" href="#模型难以优化"></a> <strong>模型难以优化</strong></h2>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/02/13/2025%E5%B9%B42%E6%9C%8813%E6%97%A5-%E6%8E%A8%E7%90%86%E6%A1%86%E6%9E%B6/" data-id="cm8q1tfhl000lpcv473w5empa" class="article-share-link">分享</a>
+      <a data-url="https://shakewely.github.io/2025/03/14/2025%E5%B9%B43%E6%9C%8816%E6%97%A5-DL%E5%85%AB%E8%82%A1%E6%96%87/" data-id="cm8q1tfhq0011pcv41q1mcut5" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DL/" rel="tag">DL</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2025年3月14日-据增强方法" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/03/14/2025%E5%B9%B43%E6%9C%8814%E6%97%A5-%E6%8D%AE%E5%A2%9E%E5%BC%BA%E6%96%B9%E6%B3%95/" class="article-date">
+  <time class="post-time" datetime="2025-03-14T05:34:43.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">14</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/03/14/2025%E5%B9%B43%E6%9C%8814%E6%97%A5-%E6%8D%AE%E5%A2%9E%E5%BC%BA%E6%96%B9%E6%B3%95/">2025年3月14日 数据增强方法</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="数据预处理"><a class="markdownIt-Anchor" href="#数据预处理"></a> 数据预处理</h1>
+<h2 id="数据增强方法"><a class="markdownIt-Anchor" href="#数据增强方法"></a> 数据增强方法</h2>
+<h3 id="1-数据增强的作用"><a class="markdownIt-Anchor" href="#1-数据增强的作用"></a> 1 数据增强的作用</h3>
+<p>1） 避免过拟合。当数据集具有某种明显的特征，例如数据集中图片基本在同一个场景中拍摄，使用Cutout方法和风格迁移变化等相关方法可避免模型学到跟目标无关的信息。</p>
+<p>2）提升模型鲁棒性，降低模型对图像的敏感度。当训练数据都属于比较理想的状态，碰到一些特殊情况，如遮挡，亮度，模糊等情况容易识别错误，对训练数据加上噪声，掩码等方法可提升模型鲁棒性。</p>
+<p>3）增加训练数据，提高模型泛化能力。</p>
+<p>4）避免样本不均衡。在工业缺陷检测方面，医疗疾病识别方面，容易出现正负样本极度不平衡的情况，通过对少样本进行一些数据增强方法，降低样本不均衡比例。</p>
+<p>———————————————</p>
+<h3 id="2-哪些数据增强方法"><a class="markdownIt-Anchor" href="#2-哪些数据增强方法"></a> 2 哪些数据增强方法</h3>
+<h4 id="几何变换"><a class="markdownIt-Anchor" href="#几何变换"></a> 几何变换</h4>
+<p>随机旋转（±15°）、</p>
+<p>翻转</p>
+<p>裁剪，</p>
+<p>缩放，</p>
+<p>平移，</p>
+<h4 id="像素变换"><a class="markdownIt-Anchor" href="#像素变换"></a> 像素变换</h4>
+<p>高斯噪声、</p>
+<p>运动模糊模拟</p>
+<p>调整HSV对比度</p>
+<p>调节亮度，饱和度，直方图均衡化，调整白平衡</p>
+<h3 id="3-特殊任务"><a class="markdownIt-Anchor" href="#3-特殊任务"></a> 3 特殊任务</h3>
+<h4 id="适合分类任务"><a class="markdownIt-Anchor" href="#适合分类任务"></a> 适合分类任务</h4>
+<p><img src="/2025/03/14/2025%E5%B9%B43%E6%9C%8814%E6%97%A5-%E6%8D%AE%E5%A2%9E%E5%BC%BA%E6%96%B9%E6%B3%95/image-20250314143616191.png" alt="image-20250314143616191"></p>
+<blockquote>
+<p>Mixup, Cutmix只用于分类任务</p>
+</blockquote>
+<h4 id="适合检测任务"><a class="markdownIt-Anchor" href="#适合检测任务"></a> 适合检测任务</h4>
+<p>GridMask</p>
+<img src="/2025/03/14/2025%E5%B9%B43%E6%9C%8814%E6%97%A5-%E6%8D%AE%E5%A2%9E%E5%BC%BA%E6%96%B9%E6%B3%95/image-20250314143710300.png" alt="image-20250314143710300" style="zoom: 33%;"> 
+<h4 id="mosaic数据增强"><a class="markdownIt-Anchor" href="#mosaic数据增强"></a> mosaic数据增强</h4>
+<img src="/2025/03/14/2025%E5%B9%B43%E6%9C%8814%E6%97%A5-%E6%8D%AE%E5%A2%9E%E5%BC%BA%E6%96%B9%E6%B3%95/image-20250314143803362.png" alt="image-20250314143803362" style="zoom: 43%;"> 
+<h2 id="4-transformscompose"><a class="markdownIt-Anchor" href="#4-transformscompose"></a> 4 Transforms.Compose</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">transform = transforms.Compose([</span><br><span class="line">    transforms.Resize(<span class="number">256</span>),          <span class="comment"># 调整图像尺寸</span></span><br><span class="line">    transforms.RandomCrop(<span class="number">224</span>),      <span class="comment"># 随机裁剪为224x224</span></span><br><span class="line">    transforms.RandomHorizontalFlip(), <span class="comment"># 随机水平翻转（概率0.5）</span></span><br><span class="line">    transforms.ToTensor(),           <span class="comment"># 转为张量并归一化至[0,1]</span></span><br><span class="line">    transforms.Normalize(            <span class="comment"># 标准化（均值、标准差）</span></span><br><span class="line">        mean=[<span class="number">0.485</span>, <span class="number">0.456</span>, <span class="number">0.406</span>], </span><br><span class="line">        std=[<span class="number">0.229</span>, <span class="number">0.224</span>, <span class="number">0.225</span>]</span><br><span class="line">    )</span><br><span class="line">])</span><br></pre></td></tr></table></figure>
+<h3 id="5-复杂场景的特殊处理"><a class="markdownIt-Anchor" href="#5-复杂场景的特殊处理"></a> 5 复杂场景的特殊处理</h3>
+<p>复杂场景如图像可能包含以下问题：</p>
+<ol>
+<li><strong>遮挡与局部模糊</strong>（如交通监控中的车辆遮挡）</li>
+<li><strong>光照不均</strong>（如夜间低光照或强反光区域）</li>
+<li><strong>动态模糊</strong>（如快速移动目标）</li>
+<li><strong>背景干扰</strong>（如医疗图像中器官重叠</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">transform = Compose([</span><br><span class="line">    RandomPerspective(distortion_scale=0.5),  # 透视变形模拟遮挡  </span><br><span class="line">    AdjustGamma(gamma=0.5),                   # 调整伽马值应对低光照  </span><br><span class="line">    GaussianBlur(kernel_size=5)               # 模拟运动模糊  </span><br><span class="line">])</span><br></pre></td></tr></table></figure>
+<h2 id="数据不平衡问题"><a class="markdownIt-Anchor" href="#数据不平衡问题"></a> <strong>数据不平衡问题</strong></h2>
+<p>参考:<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/296632599%5C">https://zhuanlan.zhihu.com/p/296632599\</a></p>
+<h3 id="1-数据不平衡"><a class="markdownIt-Anchor" href="#1-数据不平衡"></a> 1 数据不平衡</h3>
+<p>不同类别的样本量差异非常大，或者少数样本代表了业务的关键数据</p>
+<h3 id="2-如何处理"><a class="markdownIt-Anchor" href="#2-如何处理"></a> 2 <strong>如何处理</strong></h3>
+<ol>
+<li>
+<p>欠采样：<strong>在少量样本数量不影响模型训练的情况下</strong>，可通过对<strong>多数类样本欠采样</strong>，实现少数样本和多数样本均衡。</p>
+</li>
+<li>
+<p>过采样：在少量样本数量<strong>不支持</strong>模型训练的情况下，可以通过对<strong>少数类样本过采样</strong>，实现少数样本和多数样本的均衡。</p>
+</li>
+<li>
+<p>模型算法：通过引入有权重的模型算法，<strong>针对少量样本着重拟合</strong>，以提升对少量样本特征的学习。</p>
+</li>
+</ol>
+<h4 id="1欠采样"><a class="markdownIt-Anchor" href="#1欠采样"></a> 1.欠采样</h4>
+<p>​	减少大样本数量的采集</p>
+<h5 id="随机法删除"><a class="markdownIt-Anchor" href="#随机法删除"></a> <strong>随机法</strong>删除</h5>
+<blockquote>
+<p>随机的删除一些多数类样本</p>
+</blockquote>
+<h4 id="2过采样"><a class="markdownIt-Anchor" href="#2过采样"></a> 2.过采样</h4>
+<h5 id="随机复制"><a class="markdownIt-Anchor" href="#随机复制"></a> <strong>随机复制</strong></h5>
+<blockquote>
+<p>对少量样本进行复制后达到样本均衡的效果以提升模型的效果。</p>
+</blockquote>
+<p><strong>样本生成</strong></p>
+<blockquote>
+<p>SMOTE方法为例，对于任意选取的少类样本，它用K近邻选取相似样本，并通过对样本线性插值得到新样本。</p>
+</blockquote>
+<h4 id="3模型算法"><a class="markdownIt-Anchor" href="#3模型算法"></a> 3.模型算法</h4>
+<p>​	从算法层面</p>
+<h5 id="focal-loss"><a class="markdownIt-Anchor" href="#focal-loss"></a> <strong>Focal Loss</strong></h5>
+<blockquote>
+<p>Focal loss 在标准交叉熵损失的基础上修改得到的，通过减少易分类样本的权重，使得模型在训练时更专注于难分类的样本</p>
+</blockquote>
+<p><strong>解耦特征和分类器</strong></p>
+<h3 id="3-目标检测中"><a class="markdownIt-Anchor" href="#3-目标检测中"></a> 3 目标检测中</h3>
+<p><strong>定义</strong></p>
+<ul>
+<li>正样本：<strong>标签区域内</strong>的图像区域，即目标图像块</li>
+<li>负样本：<strong>标签区域以外</strong>的图像区域，即图像背景区域</li>
+<li>易分正样本：容易正确分类的正样本，在实际训练过程中，<strong>该类占总体样本的比重非常高，单个样本的损失函数较小</strong>，但是累计的损失函数会主导损失函数</li>
+<li>易分负样本：容易正确分类的负样本，在实际训练过程中，<strong>该类占的比重非常高</strong>，单个样本的损失函数较小，但是累计的损失函数会主导损失函数</li>
+<li>难分正样本：错分成负样本的正样本，这部分样本在训练过程中单个样本的损失函数较高，但是<strong>该类占总体样本的比例较小</strong></li>
+<li>难分负样本：错分成正样本的负样本，这部分样本在训练过程中单个样本的损失函数教高，但是该类占总体样本的比例教小</li>
+</ul>
+<img src="/2025/03/14/2025%E5%B9%B43%E6%9C%8814%E6%97%A5-%E6%8D%AE%E5%A2%9E%E5%BC%BA%E6%96%B9%E6%B3%95/image-20250314152506435.png" alt="image-20250314152506435" style="zoom:50%;">
+<blockquote>
+<p>和grand true 的框重叠部分</p>
+</blockquote>
+<h4 id="1正负样本不均衡"><a class="markdownIt-Anchor" href="#1正负样本不均衡"></a> <strong>1.正负样本不均衡</strong></h4>
+<p>以Faster RCNN为例，在RPN部分会生成20000个左右的Anchor，由于一张图中通常有10个左右的物体，<strong>导致可能只有100个左右的Anchor会是正样本，正负样本比例约为1∶200，存在严重的不均衡。</strong></p>
+<h4 id="2难易样本不均衡"><a class="markdownIt-Anchor" href="#2难易样本不均衡"></a> <strong>2.难易样本不均衡</strong></h4>
+<ol>
+<li>难样本指的是<strong>分类不太明确的边框，处在前景与背景的过渡区域上</strong></li>
+<li>然而，大量的样本并非处在前景与背景的过渡区，而是**与真实物体没有重叠区域的负样本，或者与真实物体重叠程度很高的正样本，<strong>这部分被称为</strong>简单样本，**单个损失会较小，对参数收敛的作用有限。</li>
+</ol>
+<h4 id="3类别间样本不均衡"><a class="markdownIt-Anchor" href="#3类别间样本不均衡"></a> <strong>3.类别间样本不均衡</strong></h4>
+<p>机器学习中，样本不均衡问题的解决方法</p>
+<h1 id="多进程"><a class="markdownIt-Anchor" href="#多进程"></a> 多进程</h1>
+<h2 id="几种方法实现"><a class="markdownIt-Anchor" href="#几种方法实现"></a> 几种方法实现：</h2>
+<h3 id="多进程创建模型推理"><a class="markdownIt-Anchor" href="#多进程创建模型推理"></a> 多进程创建模型推理</h3>
+<p><strong>多进程并行推理</strong></p>
+<ol>
+<li>创建多个进程：每个进程加载一个YOLOv8模型实例，将待推理的图像或视频流分配给不同的进程并行处理。</li>
+<li>进程间通信：使用队列、管道等机制实现进程间的通信和数据交换。例如，可以使用multiprocessing.Queue来传递待处理的图像数据和推理结果。</li>
+<li>合理分配任务：根据硬件资源和任务特性，合理分配每个进程的推理任务量，避免资源浪费和性能瓶颈。</li>
+</ol>
+<p><strong>硬件加速与优化</strong></p>
+<ol>
+<li>使用GPU加速：将YOLOv8模型部署在GPU上，利用GPU的并行计算能力加速模型推理。可以使用TensorRT等工具对模型进行优化，进一步提升推理效率。</li>
+<li>模型优化：对YOLOv8模型进行量化、剪枝等优化操作，减少模型的计算复杂度和参数量，从而提高推理速度。</li>
+<li>前后处理加速：优化图像的预处理和后处理步骤，例如使用内存0拷贝技术、快速的解码和编码算法等，减少数据传输和处理的时间。</li>
+</ol>
+<p><strong>多线程辅助</strong></p>
+<ol>
+<li>多线程数据读写：在多进程推理的基础上，可以使用多线程来辅助数据的读写操作，提高数据处理的效率。例如，使用线程池来维护多个线程，每个线程负责读取或写入一部分数据。</li>
+<li>界面与推理分离：如果需要在GUI界面中进行YOLOv8推理，可以将推理任务放在单独的线程中执行，避免阻塞界面线程，提高用户体验。</li>
+</ol>
+<p>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/zhiqingAI/article/details/145017566">https://blog.csdn.net/zhiqingAI/article/details/145017566</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Process, Queue</span><br><span class="line"><span class="keyword">from</span> ultralytics <span class="keyword">import</span> YOLO</span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">worker</span>(<span class="params">q, model_path</span>):</span><br><span class="line">    model = YOLO(model_path)</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        img = q.get()</span><br><span class="line">        <span class="keyword">if</span> img <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        results = model.predict(source=img)</span><br><span class="line">        <span class="comment"># 处理推理结果</span></span><br><span class="line">        <span class="built_in">print</span>(results)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    q = Queue()</span><br><span class="line">    model_path = <span class="string">&#x27;yolov8n.pt&#x27;</span></span><br><span class="line">    num_processes = <span class="number">4</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建多个进程</span></span><br><span class="line">    processes = []</span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(num_processes):</span><br><span class="line">        p = Process(target=worker, args=(q, model_path))</span><br><span class="line">        p.start()</span><br><span class="line">        processes.append(p)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 将图像数据放入队列</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">        img_path = <span class="string">f&#x27;image_<span class="subst">&#123;i&#125;</span>.jpg&#x27;</span></span><br><span class="line">        img = cv2.imread(img_path)</span><br><span class="line">        q.put(img)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 结束进程</span></span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(num_processes):</span><br><span class="line">        q.put(<span class="literal">None</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> p <span class="keyword">in</span> processes:</span><br><span class="line">        p.join()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="多线程同时访问相同模型"><a class="markdownIt-Anchor" href="#多线程同时访问相同模型"></a> 多线程同时访问相同模型</h3>
+<p>多线程推理函数</p>
+<h4 id="1-解决图像接收端与推理端速度不匹配的问题"><a class="markdownIt-Anchor" href="#1-解决图像接收端与推理端速度不匹配的问题"></a> 1. 解决图像接收端与推理端速度不匹配的问题</h4>
+<p>当出现生产者生产太快，而消费太慢时：会让图片发生堆积，一张图片可能有2MB，如果长期运行，就会发现，程序可能在某一刻发生崩溃（内存消耗殆尽）</p>
+<h3 id="检测与识别并行"><a class="markdownIt-Anchor" href="#检测与识别并行"></a> 检测与识别并行</h3>
+<h4 id="一张图片经多个模型推理的异步模式设计"><a class="markdownIt-Anchor" href="#一张图片经多个模型推理的异步模式设计"></a> 一张图片，经多个模型推理的异步模式设计</h4>
+<p>参考:<a target="_blank" rel="noopener" href="https://blog.csdn.net/hh1357102/article/details/127586846%5C">https://blog.csdn.net/hh1357102/article/details/127586846\</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/03/14/2025%E5%B9%B43%E6%9C%8814%E6%97%A5-%E6%8D%AE%E5%A2%9E%E5%BC%BA%E6%96%B9%E6%B3%95/" data-id="cmanj8o220009lcv41hue4oqi" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DL/" rel="tag">DL</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2025年3月15日-模型评价指标" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/03/14/2025%E5%B9%B43%E6%9C%8815%E6%97%A5-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BB%B7%E6%8C%87%E6%A0%87/" class="article-date">
+  <time class="post-time" datetime="2025-03-13T16:26:50.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">14</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/03/14/2025%E5%B9%B43%E6%9C%8815%E6%97%A5-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BB%B7%E6%8C%87%E6%A0%87/">2025年3月15日 模型评价指标</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="计算量与参数量"><a class="markdownIt-Anchor" href="#计算量与参数量"></a> 计算量与参数量</h1>
+<h2 id="1-定义"><a class="markdownIt-Anchor" href="#1-定义"></a> 1 定义</h2>
+<ol>
+<li>计算量-时间复杂度  <strong>乘法和加发的操作次数</strong></li>
+<li>参数量-空间复杂度</li>
+</ol>
+<h3 id="卷积层"><a class="markdownIt-Anchor" href="#卷积层"></a> 卷积层</h3>
+<p><strong>计算量</strong>: (KxKxWxH) x C_in x C_out</p>
+<blockquote>
+<p>W\H: 输出feature map 的size</p>
+<p>回忆卷积操作过程</p>
+</blockquote>
+<p><strong>参数量</strong>: KxKxC_inxC_out</p>
+<blockquote>
+<p>卷积核的weight</p>
+</blockquote>
+<h3 id="池化层"><a class="markdownIt-Anchor" href="#池化层"></a> 池化层</h3>
+<p><strong>计算量</strong>: 不同池化操作不同 Cin x Cout x W x H x K xK</p>
+<blockquote></blockquote>
+<p><strong>参数量</strong>  无</p>
+<h3 id="全连接层"><a class="markdownIt-Anchor" href="#全连接层"></a> 全连接层</h3>
+<p>参数量 weight_in*weight_out</p>
+<p>计算量＝ 2 x Cin x Cout</p>
+<h3 id="batchnorm"><a class="markdownIt-Anchor" href="#batchnorm"></a> BatchNorm</h3>
+<p>计算量: 4WHC</p>
+<blockquote></blockquote>
+<p>参数量: 2C</p>
+<blockquote>
+<p>(y=ax+b) xC</p>
+</blockquote>
+<h3 id="激活函数"><a class="markdownIt-Anchor" href="#激活函数"></a> 激活函数</h3>
+<p>计算量: H×W×C</p>
+<blockquote>
+<p>path个数</p>
+</blockquote>
+<h2 id="硬件需求"><a class="markdownIt-Anchor" href="#硬件需求"></a> 硬件需求</h2>
+<p>计算量的要求是在于芯片的__（指的是gpu的运算能力）</p>
+<p>参数量取决于__大小</p>
+<h3 id="计算量和参数量查看"><a class="markdownIt-Anchor" href="#计算量和参数量查看"></a> 计算量和参数量查看</h3>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40507857/article/details/118764782">https://blog.csdn.net/qq_40507857/article/details/118764782</a></p>
+<h3 id="输入数据对模型的参数量和计算量的影响"><a class="markdownIt-Anchor" href="#输入数据对模型的参数量和计算量的影响"></a> 输入数据对模型的参数量和计算量的影响</h3>
+<h1 id="tf-fp-fn-tn"><a class="markdownIt-Anchor" href="#tf-fp-fn-tn"></a> TF FP FN TN</h1>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/wzk4869/article/details/127879761">https://blog.csdn.net/wzk4869/article/details/127879761</a></p>
+<img src="https://picx.zhimg.com/70/v2-895d6f8e80c0078c92244158dec97bfc_1440w.image?source=172ae18b&biz_tag=Post" alt="深挖一下F1 score (F-measure, F-score)[根据公式分析]" style="zoom:50%;">
+<h2 id="1-准确率precision"><a class="markdownIt-Anchor" href="#1-准确率precision"></a> 1 准确率（Precision）</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="2-召回率-recall"><a class="markdownIt-Anchor" href="#2-召回率-recall"></a> 2 召回率 (Recall)</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+<h1 id="目标检测的评价指标"><a class="markdownIt-Anchor" href="#目标检测的评价指标"></a> 目标检测的评价指标</h1>
+<h2 id="1-iou"><a class="markdownIt-Anchor" href="#1-iou"></a> 1: IoU</h2>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="2-f1-score"><a class="markdownIt-Anchor" href="#2-f1-score"></a> 2: F1 Score</h2>
+<p><strong>定义</strong>: F Score 是 Precision 和 Recall 的调和平均数 (harmonic mean)</p>
+<p><img src="/2025/03/14/2025%E5%B9%B43%E6%9C%8815%E6%97%A5-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BB%B7%E6%8C%87%E6%A0%87/image-20250314011150884.png" alt="image-20250314011150884"></p>
+<blockquote>
+<p>Precision 与 Recall 看起来很相似，实际上这两个是“冤家”。为什么这么说呢？因为在大多数情况下，这两者有一定的互斥性。****</p>
+</blockquote>
+<p><strong>作用:</strong></p>
+<h2 id="平均准确度-average-precisionap"><a class="markdownIt-Anchor" href="#平均准确度-average-precisionap"></a> 平均准确度 (Average Precision，AP)</h2>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/03/14/2025%E5%B9%B43%E6%9C%8815%E6%97%A5-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BB%B7%E6%8C%87%E6%A0%87/" data-id="cm8q1tfhp000xpcv44db75i16" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/21/" rel="tag">21</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2025年3月12日-onnx5-算子" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/03/12/2025%E5%B9%B43%E6%9C%8812%E6%97%A5-onnx5-%E7%AE%97%E5%AD%90/" class="article-date">
+  <time class="post-time" datetime="2025-03-12T14:42:57.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">12</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/03/12/2025%E5%B9%B43%E6%9C%8812%E6%97%A5-onnx5-%E7%AE%97%E5%AD%90/">2025年3月12日 onnx问答</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/zhaoyqcsdn/article/details/135512992%E3%80%81">https://blog.csdn.net/zhaoyqcsdn/article/details/135512992、</a></p>
+<h1 id="1-算子不兼容"><a class="markdownIt-Anchor" href="#1-算子不兼容"></a> 1 算子不兼容</h1>
+<p>onnx算子是否支持<br>
+<a target="_blank" rel="noopener" href="https://github.com/onnx/onnx/blob/main/docs/Operators.md">https://github.com/onnx/onnx/blob/main/docs/Operators.md</a></p>
+<h2 id="11-pytorch中有onnx中也有的算子"><a class="markdownIt-Anchor" href="#11-pytorch中有onnx中也有的算子"></a> 1.1 pytorch中有，onnx中也有的算子</h2>
+<h2 id="12-pytorch中有onnx中无的算子"><a class="markdownIt-Anchor" href="#12-pytorch中有onnx中无的算子"></a> 1.2 pytorch中有，onnx中无的算子</h2>
+<p>继承<code>torch.autograd.Function</code>实现自定义算子</p>
+<h3 id="1-案例示例-focus层的切片操作"><a class="markdownIt-Anchor" href="#1-案例示例-focus层的切片操作"></a> <strong>1 案例示例</strong>： <code>Focus</code>层的切片操作</h3>
+<blockquote>
+<p>通过其他变换来改成兼容的算子</p>
+</blockquote>
+<p>在目标检测项目中，将PyTorch训练的YOLOv5模型转换为ONNX时，需处理<code>Focus</code>层的切片操作兼容性问题，通过重构为<code>Conv</code>层解决，将size减少一半通道数增加一倍</p>
+<h3 id="2-实际案例动态切片问题"><a class="markdownIt-Anchor" href="#2-实际案例动态切片问题"></a> 2 <strong>实际案例：动态切片问题</strong></h3>
+<p>静态图无法处理随机性</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 原始PyTorch代码（无法导出）</span><br><span class="line">x_slice = x[:, :, start_idx:start_idx+10]</span><br><span class="line"></span><br><span class="line"># 修改为ONNX兼容方式</span><br><span class="line">indices = torch.arange(start_idx, start_idx+10, device=x.device)</span><br><span class="line">x_slice = torch.index_select(x, dim=2, index=indices)</span><br></pre></td></tr></table></figure>
+<h3 id="3-案例示例创建新的算子-手动实现"><a class="markdownIt-Anchor" href="#3-案例示例创建新的算子-手动实现"></a> 3 案例示例：创建新的算子 手动实现</h3>
+<blockquote>
+<p>使用支持的操作来手动实现算子</p>
+</blockquote>
+<ul>
+<li>
+<p>****：部分框架特定操作（如PyTorch自定义层）需替换为ONNX标准算子或自定义实现。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.onnx</span><br><span class="line"><span class="keyword">from</span> torch.onnx <span class="keyword">import</span> register_custom_op_symbolic</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 定义自定义算子</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CustomRelu</span>(torch.autograd.Function):</span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">ctx, <span class="built_in">input</span></span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;前向传播：自定义的ReLU操作&quot;&quot;&quot;</span></span><br><span class="line">        ctx.save_for_backward(<span class="built_in">input</span>)</span><br><span class="line">        <span class="keyword">return</span> torch.maximum(<span class="built_in">input</span>, torch.tensor(<span class="number">0.5</span>))  <span class="comment"># 比普通ReLU多了一个偏移</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">backward</span>(<span class="params">ctx, grad_output</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;反向传播：ReLU的梯度计算&quot;&quot;&quot;</span></span><br><span class="line">        <span class="built_in">input</span>, = ctx.saved_tensors</span><br><span class="line">        grad_input = grad_output.clone()</span><br><span class="line">        grad_input[<span class="built_in">input</span> &lt; <span class="number">0.5</span>] = <span class="number">0</span>  <span class="comment"># 低于0.5的部分梯度置零</span></span><br><span class="line">        <span class="keyword">return</span> grad_input</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 创建 ONNX 计算图中的算子</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">symbolic_custom_relu</span>(<span class="params">g, <span class="built_in">input</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;定义 ONNX 计算图中的 custom_relu&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">return</span> g.op(<span class="string">&quot;custom_domain::CustomRelu&quot;</span>, <span class="built_in">input</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 绑定 ONNX 导出</span></span><br><span class="line">register_custom_op_symbolic(<span class="string">&quot;::CustomRelu&quot;</span>, symbolic_custom_relu, <span class="number">11</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 使用自定义算子</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CustomModel</span>(torch.nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        <span class="keyword">return</span> CustomRelu.apply(x)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5. 实例化模型</span></span><br><span class="line">model = CustomModel()</span><br><span class="line">x = torch.randn(<span class="number">1</span>, <span class="number">3</span>, <span class="number">224</span>, <span class="number">224</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 6. 导出为 ONNX（确保 opset 版本支持）</span></span><br><span class="line">torch.onnx.export(</span><br><span class="line">    model, x, <span class="string">&quot;custom_relu.onnx&quot;</span>,</span><br><span class="line">    opset_version=<span class="number">11</span>,</span><br><span class="line">    verbose=<span class="literal">True</span>,</span><br><span class="line">    operator_export_type=torch.onnx.OperatorExportTypes.ONNX</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="问题动态batch或可变输入尺寸导致转换失败"><a class="markdownIt-Anchor" href="#问题动态batch或可变输入尺寸导致转换失败"></a> <strong>问题</strong>：动态Batch或可变输入尺寸导致转换失败。</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">torch.onnx.export(</span><br><span class="line">    model, dummy_input, &quot;yolov5_dynamic.onnx&quot;,</span><br><span class="line">    opset_version=11,</span><br><span class="line">    input_names=[&quot;input&quot;], output_names=[&quot;output&quot;],</span><br><span class="line">    dynamic_axes=&#123;</span><br><span class="line">        &quot;input&quot;: &#123;0: &quot;batch_size&quot;&#125;,   # 让 input 的 batch 维度 (dim=0) 变为动态</span><br><span class="line">        &quot;output&quot;: &#123;0: &quot;batch_size&quot;&#125;   # 让 output 的 batch 维度 (dim=0) 变为动态</span><br><span class="line">    &#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h1 id="2-写占位符号替换乱七八糟的算子"><a class="markdownIt-Anchor" href="#2-写占位符号替换乱七八糟的算子"></a> 2 写占位符号替换乱七八糟的算子</h1>
+<p><img src="/2025/03/12/2025%E5%B9%B43%E6%9C%8812%E6%97%A5-onnx5-%E7%AE%97%E5%AD%90/image-20250315101551480.png" alt="image-20250315101551480" style="zoom: 50%;"> <img src="/2025/03/12/2025%E5%B9%B43%E6%9C%8812%E6%97%A5-onnx5-%E7%AE%97%E5%AD%90/image-20250315101542696.png"></p>
+<h2 id="代码怎么写"><a class="markdownIt-Anchor" href="#代码怎么写"></a> 代码怎么写</h2>
+<h3 id="todo"><a class="markdownIt-Anchor" href="#todo"></a> TODO</h3>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/03/12/2025%E5%B9%B43%E6%9C%8812%E6%97%A5-onnx5-%E7%AE%97%E5%AD%90/" data-id="cmanj8o23000dlcv4dnxrcuh0" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/onnx/" rel="tag">onnx</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2025年3月12日-onnx4-图优化" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/03/12/2025%E5%B9%B43%E6%9C%8812%E6%97%A5-onnx4-%E5%9B%BE%E4%BC%98%E5%8C%96/" class="article-date">
+  <time class="post-time" datetime="2025-03-12T14:14:32.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">12</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/03/12/2025%E5%B9%B43%E6%9C%8812%E6%97%A5-onnx4-%E5%9B%BE%E4%BC%98%E5%8C%96/">2025年3月12日 onnx3</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="图优化"><a class="markdownIt-Anchor" href="#图优化"></a> 图优化</h1>
+<h3 id="1"><a class="markdownIt-Anchor" href="#1"></a> 1</h3>
+<p><img src="/2025/03/12/2025%E5%B9%B43%E6%9C%8812%E6%97%A5-onnx4-%E5%9B%BE%E4%BC%98%E5%8C%96/image-20250312222559294.png" alt="image-20250312222559294"></p>
+<p><strong>引擎能够针对特定硬件进行深度优化，实现最佳的性能和效率</strong></p>
+<p><img src="/2025/03/12/2025%E5%B9%B43%E6%9C%8812%E6%97%A5-onnx4-%E5%9B%BE%E4%BC%98%E5%8C%96/image-20250312224327684.png" alt="image-20250312224327684"></p>
+<h3 id="3-查看netron节点"><a class="markdownIt-Anchor" href="#3-查看netron节点"></a> 3 查看netron节点</h3>
+<p>ONNX的optimizer模块提供部分图优化的功能，例如最常用的：fuse_bn_into_conv，fuse_pad_into_conv等等。</p>
+<p><img src="/2025/03/12/2025%E5%B9%B43%E6%9C%8812%E6%97%A5-onnx4-%E5%9B%BE%E4%BC%98%E5%8C%96/image-20250312232520596.png" alt="image-20250312232520596"></p>
+<h3 id="2-为什么需要forward_fuse"><a class="markdownIt-Anchor" href="#2-为什么需要forward_fuse"></a> 2. 为什么需要forward_fuse？</h3>
+<ul>
+<li>
+<p>forward_fuse通常用于把卷积和BN层合并，或者把多个卷积分支合并，减少计算量，提高推理速度。</p>
+</li>
+<li>
+<p>如果你的模块没有BN层，或者结构很简单，不需要合并，也应该定义一个forward_fuse，让它和forward一样。</p>
+</li>
+</ul>
+<h3 id="4-onnxslim-模块未安装简化失败"><a class="markdownIt-Anchor" href="#4-onnxslim-模块未安装简化失败"></a> <code>4 onnxslim</code> 模块未安装，简化失败</h3>
+<h4 id="简化-onnx-的主要作用"><a class="markdownIt-Anchor" href="#简化-onnx-的主要作用"></a> ✅ 简化 ONNX 的主要作用：</h4>
+<table>
+<thead>
+<tr>
+<th>好处</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>📦 减少模型大小</td>
+<td>去除冗余算子与中间变量，减小 <code>.onnx</code> 文件大小</td>
+</tr>
+<tr>
+<td>🚀 加速推理速度</td>
+<td>简化计算图后，ONNX Runtime / TensorRT 推理更快</td>
+</tr>
+<tr>
+<td>🔧 提高兼容性</td>
+<td>某些部署平台（如 OpenVINO、MNN）对简化后的模型兼容性更强</td>
+</tr>
+<tr>
+<td>🧩 易于可视化分析</td>
+<td>模型结构更清晰，利于在 Netron 中查看和理解</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/03/12/2025%E5%B9%B43%E6%9C%8812%E6%97%A5-onnx4-%E5%9B%BE%E4%BC%98%E5%8C%96/" data-id="cmanj8o210008lcv42fxu34el" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/onnx/" rel="tag">onnx</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2025年3月11日-yolov5-5-0训练" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/03/11/2025%E5%B9%B43%E6%9C%8811%E6%97%A5-yolov5-5-0%E8%AE%AD%E7%BB%83/" class="article-date">
+  <time class="post-time" datetime="2025-03-11T03:59:58.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">11</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/03/11/2025%E5%B9%B43%E6%9C%8811%E6%97%A5-yolov5-5-0%E8%AE%AD%E7%BB%83/">2025年3月11日 yolov5 5.0训练</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="sad"><a class="markdownIt-Anchor" href="#sad"></a> sad</h2>
+<h2 id="报错"><a class="markdownIt-Anchor" href="#报错"></a> 报错</h2>
+<p>库的版本要匹配上 否则会出现不确定错误</p>
+<ol>
+<li>
+<p>pydantic_core._pydantic_core.ValidationError: 1 validation error for Settings<br>
+anonymous<br>
+Input should be ‘allow’, ‘must’ or ‘never’ [type=literal_error, input_value=‘true’, input_type=str]<br>
+For further information visit <a target="_blank" rel="noopener" href="https://errors.pydantic.dev/2.10/v/literal_error">https://errors.pydantic.dev/2.10/v/literal_error</a></p>
+<p>建议：wandb 下降版本<code>pip install wandb==0.12.10</code></p>
+</li>
+<li>
+<p>You are using <code>torch.load</code> with <code>weights_only=False</code> (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling</p>
+<p>修改代码中加载模型权重的部分</p>
+<p><code> run_id = torch.load(weights, weights_only=True).get('wandb_id')  # 添加weights_only=True</code></p>
+</li>
+<li>
+<p>File “F:\Pydata\DL_NEW\YOLO\yolov5-5.0\utils\datasets.py”, line 411, in <strong>init</strong><br>
+bi = np.floor(np.arange(n) / batch_size).astype(np.int)  # batch index</p>
+</li>
+</ol>
+<p><code>pip install numpy==1.22.4       # 部分新库兼容的中间版本</code></p>
+<ol start="4">
+<li>
+<p>TypeError: Descriptors cannot be created directly.<br>
+If this call came from a _pb2.py file, your generated code is out of date and must be regenerated with protoc &gt;= 3.19.0.<br>
+If you cannot immediately regenerate your protos, some other possible workarounds are:</p>
+<ol>
+<li>Downgrade the protobuf package to 3.20.x or lower.</li>
+<li>Set PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python (but this will use pure-Python parsing and will be much slower).</li>
+</ol>
+<p><code>pip install protobuf==3.20.1 </code></p>
+</li>
+<li>
+<p>是</p>
+</li>
+</ol>
+<p>代码出现的问题:</p>
+<ol>
+<li>
+<p>手动添加SSF层</p>
+</li>
+<li>
+<p>缺少logger</p>
+<p>手动添加 <code>logger = logging.getLogger(__name__)</code></p>
+</li>
+<li></li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/03/11/2025%E5%B9%B43%E6%9C%8811%E6%97%A5-yolov5-5-0%E8%AE%AD%E7%BB%83/" data-id="cm8q1tfhp000upcv4f52t1sn8" class="article-share-link">分享</a>
       
       
     </footer>
@@ -772,11 +1009,11 @@
 
 
   
-    <article id="post-2025年1月25日-Segmentation模型" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2025年3月10日-onnx3进阶使用与常见问题" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2025/02/10/2025%E5%B9%B41%E6%9C%8825%E6%97%A5-Segmentation%E6%A8%A1%E5%9E%8B/" class="article-date">
-  <time class="post-time" datetime="2025-02-10T07:29:02.000Z" itemprop="datePublished">
-    <span class="post-month">2月</span><br/>
+    <a href="/2025/03/10/2025%E5%B9%B43%E6%9C%8810%E6%97%A5-onnx3%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" class="article-date">
+  <time class="post-time" datetime="2025-03-10T13:15:13.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
     <span class="post-day">10</span>
   </time>
 </a>
@@ -789,7 +1026,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2025/02/10/2025%E5%B9%B41%E6%9C%8825%E6%97%A5-Segmentation%E6%A8%A1%E5%9E%8B/">2025年1月25日 Segmentation模型</a>
+      <a class="article-title" href="/2025/03/10/2025%E5%B9%B43%E6%9C%8810%E6%97%A5-onnx3%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/">2025年3月10日 onnx2</a>
     </h1>
   
 
@@ -804,22 +1041,604 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="segmentation"><a class="markdownIt-Anchor" href="#segmentation"></a> Segmentation</h1>
-<h2 id="unet"><a class="markdownIt-Anchor" href="#unet"></a> UNET</h2>
-<img src="/2025/02/10/2025%E5%B9%B41%E6%9C%8825%E6%97%A5-Segmentation%E6%A8%A1%E5%9E%8B/image-20250105155647634.png" alt="image-20250105155647634" style="zoom:33%;"> 
-<h3 id="u2net"><a class="markdownIt-Anchor" href="#u2net"></a> U2NET</h3>
-<p>SOD任务</p>
-<p><img src="/2025/02/10/2025%E5%B9%B41%E6%9C%8825%E6%97%A5-Segmentation%E6%A8%A1%E5%9E%8B/image-20250105155624697.png" alt="image-20250105155624697" style="zoom:50%;"> 整体</p>
-<p><img src="/2025/02/10/2025%E5%B9%B41%E6%9C%8825%E6%97%A5-Segmentation%E6%A8%A1%E5%9E%8B/image-20250105155734798.png" alt="image-20250105155734798" style="zoom: 33%;"> 小块</p>
-<h2 id="sam"><a class="markdownIt-Anchor" href="#sam"></a> SAM</h2>
-<p><img src="https://github.com/facebookresearch/segment-anything/raw/main/assets/model_diagram.png?raw=true" alt="SAM design"></p>
-<p><img src="/2025/02/10/2025%E5%B9%B41%E6%9C%8825%E6%97%A5-Segmentation%E6%A8%A1%E5%9E%8B/image-20250107134550384.png" alt="image-20250107134550384"></p>
-<img src="/2025/02/10/2025%E5%B9%B41%E6%9C%8825%E6%97%A5-Segmentation%E6%A8%A1%E5%9E%8B/image-20250107134129164.png" alt="image-20250107134129164" style="zoom: 50%;">
+        <ul>
+<li></li>
+</ul>
+<h2 id="报错"><a class="markdownIt-Anchor" href="#报错"></a> 报错</h2>
+<p>Unsupported: ONNX export of convolution for kernel of unknown shape”，这通常与动态形状或无法推断的卷积核尺寸有</p>
+<ol>
+<li>
+<p>静态化Reshape操作</p>
+</li>
+<li>
+<p>修复多级融合的TracerWarning fused_cls = sum(w * c for w, c in zip(weights_cls, preds_cls))</p>
+<p><code>sum(w * c for w, c in zip(...))</code>中的迭代操作会被PyTorch的JIT Tracer识别为动态控制流，导致ONNX导出时无法生成静态计算图。这种Python层的迭代操作在模型跟踪阶段会被视为潜在动态行为，从而触发TracerWarning</p>
+</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="为什么导出的onnx会有那么多identity这是什么怎么消除"><a class="markdownIt-Anchor" href="#为什么导出的onnx会有那么多identity这是什么怎么消除"></a> 为什么导出的onnx会有那么多Identity，这是什么，怎么消除</h3>
+<p><img src="/2025/03/10/2025%E5%B9%B43%E6%9C%8810%E6%97%A5-onnx3%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/image-20250310215555781.png" alt="image-20250310215555781"></p>
+<ol>
+<li><strong>数据传递占位符</strong> Identity节点的核心功能是将输入张量原样输出，不进行任何计算</li>
+<li><strong>框架转换机制缺陷</strong></li>
+<li><strong>自定义算子副作用</strong></li>
+</ol>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/02/10/2025%E5%B9%B41%E6%9C%8825%E6%97%A5-Segmentation%E6%A8%A1%E5%9E%8B/" data-id="cm8q1tfhf000fpcv4fgiq10pj" class="article-share-link">分享</a>
+      <a data-url="https://shakewely.github.io/2025/03/10/2025%E5%B9%B43%E6%9C%8810%E6%97%A5-onnx3%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" data-id="cmanj8o1s0006lcv45hyj3669" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2025年3月10日-C-记录" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/03/10/2025%E5%B9%B43%E6%9C%8810%E6%97%A5-C-%E8%AE%B0%E5%BD%95/" class="article-date">
+  <time class="post-time" datetime="2025-03-10T05:29:15.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">10</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/03/10/2025%E5%B9%B43%E6%9C%8810%E6%97%A5-C-%E8%AE%B0%E5%BD%95/">2025年3月10日 C++记录</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="c"><a class="markdownIt-Anchor" href="#c"></a> ✨C++</h1>
+<h2 id="基础知识"><a class="markdownIt-Anchor" href="#基础知识"></a> 基础知识</h2>
+<h3 id="1-变量作用域"><a class="markdownIt-Anchor" href="#1-变量作用域"></a> 1 变量作用域</h3>
+<ol>
+<li>什么是局部变量 ☑️</li>
+<li>什么是全局变量 ☑️</li>
+<li>什么是块作用域，如何实现？</li>
+<li>类？</li>
+</ol>
+<h3 id="2-常量"><a class="markdownIt-Anchor" href="#2-常量"></a> 2 常量？</h3>
+<ol>
+<li>定义？</li>
+<li>如何定义常量</li>
+</ol>
+<h3 id="3-修饰符"><a class="markdownIt-Anchor" href="#3-修饰符"></a> 3 修饰符</h3>
+<ol>
+<li>
+<p>修饰符类型</p>
+</li>
+<li>
+<p>类型限定符：是什么？</p>
+<table>
+<thead>
+<tr>
+<th>static</th>
+<th>用于定义静态变量，表示该变量的作用域仅限于当前文件或当前函数内，不会被其他文件或函数访问。</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>const</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li></li>
+</ol>
+<h3 id="4-c-存储类"><a class="markdownIt-Anchor" href="#4-c-存储类"></a> 4 C++ 存储类</h3>
+<p>控制变量和函数生命周期及可见性的手段。？？？</p>
+<ul>
+<li><strong>extern</strong> 都有什么用？全局变量，具有外部链接，默认存储类为extern</li>
+<li><strong>auto</strong></li>
+<li><strong>static</strong></li>
+</ul>
+<h3 id="5-运算符"><a class="markdownIt-Anchor" href="#5-运算符"></a> 5 运算符</h3>
+<ul>
+<li>
+<p>逻辑运算符</p>
+</li>
+<li>
+<h4 id="运算符优先级"><a class="markdownIt-Anchor" href="#运算符优先级"></a> 运算符优先级</h4>
+</li>
+</ul>
+<h3 id="6-lambda-函数与表达式"><a class="markdownIt-Anchor" href="#6-lambda-函数与表达式"></a> 6 Lambda 函数与表达式</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[](int x, int y) -&gt; int &#123; int z = x + y; return z + x; &#125;</span><br></pre></td></tr></table></figure>
+<p>递归+lamda</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">auto dfs = [&amp;](this auto&amp;&amp; dfs, int i, int j) -&gt; int &#123;   // 递归逻辑  &#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="7-c-引用"><a class="markdownIt-Anchor" href="#7-c-引用"></a> 7 C++ 引用</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int a = 10;</span><br><span class="line">int &amp;ref = a;  // ref 是 a 的引用</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>int &amp;ref</code> 表示 <code>ref</code> 是一个 <code>int</code> 类型的引用。</li>
+<li><code>ref</code> 是 <code>a</code> 的别名，对 <code>ref</code> 的操作会直接作用于 <code>a</code>。</li>
+</ul>
+<h2 id="code-细节"><a class="markdownIt-Anchor" href="#code-细节"></a> code 细节</h2>
+<h4 id="1-越界"><a class="markdownIt-Anchor" href="#1-越界"></a> 1 越界</h4>
+<ul>
+<li><strong>先判断空栈，再取栈顶元素</strong>。<code>if(val &lt; min_stack.back() || min_stack.empty())</code></li>
+</ul>
+<h2 id="std"><a class="markdownIt-Anchor" href="#std"></a> std</h2>
+<h3 id="1-map-和-set"><a class="markdownIt-Anchor" href="#1-map-和-set"></a> 1 map 和 set</h3>
+<table>
+<thead>
+<tr>
+<th>特点</th>
+<th>unordered_map</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>存储</td>
+<td>键值对 (key, value)</td>
+</tr>
+<tr>
+<td>使用场景</td>
+<td>需要存储键值对，例如统计频率，映射关系</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>map[key]</code></td>
+<td>访问 / 插入元素，若 key 不存在会默认插入一个默认值</td>
+</tr>
+<tr>
+<td><code>map.at(key)</code></td>
+<td>访问元素，key 不存在会抛异常</td>
+</tr>
+<tr>
+<td><code>map.insert(&#123;key, value&#125;)</code></td>
+<td>插入键值对</td>
+</tr>
+<tr>
+<td><code>map.emplace(key, value)</code></td>
+<td>就地构造，效率比 <code>insert</code> 更高</td>
+</tr>
+<tr>
+<td><code>map.erase(key)</code></td>
+<td>删除键为 <code>key</code> 的元素</td>
+</tr>
+<tr>
+<td><code>map.clear()</code></td>
+<td>清空所有元素</td>
+</tr>
+<tr>
+<td><code>map.count(key)</code></td>
+<td>判断 key 是否存在，存在返回 1，不存在返回 0</td>
+</tr>
+<tr>
+<td><code>map.find(key)</code></td>
+<td>查找 key，返回迭代器，等于 <code>map.end()</code> 表示没找到</td>
+</tr>
+<tr>
+<td><code>map.size()</code></td>
+<td>返回元素个数</td>
+</tr>
+<tr>
+<td><code>map.empty()</code></td>
+<td>判断是否为空</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>set.insert(key)</code></td>
+<td>插入元素</td>
+</tr>
+<tr>
+<td><code>set.emplace(key)</code></td>
+<td>就地构造，效率更高</td>
+</tr>
+<tr>
+<td><code>set.erase(key)</code></td>
+<td>删除元素</td>
+</tr>
+<tr>
+<td><code>set.clear()</code></td>
+<td>清空元素</td>
+</tr>
+<tr>
+<td><code>set.count(key)</code></td>
+<td>判断元素是否存在，存在返回 1</td>
+</tr>
+<tr>
+<td><code>set.find(key)</code></td>
+<td>查找元素，返回迭代器</td>
+</tr>
+<tr>
+<td><code>set.size()</code></td>
+<td>返回元素个数</td>
+</tr>
+<tr>
+<td><code>set.empty()</code></td>
+<td>判断是否为空</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-vector"><a class="markdownIt-Anchor" href="#2-vector"></a> 2 vector</h3>
+<table>
+<thead>
+<tr>
+<th>功能类别</th>
+<th>函数名</th>
+<th>作用描述</th>
+<th>时间复杂度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>插入</strong></td>
+<td><code>push_back(val)</code></td>
+<td>在 vector 尾部插入元素 <code>val</code></td>
+<td><strong>摊销 O(1)</strong></td>
+</tr>
+<tr>
+<td><strong>删除</strong></td>
+<td><code>pop_back()</code></td>
+<td>删除 vector 尾部元素</td>
+<td><strong>O(1)</strong></td>
+</tr>
+<tr>
+<td><strong>访问</strong></td>
+<td><code>back()</code></td>
+<td>返回 vector 的最后一个元素（不删除）</td>
+<td><strong>O(1)</strong></td>
+</tr>
+<tr>
+<td></td>
+<td><code>front()</code></td>
+<td>返回 vector 的第一个元素（不删除）</td>
+<td><strong>O(1)</strong></td>
+</tr>
+<tr>
+<td></td>
+<td><code>at(index)</code></td>
+<td>返回指定下标元素，带边界检查</td>
+<td><strong>O(1)</strong></td>
+</tr>
+<tr>
+<td></td>
+<td><code>operator[]</code></td>
+<td>返回指定下标元素（不带边界检查）</td>
+<td><strong>O(1)</strong></td>
+</tr>
+<tr>
+<td><strong>状态</strong></td>
+<td><code>empty()</code></td>
+<td>检查 vector 是否为空</td>
+<td><strong>O(1)</strong></td>
+</tr>
+<tr>
+<td></td>
+<td><code>size()</code></td>
+<td>返回 vector 中元素个数</td>
+<td><strong>O(1)</strong></td>
+</tr>
+<tr>
+<td><strong>清空</strong></td>
+<td><code>clear()</code></td>
+<td>清空 vector 所有元素</td>
+<td><strong>O(n)</strong></td>
+</tr>
+<tr>
+<td><strong>其他</strong></td>
+<td><code>resize(n)</code></td>
+<td>调整 vector 大小为 <code>n</code>，默认填充值为零</td>
+<td><strong>O(n)</strong></td>
+</tr>
+<tr>
+<td></td>
+<td><code>reserve(n)</code></td>
+<td>预留空间，避免多次扩容</td>
+<td><strong>O(n)</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="3-字符串操作函数"><a class="markdownIt-Anchor" href="#3-字符串操作函数"></a> 3、字符串操作函数</h3>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>功能</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>s.length()</code> / <code>s.size()</code></td>
+<td>字符串长度</td>
+<td></td>
+</tr>
+<tr>
+<td><code>s.substr(pos, len)</code></td>
+<td>子串</td>
+<td><code>s.substr(0, 3)</code></td>
+</tr>
+<tr>
+<td><code>s.find(sub)</code></td>
+<td>查找子串位置</td>
+<td><code>s.find(&quot;abc&quot;)</code></td>
+</tr>
+<tr>
+<td><code>s.rfind(sub)</code></td>
+<td>反向查找子串位置</td>
+<td></td>
+</tr>
+<tr>
+<td><code>s.erase(pos, len)</code></td>
+<td>删除子串</td>
+<td></td>
+</tr>
+<tr>
+<td><code>s.insert(pos, sub)</code></td>
+<td>插入子串</td>
+<td></td>
+</tr>
+<tr>
+<td><code>s.replace(pos, len, sub)</code></td>
+<td>替换子串</td>
+<td></td>
+</tr>
+<tr>
+<td><code>reverse(s.begin(), s.end())</code></td>
+<td>字符串反转</td>
+<td></td>
+</tr>
+<tr>
+<td><code>sort(s.begin(), s.end())</code></td>
+<td>字符串排序</td>
+<td></td>
+</tr>
+<tr>
+<td><code>toupper(ch)</code> / <code>tolower(ch)</code></td>
+<td>字符大小写转换</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="4-数字cmath"><a class="markdownIt-Anchor" href="#4-数字cmath"></a> 4、数字（<cmath>`）</cmath></h3>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>功能</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>abs(x)</code></td>
+<td>绝对值</td>
+<td><code>abs(-3) // 3</code></td>
+</tr>
+<tr>
+<td><code>pow(a, b)</code></td>
+<td>幂</td>
+<td><code>pow(2, 3) // 8</code></td>
+</tr>
+<tr>
+<td><code>sqrt(x)</code></td>
+<td>开方</td>
+<td><code>sqrt(16) // 4</code></td>
+</tr>
+<tr>
+<td><code>log(x)</code></td>
+<td>自然对数</td>
+<td></td>
+</tr>
+<tr>
+<td><code>log10(x)</code></td>
+<td>以 10 为底的对数</td>
+<td></td>
+</tr>
+<tr>
+<td><code>ceil(x)</code></td>
+<td>向上取整</td>
+<td><code>ceil(2.3) // 3</code></td>
+</tr>
+<tr>
+<td><code>floor(x)</code></td>
+<td>向下取整</td>
+<td><code>floor(2.7) // 2</code></td>
+</tr>
+<tr>
+<td><code>round(x)</code></td>
+<td>四舍五入</td>
+<td><code>round(2.5) // 3</code></td>
+</tr>
+<tr>
+<td><code>max(a, b)</code> / <code>min(a, b)</code></td>
+<td>最大/最小值</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="5-算法algorithm"><a class="markdownIt-Anchor" href="#5-算法algorithm"></a> 5 算法（<code>&lt;algorithm&gt;</code>）</h3>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>功能</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sort(start, end)</code></td>
+<td>排序</td>
+<td></td>
+</tr>
+<tr>
+<td><code>reverse(start, end)</code></td>
+<td>反转</td>
+<td></td>
+</tr>
+<tr>
+<td><code>next_permutation(start, end)</code></td>
+<td>下一个排列</td>
+<td></td>
+</tr>
+<tr>
+<td><code>prev_permutation(start, end)</code></td>
+<td>上一个排列</td>
+<td></td>
+</tr>
+<tr>
+<td><code>lower_bound(start, end, val)</code></td>
+<td>二分查找，返回 ≥val 的首元素迭代器</td>
+<td></td>
+</tr>
+<tr>
+<td><code>upper_bound(start, end, val)</code></td>
+<td>二分查找，返回 &gt;val 的首元素迭代器</td>
+<td></td>
+</tr>
+<tr>
+<td><code>count(start, end, val)</code></td>
+<td>统计元素出现次数</td>
+<td></td>
+</tr>
+<tr>
+<td><code>find(start, end, val)</code></td>
+<td>查找元素</td>
+<td></td>
+</tr>
+<tr>
+<td><code>accumulate(start, end, init)</code></td>
+<td>元素累加 (需 <code>&lt;numeric&gt;</code>)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h1 id="力扣刷题"><a class="markdownIt-Anchor" href="#力扣刷题"></a> 🚀力扣刷题</h1>
+<h2 id="算法设计"><a class="markdownIt-Anchor" href="#算法设计"></a> 算法设计</h2>
+<h3 id="1-快慢指针算法"><a class="markdownIt-Anchor" href="#1-快慢指针算法"></a> 1 快慢指针算法</h3>
+<ol>
+<li>判断循环</li>
+<li>遍历</li>
+</ol>
+<h3 id="2-贪心算法"><a class="markdownIt-Anchor" href="#2-贪心算法"></a> 2 贪心算法</h3>
+<ol>
+<li>一般用在有cost的</li>
+</ol>
+<h3 id="3-动态规划"><a class="markdownIt-Anchor" href="#3-动态规划"></a> 3 动态规划</h3>
+<ol>
+<li>后面的前面已经解决过了// 重后面开始算起，简单的算起</li>
+<li>背包问题 爬楼梯</li>
+<li>滚动数组</li>
+<li>递归【枚举判断初始条件是否正确】–&gt; 变成动态规划  存储前状态变量</li>
+</ol>
+<h3 id="4-滑动窗口思想总结"><a class="markdownIt-Anchor" href="#4-滑动窗口思想总结"></a> 4 滑动窗口思想总结</h3>
+<p><strong>核心思想：</strong><br>
+滑动窗口是一种高效解决「子数组 / 子区间 / 子串」问题的技巧，</p>
+<p>维护窗口大小，缩小当前维护与扩展窗口</p>
+<p>通常用于：</p>
+<ul>
+<li><strong>连续子序列</strong>：比如最长不重复子串、子数组和等。</li>
+<li></li>
+</ul>
+<h3 id="5-用栈追溯"><a class="markdownIt-Anchor" href="#5-用栈追溯"></a> 5 用栈追溯</h3>
+<h3 id="5-链表"><a class="markdownIt-Anchor" href="#5-链表"></a> 5 链表</h3>
+<ol>
+<li>呀节点 避免nullptr的判断 <code>return dummy-&gt;next</code> 即可</li>
+</ol>
+<h2 id="日期记录"><a class="markdownIt-Anchor" href="#日期记录"></a> 🌏日期记录</h2>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/03/10/2025%E5%B9%B43%E6%9C%8810%E6%97%A5-C-%E8%AE%B0%E5%BD%95/" data-id="cm8q1tfhn000ppcv4eds1bem1" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/" rel="tag">C++</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2025年3月7日-loss汇总" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/03/06/2025%E5%B9%B43%E6%9C%887%E6%97%A5-loss%E6%B1%87%E6%80%BB/" class="article-date">
+  <time class="post-time" datetime="2025-03-06T04:44:46.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">06</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/03/06/2025%E5%B9%B43%E6%9C%887%E6%97%A5-loss%E6%B1%87%E6%80%BB/">2025年3月7日 loss汇总</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/03/06/2025%E5%B9%B43%E6%9C%887%E6%97%A5-loss%E6%B1%87%E6%80%BB/" data-id="cm8q1tfhy001cpcv43gu2ejcs" class="article-share-link">分享</a>
       
       
     </footer>
@@ -834,7 +1653,7 @@
 
 
   <nav id="page-nav">
-    <a class="extend prev" rel="prev" href="/">&amp;laquo; pre</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" href="/page/3/">next &amp;raquo;</a>
+    <a class="extend prev" rel="prev" href="/">&amp;laquo; pre</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/10/">10</a><a class="extend next" rel="next" href="/page/3/">next &amp;raquo;</a>
   </nav>
 </section>
         
@@ -875,9 +1694,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>90</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>95</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>19</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>27</strong><br>标签</div></a>
     </div>
 
 

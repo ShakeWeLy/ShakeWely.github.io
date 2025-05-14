@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2025年3月14日 数据增强方法 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="数据预处理  数据增强方法  1 数据增强的作用 1） 避免过拟合。当数据集具有某种明显的特征，例如数据集中图片基本在同一个场景中拍摄，使用Cutout方法和风格迁移变化等相关方法可避免模型学到跟目标无关的信息。 2）提升模型鲁棒性，降低模型对图像的敏感度。当训练数据都属于比较理想的状态，碰到一些特殊情况，如遮挡，亮度，模糊等情况容易识别错误，对训练数据加上噪声，掩码等方法可提升模型鲁棒性。 3">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2025年3月14日 数据增强方法">
+<meta property="og:url" content="https://shakewely.github.io/2025/03/14/2025%E5%B9%B43%E6%9C%8814%E6%97%A5-%E6%8D%AE%E5%A2%9E%E5%BC%BA%E6%96%B9%E6%B3%95/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="数据预处理  数据增强方法  1 数据增强的作用 1） 避免过拟合。当数据集具有某种明显的特征，例如数据集中图片基本在同一个场景中拍摄，使用Cutout方法和风格迁移变化等相关方法可避免模型学到跟目标无关的信息。 2）提升模型鲁棒性，降低模型对图像的敏感度。当训练数据都属于比较理想的状态，碰到一些特殊情况，如遮挡，亮度，模糊等情况容易识别错误，对训练数据加上噪声，掩码等方法可提升模型鲁棒性。 3">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2025/03/14/2025%E5%B9%B43%E6%9C%8814%E6%97%A5-%E6%8D%AE%E5%A2%9E%E5%BC%BA%E6%96%B9%E6%B3%95/image-20250314143616191.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/03/14/2025%E5%B9%B43%E6%9C%8814%E6%97%A5-%E6%8D%AE%E5%A2%9E%E5%BC%BA%E6%96%B9%E6%B3%95/image-20250314143710300.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/03/14/2025%E5%B9%B43%E6%9C%8814%E6%97%A5-%E6%8D%AE%E5%A2%9E%E5%BC%BA%E6%96%B9%E6%B3%95/image-20250314143803362.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/03/14/2025%E5%B9%B43%E6%9C%8814%E6%97%A5-%E6%8D%AE%E5%A2%9E%E5%BC%BA%E6%96%B9%E6%B3%95/image-20250314152506435.png">
+<meta property="article:published_time" content="2025-03-14T05:34:43.000Z">
+<meta property="article:modified_time" content="2025-05-08T11:55:36.655Z">
+<meta property="article:author" content="Weakliy">
+<meta property="article:tag" content="DL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shakewely.github.io/2025/03/14/2025%E5%B9%B43%E6%9C%8814%E6%97%A5-%E6%8D%AE%E5%A2%9E%E5%BC%BA%E6%96%B9%E6%B3%95/image-20250314143616191.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>95</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>27</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2025年3月14日-据增强方法" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/03/14/2025%E5%B9%B43%E6%9C%8814%E6%97%A5-%E6%8D%AE%E5%A2%9E%E5%BC%BA%E6%96%B9%E6%B3%95/" class="article-date">
+  <time class="post-time" datetime="2025-03-14T05:34:43.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">14</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2025年3月14日 数据增强方法
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="数据预处理"><a class="markdownIt-Anchor" href="#数据预处理"></a> 数据预处理</h1>
+<h2 id="数据增强方法"><a class="markdownIt-Anchor" href="#数据增强方法"></a> 数据增强方法</h2>
+<h3 id="1-数据增强的作用"><a class="markdownIt-Anchor" href="#1-数据增强的作用"></a> 1 数据增强的作用</h3>
+<p>1） 避免过拟合。当数据集具有某种明显的特征，例如数据集中图片基本在同一个场景中拍摄，使用Cutout方法和风格迁移变化等相关方法可避免模型学到跟目标无关的信息。</p>
+<p>2）提升模型鲁棒性，降低模型对图像的敏感度。当训练数据都属于比较理想的状态，碰到一些特殊情况，如遮挡，亮度，模糊等情况容易识别错误，对训练数据加上噪声，掩码等方法可提升模型鲁棒性。</p>
+<p>3）增加训练数据，提高模型泛化能力。</p>
+<p>4）避免样本不均衡。在工业缺陷检测方面，医疗疾病识别方面，容易出现正负样本极度不平衡的情况，通过对少样本进行一些数据增强方法，降低样本不均衡比例。</p>
+<p>———————————————</p>
+<h3 id="2-哪些数据增强方法"><a class="markdownIt-Anchor" href="#2-哪些数据增强方法"></a> 2 哪些数据增强方法</h3>
+<h4 id="几何变换"><a class="markdownIt-Anchor" href="#几何变换"></a> 几何变换</h4>
+<p>随机旋转（±15°）、</p>
+<p>翻转</p>
+<p>裁剪，</p>
+<p>缩放，</p>
+<p>平移，</p>
+<h4 id="像素变换"><a class="markdownIt-Anchor" href="#像素变换"></a> 像素变换</h4>
+<p>高斯噪声、</p>
+<p>运动模糊模拟</p>
+<p>调整HSV对比度</p>
+<p>调节亮度，饱和度，直方图均衡化，调整白平衡</p>
+<h3 id="3-特殊任务"><a class="markdownIt-Anchor" href="#3-特殊任务"></a> 3 特殊任务</h3>
+<h4 id="适合分类任务"><a class="markdownIt-Anchor" href="#适合分类任务"></a> 适合分类任务</h4>
+<p><img src="/2025/03/14/2025%E5%B9%B43%E6%9C%8814%E6%97%A5-%E6%8D%AE%E5%A2%9E%E5%BC%BA%E6%96%B9%E6%B3%95/image-20250314143616191.png" alt="image-20250314143616191"></p>
+<blockquote>
+<p>Mixup, Cutmix只用于分类任务</p>
+</blockquote>
+<h4 id="适合检测任务"><a class="markdownIt-Anchor" href="#适合检测任务"></a> 适合检测任务</h4>
+<p>GridMask</p>
+<img src="/2025/03/14/2025%E5%B9%B43%E6%9C%8814%E6%97%A5-%E6%8D%AE%E5%A2%9E%E5%BC%BA%E6%96%B9%E6%B3%95/image-20250314143710300.png" alt="image-20250314143710300" style="zoom: 33%;"> 
+<h4 id="mosaic数据增强"><a class="markdownIt-Anchor" href="#mosaic数据增强"></a> mosaic数据增强</h4>
+<img src="/2025/03/14/2025%E5%B9%B43%E6%9C%8814%E6%97%A5-%E6%8D%AE%E5%A2%9E%E5%BC%BA%E6%96%B9%E6%B3%95/image-20250314143803362.png" alt="image-20250314143803362" style="zoom: 43%;"> 
+<h2 id="4-transformscompose"><a class="markdownIt-Anchor" href="#4-transformscompose"></a> 4 Transforms.Compose</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">transform = transforms.Compose([</span><br><span class="line">    transforms.Resize(<span class="number">256</span>),          <span class="comment"># 调整图像尺寸</span></span><br><span class="line">    transforms.RandomCrop(<span class="number">224</span>),      <span class="comment"># 随机裁剪为224x224</span></span><br><span class="line">    transforms.RandomHorizontalFlip(), <span class="comment"># 随机水平翻转（概率0.5）</span></span><br><span class="line">    transforms.ToTensor(),           <span class="comment"># 转为张量并归一化至[0,1]</span></span><br><span class="line">    transforms.Normalize(            <span class="comment"># 标准化（均值、标准差）</span></span><br><span class="line">        mean=[<span class="number">0.485</span>, <span class="number">0.456</span>, <span class="number">0.406</span>], </span><br><span class="line">        std=[<span class="number">0.229</span>, <span class="number">0.224</span>, <span class="number">0.225</span>]</span><br><span class="line">    )</span><br><span class="line">])</span><br></pre></td></tr></table></figure>
+<h3 id="5-复杂场景的特殊处理"><a class="markdownIt-Anchor" href="#5-复杂场景的特殊处理"></a> 5 复杂场景的特殊处理</h3>
+<p>复杂场景如图像可能包含以下问题：</p>
+<ol>
+<li><strong>遮挡与局部模糊</strong>（如交通监控中的车辆遮挡）</li>
+<li><strong>光照不均</strong>（如夜间低光照或强反光区域）</li>
+<li><strong>动态模糊</strong>（如快速移动目标）</li>
+<li><strong>背景干扰</strong>（如医疗图像中器官重叠</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">transform = Compose([</span><br><span class="line">    RandomPerspective(distortion_scale=0.5),  # 透视变形模拟遮挡  </span><br><span class="line">    AdjustGamma(gamma=0.5),                   # 调整伽马值应对低光照  </span><br><span class="line">    GaussianBlur(kernel_size=5)               # 模拟运动模糊  </span><br><span class="line">])</span><br></pre></td></tr></table></figure>
+<h2 id="数据不平衡问题"><a class="markdownIt-Anchor" href="#数据不平衡问题"></a> <strong>数据不平衡问题</strong></h2>
+<p>参考:<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/296632599%5C">https://zhuanlan.zhihu.com/p/296632599\</a></p>
+<h3 id="1-数据不平衡"><a class="markdownIt-Anchor" href="#1-数据不平衡"></a> 1 数据不平衡</h3>
+<p>不同类别的样本量差异非常大，或者少数样本代表了业务的关键数据</p>
+<h3 id="2-如何处理"><a class="markdownIt-Anchor" href="#2-如何处理"></a> 2 <strong>如何处理</strong></h3>
+<ol>
+<li>
+<p>欠采样：<strong>在少量样本数量不影响模型训练的情况下</strong>，可通过对<strong>多数类样本欠采样</strong>，实现少数样本和多数样本均衡。</p>
+</li>
+<li>
+<p>过采样：在少量样本数量<strong>不支持</strong>模型训练的情况下，可以通过对<strong>少数类样本过采样</strong>，实现少数样本和多数样本的均衡。</p>
+</li>
+<li>
+<p>模型算法：通过引入有权重的模型算法，<strong>针对少量样本着重拟合</strong>，以提升对少量样本特征的学习。</p>
+</li>
+</ol>
+<h4 id="1欠采样"><a class="markdownIt-Anchor" href="#1欠采样"></a> 1.欠采样</h4>
+<p>​	减少大样本数量的采集</p>
+<h5 id="随机法删除"><a class="markdownIt-Anchor" href="#随机法删除"></a> <strong>随机法</strong>删除</h5>
+<blockquote>
+<p>随机的删除一些多数类样本</p>
+</blockquote>
+<h4 id="2过采样"><a class="markdownIt-Anchor" href="#2过采样"></a> 2.过采样</h4>
+<h5 id="随机复制"><a class="markdownIt-Anchor" href="#随机复制"></a> <strong>随机复制</strong></h5>
+<blockquote>
+<p>对少量样本进行复制后达到样本均衡的效果以提升模型的效果。</p>
+</blockquote>
+<p><strong>样本生成</strong></p>
+<blockquote>
+<p>SMOTE方法为例，对于任意选取的少类样本，它用K近邻选取相似样本，并通过对样本线性插值得到新样本。</p>
+</blockquote>
+<h4 id="3模型算法"><a class="markdownIt-Anchor" href="#3模型算法"></a> 3.模型算法</h4>
+<p>​	从算法层面</p>
+<h5 id="focal-loss"><a class="markdownIt-Anchor" href="#focal-loss"></a> <strong>Focal Loss</strong></h5>
+<blockquote>
+<p>Focal loss 在标准交叉熵损失的基础上修改得到的，通过减少易分类样本的权重，使得模型在训练时更专注于难分类的样本</p>
+</blockquote>
+<p><strong>解耦特征和分类器</strong></p>
+<h3 id="3-目标检测中"><a class="markdownIt-Anchor" href="#3-目标检测中"></a> 3 目标检测中</h3>
+<p><strong>定义</strong></p>
+<ul>
+<li>正样本：<strong>标签区域内</strong>的图像区域，即目标图像块</li>
+<li>负样本：<strong>标签区域以外</strong>的图像区域，即图像背景区域</li>
+<li>易分正样本：容易正确分类的正样本，在实际训练过程中，<strong>该类占总体样本的比重非常高，单个样本的损失函数较小</strong>，但是累计的损失函数会主导损失函数</li>
+<li>易分负样本：容易正确分类的负样本，在实际训练过程中，<strong>该类占的比重非常高</strong>，单个样本的损失函数较小，但是累计的损失函数会主导损失函数</li>
+<li>难分正样本：错分成负样本的正样本，这部分样本在训练过程中单个样本的损失函数较高，但是<strong>该类占总体样本的比例较小</strong></li>
+<li>难分负样本：错分成正样本的负样本，这部分样本在训练过程中单个样本的损失函数教高，但是该类占总体样本的比例教小</li>
+</ul>
+<img src="/2025/03/14/2025%E5%B9%B43%E6%9C%8814%E6%97%A5-%E6%8D%AE%E5%A2%9E%E5%BC%BA%E6%96%B9%E6%B3%95/image-20250314152506435.png" alt="image-20250314152506435" style="zoom:50%;">
+<blockquote>
+<p>和grand true 的框重叠部分</p>
+</blockquote>
+<h4 id="1正负样本不均衡"><a class="markdownIt-Anchor" href="#1正负样本不均衡"></a> <strong>1.正负样本不均衡</strong></h4>
+<p>以Faster RCNN为例，在RPN部分会生成20000个左右的Anchor，由于一张图中通常有10个左右的物体，<strong>导致可能只有100个左右的Anchor会是正样本，正负样本比例约为1∶200，存在严重的不均衡。</strong></p>
+<h4 id="2难易样本不均衡"><a class="markdownIt-Anchor" href="#2难易样本不均衡"></a> <strong>2.难易样本不均衡</strong></h4>
+<ol>
+<li>难样本指的是<strong>分类不太明确的边框，处在前景与背景的过渡区域上</strong></li>
+<li>然而，大量的样本并非处在前景与背景的过渡区，而是**与真实物体没有重叠区域的负样本，或者与真实物体重叠程度很高的正样本，<strong>这部分被称为</strong>简单样本，**单个损失会较小，对参数收敛的作用有限。</li>
+</ol>
+<h4 id="3类别间样本不均衡"><a class="markdownIt-Anchor" href="#3类别间样本不均衡"></a> <strong>3.类别间样本不均衡</strong></h4>
+<p>机器学习中，样本不均衡问题的解决方法</p>
+<h1 id="多进程"><a class="markdownIt-Anchor" href="#多进程"></a> 多进程</h1>
+<h2 id="几种方法实现"><a class="markdownIt-Anchor" href="#几种方法实现"></a> 几种方法实现：</h2>
+<h3 id="多进程创建模型推理"><a class="markdownIt-Anchor" href="#多进程创建模型推理"></a> 多进程创建模型推理</h3>
+<p><strong>多进程并行推理</strong></p>
+<ol>
+<li>创建多个进程：每个进程加载一个YOLOv8模型实例，将待推理的图像或视频流分配给不同的进程并行处理。</li>
+<li>进程间通信：使用队列、管道等机制实现进程间的通信和数据交换。例如，可以使用multiprocessing.Queue来传递待处理的图像数据和推理结果。</li>
+<li>合理分配任务：根据硬件资源和任务特性，合理分配每个进程的推理任务量，避免资源浪费和性能瓶颈。</li>
+</ol>
+<p><strong>硬件加速与优化</strong></p>
+<ol>
+<li>使用GPU加速：将YOLOv8模型部署在GPU上，利用GPU的并行计算能力加速模型推理。可以使用TensorRT等工具对模型进行优化，进一步提升推理效率。</li>
+<li>模型优化：对YOLOv8模型进行量化、剪枝等优化操作，减少模型的计算复杂度和参数量，从而提高推理速度。</li>
+<li>前后处理加速：优化图像的预处理和后处理步骤，例如使用内存0拷贝技术、快速的解码和编码算法等，减少数据传输和处理的时间。</li>
+</ol>
+<p><strong>多线程辅助</strong></p>
+<ol>
+<li>多线程数据读写：在多进程推理的基础上，可以使用多线程来辅助数据的读写操作，提高数据处理的效率。例如，使用线程池来维护多个线程，每个线程负责读取或写入一部分数据。</li>
+<li>界面与推理分离：如果需要在GUI界面中进行YOLOv8推理，可以将推理任务放在单独的线程中执行，避免阻塞界面线程，提高用户体验。</li>
+</ol>
+<p>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/zhiqingAI/article/details/145017566">https://blog.csdn.net/zhiqingAI/article/details/145017566</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> multiprocessing <span class="keyword">import</span> Process, Queue</span><br><span class="line"><span class="keyword">from</span> ultralytics <span class="keyword">import</span> YOLO</span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">worker</span>(<span class="params">q, model_path</span>):</span><br><span class="line">    model = YOLO(model_path)</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        img = q.get()</span><br><span class="line">        <span class="keyword">if</span> img <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        results = model.predict(source=img)</span><br><span class="line">        <span class="comment"># 处理推理结果</span></span><br><span class="line">        <span class="built_in">print</span>(results)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    q = Queue()</span><br><span class="line">    model_path = <span class="string">&#x27;yolov8n.pt&#x27;</span></span><br><span class="line">    num_processes = <span class="number">4</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 创建多个进程</span></span><br><span class="line">    processes = []</span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(num_processes):</span><br><span class="line">        p = Process(target=worker, args=(q, model_path))</span><br><span class="line">        p.start()</span><br><span class="line">        processes.append(p)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 将图像数据放入队列</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">10</span>):</span><br><span class="line">        img_path = <span class="string">f&#x27;image_<span class="subst">&#123;i&#125;</span>.jpg&#x27;</span></span><br><span class="line">        img = cv2.imread(img_path)</span><br><span class="line">        q.put(img)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 结束进程</span></span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(num_processes):</span><br><span class="line">        q.put(<span class="literal">None</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> p <span class="keyword">in</span> processes:</span><br><span class="line">        p.join()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="多线程同时访问相同模型"><a class="markdownIt-Anchor" href="#多线程同时访问相同模型"></a> 多线程同时访问相同模型</h3>
+<p>多线程推理函数</p>
+<h4 id="1-解决图像接收端与推理端速度不匹配的问题"><a class="markdownIt-Anchor" href="#1-解决图像接收端与推理端速度不匹配的问题"></a> 1. 解决图像接收端与推理端速度不匹配的问题</h4>
+<p>当出现生产者生产太快，而消费太慢时：会让图片发生堆积，一张图片可能有2MB，如果长期运行，就会发现，程序可能在某一刻发生崩溃（内存消耗殆尽）</p>
+<h3 id="检测与识别并行"><a class="markdownIt-Anchor" href="#检测与识别并行"></a> 检测与识别并行</h3>
+<h4 id="一张图片经多个模型推理的异步模式设计"><a class="markdownIt-Anchor" href="#一张图片经多个模型推理的异步模式设计"></a> 一张图片，经多个模型推理的异步模式设计</h4>
+<p>参考:<a target="_blank" rel="noopener" href="https://blog.csdn.net/hh1357102/article/details/127586846%5C">https://blog.csdn.net/hh1357102/article/details/127586846\</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/03/14/2025%E5%B9%B43%E6%9C%8814%E6%97%A5-%E6%8D%AE%E5%A2%9E%E5%BC%BA%E6%96%B9%E6%B3%95/" data-id="cmanj8o220009lcv41hue4oqi" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DL/" rel="tag">DL</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2025/03/14/2025%E5%B9%B43%E6%9C%8816%E6%97%A5-DL%E5%85%AB%E8%82%A1%E6%96%87/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          2025年3月16日 DL八股文
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2025/03/14/2025%E5%B9%B43%E6%9C%8815%E6%97%A5-%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BB%B7%E6%8C%87%E6%A0%87/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2025年3月15日 模型评价指标</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>95</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>27</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2024 - 2025 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
