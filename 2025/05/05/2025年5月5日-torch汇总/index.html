@@ -5,15 +5,15 @@
   
   <title>2025年5月5日 torch汇总 | Weakliy_Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="1️⃣ torch.stack(preds_cls) 把 preds_cls 列表拼起来，增加一个新维度。 例子： 12python复制编辑preds_cls &#x3D; [cls1, cls2, cls3]  # 每个 cls shape (B, C, H, W)torch.stack(preds_cls) → (3, B, C, H, W) 等价于 torch.stack(preds_cls, dim">
+  <meta name="description" content="tensor 1️⃣ view(shape) 改变张量形状（reshape），但不改变内存布局。 例子： 123python复制编辑x &#x3D; torch.randn(2,3,4)y &#x3D; x.view(6,4)print(y.shape)  # torch.Size([6, 4])  2️⃣ reshape(shape) 类似 view，但更灵活，支持非连续内存。 例子： 123python复制编辑">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2025年5月5日 torch汇总">
 <meta property="og:url" content="https://shakewely.github.io/2025/05/05/2025%E5%B9%B45%E6%9C%885%E6%97%A5-torch%E6%B1%87%E6%80%BB/index.html">
 <meta property="og:site_name" content="Weakliy_Blog">
-<meta property="og:description" content="1️⃣ torch.stack(preds_cls) 把 preds_cls 列表拼起来，增加一个新维度。 例子： 12python复制编辑preds_cls &#x3D; [cls1, cls2, cls3]  # 每个 cls shape (B, C, H, W)torch.stack(preds_cls) → (3, B, C, H, W) 等价于 torch.stack(preds_cls, dim">
+<meta property="og:description" content="tensor 1️⃣ view(shape) 改变张量形状（reshape），但不改变内存布局。 例子： 123python复制编辑x &#x3D; torch.randn(2,3,4)y &#x3D; x.view(6,4)print(y.shape)  # torch.Size([6, 4])  2️⃣ reshape(shape) 类似 view，但更灵活，支持非连续内存。 例子： 123python复制编辑">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-05-05T02:35:44.000Z">
-<meta property="article:modified_time" content="2025-05-10T11:52:59.990Z">
+<meta property="article:modified_time" content="2025-05-16T05:19:16.007Z">
 <meta property="article:author" content="Weakliy">
 <meta name="twitter:card" content="summary">
   
@@ -47,9 +47,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>95</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>100</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>27</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>29</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -105,7 +105,138 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>1️⃣ <strong>torch.stack(preds_cls)</strong><br>
+        <h1 id="tensor"><a class="markdownIt-Anchor" href="#tensor"></a> tensor</h1>
+<p>1️⃣ <strong>view(shape)</strong><br>
+改变张量形状（reshape），但不改变内存布局。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x = torch.randn(2,3,4)</span><br><span class="line">y = x.view(6,4)</span><br><span class="line">print(y.shape)  # torch.Size([6, 4])</span><br></pre></td></tr></table></figure>
+<hr>
+<p>2️⃣ <strong>reshape(shape)</strong><br>
+类似 <code>view</code>，但更灵活，支持非连续内存。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x = torch.randn(2,3,4)</span><br><span class="line">y = x.reshape(6,4)</span><br><span class="line">print(y.shape)  # torch.Size([6, 4])</span><br></pre></td></tr></table></figure>
+<hr>
+<p>3️⃣ <strong>squeeze(dim=None)</strong><br>
+去掉所有为1的维度，或者指定维度的1。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x = torch.randn(2,1,3)</span><br><span class="line">y = x.squeeze()</span><br><span class="line">print(y.shape)  # torch.Size([2,3])</span><br><span class="line">y2 = x.squeeze(1)</span><br><span class="line">print(y2.shape)  # torch.Size([2,3])</span><br></pre></td></tr></table></figure>
+<hr>
+<p>4️⃣ <strong>unsqueeze(dim)</strong><br>
+在指定位置插入维度1。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x = torch.randn(2,3)</span><br><span class="line">y = x.unsqueeze(1)</span><br><span class="line">print(y.shape)  # torch.Size([2,1,3])</span><br></pre></td></tr></table></figure>
+<hr>
+<p>5️⃣ <strong>transpose(dim0, dim1)</strong><br>
+交换两个维度。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x = torch.randn(2,3,4)</span><br><span class="line">y = x.transpose(1,2)</span><br><span class="line">print(y.shape)  # torch.Size([2,4,3])</span><br></pre></td></tr></table></figure>
+<hr>
+<p>6️⃣ <strong>permute(dims)</strong><br>
+任意维度换序。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x = torch.randn(2,3,4)</span><br><span class="line">y = x.permute(0,2,1)</span><br><span class="line">print(y.shape)  # torch.Size([2,4,3])</span><br></pre></td></tr></table></figure>
+<hr>
+<p>7️⃣ <strong>contiguous()</strong><br>
+返回内存连续的 tensor（一般 <code>view</code> 前用）。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x = torch.randn(2,3,4).transpose(1,2)</span><br><span class="line">y = x.contiguous().view(2,12)</span><br><span class="line">print(y.shape)  # torch.Size([2,12])</span><br></pre></td></tr></table></figure>
+<hr>
+<p>8️⃣ <strong>to(device)</strong><br>
+转移到指定设备。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x = torch.randn(2,3)</span><br><span class="line">y = x.to(&#x27;cuda&#x27;)</span><br></pre></td></tr></table></figure>
+<hr>
+<p>9️⃣ <strong>cpu() / cuda()</strong><br>
+简写版的 to(‘cpu’) 或 to(‘cuda’)</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x = torch.randn(2,3).cuda()</span><br><span class="line">y = x.cpu()</span><br></pre></td></tr></table></figure>
+<hr>
+<p>🔟 <strong>clone()</strong><br>
+复制 tensor（新开内存）。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x = torch.randn(2,3)</span><br><span class="line">y = x.clone()</span><br></pre></td></tr></table></figure>
+<hr>
+<p>1️⃣1️⃣ <strong>detach()</strong><br>
+返回一个不参与计算图的新 tensor。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x = torch.randn(2,3, requires_grad=True)</span><br><span class="line">y = x.detach()</span><br></pre></td></tr></table></figure>
+<hr>
+<p>1️⃣2️⃣ <strong>item()</strong><br>
+返回单元素 tensor 的 python 数值。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x = torch.tensor([3.14])</span><br><span class="line">v = x.item()  # 3.14 (float)</span><br></pre></td></tr></table></figure>
+<hr>
+<p>1️⃣3️⃣ <strong>numpy()</strong><br>
+转为 numpy 数组（共享内存）。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x = torch.randn(2,3)</span><br><span class="line">arr = x.numpy()</span><br></pre></td></tr></table></figure>
+<hr>
+<p>1️⃣4️⃣ <strong>size(dim=None)</strong><br>
+返回维度大小，dim=None 返回全部 shape。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x = torch.randn(2,3,4)</span><br><span class="line">print(x.size())     # torch.Size([2,3,4])</span><br><span class="line">print(x.size(1))    # 3</span><br></pre></td></tr></table></figure>
+<hr>
+<p>1️⃣5️⃣ <strong>shape</strong><br>
+属性，等价于 <code>size()</code>。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x = torch.randn(2,3,4)</span><br><span class="line">print(x.shape)  # torch.Size([2,3,4])</span><br></pre></td></tr></table></figure>
+<hr>
+<p>1️⃣6️⃣ <strong>numel()</strong><br>
+张量元素总数。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x = torch.randn(2,3,4)</span><br><span class="line">print(x.numel())  # 24</span><br></pre></td></tr></table></figure>
+<h1 id="model"><a class="markdownIt-Anchor" href="#model"></a> model</h1>
+<p>1️⃣ <strong><code>model.parameters()</code></strong><br>
+返回一个生成器，只包含模型中所有参数（<code>nn.Parameter</code> 类型）。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑for param in model.parameters():</span><br><span class="line">    print(param.shape)</span><br></pre></td></tr></table></figure>
+<hr>
+<p>2️⃣ <strong><code>model.named_parameters()</code></strong><br>
+返回 <code>(name, param)</code> 元组的生成器，带有名字。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑for name, param in model.named_parameters():</span><br><span class="line">    print(name, param.shape)</span><br></pre></td></tr></table></figure>
+<hr>
+<p>3️⃣ <strong><code>model.children()</code></strong><br>
+返回模型的<strong>第一层子模块</strong>，不递归。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑for child in model.children():</span><br><span class="line">    print(child)  # 只是一层，例如 Conv, ReLU, Linear</span><br></pre></td></tr></table></figure>
+<hr>
+<p>4️⃣ <strong><code>model.named_children()</code></strong><br>
+返回 <code>(name, module)</code> 的生成器，第一层子模块带名字。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑for name, module in model.named_children():</span><br><span class="line">    print(name, module)</span><br></pre></td></tr></table></figure>
+<hr>
+<p>5️⃣ <strong><code>model.modules()</code></strong><br>
+返回模型中所有模块（包括自身和递归子模块）。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑for module in model.modules():</span><br><span class="line">    print(type(module))</span><br></pre></td></tr></table></figure>
+<hr>
+<p>6️⃣ <strong><code>model.named_modules()</code></strong><br>
+返回 <code>(name, module)</code> 形式的所有模块（递归 + 包括自身）。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑for name, module in model.named_modules():</span><br><span class="line">    print(name, module)</span><br></pre></td></tr></table></figure>
+<hr>
+<p>7️⃣ <strong><code>model.state_dict()</code></strong><br>
+返回包含所有参数和缓冲区（如 <code>running_mean</code>）的字典。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑for name, tensor in model.state_dict().items():</span><br><span class="line">    print(name, tensor.shape)</span><br></pre></td></tr></table></figure>
+<hr>
+<p>8️⃣ <strong><code>model.load_state_dict(state_dict)</code></strong><br>
+加载 <code>.pth</code> 文件保存的权重。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">model.load_state_dict(torch.load(&#x27;xxx.pth&#x27;))</span><br></pre></td></tr></table></figure>
+<hr>
+<p>9️⃣ <strong><code>model.eval()</code> / <code>model.train()</code></strong><br>
+切换模型模式（影响 Dropout / BatchNorm 等）。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑model.eval()   # 推理模式</span><br><span class="line">model.train()  # 训练模式</span><br></pre></td></tr></table></figure>
+<hr>
+<p>🔟 <strong><code>model.zero_grad()</code></strong><br>
+清空所有参数的梯度（等效于 <code>optimizer.zero_grad()</code>）。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">model.zero_grad()</span><br></pre></td></tr></table></figure>
+<h2 id="torch"><a class="markdownIt-Anchor" href="#torch"></a> torch</h2>
+<p>1️⃣ <strong>torch.stack(preds_cls)</strong><br>
 把 <code>preds_cls</code> 列表拼起来，增加一个新维度。</p>
 <p>例子：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑preds_cls = [cls1, cls2, cls3]  # 每个 cls shape (B, C, H, W)</span><br><span class="line">torch.stack(preds_cls) → (3, B, C, H, W)</span><br></pre></td></tr></table></figure>
@@ -333,9 +464,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>95</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>100</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>27</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>29</strong><br>标签</div></a>
     </div>
 
 

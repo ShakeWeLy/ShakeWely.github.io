@@ -43,9 +43,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>95</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>100</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>27</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>29</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -70,6 +70,838 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-2025年3月12日-onnx4-图优化" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/03/12/2025%E5%B9%B43%E6%9C%8812%E6%97%A5-onnx4-%E5%9B%BE%E4%BC%98%E5%8C%96/" class="article-date">
+  <time class="post-time" datetime="2025-03-12T14:14:32.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">12</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/03/12/2025%E5%B9%B43%E6%9C%8812%E6%97%A5-onnx4-%E5%9B%BE%E4%BC%98%E5%8C%96/">2025年3月12日 onnx3</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="图优化"><a class="markdownIt-Anchor" href="#图优化"></a> 图优化</h1>
+<h3 id="1"><a class="markdownIt-Anchor" href="#1"></a> 1</h3>
+<p><img src="/2025/03/12/2025%E5%B9%B43%E6%9C%8812%E6%97%A5-onnx4-%E5%9B%BE%E4%BC%98%E5%8C%96/image-20250312222559294.png" alt="image-20250312222559294"></p>
+<p><strong>引擎能够针对特定硬件进行深度优化，实现最佳的性能和效率</strong></p>
+<p><img src="/2025/03/12/2025%E5%B9%B43%E6%9C%8812%E6%97%A5-onnx4-%E5%9B%BE%E4%BC%98%E5%8C%96/image-20250312224327684.png" alt="image-20250312224327684"></p>
+<h3 id="3-查看netron节点"><a class="markdownIt-Anchor" href="#3-查看netron节点"></a> 3 查看netron节点</h3>
+<p>ONNX的optimizer模块提供部分图优化的功能，例如最常用的：fuse_bn_into_conv，fuse_pad_into_conv等等。</p>
+<p><img src="/2025/03/12/2025%E5%B9%B43%E6%9C%8812%E6%97%A5-onnx4-%E5%9B%BE%E4%BC%98%E5%8C%96/image-20250312232520596.png" alt="image-20250312232520596"></p>
+<h3 id="2-为什么需要forward_fuse"><a class="markdownIt-Anchor" href="#2-为什么需要forward_fuse"></a> 2. 为什么需要forward_fuse？</h3>
+<ul>
+<li>
+<p>forward_fuse通常用于把卷积和BN层合并，或者把多个卷积分支合并，减少计算量，提高推理速度。</p>
+</li>
+<li>
+<p>如果你的模块没有BN层，或者结构很简单，不需要合并，也应该定义一个forward_fuse，让它和forward一样。</p>
+</li>
+</ul>
+<h3 id="4-onnxslim-模块未安装简化失败"><a class="markdownIt-Anchor" href="#4-onnxslim-模块未安装简化失败"></a> <code>4 onnxslim</code> 模块未安装，简化失败</h3>
+<h4 id="简化-onnx-的主要作用"><a class="markdownIt-Anchor" href="#简化-onnx-的主要作用"></a> ✅ 简化 ONNX 的主要作用：</h4>
+<table>
+<thead>
+<tr>
+<th>好处</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>📦 减少模型大小</td>
+<td>去除冗余算子与中间变量，减小 <code>.onnx</code> 文件大小</td>
+</tr>
+<tr>
+<td>🚀 加速推理速度</td>
+<td>简化计算图后，ONNX Runtime / TensorRT 推理更快</td>
+</tr>
+<tr>
+<td>🔧 提高兼容性</td>
+<td>某些部署平台（如 OpenVINO、MNN）对简化后的模型兼容性更强</td>
+</tr>
+<tr>
+<td>🧩 易于可视化分析</td>
+<td>模型结构更清晰，利于在 Netron 中查看和理解</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/03/12/2025%E5%B9%B43%E6%9C%8812%E6%97%A5-onnx4-%E5%9B%BE%E4%BC%98%E5%8C%96/" data-id="cmanj8o210008lcv42fxu34el" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/onnx/" rel="tag">onnx</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2025年3月11日-yolov5-5-0训练" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/03/11/2025%E5%B9%B43%E6%9C%8811%E6%97%A5-yolov5-5-0%E8%AE%AD%E7%BB%83/" class="article-date">
+  <time class="post-time" datetime="2025-03-11T03:59:58.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">11</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/03/11/2025%E5%B9%B43%E6%9C%8811%E6%97%A5-yolov5-5-0%E8%AE%AD%E7%BB%83/">2025年3月11日 yolov5 5.0训练</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="sad"><a class="markdownIt-Anchor" href="#sad"></a> sad</h2>
+<h2 id="报错"><a class="markdownIt-Anchor" href="#报错"></a> 报错</h2>
+<p>库的版本要匹配上 否则会出现不确定错误</p>
+<ol>
+<li>
+<p>pydantic_core._pydantic_core.ValidationError: 1 validation error for Settings<br>
+anonymous<br>
+Input should be ‘allow’, ‘must’ or ‘never’ [type=literal_error, input_value=‘true’, input_type=str]<br>
+For further information visit <a target="_blank" rel="noopener" href="https://errors.pydantic.dev/2.10/v/literal_error">https://errors.pydantic.dev/2.10/v/literal_error</a></p>
+<p>建议：wandb 下降版本<code>pip install wandb==0.12.10</code></p>
+</li>
+<li>
+<p>You are using <code>torch.load</code> with <code>weights_only=False</code> (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling</p>
+<p>修改代码中加载模型权重的部分</p>
+<p><code> run_id = torch.load(weights, weights_only=True).get('wandb_id')  # 添加weights_only=True</code></p>
+</li>
+<li>
+<p>File “F:\Pydata\DL_NEW\YOLO\yolov5-5.0\utils\datasets.py”, line 411, in <strong>init</strong><br>
+bi = np.floor(np.arange(n) / batch_size).astype(np.int)  # batch index</p>
+</li>
+</ol>
+<p><code>pip install numpy==1.22.4       # 部分新库兼容的中间版本</code></p>
+<ol start="4">
+<li>
+<p>TypeError: Descriptors cannot be created directly.<br>
+If this call came from a _pb2.py file, your generated code is out of date and must be regenerated with protoc &gt;= 3.19.0.<br>
+If you cannot immediately regenerate your protos, some other possible workarounds are:</p>
+<ol>
+<li>Downgrade the protobuf package to 3.20.x or lower.</li>
+<li>Set PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python (but this will use pure-Python parsing and will be much slower).</li>
+</ol>
+<p><code>pip install protobuf==3.20.1 </code></p>
+</li>
+<li>
+<p>是</p>
+</li>
+</ol>
+<p>代码出现的问题:</p>
+<ol>
+<li>
+<p>手动添加SSF层</p>
+</li>
+<li>
+<p>缺少logger</p>
+<p>手动添加 <code>logger = logging.getLogger(__name__)</code></p>
+</li>
+<li></li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/03/11/2025%E5%B9%B43%E6%9C%8811%E6%97%A5-yolov5-5-0%E8%AE%AD%E7%BB%83/" data-id="cm8q1tfhp000upcv4f52t1sn8" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2025年3月10日-onnx3进阶使用与常见问题" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/03/10/2025%E5%B9%B43%E6%9C%8810%E6%97%A5-onnx3%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" class="article-date">
+  <time class="post-time" datetime="2025-03-10T13:15:13.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">10</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/03/10/2025%E5%B9%B43%E6%9C%8810%E6%97%A5-onnx3%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/">2025年3月10日 onnx2</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li></li>
+</ul>
+<h2 id="报错"><a class="markdownIt-Anchor" href="#报错"></a> 报错</h2>
+<p>Unsupported: ONNX export of convolution for kernel of unknown shape”，这通常与动态形状或无法推断的卷积核尺寸有</p>
+<ol>
+<li>
+<p>静态化Reshape操作</p>
+</li>
+<li>
+<p>修复多级融合的TracerWarning fused_cls = sum(w * c for w, c in zip(weights_cls, preds_cls))</p>
+<p><code>sum(w * c for w, c in zip(...))</code>中的迭代操作会被PyTorch的JIT Tracer识别为动态控制流，导致ONNX导出时无法生成静态计算图。这种Python层的迭代操作在模型跟踪阶段会被视为潜在动态行为，从而触发TracerWarning</p>
+</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="为什么导出的onnx会有那么多identity这是什么怎么消除"><a class="markdownIt-Anchor" href="#为什么导出的onnx会有那么多identity这是什么怎么消除"></a> 为什么导出的onnx会有那么多Identity，这是什么，怎么消除</h3>
+<p><img src="/2025/03/10/2025%E5%B9%B43%E6%9C%8810%E6%97%A5-onnx3%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/image-20250310215555781.png" alt="image-20250310215555781"></p>
+<ol>
+<li><strong>数据传递占位符</strong> Identity节点的核心功能是将输入张量原样输出，不进行任何计算</li>
+<li><strong>框架转换机制缺陷</strong></li>
+<li><strong>自定义算子副作用</strong></li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/03/10/2025%E5%B9%B43%E6%9C%8810%E6%97%A5-onnx3%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" data-id="cmanj8o1s0006lcv45hyj3669" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2025年3月10日-C-记录" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/03/10/2025%E5%B9%B43%E6%9C%8810%E6%97%A5-C-%E8%AE%B0%E5%BD%95/" class="article-date">
+  <time class="post-time" datetime="2025-03-10T05:29:15.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">10</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/03/10/2025%E5%B9%B43%E6%9C%8810%E6%97%A5-C-%E8%AE%B0%E5%BD%95/">2025年3月10日 C++记录</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="c"><a class="markdownIt-Anchor" href="#c"></a> ✨C++</h1>
+<h2 id="基础知识"><a class="markdownIt-Anchor" href="#基础知识"></a> 基础知识</h2>
+<h3 id="1-变量作用域"><a class="markdownIt-Anchor" href="#1-变量作用域"></a> 1 变量作用域</h3>
+<ol>
+<li>什么是局部变量 ☑️</li>
+<li>什么是全局变量 ☑️</li>
+<li>什么是块作用域，如何实现？</li>
+<li>类？</li>
+</ol>
+<h3 id="2-常量"><a class="markdownIt-Anchor" href="#2-常量"></a> 2 常量？</h3>
+<ol>
+<li>定义？</li>
+<li>如何定义常量</li>
+</ol>
+<h3 id="3-修饰符"><a class="markdownIt-Anchor" href="#3-修饰符"></a> 3 修饰符</h3>
+<ol>
+<li>
+<p>修饰符类型</p>
+</li>
+<li>
+<p>类型限定符：是什么？</p>
+<table>
+<thead>
+<tr>
+<th>static</th>
+<th>用于定义静态变量，表示该变量的作用域仅限于当前文件或当前函数内，不会被其他文件或函数访问。</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>const</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li></li>
+</ol>
+<h3 id="4-c-存储类"><a class="markdownIt-Anchor" href="#4-c-存储类"></a> 4 C++ 存储类</h3>
+<p>控制变量和函数生命周期及可见性的手段。？？？</p>
+<ul>
+<li><strong>extern</strong> 都有什么用？全局变量，具有外部链接，默认存储类为extern</li>
+<li><strong>auto</strong></li>
+<li><strong>static</strong></li>
+</ul>
+<h3 id="5-运算符"><a class="markdownIt-Anchor" href="#5-运算符"></a> 5 运算符</h3>
+<ul>
+<li>
+<p>逻辑运算符</p>
+</li>
+<li>
+<h4 id="运算符优先级"><a class="markdownIt-Anchor" href="#运算符优先级"></a> 运算符优先级</h4>
+</li>
+</ul>
+<h3 id="6-lambda-函数与表达式"><a class="markdownIt-Anchor" href="#6-lambda-函数与表达式"></a> 6 Lambda 函数与表达式</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[](int x, int y) -&gt; int &#123; int z = x + y; return z + x; &#125;</span><br></pre></td></tr></table></figure>
+<p>递归+lamda</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">auto dfs = [&amp;](this auto&amp;&amp; dfs, int i, int j) -&gt; int &#123;   // 递归逻辑  &#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="7-c-引用"><a class="markdownIt-Anchor" href="#7-c-引用"></a> 7 C++ 引用</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int a = 10;</span><br><span class="line">int &amp;ref = a;  // ref 是 a 的引用</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>int &amp;ref</code> 表示 <code>ref</code> 是一个 <code>int</code> 类型的引用。</li>
+<li><code>ref</code> 是 <code>a</code> 的别名，对 <code>ref</code> 的操作会直接作用于 <code>a</code>。</li>
+</ul>
+<h2 id="code-细节"><a class="markdownIt-Anchor" href="#code-细节"></a> code 细节</h2>
+<h4 id="1-越界"><a class="markdownIt-Anchor" href="#1-越界"></a> 1 越界</h4>
+<ul>
+<li><strong>先判断空栈，再取栈顶元素</strong>。<code>if(val &lt; min_stack.back() || min_stack.empty())</code></li>
+</ul>
+<h2 id="std"><a class="markdownIt-Anchor" href="#std"></a> std</h2>
+<h3 id="1-map-和-set"><a class="markdownIt-Anchor" href="#1-map-和-set"></a> 1 map 和 set</h3>
+<table>
+<thead>
+<tr>
+<th>特点</th>
+<th>unordered_map</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>存储</td>
+<td>键值对 (key, value)</td>
+</tr>
+<tr>
+<td>使用场景</td>
+<td>需要存储键值对，例如统计频率，映射关系</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>map[key]</code></td>
+<td>访问 / 插入元素，若 key 不存在会默认插入一个默认值</td>
+</tr>
+<tr>
+<td><code>map.at(key)</code></td>
+<td>访问元素，key 不存在会抛异常</td>
+</tr>
+<tr>
+<td><code>map.insert(&#123;key, value&#125;)</code></td>
+<td>插入键值对</td>
+</tr>
+<tr>
+<td><code>map.emplace(key, value)</code></td>
+<td>就地构造，效率比 <code>insert</code> 更高</td>
+</tr>
+<tr>
+<td><code>map.erase(key)</code></td>
+<td>删除键为 <code>key</code> 的元素</td>
+</tr>
+<tr>
+<td><code>map.clear()</code></td>
+<td>清空所有元素</td>
+</tr>
+<tr>
+<td><code>map.count(key)</code></td>
+<td>判断 key 是否存在，存在返回 1，不存在返回 0</td>
+</tr>
+<tr>
+<td><code>map.find(key)</code></td>
+<td>查找 key，返回迭代器，等于 <code>map.end()</code> 表示没找到</td>
+</tr>
+<tr>
+<td><code>map.size()</code></td>
+<td>返回元素个数</td>
+</tr>
+<tr>
+<td><code>map.empty()</code></td>
+<td>判断是否为空</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>set.insert(key)</code></td>
+<td>插入元素</td>
+</tr>
+<tr>
+<td><code>set.emplace(key)</code></td>
+<td>就地构造，效率更高</td>
+</tr>
+<tr>
+<td><code>set.erase(key)</code></td>
+<td>删除元素</td>
+</tr>
+<tr>
+<td><code>set.clear()</code></td>
+<td>清空元素</td>
+</tr>
+<tr>
+<td><code>set.count(key)</code></td>
+<td>判断元素是否存在，存在返回 1</td>
+</tr>
+<tr>
+<td><code>set.find(key)</code></td>
+<td>查找元素，返回迭代器</td>
+</tr>
+<tr>
+<td><code>set.size()</code></td>
+<td>返回元素个数</td>
+</tr>
+<tr>
+<td><code>set.empty()</code></td>
+<td>判断是否为空</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-vector"><a class="markdownIt-Anchor" href="#2-vector"></a> 2 vector</h3>
+<table>
+<thead>
+<tr>
+<th>功能类别</th>
+<th>函数名</th>
+<th>作用描述</th>
+<th>时间复杂度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>插入</strong></td>
+<td><code>push_back(val)</code></td>
+<td>在 vector 尾部插入元素 <code>val</code></td>
+<td><strong>摊销 O(1)</strong></td>
+</tr>
+<tr>
+<td><strong>删除</strong></td>
+<td><code>pop_back()</code></td>
+<td>删除 vector 尾部元素</td>
+<td><strong>O(1)</strong></td>
+</tr>
+<tr>
+<td><strong>访问</strong></td>
+<td><code>back()</code></td>
+<td>返回 vector 的最后一个元素（不删除）</td>
+<td><strong>O(1)</strong></td>
+</tr>
+<tr>
+<td></td>
+<td><code>front()</code></td>
+<td>返回 vector 的第一个元素（不删除）</td>
+<td><strong>O(1)</strong></td>
+</tr>
+<tr>
+<td></td>
+<td><code>at(index)</code></td>
+<td>返回指定下标元素，带边界检查</td>
+<td><strong>O(1)</strong></td>
+</tr>
+<tr>
+<td></td>
+<td><code>operator[]</code></td>
+<td>返回指定下标元素（不带边界检查）</td>
+<td><strong>O(1)</strong></td>
+</tr>
+<tr>
+<td><strong>状态</strong></td>
+<td><code>empty()</code></td>
+<td>检查 vector 是否为空</td>
+<td><strong>O(1)</strong></td>
+</tr>
+<tr>
+<td></td>
+<td><code>size()</code></td>
+<td>返回 vector 中元素个数</td>
+<td><strong>O(1)</strong></td>
+</tr>
+<tr>
+<td><strong>清空</strong></td>
+<td><code>clear()</code></td>
+<td>清空 vector 所有元素</td>
+<td><strong>O(n)</strong></td>
+</tr>
+<tr>
+<td><strong>其他</strong></td>
+<td><code>resize(n)</code></td>
+<td>调整 vector 大小为 <code>n</code>，默认填充值为零</td>
+<td><strong>O(n)</strong></td>
+</tr>
+<tr>
+<td></td>
+<td><code>reserve(n)</code></td>
+<td>预留空间，避免多次扩容</td>
+<td><strong>O(n)</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="3-字符串操作函数"><a class="markdownIt-Anchor" href="#3-字符串操作函数"></a> 3、字符串操作函数</h3>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>功能</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>s.length()</code> / <code>s.size()</code></td>
+<td>字符串长度</td>
+<td></td>
+</tr>
+<tr>
+<td><code>s.substr(pos, len)</code></td>
+<td>子串</td>
+<td><code>s.substr(0, 3)</code></td>
+</tr>
+<tr>
+<td><code>s.find(sub)</code></td>
+<td>查找子串位置</td>
+<td><code>s.find(&quot;abc&quot;)</code></td>
+</tr>
+<tr>
+<td><code>s.rfind(sub)</code></td>
+<td>反向查找子串位置</td>
+<td></td>
+</tr>
+<tr>
+<td><code>s.erase(pos, len)</code></td>
+<td>删除子串</td>
+<td></td>
+</tr>
+<tr>
+<td><code>s.insert(pos, sub)</code></td>
+<td>插入子串</td>
+<td></td>
+</tr>
+<tr>
+<td><code>s.replace(pos, len, sub)</code></td>
+<td>替换子串</td>
+<td></td>
+</tr>
+<tr>
+<td><code>reverse(s.begin(), s.end())</code></td>
+<td>字符串反转</td>
+<td></td>
+</tr>
+<tr>
+<td><code>sort(s.begin(), s.end())</code></td>
+<td>字符串排序</td>
+<td></td>
+</tr>
+<tr>
+<td><code>toupper(ch)</code> / <code>tolower(ch)</code></td>
+<td>字符大小写转换</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="4-数字cmath"><a class="markdownIt-Anchor" href="#4-数字cmath"></a> 4、数字（<cmath>`）</cmath></h3>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>功能</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>abs(x)</code></td>
+<td>绝对值</td>
+<td><code>abs(-3) // 3</code></td>
+</tr>
+<tr>
+<td><code>pow(a, b)</code></td>
+<td>幂</td>
+<td><code>pow(2, 3) // 8</code></td>
+</tr>
+<tr>
+<td><code>sqrt(x)</code></td>
+<td>开方</td>
+<td><code>sqrt(16) // 4</code></td>
+</tr>
+<tr>
+<td><code>log(x)</code></td>
+<td>自然对数</td>
+<td></td>
+</tr>
+<tr>
+<td><code>log10(x)</code></td>
+<td>以 10 为底的对数</td>
+<td></td>
+</tr>
+<tr>
+<td><code>ceil(x)</code></td>
+<td>向上取整</td>
+<td><code>ceil(2.3) // 3</code></td>
+</tr>
+<tr>
+<td><code>floor(x)</code></td>
+<td>向下取整</td>
+<td><code>floor(2.7) // 2</code></td>
+</tr>
+<tr>
+<td><code>round(x)</code></td>
+<td>四舍五入</td>
+<td><code>round(2.5) // 3</code></td>
+</tr>
+<tr>
+<td><code>max(a, b)</code> / <code>min(a, b)</code></td>
+<td>最大/最小值</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="5-算法algorithm"><a class="markdownIt-Anchor" href="#5-算法algorithm"></a> 5 算法（<code>&lt;algorithm&gt;</code>）</h3>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>功能</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sort(start, end)</code></td>
+<td>排序</td>
+<td></td>
+</tr>
+<tr>
+<td><code>reverse(start, end)</code></td>
+<td>反转</td>
+<td></td>
+</tr>
+<tr>
+<td><code>next_permutation(start, end)</code></td>
+<td>下一个排列</td>
+<td></td>
+</tr>
+<tr>
+<td><code>prev_permutation(start, end)</code></td>
+<td>上一个排列</td>
+<td></td>
+</tr>
+<tr>
+<td><code>lower_bound(start, end, val)</code></td>
+<td>二分查找，返回 ≥val 的首元素迭代器</td>
+<td></td>
+</tr>
+<tr>
+<td><code>upper_bound(start, end, val)</code></td>
+<td>二分查找，返回 &gt;val 的首元素迭代器</td>
+<td></td>
+</tr>
+<tr>
+<td><code>count(start, end, val)</code></td>
+<td>统计元素出现次数</td>
+<td></td>
+</tr>
+<tr>
+<td><code>find(start, end, val)</code></td>
+<td>查找元素</td>
+<td></td>
+</tr>
+<tr>
+<td><code>accumulate(start, end, init)</code></td>
+<td>元素累加 (需 <code>&lt;numeric&gt;</code>)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h1 id="力扣刷题"><a class="markdownIt-Anchor" href="#力扣刷题"></a> 🚀力扣刷题</h1>
+<h2 id="算法设计"><a class="markdownIt-Anchor" href="#算法设计"></a> 算法设计</h2>
+<h3 id="1-快慢指针算法"><a class="markdownIt-Anchor" href="#1-快慢指针算法"></a> 1 快慢指针算法</h3>
+<ol>
+<li>判断循环</li>
+<li>遍历</li>
+</ol>
+<h3 id="2-贪心算法"><a class="markdownIt-Anchor" href="#2-贪心算法"></a> 2 贪心算法</h3>
+<ol>
+<li>一般用在有cost的</li>
+</ol>
+<h3 id="3-动态规划"><a class="markdownIt-Anchor" href="#3-动态规划"></a> 3 动态规划</h3>
+<ol>
+<li>后面的前面已经解决过了// 重后面开始算起，简单的算起</li>
+<li>背包问题 爬楼梯</li>
+<li>滚动数组</li>
+<li>递归【枚举判断初始条件是否正确】–&gt; 变成动态规划  存储前状态变量</li>
+</ol>
+<h3 id="4-滑动窗口思想总结"><a class="markdownIt-Anchor" href="#4-滑动窗口思想总结"></a> 4 滑动窗口思想总结</h3>
+<p><strong>核心思想：</strong><br>
+滑动窗口是一种高效解决「子数组 / 子区间 / 子串」问题的技巧，</p>
+<p>维护窗口大小，缩小当前维护与扩展窗口</p>
+<p>通常用于：</p>
+<ul>
+<li><strong>连续子序列</strong>：比如最长不重复子串、子数组和等。</li>
+<li></li>
+</ul>
+<h3 id="5-用栈追溯"><a class="markdownIt-Anchor" href="#5-用栈追溯"></a> 5 用栈追溯</h3>
+<h3 id="5-链表"><a class="markdownIt-Anchor" href="#5-链表"></a> 5 链表</h3>
+<ol>
+<li>呀节点 避免nullptr的判断 <code>return dummy-&gt;next</code> 即可</li>
+</ol>
+<h2 id="日期记录"><a class="markdownIt-Anchor" href="#日期记录"></a> 🌏日期记录</h2>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/03/10/2025%E5%B9%B43%E6%9C%8810%E6%97%A5-C-%E8%AE%B0%E5%BD%95/" data-id="cm8q1tfhn000ppcv4eds1bem1" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/" rel="tag">C++</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2025年3月7日-loss汇总" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/03/06/2025%E5%B9%B43%E6%9C%887%E6%97%A5-loss%E6%B1%87%E6%80%BB/" class="article-date">
+  <time class="post-time" datetime="2025-03-06T04:44:46.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">06</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/03/06/2025%E5%B9%B43%E6%9C%887%E6%97%A5-loss%E6%B1%87%E6%80%BB/">2025年3月7日 loss汇总</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/03/06/2025%E5%B9%B43%E6%9C%887%E6%97%A5-loss%E6%B1%87%E6%80%BB/" data-id="cm8q1tfhy001cpcv43gu2ejcs" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-2025年3月6日-多尺度特征" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -525,335 +1357,6 @@
 
 
   
-    <article id="post-2025年2月19日-CRNN模型" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/" class="article-date">
-  <time class="post-time" datetime="2025-02-19T06:46:09.000Z" itemprop="datePublished">
-    <span class="post-month">2月</span><br/>
-    <span class="post-day">19</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/">2025年2月19日 CRNN模型</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="ocr"><a class="markdownIt-Anchor" href="#ocr"></a> OCR</h1>
-<h2 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h2>
-<p>CRNN主要是<strong>CNN（卷积神经网络）+ RNN（循环神经网络）+ CTC（连接时序分类）</strong> 的组合，广泛用于 <strong>场景文本识别（STR, Scene Text Recognition）</strong></p>
-<p><img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219145436243.png" alt="image-20250219145436243"></p>
-<p>在早期，OCR任务通常分为两个步骤：单字切割和分类任务。首先，使用投影法等技术将文本文件中的连续文字切割成单个字符，然后将这些字符输入到卷积神经网络（CNN）中进行分类。然而，这种方法现在已经有些过时。</p>
-<p>目前更流行的方法是基于深度学习的端到端的文本识别，这种方法不需要显式地进行文字切割。而是将文字识别转化为序列学习问题。尽管输入的图像尺度和文本长度可能不同，但是通过深度卷积神经网络（DCNN）和循环神经网络（RNN）的处理，以及在输出阶段应用一定的连接时序分类（CTC）翻译转录后，就可以对整个文本图像进行识别。这意味着文字的切割过程已经被融入到深度学习模型中，从而简化了整个OCR流程。</p>
-<p>深度学习在端到端OCR（光学字符识别）技术中的应用，特别是CRNN OCR和attention OCR两种技术。这两种技术都使用了CNN+RNN的网络结构进行特征学习，但在最后的输出层（翻译层）有所不同。CRNN OCR使用CTC（连接时序分类）算法进行序列对齐，而attention OCR则采用attention机制来进行序列对齐。文件中提到，CRNN算法应用更为广泛，因此主要介绍的是CRNN算法。</p>
-<h2 id="crnn"><a class="markdownIt-Anchor" href="#crnn"></a> CRNN</h2>
-<h3 id="网络结构"><a class="markdownIt-Anchor" href="#网络结构"></a> 网络结构</h3>
-<img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219150224189.png" style="zoom: 50%;">
-<h4 id="1cnn"><a class="markdownIt-Anchor" href="#1cnn"></a> 1.CNN</h4>
-<img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219150328966.png" alt="image-20250219150328966" style="zoom: 33%;">
-<h5 id="1x2-池化"><a class="markdownIt-Anchor" href="#1x2-池化"></a> 1x2 池化</h5>
-<h4 id="2map2feature-sequence"><a class="markdownIt-Anchor" href="#2map2feature-sequence"></a> 2.Map2Feature sequence</h4>
-<p><img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219150833633.png" alt="image-20250219150833633"></p>
-<img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219150936041.png" alt="image-20250219150936041" style="zoom:50%;">
-<h4 id="3rnn"><a class="markdownIt-Anchor" href="#3rnn"></a> 3.RNN</h4>
-<h5 id="lstm"><a class="markdownIt-Anchor" href="#lstm"></a> LSTM</h5>
-<img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219150959428.png" alt="image-20250219150959428" style="zoom: 50%;">
-<h5 id="双向lstm"><a class="markdownIt-Anchor" href="#双向lstm"></a> 双向LSTM</h5>
-<h5 id><a class="markdownIt-Anchor" href="#"></a> </h5>
-<h4 id="4ctcloss"><a class="markdownIt-Anchor" href="#4ctcloss"></a> 4.CTCLoss</h4>
-<img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219154341960.png" alt="image-20250219154341960" style="zoom: 80%;">
-<p>如上图，对于最简单的时序为 2 的字符识别，有两个时间步长(t0，t1)和三个可能的字符为“ａ”，“ｂ”和“-”，我们得到两个概率分布向量，如果采取最大概率路径解码的方法，则“–”的概率最大，即真实字符为空的概率为0.6*0.6=0.36。</p>
-<p>但是为字符“ａ”的情况有多种对齐组合，“aa”, “a-“和“-a”都是代表“ａ”，所以，输出“ａ”的概率应该为三种之和：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0.4 * 0.4 + 0.4 * 0.6 + 0.6 * 0.4 = 0.16 + 0.24 + 0.24 = 0.64</span><br></pre></td></tr></table></figure>
-<h4 id="5attention"><a class="markdownIt-Anchor" href="#5attention"></a> 5.Attention</h4>
-<p>基于Attention的OCR解码算法，把OCR文字识别当成文字翻译任务，即通过Attention Decoder出文字序列。</p>
-<h5 id="rnn-seq2seq"><a class="markdownIt-Anchor" href="#rnn-seq2seq"></a> <strong>RNN -&gt; Seq2Seq</strong></h5>
-<p><img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219155949098.png" alt="image-20250219155949098"></p>
-<p>左图是经典的RNN结构，右图是Seq2Seq结构。RNN的输入序列和输出序列必须有相同的时间长度，而机器翻译以及文字识别任务都是输入输出不对齐的，不能直接使用RNN结构进行解码。于是在Seq2Seq结构中，将输入序列进行Encoder编码成一个统一的语义向量Context，然后送入Decoder中一个一个解码出输出序列。在Decoder解码过程中，第一个输入字符为<start>，然后不断将前一个时刻的输出作为下一个时刻的输入，循环解码，直到输出<stop></stop>字符为止</start></p>
-<p><strong>Seq2Seq -&gt; Attention Decoder</strong></p>
-<img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219160050009.png" alt="image-20250219160050009" style="zoom: 50%;">
-<p>Seq2Seq把所有的输入序列都编码成一个统一的语义向量Context，然后再由Decoder解码。由于context包含原始序列中的所有信息，它的长度就成了限制模型性能的瓶颈。</p>
-<p>所以如果要改进Seq2Seq结构，最好的切入角度就是：**利用Encoder所有隐藏层状态解决Context长度限制问题。**于是Attention Decoder在Seq2Seq的基础上，增加了一个Attention Layer，如上图所示。</p>
-<img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219160149932.png" alt="image-20250219160149932" style="zoom: 50%;">
-<p>在Decoder时，每个时刻的解码状态跟Encoder的所有隐藏层状态进行cross-attention计算，cross-attention将当前解码的隐藏层状态和encoder的所有隐藏层状态做相关性计算，然后对encoder的所有隐藏层加权求和，最后和当前解码的隐藏层状态concat得到最终的状态。</p>
-<h4 id="6ace"><a class="markdownIt-Anchor" href="#6ace"></a> 6.ACE</h4>
-<p>基于ACE的解码方法不同于CTC和Attention，ACE的监督信号实际上是一种弱监督(<strong>输入输出没有做形式上的对齐，没有先后顺序信息，倾向于学习表征</strong>)，并且可以用于多行文字识别。</p>
-<p><img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219160702221.png" alt="image-20250219160702221"></p>
-<p><img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219160636874.png" alt="image-20250219160636874"></p>
-<p>从模型设计上来看，可以采用结合上面3种方法的**多任务文本识别模型。在训练时，以CTC为主，Attention Decoder和ACE辅助训练。在预测时，考虑到速度和性能，只采用CTC进行解码预测。**多任务可以提高模型的泛化性，同时如果对预测时间要求不高，多结果也可以提供更多的选择和对比。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    Encoder+Decoder+Attention is implemented from:</span></span><br><span class="line"><span class="string">    https://pytorch.org/tutorials/intermediate/seq2seq_translation_tutorial.html</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CNN</span>(nn.Module):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, channel_size</span>):</span><br><span class="line">        <span class="built_in">super</span>(CNN, self).__init__()</span><br><span class="line">        self.cnn = nn.Sequential(</span><br><span class="line">                      nn.Conv2d(channel_size, <span class="number">64</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">1</span>), nn.ReLU(<span class="literal">True</span>), nn.MaxPool2d(<span class="number">2</span>, <span class="number">2</span>),</span><br><span class="line">                      nn.Conv2d(<span class="number">64</span>, <span class="number">128</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">1</span>), nn.ReLU(<span class="literal">True</span>), nn.MaxPool2d(<span class="number">2</span>, <span class="number">2</span>),</span><br><span class="line">                      nn.Conv2d(<span class="number">128</span>, <span class="number">256</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">1</span>), nn.BatchNorm2d(<span class="number">256</span>), nn.ReLU(<span class="literal">True</span>),</span><br><span class="line">                      nn.Conv2d(<span class="number">256</span>, <span class="number">256</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">1</span>), nn.ReLU(<span class="literal">True</span>), nn.MaxPool2d((<span class="number">2</span>,<span class="number">2</span>), (<span class="number">2</span>,<span class="number">1</span>), (<span class="number">0</span>,<span class="number">1</span>)),</span><br><span class="line">                      nn.Conv2d(<span class="number">256</span>, <span class="number">512</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">1</span>), nn.BatchNorm2d(<span class="number">512</span>), nn.ReLU(<span class="literal">True</span>),</span><br><span class="line">                      nn.Conv2d(<span class="number">512</span>, <span class="number">512</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">1</span>), nn.ReLU(<span class="literal">True</span>), nn.MaxPool2d((<span class="number">2</span>,<span class="number">2</span>), (<span class="number">2</span>,<span class="number">1</span>), (<span class="number">0</span>,<span class="number">1</span>)),</span><br><span class="line">                      nn.Conv2d(<span class="number">512</span>, <span class="number">512</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">0</span>), nn.BatchNorm2d(<span class="number">512</span>), nn.ReLU(<span class="literal">True</span>))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, <span class="built_in">input</span></span>):</span><br><span class="line">        <span class="comment"># [n, channel_size, 32, 280] -&gt; [n, 512, 1, 71]</span></span><br><span class="line">        conv = self.cnn(<span class="built_in">input</span>)</span><br><span class="line">        <span class="keyword">return</span> conv</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">BidirectionalLSTM</span>(nn.Module):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, input_size, hidden_size, output_size</span>):</span><br><span class="line">        <span class="built_in">super</span>(BidirectionalLSTM, self).__init__()</span><br><span class="line"></span><br><span class="line">        self.rnn = nn.LSTM(input_size, hidden_size, bidirectional=<span class="literal">True</span>)</span><br><span class="line">        self.embedding = nn.Linear(hidden_size * <span class="number">2</span>, output_size)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, <span class="built_in">input</span></span>):</span><br><span class="line">        recurrent, _ = self.rnn(<span class="built_in">input</span>)</span><br><span class="line">        T, b, h = recurrent.size()</span><br><span class="line">        t_rec = recurrent.view(T * b, h)</span><br><span class="line"></span><br><span class="line">        output = self.embedding(t_rec)  <span class="comment"># [T * b, output_size]</span></span><br><span class="line">        output = output.view(T, b, -<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> output</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">AttnDecoderRNN</span>(nn.Module):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, hidden_size, output_size, dropout_p=<span class="number">0.1</span>, max_length=<span class="number">71</span></span>):</span><br><span class="line">        <span class="built_in">super</span>(AttnDecoderRNN, self).__init__()</span><br><span class="line">        self.hidden_size = hidden_size</span><br><span class="line">        self.output_size = output_size</span><br><span class="line">        self.dropout_p = dropout_p</span><br><span class="line">        self.max_length = max_length</span><br><span class="line"></span><br><span class="line">        self.embedding = nn.Embedding(self.output_size, self.hidden_size)</span><br><span class="line">        self.attn = nn.Linear(self.hidden_size * <span class="number">2</span>, self.max_length)</span><br><span class="line">        self.attn_combine = nn.Linear(self.hidden_size * <span class="number">2</span>, self.hidden_size)</span><br><span class="line">        self.dropout = nn.Dropout(self.dropout_p)</span><br><span class="line">        self.gru = nn.GRU(self.hidden_size, self.hidden_size)</span><br><span class="line">        self.out = nn.Linear(self.hidden_size, self.output_size)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, <span class="built_in">input</span>, hidden, encoder_outputs</span>):</span><br><span class="line">        embedded = self.embedding(<span class="built_in">input</span>)</span><br><span class="line">        embedded = self.dropout(embedded)</span><br><span class="line"></span><br><span class="line">        attn_weights = F.softmax(self.attn(torch.cat((embedded, hidden[<span class="number">0</span>]), <span class="number">1</span>)), dim=<span class="number">1</span>)</span><br><span class="line">        attn_applied = torch.bmm(attn_weights.unsqueeze(<span class="number">1</span>), encoder_outputs.permute(<span class="number">1</span>, <span class="number">0</span>, <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">        output = torch.cat((embedded, attn_applied.squeeze(<span class="number">1</span>)), <span class="number">1</span>)</span><br><span class="line">        output = self.attn_combine(output).unsqueeze(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">        output = F.relu(output)</span><br><span class="line">        output, hidden = self.gru(output, hidden)</span><br><span class="line"></span><br><span class="line">        output = F.log_softmax(self.out(output[<span class="number">0</span>]), dim=<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> output, hidden, attn_weights</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">initHidden</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> torch.zeros(<span class="number">1</span>, <span class="number">1</span>, self.hidden_size, device=device)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Encoder</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, channel_size, hidden_size</span>):</span><br><span class="line">        <span class="built_in">super</span>(Encoder, self).__init__()</span><br><span class="line">        self.cnn = CNN(channel_size)</span><br><span class="line">        self.rnn = nn.Sequential(</span><br><span class="line">            BidirectionalLSTM(<span class="number">512</span>, hidden_size, hidden_size),</span><br><span class="line">            BidirectionalLSTM(hidden_size, hidden_size, hidden_size))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, <span class="built_in">input</span></span>):</span><br><span class="line">        <span class="comment"># conv features</span></span><br><span class="line">        conv = self.cnn(<span class="built_in">input</span>)</span><br><span class="line">        b, c, h, w = conv.size()</span><br><span class="line">        <span class="keyword">assert</span> h == <span class="number">1</span>, <span class="string">&quot;the height of conv must be 1&quot;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># rnn feature</span></span><br><span class="line">        conv = conv.squeeze(<span class="number">2</span>)        <span class="comment"># [b, c, 1, w] -&gt; [b, c, w]</span></span><br><span class="line">        conv = conv.permute(<span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>)  <span class="comment"># [b, c, w] -&gt; [w, b, c]</span></span><br><span class="line">        output = self.rnn(conv)</span><br><span class="line">        <span class="keyword">return</span> output</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Decoder</span>(nn.Module):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, hidden_size, output_size, dropout_p=<span class="number">0.1</span>, max_length=<span class="number">71</span></span>):</span><br><span class="line">        <span class="built_in">super</span>(Decoder, self).__init__()</span><br><span class="line">        self.hidden_size = hidden_size</span><br><span class="line">        self.decoder = AttnDecoderRNN(hidden_size, output_size, dropout_p, max_length)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, <span class="built_in">input</span>, hidden, encoder_outputs</span>):</span><br><span class="line">        <span class="keyword">return</span> self.decoder(<span class="built_in">input</span>, hidden, encoder_outputs)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">initHidden</span>(<span class="params">self, batch_size</span>):</span><br><span class="line">        result = torch.autograd.Variable(torch.zeros(<span class="number">1</span>, batch_size, self.hidden_size))</span><br><span class="line">        <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="model改进"><a class="markdownIt-Anchor" href="#model改进"></a> Model改进</h2>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/" data-id="cm8q1tfhm000mpcv41rh6e84u" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2025年2月19日-pytorch2" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-pytorch2/" class="article-date">
-  <time class="post-time" datetime="2025-02-19T03:10:27.000Z" itemprop="datePublished">
-    <span class="post-month">2月</span><br/>
-    <span class="post-day">19</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-pytorch2/">2025年2月19日 pytorch2</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>TorchScript是PyTorch中实现**即时编译（JIT）**的核心工具，它通过将动态图模型转换为静态图形式，解决了PyTorch模型在部署、性能优化和多平台支持等方面的关键问题</p>
-<p><strong>即时编译（JIT）</strong>：一种程序优化技术，通过将代码在运行时编译为机器码来提升性能。PyTorch JIT通过TorchScript实现这一机制</p>
-<p>动态图是在运行时动态构建计算图，允许灵活修改，适合开发和调试；</p>
-<p>而静态图是预先定义完整的计算图，然后进行优化和执行，适合部署和性能优化</p>
-<p>例如，PyTorch的动态图允许在训练循环中修改模型结构，而TensorFlow的静态图一旦编译后无法更改。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-pytorch2/" data-id="cm8q1tfhh000jpcv4fh4o5snj" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2025年2月14日-推理框架2" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/02/13/2025%E5%B9%B42%E6%9C%8814%E6%97%A5-%E6%8E%A8%E7%90%86%E6%A1%86%E6%9E%B62/" class="article-date">
-  <time class="post-time" datetime="2025-02-13T14:12:11.000Z" itemprop="datePublished">
-    <span class="post-month">2月</span><br/>
-    <span class="post-day">13</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/02/13/2025%E5%B9%B42%E6%9C%8814%E6%97%A5-%E6%8E%A8%E7%90%86%E6%A1%86%E6%9E%B62/">2025年2月14日 推理框架2——MNN</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="mnn"><a class="markdownIt-Anchor" href="#mnn"></a> MNN</h1>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/02/13/2025%E5%B9%B42%E6%9C%8814%E6%97%A5-%E6%8E%A8%E7%90%86%E6%A1%86%E6%9E%B62/" data-id="cm8q1tfhm000npcv4gkf71mcg" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2025年2月13日-推理框架" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/02/13/2025%E5%B9%B42%E6%9C%8813%E6%97%A5-%E6%8E%A8%E7%90%86%E6%A1%86%E6%9E%B6/" class="article-date">
-  <time class="post-time" datetime="2025-02-13T06:43:20.000Z" itemprop="datePublished">
-    <span class="post-month">2月</span><br/>
-    <span class="post-day">13</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/02/13/2025%E5%B9%B42%E6%9C%8813%E6%97%A5-%E6%8E%A8%E7%90%86%E6%A1%86%E6%9E%B6/">2025年2月13日 推理框架1-OpenVINO</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="openvino"><a class="markdownIt-Anchor" href="#openvino"></a> OpenVINO</h2>
-<h2 id="introduce"><a class="markdownIt-Anchor" href="#introduce"></a> Introduce</h2>
-<h3 id="openvino-工具"><a class="markdownIt-Anchor" href="#openvino-工具"></a> OpenVINO 工具</h3>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://github.com/openvinotoolkit/nncf">神经网络压缩框架 （NNCF）</a> - 高级模型优化技术，包括量化、滤波器修剪、二值化和稀疏性。</li>
-<li><a target="_blank" rel="noopener" href="https://github.com/openvinotoolkit/openvino.genai">GenAI 存储库</a>和 <a target="_blank" rel="noopener" href="https://github.com/openvinotoolkit/openvino_tokenizers">OpenVINO Tokenizers</a> - 用于开发和优化生成式 AI 应用程序的资源和工具。</li>
-<li><a target="_blank" rel="noopener" href="https://github.com/openvinotoolkit/model_server">OpenVINO™ 模型服务器 （OVMS）</a> - 一种可扩展的高性能解决方案，用于为针对 Intel 架构优化的模型提供服务。</li>
-<li><a target="_blank" rel="noopener" href="https://geti.intel.com/">Intel® Geti™</a> - 适用于计算机视觉用例的交互式视频和图像注释工具。</li>
-</ul>
-<h3 id="如何优化的"><a class="markdownIt-Anchor" href="#如何优化的"></a> 如何优化的</h3>
-<img src="/2025/02/13/2025%E5%B9%B42%E6%9C%8813%E6%97%A5-%E6%8E%A8%E7%90%86%E6%A1%86%E6%9E%B6/image-20250213215109749.png" alt="image-20250213215109749"> 
-<ol>
-<li>模型压缩、层融合（Layer Fusion）、量化（Quantization）等技术优化模型</li>
-<li>自动利用硬件加速特性</li>
-</ol>
-<h2 id="workflow"><a class="markdownIt-Anchor" href="#workflow"></a> Workflow</h2>
-<p><img src="/2025/02/13/2025%E5%B9%B42%E6%9C%8813%E6%97%A5-%E6%8E%A8%E7%90%86%E6%A1%86%E6%9E%B6/image-20250213214620596.png" alt></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">训练模型 (TF/PyTorch) → 转换为 IR → 优化 → 部署到 CPU/GPU/VPU → 推理 → 性能调优</span><br></pre></td></tr></table></figure>
-<p>Openvino整体框架为：<strong>Openvino前端→ Plugin中间层→ Backend后端</strong></p>
-<img src="/2025/02/13/2025%E5%B9%B42%E6%9C%8813%E6%97%A5-%E6%8E%A8%E7%90%86%E6%A1%86%E6%9E%B6/image-20250213220750908.png" alt="image-20250213220750908" style="zoom:50%;">
-<h2 id="code"><a class="markdownIt-Anchor" href="#code"></a> Code</h2>
-<p>Python：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44613415/article/details/143507060">https://blog.csdn.net/weixin_44613415/article/details/143507060</a></p>
-<p>​	<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_38739735/article/details/137099211=">https://blog.csdn.net/weixin_38739735/article/details/137099211=</a></p>
-<p>C：<a target="_blank" rel="noopener" href="https://blog.csdn.net/bjbz_cxy/article/details/130318904">https://blog.csdn.net/bjbz_cxy/article/details/130318904</a></p>
-<p>​	<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_44732054/article/details/140971622">https://blog.csdn.net/qq_44732054/article/details/140971622</a></p>
-<h1 id="ncnn"><a class="markdownIt-Anchor" href="#ncnn"></a> ncnn</h1>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/PHILICS7/article/details/125430079">https://blog.csdn.net/PHILICS7/article/details/125430079</a></p>
-<p>ncnn是腾讯优图推出的在手机端极致优化的高性能神经网络前向计架框架，适用于手机端的CPU计算且无需依赖第三方计算库，ncnn只用作推理而非边训练边推理。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/02/13/2025%E5%B9%B42%E6%9C%8813%E6%97%A5-%E6%8E%A8%E7%90%86%E6%A1%86%E6%9E%B6/" data-id="cm8q1tfhl000lpcv473w5empa" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2025年1月25日-Segmentation模型" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/02/10/2025%E5%B9%B41%E6%9C%8825%E6%97%A5-Segmentation%E6%A8%A1%E5%9E%8B/" class="article-date">
-  <time class="post-time" datetime="2025-02-10T07:29:02.000Z" itemprop="datePublished">
-    <span class="post-month">2月</span><br/>
-    <span class="post-day">10</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/02/10/2025%E5%B9%B41%E6%9C%8825%E6%97%A5-Segmentation%E6%A8%A1%E5%9E%8B/">2025年1月25日 Segmentation模型</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="segmentation"><a class="markdownIt-Anchor" href="#segmentation"></a> Segmentation</h1>
-<h2 id="unet"><a class="markdownIt-Anchor" href="#unet"></a> UNET</h2>
-<img src="/2025/02/10/2025%E5%B9%B41%E6%9C%8825%E6%97%A5-Segmentation%E6%A8%A1%E5%9E%8B/image-20250105155647634.png" alt="image-20250105155647634" style="zoom:33%;"> 
-<h3 id="u2net"><a class="markdownIt-Anchor" href="#u2net"></a> U2NET</h3>
-<p>SOD任务</p>
-<p><img src="/2025/02/10/2025%E5%B9%B41%E6%9C%8825%E6%97%A5-Segmentation%E6%A8%A1%E5%9E%8B/image-20250105155624697.png" alt="image-20250105155624697" style="zoom:50%;"> 整体</p>
-<p><img src="/2025/02/10/2025%E5%B9%B41%E6%9C%8825%E6%97%A5-Segmentation%E6%A8%A1%E5%9E%8B/image-20250105155734798.png" alt="image-20250105155734798" style="zoom: 33%;"> 小块</p>
-<h2 id="sam"><a class="markdownIt-Anchor" href="#sam"></a> SAM</h2>
-<p><img src="https://github.com/facebookresearch/segment-anything/raw/main/assets/model_diagram.png?raw=true" alt="SAM design"></p>
-<p><img src="/2025/02/10/2025%E5%B9%B41%E6%9C%8825%E6%97%A5-Segmentation%E6%A8%A1%E5%9E%8B/image-20250107134550384.png" alt="image-20250107134550384"></p>
-<img src="/2025/02/10/2025%E5%B9%B41%E6%9C%8825%E6%97%A5-Segmentation%E6%A8%A1%E5%9E%8B/image-20250107134129164.png" alt="image-20250107134129164" style="zoom: 50%;">
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/02/10/2025%E5%B9%B41%E6%9C%8825%E6%97%A5-Segmentation%E6%A8%A1%E5%9E%8B/" data-id="cm8q1tfhf000fpcv4fgiq10pj" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -898,9 +1401,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>95</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>100</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>27</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>29</strong><br>标签</div></a>
     </div>
 
 

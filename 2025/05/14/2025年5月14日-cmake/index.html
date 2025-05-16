@@ -14,7 +14,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://shakewely.github.io/2025/05/14/2025%E5%B9%B45%E6%9C%8814%E6%97%A5-cmake/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20250514101856087.png">
 <meta property="article:published_time" content="2025-05-14T01:44:29.000Z">
-<meta property="article:modified_time" content="2025-05-14T03:06:36.393Z">
+<meta property="article:modified_time" content="2025-05-14T07:30:33.807Z">
 <meta property="article:author" content="Weakliy">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://shakewely.github.io/2025/05/14/2025%E5%B9%B45%E6%9C%8814%E6%97%A5-cmake/Users/admin/AppData/Roaming/Typora/typora-user-images/image-20250514101856087.png">
@@ -49,9 +49,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>95</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>100</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>27</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>29</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -152,7 +152,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msbuild MyProject.sln /p:Configuration=Release</span><br></pre></td></tr></table></figure>
 <h3 id="4-实例"><a class="markdownIt-Anchor" href="#4-实例"></a> 4 实例</h3>
 <blockquote>
-<p>cmake -G “Visual Studio 17 2022” -A x64 …</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake -G &quot;Visual Studio 17 2022&quot; -A x64 ..</span><br></pre></td></tr></table></figure>
 </blockquote>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">cmake_minimum_required(VERSION 3.10)</span><br><span class="line">project(MyProject CXX)</span><br><span class="line"></span><br><span class="line"># 设置Visual Studio版本</span><br><span class="line">set(CMAKE_GENERATOR_TOOLSET &quot;v143&quot;)  # VS2022</span><br><span class="line">set(CMAKE_GENERATOR_PLATFORM &quot;x64&quot;)</span><br><span class="line"></span><br><span class="line">set(MY_VAR &quot;Hello World&quot;)</span><br><span class="line">message(STATUS &quot;MY_VAR: $&#123;MY_VAR&#125;&quot;)</span><br><span class="line"></span><br><span class="line"># 缓存变量</span><br><span class="line">set(MY_VAR &quot;Hello World&quot; CACHE STRING &quot;My Variable&quot;)</span><br><span class="line">message(STATUS &quot;MY_VAR: $&#123;MY_VAR&#125;&quot;)</span><br><span class="line"></span><br><span class="line"># 设置OpenCV路径</span><br><span class="line">set(OpenCV_DIR &quot;F:/Cppdata/pkg/opencv/build/x64/vc15&quot;)</span><br><span class="line">set(OpenCV_INCLUDE_DIRS &quot;F:/Cppdata/pkg/opencv/build/include&quot;)</span><br><span class="line">set(OpenCV_LIBS_DIR &quot;F:/Cppdata/pkg/opencv/build/x64/vc15/lib&quot;)</span><br><span class="line"></span><br><span class="line"># 添加 OpenCV 库</span><br><span class="line">find_package(OpenCV REQUIRED)</span><br><span class="line">include_directories($&#123;OpenCV_INCLUDE_DIRS&#125;)</span><br><span class="line">link_directories($&#123;OpenCV_LIBS_DIR&#125;)</span><br><span class="line"></span><br><span class="line"># 添加源文件</span><br><span class="line">add_executable(MyExecutable main.cpp)</span><br><span class="line"></span><br><span class="line"># 设置 C++ 标准</span><br><span class="line">set(CMAKE_CXX_STANDARD 11)</span><br><span class="line"></span><br><span class="line"># 添加 OpenCV 库</span><br><span class="line">target_link_libraries(MyExecutable $&#123;OpenCV_LIBS&#125;)</span><br><span class="line"></span><br><span class="line"># 设置输出目录</span><br><span class="line">set(CMAKE_RUNTIME_OUTPUT_DIRECTORY $&#123;CMAKE_BINARY_DIR&#125;/bin)</span><br><span class="line">set(CMAKE_LIBRARY_OUTPUT_DIRECTORY $&#123;CMAKE_BINARY_DIR&#125;/lib)</span><br><span class="line">set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY $&#123;CMAKE_BINARY_DIR&#125;/lib)</span><br></pre></td></tr></table></figure>
 
@@ -167,6 +167,15 @@
   
     
 <nav id="article-nav">
+  
+    <a href="/2025/05/14/2025%E5%B9%B45%E6%9C%8814%E6%97%A5-%E5%89%AA%E6%9E%9D1-%E4%BB%8B%E7%BB%8D%E6%B1%87%E6%80%BB/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          2025年5月14日 剪枝1-介绍汇总
+        
+      </div>
+    </a>
   
   
     <a href="/2025/05/13/2025%E5%B9%B45%E6%9C%8813%E6%97%A5-TensorRT3infer/" id="article-nav-older" class="article-nav-link-wrap">
@@ -220,9 +229,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>95</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>100</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>27</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>29</strong><br>标签</div></a>
     </div>
 
 
