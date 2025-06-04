@@ -5,16 +5,17 @@
   
   <title>2025年5月5日 torch汇总 | Weakliy_Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="tensor 1️⃣ view(shape) 改变张量形状（reshape），但不改变内存布局。 例子： 123python复制编辑x &#x3D; torch.randn(2,3,4)y &#x3D; x.view(6,4)print(y.shape)  # torch.Size([6, 4])  2️⃣ reshape(shape) 类似 view，但更灵活，支持非连续内存。 例子： 123python复制编辑">
+  <meta name="description" content="Module mymodule&#x3D; MyModule() Mymodule.bn.weight mymodule.bn.weight.data  parameters 卷积核（nn.Conv2d）的权重维度是 [out_channels, in_channels, kernel_height, kernel_width]  RuntimeError: Given groups&#x3D;1, weight">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2025年5月5日 torch汇总">
 <meta property="og:url" content="https://shakewely.github.io/2025/05/05/2025%E5%B9%B45%E6%9C%885%E6%97%A5-torch%E6%B1%87%E6%80%BB/index.html">
 <meta property="og:site_name" content="Weakliy_Blog">
-<meta property="og:description" content="tensor 1️⃣ view(shape) 改变张量形状（reshape），但不改变内存布局。 例子： 123python复制编辑x &#x3D; torch.randn(2,3,4)y &#x3D; x.view(6,4)print(y.shape)  # torch.Size([6, 4])  2️⃣ reshape(shape) 类似 view，但更灵活，支持非连续内存。 例子： 123python复制编辑">
+<meta property="og:description" content="Module mymodule&#x3D; MyModule() Mymodule.bn.weight mymodule.bn.weight.data  parameters 卷积核（nn.Conv2d）的权重维度是 [out_channels, in_channels, kernel_height, kernel_width]  RuntimeError: Given groups&#x3D;1, weight">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-05-05T02:35:44.000Z">
-<meta property="article:modified_time" content="2025-05-16T05:19:16.007Z">
+<meta property="article:modified_time" content="2025-06-04T03:52:18.238Z">
 <meta property="article:author" content="Weakliy">
+<meta property="article:tag" content="torch">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
@@ -47,9 +48,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>92</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>97</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>29</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>30</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -105,11 +106,62 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="tensor"><a class="markdownIt-Anchor" href="#tensor"></a> tensor</h1>
-<p>1️⃣ <strong>view(shape)</strong><br>
+        <h1 id="module"><a class="markdownIt-Anchor" href="#module"></a> Module</h1>
+<p>mymodule= MyModule()</p>
+<p><code>Mymodule.bn.weight</code></p>
+<p>mymodule.bn.weight.data</p>
+<h1 id="parameters"><a class="markdownIt-Anchor" href="#parameters"></a> parameters</h1>
+<p>卷积核（<code>nn.Conv2d</code>）的权重维度是 <strong>[out_channels, in_channels, kernel_height, kernel_width]</strong></p>
+<blockquote>
+<p>RuntimeError: Given groups=1, weight of size [6, 3, 3, 3], expected input[1, 640, 640, 3] to have 3 channels, but got 640 channels instead</p>
+</blockquote>
+<p><strong>model.parameters()</strong></p>
+<h1 id="grad"><a class="markdownIt-Anchor" href="#grad"></a> Grad</h1>
+<h3 id="requires_grad"><a class="markdownIt-Anchor" href="#requires_grad"></a> requires_grad</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">model.bn.weight.requires_grad</span><br></pre></td></tr></table></figure>
+<h1 id="钩子函数"><a class="markdownIt-Anchor" href="#钩子函数"></a> 钩子函数</h1>
+<blockquote>
+<p><strong>钩子函数（Hook Function）*<em>是可以绑定到 <code>nn.Module</code> 的某一层（Layer）上的函数，在*<em>前向传播（forward）或反向传播（backward）时自动执行</em></em>，用来</strong>提取中间特征、修改梯度或中间输出、调试模型等**。</p>
+<h3 id="什么是钩子函数hook-function"><a class="markdownIt-Anchor" href="#什么是钩子函数hook-function"></a> ✅ 什么是钩子函数（Hook Function）？</h3>
+<p>在 PyTorch 中，<strong>钩子函数（Hook Function）*<em>是可以绑定到 <code>nn.Module</code> 的某一层（Layer）上的函数，在*<em>前向传播（forward）或反向传播（backward）时自动执行</em></em>，用来</strong>提取中间特征、修改梯度或中间输出、调试模型等**。</p>
+<hr>
+<h3 id="pytorch-中的钩子种类"><a class="markdownIt-Anchor" href="#pytorch-中的钩子种类"></a> 📌 PyTorch 中的钩子种类：</h3>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>方法</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>前向钩子</td>
+<td><code>register_forward_hook()</code></td>
+<td>在该层 <strong>forward输出后</strong> 自动调用</td>
+</tr>
+<tr>
+<td>前向前钩子</td>
+<td><code>register_forward_pre_hook()</code></td>
+<td>在该层 <strong>forward输入前</strong> 调用</td>
+</tr>
+<tr>
+<td>反向钩子</td>
+<td><code>register_backward_hook()</code>（不推荐）或 <code>register_full_backward_hook()</code></td>
+<td>在该层 <strong>backward执行时</strong> 调用</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="为什么要注册钩子函数"><a class="markdownIt-Anchor" href="#为什么要注册钩子函数"></a> 🧠 为什么要注册钩子函数？</h3>
+<p>你这段代码中使用 <code>register_forward_hook()</code>，是为了在<strong>蒸馏过程中提取教师模型和学生模型某些层的输出特征</strong>，计算特征之间的差异作为蒸馏损失。</p>
+</blockquote>
+<p><code>.data</code></p>
+<h1 id="tensor"><a class="markdownIt-Anchor" href="#tensor"></a> tensor</h1>
+<p>1️⃣ view(shape)✅<br>
 改变张量形状（reshape），但不改变内存布局。</p>
 <p>例子：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x = torch.randn(2,3,4)</span><br><span class="line">y = x.view(6,4)</span><br><span class="line">print(y.shape)  # torch.Size([6, 4])</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x = torch.randn(2,3,4)</span><br><span class="line">y = x.view(6,4)</span><br><span class="line">print(y.shape)  # torch.Size([6, 4])</span><br></pre></td></tr></table></figure>
 <hr>
 <p>2️⃣ <strong>reshape(shape)</strong><br>
 类似 <code>view</code>，但更灵活，支持非连续内存。</p>
@@ -126,15 +178,15 @@
 <p>例子：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x = torch.randn(2,3)</span><br><span class="line">y = x.unsqueeze(1)</span><br><span class="line">print(y.shape)  # torch.Size([2,1,3])</span><br></pre></td></tr></table></figure>
 <hr>
-<p>5️⃣ <strong>transpose(dim0, dim1)</strong><br>
-交换两个维度。</p>
+<p>5️⃣ **transpose(dim0, dim1)**✅<br>
+只交换两个维度。</p>
 <p>例子：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x = torch.randn(2,3,4)</span><br><span class="line">y = x.transpose(1,2)</span><br><span class="line">print(y.shape)  # torch.Size([2,4,3])</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x = torch.randn(2,3,4)</span><br><span class="line">y = x.transpose(1,2)</span><br><span class="line">print(y.shape)  # torch.Size([2,4,3])</span><br></pre></td></tr></table></figure>
 <hr>
-<p>6️⃣ <strong>permute(dims)</strong><br>
+<p>6️⃣ **permute(dims)**✅<br>
 任意维度换序。</p>
 <p>例子：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x = torch.randn(2,3,4)</span><br><span class="line">y = x.permute(0,2,1)</span><br><span class="line">print(y.shape)  # torch.Size([2,4,3])</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x = torch.randn(2,3,4)</span><br><span class="line">y = x.permute(0,2,1)</span><br><span class="line">print(y.shape)  # torch.Size([2,4,3])</span><br></pre></td></tr></table></figure>
 <hr>
 <p>7️⃣ <strong>contiguous()</strong><br>
 返回内存连续的 tensor（一般 <code>view</code> 前用）。</p>
@@ -185,16 +237,59 @@
 张量元素总数。</p>
 <p>例子：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x = torch.randn(2,3,4)</span><br><span class="line">print(x.numel())  # 24</span><br></pre></td></tr></table></figure>
+<h1 id="torchcuda"><a class="markdownIt-Anchor" href="#torchcuda"></a> torch.cuda</h1>
+<p>1️⃣ <strong>torch.cuda.is_available()</strong><br>
+检查当前 PyTorch 是否可以使用 GPU。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">torch.cuda.is_available()  # True / False</span><br></pre></td></tr></table></figure>
+<hr>
+<p>2️⃣ <strong>torch.cuda.device_count()</strong><br>
+返回可用的 GPU 数量。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">torch.cuda.device_count()  # 如 2</span><br></pre></td></tr></table></figure>
+<hr>
+<p>3️⃣ <strong>torch.cuda.get_device_name(device=0)</strong><br>
+获取指定 GPU 的名称。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">torch.cuda.get_device_name(0)  # &#x27;NVIDIA GeForce RTX 4090&#x27;</span><br></pre></td></tr></table></figure>
+<hr>
+<p>4️⃣ <strong>torch.cuda.current_device()</strong><br>
+返回当前默认设备的索引（int）。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">torch.cuda.current_device()  # 如 0</span><br></pre></td></tr></table></figure>
+<hr>
+<p>5️⃣ <strong>torch.cuda.set_device(device)</strong><br>
+设置当前默认使用的 GPU。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">torch.cuda.set_device(1)</span><br></pre></td></tr></table></figure>
+<hr>
+<p>6️⃣ <strong>torch.cuda.memory_allocated(device=0)</strong><br>
+返回当前分配给张量的显存大小（单位：字节）。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">torch.cuda.memory_allocated(0) / 1024**2  # 单位：MB</span><br></pre></td></tr></table></figure>
+<hr>
+<p>7️⃣ <strong>torch.cuda.memory_reserved(device=0)</strong><br>
+返回为分配预留的显存（用于缓存机制）。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">torch.cuda.memory_reserved(0) / 1024**2  # 单位：MB</span><br></pre></td></tr></table></figure>
+<hr>
+<p>8️⃣ <strong>torch.cuda.empty_cache()</strong><br>
+释放未使用的显存缓存（不会释放已使用的显存）。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">torch.cuda.empty_cache()</span><br></pre></td></tr></table></figure>
+<hr>
+<p>9️⃣ <strong>torch.cuda.synchronize(device=None)</strong><br>
+等待所有 GPU 操作完成（用于计时时精准）。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">torch.cuda.synchronize()</span><br></pre></td></tr></table></figure>
+<hr>
+<p>🔟 <strong>torch.cuda.Stream / torch.cuda.Event</strong><br>
+用于手动控制 CUDA 操作顺序（高级用法）。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑stream = torch.cuda.Stream()</span><br><span class="line">event = torch.cuda.Event()</span><br></pre></td></tr></table></figure>
 <h1 id="model"><a class="markdownIt-Anchor" href="#model"></a> model</h1>
-<p>1️⃣ <strong><code>model.parameters()</code></strong><br>
+<p><strong><code>m.weight</code></strong>：获取<code>BatchNorm2d</code>层的权重参数。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">w = m.weight.abs().detach()</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">b = m.bias.abs().detach()</span><br></pre></td></tr></table></figure>
+<p>1️⃣ **<code>model.parameters()</code>**✅<br>
 返回一个生成器，只包含模型中所有参数（<code>nn.Parameter</code> 类型）。</p>
 <p>例子：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑for param in model.parameters():</span><br><span class="line">    print(param.shape)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">for param in model.parameters():</span><br><span class="line">    print(param.shape)</span><br><span class="line">    param.nelement() * param.element_size()</span><br></pre></td></tr></table></figure>
 <hr>
-<p>2️⃣ <strong><code>model.named_parameters()</code></strong><br>
+<p>2️⃣ <strong><code>model.named_parameters()</code></strong> ✅<br>
 返回 <code>(name, param)</code> 元组的生成器，带有名字。</p>
 <p>例子：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑for name, param in model.named_parameters():</span><br><span class="line">    print(name, param.shape)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">]for name, param in model.named_parameters():</span><br><span class="line">    print(name, param.shape)</span><br></pre></td></tr></table></figure>
 <hr>
 <p>3️⃣ <strong><code>model.children()</code></strong><br>
 返回模型的<strong>第一层子模块</strong>，不递归。</p>
@@ -235,7 +330,13 @@
 清空所有参数的梯度（等效于 <code>optimizer.zero_grad()</code>）。</p>
 <p>例子：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">model.zero_grad()</span><br></pre></td></tr></table></figure>
-<h2 id="torch"><a class="markdownIt-Anchor" href="#torch"></a> torch</h2>
+<h1 id="torch"><a class="markdownIt-Anchor" href="#torch"></a> torch</h1>
+<p><code>torch.sort</code> 是 PyTorch 中用于对张量进行排序的函数。</p>
+<ul>
+<li><code>descending=True</code> 表示按降序排序。</li>
+<li>这个函数返回一个元组 <code>(sorted_tensor, indices)</code>，其中 <code>sorted_tensor</code> 是排序后的张量，<code>indices</code> 是排序后的索引。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">import torch</span><br><span class="line"></span><br><span class="line"># 创建一个二维张量</span><br><span class="line">tensor = torch.tensor([[0.1, 0.5, 0.3], [0.9, 0.7, 0.2]])</span><br><span class="line"></span><br><span class="line"># 设置条件</span><br><span class="line">condition = tensor &gt; 0.4</span><br><span class="line"></span><br><span class="line"># 使用 torch.where 找到满足条件的元素的索引</span><br><span class="line">indices = torch.where(condition)</span><br><span class="line"></span><br><span class="line">print(&quot;原始张量:&quot;, tensor)</span><br><span class="line">print(&quot;条件:&quot;, condition)</span><br><span class="line">print(&quot;返回的索引:&quot;, indices)</span><br></pre></td></tr></table></figure>
 <p>1️⃣ <strong>torch.stack(preds_cls)</strong><br>
 把 <code>preds_cls</code> 列表拼起来，增加一个新维度。</p>
 <p>例子：</p>
@@ -397,6 +498,8 @@
       <a data-url="https://shakewely.github.io/2025/05/05/2025%E5%B9%B45%E6%9C%885%E6%97%A5-torch%E6%B1%87%E6%80%BB/" data-id="cmanj8o28000wlcv4bsx0grzy" class="article-share-link">分享</a>
       
       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/torch/" rel="tag">torch</a></li></ul>
+
     </footer>
   </div>
   
@@ -464,9 +567,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>92</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>97</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>29</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>30</strong><br>标签</div></a>
     </div>
 
 

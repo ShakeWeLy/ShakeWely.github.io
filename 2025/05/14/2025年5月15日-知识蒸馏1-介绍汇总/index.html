@@ -5,15 +5,15 @@
   
   <title>2025年5月15日 知识蒸馏1-介绍汇总 | Weakliy_Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="蒸馏介绍 通过设计一个规模较小的学生模型，使其学习大型教师模型的有效信息  知识蒸馏的本质可以被认为是一种正则化方法,即在学生模型中引入一些特殊信息来实现模型性能的提升。   蒸馏分类  知识类型  基于模型输出的方法 基于特征图的方法   教师模型类型 蒸馏策略三方面   1.1 输出蒸馏  1.2 特征蒸馏 通道  mgd  之前的知识蒸馏方法着力于使学生去模仿更强的教师的特征，以使学生特征">
+  <meta name="description" content="蒸馏介绍 通过设计一个规模较小的学生模型，使其学习大型教师模型的有效信息  知识蒸馏的本质可以被认为是一种正则化方法,即在学生模型中引入一些特殊信息来实现模型性能的提升。   蒸馏分类   知识类型   基于响应&#x2F;模型输出的蒸馏（Response-based）：使用教师模型的最后输出层的信息（如类别概率）来训练学生模型。   基于特征的蒸馏（Feature-based）：利用教师模型的中间层特征">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2025年5月15日 知识蒸馏1-介绍汇总">
 <meta property="og:url" content="https://shakewely.github.io/2025/05/14/2025%E5%B9%B45%E6%9C%8815%E6%97%A5-%E7%9F%A5%E8%AF%86%E8%92%B8%E9%A6%8F1-%E4%BB%8B%E7%BB%8D%E6%B1%87%E6%80%BB/index.html">
 <meta property="og:site_name" content="Weakliy_Blog">
-<meta property="og:description" content="蒸馏介绍 通过设计一个规模较小的学生模型，使其学习大型教师模型的有效信息  知识蒸馏的本质可以被认为是一种正则化方法,即在学生模型中引入一些特殊信息来实现模型性能的提升。   蒸馏分类  知识类型  基于模型输出的方法 基于特征图的方法   教师模型类型 蒸馏策略三方面   1.1 输出蒸馏  1.2 特征蒸馏 通道  mgd  之前的知识蒸馏方法着力于使学生去模仿更强的教师的特征，以使学生特征">
+<meta property="og:description" content="蒸馏介绍 通过设计一个规模较小的学生模型，使其学习大型教师模型的有效信息  知识蒸馏的本质可以被认为是一种正则化方法,即在学生模型中引入一些特殊信息来实现模型性能的提升。   蒸馏分类   知识类型   基于响应&#x2F;模型输出的蒸馏（Response-based）：使用教师模型的最后输出层的信息（如类别概率）来训练学生模型。   基于特征的蒸馏（Feature-based）：利用教师模型的中间层特征">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-05-14T07:57:53.000Z">
-<meta property="article:modified_time" content="2025-05-19T13:03:39.244Z">
+<meta property="article:modified_time" content="2025-05-22T15:08:07.889Z">
 <meta property="article:author" content="Weakliy">
 <meta property="article:tag" content="知识蒸馏">
 <meta name="twitter:card" content="summary">
@@ -48,9 +48,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>92</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>97</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>29</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>30</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -113,14 +113,37 @@
 </blockquote>
 <h2 id="蒸馏分类"><a class="markdownIt-Anchor" href="#蒸馏分类"></a> 蒸馏分类</h2>
 <ol>
-<li>知识类型
+<li>
+<p>知识类型</p>
 <ol>
-<li>基于模型输出的方法</li>
-<li>基于特征图的方法</li>
+<li>
+<p><strong>基于响应/模型输出</strong>的蒸馏（Response-based）：使用教师模型的最后输出层的信息（如类别概率）来训练学生模型。</p>
+</li>
+<li>
+<p>基于<strong>特征</strong>的蒸馏（Feature-based）：利用教师模型的中间层特征来指导学生模型。</p>
+</li>
+<li>
+<p>基于关系的蒸馏（Relation-based）：侧重于教师模型内<strong>不同特征之间的关系</strong>，如特征图之间的相互作用。</p>
+</li>
 </ol>
 </li>
-<li>教师模型类型</li>
-<li>蒸馏策略三方面</li>
+<li>
+<p>教师模型类型</p>
+</li>
+<li>
+<p>蒸馏策略三方面</p>
+<ol>
+<li>
+<p>在线蒸馏（Online distillation）：教师模型和学生模型同时训练，学生模型实时学习教师模型的知识。</p>
+</li>
+<li>
+<p>离线蒸馏（Offline distillation）：先训练教师模型，再使用该模型来训练学生模型，学生模型不会影响教师模型。</p>
+</li>
+<li>
+<p>自蒸馏（Self distillation）：模型使用自己的预测作为软标签来提高自己的性能。</p>
+</li>
+</ol>
+</li>
 </ol>
 <h3 id="11-输出蒸馏"><a class="markdownIt-Anchor" href="#11-输出蒸馏"></a> 1.1 输出蒸馏</h3>
 <h3 id="12-特征蒸馏"><a class="markdownIt-Anchor" href="#12-特征蒸馏"></a> 1.2 特征蒸馏</h3>
@@ -129,6 +152,27 @@
 <blockquote>
 <p>之前的知识蒸馏方法着力于使学生去模仿更强的教师的特征，以使学生特征具有更强的表征能力。我们认为提升学生的表征能力并不一定需要通过直接模仿教师实现。从这点出发，我们把模仿任务修改成了生成任务：让学生凭借自己较弱的特征去生成教师较强的特征。在蒸馏过程中，我们对学生特征进行了随机mask，强制学生仅用自己的部分特征去生成教师的所有特征，以提升学生的表征能力。</p>
 <p>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_41335232/article/details/142717122">https://blog.csdn.net/qq_41335232/article/details/142717122</a></p>
+</blockquote>
+<blockquote>
+<p>YOLO11 summary (fused): 100 layers, 2,585,467 parameters, 0 gradients, 6.3 GFLOPs<br>
+all         53        396      0.971      0.954      0.979      0.671<br>
+Bottom1         21         21          1      0.935      0.973      0.779<br>
+Bottom2         26         26          1      0.981      0.995      0.669<br>
+Left1         32         32      0.964      0.969       0.95      0.676<br>
+Left2         16         16      0.978          1      0.995      0.657<br>
+Left3         30         32      0.967      0.902      0.934      0.631<br>
+Left4         28         33          1      0.853       0.94      0.709<br>
+Left5         28         28       0.99      0.929      0.993      0.756<br>
+Right1         38         39       0.96      0.974      0.971      0.559<br>
+Right2         39         39      0.973      0.974      0.951      0.567<br>
+Right3         14         14      0.895          1      0.986      0.734<br>
+Right4         15         15      0.971          1      0.995      0.669<br>
+Top1         32         32      0.974      0.938      0.987      0.697<br>
+Top2         33         33      0.986          1      0.995      0.703<br>
+out1          7          7      0.942          1      0.995      0.541<br>
+out2         11         11          1      0.878      0.995      0.657<br>
+out3         13         13          1      0.891      0.995      0.698<br>
+out4          5          5       0.91          1      0.995      0.711</p>
 </blockquote>
 <h3 id="cwd"><a class="markdownIt-Anchor" href="#cwd"></a> cwd</h3>
 
@@ -207,9 +251,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>92</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>97</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>29</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>30</strong><br>标签</div></a>
     </div>
 
 
