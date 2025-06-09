@@ -13,7 +13,7 @@
 <meta property="og:description" content="✨C++  基础知识  1 变量作用域  什么是局部变量 ☑️ 什么是全局变量 ☑️ 什么是块作用域，如何实现？ 类？   2 常量？  定义？ 如何定义常量   3 修饰符   修饰符类型   类型限定符：是什么？    static 用于定义静态变量，表示该变量的作用域仅限于当前文件或当前函数内，不会被其他文件或函数访问。     const             4 C++ 存储类 控制">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-03-10T05:29:15.000Z">
-<meta property="article:modified_time" content="2025-05-08T11:56:43.518Z">
+<meta property="article:modified_time" content="2025-06-09T12:07:25.253Z">
 <meta property="article:author" content="Weakliy">
 <meta property="article:tag" content="C++">
 <meta name="twitter:card" content="summary">
@@ -48,7 +48,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>97</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>98</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>30</strong><br>标签</div></a>
     </div>
@@ -578,7 +578,386 @@
 <ol>
 <li>呀节点 避免nullptr的判断 <code>return dummy-&gt;next</code> 即可</li>
 </ol>
-<h2 id="日期记录"><a class="markdownIt-Anchor" href="#日期记录"></a> 🌏日期记录</h2>
+<h2 id="记录"><a class="markdownIt-Anchor" href="#记录"></a> 🌏记录</h2>
+<h3 id="code"><a class="markdownIt-Anchor" href="#code"></a> code</h3>
+<blockquote>
+<p>缩进也报错?</p>
+<p>选择&quot;UTF-8 带签名(BOM)&quot;???</p>
+</blockquote>
+<h4 id="数"><a class="markdownIt-Anchor" href="#数"></a> 数</h4>
+<blockquote>
+<p>INFINITY 是 C++ 中表示正无穷大的宏</p>
+<p>NaN 不等于任何值（包括自身），用 std::isnan(x) 检查。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">float nan = std::nan(&quot;&quot;); // NaN</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h3 id="vector"><a class="markdownIt-Anchor" href="#vector"></a> Vector</h3>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Vector <span class="title">output</span><span class="params">(output_channel, <span class="number">0.0f</span>)</span></span>;  <span class="comment">// 初始化输出向量</span></span><br><span class="line"><span class="comment">// 初始化权重矩阵</span></span><br><span class="line"><span class="function">Matrix <span class="title">weight</span><span class="params">(output_channel, Vector(x_size, <span class="number">0.0f</span>))</span></span>;</span><br></pre></td></tr></table></figure>
+<p>区别</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cout &lt;&lt; list.<span class="built_in">at</span>(<span class="number">2</span>) &lt;&lt; endl;</span><br><span class="line">cout &lt;&lt; list[<span class="number">2</span>] &lt;&lt; endl;</span><br><span class="line">cout &lt;&lt; list.<span class="keyword">operator</span>[](<span class="number">2</span>) &lt;&lt; endl;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">capacity</span>()</span><br><span class="line"><span class="built_in">max_size</span>()</span><br></pre></td></tr></table></figure>
+<h4 id="map"><a class="markdownIt-Anchor" href="#map"></a> MAP</h4>
+<blockquote>
+<p>std::map 是一个关联容器，存储键值对（key-value pairs），每个元素是一个 std::pair&lt;const Key, T&gt;。</p>
+<ul>
+<li>Key：键的类型（在你的代码中是 string）。</li>
+<li>T：值的类型（在你的代码中是 int）。</li>
+<li>const Key：键是常量，不能修改，以保证 map 的排序和唯一性。</li>
+</ul>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(map&lt;string, <span class="type">int</span>&gt;map)</span></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">auto</span> it = map.<span class="built_in">begin</span>(); it != map.<span class="built_in">end</span>(); it++)&#123;</span><br><span class="line">        cout &lt;&lt; it-&gt;first &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; it-&gt;second &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="it-vs-it"><a class="markdownIt-Anchor" href="#it-vs-it"></a> it++ vs ++it</h5>
+<blockquote>
+<p>无影响,会优化</p>
+</blockquote>
+<p><strong>it-&gt;first 和 it-&gt;second 是什么？</strong></p>
+<blockquote>
+<p>it-&gt;first 和 it-&gt;second 是访问 std::map 中键值对的成员，</p>
+</blockquote>
+<h3 id="函数"><a class="markdownIt-Anchor" href="#函数"></a> 函数</h3>
+<p>三个有什么区别</p>
+<blockquote>
+<ul>
+<li>
+<h3 id="1-void-swapint-a-int-b"><a class="markdownIt-Anchor" href="#1-void-swapint-a-int-b"></a> 1. void swap(int a, int b)</h3>
+<ul>
+<li>
+<p><strong>参数传递方式</strong>：值传递（Pass by Value）</p>
+</li>
+<li>
+<p>接收参数的副本</p>
+</li>
+</ul>
+<h3 id="2-void-swapint-a-int-b"><a class="markdownIt-Anchor" href="#2-void-swapint-a-int-b"></a> 2. void swap(int *a, int *b)</h3>
+<ul>
+<li>
+<p><strong>参数传递方式</strong>：指针传递（Pass by Pointer）</p>
+</li>
+<li>
+<p>通过解引用（*a 和 *b）直接访问和修改调用者的变量</p>
+</li>
+</ul>
+<h3 id="3-void-swapint-a-int-b"><a class="markdownIt-Anchor" href="#3-void-swapint-a-int-b"></a> 3. void swap(int &amp;a, int &amp;b)</h3>
+<ul>
+<li><strong>参数传递方式</strong>：引用传递（Pass by Reference）</li>
+<li>函数接收的是调用者变量的引用，a 和 b 是原始变量的别名，任何对 a 和 b 的修改直接反映到调用者的变量上。</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<h4 id="函数重载"><a class="markdownIt-Anchor" href="#函数重载"></a> <strong>函数重载</strong></h4>
+<blockquote>
+<p>允许在同一作用域内定义多个同名函数，但这些函数的参数列表（参数数量、类型或顺序）必须不同。编译器会根据调用时提供的参数类型和数量，自动选择最匹配的函数版本来执行</p>
+</blockquote>
+<h4 id="函数指针数组的写法规则"><a class="markdownIt-Anchor" href="#函数指针数组的写法规则"></a> 函数指针数组的写法规则</h4>
+<p><strong>函数签名一致</strong>：</p>
+<ul>
+<li>数组中所有函数指针指向的函数必须具有<strong>相同的返回类型</strong>和<strong>相同的参数列表</strong>（包括参数类型和数量）。</li>
+<li>例如，所有函数指针都指向 void(int*, int*) 类型的函数。</li>
+</ul>
+<p><strong>声明语法</strong>：</p>
+<ul>
+<li>函数指针的声明形式为：返回类型 (*指针名)(参数列表)。</li>
+<li>函数指针数组的声明形式为：返回类型 (*数组名[大小])(参数列表)。</li>
+<li>例如：void (<em>swapFuncs[2])(int</em>, int*) 表示一个数组，包含两个指向 void(int*, int*) 类型函数的指针。</li>
+</ul>
+<h4 id="模板函数"><a class="markdownIt-Anchor" href="#模板函数"></a> 模板函数</h4>
+<blockquote>
+<p>定义一个函数的“蓝图”，让它能够处理多种数据类型（如 int、double、std::string 等），而不需要为每种类型写一个单独的函数。</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="comment">// 或者 template &lt;class T&gt;</span></span><br><span class="line">返回类型 函数名(参数列表) &#123;</span><br><span class="line">    <span class="comment">// 函数体，使用 T 作为类型</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="什么是函数对象"><a class="markdownIt-Anchor" href="#什么是函数对象"></a> 什么是函数对象？</h4>
+<blockquote>
+<p>函数对象是一个<strong>行为类似函数的类对象</strong>。在C++中，函数对象是通过定义了<strong>函数调用运算符</strong>（operator()）的类或结构体创建的.像普通函数一样被调用，但因为是对象，它可以保存状态、支持更多灵活性</p>
+</blockquote>
+<blockquote>
+<p>一个函数对象需要重载 operator()，使其可以通过 () 调用。</p>
+</blockquote>
+<h3 id="指针"><a class="markdownIt-Anchor" href="#指针"></a> 指针</h3>
+<ul>
+<li><code>int *p, q;   // p 是指针，q 是普通整数（新手常见错误）</code></li>
+</ul>
+<h4 id><a class="markdownIt-Anchor" href="#"></a> </h4>
+<h3 id="类"><a class="markdownIt-Anchor" href="#类"></a> 类</h3>
+<p>if not define --&gt; define  --&gt; endif</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#ifndef MYCLASS_H</span><br><span class="line">#define MYCLASS_H</span><br><span class="line"></span><br><span class="line">class MyClass &#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
+<h4 id="cpp"><a class="markdownIt-Anchor" href="#cpp"></a> cpp</h4>
+<blockquote>
+<h2 id="用-this-或改名避免混淆"><a class="markdownIt-Anchor" href="#用-this-或改名避免混淆"></a> 用 <code>this-&gt;</code> 或改名避免混淆</h2>
+<h3 id="方法-1用-this-明确访问成员变量"><a class="markdownIt-Anchor" href="#方法-1用-this-明确访问成员变量"></a> 方法 1：用 <code>this-&gt;</code> 明确访问成员变量</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cpp复制编辑void MyClass::setValue(int value) &#123;</span><br><span class="line">    this-&gt;value = value;  // ✅ 正确：this-&gt;value 表示成员变量</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="方法-2参数改名避免遮蔽"><a class="markdownIt-Anchor" href="#方法-2参数改名避免遮蔽"></a> 方法 2：参数改名，避免遮蔽</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cpp复制编辑void MyClass::setValue(int v) &#123;</span><br><span class="line">    value = v;  // ✅ 正确：v 是参数，value 是成员变量</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<p>MyClass::MyClass():value(0){</p>
+<p>std::cout&lt;&lt;“运行构造函数”&lt;&lt;std::endl;}</p>
+<p>MyClass::MyClass(){</p>
+<p>value = 0;</p>
+<p>std::cout&lt;&lt;“运行构造函数”&lt;&lt;std::endl;}</p>
+<table>
+<thead>
+<tr>
+<th>写法</th>
+<th>初始化时机</th>
+<th>效率</th>
+<th>推荐吗？</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>: value(0)</code></td>
+<td>构造函数进入前</td>
+<td>✅ 更快</td>
+<td>✅ 推荐</td>
+</tr>
+<tr>
+<td><code>value = 0;</code></td>
+<td>构造函数体内赋值</td>
+<td>稍慢一点</td>
+<td>✅ 也可以</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<h4 id="h"><a class="markdownIt-Anchor" href="#h"></a> .h</h4>
+<p>为什么要写const</p>
+<blockquote>
+<p>// 成员函数</p>
+<p>void setValue(int value);</p>
+<p>int getValue() const;</p>
+</blockquote>
+<h4 id="random"><a class="markdownIt-Anchor" href="#random"></a> random</h4>
+<blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">random_device rd;</span><br><span class="line"><span class="function">mt19937 <span class="title">gen</span><span class="params">(rd())</span></span>;</span><br><span class="line"><span class="function">uniform_real_distribution&lt;<span class="type">float</span>&gt; <span class="title">dis</span><span class="params">(<span class="number">-0.1f</span>, <span class="number">0.1f</span>)</span></span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>random_device 是 C++11 引入的  库中的类，用于生成非确定性随机数（通常基于硬件或操作系统的熵源）</p>
+</li>
+<li>
+<p>mt19937 是  库中的梅森旋转算法（Mersenne Twister）伪随机数生成器，是一种高效、高周期的伪随机数生成器</p>
+</li>
+<li>
+<p>uniform_real_distribution<float> 是 <random> 库中的类，用于生成指定范围内的<strong>均匀分布浮点随机数</strong>。</random></float></p>
+<p>dis 是一个分布对象，指定范围为 [-0.1, 0.1)（包含 -0.1，不包含 0.1）。</p>
+</li>
+</ul>
+</blockquote>
+<h2 id="cpp思路"><a class="markdownIt-Anchor" href="#cpp思路"></a> CPP思路</h2>
+<blockquote>
+<h3 id="batch-normalization-的核心目标"><a class="markdownIt-Anchor" href="#batch-normalization-的核心目标"></a> 🧠 <strong>Batch Normalization 的核心目标</strong>：</h3>
+<blockquote>
+<p>在网络的每一层，将激活值标准化，使其均值为 0，方差为 1，从而加速训练、提升稳定性。</p>
+</blockquote>
+<hr>
+<h3 id="你需要思考的关键点按执行流程划分"><a class="markdownIt-Anchor" href="#你需要思考的关键点按执行流程划分"></a> 🎯 <strong>你需要思考的关键点（按执行流程划分）</strong>：</h3>
+<h4 id="1-输入数据是什么形状"><a class="markdownIt-Anchor" href="#1-输入数据是什么形状"></a> 1. <strong>输入数据是什么形状？</strong></h4>
+<ul>
+<li>是一个 batch，一个通道，一张图，还是一个数？</li>
+<li>不同形状下，BN 应该在哪些维度上求均值和方差？</li>
+</ul>
+<h4 id="2-你需要计算什么"><a class="markdownIt-Anchor" href="#2-你需要计算什么"></a> 2. <strong>你需要计算什么？</strong></h4>
+<ul>
+<li><strong>均值（mean）</strong></li>
+<li><strong>方差（variance）</strong></li>
+<li>你会选择 <code>全局mean</code>、<code>通道mean</code> 还是 <code>按batch求mean</code>？</li>
+</ul>
+<h4 id="3-归一化怎么做"><a class="markdownIt-Anchor" href="#3-归一化怎么做"></a> 3. <strong>归一化怎么做？</strong></h4>
+<ul>
+<li>将数据减去均值，再除以标准差</li>
+<li>要考虑 <strong>数值稳定性</strong>（加入小的 ε）</li>
+</ul>
+<h4 id="4-训练时-vs-推理时"><a class="markdownIt-Anchor" href="#4-训练时-vs-推理时"></a> 4. <strong>训练时 vs 推理时</strong></h4>
+<ul>
+<li>训练：用 batch 的均值/方差</li>
+<li>推理：用<strong>累计的滑动平均值</strong></li>
+</ul>
+<h4 id="5-可学习的参数-γ-β缩放-平移"><a class="markdownIt-Anchor" href="#5-可学习的参数-γ-β缩放-平移"></a> 5. <strong>可学习的参数 γ、β（缩放 + 平移）</strong></h4>
+<ul>
+<li>为啥需要？BN 本质上是归一化 + 一个线性变换</li>
+<li>γ 控制方差，β 控制均值 —— 不影响模型表达能力</li>
+</ul>
+<h4 id="6-反向传播要怎么处理"><a class="markdownIt-Anchor" href="#6-反向传播要怎么处理"></a> 6. <strong>反向传播要怎么处理？</strong></h4>
+<ul>
+<li>归一化涉及除法和平方，链式法则复杂</li>
+<li>γ 和 β 的梯度如何计算？</li>
+<li>对输入的梯度是否能用链式求导？</li>
+</ul>
+<hr>
+<h3 id="总结你需要自己实现或思考的组件"><a class="markdownIt-Anchor" href="#总结你需要自己实现或思考的组件"></a> 📌 总结你需要自己实现或思考的组件：</h3>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>是否必须</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>均值与方差计算</td>
+<td>✅</td>
+<td>按 batch / 通道计算</td>
+</tr>
+<tr>
+<td>归一化</td>
+<td>✅</td>
+<td><code>x_norm = (x - mean) / sqrt(var+ε)</code></td>
+</tr>
+<tr>
+<td>γ 和 β 参数</td>
+<td>✅</td>
+<td>可学习参数，用于恢复分布</td>
+</tr>
+<tr>
+<td>训练/推理切换机制</td>
+<td>✅</td>
+<td>使用 batch 统计 or 滑动平均值</td>
+</tr>
+<tr>
+<td>backward</td>
+<td>✅</td>
+<td>计算输入、γ、β 的梯度</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<blockquote>
+<h3 id="核心思路指南maxpooling-实现"><a class="markdownIt-Anchor" href="#核心思路指南maxpooling-实现"></a> 🧠 核心思路指南：MaxPooling 实现</h3>
+<h4 id="1-操作对象是什么"><a class="markdownIt-Anchor" href="#1-操作对象是什么"></a> 1. <strong>操作对象是什么？</strong></h4>
+<ul>
+<li>输入通常是一个二维或三维矩阵（如单通道或多通道 feature map）。</li>
+<li>你需要按固定窗口（例如 2×2 或 3×3）滑动，提取每个窗口的最大值。</li>
+</ul>
+<hr>
+<h4 id="2-滑动的方式"><a class="markdownIt-Anchor" href="#2-滑动的方式"></a> 2. <strong>滑动的方式？</strong></h4>
+<ul>
+<li>核心概念是「窗口大小」和「步长（stride）」。</li>
+<li>每次从输入矩阵中裁剪一个小块窗口，沿着行/列按 stride 移动。</li>
+<li>边缘处理策略是否允许溢出窗口？是否需要 padding？</li>
+</ul>
+<hr>
+<h4 id="3-提取什么信息"><a class="markdownIt-Anchor" href="#3-提取什么信息"></a> 3. <strong>提取什么信息？</strong></h4>
+<ul>
+<li>每个滑动窗口中提取一个值（最大值），形成输出矩阵中的一个元素。</li>
+<li>输出矩阵的大小可通过公式推导得到（由输入大小、窗口大小、stride 决定）。</li>
+</ul>
+<hr>
+<h4 id="4-输出结果结构"><a class="markdownIt-Anchor" href="#4-输出结果结构"></a> 4. <strong>输出结果结构？</strong></h4>
+<ul>
+<li>如果输入是二维矩阵 → 输出也是二维；</li>
+<li>如果输入是多通道（如 [C, H, W]） → 每个通道独立池化，输出保持通道数不变。</li>
+</ul>
+<hr>
+<h4 id="5-如何组织代码结构"><a class="markdownIt-Anchor" href="#5-如何组织代码结构"></a> 5. <strong>如何组织代码结构？</strong></h4>
+<ul>
+<li>一个通用函数 / 类，支持参数：
+<ul>
+<li><code>kernel_size</code></li>
+<li><code>stride</code></li>
+<li><code>padding</code>（可选）</li>
+</ul>
+</li>
+<li>建议按“逐通道处理”和“窗口遍历”两个层级设计逻辑。</li>
+</ul>
+<hr>
+<h4 id="6-可选进阶功能"><a class="markdownIt-Anchor" href="#6-可选进阶功能"></a> 6. <strong>可选进阶功能</strong></h4>
+<ul>
+<li>池化位置索引记录（用于反向传播 / Unpooling）</li>
+<li>实现 Average Pooling 作为对照</li>
+<li>支持 batch 输入维度（例如 [N, C, H, W]）</li>
+</ul>
+</blockquote>
+<h1 id="cpp_dl"><a class="markdownIt-Anchor" href="#cpp_dl"></a> CPP_DL</h1>
+<blockquote>
+<h3 id="初级巩固类构建积木块"><a class="markdownIt-Anchor" href="#初级巩固类构建积木块"></a> ✅ <strong>初级巩固类（构建积木块）</strong></h3>
+<ol>
+<li><strong>手写 ReLU / Sigmoid / Tanh 等激活函数</strong>
+<ul>
+<li>实现 forward 和 backward（反向传播）</li>
+<li>加深函数微分和链式法则的理解</li>
+</ul>
+</li>
+<li><strong>手写 MaxPooling / AvgPooling 层</strong>
+<ul>
+<li>包括 forward 和反向传播（对位置进行追踪）</li>
+</ul>
+</li>
+<li><strong>手写 Linear (全连接层) + Softmax + CrossEntropy</strong>
+<ul>
+<li>和你已有的 Conv 组合起来，构建 MLP</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="中级组合类搭建小模型"><a class="markdownIt-Anchor" href="#中级组合类搭建小模型"></a> 🔄 <strong>中级组合类（搭建小模型）</strong></h3>
+<ol>
+<li><strong>实现简单的 MLP（多层感知机）进行分类任务</strong>
+<ul>
+<li>用自己实现的 Linear + ReLU + Softmax</li>
+</ul>
+</li>
+<li><strong>实现简化版的 CNN</strong>
+<ul>
+<li>使用你自己写的 Conv + Pooling + Linear，训练 MNIST 手写数字（可以从 CSV 数据加载开始）</li>
+</ul>
+</li>
+<li><strong>手写一个计算图引擎（自动求导）</strong>
+<ul>
+<li>类似 PyTorch 的 autograd：支持前向 + 反向传播（Tensor + Node + backward）</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="进阶项目模仿框架"><a class="markdownIt-Anchor" href="#进阶项目模仿框架"></a> 📦 <strong>进阶项目（模仿框架）</strong></h3>
+<ol>
+<li><strong>手写简易的深度学习框架 miniDNN</strong>
+<ul>
+<li>模仿 PyTorch 的结构，模块化设计：<code>Tensor</code> 类、<code>Layer</code> 类、<code>Model</code> 类</li>
+<li>支持动态图 / 静态图、自动求导、优化器等</li>
+</ul>
+</li>
+<li><strong>实现 YOLO 输出解码 + 后处理（Anchor解码 + Sigmoid + NMS）</strong>
+<ul>
+<li>模拟实际输出张量解码流程，如 <code>[N, 13,13,3,85]</code> 解析</li>
+</ul>
+</li>
+<li><strong>用 C++ 推理一个 ONNX 模型（如 ResNet18）</strong>
+<ul>
+<li>不依赖第三方框架，纯手写 Tensor 运算 + 模型结构 + 权重加载</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="挑战类偏实际落地"><a class="markdownIt-Anchor" href="#挑战类偏实际落地"></a> 🧠 <strong>挑战类（偏实际落地）</strong></h3>
+<ol>
+<li><strong>用 C++ 和 OpenCV 实现简易目标检测系统</strong></li>
+</ol>
+<ul>
+<li>读取视频帧 + 推理（NMS + 解码）+ 绘制结果</li>
+<li>可以用你自己的 NMS 和解码模块</li>
+</ul>
+<ol>
+<li><strong>实现简化版 YOLOv3/YOLOv5 推理模块</strong></li>
+</ol>
+<ul>
+<li>输入图片，输出检测框（用你写的 Conv、NMS）</li>
+<li>加载预训练的权重文件（比如从 <code>.weights</code> 解析）</li>
+</ul>
+<ol>
+<li><strong>移植 C++ 代码到嵌入式平台（边缘设备）</strong></li>
+</ol>
+<ul>
+<li>比如使用 ARM 的板子，或 Jetson Nano 进行测试</li>
+</ul>
+<hr>
+<h3 id="建议学习路线"><a class="markdownIt-Anchor" href="#建议学习路线"></a> 💡 建议学习路线：</h3>
+<ul>
+<li>✅ 项目 1~3 巩固基础</li>
+<li>🔁 项目 4~6 做一个“可训练”的小网络</li>
+<li>📦 项目 7~9 构建框架级别认知</li>
+<li>🧠 项目 10~12 面向实际部署能力</li>
+</ul>
+</blockquote>
 
       
     </div>
@@ -655,7 +1034,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>97</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>98</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>30</strong><br>标签</div></a>
     </div>

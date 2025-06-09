@@ -43,7 +43,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>97</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>98</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>30</strong><br>标签</div></a>
     </div>
@@ -70,6 +70,124 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-2024年1月29日-python之项目总结" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2024/01/29/2024%E5%B9%B41%E6%9C%8829%E6%97%A5-python%E4%B9%8B%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/" class="article-date">
+  <time class="post-time" datetime="2024-01-29T15:12:02.000Z" itemprop="datePublished">
+    <span class="post-month">1月</span><br/>
+    <span class="post-day">29</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2024/01/29/2024%E5%B9%B41%E6%9C%8829%E6%97%A5-python%E4%B9%8B%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/">2024年1月29日 python之项目总结</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="python之项目总结"><a class="markdownIt-Anchor" href="#python之项目总结"></a> python之项目总结</h1>
+<h2 id="0-源码包与二进制包什么区别"><a class="markdownIt-Anchor" href="#0-源码包与二进制包什么区别"></a> 0 源码包与二进制包什么区别？</h2>
+<p>Python 包的分发可以分为两种：</p>
+<p>1、以源码包的方式发布</p>
+<p>源码包安装的过程，是先解压，再编译，最后才安装，所以它是跨平台的，由于每次安装都要进行编译，相对二进包安装方式来说安装速度较慢。<img src="https://pic1.zhimg.com/80/v2-dffd77a245997a841eb426d9c0ce5184_1440w.webp" alt="img"></p>
+<p>2、以二进制包形式发布</p>
+<p>二进制包的安装过程省去了编译的过程，直接进行解压安装，所以安装速度较源码包来说更快。</p>
+<p>由于不同平台的编译出来的包无法通用，所以在发布时，需事先编译好多个平台的包。<img src="https://pic4.zhimg.com/v2-b0a22d8b82eac1f25bc6a1b95f6e0c2f_r.jpg" alt="img"></p>
+<h2 id="1-python-中的-requirementstxt-与-setuppy区别"><a class="markdownIt-Anchor" href="#1-python-中的-requirementstxt-与-setuppy区别"></a> 1 Python 中的 requirements.txt 与 setup.py区别</h2>
+<ol>
+<li>
+<p><strong>requirements.txt</strong>:</p>
+<ul>
+<li>
+<p><strong>作用</strong>: <code>requirements.txt</code>文件通常用于列出项目所依赖的第三方库及其版本信息。</p>
+</li>
+<li>
+<dl>
+<dt>格式</dt>
+<dd>每行一个依赖项，通常包括库的名称和版本号，例如：</dd>
+</dl>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">requests==2.26.0</span><br><span class="line">numpy==1.21.5</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>安装依赖</strong>: 通过运行<code>pip install -r requirements.txt</code>命令，可以一次性安装所有列出的依赖项。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><a target="_blank" rel="noopener" href="http://setup.py">setup.py</a></strong>:</p>
+<hr>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">待解决</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p><strong>我们常见的运行命令</strong>，“pip install  模块名”或者“python <a target="_blank" rel="noopener" href="http://setup.py">setup.py</a> install”，前者是在线安装，会安装该包的相关依赖包；后者是下载源码包然后在本地安装，不会安装该包的相关依赖包。</p>
+</li>
+<li>
+<p><strong>在编写相关系统时，如何实现连同依赖包一起打包发布</strong>？</p>
+</li>
+</ul>
+<p>假如我在本机开发一个程序，需要用到python的redis、mysql模块以及自己编写的redis_run.py模块。我怎么实现在<strong>服务器</strong>上去发布该系统，如何实现依赖模块和自己编写的模块redis_run.py一起打包，实现一键安装呢？同时将自己编写的redis_run.py模块以exe文件格式安装到python的全局执行路径~/Python27/Scripts下呢？</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python setup.py install</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p><strong>作用</strong>: <code>setup.py</code>文件是一个 Python 脚本，用于定义项目的元数据和其他相关配置，例如项目名称、版本、作者信息、依赖关系等。</p>
+</li>
+<li>
+<p><strong>如何编写</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">from setuptools import setup, find_packages</span><br><span class="line"></span><br><span class="line">setup(</span><br><span class="line">    name=&quot;example&quot;,</span><br><span class="line">    version=&quot;0.1&quot;,</span><br><span class="line">    packages=find_packages(),</span><br><span class="line">    install_requires=[</span><br><span class="line">        &#x27;requests&gt;=2.26.0&#x27;,</span><br><span class="line">        &#x27;numpy&gt;=1.21.5&#x27;</span><br><span class="line">    ],</span><br><span class="line">    author=&quot;Your Name&quot;,</span><br><span class="line">    author_email=&quot;your@email.com&quot;,</span><br><span class="line">    description=&quot;Description of your project&quot;,</span><br><span class="line">    ...</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>安装依赖</strong>: 通过在<code>install_requires</code>参数中指定依赖项，可以告诉 <code>setuptools</code> 安装项目所需的依赖项。当用户运行<code>python setup.py install</code>时，<code>setuptools</code>会自动处理依赖项的安装。</p>
+</li>
+<li></li>
+</ul>
+</li>
+</ol>
+<h3 id="inquirer库"><a class="markdownIt-Anchor" href="#inquirer库"></a> <code>inquirer</code>库</h3>
+<p><code>inquirer</code>库是一个用于构建命令行交互式界面的Python库。它提供了各种交互式组件，例如选择列表、多选列表、输入框等，可以让用户通过命令行界面与程序进行交互。</p>
+<h2 id="2-from-pil-import-image-为什么-image会报错找不到呢"><a class="markdownIt-Anchor" href="#2-from-pil-import-image-为什么-image会报错找不到呢"></a> 2 from PIL import Image 为什么 Image会报错找不到呢？</h2>
+<p>如图：</p>
+<img src="/2024/01/29/2024%E5%B9%B41%E6%9C%8829%E6%97%A5-python%E4%B9%8B%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/image-20240131001907043.png" alt="image-20240131001907043" style="zoom:50%;">
+<img src="/2024/01/29/2024%E5%B9%B41%E6%9C%8829%E6%97%A5-python%E4%B9%8B%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/image-20240131001917320.png" alt="image-20240131001917320" style="zoom:50%;">
+<h3 id="解决"><a class="markdownIt-Anchor" href="#解决"></a> <strong>解决：</strong></h3>
+<p>因为：在该函数体内报错代码的后面 又再一次到了和相关库，导致报错！</p>
+<img src="/2024/01/29/2024%E5%B9%B41%E6%9C%8829%E6%97%A5-python%E4%B9%8B%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/image-20240131002107821.png" alt="image-20240131002107821" style="zoom:50%;">
+<img src="/2024/01/29/2024%E5%B9%B41%E6%9C%8829%E6%97%A5-python%E4%B9%8B%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/image-20240131002130243.png" alt="image-20240131002130243" style="zoom:50%;">
+<h2 id="3"><a class="markdownIt-Anchor" href="#3"></a> 3</h2>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2024/01/29/2024%E5%B9%B41%E6%9C%8829%E6%97%A5-python%E4%B9%8B%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/" data-id="cltgreexw0007w8v48jfj3kid" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-2024年1月28日-Git连接出错" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -893,73 +1011,6 @@ and the repository exists.</p>
 
 
   
-    <article id="post-2023年11月7日-深度学习报错日记" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2023/11/07/2023%E5%B9%B411%E6%9C%887%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%A5%E9%94%99%E6%97%A5%E8%AE%B0/" class="article-date">
-  <time class="post-time" datetime="2023-11-07T12:02:19.000Z" itemprop="datePublished">
-    <span class="post-month">11月</span><br/>
-    <span class="post-day">07</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/11/07/2023%E5%B9%B411%E6%9C%887%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%A5%E9%94%99%E6%97%A5%E8%AE%B0/">2023年11月7日 深度学习报错日记</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li>2</li>
-</ul>
-<p>RuntimeError: Input type (torch.cuda.FloatTensor) and weight type (torch.FloatTensor) should be the same</p>
-<p><strong>没有明确指定模型应该在GPU上运行。你可以使用<code>model.to(device)</code>将模型移动到GPU上</strong></p>
-<ul>
-<li>
-<p>3</p>
-<p>PIL.UnidentifiedImageError: cannot identify image file ‘F:\Dataset\PetImages\Cat\666.jpg’</p>
-</li>
-</ul>
-<p><strong>图片损坏</strong></p>
-<ul>
-<li>继承Conv基类错误了</li>
-</ul>
-<p><img src="/2023/11/07/2023%E5%B9%B411%E6%9C%887%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%A5%E9%94%99%E6%97%A5%E8%AE%B0/a1fc621421e9142e2c9efb319447d81.png" alt="a1fc621421e9142e2c9efb319447d81"></p>
-<p><img src="/2023/11/07/2023%E5%B9%B411%E6%9C%887%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%A5%E9%94%99%E6%97%A5%E8%AE%B0/8906c28d1e2f7e77d19994f0a920f62.png" alt="8906c28d1e2f7e77d19994f0a920f62"></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2023/11/07/2023%E5%B9%B411%E6%9C%887%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%A5%E9%94%99%E6%97%A5%E8%AE%B0/" data-id="clrwazlr1000q7ov430ep5euf" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl/" rel="tag">dl</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -1004,7 +1055,7 @@ and the repository exists.</p>
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>97</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>98</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>30</strong><br>标签</div></a>
     </div>

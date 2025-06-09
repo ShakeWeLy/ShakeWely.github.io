@@ -43,7 +43,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>97</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>98</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>30</strong><br>标签</div></a>
     </div>
@@ -70,6 +70,100 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-2025年2月19日-CRNN模型" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/" class="article-date">
+  <time class="post-time" datetime="2025-02-19T06:46:09.000Z" itemprop="datePublished">
+    <span class="post-month">2月</span><br/>
+    <span class="post-day">19</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/">2025年2月19日 CRNN模型</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="ocr"><a class="markdownIt-Anchor" href="#ocr"></a> OCR</h1>
+<h2 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h2>
+<p>CRNN主要是<strong>CNN（卷积神经网络）+ RNN（循环神经网络）+ CTC（连接时序分类）</strong> 的组合，广泛用于 <strong>场景文本识别（STR, Scene Text Recognition）</strong></p>
+<p><img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219145436243.png" alt="image-20250219145436243"></p>
+<p>在早期，OCR任务通常分为两个步骤：单字切割和分类任务。首先，使用投影法等技术将文本文件中的连续文字切割成单个字符，然后将这些字符输入到卷积神经网络（CNN）中进行分类。然而，这种方法现在已经有些过时。</p>
+<p>目前更流行的方法是基于深度学习的端到端的文本识别，这种方法不需要显式地进行文字切割。而是将文字识别转化为序列学习问题。尽管输入的图像尺度和文本长度可能不同，但是通过深度卷积神经网络（DCNN）和循环神经网络（RNN）的处理，以及在输出阶段应用一定的连接时序分类（CTC）翻译转录后，就可以对整个文本图像进行识别。这意味着文字的切割过程已经被融入到深度学习模型中，从而简化了整个OCR流程。</p>
+<p>深度学习在端到端OCR（光学字符识别）技术中的应用，特别是CRNN OCR和attention OCR两种技术。这两种技术都使用了CNN+RNN的网络结构进行特征学习，但在最后的输出层（翻译层）有所不同。CRNN OCR使用CTC（连接时序分类）算法进行序列对齐，而attention OCR则采用attention机制来进行序列对齐。文件中提到，CRNN算法应用更为广泛，因此主要介绍的是CRNN算法。</p>
+<h2 id="crnn"><a class="markdownIt-Anchor" href="#crnn"></a> CRNN</h2>
+<h3 id="网络结构"><a class="markdownIt-Anchor" href="#网络结构"></a> 网络结构</h3>
+<img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219150224189.png" style="zoom: 50%;">
+<h4 id="1cnn"><a class="markdownIt-Anchor" href="#1cnn"></a> 1.CNN</h4>
+<img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219150328966.png" alt="image-20250219150328966" style="zoom: 33%;">
+<h5 id="1x2-池化"><a class="markdownIt-Anchor" href="#1x2-池化"></a> 1x2 池化</h5>
+<h4 id="2map2feature-sequence"><a class="markdownIt-Anchor" href="#2map2feature-sequence"></a> 2.Map2Feature sequence</h4>
+<p><img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219150833633.png" alt="image-20250219150833633"></p>
+<img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219150936041.png" alt="image-20250219150936041" style="zoom:50%;">
+<h4 id="3rnn"><a class="markdownIt-Anchor" href="#3rnn"></a> 3.RNN</h4>
+<h5 id="lstm"><a class="markdownIt-Anchor" href="#lstm"></a> LSTM</h5>
+<img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219150959428.png" alt="image-20250219150959428" style="zoom: 50%;">
+<h5 id="双向lstm"><a class="markdownIt-Anchor" href="#双向lstm"></a> 双向LSTM</h5>
+<h5 id><a class="markdownIt-Anchor" href="#"></a> </h5>
+<h4 id="4ctcloss"><a class="markdownIt-Anchor" href="#4ctcloss"></a> 4.CTCLoss</h4>
+<img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219154341960.png" alt="image-20250219154341960" style="zoom: 80%;">
+<p>如上图，对于最简单的时序为 2 的字符识别，有两个时间步长(t0，t1)和三个可能的字符为“ａ”，“ｂ”和“-”，我们得到两个概率分布向量，如果采取最大概率路径解码的方法，则“–”的概率最大，即真实字符为空的概率为0.6*0.6=0.36。</p>
+<p>但是为字符“ａ”的情况有多种对齐组合，“aa”, “a-“和“-a”都是代表“ａ”，所以，输出“ａ”的概率应该为三种之和：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0.4 * 0.4 + 0.4 * 0.6 + 0.6 * 0.4 = 0.16 + 0.24 + 0.24 = 0.64</span><br></pre></td></tr></table></figure>
+<h4 id="5attention"><a class="markdownIt-Anchor" href="#5attention"></a> 5.Attention</h4>
+<p>基于Attention的OCR解码算法，把OCR文字识别当成文字翻译任务，即通过Attention Decoder出文字序列。</p>
+<h5 id="rnn-seq2seq"><a class="markdownIt-Anchor" href="#rnn-seq2seq"></a> <strong>RNN -&gt; Seq2Seq</strong></h5>
+<p><img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219155949098.png" alt="image-20250219155949098"></p>
+<p>左图是经典的RNN结构，右图是Seq2Seq结构。RNN的输入序列和输出序列必须有相同的时间长度，而机器翻译以及文字识别任务都是输入输出不对齐的，不能直接使用RNN结构进行解码。于是在Seq2Seq结构中，将输入序列进行Encoder编码成一个统一的语义向量Context，然后送入Decoder中一个一个解码出输出序列。在Decoder解码过程中，第一个输入字符为<start>，然后不断将前一个时刻的输出作为下一个时刻的输入，循环解码，直到输出<stop></stop>字符为止</start></p>
+<p><strong>Seq2Seq -&gt; Attention Decoder</strong></p>
+<img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219160050009.png" alt="image-20250219160050009" style="zoom: 50%;">
+<p>Seq2Seq把所有的输入序列都编码成一个统一的语义向量Context，然后再由Decoder解码。由于context包含原始序列中的所有信息，它的长度就成了限制模型性能的瓶颈。</p>
+<p>所以如果要改进Seq2Seq结构，最好的切入角度就是：**利用Encoder所有隐藏层状态解决Context长度限制问题。**于是Attention Decoder在Seq2Seq的基础上，增加了一个Attention Layer，如上图所示。</p>
+<img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219160149932.png" alt="image-20250219160149932" style="zoom: 50%;">
+<p>在Decoder时，每个时刻的解码状态跟Encoder的所有隐藏层状态进行cross-attention计算，cross-attention将当前解码的隐藏层状态和encoder的所有隐藏层状态做相关性计算，然后对encoder的所有隐藏层加权求和，最后和当前解码的隐藏层状态concat得到最终的状态。</p>
+<h4 id="6ace"><a class="markdownIt-Anchor" href="#6ace"></a> 6.ACE</h4>
+<p>基于ACE的解码方法不同于CTC和Attention，ACE的监督信号实际上是一种弱监督(<strong>输入输出没有做形式上的对齐，没有先后顺序信息，倾向于学习表征</strong>)，并且可以用于多行文字识别。</p>
+<p><img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219160702221.png" alt="image-20250219160702221"></p>
+<p><img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219160636874.png" alt="image-20250219160636874"></p>
+<p>从模型设计上来看，可以采用结合上面3种方法的**多任务文本识别模型。在训练时，以CTC为主，Attention Decoder和ACE辅助训练。在预测时，考虑到速度和性能，只采用CTC进行解码预测。**多任务可以提高模型的泛化性，同时如果对预测时间要求不高，多结果也可以提供更多的选择和对比。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    Encoder+Decoder+Attention is implemented from:</span></span><br><span class="line"><span class="string">    https://pytorch.org/tutorials/intermediate/seq2seq_translation_tutorial.html</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CNN</span>(nn.Module):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, channel_size</span>):</span><br><span class="line">        <span class="built_in">super</span>(CNN, self).__init__()</span><br><span class="line">        self.cnn = nn.Sequential(</span><br><span class="line">                      nn.Conv2d(channel_size, <span class="number">64</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">1</span>), nn.ReLU(<span class="literal">True</span>), nn.MaxPool2d(<span class="number">2</span>, <span class="number">2</span>),</span><br><span class="line">                      nn.Conv2d(<span class="number">64</span>, <span class="number">128</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">1</span>), nn.ReLU(<span class="literal">True</span>), nn.MaxPool2d(<span class="number">2</span>, <span class="number">2</span>),</span><br><span class="line">                      nn.Conv2d(<span class="number">128</span>, <span class="number">256</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">1</span>), nn.BatchNorm2d(<span class="number">256</span>), nn.ReLU(<span class="literal">True</span>),</span><br><span class="line">                      nn.Conv2d(<span class="number">256</span>, <span class="number">256</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">1</span>), nn.ReLU(<span class="literal">True</span>), nn.MaxPool2d((<span class="number">2</span>,<span class="number">2</span>), (<span class="number">2</span>,<span class="number">1</span>), (<span class="number">0</span>,<span class="number">1</span>)),</span><br><span class="line">                      nn.Conv2d(<span class="number">256</span>, <span class="number">512</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">1</span>), nn.BatchNorm2d(<span class="number">512</span>), nn.ReLU(<span class="literal">True</span>),</span><br><span class="line">                      nn.Conv2d(<span class="number">512</span>, <span class="number">512</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">1</span>), nn.ReLU(<span class="literal">True</span>), nn.MaxPool2d((<span class="number">2</span>,<span class="number">2</span>), (<span class="number">2</span>,<span class="number">1</span>), (<span class="number">0</span>,<span class="number">1</span>)),</span><br><span class="line">                      nn.Conv2d(<span class="number">512</span>, <span class="number">512</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">0</span>), nn.BatchNorm2d(<span class="number">512</span>), nn.ReLU(<span class="literal">True</span>))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, <span class="built_in">input</span></span>):</span><br><span class="line">        <span class="comment"># [n, channel_size, 32, 280] -&gt; [n, 512, 1, 71]</span></span><br><span class="line">        conv = self.cnn(<span class="built_in">input</span>)</span><br><span class="line">        <span class="keyword">return</span> conv</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">BidirectionalLSTM</span>(nn.Module):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, input_size, hidden_size, output_size</span>):</span><br><span class="line">        <span class="built_in">super</span>(BidirectionalLSTM, self).__init__()</span><br><span class="line"></span><br><span class="line">        self.rnn = nn.LSTM(input_size, hidden_size, bidirectional=<span class="literal">True</span>)</span><br><span class="line">        self.embedding = nn.Linear(hidden_size * <span class="number">2</span>, output_size)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, <span class="built_in">input</span></span>):</span><br><span class="line">        recurrent, _ = self.rnn(<span class="built_in">input</span>)</span><br><span class="line">        T, b, h = recurrent.size()</span><br><span class="line">        t_rec = recurrent.view(T * b, h)</span><br><span class="line"></span><br><span class="line">        output = self.embedding(t_rec)  <span class="comment"># [T * b, output_size]</span></span><br><span class="line">        output = output.view(T, b, -<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> output</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">AttnDecoderRNN</span>(nn.Module):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, hidden_size, output_size, dropout_p=<span class="number">0.1</span>, max_length=<span class="number">71</span></span>):</span><br><span class="line">        <span class="built_in">super</span>(AttnDecoderRNN, self).__init__()</span><br><span class="line">        self.hidden_size = hidden_size</span><br><span class="line">        self.output_size = output_size</span><br><span class="line">        self.dropout_p = dropout_p</span><br><span class="line">        self.max_length = max_length</span><br><span class="line"></span><br><span class="line">        self.embedding = nn.Embedding(self.output_size, self.hidden_size)</span><br><span class="line">        self.attn = nn.Linear(self.hidden_size * <span class="number">2</span>, self.max_length)</span><br><span class="line">        self.attn_combine = nn.Linear(self.hidden_size * <span class="number">2</span>, self.hidden_size)</span><br><span class="line">        self.dropout = nn.Dropout(self.dropout_p)</span><br><span class="line">        self.gru = nn.GRU(self.hidden_size, self.hidden_size)</span><br><span class="line">        self.out = nn.Linear(self.hidden_size, self.output_size)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, <span class="built_in">input</span>, hidden, encoder_outputs</span>):</span><br><span class="line">        embedded = self.embedding(<span class="built_in">input</span>)</span><br><span class="line">        embedded = self.dropout(embedded)</span><br><span class="line"></span><br><span class="line">        attn_weights = F.softmax(self.attn(torch.cat((embedded, hidden[<span class="number">0</span>]), <span class="number">1</span>)), dim=<span class="number">1</span>)</span><br><span class="line">        attn_applied = torch.bmm(attn_weights.unsqueeze(<span class="number">1</span>), encoder_outputs.permute(<span class="number">1</span>, <span class="number">0</span>, <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">        output = torch.cat((embedded, attn_applied.squeeze(<span class="number">1</span>)), <span class="number">1</span>)</span><br><span class="line">        output = self.attn_combine(output).unsqueeze(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">        output = F.relu(output)</span><br><span class="line">        output, hidden = self.gru(output, hidden)</span><br><span class="line"></span><br><span class="line">        output = F.log_softmax(self.out(output[<span class="number">0</span>]), dim=<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> output, hidden, attn_weights</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">initHidden</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> torch.zeros(<span class="number">1</span>, <span class="number">1</span>, self.hidden_size, device=device)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Encoder</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, channel_size, hidden_size</span>):</span><br><span class="line">        <span class="built_in">super</span>(Encoder, self).__init__()</span><br><span class="line">        self.cnn = CNN(channel_size)</span><br><span class="line">        self.rnn = nn.Sequential(</span><br><span class="line">            BidirectionalLSTM(<span class="number">512</span>, hidden_size, hidden_size),</span><br><span class="line">            BidirectionalLSTM(hidden_size, hidden_size, hidden_size))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, <span class="built_in">input</span></span>):</span><br><span class="line">        <span class="comment"># conv features</span></span><br><span class="line">        conv = self.cnn(<span class="built_in">input</span>)</span><br><span class="line">        b, c, h, w = conv.size()</span><br><span class="line">        <span class="keyword">assert</span> h == <span class="number">1</span>, <span class="string">&quot;the height of conv must be 1&quot;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># rnn feature</span></span><br><span class="line">        conv = conv.squeeze(<span class="number">2</span>)        <span class="comment"># [b, c, 1, w] -&gt; [b, c, w]</span></span><br><span class="line">        conv = conv.permute(<span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>)  <span class="comment"># [b, c, w] -&gt; [w, b, c]</span></span><br><span class="line">        output = self.rnn(conv)</span><br><span class="line">        <span class="keyword">return</span> output</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Decoder</span>(nn.Module):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, hidden_size, output_size, dropout_p=<span class="number">0.1</span>, max_length=<span class="number">71</span></span>):</span><br><span class="line">        <span class="built_in">super</span>(Decoder, self).__init__()</span><br><span class="line">        self.hidden_size = hidden_size</span><br><span class="line">        self.decoder = AttnDecoderRNN(hidden_size, output_size, dropout_p, max_length)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, <span class="built_in">input</span>, hidden, encoder_outputs</span>):</span><br><span class="line">        <span class="keyword">return</span> self.decoder(<span class="built_in">input</span>, hidden, encoder_outputs)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">initHidden</span>(<span class="params">self, batch_size</span>):</span><br><span class="line">        result = torch.autograd.Variable(torch.zeros(<span class="number">1</span>, batch_size, self.hidden_size))</span><br><span class="line">        <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="model改进"><a class="markdownIt-Anchor" href="#model改进"></a> Model改进</h2>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/" data-id="cm8q1tfhm000mpcv41rh6e84u" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl%E3%80%81model/" rel="tag">dl、model</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-2025年2月19日-pytorch2" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -1277,342 +1371,6 @@ FBNet 使用了一种基于梯度优化的搜索方法，即将 NAS 搜索过程
 
 
   
-    <article id="post-2025年1月11日-视觉模型" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/" class="article-date">
-  <time class="post-time" datetime="2024-12-31T07:20:05.000Z" itemprop="datePublished">
-    <span class="post-month">12月</span><br/>
-    <span class="post-day">31</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/">2025年1月2日 视觉模型</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>端到端单阶段</p>
-<p>两阶段的</p>
-<p>RCNN</p>
-<h2 id="rcnn"><a class="markdownIt-Anchor" href="#rcnn"></a> RCNN</h2>
-<h3 id="rcnn-2"><a class="markdownIt-Anchor" href="#rcnn-2"></a> RCNN</h3>
-<h4 id="0-原理"><a class="markdownIt-Anchor" href="#0-原理"></a> 0 原理</h4>
-<p><strong><img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104184356637.png" alt="image-20250104184356637" style="zoom: 33%;"></strong></p>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250221144723650.png" alt="image-20250221144723650" style="zoom:50%;"> 
-<h4 id="1-ss算法"><a class="markdownIt-Anchor" href="#1-ss算法"></a> 1 ss算法</h4>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104184501872.png" alt="image-20250104184501872" style="zoom: 33%;">
-<h4 id="2-提取特征"><a class="markdownIt-Anchor" href="#2-提取特征"></a> 2 提取特征</h4>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104184859288.png" alt="image-20250104184859288" style="zoom: 33%;">
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104184531836.png" alt="image-20250104184531836" style="zoom:50%;">
-<h4 id="3-svm"><a class="markdownIt-Anchor" href="#3-svm"></a> 3 SVM</h4>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104184713372.png" alt="image-20250104184713372" style="zoom: 33%;">
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104185007538.png" alt="image-20250104185007538" style="zoom: 33%;">
-<p><strong>IOU</strong></p>
-<blockquote>
-<p><img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104185250090.png" alt="image-20250104185250090" style="zoom: 50%;"><img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104185256627.png" alt="image-20250104185256627" style="zoom: 25%;"></p>
-</blockquote>
-<blockquote>
-<p><img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104185308808.png" alt="image-20250104185308808" style="zoom: 33%;"> <img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104185322806.png" alt="image-20250104185322806" style="zoom:33%;"></p>
-</blockquote>
-<h4 id="4-回归分类器"><a class="markdownIt-Anchor" href="#4-回归分类器"></a> 4 回归分类器</h4>
-<p>pass</p>
-<h4 id="优缺"><a class="markdownIt-Anchor" href="#优缺"></a> 优缺</h4>
-<ul>
-<li>冗余</li>
-<li>慢</li>
-<li>空间大</li>
-</ul>
-<h3 id="fast-rcnn"><a class="markdownIt-Anchor" href="#fast-rcnn"></a> Fast RCNN</h3>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104190121582.png" alt="image-20250104190121582" style="zoom:50%;">
-<h4 id="0-原理-2"><a class="markdownIt-Anchor" href="#0-原理-2"></a> 0 原理</h4>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250221152009699.png" alt="image-20250221152009699" style="zoom: 80%;">  
- <img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250221144938969.png" alt="image-20250221144938969" style="zoom:50%;"> 
-<h4 id="1-减少重复计算特征"><a class="markdownIt-Anchor" href="#1-减少重复计算特征"></a> 1 减少重复计算特征</h4>
-<p>通过全连接层进行</p>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104191656317.png" alt="image-20250104191656317" style="zoom:33%;">
-<p><strong>正负样本</strong></p>
-<blockquote></blockquote>
-<h4 id="2-分类器"><a class="markdownIt-Anchor" href="#2-分类器"></a> 2 分类器</h4>
-<p>全连接层实现</p>
-<h4 id="3-边界框回归器"><a class="markdownIt-Anchor" href="#3-边界框回归器"></a> 3 边界框回归器</h4>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104192439278.png" alt="image-20250104192439278" style="zoom: 33%;">
-<h4 id="4-损失计算"><a class="markdownIt-Anchor" href="#4-损失计算"></a> 4 损失计算</h4>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104192659858.png" alt="image-20250104192659858" style="zoom:33%;">
-<h3 id="faster-rcnn"><a class="markdownIt-Anchor" href="#faster-rcnn"></a> Faster RCNN</h3>
-<h4 id="0-原理-3"><a class="markdownIt-Anchor" href="#0-原理-3"></a> 0 原理</h4>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104194051582.png" alt="image-20250104194051582" style="zoom:33%;"> 
-<p><strong>就是用RPN替换SS算法</strong></p>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104194210537.png" alt="image-20250104194210537" style="zoom:33%;">  
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104194406137.png" alt="image-20250104194406137" style="zoom: 33%;">  
-<h4 id="1-rpn"><a class="markdownIt-Anchor" href="#1-rpn"></a> 1 RPN</h4>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104194441284.png" alt="image-20250104194441284" style="zoom: 50%;">	
-<ul>
-<li>3x3 卷积</li>
-<li>在并联两个全连接层 生成:背景和前景 + 4个参数</li>
-<li></li>
-<li></li>
-</ul>
-<h4 id="2-anchor"><a class="markdownIt-Anchor" href="#2-anchor"></a> 2 anchor</h4>
-<p><strong>实现原理</strong></p>
-<p><img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104194722542.png" alt="image-20250104194722542" style="zoom:33%;"><img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104194733782.png" alt="image-20250104194733782" style="zoom:33%;"></p>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104194922010.png" alt="image-20250104194922010" style="zoom: 25%;"> 
-<p>anchor 个数</p>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104195441622.png" alt="image-20250104195441622" style="zoom: 25%;">  
-<p><strong>小感受野也可以预测大特征</strong></p>
-<blockquote>
- <img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104195137512.png" alt="image-20250104195137512" style="zoom:33%;">  
-</blockquote>
-<h4 id="3-损失计算"><a class="markdownIt-Anchor" href="#3-损失计算"></a> 3 损失计算</h4>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104200305676.png" alt="image-20250104200305676" style="zoom:33%;">
-<h2 id="ssd"><a class="markdownIt-Anchor" href="#ssd"></a> SSD</h2>
-<h3 id="原理"><a class="markdownIt-Anchor" href="#原理"></a> 原理</h3>
-<p>在<strong>六个不同的层上预测不同大小的目标</strong>[ 因为:卷积程度越深 感受野越大 抽象的特征越大 那么细节就越少]</p>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250221160156493.png" alt="image-20250221160156493" style="zoom:67%;">
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104171147389.png" alt="image-20250104171147389" style="zoom:33%;">
-<ul>
-<li>b预测小目标 🐱</li>
-<li>C预测大目标 🐕</li>
-</ul>
-<h4 id="default-box"><a class="markdownIt-Anchor" href="#default-box"></a> default box</h4>
-<p>从不同的特征层中产生 每个特征图（feature map）上的像素点为中心生成default box。中心点坐标为特征图位置的映射值，计算公式</p>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104171745323.png" alt="image-20250104171745323" style="zoom:67%;">
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104172055346.png" alt="image-20250104172055346" style="zoom:67%;">
-<h3 id="训练"><a class="markdownIt-Anchor" href="#训练"></a> 训练</h3>
-<h4 id="模型"><a class="markdownIt-Anchor" href="#模型"></a> 模型</h4>
-<p><img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104170756080.png" alt="image-20250104170756080"><img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104170840590.png" alt="image-20250104170840590" style="zoom: 25%;"></p>
-<h4 id="数据处理"><a class="markdownIt-Anchor" href="#数据处理"></a> 数据处理</h4>
-<h4 id="损失计算"><a class="markdownIt-Anchor" href="#损失计算"></a> 损失计算</h4>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104172613364.png" alt="image-20250104172613364" style="zoom:50%;">
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104172751053.png" alt="image-20250104172751053" style="zoom:33%;">
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104172759925.png" alt="image-20250104172759925" style="zoom: 33%;">
-<h4 id="预测"><a class="markdownIt-Anchor" href="#预测"></a> 预测</h4>
-<p><img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104172201462.png" alt="image-20250104172201462"> ]</p>
-<p>参数数目</p>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104172401969.png" alt="image-20250104172401969" style="zoom: 33%;"> 
-<h3 id="优缺-2"><a class="markdownIt-Anchor" href="#优缺-2"></a> 优缺</h3>
-<h3 id="qa"><a class="markdownIt-Anchor" href="#qa"></a> QA</h3>
-<h1 id="yolo"><a class="markdownIt-Anchor" href="#yolo"></a> YOLO</h1>
-<h2 id="yolov1"><a class="markdownIt-Anchor" href="#yolov1"></a> <a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43334693/article/details/129011644?spm=1001.2014.3001.5501">YOLOv1</a></h2>
-<ul>
-<li>端到端单阶段</li>
-<li>目标检测问题看作回归问题</li>
-</ul>
-<h4 id="bounding-box"><a class="markdownIt-Anchor" href="#bounding-box"></a> bounding box</h4>
-<ul>
-<li>x——框中心的横坐标</li>
-<li>y——框中心的纵坐标</li>
-<li>w——框的宽度</li>
-<li>h——框的高度</li>
-<li>置信度（confidence）</li>
-</ul>
-<p>在YOLOV1中S = 7 , B = 2即将每个输入图片分成7 × 7 个网格，每个网格将生成2 个预测框，用来框出图片中的物体。 每个框会预测出5个变量值，所以一个网格生成两个框，一个框带有5个属性，所以一个格就需要预测出5 × 2 = 10 个变量值。<br>
-在YOLOv1中有<strong>20个类别的物体的条件概率</strong>，所以输出结果的后20个值就表示每一个小网格（grid cell）对应每一类物体的概率，即由该网格生产的两个预测框对应每一类物体的概率。 由此，输出的7 × 7 × 30 向量的每一项含义便清楚了。<br>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104151446113.png" alt="image-20250104151446113" style="zoom: 67%;"></p>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104154104316.png" alt="image-20250104154104316" style="zoom: 33%;">
-<h4 id="训练-2"><a class="markdownIt-Anchor" href="#训练-2"></a> 训练</h4>
-<h5 id="网络结构"><a class="markdownIt-Anchor" href="#网络结构"></a> 网络结构</h5>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/64c2116c3e9f6d55b5aa2a8fab982a26.png" alt="img"></p>
-<p>YOLOV1的输入为448 × 448 × 3 图像，输出大小为7 × 7 × 30 向量</p>
-<p>在网络结构的最后一层使用的是线性激活函数，其他层使用的是****leaky ReLU****激活函数，YOLOv1中采用的leaky ReLU定义公式如下</p>
-<p><img src="https://i-blog.csdnimg.cn/direct/dba9296aa0d24233abe7b02e75e4b7e9.png" alt="img"></p>
-<h5 id="数据处理-2"><a class="markdownIt-Anchor" href="#数据处理-2"></a> 数据处理</h5>
-<h5 id="损失计算-2"><a class="markdownIt-Anchor" href="#损失计算-2"></a> 损失计算</h5>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104155000144.png" alt="image-20250104155000144" style="zoom:67%;">
-<p><img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104155310820.png" alt="image-20250104155310820" style="zoom:33%;"> 大小目标对偏移影响不同</p>
-<h5 id="预测极大值抑制"><a class="markdownIt-Anchor" href="#预测极大值抑制"></a> 预测–极大值抑制</h5>
-<p>7X7X2个bounding box 进行 过滤与非极大值抑制</p>
-<p><img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104152002611.png" alt></p>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/d358fa901b47a00baa710246af0ea197.gif" alt="img"></p>
-<h4 id="优缺-3"><a class="markdownIt-Anchor" href="#优缺-3"></a> 优缺</h4>
-<p>无法很好地处理小目标和重叠目标</p>
-<h4 id="qa-2"><a class="markdownIt-Anchor" href="#qa-2"></a> QA</h4>
-<ol>
-<li>
-<h5 id="为什么两个bounding-box"><a class="markdownIt-Anchor" href="#为什么两个bounding-box"></a> 为什么两个bounding box</h5>
-</li>
-</ol>
-<p>每个 bounding box 都有一组独立的参数，包括中心坐标、宽度、高度和置信度，能够分别拟合不同的目标。</p>
-<h2 id="yolov2"><a class="markdownIt-Anchor" href="#yolov2"></a> YOLOV2</h2>
-<h4 id="1-bn-加入"><a class="markdownIt-Anchor" href="#1-bn-加入"></a> 1 BN 加入</h4>
-<h4 id="2-anchor-2"><a class="markdownIt-Anchor" href="#2-anchor-2"></a> 2 anchor</h4>
-<p>K-mean聚类实现</p>
-<p>模型学习如何调整预定义的 anchor，而不是从零开始预测边界框的所有参数。</p>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104164542277.png" alt="image-20250104164542277" style="zoom: 67%;"> 
-<h4 id="3-pass-through-layer"><a class="markdownIt-Anchor" href="#3-pass-through-layer"></a> 3 pass through layer</h4>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104160704522.png" alt="image-20250104160704522" style="zoom:67%;"> 
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104160931404.png" alt="image-20250104160931404" style="zoom:50%;"> 
-<h5 id="4-多尺度数据输入"><a class="markdownIt-Anchor" href="#4-多尺度数据输入"></a> 4 多尺度数据输入</h5>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250104161259611.png" alt="image-20250104161259611" style="zoom:50%;"> 
-<h4 id="faster"><a class="markdownIt-Anchor" href="#faster"></a> Faster</h4>
-<p>1</p>
-<h2 id="yolov3"><a class="markdownIt-Anchor" href="#yolov3"></a> YOLOV3</h2>
-<h4 id="单标签分类改进为多标签分类"><a class="markdownIt-Anchor" href="#单标签分类改进为多标签分类"></a> 单标签分类改进为多标签分类</h4>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105125615278.png" alt="image-20250105125615278" style="zoom:50%;"> 
-<h4 id="pan"><a class="markdownIt-Anchor" href="#pan"></a> PAN</h4>
-<h3 id="yolov4"><a class="markdownIt-Anchor" href="#yolov4"></a> YOLOV4</h3>
-<h3 id="1-原理"><a class="markdownIt-Anchor" href="#1-原理"></a> 1 原理</h3>
-<p><img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105142450863.png" alt="image-20250105142450863"><img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105142605476.png" alt="image-20250105142605476" style="zoom:67%;"></p>
-<h3 id="2-输入端"><a class="markdownIt-Anchor" href="#2-输入端"></a> 2 输入端</h3>
-<h5 id="sat自对抗训练"><a class="markdownIt-Anchor" href="#sat自对抗训练"></a> SAT自对抗训练</h5>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105151656124.png" alt="image-20250105151656124" style="zoom:67%;">
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105151712577.png" alt="image-20250105151712577" style="zoom:67%;">
-<h5 id="label-smoothing类标签平滑"><a class="markdownIt-Anchor" href="#label-smoothing类标签平滑"></a> Label Smoothing类标签平滑</h5>
-<h3 id="3-网络结构"><a class="markdownIt-Anchor" href="#3-网络结构"></a> 3 网络结构</h3>
-<h4 id="1-backbone"><a class="markdownIt-Anchor" href="#1-backbone"></a> 1 Backbone</h4>
-<h5 id="31-csp"><a class="markdownIt-Anchor" href="#31-csp"></a> 3.1 CSP</h5>
-<h5 id="img-src2025年1月11日-视觉模型image-20250105130506026png-altimage-20250105130506026-stylezoom50"><a class="markdownIt-Anchor" href="#img-src2025年1月11日-视觉模型image-20250105130506026png-altimage-20250105130506026-stylezoom50"></a> <img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105130506026.png" alt="image-20250105130506026" style="zoom:50%;"></h5>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105152215756.png" alt="image-20250105152215756" style="zoom:50%;"> 
-<h4 id="4-neck"><a class="markdownIt-Anchor" href="#4-neck"></a> 4 Neck</h4>
-<p>一个颈部neck由几个自下而上的路径和几个自上而下的路径组成。具有该机制的网络包括特征金字塔网络(FPN)、路径汇聚网络(PAN)、BiFPN和NAS-FPN。</p>
-<h5 id="41-fpn"><a class="markdownIt-Anchor" href="#41-fpn"></a> 4.1 FPN</h5>
-<p>引入了自底向上的路径，使得底层信息更容易传到顶部</p>
-<p><img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105150718121.png" alt="image-20250105150718121"></p>
-<p><img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105150726295.png" alt="image-20250105150726295"></p>
-<h5 id="42-pan"><a class="markdownIt-Anchor" href="#42-pan"></a> 4.2 PAN</h5>
-<p>特征层之间融合时是直接通过addition的方式进行融合的，而Yolov4中则采用在通道方向concat拼接操作融合的</p>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105150948205.png" alt="image-20250105150948205" style="zoom:67%;">
-<p><img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105150823004.png" alt="image-20250105150823004"></p>
-<h5 id="43-spp"><a class="markdownIt-Anchor" href="#43-spp"></a> 4.3 SPP</h5>
-<p>空间金字塔池化 特征提取池化</p>
-<p>通过在输入特征图上<strong>采用不同尺度的池化窗口</strong>（如1×1、2×2、4×4 等），SPP 能够从不同的空间范围内有效地捕获图像中不同大小和比例的目标特征</p>
-<blockquote>
-<p>旨在解决卷积神经网络中固定大小输入的限制。它能够对任意大小的 输入特征图进行处理，并在不同尺度下提取特征，从而显著增强模型对不同大小目标的感 知能力</p>
-</blockquote>
-<p><img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250303181539006.png" alt="image-20250303181539006"></p>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105150606229.png" alt="image-20250105150606229" style="zoom:50%;">
-<h3 id="4-bof"><a class="markdownIt-Anchor" href="#4-bof"></a> 4 BoF</h3>
-<p>我们把这些只会改变培训策略或只增加培训成本的方法称为“bag of freebies”。</p>
-<h4 id="1-数据增强"><a class="markdownIt-Anchor" href="#1-数据增强"></a> 1 数据增强</h4>
-<h4 id="2-解决数据集中语义分布偏差问题"><a class="markdownIt-Anchor" href="#2-解决数据集中语义分布偏差问题"></a> 2 解决数据集中语义分布偏差问题</h4>
-<p>不同类之间存在数据不平衡的问题</p>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105143153315.png" alt="image-20250105143153315" style="zoom: 67%;"> 
-<h4 id="3-边界框bbox回归的目标函数"><a class="markdownIt-Anchor" href="#3-边界框bbox回归的目标函数"></a> 3 边界框(BBox)回归的目标函数 ??</h4>
-<p>直接估计BBox中每个点的坐标值是要将这些点作为自变量来处理，但实际上并没有考虑对象本身的完整性</p>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105143449548.png" alt="image-20250105143449548" style="zoom:67%;">
-<h3 id="5-bos"><a class="markdownIt-Anchor" href="#5-bos"></a> 5 BoS</h3>
-<p>对于那些只增加少量推理成本但又能显著提高目标检测精度的插件模块和后处理方法，我们称它们为“bag of specials&quot;</p>
-<h4 id="1-增强感受野"><a class="markdownIt-Anchor" href="#1-增强感受野"></a> 1 增强感受野</h4>
-<p><strong>①改进的SPP模块</strong></p>
-<p><img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105143750945.png" alt="image-20250105143750945"></p>
-<p><strong>②ASPP模块</strong></p>
-<p><img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105143836518.png" alt="image-20250105143836518"></p>
-<p><strong>③RFB模块</strong></p>
-<p><img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105143846925.png" alt="image-20250105143846925"></p>
-<h4 id="2-注意力机制"><a class="markdownIt-Anchor" href="#2-注意力机制"></a> 2 注意力机制</h4>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105143912123.png" alt="image-20250105143912123" style="zoom:50%;"> 
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105143920723.png" alt="image-20250105143920723" style="zoom: 50%;"> 
-<h4 id="3-特征融合"><a class="markdownIt-Anchor" href="#3-特征融合"></a> 3 特征融合</h4>
-<p><strong>①SFAM：</strong> 主要思想是利用SE模块在多尺度的拼接特征图上进行信道级重加权。</p>
-<p><strong>②ASFF：</strong> 使用softmax对多尺度拼接特征图在点维度进行加权。</p>
-<p><strong>③BiFPN：</strong> 提出了多输入加权剩余连接来执行按比例的水平重加权，然后添加不同比例的特征图。</p>
-<h4 id="4-激活函数"><a class="markdownIt-Anchor" href="#4-激活函数"></a> 4 激活函数</h4>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105144012738.png" alt="image-20250105144012738" style="zoom:50%;"> 
-<h3 id="6-注意力机制"><a class="markdownIt-Anchor" href="#6-注意力机制"></a> 6 注意力机制</h3>
-<h4 id="61-cbamconvolutional-block-attention-module注意力机制"><a class="markdownIt-Anchor" href="#61-cbamconvolutional-block-attention-module注意力机制"></a> 6.1 **CBAM(Convolutional Block Attention Module)**注意力机制</h4>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105151035854.png" alt="image-20250105151035854" style="zoom: 50%;">
-<h4 id="62-channel-attention-module通道注意力模块"><a class="markdownIt-Anchor" href="#62-channel-attention-module通道注意力模块"></a> 6.2 <strong>Channel attention module(通道注意力模块)</strong></h4>
-<p><img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105151238032.png" alt="image-20250105151238032"></p>
-<h4 id="63-attention-module空间注意力模块"><a class="markdownIt-Anchor" href="#63-attention-module空间注意力模块"></a> 6.3 <strong>attention module(空间注意力模块)</strong></h4>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105151404902.png" alt="image-20250105151404902" style="zoom:80%;">
-<h3 id="dropblock正则化"><a class="markdownIt-Anchor" href="#dropblock正则化"></a> Dropblock正则化</h3>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105130645146.png" alt="image-20250105130645146" style="zoom: 50%;"> 
-<blockquote>
-<p>Q：全连接层上效果很好的Dropout在卷积层上效果并不好？</p>
-<pre><code>中间Dropout的方式会随机的删减丢弃一些信息，但Dropblock的研究者认为，卷积层对于这种随机丢弃并不敏感，因为卷积层通常是三层连用：卷积+激活+池化层，池化层本身就是对相邻单元起作用。
-
-而且即使随机丢弃，卷积层仍然可以从相邻的激活单元学习到相同的信息。因此，在全连接层上效果很好的Dropout在卷积层上效果并不好。所以右图Dropblock的研究者则干脆整个局部区域进行删减丢弃。
-</code></pre>
-</blockquote>
-<h2 id="yolov5"><a class="markdownIt-Anchor" href="#yolov5"></a> <a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43334693/article/details/129312409">YOLOV5</a></h2>
-<h3 id="1-原理-2"><a class="markdownIt-Anchor" href="#1-原理-2"></a> 1 原理</h3>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105140339482.png" alt="image-20250105140339482" style="zoom: 80%;"> 
-<h3 id="2-输入"><a class="markdownIt-Anchor" href="#2-输入"></a> 2 输入</h3>
-<p>数据增强</p>
-<h3 id="3-网络结构-2"><a class="markdownIt-Anchor" href="#3-网络结构-2"></a> 3 网络结构</h3>
-<p><img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250303181011801.png" alt></p>
-<h4 id="31-backbone"><a class="markdownIt-Anchor" href="#31-backbone"></a> 3.1 Backbone</h4>
-<h5 id="311-focus-结构"><a class="markdownIt-Anchor" href="#311-focus-结构"></a> 3.1.1 Focus 结构</h5>
-<p>4×4的3通道图 像切片后变成2×2的12通道的特征图</p>
-<p><img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105141242384.png" alt="image-20250105141242384"></p>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/009d2d69aae2b1cb6ecede41530f82bf.png" alt="img"></p>
-<p><img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105141341837.png" alt="image-20250105141341837"></p>
-<p><img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105141346413.png" alt="image-20250105141346413"></p>
-<ul>
-<li>高分辨率 图像的信息从空间维度转化到通道维度，这一转化不仅保留了大量输入信息，还缩减了输 入尺寸，有助于提升网络的训练和推理速度</li>
-</ul>
-<h5 id="312-csb"><a class="markdownIt-Anchor" href="#312-csb"></a> 3.1.2 CSB</h5>
-<p>结合了卷积、批量归一化以及SiLU 激活函数，这种配置使得该模块能够有效地提取和传递特征信息，加快模型的收敛速度并 增强检测能力。</p>
-<p><img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250303180658523.png" alt></p>
-<h5 id="313-csp"><a class="markdownIt-Anchor" href="#313-csp"></a> 3.1.3 CSP</h5>
-<p>一种用于构建特征提取网络的重要组件。通过引入<strong>跨阶段部分连接</strong>和通道分割来加强特征的传播和利 用，从而提高了模型的性能和效率。</p>
-<p><img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250303180919670.png" alt="image-20250303180919670"></p>
-<p><img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105141515679.png" alt="image-20250105141515679"></p>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105141525595.png" alt="image-20250105141525595" style="zoom:50%;"> 
-<h5 id="314-sppf"><a class="markdownIt-Anchor" href="#314-sppf"></a> 3.1.4 SPPF</h5>
-<p>SPPF将SPP原来并行的结构<strong>改进为串行结构</strong>，通过指定单一卷积核，<strong>每次池化后的输出直接作为下一个池化的输入</strong></p>
-<p><img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250303182202107.png" alt="image-20250303182202107"></p>
-<h4 id="32-neck"><a class="markdownIt-Anchor" href="#32-neck"></a> 3.2 Neck</h4>
-<p><img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105141614203.png" alt="image-20250105141614203"></p>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105141619565.png" alt="image-20250105141619565" style="zoom: 50%;">
-<h5 id="321-路径聚合网络panet"><a class="markdownIt-Anchor" href="#321-路径聚合网络panet"></a> 3.2.1 路径聚合网络（PANet）</h5>
-<p>PAN 通过增加<strong>自下而上</strong>的路径来增强 FPN 的结构，</p>
-<p>其主要目的是改善信息的流动和特征图的利用效率。</p>
-<h5 id="322-特征金字塔网络fpnet"><a class="markdownIt-Anchor" href="#322-特征金字塔网络fpnet"></a> 3.2.2 特征金字塔网络（FPNet）</h5>
-<p>FPNet多尺度特征融合的方法，它在提取的特征层之间建立<strong>自上而下</strong>的路径</p>
-<p>高层次的语义信息能够与低层次的细节<strong>信息结合</strong> 改进对<strong>小尺寸</strong>目标的检测能力</p>
-<p><img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250303182750649.png" alt="image-20250303182750649"></p>
-<h4 id="33-输出端"><a class="markdownIt-Anchor" href="#33-输出端"></a> 3.3 输出端</h4>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250303183300954.png" alt="image-20250303183300954" style="zoom:80%;">
-<p>当真实目标的中心点位于网格的左上角或右下角附近时，σ(tx)与σ(ty)的 值可能会接近0或1，这种极端值通常是网络难以实现的</p>
-<p>对偏移量进行调整，将其<strong>从（0,1）缩放到（-0.5,1.5）</strong>，确保 模型输出的偏移量保持在0到1的范围</p>
-<h3 id="4-损失函数"><a class="markdownIt-Anchor" href="#4-损失函数"></a> 4 损失函数</h3>
-<p>总损失是定 位损失、分类损失和置信度损失的加权和，各损失的权重是通过调整超参数进行优化，以 平衡分类、定位和置信度之间的重要性</p>
-<h3 id="5-训练策略"><a class="markdownIt-Anchor" href="#5-训练策略"></a> 5 训练策略</h3>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250105123929037.png" alt="image-20250105123929037" style="zoom: 50%;"> 
-<h3 id="6-魔改"><a class="markdownIt-Anchor" href="#6-魔改"></a> 6 魔改</h3>
-<h4 id="61-网络结构"><a class="markdownIt-Anchor" href="#61-网络结构"></a> 6.1 网络结构</h4>
-<img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250303184319327.png" alt="image-20250303184319327" style="zoom:67%;">
-<h1 id="fcos"><a class="markdownIt-Anchor" href="#fcos"></a> FCOS</h1>
-<h2 id="fcos-2"><a class="markdownIt-Anchor" href="#fcos-2"></a> FCOS</h2>
-<p>参考： <a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_46142822/article/details/123958529%E3%80%81">https://blog.csdn.net/weixin_46142822/article/details/123958529、</a></p>
-<h3 id="2-fcos-网络框架"><a class="markdownIt-Anchor" href="#2-fcos-网络框架"></a> 2 FCOS 网络框架</h3>
-<p><img src="/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/image-20250309153327923.png" alt="image-20250309153327923"></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2024/12/31/2025%E5%B9%B41%E6%9C%8811%E6%97%A5-%E8%A7%86%E8%A7%89%E6%A8%A1%E5%9E%8B/" data-id="cm8q1tfhe000bpcv4hr161vro" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/model/" rel="tag">model</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -1657,7 +1415,7 @@ FBNet 使用了一种基于梯度优化的搜索方法，即将 NAS 搜索过程
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>97</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>98</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>30</strong><br>标签</div></a>
     </div>

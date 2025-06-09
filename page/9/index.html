@@ -43,7 +43,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>97</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>98</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>30</strong><br>标签</div></a>
     </div>
@@ -70,6 +70,67 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-2023年8月19日-阿里总结" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/08/18/2023%E5%B9%B48%E6%9C%8819%E6%97%A5-%E9%98%BF%E9%87%8C%E6%80%BB%E7%BB%93/" class="article-date">
+  <time class="post-time" datetime="2023-08-18T13:21:06.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">18</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/08/18/2023%E5%B9%B48%E6%9C%8819%E6%97%A5-%E9%98%BF%E9%87%8C%E6%80%BB%E7%BB%93/">2023年8月19日 阿里总结</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1-查看缺失值"><a class="markdownIt-Anchor" href="#1-查看缺失值"></a> 1 查看缺失值</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">import pandas as pd</span><br><span class="line"></span><br><span class="line"># 创建一个包含缺失值的示例数据</span><br><span class="line">data = &#123;&#x27;A&#x27;: [1, 2, None, 4, 5],</span><br><span class="line">        &#x27;B&#x27;: [None, 2, 3, 4, 5],</span><br><span class="line">        &#x27;C&#x27;: [1, 2, 3, 4, None]&#125;</span><br><span class="line">df = pd.DataFrame(data)</span><br><span class="line"></span><br><span class="line"># 检查数据中是否有缺失值</span><br><span class="line">missing_values = df.isnull().sum()</span><br><span class="line">print(missing_values)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>​	处理</p>
+<p>​</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 使用平均值填充缺失值</span><br><span class="line">df_filled_mean = df.fillna(df.mean())</span><br><span class="line"># 使用前向填充或后向填充</span><br><span class="line">df_forward_filled = df.fillna(method=&#x27;ffill&#x27;)  # 前向填充</span><br><span class="line">df_backward_filled = df.fillna(method=&#x27;bfill&#x27;)  # 后向填充</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#不需要指定特定的行。</span><br><span class="line"># 删除包含缺失值的行</span><br><span class="line">df_cleaned_rows = df.dropna()</span><br><span class="line"></span><br><span class="line"># 删除包含缺失值的列</span><br><span class="line">df_cleaned_columns = df.dropna(axis=1)</span><br></pre></td></tr></table></figure>
+<p>对数转换</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"># </span><br><span class="line">import numpy as np</span><br><span class="line">import pandas as pd</span><br><span class="line"></span><br><span class="line"># 假设 df 是包含异常值的数据框</span><br><span class="line">data = &#123;&#x27;A&#x27;: [1, 2, 3, 4, 20, 30],</span><br><span class="line">        &#x27;B&#x27;: [5, 10, 15, 25, 100, 200]&#125;</span><br><span class="line">df = pd.DataFrame(data)</span><br><span class="line"></span><br><span class="line"># 进行对数转换</span><br><span class="line">df_log_transformed = np.log(df)</span><br><span class="line"></span><br><span class="line">print(&quot;原始数据框:&quot;)</span><br><span class="line">print(df)</span><br><span class="line">print(&quot;\n对数转换后的数据框:&quot;)</span><br><span class="line">print(df_log_transformed)</span><br></pre></td></tr></table></figure>
+<p>QQ图与正态分布</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line">import matplotlib.pyplot as plt</span><br><span class="line">import scipy.stats as stats</span><br><span class="line"></span><br><span class="line"># 生成随机样本数据</span><br><span class="line">np.random.seed(0)</span><br><span class="line">sample_data = np.random.normal(loc=0, scale=1, size=100)</span><br><span class="line"></span><br><span class="line"># 绘制正态分布QQ图</span><br><span class="line">plt.figure(figsize=(8, 6))</span><br><span class="line"></span><br><span class="line"># 绘制QQ图，使用正态分布作为理论分布（dist=&quot;norm&quot;）</span><br><span class="line"># 将随机样本数据与正态分布的理论分布进行比较，并在图上绘制结果</span><br><span class="line">stats.probplot(sample_data, dist=&quot;norm&quot;, plot=plt)</span><br><span class="line"></span><br><span class="line"># 添加标题和坐标轴标签</span><br><span class="line">plt.title(&quot;QQ Plot - Normal Distribution&quot;)</span><br><span class="line">plt.xlabel(&quot;Theoretical Quantiles&quot;)</span><br><span class="line">plt.ylabel(&quot;Sample Quantiles&quot;)</span><br><span class="line"></span><br><span class="line"># 显示网格</span><br><span class="line">plt.grid(True)</span><br><span class="line"></span><br><span class="line"># 显示绘制的图</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line">import matplotlib.pyplot as plt</span><br><span class="line">import seaborn as sns</span><br><span class="line">import scipy.stats as stats</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"># 假设 train_data 是你的数据框</span><br><span class="line"># 设置图表的大小</span><br><span class="line">plt.figure(figsize=(10, 5))</span><br><span class="line"># 创建子图，1 行 2 列，第一个子图</span><br><span class="line">ax = plt.subplot(1, 2, 1)</span><br><span class="line"># 使用 Seaborn 绘制数据分布图数据线，并拟合正态分布曲线</span><br><span class="line">sns.distplot(train_data[&#x27;vo&#x27;], fit=stats.norm)</span><br><span class="line"># 添加标题和标签</span><br><span class="line">ax.set_title(&quot;Distribution Plot with Normal Fit&quot;)</span><br><span class="line">ax.set_xlabel(&quot;Value&quot;)</span><br><span class="line">ax.set_ylabel(&quot;Density&quot;)</span><br><span class="line"># 创建子图，1 行 2 列，第二个子图</span><br><span class="line">ax = plt.subplot(1, 2, 2)</span><br><span class="line"># 使用 Scipy 绘制 QQ 图</span><br><span class="line">res = stats.probplot(train_data[&#x27;vo&#x27;], plot=plt)</span><br><span class="line"># 显示图表</span><br><span class="line">plt.tight_layout()</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2023/08/18/2023%E5%B9%B48%E6%9C%8819%E6%97%A5-%E9%98%BF%E9%87%8C%E6%80%BB%E7%BB%93/" data-id="clrwazlr9001s7ov40bssfvxw" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A0%E5%AD%A6%E4%B9%A0/" rel="tag">阿里天池学习</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-2023年8月17日-阿里天池6特征优化与模型融合哦" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -1065,59 +1126,6 @@
 
 
   
-    <article id="post-2023年8月11日-支持向量机" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2023/08/10/2023%E5%B9%B48%E6%9C%8811%E6%97%A5-%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/" class="article-date">
-  <time class="post-time" datetime="2023-08-10T14:11:08.000Z" itemprop="datePublished">
-    <span class="post-month">8月</span><br/>
-    <span class="post-day">10</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/08/10/2023%E5%B9%B48%E6%9C%8811%E6%97%A5-%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/">2023年8月11日 支持向量机</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在支持向量机（SVM）的训练过程中，参数更新通常是通过优化算法来实现的，目标是最小化损失函数并找到一个最优的超平面。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 作者：Weakliy</span></span><br><span class="line"><span class="comment"># 创建日期：2023/8/10 22:28</span></span><br><span class="line"><span class="comment"># 描述：这个文件实现了SVM。</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> svm</span><br><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> make_classification</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建虚拟数据集</span></span><br><span class="line">X, y = make_classification(n_samples=<span class="number">100</span>, n_features=<span class="number">2</span>, n_informative=<span class="number">2</span>, n_redundant=<span class="number">0</span>, random_state=<span class="number">42</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将数据集分为训练集和测试集</span></span><br><span class="line">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.2</span>, random_state=<span class="number">42</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一个SVM分类器</span></span><br><span class="line">clf = svm.SVC(kernel=<span class="string">&#x27;linear&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在训练集上训练分类器</span></span><br><span class="line">clf.fit(X_train, y_train)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在测试集上进行预测</span></span><br><span class="line">y_pred = clf.predict(X_test)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 绘制训练集和测试集的散点图以及决策边界</span></span><br><span class="line">plt.scatter(X_train[:, <span class="number">0</span>], X_train[:, <span class="number">1</span>], c=y_train, cmap=plt.cm.Paired, marker=<span class="string">&#x27;o&#x27;</span>, label=<span class="string">&#x27;Train&#x27;</span>)</span><br><span class="line">plt.scatter(X_test[:, <span class="number">0</span>], X_test[:, <span class="number">1</span>], c=y_test, cmap=plt.cm.Paired, marker=<span class="string">&#x27;x&#x27;</span>, label=<span class="string">&#x27;Test&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 绘制决策边界</span></span><br><span class="line">ax = plt.gca()</span><br><span class="line">xlim = ax.get_xlim()</span><br><span class="line">ylim = ax.get_ylim()</span><br><span class="line"></span><br><span class="line">xx, yy = np.meshgrid(np.linspace(xlim[<span class="number">0</span>], xlim[<span class="number">1</span>], <span class="number">100</span>), np.linspace(ylim[<span class="number">0</span>], ylim[<span class="number">1</span>], <span class="number">100</span>))</span><br><span class="line">Z = clf.decision_function(np.c_[xx.ravel(), yy.ravel()])</span><br><span class="line">Z = Z.reshape(xx.shape)</span><br><span class="line"></span><br><span class="line">plt.contour(xx, yy, Z, colors=<span class="string">&#x27;k&#x27;</span>, levels=[-<span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>], alpha=<span class="number">0.5</span>, linestyles=[<span class="string">&#x27;--&#x27;</span>, <span class="string">&#x27;-&#x27;</span>, <span class="string">&#x27;--&#x27;</span>])</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Feature 1&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Feature 2&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;SVM Classification&#x27;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 作者：Weakliy</span></span><br><span class="line"><span class="comment"># 创建日期：2023/8/11 12:22</span></span><br><span class="line"><span class="comment"># 描述：这个文件实现了SVM-三维。</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> mpl_toolkits.mplot3d <span class="keyword">import</span> Axes3D</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> datasets</span><br><span class="line"><span class="keyword">from</span> sklearn.svm <span class="keyword">import</span> SVC</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成虚拟数据集</span></span><br><span class="line">X, y = datasets.make_classification(n_samples=<span class="number">100</span>, n_features=<span class="number">3</span>, n_informative=<span class="number">3</span>, n_redundant=<span class="number">0</span>, random_state=<span class="number">42</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建SVM模型</span></span><br><span class="line">clf = SVC(kernel=<span class="string">&#x27;linear&#x27;</span>)</span><br><span class="line">clf.fit(X, y)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 绘制支持向量和超平面</span></span><br><span class="line">fig = plt.figure()</span><br><span class="line">ax = fig.add_subplot(<span class="number">111</span>, projection=<span class="string">&#x27;3d&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 绘制支持向量</span></span><br><span class="line">sv = clf.support_vectors_</span><br><span class="line">ax.scatter(sv[:, <span class="number">0</span>], sv[:, <span class="number">1</span>], sv[:, <span class="number">2</span>], c=<span class="string">&#x27;red&#x27;</span>, marker=<span class="string">&#x27;o&#x27;</span>, label=<span class="string">&#x27;Support Vectors&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 绘制非支持向量</span></span><br><span class="line">non_sv = np.array([x <span class="keyword">for</span> idx, x <span class="keyword">in</span> <span class="built_in">enumerate</span>(X) <span class="keyword">if</span> idx <span class="keyword">not</span> <span class="keyword">in</span> clf.support_])</span><br><span class="line">ax.scatter(non_sv[:, <span class="number">0</span>], non_sv[:, <span class="number">1</span>], non_sv[:, <span class="number">2</span>], c=<span class="string">&#x27;blue&#x27;</span>, marker=<span class="string">&#x27;x&#x27;</span>, label=<span class="string">&#x27;Non-Support Vectors&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算超平面上的点</span></span><br><span class="line">xx, yy = np.meshgrid(np.linspace(X[:, <span class="number">0</span>].<span class="built_in">min</span>(), X[:, <span class="number">0</span>].<span class="built_in">max</span>(), <span class="number">50</span>),</span><br><span class="line">                     np.linspace(X[:, <span class="number">1</span>].<span class="built_in">min</span>(), X[:, <span class="number">1</span>].<span class="built_in">max</span>(), <span class="number">50</span>))</span><br><span class="line">zz = (-clf.intercept_[<span class="number">0</span>] - clf.coef_[<span class="number">0</span>][<span class="number">0</span>] * xx - clf.coef_[<span class="number">0</span>][<span class="number">1</span>] * yy) / clf.coef_[<span class="number">0</span>][<span class="number">2</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 绘制超平面</span></span><br><span class="line">ax.plot_surface(xx, yy, zz, alpha=<span class="number">0.2</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置图形参数</span></span><br><span class="line">ax.set_xlabel(<span class="string">&#x27;Feature 1&#x27;</span>)</span><br><span class="line">ax.set_ylabel(<span class="string">&#x27;Feature 2&#x27;</span>)</span><br><span class="line">ax.set_zlabel(<span class="string">&#x27;Feature 3&#x27;</span>)</span><br><span class="line">ax.set_title(<span class="string">&#x27;SVM Hyperplane in 3D&#x27;</span>)</span><br><span class="line">ax.legend()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示交互式图</span></span><br><span class="line">plt.show()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2023/08/10/2023%E5%B9%B48%E6%9C%8811%E6%97%A5-%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/" data-id="clrwazlr400137ov45xxlguzq" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -1162,7 +1170,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>97</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>98</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>30</strong><br>标签</div></a>
     </div>

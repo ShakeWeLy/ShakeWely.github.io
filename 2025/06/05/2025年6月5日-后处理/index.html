@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2025年6月5日 后处理 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="2. 基于空间位置关系的计数逻辑  技术含义   定义：基于空间位置关系的计数逻辑利用目标边界框的空间分布特性（如位置、距离、方向等），对检测结果进行后处理，以减少误报并优化计数准确性。   应用场景：在流水线检测中，目标（如零件、包裹）通常具有特定的空间分布规律（如沿传送带排列、在固定区域内出现）。通过分析边界框的空间关系，可以过滤不符合场景逻辑的误报。   实现方式 ：   空间聚类 ：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2025年6月5日 后处理">
+<meta property="og:url" content="https://shakewely.github.io/2025/06/05/2025%E5%B9%B46%E6%9C%885%E6%97%A5-%E5%90%8E%E5%A4%84%E7%90%86/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="2. 基于空间位置关系的计数逻辑  技术含义   定义：基于空间位置关系的计数逻辑利用目标边界框的空间分布特性（如位置、距离、方向等），对检测结果进行后处理，以减少误报并优化计数准确性。   应用场景：在流水线检测中，目标（如零件、包裹）通常具有特定的空间分布规律（如沿传送带排列、在固定区域内出现）。通过分析边界框的空间关系，可以过滤不符合场景逻辑的误报。   实现方式 ：   空间聚类 ：">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-06-05T03:36:49.000Z">
+<meta property="article:modified_time" content="2025-06-05T04:01:51.435Z">
+<meta property="article:author" content="Weakliy">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>98</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>30</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2025年6月5日-后处理" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/06/05/2025%E5%B9%B46%E6%9C%885%E6%97%A5-%E5%90%8E%E5%A4%84%E7%90%86/" class="article-date">
+  <time class="post-time" datetime="2025-06-05T03:36:49.000Z" itemprop="datePublished">
+    <span class="post-month">6月</span><br/>
+    <span class="post-day">05</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2025年6月5日 后处理
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="2-基于空间位置关系的计数逻辑"><a class="markdownIt-Anchor" href="#2-基于空间位置关系的计数逻辑"></a> 2. <strong>基于空间位置关系的计数逻辑</strong></h3>
+<h4 id="技术含义"><a class="markdownIt-Anchor" href="#技术含义"></a> 技术含义</h4>
+<ul>
+<li>
+<p><strong>定义</strong>：基于空间位置关系的计数逻辑利用目标边界框的空间分布特性（如位置、距离、方向等），对检测结果进行后处理，以减少误报并优化计数准确性。</p>
+</li>
+<li>
+<p><strong>应用场景</strong>：在流水线检测中，目标（如零件、包裹）通常具有特定的空间分布规律（如沿传送带排列、在固定区域内出现）。通过分析边界框的空间关系，可以过滤不符合场景逻辑的误报。</p>
+</li>
+<li>
+<p>实现方式</p>
+<p>：</p>
+<ol>
+<li>
+<p>空间聚类</p>
+<p>：</p>
+<ul>
+<li>对检测到的边界框进行聚类（如DBSCAN算法），根据空间距离合并或过滤重叠框。</li>
+<li>示例：若两个边界框中心距离过近（&lt;某个阈值），则认为是同一目标，保留置信度较高的框。</li>
+</ul>
+</li>
+<li>
+<p>轨迹约束</p>
+<p>：</p>
+<ul>
+<li>在视频或连续帧中，利用目标的空间运动轨迹（如流水线上的线性移动）过滤异常框。</li>
+<li>示例：若检测框的位置偏离预期轨迹（如传送带路径），则视为误报。</li>
+</ul>
+</li>
+<li>
+<p>计数规则</p>
+<p>：</p>
+<ul>
+<li>根据空间分布规律（如目标在图像中的网格区域），统计目标数量。</li>
+<li>示例：在流水线场景中，只计数位于传送带区域的检测框。</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<p>‘’</p>
+<h3 id="3-关键区域roi检测"><a class="markdownIt-Anchor" href="#3-关键区域roi检测"></a> 3. <strong>关键区域ROI检测</strong></h3>
+<h4 id="技术含义-2"><a class="markdownIt-Anchor" href="#技术含义-2"></a> 技术含义</h4>
+<ul>
+<li>
+<p><strong>定义</strong>：ROI（Region of Interest，感兴趣区域）检测是指在图像中预定义关键区域，仅对这些区域内的检测结果进行处理，忽略其他区域的预测框，从而过滤误报。</p>
+</li>
+<li>
+<p><strong>应用场景</strong>：在流水线检测中，目标通常出现在特定区域（如传送带中心、固定工作台）。通过定义ROI，可以聚焦于关键区域，减少背景区域的误报。</p>
+</li>
+<li>
+<p>实现方式</p>
+<p>：</p>
+<ol>
+<li>
+<p>定义ROI</p>
+<p>：</p>
+<ul>
+<li>手动指定ROI区域（如矩形坐标[x, y, w, h]）或通过图像分割算法自动提取（如基于颜色、纹理）。</li>
+<li>示例：传送带区域为图像中部，定义为[x1, y1, x2, y2] = [100, 50, 540, 590]（基于640x640分辨率）。</li>
+</ul>
+</li>
+<li>
+<p>过滤检测框</p>
+<p>：</p>
+<ul>
+<li>仅保留中心点位于ROI内的边界框，或IoU与ROI区域大于某个阈值（如0.5）的框。</li>
+</ul>
+</li>
+<li>
+<p>计数优化</p>
+<p>：</p>
+<ul>
+<li>在ROI内进行目标计数，忽略ROI外的检测结果。</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<p><strong>Soft-NMS（Soft Non-Maximum Suppression）</strong>：</p>
+<ul>
+<li>
+<p><strong>定义</strong>：传统NMS通过IoU阈值直接丢弃重叠框，Soft-NMS通过降低重叠框的置信度（而非直接丢弃）保留更多潜在目标。</p>
+</li>
+<li>
+<p><strong>优势</strong>：提升召回率（约2%-5%），尤其适合密集目标场景。</p>
+</li>
+<li>
+<p>实现</p>
+<p>：</p>
+<ul>
+<li>
+<p>修改YOLOv5/v8的utils/general.py中的non_max_suppression函数，添加Soft-NMS逻辑。</p>
+</li>
+<li>
+<p>示例（伪代码）：</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>适用场景</strong>：密集目标检测（如流水线上的零件堆叠）。</p>
+</li>
+</ul>
+<p><strong>时序平滑（Temporal Smoothing）</strong>：</p>
+<ul>
+<li>
+<p><strong>定义</strong>：在视频或连续帧中，利用多帧检测结果的时序一致性，平滑边界框位置和置信度，过滤抖动或瞬时误报。</p>
+</li>
+<li>
+<p>实现</p>
+<p>：</p>
+<ul>
+<li>使用卡尔曼滤波或均值滤波对边界框坐标进行平滑。</li>
+<li>示例：对连续5帧的检测框取平均值，过滤异常框。</li>
+</ul>
+</li>
+<li>
+<p><strong>适用场景</strong>：流水线视频检测，目标运动轨迹可预测。</p>
+</li>
+</ul>
+<h3 id="2-智能抽帧的实现方法"><a class="markdownIt-Anchor" href="#2-智能抽帧的实现方法"></a> 2. <strong>智能抽帧的实现方法</strong></h3>
+<p>智能抽帧算法通常结合<strong>帧间差异分析</strong>、<strong>目标跟踪</strong>和<strong>场景上下文</strong>，动态决定哪些帧需要处理。以下是实现步骤和关键技术：</p>
+<h4 id="步骤1帧间差异分析"><a class="markdownIt-Anchor" href="#步骤1帧间差异分析"></a> 步骤1：帧间差异分析</h4>
+<ul>
+<li>
+<p><strong>目的</strong>：通过比较连续帧的差异，识别内容变化显著的帧作为关键帧。</p>
+</li>
+<li>
+<p>方法</p>
+<p>：</p>
+<ol>
+<li>
+<p>像素级差异</p>
+<p>：</p>
+<ul>
+<li>
+<p>计算相邻帧的像素差异（如灰度差值的均方误差MSE）。</p>
+</li>
+<li>
+<p>如果差异超过阈值，则认为当前帧为关键帧。</p>
+</li>
+<li>
+<p>示例代码：</p>
+<p>python</p>
+<p>收起自动换行运行</p>
+<p>复制</p>
+<p><code>import cv2 import numpy as np def frame_diff(prev_frame, curr_frame, thres=0.1):    prev_gray = cv2.cvtColor(prev_frame, cv2.COLOR_BGR2GRAY)    curr_gray = cv2.cvtColor(curr_frame, cv2.COLOR_BGR2GRAY)    diff = np.mean((prev_gray - curr_gray) ** 2)    return diff &gt; thres</code></p>
+</li>
+</ul>
+</li>
+<li>
+<p>特征级差异</p>
+<p>：</p>
+<ul>
+<li>
+<p>提取帧的特征（如HOG、SIFT或深度特征），比较特征向量距离。</p>
+</li>
+<li>
+<p>使用预训练模型（如ResNet提取特征）计算余弦相似度或L2距离。</p>
+</li>
+<li>
+<p>示例代码：</p>
+<p>python</p>
+<p>收起自动换行运行</p>
+<p>复制</p>
+<p><code>from torchvision.models import resnet18 import torch model = resnet18(pretrained=True).eval().cuda() def feature_diff(prev_frame, curr_frame, thres=0.5):    prev_feat = model(preprocess(prev_frame).cuda())    curr_feat = model(preprocess(curr_frame).cuda())    dist = torch.norm(prev_feat - curr_feat, p=2)    return dist &gt; thres</code></p>
+</li>
+</ul>
+</li>
+<li>
+<p>光流分析</p>
+<p>：</p>
+<ul>
+<li>
+<p>使用光流算法（如Farneback光流）检测帧间运动变化，识别目标移动或场景变化。</p>
+</li>
+<li>
+<p>示例代码：</p>
+<p>python</p>
+<p>收起自动换行运行</p>
+<p>复制</p>
+<p><code>def optical_flow_diff(prev_frame, curr_frame, thres=1.0):    prev_gray = cv2.cvtColor(prev_frame, cv2.COLOR_BGR2GRAY)    curr_gray = cv2.cvtColor(curr_frame, cv2.COLOR_BGR2GRAY)    flow = cv2.calcOpticalFlowFarneback(prev_gray, curr_gray, None, 0.5, 3, 15, 3, 5, 1.2, 0)    mag = np.sqrt(flow[..., 0]**2 + flow[..., 1]**2)    return np.mean(mag) &gt; thres</code></p>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<h4 id="步骤2目标跟踪辅助抽帧"><a class="markdownIt-Anchor" href="#步骤2目标跟踪辅助抽帧"></a> 步骤2：目标跟踪辅助抽帧</h4>
+<ul>
+<li>
+<p><strong>目的</strong>：利用目标跟踪算法（如DeepSORT、ByteTrack）减少对YOLO模型的调用频率，仅在目标状态变化时触发检测。</p>
+</li>
+<li>
+<p>方法</p>
+<p>：</p>
+<ol>
+<li>
+<p>初始化检测</p>
+<p>：</p>
+<ul>
+<li>在首帧或关键帧上运行YOLO模型，获取目标边界框。</li>
+</ul>
+</li>
+<li>
+<p>跟踪目标</p>
+<p>：</p>
+<ul>
+<li>使用跟踪算法（如DeepSORT）预测目标在后续帧中的位置。</li>
+<li>如果跟踪置信度下降（如目标丢失或位置偏移过大），触发YOLO检测。</li>
+</ul>
+</li>
+<li>
+<p>动态抽帧</p>
+<p>：</p>
+<ul>
+<li>若跟踪结果稳定（目标位置变化小），跳过若干帧，仅进行跟踪。</li>
+<li>若目标发生显著变化（如新目标进入、目标离开ROI），立即运行YOLO检测。</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>
+<p>实现</p>
+<p>：</p>
+<ul>
+<li>
+<p>使用ByteTrack（轻量、高效）结合YOLOv5/v8：</p>
+<p>python</p>
+<p>收起自动换行运行</p>
+<p>复制</p>
+<p><code>from yolov5 import YOLOv5 from byte_tracker import BYTETracker model = YOLOv5('yolov5s.pt') tracker = BYTETracker(track_thresh=0.5, match_thresh=0.8) def process_frame(frame, prev_tracks):    # YOLO检测    results = model(frame)    dets = results.xyxy[0].cpu().numpy()  # [x1, y1, x2, y2, conf, cls]    # 跟踪更新    tracks = tracker.update(dets)    # 判断是否需要再次检测    if len(tracks) != len(prev_tracks) or significant_change(tracks, prev_tracks):        return tracks, True  # 需要检测    return tracks, False  # 跳过检测</code></p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>效果</strong>：减少50%-80%的YOLO调用，吞吐量提升2-5倍。</p>
+</li>
+</ul>
+<h4 id="步骤3基于场景上下文的抽帧"><a class="markdownIt-Anchor" href="#步骤3基于场景上下文的抽帧"></a> 步骤3：基于场景上下文的抽帧</h4>
+<ul>
+<li>
+<p><strong>目的</strong>：结合流水线场景的上下文（如传送带速度、目标出现频率），动态调整抽帧间隔。</p>
+</li>
+<li>
+<p>方法</p>
+<p>：</p>
+<ol>
+<li>
+<p>ROI监控</p>
+<p>：</p>
+<ul>
+<li>定义关键区域（如传送带区域），仅对ROI内发生变化的帧运行YOLO检测。</li>
+<li>示例：结合前述ROI检测，仅处理ROI内像素变化显著的帧。</li>
+</ul>
+</li>
+<li>
+<p>时间间隔预测</p>
+<p>：</p>
+<ul>
+<li>根据流水线速度（如传送带每秒移动1米）估算目标出现频率，动态调整抽帧间隔。</li>
+<li>示例：若目标每2秒出现一次，抽帧间隔可设为1秒。</li>
+</ul>
+</li>
+<li>
+<p>异常检测触发</p>
+<p>：</p>
+<ul>
+<li>使用轻量级异常检测（如像素变化、光流异常）触发关键帧检测。</li>
+<li>示例：若光流幅度异常增大（如零件掉落），立即运行YOLO。</li>
+</ul>
+</li>
+</ol>
+</li>
+<li>
+<p>实现</p>
+<p>：</p>
+<p>python</p>
+<p>收起自动换行运行</p>
+<p>复制</p>
+<p><code>def dynamic_frame_skip(frame, prev_frame, roi, speed=1.0, base_interval=5):    if frame_diff(frame, prev_frame, thres=0.1) or roi_change(frame, roi):        return True  # 处理当前帧    interval = int(base_interval / speed)  # 根据速度调整间隔    return False if frame_idx % interval == 0 else True</code></p>
+</li>
+</ul>
+<h4 id="步骤4后处理优化"><a class="markdownIt-Anchor" href="#步骤4后处理优化"></a> 步骤4：后处理优化</h4>
+<ul>
+<li>
+<p><strong>目的</strong>：结合前述后处理规则（如空间位置计数、ROI检测）过滤误报，确保关键事件不被漏检。</p>
+</li>
+<li>
+<p>方法</p>
+<p>：</p>
+<ul>
+<li>空间位置计数：对检测到的目标进行聚类，过滤异常框。</li>
+<li>ROI检测：仅保留ROI内的检测结果。</li>
+<li>时序平滑：利用多帧结果平滑目标位置和置信度，减少抖动。</li>
+</ul>
+</li>
+<li>
+<p><strong>效果</strong>：精度提升约5%-10%，召回率保持高水平。</p>
+</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/06/05/2025%E5%B9%B46%E6%9C%885%E6%97%A5-%E5%90%8E%E5%A4%84%E7%90%86/" data-id="cmbpr6lmp000034v4495x3tvb" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2025/06/02/2025%E5%B9%B46%E6%9C%882%E6%97%A5-pandas/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2025年6月2日 pandas</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>98</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>30</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2024 - 2025 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

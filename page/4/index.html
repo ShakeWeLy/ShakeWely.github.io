@@ -43,7 +43,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>97</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>98</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>30</strong><br>标签</div></a>
     </div>
@@ -70,6 +70,101 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-2025年3月12日-onnx4-图优化" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/03/12/2025%E5%B9%B43%E6%9C%8812%E6%97%A5-onnx4-%E5%9B%BE%E4%BC%98%E5%8C%96/" class="article-date">
+  <time class="post-time" datetime="2025-03-12T14:14:32.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">12</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/03/12/2025%E5%B9%B43%E6%9C%8812%E6%97%A5-onnx4-%E5%9B%BE%E4%BC%98%E5%8C%96/">2025年3月12日 onnx3</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="图优化"><a class="markdownIt-Anchor" href="#图优化"></a> 图优化</h1>
+<h3 id="1"><a class="markdownIt-Anchor" href="#1"></a> 1</h3>
+<p><img src="/2025/03/12/2025%E5%B9%B43%E6%9C%8812%E6%97%A5-onnx4-%E5%9B%BE%E4%BC%98%E5%8C%96/image-20250312222559294.png" alt="image-20250312222559294"></p>
+<p><strong>引擎能够针对特定硬件进行深度优化，实现最佳的性能和效率</strong></p>
+<p><img src="/2025/03/12/2025%E5%B9%B43%E6%9C%8812%E6%97%A5-onnx4-%E5%9B%BE%E4%BC%98%E5%8C%96/image-20250312224327684.png" alt="image-20250312224327684"></p>
+<h3 id="3-查看netron节点"><a class="markdownIt-Anchor" href="#3-查看netron节点"></a> 3 查看netron节点</h3>
+<p>ONNX的optimizer模块提供部分图优化的功能，例如最常用的：fuse_bn_into_conv，fuse_pad_into_conv等等。</p>
+<p><img src="/2025/03/12/2025%E5%B9%B43%E6%9C%8812%E6%97%A5-onnx4-%E5%9B%BE%E4%BC%98%E5%8C%96/image-20250312232520596.png" alt="image-20250312232520596"></p>
+<h3 id="2-为什么需要forward_fuse"><a class="markdownIt-Anchor" href="#2-为什么需要forward_fuse"></a> 2. 为什么需要forward_fuse？</h3>
+<ul>
+<li>
+<p>forward_fuse通常用于把卷积和BN层合并，或者把多个卷积分支合并，减少计算量，提高推理速度。</p>
+</li>
+<li>
+<p>如果你的模块没有BN层，或者结构很简单，不需要合并，也应该定义一个forward_fuse，让它和forward一样。</p>
+</li>
+</ul>
+<h3 id="4-onnxslim-模块未安装简化失败"><a class="markdownIt-Anchor" href="#4-onnxslim-模块未安装简化失败"></a> <code>4 onnxslim</code> 模块未安装，简化失败</h3>
+<h4 id="简化-onnx-的主要作用"><a class="markdownIt-Anchor" href="#简化-onnx-的主要作用"></a> ✅ 简化 ONNX 的主要作用：</h4>
+<table>
+<thead>
+<tr>
+<th>好处</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>📦 减少模型大小</td>
+<td>去除冗余算子与中间变量，减小 <code>.onnx</code> 文件大小</td>
+</tr>
+<tr>
+<td>🚀 加速推理速度</td>
+<td>简化计算图后，ONNX Runtime / TensorRT 推理更快</td>
+</tr>
+<tr>
+<td>🔧 提高兼容性</td>
+<td>某些部署平台（如 OpenVINO、MNN）对简化后的模型兼容性更强</td>
+</tr>
+<tr>
+<td>🧩 易于可视化分析</td>
+<td>模型结构更清晰，利于在 Netron 中查看和理解</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/03/12/2025%E5%B9%B43%E6%9C%8812%E6%97%A5-onnx4-%E5%9B%BE%E4%BC%98%E5%8C%96/" data-id="cmanj8o210008lcv42fxu34el" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/onnx/" rel="tag">onnx</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-2025年3月11日-yolov5-5-0训练" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -750,7 +845,386 @@ If you cannot immediately regenerate your protos, some other possible workaround
 <ol>
 <li>呀节点 避免nullptr的判断 <code>return dummy-&gt;next</code> 即可</li>
 </ol>
-<h2 id="日期记录"><a class="markdownIt-Anchor" href="#日期记录"></a> 🌏日期记录</h2>
+<h2 id="记录"><a class="markdownIt-Anchor" href="#记录"></a> 🌏记录</h2>
+<h3 id="code"><a class="markdownIt-Anchor" href="#code"></a> code</h3>
+<blockquote>
+<p>缩进也报错?</p>
+<p>选择&quot;UTF-8 带签名(BOM)&quot;???</p>
+</blockquote>
+<h4 id="数"><a class="markdownIt-Anchor" href="#数"></a> 数</h4>
+<blockquote>
+<p>INFINITY 是 C++ 中表示正无穷大的宏</p>
+<p>NaN 不等于任何值（包括自身），用 std::isnan(x) 检查。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">float nan = std::nan(&quot;&quot;); // NaN</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h3 id="vector"><a class="markdownIt-Anchor" href="#vector"></a> Vector</h3>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Vector <span class="title">output</span><span class="params">(output_channel, <span class="number">0.0f</span>)</span></span>;  <span class="comment">// 初始化输出向量</span></span><br><span class="line"><span class="comment">// 初始化权重矩阵</span></span><br><span class="line"><span class="function">Matrix <span class="title">weight</span><span class="params">(output_channel, Vector(x_size, <span class="number">0.0f</span>))</span></span>;</span><br></pre></td></tr></table></figure>
+<p>区别</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cout &lt;&lt; list.<span class="built_in">at</span>(<span class="number">2</span>) &lt;&lt; endl;</span><br><span class="line">cout &lt;&lt; list[<span class="number">2</span>] &lt;&lt; endl;</span><br><span class="line">cout &lt;&lt; list.<span class="keyword">operator</span>[](<span class="number">2</span>) &lt;&lt; endl;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">capacity</span>()</span><br><span class="line"><span class="built_in">max_size</span>()</span><br></pre></td></tr></table></figure>
+<h4 id="map"><a class="markdownIt-Anchor" href="#map"></a> MAP</h4>
+<blockquote>
+<p>std::map 是一个关联容器，存储键值对（key-value pairs），每个元素是一个 std::pair&lt;const Key, T&gt;。</p>
+<ul>
+<li>Key：键的类型（在你的代码中是 string）。</li>
+<li>T：值的类型（在你的代码中是 int）。</li>
+<li>const Key：键是常量，不能修改，以保证 map 的排序和唯一性。</li>
+</ul>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(map&lt;string, <span class="type">int</span>&gt;map)</span></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">auto</span> it = map.<span class="built_in">begin</span>(); it != map.<span class="built_in">end</span>(); it++)&#123;</span><br><span class="line">        cout &lt;&lt; it-&gt;first &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; it-&gt;second &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="it-vs-it"><a class="markdownIt-Anchor" href="#it-vs-it"></a> it++ vs ++it</h5>
+<blockquote>
+<p>无影响,会优化</p>
+</blockquote>
+<p><strong>it-&gt;first 和 it-&gt;second 是什么？</strong></p>
+<blockquote>
+<p>it-&gt;first 和 it-&gt;second 是访问 std::map 中键值对的成员，</p>
+</blockquote>
+<h3 id="函数"><a class="markdownIt-Anchor" href="#函数"></a> 函数</h3>
+<p>三个有什么区别</p>
+<blockquote>
+<ul>
+<li>
+<h3 id="1-void-swapint-a-int-b"><a class="markdownIt-Anchor" href="#1-void-swapint-a-int-b"></a> 1. void swap(int a, int b)</h3>
+<ul>
+<li>
+<p><strong>参数传递方式</strong>：值传递（Pass by Value）</p>
+</li>
+<li>
+<p>接收参数的副本</p>
+</li>
+</ul>
+<h3 id="2-void-swapint-a-int-b"><a class="markdownIt-Anchor" href="#2-void-swapint-a-int-b"></a> 2. void swap(int *a, int *b)</h3>
+<ul>
+<li>
+<p><strong>参数传递方式</strong>：指针传递（Pass by Pointer）</p>
+</li>
+<li>
+<p>通过解引用（*a 和 *b）直接访问和修改调用者的变量</p>
+</li>
+</ul>
+<h3 id="3-void-swapint-a-int-b"><a class="markdownIt-Anchor" href="#3-void-swapint-a-int-b"></a> 3. void swap(int &amp;a, int &amp;b)</h3>
+<ul>
+<li><strong>参数传递方式</strong>：引用传递（Pass by Reference）</li>
+<li>函数接收的是调用者变量的引用，a 和 b 是原始变量的别名，任何对 a 和 b 的修改直接反映到调用者的变量上。</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<h4 id="函数重载"><a class="markdownIt-Anchor" href="#函数重载"></a> <strong>函数重载</strong></h4>
+<blockquote>
+<p>允许在同一作用域内定义多个同名函数，但这些函数的参数列表（参数数量、类型或顺序）必须不同。编译器会根据调用时提供的参数类型和数量，自动选择最匹配的函数版本来执行</p>
+</blockquote>
+<h4 id="函数指针数组的写法规则"><a class="markdownIt-Anchor" href="#函数指针数组的写法规则"></a> 函数指针数组的写法规则</h4>
+<p><strong>函数签名一致</strong>：</p>
+<ul>
+<li>数组中所有函数指针指向的函数必须具有<strong>相同的返回类型</strong>和<strong>相同的参数列表</strong>（包括参数类型和数量）。</li>
+<li>例如，所有函数指针都指向 void(int*, int*) 类型的函数。</li>
+</ul>
+<p><strong>声明语法</strong>：</p>
+<ul>
+<li>函数指针的声明形式为：返回类型 (*指针名)(参数列表)。</li>
+<li>函数指针数组的声明形式为：返回类型 (*数组名[大小])(参数列表)。</li>
+<li>例如：void (<em>swapFuncs[2])(int</em>, int*) 表示一个数组，包含两个指向 void(int*, int*) 类型函数的指针。</li>
+</ul>
+<h4 id="模板函数"><a class="markdownIt-Anchor" href="#模板函数"></a> 模板函数</h4>
+<blockquote>
+<p>定义一个函数的“蓝图”，让它能够处理多种数据类型（如 int、double、std::string 等），而不需要为每种类型写一个单独的函数。</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="comment">// 或者 template &lt;class T&gt;</span></span><br><span class="line">返回类型 函数名(参数列表) &#123;</span><br><span class="line">    <span class="comment">// 函数体，使用 T 作为类型</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="什么是函数对象"><a class="markdownIt-Anchor" href="#什么是函数对象"></a> 什么是函数对象？</h4>
+<blockquote>
+<p>函数对象是一个<strong>行为类似函数的类对象</strong>。在C++中，函数对象是通过定义了<strong>函数调用运算符</strong>（operator()）的类或结构体创建的.像普通函数一样被调用，但因为是对象，它可以保存状态、支持更多灵活性</p>
+</blockquote>
+<blockquote>
+<p>一个函数对象需要重载 operator()，使其可以通过 () 调用。</p>
+</blockquote>
+<h3 id="指针"><a class="markdownIt-Anchor" href="#指针"></a> 指针</h3>
+<ul>
+<li><code>int *p, q;   // p 是指针，q 是普通整数（新手常见错误）</code></li>
+</ul>
+<h4 id><a class="markdownIt-Anchor" href="#"></a> </h4>
+<h3 id="类"><a class="markdownIt-Anchor" href="#类"></a> 类</h3>
+<p>if not define --&gt; define  --&gt; endif</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#ifndef MYCLASS_H</span><br><span class="line">#define MYCLASS_H</span><br><span class="line"></span><br><span class="line">class MyClass &#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
+<h4 id="cpp"><a class="markdownIt-Anchor" href="#cpp"></a> cpp</h4>
+<blockquote>
+<h2 id="用-this-或改名避免混淆"><a class="markdownIt-Anchor" href="#用-this-或改名避免混淆"></a> 用 <code>this-&gt;</code> 或改名避免混淆</h2>
+<h3 id="方法-1用-this-明确访问成员变量"><a class="markdownIt-Anchor" href="#方法-1用-this-明确访问成员变量"></a> 方法 1：用 <code>this-&gt;</code> 明确访问成员变量</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cpp复制编辑void MyClass::setValue(int value) &#123;</span><br><span class="line">    this-&gt;value = value;  // ✅ 正确：this-&gt;value 表示成员变量</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="方法-2参数改名避免遮蔽"><a class="markdownIt-Anchor" href="#方法-2参数改名避免遮蔽"></a> 方法 2：参数改名，避免遮蔽</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cpp复制编辑void MyClass::setValue(int v) &#123;</span><br><span class="line">    value = v;  // ✅ 正确：v 是参数，value 是成员变量</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<p>MyClass::MyClass():value(0){</p>
+<p>std::cout&lt;&lt;“运行构造函数”&lt;&lt;std::endl;}</p>
+<p>MyClass::MyClass(){</p>
+<p>value = 0;</p>
+<p>std::cout&lt;&lt;“运行构造函数”&lt;&lt;std::endl;}</p>
+<table>
+<thead>
+<tr>
+<th>写法</th>
+<th>初始化时机</th>
+<th>效率</th>
+<th>推荐吗？</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>: value(0)</code></td>
+<td>构造函数进入前</td>
+<td>✅ 更快</td>
+<td>✅ 推荐</td>
+</tr>
+<tr>
+<td><code>value = 0;</code></td>
+<td>构造函数体内赋值</td>
+<td>稍慢一点</td>
+<td>✅ 也可以</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<h4 id="h"><a class="markdownIt-Anchor" href="#h"></a> .h</h4>
+<p>为什么要写const</p>
+<blockquote>
+<p>// 成员函数</p>
+<p>void setValue(int value);</p>
+<p>int getValue() const;</p>
+</blockquote>
+<h4 id="random"><a class="markdownIt-Anchor" href="#random"></a> random</h4>
+<blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">random_device rd;</span><br><span class="line"><span class="function">mt19937 <span class="title">gen</span><span class="params">(rd())</span></span>;</span><br><span class="line"><span class="function">uniform_real_distribution&lt;<span class="type">float</span>&gt; <span class="title">dis</span><span class="params">(<span class="number">-0.1f</span>, <span class="number">0.1f</span>)</span></span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>random_device 是 C++11 引入的  库中的类，用于生成非确定性随机数（通常基于硬件或操作系统的熵源）</p>
+</li>
+<li>
+<p>mt19937 是  库中的梅森旋转算法（Mersenne Twister）伪随机数生成器，是一种高效、高周期的伪随机数生成器</p>
+</li>
+<li>
+<p>uniform_real_distribution<float> 是 <random> 库中的类，用于生成指定范围内的<strong>均匀分布浮点随机数</strong>。</random></float></p>
+<p>dis 是一个分布对象，指定范围为 [-0.1, 0.1)（包含 -0.1，不包含 0.1）。</p>
+</li>
+</ul>
+</blockquote>
+<h2 id="cpp思路"><a class="markdownIt-Anchor" href="#cpp思路"></a> CPP思路</h2>
+<blockquote>
+<h3 id="batch-normalization-的核心目标"><a class="markdownIt-Anchor" href="#batch-normalization-的核心目标"></a> 🧠 <strong>Batch Normalization 的核心目标</strong>：</h3>
+<blockquote>
+<p>在网络的每一层，将激活值标准化，使其均值为 0，方差为 1，从而加速训练、提升稳定性。</p>
+</blockquote>
+<hr>
+<h3 id="你需要思考的关键点按执行流程划分"><a class="markdownIt-Anchor" href="#你需要思考的关键点按执行流程划分"></a> 🎯 <strong>你需要思考的关键点（按执行流程划分）</strong>：</h3>
+<h4 id="1-输入数据是什么形状"><a class="markdownIt-Anchor" href="#1-输入数据是什么形状"></a> 1. <strong>输入数据是什么形状？</strong></h4>
+<ul>
+<li>是一个 batch，一个通道，一张图，还是一个数？</li>
+<li>不同形状下，BN 应该在哪些维度上求均值和方差？</li>
+</ul>
+<h4 id="2-你需要计算什么"><a class="markdownIt-Anchor" href="#2-你需要计算什么"></a> 2. <strong>你需要计算什么？</strong></h4>
+<ul>
+<li><strong>均值（mean）</strong></li>
+<li><strong>方差（variance）</strong></li>
+<li>你会选择 <code>全局mean</code>、<code>通道mean</code> 还是 <code>按batch求mean</code>？</li>
+</ul>
+<h4 id="3-归一化怎么做"><a class="markdownIt-Anchor" href="#3-归一化怎么做"></a> 3. <strong>归一化怎么做？</strong></h4>
+<ul>
+<li>将数据减去均值，再除以标准差</li>
+<li>要考虑 <strong>数值稳定性</strong>（加入小的 ε）</li>
+</ul>
+<h4 id="4-训练时-vs-推理时"><a class="markdownIt-Anchor" href="#4-训练时-vs-推理时"></a> 4. <strong>训练时 vs 推理时</strong></h4>
+<ul>
+<li>训练：用 batch 的均值/方差</li>
+<li>推理：用<strong>累计的滑动平均值</strong></li>
+</ul>
+<h4 id="5-可学习的参数-γ-β缩放-平移"><a class="markdownIt-Anchor" href="#5-可学习的参数-γ-β缩放-平移"></a> 5. <strong>可学习的参数 γ、β（缩放 + 平移）</strong></h4>
+<ul>
+<li>为啥需要？BN 本质上是归一化 + 一个线性变换</li>
+<li>γ 控制方差，β 控制均值 —— 不影响模型表达能力</li>
+</ul>
+<h4 id="6-反向传播要怎么处理"><a class="markdownIt-Anchor" href="#6-反向传播要怎么处理"></a> 6. <strong>反向传播要怎么处理？</strong></h4>
+<ul>
+<li>归一化涉及除法和平方，链式法则复杂</li>
+<li>γ 和 β 的梯度如何计算？</li>
+<li>对输入的梯度是否能用链式求导？</li>
+</ul>
+<hr>
+<h3 id="总结你需要自己实现或思考的组件"><a class="markdownIt-Anchor" href="#总结你需要自己实现或思考的组件"></a> 📌 总结你需要自己实现或思考的组件：</h3>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>是否必须</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>均值与方差计算</td>
+<td>✅</td>
+<td>按 batch / 通道计算</td>
+</tr>
+<tr>
+<td>归一化</td>
+<td>✅</td>
+<td><code>x_norm = (x - mean) / sqrt(var+ε)</code></td>
+</tr>
+<tr>
+<td>γ 和 β 参数</td>
+<td>✅</td>
+<td>可学习参数，用于恢复分布</td>
+</tr>
+<tr>
+<td>训练/推理切换机制</td>
+<td>✅</td>
+<td>使用 batch 统计 or 滑动平均值</td>
+</tr>
+<tr>
+<td>backward</td>
+<td>✅</td>
+<td>计算输入、γ、β 的梯度</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<blockquote>
+<h3 id="核心思路指南maxpooling-实现"><a class="markdownIt-Anchor" href="#核心思路指南maxpooling-实现"></a> 🧠 核心思路指南：MaxPooling 实现</h3>
+<h4 id="1-操作对象是什么"><a class="markdownIt-Anchor" href="#1-操作对象是什么"></a> 1. <strong>操作对象是什么？</strong></h4>
+<ul>
+<li>输入通常是一个二维或三维矩阵（如单通道或多通道 feature map）。</li>
+<li>你需要按固定窗口（例如 2×2 或 3×3）滑动，提取每个窗口的最大值。</li>
+</ul>
+<hr>
+<h4 id="2-滑动的方式"><a class="markdownIt-Anchor" href="#2-滑动的方式"></a> 2. <strong>滑动的方式？</strong></h4>
+<ul>
+<li>核心概念是「窗口大小」和「步长（stride）」。</li>
+<li>每次从输入矩阵中裁剪一个小块窗口，沿着行/列按 stride 移动。</li>
+<li>边缘处理策略是否允许溢出窗口？是否需要 padding？</li>
+</ul>
+<hr>
+<h4 id="3-提取什么信息"><a class="markdownIt-Anchor" href="#3-提取什么信息"></a> 3. <strong>提取什么信息？</strong></h4>
+<ul>
+<li>每个滑动窗口中提取一个值（最大值），形成输出矩阵中的一个元素。</li>
+<li>输出矩阵的大小可通过公式推导得到（由输入大小、窗口大小、stride 决定）。</li>
+</ul>
+<hr>
+<h4 id="4-输出结果结构"><a class="markdownIt-Anchor" href="#4-输出结果结构"></a> 4. <strong>输出结果结构？</strong></h4>
+<ul>
+<li>如果输入是二维矩阵 → 输出也是二维；</li>
+<li>如果输入是多通道（如 [C, H, W]） → 每个通道独立池化，输出保持通道数不变。</li>
+</ul>
+<hr>
+<h4 id="5-如何组织代码结构"><a class="markdownIt-Anchor" href="#5-如何组织代码结构"></a> 5. <strong>如何组织代码结构？</strong></h4>
+<ul>
+<li>一个通用函数 / 类，支持参数：
+<ul>
+<li><code>kernel_size</code></li>
+<li><code>stride</code></li>
+<li><code>padding</code>（可选）</li>
+</ul>
+</li>
+<li>建议按“逐通道处理”和“窗口遍历”两个层级设计逻辑。</li>
+</ul>
+<hr>
+<h4 id="6-可选进阶功能"><a class="markdownIt-Anchor" href="#6-可选进阶功能"></a> 6. <strong>可选进阶功能</strong></h4>
+<ul>
+<li>池化位置索引记录（用于反向传播 / Unpooling）</li>
+<li>实现 Average Pooling 作为对照</li>
+<li>支持 batch 输入维度（例如 [N, C, H, W]）</li>
+</ul>
+</blockquote>
+<h1 id="cpp_dl"><a class="markdownIt-Anchor" href="#cpp_dl"></a> CPP_DL</h1>
+<blockquote>
+<h3 id="初级巩固类构建积木块"><a class="markdownIt-Anchor" href="#初级巩固类构建积木块"></a> ✅ <strong>初级巩固类（构建积木块）</strong></h3>
+<ol>
+<li><strong>手写 ReLU / Sigmoid / Tanh 等激活函数</strong>
+<ul>
+<li>实现 forward 和 backward（反向传播）</li>
+<li>加深函数微分和链式法则的理解</li>
+</ul>
+</li>
+<li><strong>手写 MaxPooling / AvgPooling 层</strong>
+<ul>
+<li>包括 forward 和反向传播（对位置进行追踪）</li>
+</ul>
+</li>
+<li><strong>手写 Linear (全连接层) + Softmax + CrossEntropy</strong>
+<ul>
+<li>和你已有的 Conv 组合起来，构建 MLP</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="中级组合类搭建小模型"><a class="markdownIt-Anchor" href="#中级组合类搭建小模型"></a> 🔄 <strong>中级组合类（搭建小模型）</strong></h3>
+<ol>
+<li><strong>实现简单的 MLP（多层感知机）进行分类任务</strong>
+<ul>
+<li>用自己实现的 Linear + ReLU + Softmax</li>
+</ul>
+</li>
+<li><strong>实现简化版的 CNN</strong>
+<ul>
+<li>使用你自己写的 Conv + Pooling + Linear，训练 MNIST 手写数字（可以从 CSV 数据加载开始）</li>
+</ul>
+</li>
+<li><strong>手写一个计算图引擎（自动求导）</strong>
+<ul>
+<li>类似 PyTorch 的 autograd：支持前向 + 反向传播（Tensor + Node + backward）</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="进阶项目模仿框架"><a class="markdownIt-Anchor" href="#进阶项目模仿框架"></a> 📦 <strong>进阶项目（模仿框架）</strong></h3>
+<ol>
+<li><strong>手写简易的深度学习框架 miniDNN</strong>
+<ul>
+<li>模仿 PyTorch 的结构，模块化设计：<code>Tensor</code> 类、<code>Layer</code> 类、<code>Model</code> 类</li>
+<li>支持动态图 / 静态图、自动求导、优化器等</li>
+</ul>
+</li>
+<li><strong>实现 YOLO 输出解码 + 后处理（Anchor解码 + Sigmoid + NMS）</strong>
+<ul>
+<li>模拟实际输出张量解码流程，如 <code>[N, 13,13,3,85]</code> 解析</li>
+</ul>
+</li>
+<li><strong>用 C++ 推理一个 ONNX 模型（如 ResNet18）</strong>
+<ul>
+<li>不依赖第三方框架，纯手写 Tensor 运算 + 模型结构 + 权重加载</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="挑战类偏实际落地"><a class="markdownIt-Anchor" href="#挑战类偏实际落地"></a> 🧠 <strong>挑战类（偏实际落地）</strong></h3>
+<ol>
+<li><strong>用 C++ 和 OpenCV 实现简易目标检测系统</strong></li>
+</ol>
+<ul>
+<li>读取视频帧 + 推理（NMS + 解码）+ 绘制结果</li>
+<li>可以用你自己的 NMS 和解码模块</li>
+</ul>
+<ol>
+<li><strong>实现简化版 YOLOv3/YOLOv5 推理模块</strong></li>
+</ol>
+<ul>
+<li>输入图片，输出检测框（用你写的 Conv、NMS）</li>
+<li>加载预训练的权重文件（比如从 <code>.weights</code> 解析）</li>
+</ul>
+<ol>
+<li><strong>移植 C++ 代码到嵌入式平台（边缘设备）</strong></li>
+</ol>
+<ul>
+<li>比如使用 ARM 的板子，或 Jetson Nano 进行测试</li>
+</ul>
+<hr>
+<h3 id="建议学习路线"><a class="markdownIt-Anchor" href="#建议学习路线"></a> 💡 建议学习路线：</h3>
+<ul>
+<li>✅ 项目 1~3 巩固基础</li>
+<li>🔁 项目 4~6 做一个“可训练”的小网络</li>
+<li>📦 项目 7~9 构建框架级别认知</li>
+<li>🧠 项目 10~12 面向实际部署能力</li>
+</ul>
+</blockquote>
 
       
     </div>
@@ -1275,100 +1749,6 @@ If you cannot immediately regenerate your protos, some other possible workaround
 
 
   
-    <article id="post-2025年2月19日-CRNN模型" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/" class="article-date">
-  <time class="post-time" datetime="2025-02-19T06:46:09.000Z" itemprop="datePublished">
-    <span class="post-month">2月</span><br/>
-    <span class="post-day">19</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/">2025年2月19日 CRNN模型</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="ocr"><a class="markdownIt-Anchor" href="#ocr"></a> OCR</h1>
-<h2 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h2>
-<p>CRNN主要是<strong>CNN（卷积神经网络）+ RNN（循环神经网络）+ CTC（连接时序分类）</strong> 的组合，广泛用于 <strong>场景文本识别（STR, Scene Text Recognition）</strong></p>
-<p><img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219145436243.png" alt="image-20250219145436243"></p>
-<p>在早期，OCR任务通常分为两个步骤：单字切割和分类任务。首先，使用投影法等技术将文本文件中的连续文字切割成单个字符，然后将这些字符输入到卷积神经网络（CNN）中进行分类。然而，这种方法现在已经有些过时。</p>
-<p>目前更流行的方法是基于深度学习的端到端的文本识别，这种方法不需要显式地进行文字切割。而是将文字识别转化为序列学习问题。尽管输入的图像尺度和文本长度可能不同，但是通过深度卷积神经网络（DCNN）和循环神经网络（RNN）的处理，以及在输出阶段应用一定的连接时序分类（CTC）翻译转录后，就可以对整个文本图像进行识别。这意味着文字的切割过程已经被融入到深度学习模型中，从而简化了整个OCR流程。</p>
-<p>深度学习在端到端OCR（光学字符识别）技术中的应用，特别是CRNN OCR和attention OCR两种技术。这两种技术都使用了CNN+RNN的网络结构进行特征学习，但在最后的输出层（翻译层）有所不同。CRNN OCR使用CTC（连接时序分类）算法进行序列对齐，而attention OCR则采用attention机制来进行序列对齐。文件中提到，CRNN算法应用更为广泛，因此主要介绍的是CRNN算法。</p>
-<h2 id="crnn"><a class="markdownIt-Anchor" href="#crnn"></a> CRNN</h2>
-<h3 id="网络结构"><a class="markdownIt-Anchor" href="#网络结构"></a> 网络结构</h3>
-<img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219150224189.png" style="zoom: 50%;">
-<h4 id="1cnn"><a class="markdownIt-Anchor" href="#1cnn"></a> 1.CNN</h4>
-<img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219150328966.png" alt="image-20250219150328966" style="zoom: 33%;">
-<h5 id="1x2-池化"><a class="markdownIt-Anchor" href="#1x2-池化"></a> 1x2 池化</h5>
-<h4 id="2map2feature-sequence"><a class="markdownIt-Anchor" href="#2map2feature-sequence"></a> 2.Map2Feature sequence</h4>
-<p><img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219150833633.png" alt="image-20250219150833633"></p>
-<img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219150936041.png" alt="image-20250219150936041" style="zoom:50%;">
-<h4 id="3rnn"><a class="markdownIt-Anchor" href="#3rnn"></a> 3.RNN</h4>
-<h5 id="lstm"><a class="markdownIt-Anchor" href="#lstm"></a> LSTM</h5>
-<img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219150959428.png" alt="image-20250219150959428" style="zoom: 50%;">
-<h5 id="双向lstm"><a class="markdownIt-Anchor" href="#双向lstm"></a> 双向LSTM</h5>
-<h5 id><a class="markdownIt-Anchor" href="#"></a> </h5>
-<h4 id="4ctcloss"><a class="markdownIt-Anchor" href="#4ctcloss"></a> 4.CTCLoss</h4>
-<img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219154341960.png" alt="image-20250219154341960" style="zoom: 80%;">
-<p>如上图，对于最简单的时序为 2 的字符识别，有两个时间步长(t0，t1)和三个可能的字符为“ａ”，“ｂ”和“-”，我们得到两个概率分布向量，如果采取最大概率路径解码的方法，则“–”的概率最大，即真实字符为空的概率为0.6*0.6=0.36。</p>
-<p>但是为字符“ａ”的情况有多种对齐组合，“aa”, “a-“和“-a”都是代表“ａ”，所以，输出“ａ”的概率应该为三种之和：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0.4 * 0.4 + 0.4 * 0.6 + 0.6 * 0.4 = 0.16 + 0.24 + 0.24 = 0.64</span><br></pre></td></tr></table></figure>
-<h4 id="5attention"><a class="markdownIt-Anchor" href="#5attention"></a> 5.Attention</h4>
-<p>基于Attention的OCR解码算法，把OCR文字识别当成文字翻译任务，即通过Attention Decoder出文字序列。</p>
-<h5 id="rnn-seq2seq"><a class="markdownIt-Anchor" href="#rnn-seq2seq"></a> <strong>RNN -&gt; Seq2Seq</strong></h5>
-<p><img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219155949098.png" alt="image-20250219155949098"></p>
-<p>左图是经典的RNN结构，右图是Seq2Seq结构。RNN的输入序列和输出序列必须有相同的时间长度，而机器翻译以及文字识别任务都是输入输出不对齐的，不能直接使用RNN结构进行解码。于是在Seq2Seq结构中，将输入序列进行Encoder编码成一个统一的语义向量Context，然后送入Decoder中一个一个解码出输出序列。在Decoder解码过程中，第一个输入字符为<start>，然后不断将前一个时刻的输出作为下一个时刻的输入，循环解码，直到输出<stop></stop>字符为止</start></p>
-<p><strong>Seq2Seq -&gt; Attention Decoder</strong></p>
-<img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219160050009.png" alt="image-20250219160050009" style="zoom: 50%;">
-<p>Seq2Seq把所有的输入序列都编码成一个统一的语义向量Context，然后再由Decoder解码。由于context包含原始序列中的所有信息，它的长度就成了限制模型性能的瓶颈。</p>
-<p>所以如果要改进Seq2Seq结构，最好的切入角度就是：**利用Encoder所有隐藏层状态解决Context长度限制问题。**于是Attention Decoder在Seq2Seq的基础上，增加了一个Attention Layer，如上图所示。</p>
-<img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219160149932.png" alt="image-20250219160149932" style="zoom: 50%;">
-<p>在Decoder时，每个时刻的解码状态跟Encoder的所有隐藏层状态进行cross-attention计算，cross-attention将当前解码的隐藏层状态和encoder的所有隐藏层状态做相关性计算，然后对encoder的所有隐藏层加权求和，最后和当前解码的隐藏层状态concat得到最终的状态。</p>
-<h4 id="6ace"><a class="markdownIt-Anchor" href="#6ace"></a> 6.ACE</h4>
-<p>基于ACE的解码方法不同于CTC和Attention，ACE的监督信号实际上是一种弱监督(<strong>输入输出没有做形式上的对齐，没有先后顺序信息，倾向于学习表征</strong>)，并且可以用于多行文字识别。</p>
-<p><img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219160702221.png" alt="image-20250219160702221"></p>
-<p><img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219160636874.png" alt="image-20250219160636874"></p>
-<p>从模型设计上来看，可以采用结合上面3种方法的**多任务文本识别模型。在训练时，以CTC为主，Attention Decoder和ACE辅助训练。在预测时，考虑到速度和性能，只采用CTC进行解码预测。**多任务可以提高模型的泛化性，同时如果对预测时间要求不高，多结果也可以提供更多的选择和对比。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    Encoder+Decoder+Attention is implemented from:</span></span><br><span class="line"><span class="string">    https://pytorch.org/tutorials/intermediate/seq2seq_translation_tutorial.html</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CNN</span>(nn.Module):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, channel_size</span>):</span><br><span class="line">        <span class="built_in">super</span>(CNN, self).__init__()</span><br><span class="line">        self.cnn = nn.Sequential(</span><br><span class="line">                      nn.Conv2d(channel_size, <span class="number">64</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">1</span>), nn.ReLU(<span class="literal">True</span>), nn.MaxPool2d(<span class="number">2</span>, <span class="number">2</span>),</span><br><span class="line">                      nn.Conv2d(<span class="number">64</span>, <span class="number">128</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">1</span>), nn.ReLU(<span class="literal">True</span>), nn.MaxPool2d(<span class="number">2</span>, <span class="number">2</span>),</span><br><span class="line">                      nn.Conv2d(<span class="number">128</span>, <span class="number">256</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">1</span>), nn.BatchNorm2d(<span class="number">256</span>), nn.ReLU(<span class="literal">True</span>),</span><br><span class="line">                      nn.Conv2d(<span class="number">256</span>, <span class="number">256</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">1</span>), nn.ReLU(<span class="literal">True</span>), nn.MaxPool2d((<span class="number">2</span>,<span class="number">2</span>), (<span class="number">2</span>,<span class="number">1</span>), (<span class="number">0</span>,<span class="number">1</span>)),</span><br><span class="line">                      nn.Conv2d(<span class="number">256</span>, <span class="number">512</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">1</span>), nn.BatchNorm2d(<span class="number">512</span>), nn.ReLU(<span class="literal">True</span>),</span><br><span class="line">                      nn.Conv2d(<span class="number">512</span>, <span class="number">512</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">1</span>), nn.ReLU(<span class="literal">True</span>), nn.MaxPool2d((<span class="number">2</span>,<span class="number">2</span>), (<span class="number">2</span>,<span class="number">1</span>), (<span class="number">0</span>,<span class="number">1</span>)),</span><br><span class="line">                      nn.Conv2d(<span class="number">512</span>, <span class="number">512</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">0</span>), nn.BatchNorm2d(<span class="number">512</span>), nn.ReLU(<span class="literal">True</span>))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, <span class="built_in">input</span></span>):</span><br><span class="line">        <span class="comment"># [n, channel_size, 32, 280] -&gt; [n, 512, 1, 71]</span></span><br><span class="line">        conv = self.cnn(<span class="built_in">input</span>)</span><br><span class="line">        <span class="keyword">return</span> conv</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">BidirectionalLSTM</span>(nn.Module):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, input_size, hidden_size, output_size</span>):</span><br><span class="line">        <span class="built_in">super</span>(BidirectionalLSTM, self).__init__()</span><br><span class="line"></span><br><span class="line">        self.rnn = nn.LSTM(input_size, hidden_size, bidirectional=<span class="literal">True</span>)</span><br><span class="line">        self.embedding = nn.Linear(hidden_size * <span class="number">2</span>, output_size)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, <span class="built_in">input</span></span>):</span><br><span class="line">        recurrent, _ = self.rnn(<span class="built_in">input</span>)</span><br><span class="line">        T, b, h = recurrent.size()</span><br><span class="line">        t_rec = recurrent.view(T * b, h)</span><br><span class="line"></span><br><span class="line">        output = self.embedding(t_rec)  <span class="comment"># [T * b, output_size]</span></span><br><span class="line">        output = output.view(T, b, -<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> output</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">AttnDecoderRNN</span>(nn.Module):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, hidden_size, output_size, dropout_p=<span class="number">0.1</span>, max_length=<span class="number">71</span></span>):</span><br><span class="line">        <span class="built_in">super</span>(AttnDecoderRNN, self).__init__()</span><br><span class="line">        self.hidden_size = hidden_size</span><br><span class="line">        self.output_size = output_size</span><br><span class="line">        self.dropout_p = dropout_p</span><br><span class="line">        self.max_length = max_length</span><br><span class="line"></span><br><span class="line">        self.embedding = nn.Embedding(self.output_size, self.hidden_size)</span><br><span class="line">        self.attn = nn.Linear(self.hidden_size * <span class="number">2</span>, self.max_length)</span><br><span class="line">        self.attn_combine = nn.Linear(self.hidden_size * <span class="number">2</span>, self.hidden_size)</span><br><span class="line">        self.dropout = nn.Dropout(self.dropout_p)</span><br><span class="line">        self.gru = nn.GRU(self.hidden_size, self.hidden_size)</span><br><span class="line">        self.out = nn.Linear(self.hidden_size, self.output_size)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, <span class="built_in">input</span>, hidden, encoder_outputs</span>):</span><br><span class="line">        embedded = self.embedding(<span class="built_in">input</span>)</span><br><span class="line">        embedded = self.dropout(embedded)</span><br><span class="line"></span><br><span class="line">        attn_weights = F.softmax(self.attn(torch.cat((embedded, hidden[<span class="number">0</span>]), <span class="number">1</span>)), dim=<span class="number">1</span>)</span><br><span class="line">        attn_applied = torch.bmm(attn_weights.unsqueeze(<span class="number">1</span>), encoder_outputs.permute(<span class="number">1</span>, <span class="number">0</span>, <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">        output = torch.cat((embedded, attn_applied.squeeze(<span class="number">1</span>)), <span class="number">1</span>)</span><br><span class="line">        output = self.attn_combine(output).unsqueeze(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">        output = F.relu(output)</span><br><span class="line">        output, hidden = self.gru(output, hidden)</span><br><span class="line"></span><br><span class="line">        output = F.log_softmax(self.out(output[<span class="number">0</span>]), dim=<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> output, hidden, attn_weights</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">initHidden</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> torch.zeros(<span class="number">1</span>, <span class="number">1</span>, self.hidden_size, device=device)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Encoder</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, channel_size, hidden_size</span>):</span><br><span class="line">        <span class="built_in">super</span>(Encoder, self).__init__()</span><br><span class="line">        self.cnn = CNN(channel_size)</span><br><span class="line">        self.rnn = nn.Sequential(</span><br><span class="line">            BidirectionalLSTM(<span class="number">512</span>, hidden_size, hidden_size),</span><br><span class="line">            BidirectionalLSTM(hidden_size, hidden_size, hidden_size))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, <span class="built_in">input</span></span>):</span><br><span class="line">        <span class="comment"># conv features</span></span><br><span class="line">        conv = self.cnn(<span class="built_in">input</span>)</span><br><span class="line">        b, c, h, w = conv.size()</span><br><span class="line">        <span class="keyword">assert</span> h == <span class="number">1</span>, <span class="string">&quot;the height of conv must be 1&quot;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># rnn feature</span></span><br><span class="line">        conv = conv.squeeze(<span class="number">2</span>)        <span class="comment"># [b, c, 1, w] -&gt; [b, c, w]</span></span><br><span class="line">        conv = conv.permute(<span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>)  <span class="comment"># [b, c, w] -&gt; [w, b, c]</span></span><br><span class="line">        output = self.rnn(conv)</span><br><span class="line">        <span class="keyword">return</span> output</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Decoder</span>(nn.Module):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, hidden_size, output_size, dropout_p=<span class="number">0.1</span>, max_length=<span class="number">71</span></span>):</span><br><span class="line">        <span class="built_in">super</span>(Decoder, self).__init__()</span><br><span class="line">        self.hidden_size = hidden_size</span><br><span class="line">        self.decoder = AttnDecoderRNN(hidden_size, output_size, dropout_p, max_length)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, <span class="built_in">input</span>, hidden, encoder_outputs</span>):</span><br><span class="line">        <span class="keyword">return</span> self.decoder(<span class="built_in">input</span>, hidden, encoder_outputs)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">initHidden</span>(<span class="params">self, batch_size</span>):</span><br><span class="line">        result = torch.autograd.Variable(torch.zeros(<span class="number">1</span>, batch_size, self.hidden_size))</span><br><span class="line">        <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="model改进"><a class="markdownIt-Anchor" href="#model改进"></a> Model改进</h2>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/" data-id="cm8q1tfhm000mpcv41rh6e84u" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl%E3%80%81model/" rel="tag">dl、model</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -1413,7 +1793,7 @@ If you cannot immediately regenerate your protos, some other possible workaround
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>97</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>98</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>30</strong><br>标签</div></a>
     </div>
