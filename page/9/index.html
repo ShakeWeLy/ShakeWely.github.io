@@ -43,7 +43,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>98</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>99</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>30</strong><br>标签</div></a>
     </div>
@@ -70,6 +70,106 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-2023年8月19日-阿里天池7总结" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/08/18/2023%E5%B9%B48%E6%9C%8819%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A07%E6%80%BB%E7%BB%93/" class="article-date">
+  <time class="post-time" datetime="2023-08-18T13:21:21.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">18</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/08/18/2023%E5%B9%B48%E6%9C%8819%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A07%E6%80%BB%E7%BB%93/">2023年8月19日 阿里天池7总结</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id=""><a class="markdownIt-Anchor" href="#"></a> </h1>
+<h2 id="1-箱线图"><a class="markdownIt-Anchor" href="#1-箱线图"></a> 1 箱线图</h2>
+<p>展示数据分布和统计信息的图表工具。</p>
+<p>它可以帮助人们理解数据的<strong>中位数、分位数、异常值等关键统计量</strong></p>
+<p>箱线图通常由以下五个关键统计量组成：</p>
+<ol>
+<li>最小值（Minimum）：数据集中的最小值。</li>
+<li>第一四分位数（<strong>Q1，下四分位数、上边缘</strong>）：将数据从小到大排列，取中间值的中位数，即一半数据的中位数。</li>
+<li>中位数（Median）：数据集的中间值，将数据从小到大排列后的正中间值。</li>
+<li>第三四分位数（<strong>Q3，上四分位数、下边缘</strong>）：将数据从小到大排列，取中间值的中位数，即一半数据的中位数。</li>
+<li>最大值（Maximum）：数据集中的最大值</li>
+</ol>
+<p><img src="./2023%E5%B9%B48%E6%9C%8819%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A07%E6%80%BB%E7%BB%93/image-20230818213302706.png" alt="image-20230818213302706" /></p>
+<h2 id="2-直方图"><a class="markdownIt-Anchor" href="#2-直方图"></a> 2 直方图</h2>
+<p>帮助我们了解数据的集中趋势、分散程度、偏斜度以及是否存在异常值。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="3-qq图的目的"><a class="markdownIt-Anchor" href="#3-qq图的目的"></a> 3 QQ图的目的</h2>
+<p>​	<strong>分位数-分位数图</strong></p>
+<p>检查一个数据集是否与<strong>某个理论分布</strong>相符。</p>
+<p>通过观察QQ图，我们可以判断数据是否符合某个理论分布，或者是否存在偏差。</p>
+<h2 id="4-kde核函数"><a class="markdownIt-Anchor" href="#4-kde核函数"></a> 4 KDE核函数</h2>
+<p>一种非参数估计方法，用于从数据样本中估计概率密度函数（PDF）。它可以在没有先验假设的情况下估计数据的分布，从而更好地理解数据的概率分布特征。</p>
+<p><strong>作用</strong></p>
+<p>通过训练集数据和测试集数据的分布情况，查看数据分布是否一致，找出分布不一样的的某个特征变量</p>
+<p><strong>注意</strong></p>
+<p>**观察差异：**特别注意两个分布的形状、波峰位置、峰值高度等</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> scipy.stats <span class="keyword">import</span> ks_2samp</span><br><span class="line"><span class="comment"># train_data 和 test_data 分别是训练集和测试集的数据框</span></span><br><span class="line"><span class="comment"># 选择要比较的特征变量</span></span><br><span class="line">feature_to_compare = <span class="string">&#x27;feature_name&#x27;</span></span><br><span class="line"><span class="comment"># 使用Seaborn绘制数据集和训练集的KDE图</span></span><br><span class="line">plt.figure(figsize=(<span class="number">10</span>, <span class="number">6</span>))</span><br><span class="line">sns.kdeplot(train_data[feature_to_compare], label=<span class="string">&#x27;Train Data&#x27;</span>)</span><br><span class="line">sns.kdeplot(test_data[feature_to_compare], label=<span class="string">&#x27;Test Data&#x27;</span>)</span><br><span class="line"><span class="comment"># 添加标题和标签</span></span><br><span class="line">plt.title(<span class="string">f&quot;KDE Comparison for <span class="subst">&#123;feature_to_compare&#125;</span>&quot;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&quot;Feature Values&quot;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&quot;Density&quot;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示图表</span></span><br><span class="line">plt.show()</span><br><span class="line"><span class="comment"># 执行K-S检验</span></span><br><span class="line">ks_statistic, p_value = ks_2samp(train_data[feature_to_compare], test_data[feature_to_compare])</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;K-S Statistic:&quot;</span>, ks_statistic)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;P-Value:&quot;</span>, p_value)</span><br></pre></td></tr></table></figure>
+<p>可以计算<strong>KL散度</strong>、<strong>K-S</strong>来查看</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># KL散度</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> scipy.stats <span class="keyword">import</span> entropy</span><br><span class="line"><span class="comment"># train_data 和 test_data 分别是训练集和测试集的数据框</span></span><br><span class="line"><span class="comment"># 选择要比较的特征变量</span></span><br><span class="line">feature_to_compare = <span class="string">&#x27;feature_name&#x27;</span></span><br><span class="line"><span class="comment"># 从数据框中提取特征数据</span></span><br><span class="line">train_feature_data = train_data[feature_to_compare]</span><br><span class="line">test_feature_data = test_data[feature_to_compare]</span><br><span class="line"><span class="comment"># 计算训练集和测试集的分布</span></span><br><span class="line">train_distribution = np.histogram(train_feature_data, bins=<span class="string">&#x27;auto&#x27;</span>, density=<span class="literal">True</span>)</span><br><span class="line">test_distribution = np.histogram(test_feature_data, bins=<span class="string">&#x27;auto&#x27;</span>, density=<span class="literal">True</span>)</span><br><span class="line"><span class="comment"># 计算KL散度</span></span><br><span class="line">kl_divergence = entropy(train_distribution[<span class="number">0</span>], test_distribution[<span class="number">0</span>])</span><br><span class="line"><span class="comment"># 自定义阈值</span></span><br><span class="line">custom_threshold = <span class="number">0.1</span>  <span class="comment"># 自定义的阈值</span></span><br><span class="line"><span class="comment"># 比较KL散度和自定义阈值</span></span><br><span class="line"><span class="keyword">if</span> kl_divergence &gt; custom_threshold:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;分布差异超过阈值，分布不一致&quot;</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;分布差异未超过阈值，分布可能一致&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>KS检验用于比较两个样本是否来自同一分布，而KL散度用于度量两个概率分布之间的差异</p>
+<h2 id="线性回归关系图"><a class="markdownIt-Anchor" href="#线性回归关系图"></a> 线性回归关系图</h2>
+<p>分析数据的线性回归关系图可以帮助你在数据分析和建模过程中获得有关<strong>变量或者变量与目标之间关系</strong>的重要信息。</p>
+<p><strong>作用</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">决定是否值得在建模中考虑这个关系。</span><br><span class="line">观察是否存在偏离主要趋势的异常值---考虑是否需要进行数据清洗或处理。</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8819%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A07%E6%80%BB%E7%BB%93/image-20230818223654701.png" alt="image-20230818223654701" /></p>
+<h2 id="数据分布图核密度估计图"><a class="markdownIt-Anchor" href="#数据分布图核密度估计图"></a> <strong>数据分布图（核密度估计图）</strong></h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sns.distplot() 绘制数据分布图，其中包括直方图和KDE曲线。</span><br><span class="line">似乎没有什么关系</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8819%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A07%E6%80%BB%E7%BB%93/image-20230818223639347.png" alt="image-20230818223639347" /></p>
+<h2 id="特征变量相关性和热力图"><a class="markdownIt-Anchor" href="#特征变量相关性和热力图"></a> 特征变量相关性和热力图</h2>
+<p><strong>主要用于线性关系的模型</strong>其他模型不考虑</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">只线性模型考虑！！！</span><br></pre></td></tr></table></figure>
+<h2 id="树模型的特征重要性选择"><a class="markdownIt-Anchor" href="#树模型的特征重要性选择"></a> 树模型的特征重要性选择</h2>
+<p>计算每个特征对预测目标的贡献程度</p>
+<p>可以使用随机森林模型对数据进行建模，然后获取每个特征的重要性分数。重要性分数越高表示该特征对目标变量的预测影响越大。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.ensemble <span class="keyword">import</span> RandomForestRegressor</span><br><span class="line"></span><br><span class="line"><span class="comment"># 假设 df 是你的数据框，其中 &#x27;features&#x27; 是特征变量，&#x27;target&#x27; 是目标变量</span></span><br><span class="line">X = df.drop(<span class="string">&#x27;target&#x27;</span>, axis=<span class="number">1</span>)</span><br><span class="line">y = df[<span class="string">&#x27;target&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 划分训练集和测试集</span></span><br><span class="line">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.2</span>, random_state=<span class="number">42</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 构建随机森林模型</span></span><br><span class="line">rf_model = RandomForestRegressor(n_estimators=<span class="number">100</span>, random_state=<span class="number">42</span>)</span><br><span class="line">rf_model.fit(X_train, y_train)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取特征重要性分数</span></span><br><span class="line">feature_importances = rf_model.feature_importances_</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将特征重要性分数与特征名对应起来</span></span><br><span class="line">feature_importance_df = pd.DataFrame(&#123;<span class="string">&#x27;Feature&#x27;</span>: X.columns, <span class="string">&#x27;Importance&#x27;</span>: feature_importances&#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 根据特征重要性分数进行降序排序</span></span><br><span class="line">feature_importance_df = feature_importance_df.sort_values(by=<span class="string">&#x27;Importance&#x27;</span>, ascending=<span class="literal">False</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输出特征重要性结果</span></span><br><span class="line"><span class="built_in">print</span>(feature_importance_df)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="box-cox转换"><a class="markdownIt-Anchor" href="#box-cox转换"></a> box-cox转换</h2>
+<p>一种处理数据变换的方法 ，旨在<strong>改善数据的正态性（正态分布）</strong>。</p>
+<h2 id="归一化的时候为什么要先对训练集和测试集数据进行合并"><a class="markdownIt-Anchor" href="#归一化的时候为什么要先对训练集和测试集数据进行合并"></a> 归一化的时候为什么要先对训练集和测试集数据进行合并</h2>
+<p>确保归一化的尺度参数基于所有数据的范围进行计算，从而避免在训练集和测试集之间引入额外的尺度差异从而<strong>影响模型在测试集上的性能</strong>。</p>
+<p><strong>保持一致的尺度 和 防止信息泄露</strong></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2023/08/18/2023%E5%B9%B48%E6%9C%8819%E6%97%A5-%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A07%E6%80%BB%E7%BB%93/" data-id="clrwazlr9001u7ov4d4rib8y1" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%98%BF%E9%87%8C%E5%A4%A9%E6%B1%A0%E5%AD%A6%E4%B9%A0/" rel="tag">阿里天池学习</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-2023年8月19日-阿里总结" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -1069,63 +1169,6 @@
 
 
   
-    <article id="post-2023年8月11日-机器学习总结" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2023/08/10/2023%E5%B9%B48%E6%9C%8811%E6%97%A5-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/" class="article-date">
-  <time class="post-time" datetime="2023-08-10T14:36:25.000Z" itemprop="datePublished">
-    <span class="post-month">8月</span><br/>
-    <span class="post-day">10</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/08/10/2023%E5%B9%B48%E6%9C%8811%E6%97%A5-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/">机器学习总结</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="1-如何训练"><a class="markdownIt-Anchor" href="#1-如何训练"></a> 1. 如何训练？</h2>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">通过调整模型的参数</span><br></pre></td></tr></table></figure>
-<p>​	1.1 方法</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">极大似然估计</span><br></pre></td></tr></table></figure>
-<p>​		<img src="/2023/08/10/2023%E5%B9%B48%E6%9C%8811%E6%97%A5-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/image-20230810223813617.png" alt="image-20230810223813617"></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">序列最小最优化（SMO）算法</span><br></pre></td></tr></table></figure>
-<p><img src="/2023/08/10/2023%E5%B9%B48%E6%9C%8811%E6%97%A5-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/image-20230810230334840.png" alt="image-20230810230334840"></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2023/08/10/2023%E5%B9%B48%E6%9C%8811%E6%97%A5-%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E6%80%BB%E7%BB%93/" data-id="clrwazlr500187ov40ikyf28g" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -1170,7 +1213,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>98</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>99</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>30</strong><br>标签</div></a>
     </div>

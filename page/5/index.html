@@ -43,7 +43,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>98</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>99</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>30</strong><br>标签</div></a>
     </div>
@@ -70,6 +70,131 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-2025年3月3日-目标追踪-单目标Siam" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA-%E5%8D%95%E7%9B%AE%E6%A0%87Siam/" class="article-date">
+  <time class="post-time" datetime="2025-03-03T04:40:32.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">03</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA-%E5%8D%95%E7%9B%AE%E6%A0%87Siam/">2025年3月3日 目标追踪</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="介绍"><a class="markdownIt-Anchor" href="#介绍"></a> 介绍</h1>
+<p>参考:<a target="_blank" rel="noopener" href="https://blog.csdn.net/Lison_Zhu/article/details/100772541%5Chttps://blog.csdn.net/Yaoyao2024/article/details/136625461">https://blog.csdn.net/Lison_Zhu/article/details/100772541\https://blog.csdn.net/Yaoyao2024/article/details/136625461</a></p>
+<h2 id="方法"><a class="markdownIt-Anchor" href="#方法"></a> 方法</h2>
+<p><img src="/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA-%E5%8D%95%E7%9B%AE%E6%A0%87Siam/image-20250303124416382.png" alt="image-20250303124416382"></p>
+<p>（1）运动模型：如何产生众多的候选样本。</p>
+<p>（2）特征提取：利用何种特征表示目标。</p>
+<p>（3）观测模型：如何为众多候选样本进行评分。</p>
+<p>（4）模型更新：如何更新观测模型使其适应目标的变化。</p>
+<p>（5）集成方法：如何融合多个决策获得一个更优的决策结果。</p>
+<p>**运动模型（Motion Model）：**生成候选样本的速度与质量直接决定了跟踪系统表现的优劣。常用的有两种方法：粒子滤波（Particle Filter）和滑动窗口（Sliding Window）。粒子滤波是一种序贯贝叶斯推断方法，通过递归的方式推断目标的隐含状态。而滑动窗口是一种穷举搜索方法，它列出目标附近的所有可能的样本作为候选样本。</p>
+<p><strong>特征提取（Feature Extractor）:</strong> 鉴别性的特征表示是目标跟踪的关键之一。常用的特征被分为两种类型：手工设计的特征（Hand-crafted feature）和深度特征（Deep feature）。常用的手工设计的特征有灰度特征（Gray），方向梯度直方图（HOG），哈尔特征（Haar-like），尺度不变特征（SIFT）等。与人为设计的特征不同，深度特征是通过大量的训练样本学习出来的特征，它比手工设计的特征更具有鉴别性。因此，利用深度特征的跟踪方法通常很轻松就能获得一个不错的效果。</p>
+<p>**观测模型（Observation Model）😗*大多数的跟踪方法主要集中在这一块的设计上。根据不同的思路，观测模型可分为两类：生成式模型（Generative Model）和判别式模型（Discriminative Model）. 生成式模型通常寻找与目标模板最相似的候选作为跟踪结果，这一过程可以视为模板匹配。常用的理论方法包括：子空间，稀疏表示，字典学习等。而判别式模型通过训练一个分类器去区分目标与背景，选择置信度最高的候选样本作为预测结果。判别式方法已经成为目标跟踪中的主流方法，因为有大量的机器学习方法可以利用。常用的理论方法包括：逻辑回归，岭回归，支持向量机，多示例学习，相关滤波等。</p>
+<p><strong>模型更新（Model Update）:</strong> 模型更新主要是更新观测模型，以适应目标表观的变化，防止跟踪过程发生漂移。模型更新没有一个统一的标准，通常认为目标的表观连续变化，所以常常会每一帧都更新一次模型。但也有人认为目标过去的表观对跟踪很重要，连续更新可能会丢失过去的表观信息，引入过多的噪音，因此利用长短期更新相结合的方式来解决这一问题。</p>
+<p><strong>集成方法（Ensemble Method）:</strong> 集成方法有利于提高模型的预测精度，也常常被视为一种提高跟踪准确率的有效手段。可以把集成方法笼统的划分为两类：在多个预测结果中选一个最好的，或是利用所有的预测加权平均。</p>
+<h2 id="分类"><a class="markdownIt-Anchor" href="#分类"></a> 分类</h2>
+<h2 id="挑战"><a class="markdownIt-Anchor" href="#挑战"></a> 挑战</h2>
+<img src="/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA-%E5%8D%95%E7%9B%AE%E6%A0%87Siam/image-20250303124957636.png" alt="image-20250303124957636" style="zoom:67%;">
+<h2 id="视觉目标跟踪方法"><a class="markdownIt-Anchor" href="#视觉目标跟踪方法"></a> <strong>视觉目标跟踪方法</strong></h2>
+<p>视觉目标跟踪方法根据观测模型是生成式模型或判别式模型可以被分为生成式方法（Generative Method）和判别式方法（Discriminative Method）。</p>
+<p>前几年最火的生成式跟踪方法大概是稀疏编码（Sparse Coding）了, 而近来判别式跟踪方法逐渐占据了主流地位，以相关滤波（Correlation Filter）和深度学习（Deep Learning）为代表的判别式方法也取得了令人满意的效果。</p>
+<h3 id="生成式模型"><a class="markdownIt-Anchor" href="#生成式模型"></a> 生成式模型</h3>
+<p>在当前帧对目标区域建模，下一帧寻找与模型最相似的区域就是预测位置，与传统的盲搜不同，它利用<strong>相邻帧之间目标位置变化不大</strong>的特点，采用<strong>迭代逼近</strong>的方式提高算法的搜索速度</p>
+<h3 id="判别式模型"><a class="markdownIt-Anchor" href="#判别式模型"></a> 判别式模型</h3>
+<p><img src="/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA-%E5%8D%95%E7%9B%AE%E6%A0%87Siam/image-20250303131015672.png" alt="image-20250303131015672"></p>
+<h3 id="深度学习方法"><a class="markdownIt-Anchor" href="#深度学习方法"></a> 深度学习方法</h3>
+<p>如基于卷积神经网络（CNN）和<strong>孪生网络</strong>的跟踪器，其实也可以归类为判别式方法，因为它们通常涉及到<strong>训练一个能够区分目标和背景的网络</strong>。</p>
+<h2 id="发展"><a class="markdownIt-Anchor" href="#发展"></a> 发展</h2>
+<img src="/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA-%E5%8D%95%E7%9B%AE%E6%A0%87Siam/image-20250303125749159.png" style="zoom:50%;">
+<h1 id="基于孪生网络的单目标跟踪siamfc"><a class="markdownIt-Anchor" href="#基于孪生网络的单目标跟踪siamfc"></a> 基于孪生网络的单目标跟踪SiamFC</h1>
+<p>参考:<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43913124/article/details/123403727">https://blog.csdn.net/weixin_43913124/article/details/123403727</a> \https://github.com/rafellerc/Pytorch-SiamFC <a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43913124/article/details/123545157">https://blog.csdn.net/weixin_43913124/article/details/123545157</a></p>
+<img src="https://i-blog.csdnimg.cn/blog_migrate/60f706a822f46b296fa249f17e0d0554.png" alt="结构图2" style="zoom:50%;">
+<h2 id="0-siamfc"><a class="markdownIt-Anchor" href="#0-siamfc"></a> 0 SiamFC</h2>
+<p>Siamese跟踪器<strong>将视觉目标跟踪问题表述为通过学习目标模板和搜索区域的特征表示之间的相互关联来学习通用的相似性映射</strong></p>
+<p><img src="/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA-%E5%8D%95%E7%9B%AE%E6%A0%87Siam/image-20250303140047653.png" alt="image-20250303140047653"></p>
+<p><strong>AlexNet</strong></p>
+<p><img src="/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA-%E5%8D%95%E7%9B%AE%E6%A0%87Siam/image-20250303141401445.png" alt="image-20250303141401445"></p>
+<img src="/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA-%E5%8D%95%E7%9B%AE%E6%A0%87Siam/image-20250303141444947.png" alt="image-20250303141444947" style="zoom:50%;">
+<p>Logistic<strong>损失函数</strong></p>
+<h2 id="1-siamrpn"><a class="markdownIt-Anchor" href="#1-siamrpn"></a> 1 SiamRPN</h2>
+<p>参考:<a target="_blank" rel="noopener" href="https://blog.csdn.net/fzp95/article/details/80982201">https://blog.csdn.net/fzp95/article/details/80982201</a></p>
+<p><strong>RPN</strong></p>
+<p>网络只需要把这些可能含有物体的区域选取出来就可以了，这些被选取出来的区域又叫做ROI （Region of Interests），即感兴趣的区域</p>
+<p>RPN同时也会在feature map上框定这些ROI感兴趣区域的大致位置</p>
+<p><strong>网络结构</strong></p>
+<img src="/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA-%E5%8D%95%E7%9B%AE%E6%A0%87Siam/image-20250303141905683.png" alt="image-20250303141905683" style="zoom:67%;">
+<p><strong>损失函数</strong></p>
+<p><img src="/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA-%E5%8D%95%E7%9B%AE%E6%A0%87Siam/image-20250303142721363.png" alt="image-20250303142721363"></p>
+<h3 id="11-dasiamrpn"><a class="markdownIt-Anchor" href="#11-dasiamrpn"></a> 1.1 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/56254712/bo-li.info/DaSiamRPN">DaSiamRPN</a></h3>
+<ul>
+<li>基于SiamRPN，主要是提出更好的使用数据，利用更好的训练方式让tracker变得更鲁邦</li>
+<li>有了更好的分数作为指导后，算法可以扩展到Long-term</li>
+</ul>
+<h3 id="12-vot2018-entry-siamrpn"><a class="markdownIt-Anchor" href="#12-vot2018-entry-siamrpn"></a> 1.2 <a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=100630994&amp;content_type=Article&amp;match_order=1&amp;q=VOT2018&amp;zhida_source=entity">VOT2018</a> entry SiamRPN</h3>
+<ul>
+<li>基于DaSiamRPN，想通过增强backbone来提升性能，但没能实现，最终通过加厚alexnet提升性能。加厚虽然临时的提升了网络的性能，但网络依然很浅，同时还极大的增加了模型参数量以及计算量。（模型加厚一倍，实际上模型和计算量增加四倍）</li>
+</ul>
+<h2 id="2-siamrpn"><a class="markdownIt-Anchor" href="#2-siamrpn"></a> 2 SiamRPN++</h2>
+<p>参考:<a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_63294504/article/details/145073446%5Chttps://zhuanlan.zhihu.com/p/56254712">https://blog.csdn.net/m0_63294504/article/details/145073446\https://zhuanlan.zhihu.com/p/56254712</a></p>
+<p><strong>打破了<strong><strong>Siamese</strong></strong>网络在目标跟踪时无法使用深度复杂网络</strong>**(VGG****、<strong><strong>ResNet</strong></strong>、**<strong>MobileNet)<strong><strong>的限制</strong></strong>原因来自于对严格平移不变性的破坏</strong></p>
+<p>入了一种**简单而有效的采样策略****(<strong><strong>说白了就是增加了随机平移</strong></strong>shft)**来打破Siamese跟踪器的空间不变性限制 <a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_63294504/article/details/145072710?spm=1001.2014.3001.5501">什么是卷积网络中的平移不变性？平移shft在数据增强中的意义-CSDN博客</a></p>
+<p>提出了一种<strong>分层特征强化结构</strong>用于相互关联操作</p>
+<p>要贡献如下:</p>
+<p>1.我们对Siamese跟踪器进行了深入的分析，并证明了当使用深度网络时，准确性的降低来自于严格的平移不变性的破坏。</p>
+<p>2.我们提出了一种简单而有效的采样策略来打破空间不变性的限制，成功地训练了由ResNet架构驱动的Siamese跟踪器。</p>
+<p>3.我们提出了一种分层特征聚合结构，用于相互关联操作，这有助于跟踪器从多层学习的特征中预测相似的映射。</p>
+<p>4.我们提出了一种深度可分离相关结构，以增强相互关联，从而产生与不同语义相关的多个相似映射。<br>
+————————————————</p>
+<p><img src="/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA-%E5%8D%95%E7%9B%AE%E6%A0%87Siam/image-20250303144709836.png" alt="image-20250303144709836"></p>
+<h2 id="3-网络更新"><a class="markdownIt-Anchor" href="#3-网络更新"></a> 3 网络更新</h2>
+<h2 id="4-模板更新"><a class="markdownIt-Anchor" href="#4-模板更新"></a> 4 模板更新</h2>
+<h2 id="5-回归更新"><a class="markdownIt-Anchor" href="#5-回归更新"></a> 5 回归更新</h2>
+<h1 id="基于相关滤波_pass"><a class="markdownIt-Anchor" href="#基于相关滤波_pass"></a> 基于相关滤波_pass</h1>
+<h1 id="基于深度学习的目标检测与再识别detection-based-tracking"><a class="markdownIt-Anchor" href="#基于深度学习的目标检测与再识别detection-based-tracking"></a> <strong>基于深度学习的目标检测与再识别（Detection-based Tracking）</strong></h1>
+<p>这类方法利用目标检测器（如Faster R-CNN、YOLO）在每一帧中检测目标，并使用Re-ID（再识别）模型或光流估计方法进行目标匹配。</p>
+<h1 id="基于视觉transformervit-vision-transformer"><a class="markdownIt-Anchor" href="#基于视觉transformervit-vision-transformer"></a> <strong>基于视觉Transformer（ViT, Vision Transformer）</strong></h1>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA-%E5%8D%95%E7%9B%AE%E6%A0%87Siam/" data-id="cmanj8o24000flcv42ogd545d" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/model%E3%80%81tracking/" rel="tag">model、tracking</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-2025年2月19日-CRNN模型" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -1244,133 +1369,6 @@ FBNet 使用了一种基于梯度优化的搜索方法，即将 NAS 搜索过程
 
 
   
-    <article id="post-2025年1月9日-语言模型" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/01/08/2025%E5%B9%B41%E6%9C%889%E6%97%A5-%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/" class="article-date">
-  <time class="post-time" datetime="2025-01-07T16:22:05.000Z" itemprop="datePublished">
-    <span class="post-month">1月</span><br/>
-    <span class="post-day">08</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/01/08/2025%E5%B9%B41%E6%9C%889%E6%97%A5-%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/">2025年1月9日 语言模型</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ol>
-<li>预训练 浅层特征不变 高层改变
-<ol>
-<li>冻结</li>
-<li>fine-tuning</li>
-</ol>
-</li>
-</ol>
-<h2 id="统计语言模型"><a class="markdownIt-Anchor" href="#统计语言模型"></a> 统计语言模型</h2>
-<p><img src="/2025/01/08/2025%E5%B9%B41%E6%9C%889%E6%97%A5-%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/image-20250103124916040.png" alt="image-20250103124916040"></p>
-<ol>
-<li>马尔科夫链</li>
-<li></li>
-</ol>
-<h2 id="神经网络语言模型"><a class="markdownIt-Anchor" href="#神经网络语言模型"></a> 神经网络语言模型</h2>
-<p>word embedding 例子</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-<p>word embedding 就是 预训练的frozen</p>
-<p><img src="/2025/01/08/2025%E5%B9%B41%E6%9C%889%E6%97%A5-%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/image-20250108002222562.png" alt></p>
-<p><img src="/2025/01/08/2025%E5%B9%B41%E6%9C%889%E6%97%A5-%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/image-20250108002349457.png" alt="image-20250108002349457" style="zoom:50%;"><img src="/2025/01/08/2025%E5%B9%B41%E6%9C%889%E6%97%A5-%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/image-20250108002355983.png" alt="image-20250108002355983"><img src="/2025/01/08/2025%E5%B9%B41%E6%9C%889%E6%97%A5-%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/image-20250108002359696.png" alt="image-20250108002359696" style="zoom:50%;"><img src="/2025/01/08/2025%E5%B9%B41%E6%9C%889%E6%97%A5-%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/image-20250108002402739.png" alt="image-20250108002402739" style="zoom:50%;"></p>
-<h2 id="改进的注意力机制"><a class="markdownIt-Anchor" href="#改进的注意力机制"></a> 改进的注意力机制</h2>
-<h3 id><a class="markdownIt-Anchor" href="#"></a> </h3>
-<h3 id="1-lora-低秩近似在-transformer-中的应用"><a class="markdownIt-Anchor" href="#1-lora-低秩近似在-transformer-中的应用"></a> 1 LORA 低秩近似在 Transformer 中的应用</h3>
-<p>在 Transformer 中，低秩近似主要应用于自注意力计算，特别是通过优化注意力矩阵的存储和计算来提高效率。以下是两种常见的实现方式：</p>
-<ol>
-<li>
-<p><strong>Linformer</strong>：Linformer 是一种基于低秩近似的优化方法。Linformer 的核心思想是将标准自注意力中的注意力矩阵近似为低秩矩阵。Linformer 假设注意力矩阵可以用低秩矩阵来近似，因此将其从一个全连接矩阵（n×n）降为一个n×k  的矩阵（其中 kkk 是较小的值，通常比 nnn 小得多）。通过这种低秩近似，计算复杂度从</p>
-<p class="katex-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^2)
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1141079999999999em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span></p>
-<p>降低为</p>
-<p class="katex-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mo>⋅</mo><mi>k</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n \cdot k)
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.03148em;">k</span><span class="mclose">)</span></span></span></span></span></p>
-<p>大大减少了计算量，特别是在长序列时效果显著。</p>
-</li>
-<li>
-<p><strong>Performer</strong>：Performer 是另一种采用低秩近似的 Transformer 变种，它通过引入一种叫做 <strong>线性注意力</strong> 的方法，采用<strong>随机特征来近似注意力矩阵</strong>的乘积。这种方法能够将原本的</p>
-<p class="katex-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^2)
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.1141079999999999em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8641079999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></span></p>
-<p>计算复杂度降低为</p>
-<p class="katex-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>n</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n)
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal">n</span><span class="mclose">)</span></span></span></span></span></p>
-<p>，使得 Transformer 可以处理非常长的序列。</p>
-</li>
-</ol>
-<h4 id="低秩近似的优点"><a class="markdownIt-Anchor" href="#低秩近似的优点"></a> 低秩近似的优点</h4>
-<ul>
-<li><strong>减少计算复杂度</strong>：通过将高秩矩阵分解为低秩矩阵，降低了计算复杂度，从而加快了训练和推理速度。</li>
-<li><strong>节省内存</strong>：低秩矩阵的存储通常比原始矩阵所需的内存少，因此节省了计算过程中的内存消耗。</li>
-<li><strong>适用于长序列</strong>：对于长序列，低秩近似可以大大提高 Transformer 的效率，使其能够处理更长的输入序列而不遇到内存瓶颈。</li>
-</ul>
-<h4 id="低秩近似的缺点"><a class="markdownIt-Anchor" href="#低秩近似的缺点"></a> 低秩近似的缺点</h4>
-<ul>
-<li><strong>性能损失</strong>：低秩近似虽然可以减少计算复杂度，但可能会带来一定的性能损失，尤其是在近似效果不佳时。较低的秩可能无法捕捉到原矩阵中的复杂关系，因此可能影响模型的精度。</li>
-<li><strong>近似精度问题</strong>：低秩近似依赖于如何选择低秩矩阵的秩（rank）。如果选择的秩过小，可能会导致较大的误差，从而影响模型的效果。</li>
-</ul>
-<p>、</p>
-<h3 id="lora-的应用步骤"><a class="markdownIt-Anchor" href="#lora-的应用步骤"></a> LoRA 的应用步骤</h3>
-<h4 id="1-选择适当的层"><a class="markdownIt-Anchor" href="#1-选择适当的层"></a> 1. <strong>选择适当的层</strong></h4>
-<ul>
-<li>通常，LoRA 应用在 Transformer 中的关键层，如注意力层和前馈层。选择这些层是因为它们通常是最有影响力的层，影响模型的表达能力。</li>
-</ul>
-<h4 id="2-添加低秩矩阵"><a class="markdownIt-Anchor" href="#2-添加低秩矩阵"></a> 2. <strong>添加低秩矩阵</strong></h4>
-<ul>
-<li>对于每个需要修改的层（如注意力层中的权重矩阵），LoRA 在其上加上低秩矩阵。通常，这些低秩矩阵的秩较小，因此不会显著增加模型的复杂度。</li>
-</ul>
-<h4 id="3-训练低秩矩阵"><a class="markdownIt-Anchor" href="#3-训练低秩矩阵"></a> 3. <strong>训练低秩矩阵</strong></h4>
-<ul>
-<li>在微调过程中，仅训练低秩矩阵的参数，而保持原始的预训练权重不变。这意味着只有少量参数需要更新，从而加速训练并降低存储需求。</li>
-</ul>
-<h4 id="4-合成模型"><a class="markdownIt-Anchor" href="#4-合成模型"></a> 4. <strong>合成模型</strong></h4>
-<ul>
-<li>在微调结束后，最终的模型将包括原始的预训练权重和经过 LoRA 微调的低秩矩阵</li>
-</ul>
-<h3 id="代码实现"><a class="markdownIt-Anchor" href="#代码实现"></a> 代码实现</h3>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="adapter"><a class="markdownIt-Anchor" href="#adapter"></a> Adapter</h2>
-<p>适</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/01/08/2025%E5%B9%B41%E6%9C%889%E6%97%A5-%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B/" data-id="cm6rncay70001xgv40x8a6tc6" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/llm/" rel="tag">llm</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -1415,7 +1413,7 @@ FBNet 使用了一种基于梯度优化的搜索方法，即将 NAS 搜索过程
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>98</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>99</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>30</strong><br>标签</div></a>
     </div>

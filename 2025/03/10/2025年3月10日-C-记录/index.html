@@ -13,7 +13,7 @@
 <meta property="og:description" content="✨C++  基础知识  1 变量作用域  什么是局部变量 ☑️ 什么是全局变量 ☑️ 什么是块作用域，如何实现？ 类？   2 常量？  定义？ 如何定义常量   3 修饰符   修饰符类型   类型限定符：是什么？    static 用于定义静态变量，表示该变量的作用域仅限于当前文件或当前函数内，不会被其他文件或函数访问。     const             4 C++ 存储类 控制">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-03-10T05:29:15.000Z">
-<meta property="article:modified_time" content="2025-06-09T12:07:25.253Z">
+<meta property="article:modified_time" content="2025-06-11T15:43:31.738Z">
 <meta property="article:author" content="Weakliy">
 <meta property="article:tag" content="C++">
 <meta name="twitter:card" content="summary">
@@ -48,7 +48,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>98</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>99</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>30</strong><br>标签</div></a>
     </div>
@@ -578,13 +578,21 @@
 <ol>
 <li>呀节点 避免nullptr的判断 <code>return dummy-&gt;next</code> 即可</li>
 </ol>
-<h2 id="记录"><a class="markdownIt-Anchor" href="#记录"></a> 🌏记录</h2>
-<h3 id="code"><a class="markdownIt-Anchor" href="#code"></a> code</h3>
+<h1 id="记录"><a class="markdownIt-Anchor" href="#记录"></a> 🌏记录</h1>
+<h2 id="命名空间"><a class="markdownIt-Anchor" href="#命名空间"></a> 命名空间</h2>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/cl122763974/article/details/139457699">https://blog.csdn.net/cl122763974/article/details/139457699</a></p>
+<ol>
+<li>避免冲突</li>
+<li>易于维护, 不同模块和相同类</li>
+</ol>
+</blockquote>
+<h2 id="code"><a class="markdownIt-Anchor" href="#code"></a> code</h2>
 <blockquote>
 <p>缩进也报错?</p>
 <p>选择&quot;UTF-8 带签名(BOM)&quot;???</p>
 </blockquote>
-<h4 id="数"><a class="markdownIt-Anchor" href="#数"></a> 数</h4>
+<h3 id="数"><a class="markdownIt-Anchor" href="#数"></a> 数</h3>
 <blockquote>
 <p>INFINITY 是 C++ 中表示正无穷大的宏</p>
 <p>NaN 不等于任何值（包括自身），用 std::isnan(x) 检查。</p>
@@ -595,7 +603,7 @@
 <p>区别</p>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cout &lt;&lt; list.<span class="built_in">at</span>(<span class="number">2</span>) &lt;&lt; endl;</span><br><span class="line">cout &lt;&lt; list[<span class="number">2</span>] &lt;&lt; endl;</span><br><span class="line">cout &lt;&lt; list.<span class="keyword">operator</span>[](<span class="number">2</span>) &lt;&lt; endl;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">capacity</span>()</span><br><span class="line"><span class="built_in">max_size</span>()</span><br></pre></td></tr></table></figure>
-<h4 id="map"><a class="markdownIt-Anchor" href="#map"></a> MAP</h4>
+<h3 id="map"><a class="markdownIt-Anchor" href="#map"></a> MAP</h3>
 <blockquote>
 <p>std::map 是一个关联容器，存储键值对（key-value pairs），每个元素是一个 std::pair&lt;const Key, T&gt;。</p>
 <ul>
@@ -672,10 +680,21 @@
 <blockquote>
 <p>一个函数对象需要重载 operator()，使其可以通过 () 调用。</p>
 </blockquote>
+<h3 id="构造函数"><a class="markdownIt-Anchor" href="#构造函数"></a> 构造函数</h3>
+<p><code>NoBackprop() : previous_state(Config::enable_backprop) &#123;&#125;</code></p>
+<p>和<code>NoBackprop() &#123;previous_state = Config::enable_backprop;&#125;</code></p>
 <h3 id="指针"><a class="markdownIt-Anchor" href="#指针"></a> 指针</h3>
 <ul>
 <li><code>int *p, q;   // p 是指针，q 是普通整数（新手常见错误）</code></li>
 </ul>
+<blockquote>
+<h3 id="什么是函数指针和指针函数以及区别"><a class="markdownIt-Anchor" href="#什么是函数指针和指针函数以及区别"></a> 🔥 什么是函数指针和指针函数以及区别</h3>
+<h3 id="什么是常量指针和指针常量以及区别"><a class="markdownIt-Anchor" href="#什么是常量指针和指针常量以及区别"></a> 🔥 什么是常量指针和指针常量以及区别</h3>
+<blockquote>
+<p><strong>常量指针</strong>： 指的是指针本身的值（即指向的地址）可以改变，但指针指向的对象的值不能通过这个指针进行修改。</p>
+<p><strong>指针常量</strong>：指的是指针本身的值（即指向的地址）不能改变，但可以通过这个指针修改指向对象的值</p>
+</blockquote>
+</blockquote>
 <h4 id><a class="markdownIt-Anchor" href="#"></a> </h4>
 <h3 id="类"><a class="markdownIt-Anchor" href="#类"></a> 类</h3>
 <p>if not define --&gt; define  --&gt; endif</p>
@@ -726,7 +745,61 @@
 <p>void setValue(int value);</p>
 <p>int getValue() const;</p>
 </blockquote>
-<h4 id="random"><a class="markdownIt-Anchor" href="#random"></a> random</h4>
+<h4 id="静态和非静态成员"><a class="markdownIt-Anchor" href="#静态和非静态成员"></a> 静态和非静态成员</h4>
+<p>1 这个错误是因为我们试图直接访问 Config 类的非静态成员变量 enable_backprop。我们需要将 Config 类中的成员变量声明为静态的。</p>
+<blockquote>
+<ol>
+<li>普通成员变量：</li>
+</ol>
+<ul>
+<li>
+<p>每个类的实例（对象）都有自己独立的成员变量副本</p>
+</li>
+<li>
+<p>需要通过对象来访问（例如：config.enable_backprop）</p>
+</li>
+<li>
+<p>每个对象的内存中都会存储这些变量</p>
+</li>
+</ul>
+<ol>
+<li>静态成员变量：</li>
+</ol>
+<ul>
+<li>
+<p>所有类的实例共享同一个变量</p>
+</li>
+<li>
+<p>可以直接通过类名访问（例如：Config::enable_backprop）</p>
+</li>
+<li>
+<p>在内存中只有一份副本</p>
+</li>
+<li>
+<p>在程序启动时就分配内存，程序结束时才释放</p>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>/ 静态成员需要在类外定义</p>
+</blockquote>
+<h4 id="虚函数"><a class="markdownIt-Anchor" href="#虚函数"></a> 虚函数</h4>
+<blockquote>
+<p><strong>虚函数</strong> 允许在派生类中重写函数，但可以有默认实现。它是可选的，可以在基类中提供实现。</p>
+<p><strong>纯虚函数</strong> 没有默认实现，派生类必须提供实现。它使得基类成为抽象类，不能实例化。</p>
+</blockquote>
+<h4 id="-2"><a class="markdownIt-Anchor" href="#-2"></a> </h4>
+<h2 id="类似"><a class="markdownIt-Anchor" href="#类似"></a> 类似</h2>
+<p>1 CPP类似python <code>with</code>的东西</p>
+<blockquote>
+<p>with using_config(“enable_backprop”, False):  x = Variable(np.array(2.Ð))  y = square(x)</p>
+<p>使用构造函数和析构函数</p>
+</blockquote>
+<h2 id="库"><a class="markdownIt-Anchor" href="#库"></a> 库</h2>
+<h3 id="include-iomanip-用于格式化输出"><a class="markdownIt-Anchor" href="#include-iomanip-用于格式化输出"></a> #include <iomanip>  // 用于格式化输出</iomanip></h3>
+<h3 id="raiiresource-acquisition-is-initialization"><a class="markdownIt-Anchor" href="#raiiresource-acquisition-is-initialization"></a> RAII（Resource Acquisition Is Initialization</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ConfigTest(const ConfigTest&amp;) = delete;</span><br><span class="line">ConfigTest&amp; operator=(const ConfigTest&amp;) = delete;</span><br><span class="line">ConfigTest a;</span><br><span class="line">ConfigTest b = a;  // ❌ 编译错误：拷贝构造被删除</span><br><span class="line">b = a;             // ❌ 编译错误：拷贝赋值被删除</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="random"><a class="markdownIt-Anchor" href="#random"></a> random</h2>
 <blockquote>
 <figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">random_device rd;</span><br><span class="line"><span class="function">mt19937 <span class="title">gen</span><span class="params">(rd())</span></span>;</span><br><span class="line"><span class="function">uniform_real_distribution&lt;<span class="type">float</span>&gt; <span class="title">dis</span><span class="params">(<span class="number">-0.1f</span>, <span class="number">0.1f</span>)</span></span>;</span><br></pre></td></tr></table></figure>
 <ul>
@@ -742,6 +815,57 @@
 </li>
 </ul>
 </blockquote>
+<h2 id="异常处理机制"><a class="markdownIt-Anchor" href="#异常处理机制"></a> 异常处理机制\</h2>
+<h4 id="基本的异常处理语法"><a class="markdownIt-Anchor" href="#基本的异常处理语法"></a> ✅ 基本的异常处理语法</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">cpp复制编辑try &#123;</span><br><span class="line">    // 可能抛出异常的代码</span><br><span class="line">    throw std::runtime_error(&quot;Something went wrong!&quot;);</span><br><span class="line">&#125;</span><br><span class="line">catch (const std::runtime_error&amp; e) &#123;</span><br><span class="line">    std::cout &lt;&lt; &quot;Caught runtime_error: &quot; &lt;&lt; e.what() &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br><span class="line">catch (...) &#123;</span><br><span class="line">    std::cout &lt;&lt; &quot;Caught unknown exception&quot; &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>try</code>：监控语句块。</li>
+<li><code>throw</code>：抛出异常。</li>
+<li><code>catch</code>：捕获异常。</li>
+<li><code>...</code>：捕获所有类型的异常（最后一个兜底捕获器）。</li>
+</ul>
+<h3 id="标准异常类位于-stdexcept"><a class="markdownIt-Anchor" href="#标准异常类位于-stdexcept"></a> 标准异常类（位于 <code>&lt;stdexcept&gt;</code>）</h3>
+<h3 id="noexcept"><a class="markdownIt-Anchor" href="#noexcept"></a> noexcept</h3>
+<blockquote>
+<p><code>noexcept</code> 是 C++11 引入的一个关键字，用于声明一个函数 <strong>不会抛出异常</strong>。它有助于：</p>
+<ol>
+<li><strong>编译器优化</strong></li>
+<li><strong>提高异常安全性</strong></li>
+<li><strong>使标准库函数更高效</strong></li>
+</ol>
+</blockquote>
+<h2 id="threading"><a class="markdownIt-Anchor" href="#threading"></a> 🧠threading</h2>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>多线程（<code>std::thread</code>）</th>
+<th>异步（<code>std::async</code>）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>调度方式</td>
+<td>手动管理线程生命周期</td>
+<td>自动管理线程和返回值</td>
+</tr>
+<tr>
+<td>获取结果</td>
+<td>不提供返回值机制</td>
+<td><code>future.get()</code> 可取回结果</td>
+</tr>
+<tr>
+<td>使用场景</td>
+<td>更复杂的并发控制（锁、同步）</td>
+<td>简单并发任务、获取返回值</td>
+</tr>
+<tr>
+<td>更适合谁？</td>
+<td>控制更强的程序员</td>
+<td>想写少点代码的程序员 😄</td>
+</tr>
+</tbody>
+</table>
 <h2 id="cpp思路"><a class="markdownIt-Anchor" href="#cpp思路"></a> CPP思路</h2>
 <blockquote>
 <h3 id="batch-normalization-的核心目标"><a class="markdownIt-Anchor" href="#batch-normalization-的核心目标"></a> 🧠 <strong>Batch Normalization 的核心目标</strong>：</h3>
@@ -958,6 +1082,35 @@
 <li>🧠 项目 10~12 面向实际部署能力</li>
 </ul>
 </blockquote>
+<h2 id="优化"><a class="markdownIt-Anchor" href="#优化"></a> 优化</h2>
+<blockquote>
+<p>(base) PS F:\Cppdata\cpp_code\ctorch\build&gt; .\Debug\autograd.exe<br>
+iter: 0 z.data: 13<br>
+iter: 10 z.data: 0.0933579<br>
+iter: 20 z.data: 12.3269<br>
+iter: 30 z.data: 1.93872<br>
+iter: 40 z.data: 9.48611<br>
+iter: 50 z.data: 5.50273<br>
+iter: 60 z.data: 5.5404<br>
+iter: 70 z.data: 9.45205<br>
+iter: 80 z.data: 1.9659<br>
+iter: 90 z.data: 12.3092<br>
+x.data: -0.175315<br>
+y.data: -0.262973</p>
+<blockquote>
+<p>问题在于：</p>
+<ol>
+<li>
+<p>z.data的值在迭代过程中波动很大，没有稳定收敛</p>
+</li>
+<li>
+<p>最终x和y的值变成了负数，这显然不是我们期望的结果</p>
+</li>
+</ol>
+</blockquote>
+<blockquote></blockquote>
+</blockquote>
+<blockquote></blockquote>
 
       
     </div>
@@ -1034,7 +1187,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>98</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>99</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>30</strong><br>标签</div></a>
     </div>
