@@ -43,9 +43,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>99</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>102</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>30</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>31</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -70,6 +70,324 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-2023年8月12日-CUDA编程2环境配置" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-CUDA%E7%BC%96%E7%A8%8B2%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" class="article-date">
+  <time class="post-time" datetime="2023-08-12T08:18:24.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">12</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-CUDA%E7%BC%96%E7%A8%8B2%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/">cuda编程2</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="ubuntu配置以及问题总结"><a class="markdownIt-Anchor" href="#ubuntu配置以及问题总结"></a> Ubuntu配置以及问题总结</h1>
+<h2 id="一-wsl无法成功安装ubuntu"><a class="markdownIt-Anchor" href="#一-wsl无法成功安装ubuntu"></a> 一、WSL无法成功安装Ubuntu</h2>
+<p><img src="/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-CUDA%E7%BC%96%E7%A8%8B2%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/image-20230812132357377.png" alt="image-20230812132357377"></p>
+<h2 id="二-问题如下图"><a class="markdownIt-Anchor" href="#二-问题如下图"></a> 二、问题如下图：</h2>
+<h2 id="21ubuntu初始化无法正常输入密码"><a class="markdownIt-Anchor" href="#21ubuntu初始化无法正常输入密码"></a> 2.1Ubuntu初始化无法正常输入密码</h2>
+<p><img src="/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-CUDA%E7%BC%96%E7%A8%8B2%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/image-20230812132341798.png" alt></p>
+<h2 id="22更改密码"><a class="markdownIt-Anchor" href="#22更改密码"></a> 2.2.更改密码</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1. 以管理员身份打开 PowerShell</span><br><span class="line">2. 输入命令 wsl -u root</span><br><span class="line">3. 输入命令 passwd username 修改用户密码，username即待重置的用户的名称</span><br></pre></td></tr></table></figure>
+<p>​	<strong>切换用户</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ubuntu1804 config --default-user ubuntu1804</span><br></pre></td></tr></table></figure>
+<p>​	成功！</p>
+<p><img src="/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-CUDA%E7%BC%96%E7%A8%8B2%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/image-20230812160508642.png" alt="image-20230812160508642"></p>
+<h2 id="三-无法编译"><a class="markdownIt-Anchor" href="#三-无法编译"></a> 三、无法编译</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">			nvcc : 无法将“nvcc”项识别为 cmdlet、函数、脚本文件或可运行程序的名称。请检查名称的拼写 ，如果包括路径，请确保路径正确，然后再试一次。 所在位置 行:1 字符: 1 + nvcc test.cu -o test + ~~~~    + CategoryInfo          : ObjectNotFound: (nvcc:String) [], CommandNotFoundExceptio     n    + FullyQualifiedErrorId : CommandNotFoundException cuda</span><br><span class="line"></span><br><span class="line">​		cuda安装成功但是出现上面报错（nvcc-v成功运行）</span><br></pre></td></tr></table></figure>
+<p><strong>文件目录：</strong></p>
+<p><img src="/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-CUDA%E7%BC%96%E7%A8%8B2%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/image-20230812161248349.png" alt="image-20230812161248349"></p>
+<h3 id="31-可能存在的问题环境变量未配置-cuda是否安装成功"><a class="markdownIt-Anchor" href="#31-可能存在的问题环境变量未配置-cuda是否安装成功"></a> 3.1 可能存在的问题：环境变量未配置、cuda是否安装成功、</h3>
+<p><img src="/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-CUDA%E7%BC%96%E7%A8%8B2%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/image-20230812132330526.png" alt="image-20230812132330526"></p>
+<h3 id="32-代码未保存"><a class="markdownIt-Anchor" href="#32-代码未保存"></a> 3.2 代码未保存、</h3>
+<p>​	用vscode编写cuda代码，写完却一直无法成功编译，经检查才发现忘记保存，但是保存的时候才发现vscode无权限无法保存、百般调试后可能的问题：1. vscode无权限， 2. 未给创建的文件赋予读写权限。</p>
+<p>​	基于上面的两种可能，解决办法。1：重新创建文件，赋予权限，重新编写代码。2：改用nano编写（nano在ubuntu上安装）</p>
+<p>创建新文件</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir cudalesson</span><br><span class="line">chmod <span class="number">777</span> cudalesson  <span class="comment"># 赋予读写权限</span></span><br></pre></td></tr></table></figure>
+<p>在nano上编写代码</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nano test.cu</span><br></pre></td></tr></table></figure>
+<p>发现代码有误，更改：<img src="/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-CUDA%E7%BC%96%E7%A8%8B2%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/image-20230812132313546.png" alt="image-20230812132313546" style="zoom:50%;"></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function">__global__ <span class="type">void</span> <span class="title">hello_from_gpu</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;hello world from the GPU\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    hello_from_gpu&lt;&lt;&lt;<span class="number">4</span>, <span class="number">4</span>&gt;&gt;&gt;();</span><br><span class="line">    <span class="built_in">cudaDeviceSynchronize</span>();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="四-配置"><a class="markdownIt-Anchor" href="#四-配置"></a> 四、配置</h2>
+<h3 id="41-链接vscode"><a class="markdownIt-Anchor" href="#41-链接vscode"></a> 4.1 链接vscode</h3>
+<p><strong>完美解决window11 wsl ubuntu下code.出现code：commandnot found的问题</strong></p>
+<p><img src="/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-CUDA%E7%BC%96%E7%A8%8B2%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/image-20230812160618750.png" alt="image-20230812160618750"></p>
+<p><strong>解决办法</strong></p>
+<p>安装 <a target="_blank" rel="noopener" href="https://code.visualstudio.com/download">VS Code 安装页</a></p>
+<p>选中“添加到 PATH”选项</p>
+<p>安装<a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.vscode-remote-extensionpack">远程开发扩展包</a></p>
+<p>更新Ubuntu</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br></pre></td></tr></table></figure>
+<p>输入</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">code .   # 注意code空格.</span><br></pre></td></tr></table></figure>
+<p>成功运行：</p>
+<img src="/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-CUDA%E7%BC%96%E7%A8%8B2%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/image-20230812162902769.png" alt="image-20230812162902769" style="zoom:25%;">
+<h2 id="五-编译"><a class="markdownIt-Anchor" href="#五-编译"></a> 五、编译：</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvcc test.cu -o test</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./test	 # 运行</span><br></pre></td></tr></table></figure>
+<h3 id="成功"><a class="markdownIt-Anchor" href="#成功"></a> 成功！</h3>
+<p>!<img src="/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-CUDA%E7%BC%96%E7%A8%8B2%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/image-20230812132246556.png" alt="image-20230812132246556"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-CUDA%E7%BC%96%E7%A8%8B2%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" data-id="cmbhxnxaq0001gov4hk90cv5d" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cuda/" rel="tag">cuda</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2023年8月12日-tensorRT安装与实例" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-tensorRT%E5%AE%89%E8%A3%85%E4%B8%8E%E5%AE%9E%E4%BE%8B/" class="article-date">
+  <time class="post-time" datetime="2023-08-12T05:24:40.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">12</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-tensorRT%E5%AE%89%E8%A3%85%E4%B8%8E%E5%AE%9E%E4%BE%8B/">tensorRT安装</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="1-pip安装"><a class="markdownIt-Anchor" href="#1-pip安装"></a> 1 pip安装</h1>
+<h2 id="介绍"><a class="markdownIt-Anchor" href="#介绍"></a> 介绍</h2>
+<p>在TensorRT中，这三个文件都是针对Windows系统和Python 3.8的TensorRT Wheel包，但它们分别代表TensorRT库的不同部分或变体：</p>
+<p><strong>tensorrt-8.6.1-cp38-none-win_amd64.whl：</strong></p>
+<blockquote>
+<p>这个文件是TensorRT的标准版Python Wheel包。<br>
+它包含了TensorRT库的主要功能，用于深度学习模型的优化和推理。<br>
+适用于需要TensorRT所有功能的通用用途。</p>
+</blockquote>
+<p><strong>tensorrt_lean-8.6.1-cp38-none-win_amd64.whl：</strong></p>
+<blockquote>
+<p>“Lean”版本可能是TensorRT的一个精简版，它可能去除了某些不常用的功能或组件，以便在资源受限的环境中提供更高效的执行。<br>
+这种版本可能特别适合于那些只需要TensorRT核心功能的应用场景。</p>
+</blockquote>
+<p><strong>tensorrt_dispatch-8.6.1-cp38-none-win_amd64.whl：</strong></p>
+<blockquote>
+<p>“Dispatch”版本可能包含了TensorRT的动态调度功能，这意味着它可以在运行时根据不同的输入参数或环境条件来动态选择最适合的处理逻辑或算法。<br>
+这对于需要在多种不同配置或硬件上运行的应用来说可能非常有用。</p>
+</blockquote>
+<h1 id="ubuntu下的tensorrt-安装"><a class="markdownIt-Anchor" href="#ubuntu下的tensorrt-安装"></a> Ubuntu下的TensorRT 安装</h1>
+<p><strong>原因：win11 下无法安装</strong></p>
+<img src="/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-tensorRT%E5%AE%89%E8%A3%85%E4%B8%8E%E5%AE%9E%E4%BE%8B/image-20230812144645411.png" alt="image-20230812144645411" style="zoom:33%;">
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">https://blog.csdn.net/qq_43573527/article/details/131414861?spm=1001.2101.3001.6661.1&amp;utm_medium=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1-131414861-blog-126454422.235%5Ev38%5Epc_relevant_sort_base2&amp;depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-2%7Edefault%7ECTRLIST%7ERate-1-131414861-blog-126454422.235%5Ev38%5Epc_relevant_sort_base2&amp;utm_relevant_index=1</span><br><span class="line"></span><br><span class="line">https://www.bilibili.com/video/BV1Um4y1w7g6/?share_source=copy_web&amp;vd_source=ef8119f427d19b904b7ce3026143d3f7</span><br></pre></td></tr></table></figure>
+<h2 id="1安装相关工具箱"><a class="markdownIt-Anchor" href="#1安装相关工具箱"></a> 1.安装相关工具箱</h2>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mv</span> /mnt/d/<span class="built_in">nv</span><span class="literal">-tensorrt-local-repo-ubuntu1804-8</span>.<span class="number">6.1</span><span class="literal">-cuda-11</span>.<span class="number">8</span>_1.<span class="number">0</span><span class="literal">-1_amd64</span>.deb download_  <span class="comment"># 移动文件</span></span><br><span class="line">sudo dpkg <span class="literal">-i</span> i <span class="built_in">nv</span><span class="literal">-tensorrt-local-repo-ubuntu1804-8</span>.<span class="number">6.1</span><span class="literal">-cuda-11</span>.<span class="number">8</span>_1.<span class="number">0</span><span class="literal">-1_amd64</span>.deb</span><br><span class="line">sudo apt update</span><br><span class="line">sudo apt install tensorrt</span><br></pre></td></tr></table></figure>
+<h2 id="2安装tensorrt"><a class="markdownIt-Anchor" href="#2安装tensorrt"></a> 2.安装tensorRT</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -m pip install --upgrade setuptools pip</span><br></pre></td></tr></table></figure>
+<p><img src="/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-tensorRT%E5%AE%89%E8%A3%85%E4%B8%8E%E5%AE%9E%E4%BE%8B/image-20230812155830636.png" alt="image-20230812155830636"></p>
+<h3 id="3运行"><a class="markdownIt-Anchor" href="#3运行"></a> 3.运行</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">python3</span><br><span class="line"><span class="keyword">import</span> tensorrt</span><br><span class="line"><span class="built_in">print</span>(tensorrt.__version__)</span><br><span class="line">exit()</span><br></pre></td></tr></table></figure>
+<h3 id="4-在vscode中运行"><a class="markdownIt-Anchor" href="#4-在vscode中运行"></a> 4. 在vscode中运行</h3>
+<p>安装 <a target="_blank" rel="noopener" href="https://code.visualstudio.com/download">VS Code 安装页</a></p>
+<h3 id="5-配置python环境"><a class="markdownIt-Anchor" href="#5-配置python环境"></a> 5. 配置python环境</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install python3-venv</span><br><span class="line">sudo python3 -m venv tensorrt_env</span><br><span class="line"><span class="built_in">cd</span> tensorrt_env</span><br><span class="line"><span class="built_in">source</span> <span class="built_in">cd</span> tensorrt_env/bin/activate</span><br><span class="line">sudo /home/ubuntu1804/tensorrt_env/tensorrt_env/bin/python -m pip install tensorrt</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="6出现问题-vscode拓展无法编译python36"><a class="markdownIt-Anchor" href="#6出现问题-vscode拓展无法编译python36"></a> 6.出现问题： vscode拓展无法编译python3.6</h3>
+<h4 id="解决"><a class="markdownIt-Anchor" href="#解决"></a> 解决：</h4>
+<h5 id="1更换拓展"><a class="markdownIt-Anchor" href="#1更换拓展"></a> 1.更换拓展</h5>
+<p>下载就拓展：<a target="_blank" rel="noopener" href="https://marketplace.visualstudio.com/_apis/public/gallery/publishers/ms-python/vsextensions/python/2022.6.0/vspackage">https://marketplace.visualstudio.com/_apis/public/gallery/publishers/ms-python/vsextensions/python/2022.6.0/vspackage</a></p>
+<p><strong>结果：无法正常安装，使用下面的方法2.</strong></p>
+<h5 id="2更换python"><a class="markdownIt-Anchor" href="#2更换python"></a> 2.更换python</h5>
+<p>更换python：</p>
+<p>​	安装编译 Python 3.9 所需的工具和库：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install build-essential zlib1g-dev libffi-dev libssl-dev</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>下载 Python 3.9 源代码并编译安装：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">wget https://www.python.org/ftp/python/3.9.7/Python-3.9.7.tgz</span><br><span class="line">tar -xf Python-3.9.7.tgz</span><br><span class="line"><span class="built_in">cd</span> Python-3.9.7</span><br><span class="line">./configure --enable-optimizations</span><br><span class="line">make -j$(<span class="built_in">nproc</span>)</span><br><span class="line">sudo make altinstall</span><br></pre></td></tr></table></figure>
+<h3 id="7安装成功-创建环境"><a class="markdownIt-Anchor" href="#7安装成功-创建环境"></a> 7.安装成功 创建环境</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> myenv</span><br><span class="line"><span class="built_in">cd</span> myenv</span><br><span class="line"><span class="built_in">cd</span> Python-3.9.7   <span class="comment"># 这是我的</span></span><br><span class="line">python3.9 -m venv tensorrt3.9</span><br><span class="line"><span class="built_in">source</span> tensorrt3.9/bin/activate</span><br><span class="line">pip install tensorrt -H  <span class="comment"># 安装</span></span><br><span class="line">deactivate  <span class="comment"># 退出环境</span></span><br><span class="line"></span><br><span class="line">sudo -H pip install tensorrt  <span class="comment"># 不要用sudo安装，安装成功后无法使用，该怎么办因为使用了 sudo 来安装包会导致文件权限问题，使得虚拟环境无法正常访问已安装的库。 </span></span><br></pre></td></tr></table></figure>
+<img src="/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-tensorRT%E5%AE%89%E8%A3%85%E4%B8%8E%E5%AE%9E%E4%BE%8B/image-20230812201136476.png" alt="image-20230812201136476" style="zoom: 50%;">
+<p>创建文件夹来编写代码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> rtlesson</span><br><span class="line"><span class="built_in">chmod</span> 777 rtlesson  <span class="comment"># 赋予读写权限</span></span><br></pre></td></tr></table></figure>
+<h3 id="8-打开vscode并激活环境"><a class="markdownIt-Anchor" href="#8-打开vscode并激活环境"></a> 8. 打开vscode并激活环境</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">code .</span><br><span class="line">Ctrl + ~ 来打开终端。</span><br><span class="line"><span class="built_in">source</span> /Python-3.9.7/tensorrt3.9/bin/activate</span><br></pre></td></tr></table></figure>
+<h3 id="9检查安装是否成功-trtexec-version"><a class="markdownIt-Anchor" href="#9检查安装是否成功-trtexec-version"></a> 9.检查安装是否成功 <strong>trtexec --version</strong></h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 代码验证</span></span><br><span class="line"><span class="keyword">import</span> tensorrt <span class="keyword">as</span> trt</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;TensorRT imported successfully!&quot;</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="10安装一些常用的库"><a class="markdownIt-Anchor" href="#10安装一些常用的库"></a> 10.安装一些常用的库</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install pycuda onnx onnxruntime torch torchvision opencv-python torchaudio numpy -i https://pypi.tuna.tsinghua.edu.cn/simple</span><br></pre></td></tr></table></figure>
+<h3 id="11转移windows上的文件"><a class="markdownIt-Anchor" href="#11转移windows上的文件"></a> 11.转移windows上的文件</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> ~/rtlesson</span><br><span class="line"><span class="comment"># 复制</span></span><br><span class="line"><span class="built_in">cp</span> <span class="string">&quot;/mnt/f/Pydata/Project/鱼类识别+onnx/my_model.onnx&quot;</span> . </span><br><span class="line"><span class="comment"># 移动</span></span><br><span class="line"><span class="built_in">mv</span> <span class="string">&quot;/mnt/f/Pydata/Project/鱼类识别+onnx/fish_classes_list.json&quot;</span> . </span><br><span class="line"><span class="comment"># 查看</span></span><br><span class="line"><span class="built_in">ls</span> ~/rtlesson</span><br></pre></td></tr></table></figure>
+<h2 id="12运行代码-onxx转tensorrt运行"><a class="markdownIt-Anchor" href="#12运行代码-onxx转tensorrt运行"></a> 12.运行代码 onxx转TensorRt运行</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 占位符	</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">查看下一篇博客</span>：</span><br><span class="line">	<span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2023/08/12/2023%E5%B9%B48%E6%9C%8812%E6%97%A5-tensorRT%E5%AE%89%E8%A3%85%E4%B8%8E%E5%AE%9E%E4%BE%8B/" data-id="cm8q1tfhc0004pcv479pmgin5" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tensorRT/" rel="tag">tensorRT</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2023年8月10日最大熵模型" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/08/11/2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/" class="article-date">
+  <time class="post-time" datetime="2023-08-11T14:07:44.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">11</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/08/11/2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/">最大熵模型</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#ri</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">日期：2023年8月11日</span></span><br><span class="line"><span class="string">说明：只是做了简单的初步了解和内容总结，并未实际过程推导过程，仅仅只是作于了解，未深层次掌握。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+<h1 id="1-最大熵模型介绍"><a class="markdownIt-Anchor" href="#1-最大熵模型介绍"></a> 1. 最大熵模型介绍</h1>
+<h3 id="介绍"><a class="markdownIt-Anchor" href="#介绍"></a> 介绍</h3>
+<p>所有可能的模型中选择一个模型，使得满足<strong>已知的约束条件</strong>，并且在这些约束条件下熵最大。 即max H（p）</p>
+<img src="./2023年8月10日最大熵模型/image-20230811144506204.png" alt="image-20230811144506204" style="zoom:33%;" />
+<h3 id="例子"><a class="markdownIt-Anchor" href="#例子"></a> 例子</h3>
+<img src="./2023年8月10日最大熵模型/image-20230811144954814.png" alt="image-20230811144954814" style="zoom: 25%;" />
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">	写入拉格朗日 与转对偶问题</span><br><span class="line">拉格朗日例子：</span><br><span class="line">最小化 f(x) = x^2</span><br><span class="line">约束条件 g(x) = x - 2 ≤ 0</span><br><span class="line"></span><br><span class="line">我们构建拉格朗日函数为：</span><br><span class="line"></span><br><span class="line">L(x, λ) = x^2 + λ * (x - 2)</span><br><span class="line"></span><br><span class="line">然后我们要求拉格朗日函数对 x 和 λ 的偏导数等于零：</span><br><span class="line"></span><br><span class="line">对 x 求导数：∂L/∂x = 2x + λ = 0</span><br><span class="line">对 λ 求导数：∂L/∂λ = x - 2 ≤ 0</span><br><span class="line">从第一个方程得到 x = -λ/2，代入第二个方程得到 -λ/2 - 2 ≤ 0，这是因为我们要求拉格朗日函数对应的约束条件 g(x) 必须满足。</span><br><span class="line"></span><br><span class="line">然后，我们将 x = -λ/2 代入到拉格朗日函数 L(x, λ) 中：</span><br><span class="line"></span><br><span class="line">L(x, λ) = (-λ/2)^2 + λ * (-λ/2 - 2)</span><br><span class="line"></span><br><span class="line">这个式子实际上是一个关于 λ 的函数，我们可以将它最小化，从而得到最优的 λ，然后再代入 x = -λ/2 得到最优的 x。</span><br></pre></td></tr></table></figure>
+<img src="./2023年8月10日最大熵模型/image-20230811145120544.png" alt="image-20230811145120544" style="zoom:33%;" />
+<p><img src="./2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/image-20230811145435512.png" alt="image-20230811145435512" /></p>
+<p>得出结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">一般都是约束条件等分</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/image-20230811145508322.png" alt="image-20230811145508322" /></p>
+<h1 id="2-最大熵模型-极大似然估计"><a class="markdownIt-Anchor" href="#2-最大熵模型-极大似然估计"></a> 2. 最大熵模型 极大似然估计</h1>
+<p><strong>条件概率分布 和 逻辑回归类似。</strong></p>
+<p><strong>目的是为了求出最大的w参数</strong><img src="./2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/image-20230810224005109.png" alt="" /></p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/image-20230811145608933.png" alt="image-20230811145608933" /></p>
+<p>条件概率分布—找出似然函数—样本集</p>
+<p>规范化因子其实就是约束条件</p>
+<img src="./2023年8月10日最大熵模型/image-20230811150237433.png" alt="image-20230811150237433" style="zoom:25%;" />
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">最大熵模型最终是求出对数似然函数或对偶函数的极大值</span><br></pre></td></tr></table></figure>
+<p><img src="./2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/image-20230811154201780.png" alt="image-20230811154201780" /></p>
+<h1 id="3最大熵模型-优化算法"><a class="markdownIt-Anchor" href="#3最大熵模型-优化算法"></a> 3.最大熵模型 优化算法</h1>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1.梯度下降</span><br><span class="line">2.牛顿法</span><br><span class="line">3.迭代尺度法</span><br></pre></td></tr></table></figure>
+<h3 id="1梯度下降"><a class="markdownIt-Anchor" href="#1梯度下降"></a> 1.梯度下降</h3>
+<img src="./2023年8月10日最大熵模型/image-20230811151710812.png" alt="image-20230811151710812" style="zoom: 50%;" />
+<h3 id="2牛顿法"><a class="markdownIt-Anchor" href="#2牛顿法"></a> 2.牛顿法</h3>
+<ol>
+<li>
+<p><strong>求根号下精确值</strong></p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/image-20230811151834334.png" alt="" /></p>
+</li>
+</ol>
+<p>​	2. <strong>牛顿法</strong><img src="./2023年8月10日最大熵模型/image-20230811151932299.png" alt="image-20230811151932299" style="zoom:50%;" /><img src="./2023年8月10日最大熵模型/image-20230811151916434.png" alt="image-20230811151916434" style="zoom:50%;" /></p>
+<p>3.<strong>多元情况</strong><img src="./2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/image-20230811152034074.png" alt="image-20230811152034074" /></p>
+<p><img src="./2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/image-20230811152021558.png" alt="image-20230811152021558" /></p>
+<p>例子<img src="./2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/image-20230811152127868.png" alt="image-20230811152127868" /></p>
+<ol start="4">
+<li>
+<p><strong>拟牛顿法</strong></p>
+<p>原因：标函数的二阶导数（Hessian矩阵）可能在某些情况下非常耗时，并且需要很大的内存。拟牛顿法的思想是通过近似来避免计算真正的二阶导数，从而减少计算复杂性。</p>
+<img src="./2023年8月10日最大熵模型/image-20230811152358180.png" alt="image-20230811152358180" style="zoom:33%;" />
+</li>
+<li>
+<p>DFP算法 XXX</p>
+<p>原因：通过<strong>近似构建</strong>一个拟Hessian矩阵的逆，<img src="./2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/image-20230811152528844.png" alt="image-20230811152528844" /><img src="./2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/image-20230811153549138.png" alt="image-20230811153549138" /><img src="./2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/image-20230811152550032.png" alt="image-20230811152550032" /></p>
+</li>
+<li>
+<p>BFGS算法</p>
+<p>原因：相对于DFP算法，BFGS算法的<strong>更新方式更加稳定，并且具有更好的收敛性质</strong>。<img src="./2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/image-20230811152647719.png" alt="image-20230811152647719" /><img src="./2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/image-20230811152635332.png" alt="image-20230811152635332" /><img src="./2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/image-20230811153530905.png" alt="image-20230811153530905" /></p>
+</li>
+<li>
+<p>Broyden算法</p>
+<p>原因：通过构建一个<strong>逐步逼近</strong>的拟Hessian矩阵逆来实现的。<img src="./2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/image-20230811152721431.png" alt="image-20230811152721431" /><img src="./2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/image-20230811153604188.png" alt="image-20230811153604188" /></p>
+</li>
+</ol>
+<h3 id="3迭代尺度法"><a class="markdownIt-Anchor" href="#3迭代尺度法"></a> 3.迭代尺度法</h3>
+<p>​	原因：计算模型的期望特征数量，用期望特征数量用于满足约束条件。<img src="./2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/image-20230811154257465.png" alt="image-20230811154257465" /></p>
+<p>​</p>
+<h1 id="4算法实现"><a class="markdownIt-Anchor" href="#4算法实现"></a> 4.算法实现</h1>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 作者：Weakliy</span></span><br><span class="line"><span class="comment"># 创建日期：2023/8/10 22:28</span></span><br><span class="line"><span class="comment"># 描述：这个文件实现了一些功能。</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> nltk</span><br><span class="line"><span class="keyword">from</span> nltk.classify <span class="keyword">import</span> MaxentClassifier</span><br><span class="line"><span class="keyword">from</span> nltk.corpus <span class="keyword">import</span> movie_reviews</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 下载电影评论数据集</span></span><br><span class="line">nltk.download(<span class="string">&quot;movie_reviews&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取电影评论数据集</span></span><br><span class="line">documents = [(<span class="built_in">list</span>(movie_reviews.words(fileid)), category) <span class="keyword">for</span> category <span class="keyword">in</span> movie_reviews.categories() <span class="keyword">for</span> fileid <span class="keyword">in</span> movie_reviews.fileids(category)]</span><br><span class="line">random.shuffle(documents)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 特征提取</span></span><br><span class="line">all_words = nltk.FreqDist(w.lower() <span class="keyword">for</span> w <span class="keyword">in</span> movie_reviews.words())</span><br><span class="line">word_features = <span class="built_in">list</span>(all_words)[:<span class="number">2000</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">document_features</span>(<span class="params">document</span>):</span><br><span class="line">    document_words = <span class="built_in">set</span>(document)</span><br><span class="line">    features = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> word <span class="keyword">in</span> word_features:</span><br><span class="line">        features[<span class="string">f&quot;contains(<span class="subst">&#123;word&#125;</span>)&quot;</span>] = (word <span class="keyword">in</span> document_words)</span><br><span class="line">    <span class="keyword">return</span> features</span><br><span class="line"></span><br><span class="line"><span class="comment"># 特征集</span></span><br><span class="line">featuresets = [(document_features(d), c) <span class="keyword">for</span> (d, c) <span class="keyword">in</span> documents]</span><br><span class="line">train_set, test_set = featuresets[<span class="number">100</span>:], featuresets[:<span class="number">100</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 训练最大熵模型</span></span><br><span class="line">classifier = MaxentClassifier.train(train_set, algorithm=<span class="string">&#x27;iis&#x27;</span>, trace=<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 预测并计数分类结果</span></span><br><span class="line">actual_labels = [actual_label <span class="keyword">for</span> (_, actual_label) <span class="keyword">in</span> test_set]</span><br><span class="line">predicted_labels = [classifier.classify(features) <span class="keyword">for</span> (features, _) <span class="keyword">in</span> test_set]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 统计分类结果</span></span><br><span class="line">unique_labels = <span class="built_in">list</span>(<span class="built_in">set</span>(actual_labels))</span><br><span class="line">label_counts = [predicted_labels.count(label) <span class="keyword">for</span> label <span class="keyword">in</span> unique_labels]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 绘制柱状图 显示了预测结果的分布情况。</span></span><br><span class="line">plt.bar(unique_labels, label_counts)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Label&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Count&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;Predicted Label Distribution&#x27;</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2023/08/11/2023%E5%B9%B48%E6%9C%8810%E6%97%A5%E6%9C%80%E5%A4%A7%E7%86%B5%E6%A8%A1%E5%9E%8B/" data-id="clrwazlr400167ov4avi3824b" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-2023年8月11日-机器学习总结" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -553,325 +871,10 @@
 
 
   
-    <article id="post-2023年10月16日-ONNX2实操" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2023/08/02/2023%E5%B9%B410%E6%9C%8816%E6%97%A5-ONNX2%E5%AE%9E%E6%93%8D/" class="article-date">
-  <time class="post-time" datetime="2023-08-02T06:07:53.000Z" itemprop="datePublished">
-    <span class="post-month">8月</span><br/>
-    <span class="post-day">02</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/08/02/2023%E5%B9%B410%E6%9C%8816%E6%97%A5-ONNX2%E5%AE%9E%E6%93%8D/">ONNX2</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="1-一般工作流程onnx模型实用全流程"><a class="markdownIt-Anchor" href="#1-一般工作流程onnx模型实用全流程"></a> <strong>1 一般工作流程（ONNX模型实用全流程）</strong></h2>
-<ol>
-<li><strong>导出模型</strong>（如 PyTorch → ONNX）</li>
-<li><strong>简化模型结构</strong>（使用 <code>onnxsim</code>）</li>
-<li><strong>模型检查和可视化</strong>（Netron 或 <code>onnx.checker</code>）</li>
-<li><strong>量化（可选）</strong>（静态/动态/QAT）</li>
-<li><strong>部署测试</strong>（ONNX Runtime、TensorRT、OpenVINO等）</li>
-<li><strong>模型裁剪、修改或转换（可选）</strong></li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">导出 ONNX</span><br><span class="line">     ↓</span><br><span class="line">[模型合法性检查]</span><br><span class="line">     ↓</span><br><span class="line">[结构查看与确认 (Netron)]</span><br><span class="line">     ↓</span><br><span class="line">[模型简化 (onnxsim)]</span><br><span class="line">     ↓</span><br><span class="line">[推理测试 (onnxruntime)]</span><br><span class="line">     ↓</span><br><span class="line">[量化优化 (可选)]</span><br><span class="line">     ↓</span><br><span class="line">[格式转换（TRT, OpenVINO 等）]</span><br><span class="line">     ↓</span><br><span class="line">[部署调优与上线]</span><br></pre></td></tr></table></figure>
-<h2 id="2-基础操作"><a class="markdownIt-Anchor" href="#2-基础操作"></a> 2 基础操作</h2>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 导出模型为ONNX__2</span><br><span class="line">with torch.no_grad():</span><br><span class="line">    torch.onnx.export(</span><br><span class="line">        model,                       # 要转换的模型</span><br><span class="line">        example_input,               # 模型的任意一组输入</span><br><span class="line">        &#x27;resnet18.onnx&#x27;,    # 导出的 ONNX 文件名</span><br><span class="line">        opset_version=11,            # ONNX 算子集版本</span><br><span class="line">        input_names=[&#x27;input&#x27;],       # 输入 Tensor 的名称（自己起名字）</span><br><span class="line">        output_names=[&#x27;output&#x27;]      # 输出 Tensor 的名称（自己起名字）</span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
-<p><code>torch.onnx.export()</code>的主要作用是将模型转换为ONNX格式，它不会执行任何需要梯度的操作，因此没有必要关闭梯度跟踪</p>
-<p><strong>with torch.no_grad():</strong></p>
-<p>可以用一下：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 导出模型为ONNX__1</span><br><span class="line">torch.onnx.export(model, example_input, onnx_path, verbose=True)</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 检查模型格式是否正确</span><br><span class="line">print(onnx.checker.check_model(onnx_model))</span><br></pre></td></tr></table></figure>
-<p>用于验证导出的ONNX模型是否<strong>符合ONNX规范的函数</strong></p>
-<p>出现错误时会抛出异常</p>
-<ol>
-<li><strong>验证模型结构</strong>：检查模型的计算图是否按照ONNX规范正确构建。</li>
-<li><strong>验证数据类型和形状</strong>：检查模型输入和输出节点的数据类型和形状是否与ONNX规范相符。</li>
-<li><strong>检查操作符的支持</strong>：检查模型中使用的操作符是否是ONNX支持的版本。</li>
-<li><strong>检查属性和元属性</strong>：检查模型节点的属性和元属性是否正确设置。</li>
-</ol>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 以可读的形式打印计算图</span><br><span class="line">print(onnx.helper.printable_graph(onnx_model.graph))</span><br></pre></td></tr></table></figure>
-<p>用于可视化<strong>ONNX模型计算图</strong>的函数。</p>
-<p>将ONNX模型的计算图以人类可读的形式打印出来，以便于查看模型的结构和流程。</p>
-<h3 id="21-netron使用教程"><a class="markdownIt-Anchor" href="#21-netron使用教程"></a> 2.1 netron使用教程</h3>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_49963403/article/details/136242313">https://blog.csdn.net/m0_49963403/article/details/136242313</a></p>
-</blockquote>
-<h3 id="22-onnx-parser"><a class="markdownIt-Anchor" href="#22-onnx-parser"></a> 2.2 ONNX Parser</h3>
-<p>1.onnx parser是什么？</p>
-<p>ONNX Parser是一种用于<strong>解析和加载</strong>ONNX模型的工具或库。它负责将ONNX模型文件解析为内存中的数据结构，以便后续在特定的推理引擎或框架（如TensorRT）中使用。</p>
-<p>通常各种推理引擎或框架都会提供ONNX Parser的组件（如TensorRT的trt.OnnxParser()方法）。它能够创建一个Parser解析器读取ONNX模型文件</p>
-<h3 id="23-onnx-graphsurgeon"><a class="markdownIt-Anchor" href="#23-onnx-graphsurgeon"></a> 2.3 onnx-graphsurgeon</h3>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/yitiaoxiaolu/article/details/136378614">https://blog.csdn.net/yitiaoxiaolu/article/details/136378614</a></p>
-</blockquote>
-<p>onnx-graphsurgeon简介<br>
-onnx-graphsurgeon是NVIDIA推出的一种TensorRT开发辅助工具，用于编辑和优化ONNX模型。它提供了一种简单而强大的方式来修改和转换ONNX模型的图形表示，以便更好地适应TensorRT的优化和推理。</p>
-<h2 id="3-全部代码"><a class="markdownIt-Anchor" href="#3-全部代码"></a> 3 全部代码</h2>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"># 作者：Weakliy</span><br><span class="line"># 创建日期：2023/8/2 22:09</span><br><span class="line"># 描述：这个文件实现了一些功能。</span><br><span class="line"></span><br><span class="line">import torch</span><br><span class="line">from torchvision import models</span><br><span class="line">from config import Common, Train  # 你需要导入相应的配置模块</span><br><span class="line"></span><br><span class="line"># 加载模型状态字典</span><br><span class="line">model = torch.load(r&#x27;../model/cress0.0001482023-04-18-08-40-11.pth&#x27;)</span><br><span class="line"></span><br><span class="line"># 构建模型实例</span><br><span class="line">model = model.eval()</span><br><span class="line"></span><br><span class="line"># 示例输入数据</span><br><span class="line">x = torch.randn(1, 3, 224, 224).to(&quot;cuda&quot;)</span><br><span class="line"></span><br><span class="line"># 导出为ONNX模型</span><br><span class="line">onnx_path = &quot;../my_model.onnx&quot;</span><br><span class="line">torch.onnx.export(</span><br><span class="line">    model,</span><br><span class="line">    x,</span><br><span class="line">    onnx_path,</span><br><span class="line">    opset_version=11,</span><br><span class="line">    input_names=[&quot;input&quot;],</span><br><span class="line">    output_names=[&quot;output&quot;]</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<h3 id="41运行代码"><a class="markdownIt-Anchor" href="#41运行代码"></a> 4.1运行代码</h3>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"># 作者：Weakliy</span><br><span class="line"># 创建日期：2023/8/5 21:53</span><br><span class="line"># 描述：这个文件实现了一些功能。</span><br><span class="line"></span><br><span class="line">import onnxruntime</span><br><span class="line">import numpy as np</span><br><span class="line">import torch</span><br><span class="line">import torch.nn.functional as F</span><br><span class="line">import pandas as pd</span><br><span class="line"></span><br><span class="line">ort_session = onnxruntime.InferenceSession(&#x27;my_onnx_from_checkpoint.onnx&#x27;)</span><br><span class="line">x = torch.randn(1, 3, 224, 224).numpy()</span><br><span class="line">print(x.shape)</span><br><span class="line">ort_inputs = &#123;&#x27;input&#x27;: x&#125;</span><br><span class="line">ort_output = ort_session.run([&#x27;output&#x27;], ort_inputs)[0]</span><br><span class="line">print(ort_output.shape)</span><br><span class="line"></span><br><span class="line"># 载入一张真正的测试图像</span><br><span class="line">img_path = r&#x27;F:\Pydata\Project\鱼类识别+onnx\data/test\fish_03\fish_000034930001_03337.png&#x27;</span><br><span class="line">from PIL import Image</span><br><span class="line">img_pil = Image.open(img_path)</span><br><span class="line">from torchvision import transforms</span><br><span class="line">from config import Common</span><br><span class="line"># 测试集图像预处理-RCTN：缩放裁剪、转 Tensor、归一化</span><br><span class="line">test_transform = transforms.Compose([</span><br><span class="line">    transforms.ToTensor(),</span><br><span class="line">    transforms.Resize(Common.imageSize),</span><br><span class="line">    transforms.RandomHorizontalFlip(p=0.5),</span><br><span class="line">    transforms.RandomVerticalFlip(p=0.5),</span><br><span class="line">    transforms.RandomRotation(degrees=10),</span><br><span class="line">])</span><br><span class="line">input_img = test_transform(img_pil)</span><br><span class="line">print(input_img.shape)</span><br><span class="line">input_tensor = input_img.unsqueeze(0).numpy()</span><br><span class="line">print(input_tensor.shape)</span><br><span class="line"></span><br><span class="line"># ONNX Runtime 输入</span><br><span class="line">ort_inputs = &#123;&#x27;input&#x27;: input_tensor&#125;</span><br><span class="line"># ONNX Runtime 输出</span><br><span class="line">pred_logits = ort_session.run([&#x27;output&#x27;], ort_inputs)[0]  # ?</span><br><span class="line">pred_logits = torch.tensor(pred_logits)  # ?</span><br><span class="line">print(pred_logits.shape)</span><br><span class="line"># 对 logit 分数做 softmax 运算，得到置信度概率</span><br><span class="line">pred_softmax = F.softmax(pred_logits, dim=1)</span><br><span class="line">print(pred_softmax.shape)</span><br><span class="line">output = torch.argmax(pred_softmax)</span><br><span class="line">print(&quot;结果类别：&quot;, output.item())</span><br><span class="line"># 取置信度最高的前 n 个结果</span><br><span class="line">n = 3</span><br><span class="line">top_n = torch.topk(pred_softmax, n)</span><br><span class="line">print(top_n)</span><br><span class="line"># 预测类别</span><br><span class="line">pred_ids = top_n.indices.numpy()[0]</span><br><span class="line">print(pred_ids)</span><br><span class="line"># 预测置信度</span><br><span class="line">confs = top_n.values.numpy()[0]</span><br><span class="line">print(confs)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">输出：</span><br><span class="line">(1, 3, 224, 224)</span><br><span class="line">(1, 22)</span><br><span class="line">torch.Size([3, 224, 224])</span><br><span class="line">(1, 3, 224, 224)</span><br><span class="line">torch.Size([1, 22])</span><br><span class="line">torch.Size([1, 22])</span><br><span class="line">结果类别： 1</span><br><span class="line">torch.return_types.topk(</span><br><span class="line">values=tensor([[0.1146, 0.0422, 0.0422]]),</span><br><span class="line">indices=tensor([[1, 0, 2]]))</span><br><span class="line">[1 0 2]</span><br><span class="line">[0.11460126 0.0421640 0.04216173]</span><br></pre></td></tr></table></figure>
-<h3 id="42结果比较"><a class="markdownIt-Anchor" href="#42结果比较"></a> 4.2结果比较</h3>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2023/08/02/2023%E5%B9%B410%E6%9C%8816%E6%97%A5-ONNX2%E5%AE%9E%E6%93%8D/" data-id="cmanj8o1r0003lcv4e7c1ed9z" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ONNX/" rel="tag">ONNX</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2023年10月14日-ONNX1介绍" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2023/08/01/2023%E5%B9%B410%E6%9C%8814%E6%97%A5-ONNX1%E4%BB%8B%E7%BB%8D/" class="article-date">
-  <time class="post-time" datetime="2023-08-01T06:07:53.000Z" itemprop="datePublished">
-    <span class="post-month">8月</span><br/>
-    <span class="post-day">01</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/08/01/2023%E5%B9%B410%E6%9C%8814%E6%97%A5-ONNX1%E4%BB%8B%E7%BB%8D/">ONNX介绍</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="0x1-onnx介绍"><a class="markdownIt-Anchor" href="#0x1-onnx介绍"></a> <strong>0x1. ONNX介绍</strong></h2>
-<p>神经网络交换（Open Neural Network Exchange）</p>
-<p>何种训练框架训练模型（比如TensorFlow/Pytorch/OneFlow/Paddle），在训练完毕后你都可以将这些框架的模型统一转换为ONNX这种<strong>统一的格式</strong>进行存储。注意ONNX文件不仅仅存储了神经网络模型的权重，同时也存储了模型的结构信息以及网络中每一层的输入输出和一些其它的辅助信息。</p>
-<h2 id="0x2-protobuf简介"><a class="markdownIt-Anchor" href="#0x2-protobuf简介"></a> <strong>0x2. ProtoBuf简介</strong></h2>
-<p>ONNX使用的是Protobuf这个序列化数据结构去存储神经网络的权重信息。</p>
-<p>Protobuf是一种轻便高效的<strong>结构化数据存储格式</strong>，</p>
-<p><code>*.proto</code>后缀文件  <code>onnx.proto</code>就是ONNX格式文件</p>
-<h2 id="0x3-onnx格式分析"><a class="markdownIt-Anchor" href="#0x3-onnx格式分析"></a> <strong>0x3. ONNX格式分析</strong></h2>
-<p>ONNX 模型加载后返回的是一个 <code>ModelProto</code> 对象，其结构如下：</p>
-<ul>
-<li>
-<p><strong>ModelProto</strong></p>
-<ul>
-<li><code>ir_version</code>：IR（中间表示）版本</li>
-<li><code>producer_name/producer_version</code>：创建模型的工具名与版本</li>
-<li><code>graph</code>：GraphProto 对象，定义了网络结构</li>
-</ul>
-</li>
-<li>
-<p><strong>GraphProto</strong></p>
-<ul>
-<li><code>node[]</code>：计算节点数组，每个是一个 NodeProto（例如Conv、Relu等操作）</li>
-<li><code>input[]</code>：模型的输入信息，类型为 ValueInfoProto</li>
-<li><code>output[]</code>：模型的输出信息，类型为 ValueInfoProto</li>
-<li><code>initializer[]</code>：模型的参数（如权重），类型为 TensorProto</li>
-</ul>
-</li>
-</ul>
-<h2 id="0x4-onnxruntime"><a class="markdownIt-Anchor" href="#0x4-onnxruntime"></a> <strong>0x4. onnx.runtime</strong></h2>
-<h2 id="0x5-onnx-simplifier"><a class="markdownIt-Anchor" href="#0x5-onnx-simplifier"></a> <strong>0x5. onnx-simplifier</strong></h2>
-<p><strong>简化 ONNX 模型的计算图结构</strong>，以提升模型推理效率与部署兼容性。主要作用包括：</p>
-<ul>
-<li><strong>图结构优化</strong>：将复杂的计算图变得更简单，例如合并连续的操作（如多个 <code>Transpose</code>）、常量折叠、节点冗余移除等。</li>
-<li><strong>提升兼容性</strong>：有些深度学习推理引擎在面对复杂计算图结构时可能无法正确解析，简化后的模型更容易被不同的推理框架支持。</li>
-<li><strong>提高推理性能</strong>：在保持模型精度不变的前提下，减少冗余计算，提高实际部署中的推理速度。</li>
-<li><strong>如动态输入</strong>：</li>
-</ul>
-<h2 id="0x6onnx量化"><a class="markdownIt-Anchor" href="#0x6onnx量化"></a> 0x6.ONNX量化</h2>
-<h3 id="61-量化概述"><a class="markdownIt-Anchor" href="#61-量化概述"></a> 6.1 量化概述</h3>
-<p>pass</p>
-<h3 id="62-量化方式"><a class="markdownIt-Anchor" href="#62-量化方式"></a> 6.2 量化方式</h3>
-<p>ONNXRuntime 支持两种模型量化方式：</p>
-<ol>
-<li>
-<p>动态量化：</p>
-<p>对于动态量化，缩放因子（Scale）和零点（Zero Point）是在推理时计算的，并且特定用于每次激活</p>
-<p>因此它们更准确，但引入了额外的计算开销</p>
-</li>
-<li>
-<p>静态量化：</p>
-<p>对于静态量化，它们使用校准数据集离线计算</p>
-<p>所有激活都具有相同的缩放因子（Scale）和零点（Zero Point）</p>
-</li>
-</ol>
-<h4 id="63-量化数据类型"><a class="markdownIt-Anchor" href="#63-量化数据类型"></a> 6.3 量化数据类型</h4>
-<ul>
-<li>
-<p>ONNXRuntime 支持两种量化数据类型：</p>
-</li>
-<li>
-<ul>
-<li>
-<p>Int8 (QuantType.QInt8): 有符号 8 bit 整型</p>
-</li>
-<li>
-<p>UInt8 (QuantType.QUInt8): 无符号 8 bit 整型</p>
-</li>
-<li>
-<p>数据类型选择：</p>
-</li>
-<li>
-<ul>
-<li>结合激活和权重，数据格式可以是（activation：uint8，weight：uint8），（activation：uint8，weight：int8）等。</li>
-<li>这里使用 U8U8 作为 （activation：uint8， weight：uint8） 的简写，U8S8 作为 （activation：uint8， weight：int8） 和 S8U8， S8S8 作为其他两种格式的简写。</li>
-<li>CPU 上的 OnnxRuntime Quantization 可以运行 U8U8，U8S8 和 S8S8。</li>
-<li>具有 QDQ 格式的 S8S8 是性能和准确性的默认设置，它应该是第一选择。</li>
-<li>只有在精度下降很多的情况下，才能尝试U8U8。</li>
-<li>题。</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<h4 id="64-量化格式"><a class="markdownIt-Anchor" href="#64-量化格式"></a> 6.4 量化格式</h4>
-<h4 id="1-tensor-orientedquantformatqdq"><a class="markdownIt-Anchor" href="#1-tensor-orientedquantformatqdq"></a> <strong>1. Tensor-Oriented（QuantFormat.QDQ）</strong></h4>
-<ul>
-<li>
-<p>该格式使用 <strong><code>QuantizeLinear</code> 和 <code>DequantizeLinear</code></strong> 两个算子显式地插入在模型计算图中，表示张量的量化与反量化过程。</p>
-</li>
-<li>
-<p>每个量化张量都会通过如下模式处理：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">text</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">original_tensor → QuantizeLinear → Quantized Tensor → DequantizeLinear → dequantized_tensor</span><br></pre></td></tr></table></figure>
-</li>
-<li>
-<p>优点：</p>
-<ul>
-<li>表现形式直观，清晰显示了量化与反量化操作；</li>
-<li>适合用于分析与调试；</li>
-<li>在动态量化（dynamic quantization）和量化感知训练（QAT）中使用广泛；</li>
-</ul>
-</li>
-<li>
-<p>缺点：</p>
-<ul>
-<li>推理图中<strong>节点数较多</strong>，不如 QOperator 紧凑；</li>
-<li>某些后端或引擎（如 TensorRT）不完全支持。</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h4 id="2-operator-orientedquantformatqoperator"><a class="markdownIt-Anchor" href="#2-operator-orientedquantformatqoperator"></a> <strong>2. Operator-Oriented（QuantFormat.QOperator）</strong></h4>
-<ul>
-<li>
-<p>该格式直接使用专门的量化运算符，例如：</p>
-<ul>
-<li><code>QLinearConv</code></li>
-<li><code>QLinearMatMul</code></li>
-<li><code>MatMulInteger</code></li>
-<li><code>ConvInteger</code></li>
-</ul>
-</li>
-<li>
-<p>每个运算符自带量化参数（如 scale 和 zero point），无需额外的 <code>QuantizeLinear</code> / <code>DequantizeLinear</code> 包裹。</p>
-</li>
-<li>
-<p>优点：</p>
-<ul>
-<li>推理效率高，节点数更少；</li>
-<li>ONNX Runtime 在 CPU 上有良好支持；</li>
-</ul>
-<p>缺点：</p>
-<ul>
-<li>构建图更复杂，调试不如 QDQ 格式直观；</li>
-<li>某些工具链或后端对该格式支持有限（如部分硬件 NPU）</li>
-</ul>
-</li>
-</ul>
-<h4 id="66-比较"><a class="markdownIt-Anchor" href="#66-比较"></a> 6.6 比较</h4>
-<ul>
-<li>量化前后的模型文件大小如下表所示：</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>模型</th>
-<th>大小</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>原始模型</td>
-<td>16.3MB</td>
-</tr>
-<tr>
-<td>优化模型</td>
-<td>16.1MB</td>
-</tr>
-<tr>
-<td>动态量化</td>
-<td>4.1MB</td>
-</tr>
-<tr>
-<td>静态量化</td>
-<td>4.1MB</td>
-</tr>
-</tbody>
-</table>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2023/08/01/2023%E5%B9%B410%E6%9C%8814%E6%97%A5-ONNX1%E4%BB%8B%E7%BB%8D/" data-id="cmanj8o1n0000lcv4h75z5ilu" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ONNX/" rel="tag">ONNX</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
-    <a class="extend prev" rel="prev" href="/page/9/">&amp;laquo; pre</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span>
+    <a class="extend prev" rel="prev" href="/page/9/">&amp;laquo; pre</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="extend next" rel="next" href="/page/11/">next &amp;raquo;</a>
   </nav>
 </section>
         
@@ -912,9 +915,9 @@ onnx-graphsurgeon是NVIDIA推出的一种TensorRT开发辅助工具，用于编�
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>99</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>102</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>30</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>31</strong><br>标签</div></a>
     </div>
 
 

@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="Weakliy_Blog">
+<meta property="og:url" content="https://shakewely.github.io/page/11/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="Weakliy">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>102</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>31</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main">
+  
+    <article id="post-2023年10月16日-ONNX2实操" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/08/02/2023%E5%B9%B410%E6%9C%8816%E6%97%A5-ONNX2%E5%AE%9E%E6%93%8D/" class="article-date">
+  <time class="post-time" datetime="2023-08-02T06:07:53.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">02</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/08/02/2023%E5%B9%B410%E6%9C%8816%E6%97%A5-ONNX2%E5%AE%9E%E6%93%8D/">ONNX2</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1-一般工作流程onnx模型实用全流程"><a class="markdownIt-Anchor" href="#1-一般工作流程onnx模型实用全流程"></a> <strong>1 一般工作流程（ONNX模型实用全流程）</strong></h2>
+<ol>
+<li><strong>导出模型</strong>（如 PyTorch → ONNX）</li>
+<li><strong>简化模型结构</strong>（使用 <code>onnxsim</code>）</li>
+<li><strong>模型检查和可视化</strong>（Netron 或 <code>onnx.checker</code>）</li>
+<li><strong>量化（可选）</strong>（静态/动态/QAT）</li>
+<li><strong>部署测试</strong>（ONNX Runtime、TensorRT、OpenVINO等）</li>
+<li><strong>模型裁剪、修改或转换（可选）</strong></li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">导出 ONNX</span><br><span class="line">     ↓</span><br><span class="line">[模型合法性检查]</span><br><span class="line">     ↓</span><br><span class="line">[结构查看与确认 (Netron)]</span><br><span class="line">     ↓</span><br><span class="line">[模型简化 (onnxsim)]</span><br><span class="line">     ↓</span><br><span class="line">[推理测试 (onnxruntime)]</span><br><span class="line">     ↓</span><br><span class="line">[量化优化 (可选)]</span><br><span class="line">     ↓</span><br><span class="line">[格式转换（TRT, OpenVINO 等）]</span><br><span class="line">     ↓</span><br><span class="line">[部署调优与上线]</span><br></pre></td></tr></table></figure>
+<h2 id="2-基础操作"><a class="markdownIt-Anchor" href="#2-基础操作"></a> 2 基础操作</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 导出模型为ONNX__2</span><br><span class="line">with torch.no_grad():</span><br><span class="line">    torch.onnx.export(</span><br><span class="line">        model,                       # 要转换的模型</span><br><span class="line">        example_input,               # 模型的任意一组输入</span><br><span class="line">        &#x27;resnet18.onnx&#x27;,    # 导出的 ONNX 文件名</span><br><span class="line">        opset_version=11,            # ONNX 算子集版本</span><br><span class="line">        input_names=[&#x27;input&#x27;],       # 输入 Tensor 的名称（自己起名字）</span><br><span class="line">        output_names=[&#x27;output&#x27;]      # 输出 Tensor 的名称（自己起名字）</span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+<p><code>torch.onnx.export()</code>的主要作用是将模型转换为ONNX格式，它不会执行任何需要梯度的操作，因此没有必要关闭梯度跟踪</p>
+<p><strong>with torch.no_grad():</strong></p>
+<p>可以用一下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 导出模型为ONNX__1</span><br><span class="line">torch.onnx.export(model, example_input, onnx_path, verbose=True)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 检查模型格式是否正确</span><br><span class="line">print(onnx.checker.check_model(onnx_model))</span><br></pre></td></tr></table></figure>
+<p>用于验证导出的ONNX模型是否<strong>符合ONNX规范的函数</strong></p>
+<p>出现错误时会抛出异常</p>
+<ol>
+<li><strong>验证模型结构</strong>：检查模型的计算图是否按照ONNX规范正确构建。</li>
+<li><strong>验证数据类型和形状</strong>：检查模型输入和输出节点的数据类型和形状是否与ONNX规范相符。</li>
+<li><strong>检查操作符的支持</strong>：检查模型中使用的操作符是否是ONNX支持的版本。</li>
+<li><strong>检查属性和元属性</strong>：检查模型节点的属性和元属性是否正确设置。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 以可读的形式打印计算图</span><br><span class="line">print(onnx.helper.printable_graph(onnx_model.graph))</span><br></pre></td></tr></table></figure>
+<p>用于可视化<strong>ONNX模型计算图</strong>的函数。</p>
+<p>将ONNX模型的计算图以人类可读的形式打印出来，以便于查看模型的结构和流程。</p>
+<h3 id="21-netron使用教程"><a class="markdownIt-Anchor" href="#21-netron使用教程"></a> 2.1 netron使用教程</h3>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_49963403/article/details/136242313">https://blog.csdn.net/m0_49963403/article/details/136242313</a></p>
+</blockquote>
+<h3 id="22-onnx-parser"><a class="markdownIt-Anchor" href="#22-onnx-parser"></a> 2.2 ONNX Parser</h3>
+<p>1.onnx parser是什么？</p>
+<p>ONNX Parser是一种用于<strong>解析和加载</strong>ONNX模型的工具或库。它负责将ONNX模型文件解析为内存中的数据结构，以便后续在特定的推理引擎或框架（如TensorRT）中使用。</p>
+<p>通常各种推理引擎或框架都会提供ONNX Parser的组件（如TensorRT的trt.OnnxParser()方法）。它能够创建一个Parser解析器读取ONNX模型文件</p>
+<h3 id="23-onnx-graphsurgeon"><a class="markdownIt-Anchor" href="#23-onnx-graphsurgeon"></a> 2.3 onnx-graphsurgeon</h3>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/yitiaoxiaolu/article/details/136378614">https://blog.csdn.net/yitiaoxiaolu/article/details/136378614</a></p>
+</blockquote>
+<p>onnx-graphsurgeon简介<br>
+onnx-graphsurgeon是NVIDIA推出的一种TensorRT开发辅助工具，用于编辑和优化ONNX模型。它提供了一种简单而强大的方式来修改和转换ONNX模型的图形表示，以便更好地适应TensorRT的优化和推理。</p>
+<h2 id="3-全部代码"><a class="markdownIt-Anchor" href="#3-全部代码"></a> 3 全部代码</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"># 作者：Weakliy</span><br><span class="line"># 创建日期：2023/8/2 22:09</span><br><span class="line"># 描述：这个文件实现了一些功能。</span><br><span class="line"></span><br><span class="line">import torch</span><br><span class="line">from torchvision import models</span><br><span class="line">from config import Common, Train  # 你需要导入相应的配置模块</span><br><span class="line"></span><br><span class="line"># 加载模型状态字典</span><br><span class="line">model = torch.load(r&#x27;../model/cress0.0001482023-04-18-08-40-11.pth&#x27;)</span><br><span class="line"></span><br><span class="line"># 构建模型实例</span><br><span class="line">model = model.eval()</span><br><span class="line"></span><br><span class="line"># 示例输入数据</span><br><span class="line">x = torch.randn(1, 3, 224, 224).to(&quot;cuda&quot;)</span><br><span class="line"></span><br><span class="line"># 导出为ONNX模型</span><br><span class="line">onnx_path = &quot;../my_model.onnx&quot;</span><br><span class="line">torch.onnx.export(</span><br><span class="line">    model,</span><br><span class="line">    x,</span><br><span class="line">    onnx_path,</span><br><span class="line">    opset_version=11,</span><br><span class="line">    input_names=[&quot;input&quot;],</span><br><span class="line">    output_names=[&quot;output&quot;]</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h3 id="41运行代码"><a class="markdownIt-Anchor" href="#41运行代码"></a> 4.1运行代码</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"># 作者：Weakliy</span><br><span class="line"># 创建日期：2023/8/5 21:53</span><br><span class="line"># 描述：这个文件实现了一些功能。</span><br><span class="line"></span><br><span class="line">import onnxruntime</span><br><span class="line">import numpy as np</span><br><span class="line">import torch</span><br><span class="line">import torch.nn.functional as F</span><br><span class="line">import pandas as pd</span><br><span class="line"></span><br><span class="line">ort_session = onnxruntime.InferenceSession(&#x27;my_onnx_from_checkpoint.onnx&#x27;)</span><br><span class="line">x = torch.randn(1, 3, 224, 224).numpy()</span><br><span class="line">print(x.shape)</span><br><span class="line">ort_inputs = &#123;&#x27;input&#x27;: x&#125;</span><br><span class="line">ort_output = ort_session.run([&#x27;output&#x27;], ort_inputs)[0]</span><br><span class="line">print(ort_output.shape)</span><br><span class="line"></span><br><span class="line"># 载入一张真正的测试图像</span><br><span class="line">img_path = r&#x27;F:\Pydata\Project\鱼类识别+onnx\data/test\fish_03\fish_000034930001_03337.png&#x27;</span><br><span class="line">from PIL import Image</span><br><span class="line">img_pil = Image.open(img_path)</span><br><span class="line">from torchvision import transforms</span><br><span class="line">from config import Common</span><br><span class="line"># 测试集图像预处理-RCTN：缩放裁剪、转 Tensor、归一化</span><br><span class="line">test_transform = transforms.Compose([</span><br><span class="line">    transforms.ToTensor(),</span><br><span class="line">    transforms.Resize(Common.imageSize),</span><br><span class="line">    transforms.RandomHorizontalFlip(p=0.5),</span><br><span class="line">    transforms.RandomVerticalFlip(p=0.5),</span><br><span class="line">    transforms.RandomRotation(degrees=10),</span><br><span class="line">])</span><br><span class="line">input_img = test_transform(img_pil)</span><br><span class="line">print(input_img.shape)</span><br><span class="line">input_tensor = input_img.unsqueeze(0).numpy()</span><br><span class="line">print(input_tensor.shape)</span><br><span class="line"></span><br><span class="line"># ONNX Runtime 输入</span><br><span class="line">ort_inputs = &#123;&#x27;input&#x27;: input_tensor&#125;</span><br><span class="line"># ONNX Runtime 输出</span><br><span class="line">pred_logits = ort_session.run([&#x27;output&#x27;], ort_inputs)[0]  # ?</span><br><span class="line">pred_logits = torch.tensor(pred_logits)  # ?</span><br><span class="line">print(pred_logits.shape)</span><br><span class="line"># 对 logit 分数做 softmax 运算，得到置信度概率</span><br><span class="line">pred_softmax = F.softmax(pred_logits, dim=1)</span><br><span class="line">print(pred_softmax.shape)</span><br><span class="line">output = torch.argmax(pred_softmax)</span><br><span class="line">print(&quot;结果类别：&quot;, output.item())</span><br><span class="line"># 取置信度最高的前 n 个结果</span><br><span class="line">n = 3</span><br><span class="line">top_n = torch.topk(pred_softmax, n)</span><br><span class="line">print(top_n)</span><br><span class="line"># 预测类别</span><br><span class="line">pred_ids = top_n.indices.numpy()[0]</span><br><span class="line">print(pred_ids)</span><br><span class="line"># 预测置信度</span><br><span class="line">confs = top_n.values.numpy()[0]</span><br><span class="line">print(confs)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">输出：</span><br><span class="line">(1, 3, 224, 224)</span><br><span class="line">(1, 22)</span><br><span class="line">torch.Size([3, 224, 224])</span><br><span class="line">(1, 3, 224, 224)</span><br><span class="line">torch.Size([1, 22])</span><br><span class="line">torch.Size([1, 22])</span><br><span class="line">结果类别： 1</span><br><span class="line">torch.return_types.topk(</span><br><span class="line">values=tensor([[0.1146, 0.0422, 0.0422]]),</span><br><span class="line">indices=tensor([[1, 0, 2]]))</span><br><span class="line">[1 0 2]</span><br><span class="line">[0.11460126 0.0421640 0.04216173]</span><br></pre></td></tr></table></figure>
+<h3 id="42结果比较"><a class="markdownIt-Anchor" href="#42结果比较"></a> 4.2结果比较</h3>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2023/08/02/2023%E5%B9%B410%E6%9C%8816%E6%97%A5-ONNX2%E5%AE%9E%E6%93%8D/" data-id="cmanj8o1r0003lcv4e7c1ed9z" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ONNX/" rel="tag">ONNX</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2023年10月14日-ONNX1介绍" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/08/01/2023%E5%B9%B410%E6%9C%8814%E6%97%A5-ONNX1%E4%BB%8B%E7%BB%8D/" class="article-date">
+  <time class="post-time" datetime="2023-08-01T06:07:53.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">01</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/08/01/2023%E5%B9%B410%E6%9C%8814%E6%97%A5-ONNX1%E4%BB%8B%E7%BB%8D/">ONNX介绍</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="0x1-onnx介绍"><a class="markdownIt-Anchor" href="#0x1-onnx介绍"></a> <strong>0x1. ONNX介绍</strong></h2>
+<p>神经网络交换（Open Neural Network Exchange）</p>
+<p>何种训练框架训练模型（比如TensorFlow/Pytorch/OneFlow/Paddle），在训练完毕后你都可以将这些框架的模型统一转换为ONNX这种<strong>统一的格式</strong>进行存储。注意ONNX文件不仅仅存储了神经网络模型的权重，同时也存储了模型的结构信息以及网络中每一层的输入输出和一些其它的辅助信息。</p>
+<h2 id="0x2-protobuf简介"><a class="markdownIt-Anchor" href="#0x2-protobuf简介"></a> <strong>0x2. ProtoBuf简介</strong></h2>
+<p>ONNX使用的是Protobuf这个序列化数据结构去存储神经网络的权重信息。</p>
+<p>Protobuf是一种轻便高效的<strong>结构化数据存储格式</strong>，</p>
+<p><code>*.proto</code>后缀文件  <code>onnx.proto</code>就是ONNX格式文件</p>
+<h2 id="0x3-onnx格式分析"><a class="markdownIt-Anchor" href="#0x3-onnx格式分析"></a> <strong>0x3. ONNX格式分析</strong></h2>
+<p>ONNX 模型加载后返回的是一个 <code>ModelProto</code> 对象，其结构如下：</p>
+<ul>
+<li>
+<p><strong>ModelProto</strong></p>
+<ul>
+<li><code>ir_version</code>：IR（中间表示）版本</li>
+<li><code>producer_name/producer_version</code>：创建模型的工具名与版本</li>
+<li><code>graph</code>：GraphProto 对象，定义了网络结构</li>
+</ul>
+</li>
+<li>
+<p><strong>GraphProto</strong></p>
+<ul>
+<li><code>node[]</code>：计算节点数组，每个是一个 NodeProto（例如Conv、Relu等操作）</li>
+<li><code>input[]</code>：模型的输入信息，类型为 ValueInfoProto</li>
+<li><code>output[]</code>：模型的输出信息，类型为 ValueInfoProto</li>
+<li><code>initializer[]</code>：模型的参数（如权重），类型为 TensorProto</li>
+</ul>
+</li>
+</ul>
+<h2 id="0x4-onnxruntime"><a class="markdownIt-Anchor" href="#0x4-onnxruntime"></a> <strong>0x4. onnx.runtime</strong></h2>
+<h2 id="0x5-onnx-simplifier"><a class="markdownIt-Anchor" href="#0x5-onnx-simplifier"></a> <strong>0x5. onnx-simplifier</strong></h2>
+<p><strong>简化 ONNX 模型的计算图结构</strong>，以提升模型推理效率与部署兼容性。主要作用包括：</p>
+<ul>
+<li><strong>图结构优化</strong>：将复杂的计算图变得更简单，例如合并连续的操作（如多个 <code>Transpose</code>）、常量折叠、节点冗余移除等。</li>
+<li><strong>提升兼容性</strong>：有些深度学习推理引擎在面对复杂计算图结构时可能无法正确解析，简化后的模型更容易被不同的推理框架支持。</li>
+<li><strong>提高推理性能</strong>：在保持模型精度不变的前提下，减少冗余计算，提高实际部署中的推理速度。</li>
+<li><strong>如动态输入</strong>：</li>
+</ul>
+<h2 id="0x6onnx量化"><a class="markdownIt-Anchor" href="#0x6onnx量化"></a> 0x6.ONNX量化</h2>
+<h3 id="61-量化概述"><a class="markdownIt-Anchor" href="#61-量化概述"></a> 6.1 量化概述</h3>
+<p>pass</p>
+<h3 id="62-量化方式"><a class="markdownIt-Anchor" href="#62-量化方式"></a> 6.2 量化方式</h3>
+<p>ONNXRuntime 支持两种模型量化方式：</p>
+<ol>
+<li>
+<p>动态量化：</p>
+<p>对于动态量化，缩放因子（Scale）和零点（Zero Point）是在推理时计算的，并且特定用于每次激活</p>
+<p>因此它们更准确，但引入了额外的计算开销</p>
+</li>
+<li>
+<p>静态量化：</p>
+<p>对于静态量化，它们使用校准数据集离线计算</p>
+<p>所有激活都具有相同的缩放因子（Scale）和零点（Zero Point）</p>
+</li>
+</ol>
+<h4 id="63-量化数据类型"><a class="markdownIt-Anchor" href="#63-量化数据类型"></a> 6.3 量化数据类型</h4>
+<ul>
+<li>
+<p>ONNXRuntime 支持两种量化数据类型：</p>
+</li>
+<li>
+<ul>
+<li>
+<p>Int8 (QuantType.QInt8): 有符号 8 bit 整型</p>
+</li>
+<li>
+<p>UInt8 (QuantType.QUInt8): 无符号 8 bit 整型</p>
+</li>
+<li>
+<p>数据类型选择：</p>
+</li>
+<li>
+<ul>
+<li>结合激活和权重，数据格式可以是（activation：uint8，weight：uint8），（activation：uint8，weight：int8）等。</li>
+<li>这里使用 U8U8 作为 （activation：uint8， weight：uint8） 的简写，U8S8 作为 （activation：uint8， weight：int8） 和 S8U8， S8S8 作为其他两种格式的简写。</li>
+<li>CPU 上的 OnnxRuntime Quantization 可以运行 U8U8，U8S8 和 S8S8。</li>
+<li>具有 QDQ 格式的 S8S8 是性能和准确性的默认设置，它应该是第一选择。</li>
+<li>只有在精度下降很多的情况下，才能尝试U8U8。</li>
+<li>题。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="64-量化格式"><a class="markdownIt-Anchor" href="#64-量化格式"></a> 6.4 量化格式</h4>
+<h4 id="1-tensor-orientedquantformatqdq"><a class="markdownIt-Anchor" href="#1-tensor-orientedquantformatqdq"></a> <strong>1. Tensor-Oriented（QuantFormat.QDQ）</strong></h4>
+<ul>
+<li>
+<p>该格式使用 <strong><code>QuantizeLinear</code> 和 <code>DequantizeLinear</code></strong> 两个算子显式地插入在模型计算图中，表示张量的量化与反量化过程。</p>
+</li>
+<li>
+<p>每个量化张量都会通过如下模式处理：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">text</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">original_tensor → QuantizeLinear → Quantized Tensor → DequantizeLinear → dequantized_tensor</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>优点：</p>
+<ul>
+<li>表现形式直观，清晰显示了量化与反量化操作；</li>
+<li>适合用于分析与调试；</li>
+<li>在动态量化（dynamic quantization）和量化感知训练（QAT）中使用广泛；</li>
+</ul>
+</li>
+<li>
+<p>缺点：</p>
+<ul>
+<li>推理图中<strong>节点数较多</strong>，不如 QOperator 紧凑；</li>
+<li>某些后端或引擎（如 TensorRT）不完全支持。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="2-operator-orientedquantformatqoperator"><a class="markdownIt-Anchor" href="#2-operator-orientedquantformatqoperator"></a> <strong>2. Operator-Oriented（QuantFormat.QOperator）</strong></h4>
+<ul>
+<li>
+<p>该格式直接使用专门的量化运算符，例如：</p>
+<ul>
+<li><code>QLinearConv</code></li>
+<li><code>QLinearMatMul</code></li>
+<li><code>MatMulInteger</code></li>
+<li><code>ConvInteger</code></li>
+</ul>
+</li>
+<li>
+<p>每个运算符自带量化参数（如 scale 和 zero point），无需额外的 <code>QuantizeLinear</code> / <code>DequantizeLinear</code> 包裹。</p>
+</li>
+<li>
+<p>优点：</p>
+<ul>
+<li>推理效率高，节点数更少；</li>
+<li>ONNX Runtime 在 CPU 上有良好支持；</li>
+</ul>
+<p>缺点：</p>
+<ul>
+<li>构建图更复杂，调试不如 QDQ 格式直观；</li>
+<li>某些工具链或后端对该格式支持有限（如部分硬件 NPU）</li>
+</ul>
+</li>
+</ul>
+<h4 id="66-比较"><a class="markdownIt-Anchor" href="#66-比较"></a> 6.6 比较</h4>
+<ul>
+<li>量化前后的模型文件大小如下表所示：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>大小</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>原始模型</td>
+<td>16.3MB</td>
+</tr>
+<tr>
+<td>优化模型</td>
+<td>16.1MB</td>
+</tr>
+<tr>
+<td>动态量化</td>
+<td>4.1MB</td>
+</tr>
+<tr>
+<td>静态量化</td>
+<td>4.1MB</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2023/08/01/2023%E5%B9%B410%E6%9C%8814%E6%97%A5-ONNX1%E4%BB%8B%E7%BB%8D/" data-id="cmanj8o1n0000lcv4h75z5ilu" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ONNX/" rel="tag">ONNX</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+
+
+  <nav id="page-nav">
+    <a class="extend prev" rel="prev" href="/page/10/">&amp;laquo; pre</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="page-number current">11</span>
+  </nav>
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>102</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>31</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2024 - 2025 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
