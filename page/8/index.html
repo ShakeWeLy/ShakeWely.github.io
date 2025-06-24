@@ -43,9 +43,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>102</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>103</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>31</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>30</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -70,6 +70,82 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-2023年12月8日-深度学习训练总结" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/12/08/2023%E5%B9%B412%E6%9C%888%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AE%AD%E7%BB%83%E6%80%BB%E7%BB%93/" class="article-date">
+  <time class="post-time" datetime="2023-12-08T12:27:25.000Z" itemprop="datePublished">
+    <span class="post-month">12月</span><br/>
+    <span class="post-day">08</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/12/08/2023%E5%B9%B412%E6%9C%888%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AE%AD%E7%BB%83%E6%80%BB%E7%BB%93/">2023年12月8日 深度学习训练总结</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="1-如何不用卷积对图片分类"><a class="markdownIt-Anchor" href="#1-如何不用卷积对图片分类"></a> 1 如何不用卷积对图片分类</h3>
+<p>全连接神经网络，</p>
+<p>HOG</p>
+<h3 id="2-断点继续训练数据集是否保证不变比较好"><a class="markdownIt-Anchor" href="#2-断点继续训练数据集是否保证不变比较好"></a> 2 断点继续训练，数据集是否保证不变比较好</h3>
+<h4 id="数据集不变的好处"><a class="markdownIt-Anchor" href="#数据集不变的好处"></a> 数据集不变的好处：</h4>
+<ol>
+<li><strong>一致性</strong>：在继续训练时使用相同的数据集，可以确保模型在相同的数据分布上进行训练，保持了训练的一致性。</li>
+<li><strong>避免分布变化</strong>：如果数据集发生变化，可能会引入新的数据分布，导致模型在新数据上表现不佳。</li>
+<li><strong>追溯性</strong>：如果需要回溯到特定训练点以排查问题或者进行对比实验，保持数据集不变会更容易复现相同的训练状态。</li>
+</ol>
+<h4 id="数据集变化的情况"><a class="markdownIt-Anchor" href="#数据集变化的情况"></a> 数据集变化的情况：</h4>
+<ol>
+<li><strong>数据扩充</strong>：有时候会对现有数据进行扩充、修正或更新，这种情况下训练过程中可能会引入新的数据。</li>
+<li><strong>实时学习</strong>：某些场景下，模型需要不断从实时流数据中学习，此时数据集可能会不断变化。</li>
+</ol>
+<h3 id="3-训练的数据集不同加载预训练模型参数还有用吗"><a class="markdownIt-Anchor" href="#3-训练的数据集不同加载预训练模型参数还有用吗"></a> 3 训练的数据集不同，加载预训练模型参数还有用吗</h3>
+<p>预训练模型在大规模数据集上进行了训练，学习到了<strong>通用的特征表示</strong>，可能有助于加速模型收敛并提高模型的表现。</p>
+<p>如果你的训练数据集与预训练模型的训练数据集<strong>非常不同</strong>（，可能需要更多的微调或者甚至完全冻结预训练模型的参数。</p>
+<h4 id="4-model-val准确率再80上不去"><a class="markdownIt-Anchor" href="#4-model-val准确率再80上不去"></a> 4 model val准确率再80上不去？</h4>
+<img src="./2023年12月8日-深度学习训练总结/image-20231208224957461.png" alt="image-20231208224957461" style="zoom: 80%;" />
+<h4 id="5-什么是梯度消失"><a class="markdownIt-Anchor" href="#5-什么是梯度消失"></a> 5 什么是梯度消失</h4>
+<p>进行反向传播算法时，较低层的权重更新变得非常小甚至消失的现象。这种情况通常发生在很深的神经网络中</p>
+<p>在反向传播期间，梯度会随着每一层的权重更新而逐渐减小。对于某些激活函数，特别是 Sigmoid 函数在输入很大或很小时会饱和，导致函数的梯度非常接近于零。</p>
+<p><img src="./2023%E5%B9%B412%E6%9C%888%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AE%AD%E7%BB%83%E6%80%BB%E7%BB%93/image-20231208233827091.png" alt="image-20231208233827091" /></p>
+<h4 id="6-如何设置学习率衰减"><a class="markdownIt-Anchor" href="#6-如何设置学习率衰减"></a> 6 如何设置学习率衰减</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">import torch.optim as optim</span><br><span class="line">from torch.optim import lr_scheduler</span><br><span class="line"></span><br><span class="line"># 定义模型和优化器</span><br><span class="line">model = YourModel()  # 请替换成您的模型</span><br><span class="line">optimizer = optim.SGD(model.parameters(), lr=0.1)  # 设置初始学习率</span><br><span class="line"></span><br><span class="line"># 定义学习率衰减器，例如 StepLR</span><br><span class="line"># StepLR 每隔 step_size 个epoch将学习率乘以 gamma</span><br><span class="line"># 这里可以根据需要选择其他的学习率衰减策略，如使用其他的调度器类</span><br><span class="line">scheduler = lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.1)</span><br><span class="line"></span><br><span class="line"># 在训练过程中，每个 epoch 结束后更新学习率</span><br><span class="line">for epoch in range(num_epochs):</span><br><span class="line">    # 训练步骤，包括前向传播、损失计算、反向传播等</span><br><span class="line"></span><br><span class="line">    # 更新学习率</span><br><span class="line">    scheduler.step()</span><br><span class="line"></span><br><span class="line">    # 其他训练步骤</span><br><span class="line">    # ...</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2023/12/08/2023%E5%B9%B412%E6%9C%888%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AE%AD%E7%BB%83%E6%80%BB%E7%BB%93/" data-id="clrwazlr300117ov4fgy3an0d" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl/" rel="tag">dl</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-2023年12月4日-PCA" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -979,82 +1055,6 @@
 
 
   
-    <article id="post-2023年9月27日-cuda编程1" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/" class="article-date">
-  <time class="post-time" datetime="2023-09-26T17:26:45.000Z" itemprop="datePublished">
-    <span class="post-month">9月</span><br/>
-    <span class="post-day">27</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/">cuda编程1</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>1</p>
-<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/62996995/answer/3369541594">总结</a></p>
-<p>打印核函数的helloword</p>
-<img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927013114531.png" alt="image-20230927013114531" style="zoom:25%;"> 
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927014405611.png" alt="image-20230927014405611"></p>
-<img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927014434932.png" alt="image-20230927014434932" style="zoom:33%;">
-<img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927014417233.png" alt="image-20230927014417233" style="zoom:33%;">  
-<img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927014503416.png" alt="image-20230927014503416" style="zoom:33%;"> 
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927014754011.png" alt="image-20230927014754011"></p>
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927014804867.png" alt="image-20230927014804867"></p>
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927015027916.png" alt="image-20230927015027916"></p>
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927015059462.png" alt="image-20230927015059462"></p>
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927015218279.png" alt="image-20230927015218279"></p>
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927015258301.png" alt="image-20230927015258301"></p>
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927015307806.png" alt="image-20230927015307806"></p>
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927020206228.png" alt="image-20230927020206228"></p>
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927020351307.png" alt="image-20230927020351307"></p>
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927020513187.png" alt="image-20230927020513187"></p>
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927020754977.png" alt="image-20230927020754977"></p>
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927021106475.png" alt="image-20230927021106475"></p>
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927021212837.png" alt="image-20230927021212837"></p>
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927021546123.png" alt="image-20230927021546123"></p>
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927021555549.png" alt="image-20230927021555549"></p>
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927154421445.png" alt="image-20230927154421445"></p>
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927154702719.png" alt="image-20230927154702719"></p>
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927154740546.png" alt="image-20230927154740546"></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/" data-id="cmbhxnxay0003gov4dnhfgmy8" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cuda/" rel="tag">cuda</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -1099,9 +1099,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>102</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>103</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>31</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>30</strong><br>标签</div></a>
     </div>
 
 
