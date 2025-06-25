@@ -43,9 +43,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>103</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>102</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>30</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>31</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -70,135 +70,6 @@
 </div>
 
         <section id="main">
-  
-    <article id="post-2025年4月16日-TensorRT2export汇总" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/03/16/2025%E5%B9%B44%E6%9C%8816%E6%97%A5-TensorRT2export%E6%B1%87%E6%80%BB/" class="article-date">
-  <time class="post-time" datetime="2025-03-16T09:30:04.000Z" itemprop="datePublished">
-    <span class="post-month">3月</span><br/>
-    <span class="post-day">16</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/03/16/2025%E5%B9%B44%E6%9C%8816%E6%97%A5-TensorRT2export%E6%B1%87%E6%80%BB/">2023年11月16日 TensorRT推理汇总</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>去</p>
-<h3 id><a class="markdownIt-Anchor" href="#"></a> </h3>
-<h1 id="流程"><a class="markdownIt-Anchor" href="#流程"></a> 流程</h1>
-<p><strong>“ONNX → TensorRT Engine → 加载引擎文件并反序列化为可执行模型 → 分配输入输出 → 推理执行 → 拷出结果 → 后处理”</strong></p>
-<blockquote>
-<ol>
-<li>？反序列化为可执行模型</li>
-<li>？？ 创建执行上下文（IExecutionContext）</li>
-</ol>
-</blockquote>
-<h2 id="1-exe-导出"><a class="markdownIt-Anchor" href="#1-exe-导出"></a> 1 Exe 导出</h2>
-<p><strong>加上 <code>--verbose</code></strong> 运行 <code>trtexec</code></p>
-<p>模型汇总</p>
-<table>
-<thead>
-<tr>
-<th>格式</th>
-<th>文件扩展名</th>
-<th>内容</th>
-<th>用途</th>
-<th>生成方式</th>
-<th>可直接推理？</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>WTS</td>
-<td><code>.wts</code></td>
-<td>网络结构各层的权重（文本或二进制）</td>
-<td>通常用于从 PyTorch 到 TensorRT 的自定义转换流程，如通过 C++ 的 API 加载</td>
-<td>通常通过 PyTorch 脚本导出</td>
-<td>❌</td>
-</tr>
-<tr>
-<td>TRT Engine</td>
-<td><code>.trt</code> / <code>.engine</code></td>
-<td>已优化的推理引擎（含网络结构 + 权重 + TensorRT 优化）</td>
-<td>TensorRT 的最终部署格式</td>
-<td>使用 <code>trtexec</code> 或 TensorRT API 编译 <code>.onnx</code> 或 <code>.wts</code> 模型生成</td>
-<td>✅</td>
-</tr>
-</tbody>
-</table>
-<h1 id="问题汇总"><a class="markdownIt-Anchor" href="#问题汇总"></a> 问题汇总</h1>
-<h3 id="️-自定义层问题"><a class="markdownIt-Anchor" href="#️-自定义层问题"></a> ⚠️ 自定义层问题</h3>
-<h4 id="1-eyelike动态形状"><a class="markdownIt-Anchor" href="#1-eyelike动态形状"></a> 1 EyeLike动态形状</h4>
-<p><code>EyeLike</code> 是 ONNX 中一个用于生成单位矩阵的操作。该错误说明：</p>
-<ul>
-<li>你模型中的某个节点使用了 <code>EyeLike</code> 操作；</li>
-<li>但这个操作的输入张量是动态维度（即维度在推理时不固定）；</li>
-<li>而 TensorRT <strong>不支持对动态维度使用 EyeLike</strong>。</li>
-</ul>
-<p><strong>EyeLike 操作</strong>：这是一个自定义层或特殊层，在某些情况下，TensorRT 不支持动态形状。</p>
-<p><strong>动态形状问题</strong>：TensorRT 不支持动态形状的输入（<code>EyeLike</code> 操作的输入是动态形状），这导致了错误。</p>
-<blockquote>
-<p>使用batch 大小不需要变化的minShapes时没用的！</p>
-</blockquote>
-<h3 id="️-动态输入尺寸问题"><a class="markdownIt-Anchor" href="#️-动态输入尺寸问题"></a> ⚠️ 动态输入尺寸问题：</h3>
-<h4 id="1-onnx参数dynamictrue"><a class="markdownIt-Anchor" href="#1-onnx参数dynamictrue"></a> 1 ONNX参数dynamic=True</h4>
-<p>你导出的 ONNX 模型使用了 <strong>动态输入尺寸</strong>（<code>dynamic=True</code>），导致 <code>trtexec</code> 在构建 TensorRT 引擎时需要你<strong>明确地指定输入尺寸 profile</strong>，否则就会报错。</p>
-<p>解决：</p>
-<blockquote>
-<p>trtexec <br>
-–onnx=best_dynamic.onnx <br>
-–saveEngine=best.engine <br>
-–fp16 <br>
-–minShapes=images:1x3x640x640 <br>
-–optShapes=images:8x3x640x640 <br>
-–maxShapes=images:16x3x640x640</p>
-</blockquote>
-<h3 id="️-量化问题"><a class="markdownIt-Anchor" href="#️-量化问题"></a> ⚠️  量化问题</h3>
-<h4 id="1-int64数据"><a class="markdownIt-Anchor" href="#1-int64数据"></a> 1 INT64数据</h4>
-<p>你的 ONNX 模型中包含了一些 <strong><code>INT64</code> 类型的权重或常量</strong>，而 TensorRT <strong>原生只支持 <code>INT32</code> 及以下的整数类型</strong>，因此它尝试<strong>自动将 <code>INT64</code> 转换为 <code>INT32</code></strong>。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">onnx2trt_utils.cpp:374: Your ONNX model has been generated with INT64 weights, while TensorRT does not natively support INT64. Attempting to cast down to INT32.</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="️错误"><a class="markdownIt-Anchor" href="#️错误"></a> ⚠️错误</h3>
-<p>[05/13/2025-15:25:59] [TRT] [E] 1: [defaultAllocator.cpp::nvinfer1::internal::DefaultAllocator::deallocate::61] Error Code 1: Cuda Runtime (invalid argument)</p>
-<h1 id="success"><a class="markdownIt-Anchor" href="#success"></a> success！</h1>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">trtexec --onnx=F:\Pydata\DL_NEW\fuxian\ultralytics\runs\detect\wire-Ghost-C3ghost-GSCSP-CBAM3\weights\best_simplify_dynamic=False.onnx --saveEngine=best_int8.trt --int8 --verbose  --minShapes=images:1x3x640x640 --optShapes=images:8x3x640x640 --maxShapes=images:16x3x640x640trtexec ^</span><br><span class="line">--onnx=F:\Pydata\DL_NEW\fuxian\ultralytics\runs\detect\wire-Ghost-C3ghost-GSCSP-CBAM3\weights\best_simplify_dynamic.onnx ^</span><br><span class="line">--saveEngine=best_int8.trt ^</span><br><span class="line">--int8 ^</span><br><span class="line">--verbose ^</span><br><span class="line">--minShapes=images:1x3x640x640 ^</span><br><span class="line">--optShapes=images:8x3x640x640 ^</span><br><span class="line">--maxShapes=images:16x3x640x640</span><br></pre></td></tr></table></figure>
-<p><img src="/2025/03/16/2025%E5%B9%B44%E6%9C%8816%E6%97%A5-TensorRT2export%E6%B1%87%E6%80%BB/C:%5CUsers%5Cadmin%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20250513135551397.png" alt="image-20250513135551397"></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/03/16/2025%E5%B9%B44%E6%9C%8816%E6%97%A5-TensorRT2export%E6%B1%87%E6%80%BB/" data-id="cmanj8o27000plcv44xiw84f2" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/TensorRT/" rel="tag">TensorRT</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
   
     <article id="post-2025年3月16日-DL八股文" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -2191,6 +2062,105 @@ y.data: -0.262973</p>
 
 
   
+    <article id="post-2025年3月6日-多尺度特征" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/03/06/2025%E5%B9%B43%E6%9C%886%E6%97%A5-%E5%A4%9A%E5%B0%BA%E5%BA%A6%E7%89%B9%E5%BE%81/" class="article-date">
+  <time class="post-time" datetime="2025-03-06T02:22:16.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">06</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/03/06/2025%E5%B9%B43%E6%9C%886%E6%97%A5-%E5%A4%9A%E5%B0%BA%E5%BA%A6%E7%89%B9%E5%BE%81/">2025年3月6日 多尺度特征</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="混合特征学习feature-fusion"><a class="markdownIt-Anchor" href="#混合特征学习feature-fusion"></a> 混合特征学习（Feature Fusion）</h1>
+<p><strong>混合特征学习（Feature Fusion）</strong> 是指将来自不同来源或不同尺度的特征信息结合在一起，从而提升深度学习模型的表达能力。常见的特征融合方法包括 加权融合（Weighted Fusion） 和 级联融合（Concatenation Fusion）。</p>
+<ol>
+<li>
+<p><strong>加权融合（Weighted Fusion）</strong><br>
+加权融合是一种<strong>将多个特征图进行加权合并</strong>的方式。不同来源或不同尺度的特征图按照一定的权重加权后合并，从而突出重要的特征。</p>
+</li>
+<li>
+<p><strong>级联融合（Concatenation Fusion）</strong><br>
+级联融合是将多个特征图在<strong>某一维度（通常是通道维度）上拼接</strong>起来。级联融合的优势是它不会丢失任何信息，所有特征图都被保留下来，虽然拼接后的特征图会变得更加庞大。</p>
+</li>
+</ol>
+<h2 id="多尺度卷积神经网络ms-cnn"><a class="markdownIt-Anchor" href="#多尺度卷积神经网络ms-cnn"></a> <strong>多尺度卷积神经网络（MS-CNN）</strong></h2>
+<p>通过将图像<strong>输入多个卷积层或卷积核以不同的尺度处理，可以让模型同时捕获到不同尺寸的特征</strong></p>
+<h3 id="原理"><a class="markdownIt-Anchor" href="#原理"></a> 原理</h3>
+<p><strong>MS-CNN</strong> 通过以下几种方式来实现多尺度特征提取：</p>
+<ul>
+<li><strong>使用多个卷积核：不同的卷积核（大小、步长等）可以提取不同尺度的特征。</strong></li>
+<li><strong>多层次网络结构：不同的层次使用不同尺度的卷积操作来处理输入图像，从而提取多尺度信息。</strong></li>
+<li><strong>输入图像的多尺度处理：将同一张图像通过不同尺度（例如不同的图像缩放比例）进行处理，结合多个尺度的特征。</strong></li>
+</ul>
+<h3 id="实现"><a class="markdownIt-Anchor" href="#实现"></a> 实现</h3>
+<ol>
+<li>使用合适的填充和步长，确保不同卷积核提取的特征图在空间维度上一致。</li>
+<li>在通道维度上拼接特征图，避免空间维度的变化。</li>
+<li>使用1×1卷积进行特征融合，进一步整合多尺度信息。</li>
+<li>使用全局池化将特征图调整为固定尺寸，确保输出的一致性</li>
+</ol>
+<h2 id="空间金字塔池化spatial-pyramid-pooling-spp"><a class="markdownIt-Anchor" href="#空间金字塔池化spatial-pyramid-pooling-spp"></a> 空间金字塔池化（Spatial Pyramid Pooling, SPP）</h2>
+<h3 id="原理-2"><a class="markdownIt-Anchor" href="#原理-2"></a> 原理</h3>
+<p>在多个尺度上提取特征</p>
+<ul>
+<li><strong>划分不同大小的网格</strong>：将输入特征图划分为多个不同尺寸的子区域（例如，1x1、2x2、4x4等）。</li>
+<li><strong>在每个子区域上执行池化操作</strong>：对每个子区域使用池化操作（如最大池化或平均池化），生成不同尺度下的特征。</li>
+<li><strong>拼接池化结果</strong>：将所有尺度上的池化结果<strong>展平并</strong>拼接成一个向量，作为最终的特征表示。</li>
+</ul>
+<h2 id="多尺度注意力机制multi-scale-attention-mechanism"><a class="markdownIt-Anchor" href="#多尺度注意力机制multi-scale-attention-mechanism"></a> 多尺度注意力机制（Multi-Scale Attention Mechanism）</h2>
+<h3 id="原理-3"><a class="markdownIt-Anchor" href="#原理-3"></a> 原理</h3>
+<p>通过注意力机制对图像的不同尺度或区域进行<strong>加权</strong>，帮助网络聚焦于关键区域，从而更有效地提取特征的方法</p>
+<h3 id="实现-2"><a class="markdownIt-Anchor" href="#实现-2"></a> 实现</h3>
+<h4 id="non-local-attention"><a class="markdownIt-Anchor" href="#non-local-attention"></a> <strong>Non-local Attention</strong></h4>
+<h4 id="squeeze-and-excitation-networks-se-net"><a class="markdownIt-Anchor" href="#squeeze-and-excitation-networks-se-net"></a> Squeeze-and-Excitation Networks (SE-Net)</h4>
+<p>SE-Net）是一种通过引入自适应的<strong>通道注意力机制</strong>来提升模型性能的网络。它通过“压缩”和“激励”两个操作来对不同通道的特征进行加权，使得网络能够自适应地学习哪些通道对特定任务更为重要。</p>
+<h5 id="原理-4"><a class="markdownIt-Anchor" href="#原理-4"></a> 原理</h5>
+<ul>
+<li><strong>Squeeze：通过全局平均池化（Global Average Pooling），将每个通道的空间信息压缩成一个标量。</strong></li>
+<li><strong>Excitation：通过一个全连接层（或者更深的网络）生成通道的权重，这些权重用于调整每个通道的特征响应。</strong></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nn.AdaptiveAvgPool2d(1)</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/03/06/2025%E5%B9%B43%E6%9C%886%E6%97%A5-%E5%A4%9A%E5%B0%BA%E5%BA%A6%E7%89%B9%E5%BE%81/" data-id="cm8q1tfhr0013pcv4fmixa517" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl/" rel="tag">dl</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
 
 
   <nav id="page-nav">
@@ -2235,9 +2205,9 @@ y.data: -0.262973</p>
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>103</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>102</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>30</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>31</strong><br>标签</div></a>
     </div>
 
 

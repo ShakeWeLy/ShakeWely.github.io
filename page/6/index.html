@@ -43,9 +43,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>103</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>102</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>30</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>31</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -70,180 +70,6 @@
 </div>
 
         <section id="main">
-  
-    <article id="post-2025年1月15日-Vit模型" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/02/10/2025%E5%B9%B41%E6%9C%8815%E6%97%A5-Vit%E6%A8%A1%E5%9E%8B/" class="article-date">
-  <time class="post-time" datetime="2025-02-10T07:28:02.000Z" itemprop="datePublished">
-    <span class="post-month">2月</span><br/>
-    <span class="post-day">10</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/02/10/2025%E5%B9%B41%E6%9C%8815%E6%97%A5-Vit%E6%A8%A1%E5%9E%8B/">2025年1月15日 Vit模型</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="vit"><a class="markdownIt-Anchor" href="#vit"></a> VIT</h1>
-<h2 id="原理"><a class="markdownIt-Anchor" href="#原理"></a> 原理</h2>
-<p><strong>图像分块</strong>：</p>
-<p>小块16*16</p>
-<p><strong>线性嵌入</strong>：<br>
-使用线性投影将每个图像块映射到固定长度的向量（称为 Patch Embedding），然后通过添加位置编码（Positional Encoding）表示块的位置信息。</p>
-<p><strong>Transformer 编码器</strong>：<br>
-利用标准的 Transformer 编码器（多头自注意力和前馈网络）对这些嵌入进行处理，学习全局的图像特征</p>
-<p><strong>分类头</strong>：<br>
-引入一个特殊的 [CLS] token，用于整合所有块的信息。最后通过 MLP（多层感知机）对 [CLS] token 进行分类。</p>
-<img src="https://i-blog.csdnimg.cn/blog_migrate/3360fc9f03a84f99067859e2db20ffb5.gif" alt="img" style="zoom:60%;">
-<p><img src="/2025/02/10/2025%E5%B9%B41%E6%9C%8815%E6%97%A5-Vit%E6%A8%A1%E5%9E%8B/image-20250210154505777.png" alt="image-20250210154505777"></p>
-<h1 id="swin-transformer"><a class="markdownIt-Anchor" href="#swin-transformer"></a> Swin Transformer</h1>
-<h2 id="核心原理"><a class="markdownIt-Anchor" href="#核心原理"></a> 核心原理：</h2>
-<ol>
-<li><strong>分层架构</strong>：<br>
-Swin Transformer 的结构是分层的，类似于卷积神经网络（CNN）的金字塔设计。随着层数的增加，特征图的分辨率逐渐降低，通道数逐渐增加。</li>
-<li><strong>滑动窗口注意力 (Shifted Window Attention)</strong>：
-<ul>
-<li>将图像划分为多个固定大小的窗口（如 7×77 \times 77×7），在每个窗口内计算自注意力，降低计算复杂度。</li>
-<li>在不同层之间引入“滑动窗口”机制，使窗口之间的信息可以交互，增加全局建模能力。</li>
-</ul>
-</li>
-<li><strong>线性复杂度</strong>：<br>
-通过限制注意力计算在窗口内完成，避免了 ViT 的全局注意力计算带来的高时间和空间复杂度问题。</li>
-<li><strong>Patch 合并</strong>：<br>
-在分层过程中，通过 Patch 合并操作减少特征图分辨率，同时增加通道维度。</li>
-</ol>
-<h2 id="滑动窗口注意力"><a class="markdownIt-Anchor" href="#滑动窗口注意力"></a> 滑动窗口注意力</h2>
-<img src="https://i-blog.csdnimg.cn/blog_migrate/4835528644ffcb483732678807ab00b6.png#pic_center" alt="在这里插入图片描述" style="zoom:33%;">
-<h3 id="patch-merging"><a class="markdownIt-Anchor" href="#patch-merging"></a> <strong>Patch Merging</strong></h3>
-<p><img src="https://i-blog.csdnimg.cn/blog_migrate/a3b29d89bad938bc2475dfca1df80501.png" alt="img"></p>
-<h3 id="w-msa"><a class="markdownIt-Anchor" href="#w-msa"></a> W-MSA</h3>
-<img src="https://i-blog.csdnimg.cn/blog_migrate/08dfc09f92ff3766608490fcbcd355b2.png#pic_center" alt="在这里插入图片描述" style="zoom:50%;">
-<h3 id="sw-msa"><a class="markdownIt-Anchor" href="#sw-msa"></a> SW-MSA</h3>
-<img src="https://i-blog.csdnimg.cn/blog_migrate/05a8fc43e0f99856f885fd489388136b.png#pic_center" alt="在这里插入图片描述" style="zoom:33%;">
-<h1 id="mae"><a class="markdownIt-Anchor" href="#mae"></a> MAE</h1>
-<h2 id="核心原理-2"><a class="markdownIt-Anchor" href="#核心原理-2"></a> 核心原理：</h2>
-<ol>
-<li><strong>随机掩码（Masking）</strong>：
-<ul>
-<li>将输入图像划分为一系列 Patch（例如 16×1616 \times 1616×16），并随机<strong>遮掩</strong>一定比例的 Patch（如 75%）。</li>
-<li>遮掩的部分从输入中移除，剩余的 Patch 作为输入特征。</li>
-</ul>
-</li>
-<li><strong>编码器（Encoder）</strong>：
-<ul>
-<li>使用 ViT（Vision Transformer）作为编码器，仅处理未被遮掩的 Patch，提取高效的全局特征。</li>
-</ul>
-</li>
-<li><strong>解码器（Decoder）</strong>：
-<ul>
-<li>一个轻量级的解码器负责重建被遮掩的 Patch。</li>
-<li>解码器接受编码器的输出和位置编码，并尝试还原完整的图像。</li>
-</ul>
-</li>
-<li><strong>重建目标（Reconstruction Loss）</strong>：
-<ul>
-<li>模型通过最小化重建误差（通常是均方误差，MSE）来优化，从而学习有意义的图像特征。</li>
-</ul>
-</li>
-</ol>
-<img src="https://pic2.zhimg.com/v2-e6a970e23f0b03371047a6014a25a175_1440w.jpg" alt="img" style="zoom: 50%;">
-<h1 id="igpt"><a class="markdownIt-Anchor" href="#igpt"></a> IGPT</h1>
-<h2 id="核心原理-3"><a class="markdownIt-Anchor" href="#核心原理-3"></a> 核心原理：</h2>
-<ol>
-<li><strong>图像像素序列化</strong>：
-<ul>
-<li>将二维图像<strong>展平为一维像素序列</strong>，类似于自然语言处理中的文本序列。</li>
-<li>每个像素值被表示为一个离散的类别（如颜色索引或灰度值）。</li>
-</ul>
-</li>
-<li><strong>Transformer 架构</strong>：
-<ul>
-<li><strong>使用标准的 Transformer 模型，将图像像素序列作为输入</strong>，学习序列中各像素值之间的依赖关系。</li>
-<li>通过<strong>自回归方式</strong>预测下一个像素值，实现图像生成任务。</li>
-</ul>
-</li>
-<li><strong>无监督学习</strong>：
-<ul>
-<li>模型通过最大化训练数据的对数似然估计进行优化，学习如何生成与训练图像分布一致的新图像。</li>
-</ul>
-</li>
-</ol>
-<img src="https://pic1.zhimg.com/v2-56d15a5487853b70a504d7e330f9d074_1440w.jpg" alt="img" style="zoom:33%;">
-<h1 id="mobilevit"><a class="markdownIt-Anchor" href="#mobilevit"></a> MobileViT</h1>
-<h2 id="空间归纳偏置"><a class="markdownIt-Anchor" href="#空间归纳偏置"></a> 空间归纳偏置</h2>
-<h1 id="simclr"><a class="markdownIt-Anchor" href="#simclr"></a> SimCLR</h1>
-<h1 id="detr"><a class="markdownIt-Anchor" href="#detr"></a> DETR</h1>
-<h2 id="概述"><a class="markdownIt-Anchor" href="#概述"></a> 概述</h2>
-<ul>
-<li>
-<p>最大的特点就是：不需要预定义的先验anchor，也不需要NMS的后处理策略，就可以实现<strong>端到端</strong>的目标检测。</p>
-</li>
-<li>
-<p>但是，DETR大目标检测上性能是最好的，而小目标上稍差，而且基于match的loss导致学习很难收敛（即难以学习到最优的情况）。</p>
-</li>
-<li>
-<p>DETR的总体框架如下，先通过CNN提取图像的特征；再送入到transformer encoder-decoder中，该编码器解码器的结构基本与transformer相同，主要是在输入部分和输出部分的修改；最后得到类别和bbox的预测，并通过二分匹配计算损失来优化网络。</p>
-</li>
-<li>
-<p>利用全局特征之间的关系，来消除冗余的框</p>
-</li>
-</ul>
-<img src="/2025/02/10/2025%E5%B9%B41%E6%9C%8815%E6%97%A5-Vit%E6%A8%A1%E5%9E%8B/image-20250210162328722.png" alt="image-20250210162328722" style="zoom:67%;">
-<ol>
-<li>第一步，用卷积神经网络抽取图像特征。</li>
-<li>第二步，通过transformer获取图片全特征。</li>
-<li>第三步。用transformer decoder来生成很多个框。</li>
-<li>第四步。将预测出的框与ground truth的框进行matching 匹配的框计算loss。 Or在推理阶段第四部将是设置一个阀值。高于阀值则为目标，低于则为背景。</li>
-</ol>
-<h2 id="目标函数"><a class="markdownIt-Anchor" href="#目标函数"></a> 目标函数</h2>
-<p>n个输出</p>
-<h3 id="二分图匹配"><a class="markdownIt-Anchor" href="#二分图匹配"></a> 二分图匹配</h3>
-<p>输出的一百个框移Ground truth。进行匹配。而不需要nms</p>
-<h4 id="匈牙利算法"><a class="markdownIt-Anchor" href="#匈牙利算法"></a> 匈牙利算法</h4>
-<img src="/2025/02/10/2025%E5%B9%B41%E6%9C%8815%E6%97%A5-Vit%E6%A8%A1%E5%9E%8B/image-20250210174950488.png" alt="image-20250210174950488" style="zoom: 67%;">
-<blockquote>
-<p>对应最擅长的任务(框的准确度和分类准确度)</p>
-</blockquote>
-<img src="/2025/02/10/2025%E5%B9%B41%E6%9C%8815%E6%97%A5-Vit%E6%A8%A1%E5%9E%8B/image-20250210175222465.png" alt="image-20250210175222465" style="zoom: 50%;">
-<h2 id="网络"><a class="markdownIt-Anchor" href="#网络"></a> 网络</h2>
-<img src="/2025/02/10/2025%E5%B9%B41%E6%9C%8815%E6%97%A5-Vit%E6%A8%A1%E5%9E%8B/image-20250210175430711.png" alt="image-20250210175430711" style="zoom:50%;">
-<h3 id="object-quiry"><a class="markdownIt-Anchor" href="#object-quiry"></a> object quiry</h3>
-<p>embedding</p>
-<h1 id="proposal-anchor"><a class="markdownIt-Anchor" href="#proposal-anchor"></a> proposal anchor</h1>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/02/10/2025%E5%B9%B41%E6%9C%8815%E6%97%A5-Vit%E6%A8%A1%E5%9E%8B/" data-id="cm8q1tfhe000dpcv4804mfj9l" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
   
     <article id="post-2025年2月10日-轻量化神经网络3" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -1894,6 +1720,73 @@ FBNet 使用了一种基于梯度优化的搜索方法，即将 NAS 搜索过程
 
 
   
+    <article id="post-2024年3月3日-面试更新" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2024/03/03/2024%E5%B9%B43%E6%9C%883%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%9B%B4%E6%96%B0/" class="article-date">
+  <time class="post-time" datetime="2024-03-03T04:42:53.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">03</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2024/03/03/2024%E5%B9%B43%E6%9C%883%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%9B%B4%E6%96%B0/">2024年3月3日 面试更新——大模型</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="大模型面试总结"><a class="markdownIt-Anchor" href="#大模型面试总结"></a> 大模型面试总结</h1>
+<h2 id="大模型"><a class="markdownIt-Anchor" href="#大模型"></a> 大模型</h2>
+<h3 id="项目"><a class="markdownIt-Anchor" href="#项目"></a> 项目</h3>
+<p>现在简历上搞一些什么使用unet训练一个分割网络实现某个任务，或者说使用yolov7检测某个目标已经不是什么亮点了。不过这种也不是不行，但你需要<strong>更多的深度</strong>我才会感兴趣：</p>
+<ul>
+<li>网络结构有无值得说明的改进</li>
+<li>为什么这样做可以明确说出原因和数据证明</li>
+<li>对使用这个方法以及和其他方法做过比较详细的对比，选择这个模型是有理由的</li>
+</ul>
+<h3 id="推理相关"><a class="markdownIt-Anchor" href="#推理相关"></a> 推理相关</h3>
+<p>要求：</p>
+<ul>
+<li>搞上层编译器的（类似于torch-tensorrt的利用pytorch生态和TensorRT生态的在nvidia显卡加速的编译器，不需要自己写codegen），会针对不同的后端（比如onnx和torchscript）写parser，针对计算图写一些pass；也有搞基于MLIR的编译器的，在自己的公司硬件上跑，前端中端后端需要都搞</li>
+<li>搞推理框架的，就是优化训练和部署中的一些性能问题、精度溢出问题；有些公司喜欢搞统一的框架（训练和部署都解决了），不喜欢用现有的轮子，要自己造；对于加速类的推理框架，会实现比如模拟量化功能、精度对比功能等等</li>
+<li>搞加速的，就是对任务中各种瓶颈的算子进行加速，C<ins>转cuda，python转c</ins>等等，使用C++封装一些项目blabla</li>
+<li>项目优化op的细节</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2024/03/03/2024%E5%B9%B43%E6%9C%883%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%9B%B4%E6%96%B0/" data-id="cltgreey3000lw8v49zyk0xav" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9D%A2%E8%AF%95/" rel="tag">面试</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
 
 
   <nav id="page-nav">
@@ -1938,9 +1831,9 @@ FBNet 使用了一种基于梯度优化的搜索方法，即将 NAS 搜索过程
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>103</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>102</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>30</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>31</strong><br>标签</div></a>
     </div>
 
 
