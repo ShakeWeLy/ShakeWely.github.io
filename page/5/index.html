@@ -43,9 +43,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>102</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>101</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>30</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>31</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -70,76 +70,6 @@
 </div>
 
         <section id="main">
-  
-    <article id="post-2025年3月6日-多尺度训练" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/03/06/2025%E5%B9%B43%E6%9C%886%E6%97%A5-%E5%A4%9A%E5%B0%BA%E5%BA%A6%E8%AE%AD%E7%BB%83/" class="article-date">
-  <time class="post-time" datetime="2025-03-06T01:50:49.000Z" itemprop="datePublished">
-    <span class="post-month">3月</span><br/>
-    <span class="post-day">06</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/03/06/2025%E5%B9%B43%E6%9C%886%E6%97%A5-%E5%A4%9A%E5%B0%BA%E5%BA%A6%E8%AE%AD%E7%BB%83/">2025年3月6日 多尺度训练</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="/2025/03/06/2025%E5%B9%B43%E6%9C%886%E6%97%A5-%E5%A4%9A%E5%B0%BA%E5%BA%A6%E8%AE%AD%E7%BB%83/image-20250306095133429.png" alt="image-20250306095133429"></p>
-<h2 id="全卷积"><a class="markdownIt-Anchor" href="#全卷积"></a> 全卷积</h2>
-<p>除了最后的分类层是全连接层，而特征提取部分都是卷积或者池化操作，它们可以自适应各种尺寸的图像输入。</p>
-<h2 id="spp-net"><a class="markdownIt-Anchor" href="#spp-net"></a> SPP-Net</h2>
-<p>现有的（传统的） CNNs 由于有全连接层所以必须需要固定输入图片的尺寸，比如 224 × 224 。本文为传统的网络结构增加了一个池化策略，即空间金字塔池化，来突破全连接层对整个网络输入图像的约束。无论输入图像的尺寸是多少，SPP-Net 能够产生一个固定长度的特征向量，且能够适应形变，在分类和物体检测任务中都有很好的表现</p>
-<h3 id="空间金字塔池化-spatial-pyramid-pooling"><a class="markdownIt-Anchor" href="#空间金字塔池化-spatial-pyramid-pooling"></a> 空间金字塔池化 spatial pyramid pooling</h3>
-<p>用于解决传统卷积神经网络（CNN）中输入图像尺寸必须固定的问题。通过将特征图划分为不同粒度的区域，并对每个区域进行池化操作，SPP能够生成固定长度的特征向量，从而允许网络处理任意尺寸的输入图像</p>
-<p>空间金字塔池化的加入，使得模型在预测/测试时可以不限定输入图像的大小，同时在训练阶段，也允许模型实现多尺度训练，这一点很有利于增强尺度不变性并降低过拟合的风险。</p>
-<p><strong>输入特征图的尺寸无关，只与池化级别和通道数有关</strong></p>
-<h4 id="原理"><a class="markdownIt-Anchor" href="#原理"></a> <strong>原理</strong></h4>
-<p>SPP将特征图划分为多个不同大小的区域（如1×1、2×2、3×3、6×6等），并对每个区域进行最大池化或平均池化操作。这些池化后的特征被展平并拼接在一起，形成一个固定长度的特征向量</p>
-<h4 id="实现"><a class="markdownIt-Anchor" href="#实现"></a> <strong>实现</strong></h4>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SpatialPyramidPooling2d</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, num_level, pool_type=<span class="string">&#x27;max_pool&#x27;</span></span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        参数:</span></span><br><span class="line"><span class="string">        num_level: 池化层的级别数量（例如，[1, 2, 4]表示3个级别）</span></span><br><span class="line"><span class="string">        pool_type: 池化类型（&#x27;max_pool&#x27; 或 &#x27;avg_pool&#x27;）</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="built_in">super</span>(SpatialPyramidPooling2d, self).__init__()</span><br><span class="line">        self.num_level = num_level</span><br><span class="line">        self.pool_type = pool_type</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        N, C, H, W = x.size()</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(self.num_level):</span><br><span class="line">            level = i + <span class="number">1</span></span><br><span class="line">            kernel_size = (math.ceil(H / level), math.ceil(W / level))</span><br><span class="line">            stride = (math.ceil(H / level), math.ceil(W / level))</span><br><span class="line">            padding = (</span><br><span class="line">                math.floor((kernel_size[<span class="number">0</span>] * level - H + <span class="number">1</span>) / <span class="number">2</span>),</span><br><span class="line">                math.floor((kernel_size[<span class="number">1</span>] * level - W + <span class="number">1</span>) / <span class="number">2</span>)</span><br><span class="line">            )</span><br><span class="line">            <span class="keyword">if</span> self.pool_type == <span class="string">&#x27;max_pool&#x27;</span>:</span><br><span class="line">                tensor = F.max_pool2d(x, kernel_size=kernel_size, stride=stride, padding=padding).view(N, -<span class="number">1</span>)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                tensor = F.avg_pool2d(x, kernel_size=kernel_size, stride=stride, padding=padding).view(N, -<span class="number">1</span>)</span><br><span class="line">            <span class="keyword">if</span> i == <span class="number">0</span>:</span><br><span class="line">                res = tensor</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                res = torch.cat((res, tensor), <span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> res</span><br></pre></td></tr></table></figure>
-<h3 id="2-自适应池化adaptive-pooling"><a class="markdownIt-Anchor" href="#2-自适应池化adaptive-pooling"></a> 2. <strong>自适应池化（Adaptive Pooling）</strong></h3>
-<h4 id="原理-2"><a class="markdownIt-Anchor" href="#原理-2"></a> 原理</h4>
-<p><strong>自适应池化的目标是根据目标输出尺寸自动调整池化窗口和步长，使得输出尺寸保持一致，不依赖于输入的尺寸</strong>。</p>
-<h4 id="实现-2"><a class="markdownIt-Anchor" href="#实现-2"></a> 实现</h4>
-<p><code>nn.AdaptiveAvgPool2d((32, 32))</code></p>
-<p><code>nn.AdaptiveMaxPool2d((32, 32))</code></p>
-<h3 id="3-全局平均池化或全局最大池化global-pooling"><a class="markdownIt-Anchor" href="#3-全局平均池化或全局最大池化global-pooling"></a> 3. <strong>全局平均池化或全局最大池化（Global Pooling）</strong></h3>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/03/06/2025%E5%B9%B43%E6%9C%886%E6%97%A5-%E5%A4%9A%E5%B0%BA%E5%BA%A6%E8%AE%AD%E7%BB%83/" data-id="cm8q1tfhs0017pcv4eo49boxo" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl/" rel="tag">dl</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
   
     <article id="post-2025年3月5日-图像匹配" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -943,6 +873,120 @@ Swin Transformer 的结构是分层的，类似于卷积神经网络（CNN）的
 
 
   
+    <article id="post-2025年2月10日-轻量化神经网络3" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/02/10/2025%E5%B9%B42%E6%9C%8810%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C3/" class="article-date">
+  <time class="post-time" datetime="2025-02-10T03:40:45.000Z" itemprop="datePublished">
+    <span class="post-month">2月</span><br/>
+    <span class="post-day">10</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/02/10/2025%E5%B9%B42%E6%9C%8810%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C3/">2025年2月10日 轻量化神经网络3</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="introduction"><a class="markdownIt-Anchor" href="#introduction"></a> <strong>Introduction</strong></h1>
+<p>近期卷积网络的设计除了注重准确率之外，还需要兼顾运行性能，特别是在移动设备上的运行性能，这使得卷积神经网络的设计变得更加难，主要有以下难点：</p>
+<ul>
+<li>Intractable design space，由于卷积网络参数很多，导致设计空间十分复杂，目前很多方法提出自动化搜索，能够简化人工设计的流程，但这种方法一般需要大量的算力。</li>
+<li>Nontransferable optimality，卷积网络的性能取决于很多因素，比如输入分辨率和目标设备，不同的分辨率需要调整不同的网络参数，而相同block在不同的设备上的效率也可能大不相同，所以需要对网络在特定的条件下进行特定的调优。</li>
+<li>Inconsistent efficiency metrics，大多数效率指标不仅与网络结构相关，也和目标设备上的软硬件设置有关。为了简化，很多研究都采用硬件无关的指标来表示卷积的效率，比如FLOPs，但FLOPs并不能总等同于性能，还跟block的实现方式相关，这使得网络的设计更加困难。</li>
+</ul>
+<h1 id="nas"><a class="markdownIt-Anchor" href="#nas"></a> NAS</h1>
+<h2 id="总结nas-发展历程"><a class="markdownIt-Anchor" href="#总结nas-发展历程"></a> <strong>总结：NAS 发展历程</strong></h2>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>方法</th>
+<th>主要创新点</th>
+<th>计算成本</th>
+<th>代表性模型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>早期 NAS</strong></td>
+<td>强化学习 NAS</td>
+<td>RNN 控制器搜索网络结构</td>
+<td>高</td>
+<td>NASNet</td>
+</tr>
+<tr>
+<td><strong>进化 NAS</strong></td>
+<td>进化算法 NAS</td>
+<td>变异 + 交叉进化优化网络</td>
+<td>高</td>
+<td>AmoebaNet</td>
+</tr>
+<tr>
+<td><strong>梯度优化 NAS</strong></td>
+<td>DARTS</td>
+<td>采用梯度下降进行高效搜索</td>
+<td>低</td>
+<td>DARTS、ProxylessNAS</td>
+</tr>
+<tr>
+<td><strong>高效 NAS</strong></td>
+<td>Efficient NAS</td>
+<td>共享参数 + 复合缩放 + 硬件感知搜索</td>
+<td>低</td>
+<td>EfficientNet、FBNet、OFA</td>
+</tr>
+</tbody>
+</table>
+<h1 id="fbnet"><a class="markdownIt-Anchor" href="#fbnet"></a> FBNet</h1>
+<img src="/2025/02/10/2025%E5%B9%B42%E6%9C%8810%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C3/image-20250219134545540.png" style="zoom:67%;">
+<p>将 <strong>硬件性能约束</strong>（如浮点运算量 FLOPs、内存使用量、计算延迟等）引入到 NAS 的搜索过程，使得网络架构不仅能够实现高精度，还能在指定硬件上具有良好的执行效率。</p>
+<p>BNet 的工作流程可以分为以下几个步骤：</p>
+<ol>
+<li><strong>硬件感知的目标函数</strong>：<br>
+在设计过程中，FBNet 将目标硬件（如移动设备、嵌入式设备等）的约束（如内存、计算量等）纳入考虑。FBNet 的目标是最小化 <strong>计算资源的消耗</strong>，同时保证较高的 <strong>分类精度</strong>。这个目标函数是硬件感知的，旨在寻找在硬件上性能最优的网络架构。</li>
+<li><strong>可微分架构搜索</strong>：<br>
+FBNet 使用了一种基于梯度优化的搜索方法，即将 NAS 搜索过程转化为可微分的优化问题。这使得 FBNet 可以在较少的计算资源下快速找到高效的网络架构。具体来说，FBNet 在 <strong>超网络（SuperNet）</strong> 中进行架构搜索，超网络包含了多种候选网络结构，通过训练和优化选择最优的架构。</li>
+<li><strong>选择模块</strong>：<br>
+在 FBNet 中，网络结构的选择是模块化的，每个模块（如卷积、深度可分离卷积等）都有多个候选结构，而这些候选结构的选择在搜索过程中是通过<strong>可微分的路径选择</strong>来实现的。最终，FBNet 在候选模块中选择一个最优的结构。</li>
+<li><strong>搜索策略</strong>：<br>
+为了加速搜索过程，FBNet 使用了 <strong>混合搜索策略</strong>，即结合了 <strong>强化学习</strong> 和 <strong>梯度优化</strong> 两种方法。强化学习用于生成架构的候选方案，而梯度优化则用于对这些方案进行优化。通过这种方式，FBNet 能够在复杂的搜索空间中找到最优的架构。</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/02/10/2025%E5%B9%B42%E6%9C%8810%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C3/" data-id="cm8q1tfhg000hpcv4f8qg1hic" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E3%80%81model/" rel="tag">轻量化神经网络、model</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
 
 
   <nav id="page-nav">
@@ -987,9 +1031,9 @@ Swin Transformer 的结构是分层的，类似于卷积神经网络（CNN）的
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>102</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>101</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>30</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>31</strong><br>标签</div></a>
     </div>
 
 

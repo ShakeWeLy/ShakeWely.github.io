@@ -43,9 +43,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>102</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>101</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>30</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>31</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -70,144 +70,6 @@
 </div>
 
         <section id="main">
-  
-    <article id="post-2025年5月9日-anchor" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/05/09/2025%E5%B9%B45%E6%9C%889%E6%97%A5-anchor/" class="article-date">
-  <time class="post-time" datetime="2025-05-09T07:33:38.000Z" itemprop="datePublished">
-    <span class="post-month">5月</span><br/>
-    <span class="post-day">09</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/05/09/2025%E5%B9%B45%E6%9C%889%E6%97%A5-anchor/">2025年5月9日 anchor</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="流程"><a class="markdownIt-Anchor" href="#流程"></a> 流程</h2>
-<p><strong>Anchor 生成</strong>：</p>
-<ul>
-<li>在训练过程中，为了检测不同尺度和长宽比的物体，首先会在特征图的每个位置生成一组 Anchor（锚框）。这些 Anchor 通常具有不同的尺度和长宽比，用于捕捉图像中物体的不同尺寸和形状。</li>
-</ul>
-<p><strong>标签分配</strong>：</p>
-<ul>
-<li>每个生成的 Anchor 会与真实框（ground truth box）进行比较，通常使用 <strong>IoU（Intersection over Union）</strong> 来计算重叠程度。</li>
-<li>根据 IoU 的值将 Anchor 分为三类：
-<ul>
-<li><strong>正样本</strong>：当 Anchor 与真实框的 IoU 大于设定阈值（如 0.5）时，视为正样本。</li>
-<li><strong>负样本</strong>：当 Anchor 与所有真实框的 IoU 小于设定的低阈值（如 0.4）时，视为负样本。</li>
-<li><strong>忽略样本</strong>：IoU 介于这两个阈值之间的 Anchor 通常会被忽略。</li>
-</ul>
-</li>
-</ul>
-<p><strong>回归与分类</strong>：</p>
-<ul>
-<li>对于每个正样本 Anchor，模型需要预测一个目标框（预测框），通常通过回归来预测框的偏移量（例如，中心点坐标、宽度、高度）。</li>
-<li>同时，模型对每个 Anchor 进行分类，判断该 Anchor 代表的物体类别。</li>
-</ul>
-<p><strong>损失函数计算</strong>：</p>
-<ul>
-<li>在训练时，模型通过以下两种损失函数来优化：
-<ul>
-<li><strong>分类损失</strong>：通常使用交叉熵损失来计算每个 Anchor 是否正确分类（正样本或负样本）。</li>
-<li><strong>回归损失</strong>：通常使用平滑 L1 损失来计算预测框与真实框之间的差距。</li>
-</ul>
-</li>
-</ul>
-<p><strong>模型优化</strong>：</p>
-<ul>
-<li>根据计算出的损失（分类损失和回归损失），使用优化算法（如 SGD 或 Adam）来更新模型的权重，使其更好地拟合训练数据。</li>
-</ul>
-<p><strong>推理阶段的非极大值抑制（NMS）</strong>：</p>
-<ul>
-<li>在推理时，多个 Anchor 可能会检测到同一个物体，导致多个重叠的框。通过 <strong>NMS（Non-Maximum Suppression）</strong>，选择具有最高置信度的框，去除冗余框，只保留最佳的预测框。</li>
-</ul>
-<h2 id="anchor-生成算法"><a class="markdownIt-Anchor" href="#anchor-生成算法"></a> anchor 生成算法</h2>
-<p>Faster R-CNN 通过在每个特征图位置生成多个不同尺度、不同长宽比的锚框。具体步骤如下：</p>
-<ul>
-<li>对于每个特征图上的位置，选择多个 <strong>尺度</strong>（如 32px、64px、128px 等）和 <strong>长宽比</strong>（如 1:1、2:1、1:2 等）。</li>
-</ul>
-<ol>
-<li><strong>滑动窗口（Sliding Window）</strong>：</li>
-</ol>
-<p>在 <strong>YOLO</strong> 和 <strong>SSD</strong> 中，Anchor 的生成算法通常会在特征图的每个位置生成固定的 Anchor。具体过程包括：</p>
-<ul>
-<li>在每个位置生成多个尺寸和比例的 Anchor。</li>
-</ul>
-<h2 id="iou"><a class="markdownIt-Anchor" href="#iou"></a> IOU</h2>
-<p>定义:</p>
-<blockquote></blockquote>
-<h2 id="nms"><a class="markdownIt-Anchor" href="#nms"></a> NMS</h2>
-<p>算法流程:</p>
-<blockquote></blockquote>
-<h1 id="anchor-free"><a class="markdownIt-Anchor" href="#anchor-free"></a> Anchor free</h1>
-<h3 id="1-目标中心预测center-prediction"><a class="markdownIt-Anchor" href="#1-目标中心预测center-prediction"></a> 1. <strong>目标中心预测（Center Prediction）</strong></h3>
-<ul>
-<li>在 anchor-free 方法中，最常见的一种做法是预测物体的 <strong>中心点</strong>。</li>
-<li><strong>中心点</strong>：每个物体都有一个中心位置，模型的任务是预测这些中心点的位置。</li>
-<li>这些方法通常会在特征图上为每个像素点预测一个 <strong>热力图（heatmap）</strong>，表示该位置是否是某个物体的中心点。这个热力图的值越高，表示该位置是物体中心的概率越大。</li>
-</ul>
-<h3 id="2-标签分配"><a class="markdownIt-Anchor" href="#2-标签分配"></a> 2. <strong>标签分配</strong></h3>
-<p>在 anchor-free 方法中，标签分配的方式与传统的 anchor-based 方法有所不同。以下是一些常见的 anchor-free 标签分配策略：</p>
-<ul>
-<li><strong>正样本（Positive）</strong>：如果某个像素点的中心与某个真实框的中心位置足够接近（通常使用距离阈值），那么该像素点被视为正样本，模型的目标是回归这个位置。
-<ul>
-<li>例如，物体的中心点离特定像素点的距离小于某个阈值（如 5x5 区域），那么这个像素点就会被认为是正样本。</li>
-</ul>
-</li>
-<li><strong>负样本（Negative）</strong>：那些没有包含任何物体中心的像素点被视为负样本。这些像素点的值应该接近零，表示它们不是物体中心。</li>
-<li><strong>忽略样本（Ignore）</strong>：在某些情况下，靠近物体边界的像素点可能不会分配为正样本，而是被忽略。这是因为这些像素点的中心位置不明确，可能会影响模型的训练。</li>
-</ul>
-<h3 id="3-回归目标"><a class="markdownIt-Anchor" href="#3-回归目标"></a> 3. <strong>回归目标</strong></h3>
-<p>对于每个正样本像素点，模型需要预测：</p>
-<ul>
-<li><strong>物体的中心点</strong>：通过回归来预测目标的中心位置。</li>
-<li><strong>物体的尺寸和形状</strong>：例如，预测物体的宽度、高度、方向（如果是旋转框）等。</li>
-</ul>
-<h3 id="4-热力图损失heatmap-loss"><a class="markdownIt-Anchor" href="#4-热力图损失heatmap-loss"></a> 4. <strong>热力图损失（Heatmap Loss）</strong></h3>
-<p>在 anchor-free 方法中，模型通常会通过 <strong>热力图</strong> 来预测目标中心的概率。每个像素点的热力图值表示该位置是目标中心的概率。</p>
-<ul>
-<li><strong>热力图损失</strong>（通常使用 <strong>均方误差（MSE）</strong> 或 <strong>交叉熵损失</strong>）会计算预测的热力图与真实热力图之间的差异。</li>
-<li>对于正样本，目标热力图在该位置会有较高的值，负样本则会有接近零的值。</li>
-</ul>
-<h3 id="5-回归损失regression-loss"><a class="markdownIt-Anchor" href="#5-回归损失regression-loss"></a> 5. <strong>回归损失（Regression Loss）</strong></h3>
-<p>对于每个正样本，模型不仅预测中心点，还需要回归物体的 <strong>边界框</strong>（例如，物体的宽度、高度，或旋转框的角度）。回归损失通常使用平滑L1损失（smooth L1 loss）或其他回归损失函数来进行计算。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/05/09/2025%E5%B9%B45%E6%9C%889%E6%97%A5-anchor/" data-id="cmanj8o2d0017lcv46e4a18ey" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" rel="tag">目标检测</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
   
     <article id="post-2025年5月8日-MOT汇总" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -746,7 +608,7 @@
       <a data-url="https://shakewely.github.io/2025/05/05/2025%E5%B9%B45%E6%9C%885%E6%97%A5-torch%E6%B1%87%E6%80%BB/" data-id="cmanj8o28000wlcv4bsx0grzy" class="article-share-link">分享</a>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl/" rel="tag">dl</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl%EF%BC%8Cpyhton/" rel="tag">dl，pyhton</a></li></ul>
 
     </footer>
   </div>
@@ -1843,6 +1705,252 @@ docker-compose up -d</p>
 
 
   
+    <article id="post-2025年3月16日-DL八股文" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/03/14/2025%E5%B9%B43%E6%9C%8816%E6%97%A5-DL%E5%85%AB%E8%82%A1%E6%96%87/" class="article-date">
+  <time class="post-time" datetime="2025-03-14T06:44:16.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">14</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/03/14/2025%E5%B9%B43%E6%9C%8816%E6%97%A5-DL%E5%85%AB%E8%82%A1%E6%96%87/">2025年3月16日 DL八股文</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>记录一些学了又忘或是没学的DL八股文知识</p>
+</blockquote>
+<h1 id="dl八股文"><a class="markdownIt-Anchor" href="#dl八股文"></a> DL八股文</h1>
+<h1 id="原理"><a class="markdownIt-Anchor" href="#原理"></a> 原理</h1>
+<p>一种基于深层神经网络的机器学习方法，通过多层次的非线性变换自动提取数据特征，实现复杂模式的识别与预测。核心是模仿人脑神经元的连接方式，构建“输入-隐藏-输出”层级的计算模型，从数据中学习从简单到抽象的特征表示</p>
+<h1 id="训练"><a class="markdownIt-Anchor" href="#训练"></a> 训练</h1>
+<blockquote>
+<p>模型训练的核心是通过调整参数（如权重 <em>w</em> 和偏置 <em>b</em>） 最小化损失函数 L</p>
+</blockquote>
+<h2 id="过拟合"><a class="markdownIt-Anchor" href="#过拟合"></a> 过拟合</h2>
+<h3 id="1-什么是过拟合"><a class="markdownIt-Anchor" href="#1-什么是过拟合"></a> 1 什么是过拟合</h3>
+<p>指模型在训练集上表现优异，但在测试集或新数据上泛化能力显著下降的现象。其核心矛盾是模型过度<strong>学习了训练数据中的噪声和非全局性特征</strong>，而非数据背后的真实规律 。</p>
+<h3 id="2-原因"><a class="markdownIt-Anchor" href="#2-原因"></a> 2 原因</h3>
+<ol>
+<li>数据层面：<strong>数据量不足</strong>，导致没有学到全局特征。<strong>噪声干扰</strong>，数据中存在异常值或错误标签，模型误将其作为学习目标</li>
+<li>模型层面：模型过于复杂，<strong>过度适应训练数据细节</strong></li>
+<li>训练层面：迭代次数过多（未早停）或学习率未优化/</li>
+</ol>
+<h3 id="3-如何解决"><a class="markdownIt-Anchor" href="#3-如何解决"></a> 3 如何解决</h3>
+<ol>
+<li>
+<p>：数据增强与数据清洗</p>
+</li>
+<li>
+<p>：选用简单模型。添加正则化策略，<strong>Dropout</strong>、<strong>批量归一化</strong>BatchNorm、<strong>池化</strong></p>
+</li>
+<li>
+<p>：早停法、动态学习率、</p>
+</li>
+<li>
+<p><strong>集成方法</strong>：结合多个模型的预测结果（如随机森林投票），减少单个模型方差</p>
+<p><strong>迁移学习等</strong></p>
+</li>
+</ol>
+<h3 id="4-欠拟合呢"><a class="markdownIt-Anchor" href="#4-欠拟合呢"></a> 4 欠拟合呢？</h3>
+<h2 id="训练方法"><a class="markdownIt-Anchor" href="#训练方法"></a> 训练方法</h2>
+<p>训练方法</p>
+<h3 id="1-监督学习"><a class="markdownIt-Anchor" href="#1-监督学习"></a> 1 监督学习</h3>
+<h3 id="3-自监督学习"><a class="markdownIt-Anchor" href="#3-自监督学习"></a> 3 自监督学习</h3>
+<blockquote>
+<p>参考：<a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/1257862?spm=a2c6h.24874632.expert-profile.15.45a63181v37e02%5C">https://developer.aliyun.com/article/1257862?spm=a2c6h.24874632.expert-profile.15.45a63181v37e02\</a></p>
+</blockquote>
+<h4 id="定义"><a class="markdownIt-Anchor" href="#定义"></a> 定义</h4>
+<p>​	它利用未标记的数据来训练模型，而无需人工标注的标签</p>
+<p>​	利用数据中的自动生成的标签或任务来训练模型</p>
+<h4 id="自监督学习方法"><a class="markdownIt-Anchor" href="#自监督学习方法"></a> 自监督学习方法</h4>
+<h3 id="4-zero-shot-one-shot-and-few-shot-learning概念"><a class="markdownIt-Anchor" href="#4-zero-shot-one-shot-and-few-shot-learning概念"></a> 4 Zero-Shot, One-Shot, and Few-Shot Learning概念</h3>
+<ol>
+<li>Zero-Shot是指训练一个模型来对其从未见过的对象进行分类。其核心思想是利用另一个模型的现有知识，以获得新类别的有意义的表示。</li>
+<li>One-Shot是确定图像A是否等同于图像B。这是通过将模型从先前任务的经验中获得的信息进行概括来实现的。</li>
+<li>Few-Shot Learning它是元学习的一个子领域，旨在开发能够从少量有标签示例中学习的算法</li>
+</ol>
+<h2 id="迁移学习微调-️"><a class="markdownIt-Anchor" href="#迁移学习微调-️"></a> 迁移学习+微调 ☑️</h2>
+<h3 id="1-迁移学习"><a class="markdownIt-Anchor" href="#1-迁移学习"></a> 1 迁移学习</h3>
+<p>在大型数据集上训练好的模型可以被“迁移”到新的任务中，从而避免从零开始训练。大地缩短训练时间，并显著提高性能</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 加载预训练的ResNet模型</span></span><br><span class="line">resnet = models.resnet50(pretrained=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="2-微调"><a class="markdownIt-Anchor" href="#2-微调"></a> 2 微调</h3>
+<ul>
+<li>通过对预训练模型<strong>进行部分或全部参数的微调</strong>，模型可以适应新任务中的特定数据。微调的程度取决于新任务的相似性和目标。</li>
+<li>通常会冻结模型的部分层，以保留通用的特征提取能力，针对新任务<strong>只对高层</strong>进行微调。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 冻结所有层的参数，以便只微调最后的全连接层</span></span><br><span class="line"><span class="keyword">for</span> param <span class="keyword">in</span> resnet.parameters():</span><br><span class="line">    param.requires_grad = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 解冻部分层，允许更多层进行训练</span></span><br><span class="line"><span class="keyword">for</span> name, param <span class="keyword">in</span> resnet.named_parameters():</span><br><span class="line">    <span class="keyword">if</span> <span class="string">&quot;layer4&quot;</span> <span class="keyword">in</span> name:  <span class="comment"># 假设只解冻ResNet的最后一层</span></span><br><span class="line">        param.requires_grad = <span class="literal">True</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        param.requires_grad = <span class="literal">False</span></span><br></pre></td></tr></table></figure>
+<h2 id="梯度"><a class="markdownIt-Anchor" href="#梯度"></a> 梯度</h2>
+<p><img src="/2025/03/14/2025%E5%B9%B43%E6%9C%8816%E6%97%A5-DL%E5%85%AB%E8%82%A1%E6%96%87/image-20250320184024743.png" alt></p>
+<h3 id="2-梯度稀疏化问题"><a class="markdownIt-Anchor" href="#2-梯度稀疏化问题"></a> 2 梯度稀疏化问题</h3>
+<h4 id="定义-2"><a class="markdownIt-Anchor" href="#定义-2"></a> 定义</h4>
+<p>在深度学习中，梯度是指损失函数对模型参数的偏导数。通过反向传播算法，我们可以计算得到每个参数的梯度，并使用优化算法（如随机梯度下降）来更新参数。然而，在深层神经网络中，梯度通常具有很高的维度，<strong>其中大部分元素都是接近于零或者非常小的值</strong>。这些接近于零的梯度元素对参数更新几乎没有贡献，并且会占用大量内存空间和计算资源。</p>
+<ul>
+<li>
+<p>模型更新偏差：仅部分参数被有效更新，可能偏离全局最优解</p>
+</li>
+<li>
+<p>训练不稳定：梯度分布不均加剧收敛震荡</p>
+</li>
+</ul>
+<h4 id="成因"><a class="markdownIt-Anchor" href="#成因"></a> <strong>成因</strong></h4>
+<ol>
+<li><strong>模型结构与激活函数</strong>
+<ul>
+<li>局部激活稀疏性：ReLU等激活函数在输入为负时输出零梯度，导致大量神经元处于“死亡”状态</li>
+<li>深度网络层间依赖：深层网络中矩阵连乘导致梯度衰减或爆炸，加剧稀疏性</li>
+</ul>
+</li>
+<li><strong>优化策略与正则化</strong>
+<ul>
+<li>L1正则化：通过惩罚权重绝对值，强制稀疏参数分布，间接导致梯度稀疏</li>
+<li>梯度裁剪：限制梯度幅值，抑制小梯度更新</li>
+</ul>
+</li>
+<li><strong>训练数据分布</strong>
+<ul>
+<li>数据不均衡：长尾数据导致部分类别梯度贡献微弱</li>
+<li>特征冗余：输入数据中存在大量无关特征，相关梯度趋近于零</li>
+</ul>
+</li>
+</ol>
+<h4 id="处理方法"><a class="markdownIt-Anchor" href="#处理方法"></a> <strong>处理方法</strong></h4>
+<p><strong>优化算法改进</strong></p>
+<ul>
+<li><strong>动量修正与误差补偿</strong>：如DGC中的Momentum Correction，缓解因稀疏化导致的梯度滞后问题</li>
+<li><strong>自适应优化器</strong>：Adam等算法动态调整学习率，避免小梯度参数被完全抑制</li>
+</ul>
+<p><strong>数据与训练策略调整</strong></p>
+<ul>
+<li><strong>数据增强与重采样</strong>：平衡类别分布，提升尾部数据的梯度贡献</li>
+<li><strong>渐进式稀疏训练</strong>：初期保留更多梯度，逐步增加稀疏率以避免过早信息丢失</li>
+</ul>
+<h4 id="应用"><a class="markdownIt-Anchor" href="#应用"></a> 应用</h4>
+<ol>
+<li>剪枝与梯度量化</li>
+<li></li>
+</ol>
+<h2 id="激活函数"><a class="markdownIt-Anchor" href="#激活函数"></a> 激活函数</h2>
+<h3 id="1-定义"><a class="markdownIt-Anchor" href="#1-定义"></a> 1 定义</h3>
+<p>引入<strong>非线性因素</strong>,处理复杂的问题</p>
+<h3 id="2-常见激活函数"><a class="markdownIt-Anchor" href="#2-常见激活函数"></a> 2 常见激活函数</h3>
+<h4 id="1-sigmoid"><a class="markdownIt-Anchor" href="#1-sigmoid"></a> 1 Sigmoid</h4>
+<img src="/2025/03/14/2025%E5%B9%B43%E6%9C%8816%E6%97%A5-DL%E5%85%AB%E8%82%A1%E6%96%87/image-20250320185054836.png" alt="image-20250320185054836" style="zoom:33%;"> 
+<h4 id="2-tanh"><a class="markdownIt-Anchor" href="#2-tanh"></a> 2 Tanh</h4>
+<img src="/2025/03/14/2025%E5%B9%B43%E6%9C%8816%E6%97%A5-DL%E5%85%AB%E8%82%A1%E6%96%87/image-20250320185034344.png" alt="image-20250320185034344" style="zoom: 33%;">  
+<blockquote>
+<p>存在梯度消失的问题，因为它们的导数（连乘）在两端会趋近于零，导致深层网络训练困难</p>
+</blockquote>
+<h4 id="3-relu"><a class="markdownIt-Anchor" href="#3-relu"></a> 3 relu</h4>
+<img src="/2025/03/14/2025%E5%B9%B43%E6%9C%8816%E6%97%A5-DL%E5%85%AB%E8%82%A1%E6%96%87/image-20250320184950902.png" alt="image-20250320184950902" style="zoom: 67%;"> 
+<h5 id="优势"><a class="markdownIt-Anchor" href="#优势"></a> 优势</h5>
+<ol>
+<li><strong>缓解梯度消失</strong>：
+<ul>
+<li>Sigmoid/Tanh的饱和区：导数在输入绝对值较大时趋近于0（如Sigmoid导数值最大仅0.25），导致深层网络梯度链式相乘后指数级衰减</li>
+<li>ReLU的非饱和性：<strong>正区间的导数为1</strong>，保证梯度稳定传递，支持深层网络训练</li>
+</ul>
+</li>
+<li><strong>计算高效</strong>：ReLU仅需判断输入是否大于0（<strong>无指数运算</strong>），比Sigmoid/Tanh快6倍以上，适合大规模数据和复杂模型</li>
+<li><strong>稀疏激活</strong>：ReLU将负输入强制置零，使网络<strong>稀疏化</strong>（约50%神经元激活），降低参数依赖性和过拟合风险，增强模型鲁棒性</li>
+</ol>
+<h5 id="不足"><a class="markdownIt-Anchor" href="#不足"></a> 不足</h5>
+<ol>
+<li>为负时，ReLU输出恒为0，梯度为0，导致对应权重无法更新（“<strong>死亡</strong>”）</li>
+</ol>
+<h5 id="改进"><a class="markdownIt-Anchor" href="#改进"></a> 改进</h5>
+<blockquote>
+<p>改进ReLU的方法，比如Leaky ReLU、Parametric ReLU（PReLU）和ELU，</p>
+</blockquote>
+<h2 id="损失函数"><a class="markdownIt-Anchor" href="#损失函数"></a> 损失函数</h2>
+<blockquote>
+<p>解释什么是损失函数，它的作用，常见的损失函数类型，以及如何根据不同的任务选择合适的损失函数，还有在训练过程中如何优化损失。</p>
+</blockquote>
+<h3 id="1-定义-2"><a class="markdownIt-Anchor" href="#1-定义-2"></a> <strong>1 定义</strong>：</h3>
+<p>损失函数是衡量模型预测值与真实值<strong>差异的量化指标</strong>，</p>
+<p><strong>用于指导模型参数优化</strong>。反向传播更新梯度</p>
+<p><img src="/2025/03/14/2025%E5%B9%B43%E6%9C%8816%E6%97%A5-DL%E5%85%AB%E8%82%A1%E6%96%87/image-20250320182842833.png" alt="image-20250320182842833"></p>
+<h3 id="2-常见"><a class="markdownIt-Anchor" href="#2-常见"></a> 2 常见</h3>
+<ol>
+<li><strong>均方误差</strong> 绝对误差等等</li>
+<li>交叉熵</li>
+</ol>
+<h1 id="模型"><a class="markdownIt-Anchor" href="#模型"></a> 模型</h1>
+<h2 id="cnn"><a class="markdownIt-Anchor" href="#cnn"></a> CNN</h2>
+<h3 id="0-图像性质"><a class="markdownIt-Anchor" href="#0-图像性质"></a> 0 图像性质</h3>
+<ol>
+<li><strong>平移不变性</strong>：池化与卷积核滑动使模型对目标位置变化不敏感。</li>
+</ol>
+<h3 id="1-定义-3"><a class="markdownIt-Anchor" href="#1-定义-3"></a> 1 定义</h3>
+<p>核心思想是通过<strong>局部感受野</strong>和<strong>参数共享</strong>，高效提取空间或时序特征。<br>
+从原始像素中学习到“边缘→纹理→物体部件→完整物体”的层次化特征表示</p>
+<h3 id="2-组成"><a class="markdownIt-Anchor" href="#2-组成"></a> 2 组成</h3>
+<h4 id="卷积层"><a class="markdownIt-Anchor" href="#卷积层"></a> <strong>卷积层</strong></h4>
+<p><strong>卷积层堆叠</strong>：</p>
+<ul>
+<li>浅层卷积核提取边缘、颜色等低级特征。</li>
+<li>深层卷积核组合低级特征，形成高级语义（如车轮、车窗</li>
+</ul>
+<h4 id="池化层"><a class="markdownIt-Anchor" href="#池化层"></a> <strong>池化层</strong></h4>
+<blockquote>
+<p>减少计算量并增强平移不变性。</p>
+</blockquote>
+<h2 id="resnet"><a class="markdownIt-Anchor" href="#resnet"></a> resnet</h2>
+<h3 id="1思想"><a class="markdownIt-Anchor" href="#1思想"></a> 1<strong>思想</strong></h3>
+<blockquote>
+<p><strong>学习残差而非直接学习目标映射</strong>   通过（跳跃连接）实现残差学习</p>
+</blockquote>
+<h3 id="2-解决问题"><a class="markdownIt-Anchor" href="#2-解决问题"></a> 2 解决问题</h3>
+<h5 id="1-深层网络退化degradation"><a class="markdownIt-Anchor" href="#1-深层网络退化degradation"></a> 1. <strong>深层网络退化（Degradation）</strong></h5>
+<ul>
+<li><strong>现象</strong>：传统CNN（如VGG）随着层数增加（如20层以上），训练误差和测试误差反而上升，<strong>这不是过拟合，而是模型难以优化</strong>。</li>
+<li><strong>原因</strong>：叠加非线性层导致信息传递效率下降，深层网络难以学习有效的恒等映射（Identity Mapping）。</li>
+<li><strong>解决</strong>：跳跃连接强制网络学习残差 F(x)<em>F</em>(<em>x</em>)，当最优解接近恒等映射时，F(x)<em>F</em>(<em>x</em>) 只需逼近0，比直接拟合 H(x)=x<em>H</em>(<em>x</em>)=<em>x</em> 更简单。</li>
+</ul>
+<h5 id="2-梯度消失vanishing-gradient"><a class="markdownIt-Anchor" href="#2-梯度消失vanishing-gradient"></a> 2. <strong>梯度消失（Vanishing Gradient）</strong></h5>
+<ul>
+<li><strong>现象</strong>：反向传播时，梯度在深层网络中逐层连乘，导致浅层权重更新缓慢甚至停滞。</li>
+<li><strong>解决</strong>：跳跃连接提供<strong>梯度高速公路</strong>，梯度可通过加法操作直接回传至浅层（如公式 ∂L∂x=∂L∂H(x)⋅(1+∂F(x)∂x)∂<em>x</em>∂<em>L</em>=∂<em>H</em>(<em>x</em>)∂<em>L</em>⋅(1+∂<em>x</em>∂<em>F</em>(<em>x</em>))），避免梯度被多次非线性变换稀释。</li>
+</ul>
+<h2 id="模型难以优化"><a class="markdownIt-Anchor" href="#模型难以优化"></a> <strong>模型难以优化</strong></h2>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/03/14/2025%E5%B9%B43%E6%9C%8816%E6%97%A5-DL%E5%85%AB%E8%82%A1%E6%96%87/" data-id="cm8q1tfhq0011pcv41q1mcut5" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl/" rel="tag">dl</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
 
 
   <nav id="page-nav">
@@ -1887,9 +1995,9 @@ docker-compose up -d</p>
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>102</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>101</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>30</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>31</strong><br>标签</div></a>
     </div>
 
 

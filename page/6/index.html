@@ -43,9 +43,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>102</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>101</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>30</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>31</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -70,120 +70,6 @@
 </div>
 
         <section id="main">
-  
-    <article id="post-2025年2月10日-轻量化神经网络3" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/02/10/2025%E5%B9%B42%E6%9C%8810%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C3/" class="article-date">
-  <time class="post-time" datetime="2025-02-10T03:40:45.000Z" itemprop="datePublished">
-    <span class="post-month">2月</span><br/>
-    <span class="post-day">10</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/02/10/2025%E5%B9%B42%E6%9C%8810%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C3/">2025年2月10日 轻量化神经网络3</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="introduction"><a class="markdownIt-Anchor" href="#introduction"></a> <strong>Introduction</strong></h1>
-<p>近期卷积网络的设计除了注重准确率之外，还需要兼顾运行性能，特别是在移动设备上的运行性能，这使得卷积神经网络的设计变得更加难，主要有以下难点：</p>
-<ul>
-<li>Intractable design space，由于卷积网络参数很多，导致设计空间十分复杂，目前很多方法提出自动化搜索，能够简化人工设计的流程，但这种方法一般需要大量的算力。</li>
-<li>Nontransferable optimality，卷积网络的性能取决于很多因素，比如输入分辨率和目标设备，不同的分辨率需要调整不同的网络参数，而相同block在不同的设备上的效率也可能大不相同，所以需要对网络在特定的条件下进行特定的调优。</li>
-<li>Inconsistent efficiency metrics，大多数效率指标不仅与网络结构相关，也和目标设备上的软硬件设置有关。为了简化，很多研究都采用硬件无关的指标来表示卷积的效率，比如FLOPs，但FLOPs并不能总等同于性能，还跟block的实现方式相关，这使得网络的设计更加困难。</li>
-</ul>
-<h1 id="nas"><a class="markdownIt-Anchor" href="#nas"></a> NAS</h1>
-<h2 id="总结nas-发展历程"><a class="markdownIt-Anchor" href="#总结nas-发展历程"></a> <strong>总结：NAS 发展历程</strong></h2>
-<table>
-<thead>
-<tr>
-<th>阶段</th>
-<th>方法</th>
-<th>主要创新点</th>
-<th>计算成本</th>
-<th>代表性模型</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>早期 NAS</strong></td>
-<td>强化学习 NAS</td>
-<td>RNN 控制器搜索网络结构</td>
-<td>高</td>
-<td>NASNet</td>
-</tr>
-<tr>
-<td><strong>进化 NAS</strong></td>
-<td>进化算法 NAS</td>
-<td>变异 + 交叉进化优化网络</td>
-<td>高</td>
-<td>AmoebaNet</td>
-</tr>
-<tr>
-<td><strong>梯度优化 NAS</strong></td>
-<td>DARTS</td>
-<td>采用梯度下降进行高效搜索</td>
-<td>低</td>
-<td>DARTS、ProxylessNAS</td>
-</tr>
-<tr>
-<td><strong>高效 NAS</strong></td>
-<td>Efficient NAS</td>
-<td>共享参数 + 复合缩放 + 硬件感知搜索</td>
-<td>低</td>
-<td>EfficientNet、FBNet、OFA</td>
-</tr>
-</tbody>
-</table>
-<h1 id="fbnet"><a class="markdownIt-Anchor" href="#fbnet"></a> FBNet</h1>
-<img src="/2025/02/10/2025%E5%B9%B42%E6%9C%8810%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C3/image-20250219134545540.png" style="zoom:67%;">
-<p>将 <strong>硬件性能约束</strong>（如浮点运算量 FLOPs、内存使用量、计算延迟等）引入到 NAS 的搜索过程，使得网络架构不仅能够实现高精度，还能在指定硬件上具有良好的执行效率。</p>
-<p>BNet 的工作流程可以分为以下几个步骤：</p>
-<ol>
-<li><strong>硬件感知的目标函数</strong>：<br>
-在设计过程中，FBNet 将目标硬件（如移动设备、嵌入式设备等）的约束（如内存、计算量等）纳入考虑。FBNet 的目标是最小化 <strong>计算资源的消耗</strong>，同时保证较高的 <strong>分类精度</strong>。这个目标函数是硬件感知的，旨在寻找在硬件上性能最优的网络架构。</li>
-<li><strong>可微分架构搜索</strong>：<br>
-FBNet 使用了一种基于梯度优化的搜索方法，即将 NAS 搜索过程转化为可微分的优化问题。这使得 FBNet 可以在较少的计算资源下快速找到高效的网络架构。具体来说，FBNet 在 <strong>超网络（SuperNet）</strong> 中进行架构搜索，超网络包含了多种候选网络结构，通过训练和优化选择最优的架构。</li>
-<li><strong>选择模块</strong>：<br>
-在 FBNet 中，网络结构的选择是模块化的，每个模块（如卷积、深度可分离卷积等）都有多个候选结构，而这些候选结构的选择在搜索过程中是通过<strong>可微分的路径选择</strong>来实现的。最终，FBNet 在候选模块中选择一个最优的结构。</li>
-<li><strong>搜索策略</strong>：<br>
-为了加速搜索过程，FBNet 使用了 <strong>混合搜索策略</strong>，即结合了 <strong>强化学习</strong> 和 <strong>梯度优化</strong> 两种方法。强化学习用于生成架构的候选方案，而梯度优化则用于对这些方案进行优化。通过这种方式，FBNet 能够在复杂的搜索空间中找到最优的架构。</li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/02/10/2025%E5%B9%B42%E6%9C%8810%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C3/" data-id="cm8q1tfhg000hpcv4f8qg1hic" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E3%80%81model/" rel="tag">轻量化神经网络、model</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
   
     <article id="post-2025年2月9日-轻量化神经网络2" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -1327,7 +1213,7 @@ FBNet 使用了一种基于梯度优化的搜索方法，即将 NAS 搜索过程
       <a data-url="https://shakewely.github.io/2024/04/18/2024%E5%B9%B44%E6%9C%8818%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%87%AA%E5%88%B6%E6%A1%86%E6%9E%B6/" data-id="clx4fkxnj000dn0v43cmx8t28" class="article-share-link">分享</a>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/project/" rel="tag">project</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/project%EF%BC%8Cdl/" rel="tag">project，dl</a></li></ul>
 
     </footer>
   </div>
@@ -1787,6 +1673,481 @@ FBNet 使用了一种基于梯度优化的搜索方法，即将 NAS 搜索过程
 
 
   
+    <article id="post-2024年2月12日-转载文章" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2024/02/12/2024%E5%B9%B42%E6%9C%8812%E6%97%A5-%E8%BD%AC%E8%BD%BD%E6%96%87%E7%AB%A0/" class="article-date">
+  <time class="post-time" datetime="2024-02-12T14:16:29.000Z" itemprop="datePublished">
+    <span class="post-month">2月</span><br/>
+    <span class="post-day">12</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2024/02/12/2024%E5%B9%B42%E6%9C%8812%E6%97%A5-%E8%BD%AC%E8%BD%BD%E6%96%87%E7%AB%A0/">2024年2月12日 转载文章</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="转载ai文章"><a class="markdownIt-Anchor" href="#转载ai文章"></a> 转载AI文章</h1>
+<h2 id="python"><a class="markdownIt-Anchor" href="#python"></a> python</h2>
+<h3 id="100-个-python-练手项目"><a class="markdownIt-Anchor" href="#100-个-python-练手项目"></a> <strong>100 个 Python 练手项目</strong></h3>
+<p>1、【Python 图片转字符画】</p>
+<p>2、【200行Python代码实现2048】</p>
+<p>3、【Python3 实现火车票查询工具】</p>
+<p>4、【高德API+Python解决租房问题】</p>
+<p>5、【Python3色情图片识别】</p>
+<p>6、【Python 破解验证码】</p>
+<p>7、【Python实现简单的Web服务器】</p>
+<p>8、【pygame开发打飞机游戏】</p>
+<p>9、【Django 搭建简易博客】</p>
+<p>10、【Python基于共现提取《釜山行》人物关系】</p>
+<p>11、【基于scrapy爬虫的天气数据采集（python）】</p>
+<p>12、【Flask 开发轻博客】</p>
+<p>13、【Python3图片隐写术】</p>
+<p>14、【Python 实现简易Shell】</p>
+<p>15、【使用Python解数学方程】</p>
+<p>16、【PyQt 实现简易浏览器】</p>
+<p>17、【神经网络实现手写字符识别系统】</p>
+<p>18、【Python 实现简单画板】</p>
+<p>19、【Python实现3D建模工具】</p>
+<p>20、【NBA常规寒结果预测——利用Python进行比赛数据分析】</p>
+<p>21、【神经网络实现人脸识别任务】</p>
+<p>22、【Python文本解析器】</p>
+<p>23、【Python3&amp;；amp；OpenCV 视频转字符动画】</p>
+<p>24、【Python3 实现淘女郎照片爬虫】</p>
+<p>25、【Python3实现简单的FTP认证服务器】</p>
+<p>26、【基于Flask 与MySQL 实现番剧推荐系统】</p>
+<p>27、【Python 实现端口扫描器】</p>
+<p>28、【使用Python3编写系列实用脚本】</p>
+<p>29、【Python 实现康威生命游戏】</p>
+<p>30、【川普撞脸希拉里（基于OpenCV的面部特征交换）】</p>
+<p>31、【Python 3实现Markdown 解析器】</p>
+<p>32、【Python气象数据分析–《Python 数据分析实战》】</p>
+<p>33、【Python实现键值数据库】</p>
+<p>34、【k-近邻算法实现手写数字识别系统】</p>
+<p>35、【ebay在线拍卖数据分析】</p>
+<p>36、【Python 实现英文新闻摘要自动提取】</p>
+<p>37、【Python实现简易局域网视频聊天工具】</p>
+<p>38、【基于Flask及爬虫实现微信娱乐机器人】</p>
+<p>39、【Python实现Python解释器】</p>
+<p>40、【Python3基于Scapy实现DDos】</p>
+<p>41、【Python 实现密码强度检测器】</p>
+<p>42、【使用Python 实现深度神经网络】</p>
+<p>43、【Python实现从excel读取数据并绘制成精美图像】</p>
+<p>44、【人机对战初体验：Python基于Pygame实现四子棋游戏】</p>
+<p>45、【Python3实现可控制肉鸡的反向Shell】</p>
+<p>46、【Python打造漏洞扫描器】</p>
+<p>47、【Python应用马尔可夫链算法实现随机文本生成】</p>
+<p>48、【数独游戏的Python实现与破解】</p>
+<p>49、【使用Python定制词云】</p>
+<p>50、【Python开发简单计算器】</p>
+<p>50、【Python开发简单计算器】</p>
+<p>51、【Python 实现FTP弱口令扫描器】</p>
+<p>52、【Python实现Huffman编码解压缩文件】</p>
+<p>53、【Python实现Zip文件的暴力破解】</p>
+<p>54、【Python3智能裁切图片】</p>
+<p>55、【Python实现网站模拟登陆】</p>
+<p>56、【给Python3爬虫做一个界面.妹子图网实战】</p>
+<p>57、【Python3实现图片转彩色字符】</p>
+<p>58、【自联想器的Python 实现】</p>
+<p>59、【Python 实现简单流镜】</p>
+<p>60、【Flask实现简单聊天室】</p>
+<p>61、【基于PyQt5实现地图中定位相片拍摄位置】</p>
+<p>62、【Python实现模板引擎】</p>
+<p>63、【Python实现遗传算法求解n-queens问题】</p>
+<p>64、【Python3实现命令行动态进度条】</p>
+<p>65、【Python获取挂号信息并邮件通知】</p>
+<p>66、【Python实现java web项目远端自动化更新部署】</p>
+<p>67、【使用Python3编写Github 自动周报生成器】</p>
+<p>68、【使用Python生成分形图片】</p>
+<p>69、【Python 实现Redis 异步客户端】</p>
+<p>70、【Python 实现中文错别字高亮系统】</p>
+<p>71、【Python自动获取小说工具】</p>
+<p>72、【python自动获取酷狗音乐工具】</p>
+<p>73、【python自动获取海量IP工具】</p>
+<p>74、【Python自动化开发-制作名片卡】</p>
+<p>75、【Python自动化开发-微信统计】</p>
+<p>76、【Python自动化开发-批量发邮件通知】</p>
+<p>77、【Python自动化开发-考勒处理】</p>
+<p>78、【Python双色球系统】</p>
+<p>79、【Python批量获取王者荣耀皮肤】</p>
+<p>80、【Python获取阴阳师壁纸】</p>
+<p>81、【Python获取小说数据并分析】</p>
+<p>82、【python获取拉钩工具】</p>
+<p>83、【Python获取房天下数据】</p>
+<p>84、【Python获取彩票信息】</p>
+<p>85、【Python获取NBA数据】</p>
+<p>86、【Python合成女神图片】</p>
+<p>87、【Python法拍网数据】</p>
+<p>88、【Python操作Excel自动化开发】</p>
+<p>89、【python百行制作登录系统】</p>
+<p>90、【python百行制作查询工具】</p>
+<p>91、【Python百行代码实现点赞系统】</p>
+<p>92、【Python百行代码实现抽奖系统】</p>
+<p>93、【python自动工资条】</p>
+<p>94、【python抓取相亲网数据</p>
+<p>95、【python抓取百合网数据</p>
+<p>96、【python制作12306查票工具</p>
+<p>97、【python游戏开发公开课</p>
+<p>98、【python协程详解公开课</p>
+<p>99、【python吧中30行拿LOL皮肤</p>
+<p>100、【python快速获取斗图表情</p>
+<h3 id="数据分析"><a class="markdownIt-Anchor" href="#数据分析"></a> <a target="_blank" rel="noopener" href="https://blog.csdn.net/qazwsxpy/article/details/128192090?spm=1001.2100.3001.7377&amp;utm_medium=distribute.pc_feed_blog_category.none-task-blog-classify_tag-6-128192090-null-null.nonecase&amp;depth_1-utm_source=distribute.pc_feed_blog_category.none-task-blog-classify_tag-6-128192090-null-null.nonecase">数据分析</a></h3>
+<h2 id="机器学习"><a class="markdownIt-Anchor" href="#机器学习"></a> 机器学习</h2>
+<h3 id="机器学习-梯度下降"><a class="markdownIt-Anchor" href="#机器学习-梯度下降"></a> <a target="_blank" rel="noopener" href="https://techlead.blog.csdn.net/article/details/133819132?spm=1001.2014.3001.5502">机器学习-梯度下降</a></h3>
+<p>目录<br>
+一、简介<br>
+什么是梯度下降？<br>
+为什么梯度下降重要？<br>
+二、梯度下降的数学原理<br>
+代价函数（Cost Function）<br>
+梯度（Gradient）<br>
+更新规则<br>
+代码示例：基础的梯度下降更新规则<br>
+三、批量梯度下降（Batch Gradient Descent）<br>
+基础算法<br>
+代码示例<br>
+四、随机梯度下降（Stochastic Gradient Descent）<br>
+基础算法<br>
+代码示例<br>
+优缺点<br>
+五、小批量梯度下降（Mini-batch Gradient Descent）<br>
+基础算法<br>
+代码示例<br>
+优缺点<br>
+————————————————</p>
+<p>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/magicyangjay111/article/details/133819132">https://blog.csdn.net/magicyangjay111/article/details/133819132</a></p>
+<h3 id><a class="markdownIt-Anchor" href="#"></a> </h3>
+<h3 id="遗传算法可选"><a class="markdownIt-Anchor" href="#遗传算法可选"></a> 遗传算法（可选）</h3>
+<h2 id="深度学习"><a class="markdownIt-Anchor" href="#深度学习"></a> <a target="_blank" rel="noopener" href="https://blog.csdn.net/chenlycly/article/details/134043297?spm=1001.2100.3001.7377&amp;utm_medium=distribute.pc_feed_blog_category.none-task-blog-classify_tag-3-134043297-null-null.nonecase&amp;depth_1-utm_source=distribute.pc_feed_blog_category.none-task-blog-classify_tag-3-134043297-null-null.nonecase">深度学习</a></h2>
+<h3 id="前馈神经网络"><a class="markdownIt-Anchor" href="#前馈神经网络"></a> <a target="_blank" rel="noopener" href="https://techlead.blog.csdn.net/article/details/132421817?spm=1001.2014.3001.5502">前馈神经网络</a></h3>
+<p>目录<br>
+一、前馈神经网络概述<br>
+什么是前馈神经网络<br>
+前馈神经网络的工作原理<br>
+应用场景及优缺点<br>
+二、前馈神经网络的基本结构<br>
+输入层、隐藏层和输出层<br>
+激活函数的选择与作用<br>
+网络权重和偏置<br>
+三、前馈神经网络的训练方法<br>
+损失函数与优化算法<br>
+反向传播算法详解<br>
+避免过拟合的策略<br>
+四、使用Python和PyTorch实现FNN<br>
+4.1 准备数据集<br>
+选择合适的数据集<br>
+数据预处理<br>
+PyTorch数据加载器<br>
+4.2 构建模型结构<br>
+定义网络架构<br>
+选择激活函数<br>
+权重初始化<br>
+构建与任务相匹配的损失函数<br>
+4.3 训练模型<br>
+选择优化器<br>
+训练循环<br>
+模型验证<br>
+调整学习率<br>
+保存和加载模型<br>
+可视化训练过程<br>
+4.4 模型评估与可视化<br>
+评估指标<br>
+模型验证<br>
+混淆矩阵<br>
+ROC和AUC<br>
+特征重要性和模型解释<br>
+可视化隐藏层<br>
+五、前馈神经网络的先进变体与应用<br>
+多层感知器（MLP）<br>
+卷积神经网络（CNN）<br>
+循环神经网络（RNN）<br>
+Transformer结构<br>
+强化学习中的FNN<br>
+生成对抗网络（GAN）<br>
+FNN在医学图像分析中的应用<br>
+六、总结与未来展望<br>
+总结<br>
+未来展望<br>
+结语<br>
+————————————————</p>
+<p>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/magicyangjay111/article/details/132421817">https://blog.csdn.net/magicyangjay111/article/details/132421817</a></p>
+<p>损失函数和优化算法是神经网络训练的基石，决定了网络如何学习和调整其权重。</p>
+<ul>
+<li><strong>损失函数：</strong> 用于衡量网络预测与实际目标之间的差异，常见的损失函数包括均方误差（MSE）、交叉熵损失等。</li>
+<li><strong>优化算法：</strong> 通过最小化损失函数来更新网络权重，常见的优化算法包括随机梯度下降（SGD）、Adam、RMSProp等。</li>
+</ul>
+<h3 id="长短时记忆网络lstm"><a class="markdownIt-Anchor" href="#长短时记忆网络lstm"></a> <a target="_blank" rel="noopener" href="https://techlead.blog.csdn.net/article/details/132480035">长短时记忆网络（LSTM）</a></h3>
+<p>目录</p>
+<ol>
+<li>LSTM的背景<br>
+人工神经网络的进化<br>
+循环神经网络（RNN）的局限性<br>
+LSTM的提出背景</li>
+<li>LSTM的基础理论<br>
+2.1 LSTM的数学原理<br>
+遗忘门（Forget Gate）<br>
+输入门（Input Gate）<br>
+记忆单元（Cell State）<br>
+输出门（Output Gate）<br>
+2.2 LSTM的结构逻辑<br>
+遗忘门：决定丢弃的信息<br>
+输入门：选择性更新记忆单元<br>
+更新单元状态<br>
+输出门：决定输出的隐藏状态<br>
+门的相互作用<br>
+逻辑结构的实际应用<br>
+总结<br>
+2.3 LSTM与GRU的对比</li>
+<li>结构<br>
+LSTM<br>
+GRU</li>
+<li>数学表达<br>
+LSTM<br>
+GRU</li>
+<li>性能和应用<br>
+小结</li>
+<li>LSTM在实际应用中的优势<br>
+处理长期依赖问题<br>
+遗忘门机制<br>
+梯度消失问题的缓解<br>
+广泛的应用领域<br>
+灵活的架构选项<br>
+成熟的开源实现<br>
+小结</li>
+<li>LSTM的实战演示<br>
+4.1 使用PyTorch构建LSTM模型<br>
+定义LSTM模型<br>
+训练模型<br>
+评估和预测</li>
+<li>LSTM总结<br>
+<strong>解决长期依赖问题</strong><br>
+<strong>广泛的应用领域</strong><br>
+<strong>灵活与强大</strong><br>
+<strong>开源支持</strong><br>
+<strong>持战与展望</strong><br>
+总结反思<br>
+————————————————</li>
+</ol>
+<p>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/magicyangjay111/article/details/132480035">https://blog.csdn.net/magicyangjay111/article/details/132480035</a></p>
+<h4 id="lstm的提出背景"><a class="markdownIt-Anchor" href="#lstm的提出背景"></a> LSTM的提出背景</h4>
+<p>长短时记忆网络（LSTM）是一种特殊类型的RNN，由Hochreiter和Schmidhuber于1997年提出，目的是解决传统RNN的问题。</p>
+<ul>
+<li><strong>解决梯度消失问题</strong>: 通过引入“记忆单元”，LSTM能够在长序列中保持信息的流动。</li>
+<li><strong>捕捉长依赖性</strong>: LSTM结构允许网络捕捉和理解长序列中的复杂依赖关系。</li>
+<li><strong>广泛应用</strong>: 由于其强大的性能和灵活性，LSTM已经被广泛应用于许多序列学习任务，如语音识别、机器翻译和时间序列分析等。</li>
+</ul>
+<h4 id="记忆单元的结构"><a class="markdownIt-Anchor" href="#记忆单元的结构"></a> “记忆单元”的结构</h4>
+<h3 id="深度信念网络dbn"><a class="markdownIt-Anchor" href="#深度信念网络dbn"></a> <a target="_blank" rel="noopener" href="https://techlead.blog.csdn.net/article/details/132531255?spm=1001.2014.3001.5502">深度信念网络（DBN）</a></h3>
+<p>一、概述<br>
+1.1 深度信念网络的概述<br>
+1.2 深度信念网络与其他深度学习模型的比较<br>
+结构层次<br>
+学习方式<br>
+训练和优化<br>
+应用领域<br>
+1.3 应用领域<br>
+图像识别与处理<br>
+自然语言处理<br>
+推荐系统<br>
+语音识别<br>
+无监督学习与异常检测<br>
+药物发现与生物信息学<br>
+二、结构<br>
+2.1 受限玻尔兹曼机（RBM）<br>
+结构与组成<br>
+工作原理<br>
+学习算法<br>
+应用<br>
+2.2 DBN的结构和组成<br>
+层次结构<br>
+网络连接<br>
+训练过程<br>
+应用领域<br>
+2.3 训练和学习算法<br>
+预训练<br>
+微调<br>
+优化方法<br>
+评估和验证<br>
+三、实战<br>
+3.1 DBN模型的构建<br>
+定义RBM层<br>
+构建DBN模型<br>
+定义DBN的超参数<br>
+3.2 预训练<br>
+RBM的逐层训练<br>
+对比散度（CD）算法<br>
+3.3 微调<br>
+监督训练<br>
+微调训练<br>
+模型验证和测试<br>
+3.4 应用<br>
+分类或回归任务<br>
+特征学习<br>
+转移学习<br>
+在线应用<br>
+四、总结<br>
+————————————————</p>
+<p>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/magicyangjay111/article/details/132531255">https://blog.csdn.net/magicyangjay111/article/details/132531255</a></p>
+<h2 id="项目实战"><a class="markdownIt-Anchor" href="#项目实战"></a> 项目实战</h2>
+<h3 id="图像分类发展历史-技术全解与实战"><a class="markdownIt-Anchor" href="#图像分类发展历史-技术全解与实战"></a> <a target="_blank" rel="noopener" href="https://blog.csdn.net/magicyangjay111/article/details/134698103">图像分类：发展历史、技术全解与实战</a></h3>
+<ul>
+<li>自动化的神经网络架构搜索（NAS）技术</li>
+<li>轻量级模型和少样本学习也成为研究的热点</li>
+<li>图像分类有望实现更复杂的应用，如情感分析、自动化标注等</li>
+</ul>
+<p><img src="/2024/02/12/2024%E5%B9%B42%E6%9C%8812%E6%97%A5-%E8%BD%AC%E8%BD%BD%E6%96%87%E7%AB%A0/image-20240212222002730.png" alt="image-20240212222002730"></p>
+<h3 id="计算机视觉五大核心研究任务分类识别-检测分割-人体分析-三维视觉-视频分析"><a class="markdownIt-Anchor" href="#计算机视觉五大核心研究任务分类识别-检测分割-人体分析-三维视觉-视频分析"></a> <a target="_blank" rel="noopener" href="https://techlead.blog.csdn.net/article/details/132321843?spm=1001.2014.3001.5502">计算机视觉五大核心研究任务：分类识别、检测分割、人体分析、三维视觉、视频分析</a></h3>
+<p>目录<br>
+一、引言<br>
+1.1 计算机视觉的定义<br>
+1.1.1 核心技术<br>
+1.1.2 应用场景<br>
+1.2 历史背景及发展<br>
+1.2.1 1960s-1980s: 初期阶段<br>
+1.2.2 1990s-2000s: 机器学习时代<br>
+1.2.3 2010s-现在: 深度学习的革命<br>
+1.3 应用领域概览<br>
+1.3.1 工业自动化<br>
+1.3.2 医疗图像分析<br>
+1.3.3 自动驾驶<br>
+1.3.4 虚拟现实与增强现实<br>
+二、计算机视觉五大核心任务<br>
+2.1 图像分类与识别<br>
+2.1.1 图像分类与识别的基本概念<br>
+2.1.2 早期方法与技术演进<br>
+2.1.3 深度学习的引入与革新<br>
+卷积神经网络在图像分类中的应用<br>
+总结<br>
+2.2 物体检测与分割<br>
+2.2.1 物体检测<br>
+早期方法<br>
+深度学习方法<br>
+2.2.2 物体分割<br>
+语义分割<br>
+实例分割<br>
+总结<br>
+2.3 人体分析<br>
+2.3.1 人脸识别<br>
+2.3.2 人体姿态估计<br>
+2.3.3 动作识别<br>
+2.3.4 人体分割<br>
+2.4 三维计算机视觉<br>
+2.4.1 三维重建<br>
+立体视觉<br>
+多视图几何<br>
+点云生成和融合<br>
+2.4.2 3D物体检测和识别<br>
+基于2D图像的方法<br>
+基于点云的方法<br>
+2.4.3 三维语义分割<br>
+基于体素的方法<br>
+基于点云的方法<br>
+2.4.4 三维姿态估计<br>
+单视图方法<br>
+多视图方法<br>
+总结<br>
+2.5 视频理解与分析<br>
+2.5.1 视频分类<br>
+2.5.2 动作识别<br>
+2.5.3 视频物体检测与分割<br>
+2.5.4 视频摘要与高亮检测<br>
+2.5.5 视频生成和编辑<br>
+总结<br>
+三、无监督学习与自监督学习在计算机视觉中的应用<br>
+3.1 无监督学习<br>
+聚类<br>
+降维与表示学习<br>
+3.2 自监督学习<br>
+对比学习<br>
+预训练任务设计<br>
+3.3 跨模态学习</p>
+<ol start="4">
+<li>总结</li>
+</ol>
+<p>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/magicyangjay111/article/details/132321843">https://blog.csdn.net/magicyangjay111/article/details/132321843</a></p>
+<p><img src="/2024/02/12/2024%E5%B9%B42%E6%9C%8812%E6%97%A5-%E8%BD%AC%E8%BD%BD%E6%96%87%E7%AB%A0/image-20240212224535849.png" alt="image-20240212224535849"></p>
+<h3 id="人脸识别"><a class="markdownIt-Anchor" href="#人脸识别"></a> <a target="_blank" rel="noopener" href="https://techlead.blog.csdn.net/article/details/134762161">人脸识别</a>：</h3>
+<p>目录<br>
+一、人脸识别技术的发展历程<br>
+早期探索：20世纪60至80年代<br>
+技术价值点：<br>
+自动化与算法化：20世纪90年代<br>
+技术价值点：<br>
+深度学习的革命：21世纪初至今<br>
+技术价值点：<br>
+二、几何特征方法详解与实战<br>
+几何特征方法的原理<br>
+几何特征方法的局限性<br>
+实战案例：简单的几何特征人脸识别<br>
+环境配置<br>
+代码实现<br>
+代码说明<br>
+三、自动化与算法化详解与实战<br>
+自动化与算法化的进展<br>
+技术创新点：<br>
+实战案例：基于特征匹配的人脸识别<br>
+环境配置<br>
+代码实现<br>
+代码说明<br>
+四、深度学习方法<br>
+深度学习方法的核心概念<br>
+技术创新点<br>
+实战案例：使用深度学习进行人脸识别<br>
+环境配置<br>
+代码实现<br>
+代码说明<br>
+总结<br>
+————————————————</p>
+<p>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/magicyangjay111/article/details/134762161">https://blog.csdn.net/magicyangjay111/article/details/134762161</a></p>
+<p><img src="/2024/02/12/2024%E5%B9%B42%E6%9C%8812%E6%97%A5-%E8%BD%AC%E8%BD%BD%E6%96%87%E7%AB%A0/image-20240212232302240.png" alt="image-20240212232302240"></p>
+<p><img src="/2024/02/12/2024%E5%B9%B42%E6%9C%8812%E6%97%A5-%E8%BD%AC%E8%BD%BD%E6%96%87%E7%AB%A0/image-20240212232432194.png" alt="image-20240212232432194"></p>
+<h3 id="时间序列预测"><a class="markdownIt-Anchor" href="#时间序列预测"></a> <a target="_blank" rel="noopener" href="https://snu77.blog.csdn.net/article/details/133272874?spm=1001.2014.3001.5502">时间序列预测：</a></h3>
+<h2 id="深度学习-前沿"><a class="markdownIt-Anchor" href="#深度学习-前沿"></a> 深度学习 前沿</h2>
+<h3 id="可变形卷积deformable-conv"><a class="markdownIt-Anchor" href="#可变形卷积deformable-conv"></a> <a target="_blank" rel="noopener" href="https://blog.csdn.net/panghuzhenbang/article/details/129816869?spm=1001.2100.3001.7377&amp;utm_medium=distribute.pc_feed_blog_category.none-task-blog-classify_tag-13-129816869-null-null.nonecase&amp;depth_1-utm_source=distribute.pc_feed_blog_category.none-task-blog-classify_tag-13-129816869-null-null.nonecase">可变形卷积(Deformable Conv)</a></h3>
+<p><img src="/2024/02/12/2024%E5%B9%B42%E6%9C%8812%E6%97%A5-%E8%BD%AC%E8%BD%BD%E6%96%87%E7%AB%A0/image-20240212235532908.png" alt="image-20240212235532908"></p>
+<h3 id="llm"><a class="markdownIt-Anchor" href="#llm"></a> LLM</h3>
+<h3 id="sd"><a class="markdownIt-Anchor" href="#sd"></a> SD</h3>
+<h2 id="深度学习-项目优化"><a class="markdownIt-Anchor" href="#深度学习-项目优化"></a> 深度学习 项目优化</h2>
+<h3 id="量化"><a class="markdownIt-Anchor" href="#量化"></a> 量化</h3>
+<h3 id="cuda"><a class="markdownIt-Anchor" href="#cuda"></a> CUDA</h3>
+<h4 id="c-cuda手搓一个简单的神经网络推理"><a class="markdownIt-Anchor" href="#c-cuda手搓一个简单的神经网络推理"></a> <a target="_blank" rel="noopener" href="https://blog.csdn.net/Bartender_VA11/article/details/135999169">C++ CUDA手搓一个简单的神经网络推理</a></h4>
+<h3 id="trt"><a class="markdownIt-Anchor" href="#trt"></a> TRT</h3>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2024/02/12/2024%E5%B9%B42%E6%9C%8812%E6%97%A5-%E8%BD%AC%E8%BD%BD%E6%96%87%E7%AB%A0/" data-id="cltgreey1000aw8v4ahty4aie" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9D%82/" rel="tag">杂</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
 
 
   <nav id="page-nav">
@@ -1831,9 +2192,9 @@ FBNet 使用了一种基于梯度优化的搜索方法，即将 NAS 搜索过程
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>102</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>101</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>30</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>31</strong><br>标签</div></a>
     </div>
 
 

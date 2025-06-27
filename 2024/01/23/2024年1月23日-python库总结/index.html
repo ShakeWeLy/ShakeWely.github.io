@@ -13,7 +13,7 @@
 <meta property="og:description" content="httpx httpx 是一个比 requests 更适合现代 Python 应用（尤其是异步应用）的 HTTP 客户端。     特性 requests httpx     同步请求 ✅ ✅   异步请求 ❌ ✅   HTTP&#x2F;2 支持 ❌ ✅   典型场景 脚本、爬虫、小型服务 现代 Web 服务、异步微服务、FastAPI、HTTP&#x2F;2      Pytest 心目的只有一个：验证程序的实">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-01-23T05:53:18.000Z">
-<meta property="article:modified_time" content="2025-06-24T09:17:00.588Z">
+<meta property="article:modified_time" content="2025-06-27T07:52:33.154Z">
 <meta property="article:author" content="Weakliy">
 <meta property="article:tag" content="python">
 <meta name="twitter:card" content="summary">
@@ -48,9 +48,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>102</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>101</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>30</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>31</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -158,6 +158,127 @@
 <li>需要做参数化、大量组合测试</li>
 </ul>
 </blockquote>
+<h2 id="ospath-和-pathlib"><a class="markdownIt-Anchor" href="#ospath-和-pathlib"></a> os.path 和 pathlib</h2>
+<blockquote>
+<p><strong><code>os.path</code> 是传统的、函数式的路径处理方式</strong>。</p>
+<p><strong><code>pathlib</code> 是现代的、面向对象的路径处理方式（</strong></p>
+</blockquote>
+<blockquote>
+<h3 id="1-路径拼接"><a class="markdownIt-Anchor" href="#1-路径拼接"></a> 1. 路径拼接</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">python复制代码# os.path</span><br><span class="line">import os</span><br><span class="line">path = os.path.join(&quot;folder&quot;, &quot;file.txt&quot;)</span><br><span class="line"></span><br><span class="line"># pathlib</span><br><span class="line">from pathlib import Path</span><br><span class="line">path = Path(&quot;folder&quot;) / &quot;file.txt&quot;</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="2-获取文件名"><a class="markdownIt-Anchor" href="#2-获取文件名"></a> 2. 获取文件名</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python复制代码# os.path</span><br><span class="line">filename = os.path.basename(&quot;/some/path/file.txt&quot;)</span><br><span class="line"></span><br><span class="line"># pathlib</span><br><span class="line">filename = Path(&quot;/some/path/file.txt&quot;).name</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="3-判断文件是否存在"><a class="markdownIt-Anchor" href="#3-判断文件是否存在"></a> 3. 判断文件是否存在</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python复制代码# os.path</span><br><span class="line">os.path.exists(&quot;file.txt&quot;)</span><br><span class="line"></span><br><span class="line"># pathlib</span><br><span class="line">Path(&quot;file.txt&quot;).exists()</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="4-创建目录"><a class="markdownIt-Anchor" href="#4-创建目录"></a> 4. 创建目录</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python复制代码# os</span><br><span class="line">os.makedirs(&quot;folder/subfolder&quot;, exist_ok=True)</span><br><span class="line"></span><br><span class="line"># pathlib</span><br><span class="line">Path(&quot;folder/subfolder&quot;).mkdir(parents=True, exist_ok=True)</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<h1 id="pathlibpath-常用方法大全"><a class="markdownIt-Anchor" href="#pathlibpath-常用方法大全"></a> 📁 <code>pathlib.Path</code> 常用方法大全</h1>
+<hr>
+<p>1️⃣ <strong><code>/</code> 运算符（joinpath）</strong> ✅<br>
+重载 <code>/</code> 运算符实现路径拼接。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python复制代码from pathlib import Path</span><br><span class="line">p = Path(&quot;folder&quot;) / &quot;subfolder&quot; / &quot;file.txt&quot;</span><br><span class="line">print(p)  # folder/subfolder/file.txt</span><br></pre></td></tr></table></figure>
+<hr>
+<p>2️⃣ <strong><code>exists()</code></strong> ✅<br>
+判断路径是否存在。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制代码</span><br><span class="line">Path(&quot;somefile.txt&quot;).exists()  # True or False</span><br></pre></td></tr></table></figure>
+<hr>
+<p>3️⃣ <strong><code>is_file()</code></strong> ✅<br>
+判断路径是否为文件。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制代码</span><br><span class="line">Path(&quot;somefile.txt&quot;).is_file()  # True</span><br></pre></td></tr></table></figure>
+<hr>
+<p>4️⃣ <strong><code>is_dir()</code></strong> ✅<br>
+判断路径是否为目录。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制代码</span><br><span class="line">Path(&quot;myfolder&quot;).is_dir()  # True</span><br></pre></td></tr></table></figure>
+<hr>
+<p>5️⃣ <strong><code>mkdir(parents=False, exist_ok=False)</code></strong> ✅<br>
+创建目录。可递归创建父目录。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制代码</span><br><span class="line">Path(&quot;new/folder&quot;).mkdir(parents=True, exist_ok=True)</span><br></pre></td></tr></table></figure>
+<hr>
+<p>6️⃣ <strong><code>rmdir()</code></strong><br>
+删除空目录。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制代码</span><br><span class="line">Path(&quot;empty_folder&quot;).rmdir()</span><br></pre></td></tr></table></figure>
+<hr>
+<p>7️⃣ <strong><code>unlink()</code></strong><br>
+删除文件（相当于 <code>os.remove()</code>）。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制代码</span><br><span class="line">Path(&quot;temp.txt&quot;).unlink()</span><br></pre></td></tr></table></figure>
+<hr>
+<p>8️⃣ <strong><code>rename(target)</code></strong> ✅<br>
+重命名或移动文件/文件夹。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制代码</span><br><span class="line">Path(&quot;old_name.txt&quot;).rename(&quot;new_name.txt&quot;)</span><br></pre></td></tr></table></figure>
+<hr>
+<p>9️⃣ <strong><code>absolute()</code></strong><br>
+获取绝对路径。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">\</span><br><span class="line">print(Path(&quot;file.txt&quot;).absolute())</span><br></pre></td></tr></table></figure>
+<hr>
+<p>🔟 <strong><code>resolve(strict=False)</code></strong> ✅<br>
+返回规范化的绝对路径（软链接也会解析）。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制代码</span><br><span class="line">Path(&quot;file.txt&quot;).resolve()</span><br></pre></td></tr></table></figure>
+<hr>
+<p>1️⃣1️⃣ <strong><code>name</code></strong> ✅<br>
+返回路径的最后一个部分（文件名或文件夹名）。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制代码</span><br><span class="line">Path(&quot;/a/b/c.txt&quot;).name  # &#x27;c.txt&#x27;</span><br></pre></td></tr></table></figure>
+<hr>
+<p>1️⃣2️⃣ <strong><code>suffix</code></strong> ✅<br>
+返回文件扩展名（含点）。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制代码</span><br><span class="line">Path(&quot;report.pdf&quot;).suffix  # &#x27;.pdf&#x27;</span><br></pre></td></tr></table></figure>
+<hr>
+<p>1️⃣3️⃣ <strong><code>stem</code></strong> ✅<br>
+返回文件名（不含扩展名）。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制代码</span><br><span class="line">Path(&quot;report.pdf&quot;).stem  # &#x27;report&#x27;</span><br></pre></td></tr></table></figure>
+<hr>
+<p>1️⃣4️⃣ <strong><code>parent</code></strong> ✅<br>
+返回上一级目录。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制代码</span><br><span class="line">Path(&quot;/a/b/c.txt&quot;).parent  # Path(&#x27;/a/b&#x27;)</span><br></pre></td></tr></table></figure>
+<hr>
+<p>1️⃣5️⃣ <strong><code>parents</code></strong><br>
+返回所有父目录的列表（可索引）。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制代码list(Path(&quot;/a/b/c.txt&quot;).parents)</span><br><span class="line"># [Path(&#x27;/a/b&#x27;), Path(&#x27;/a&#x27;), Path(&#x27;/&#x27;)]</span><br></pre></td></tr></table></figure>
+<hr>
+<p>1️⃣6️⃣ <strong><code>read_text(encoding='utf-8')</code></strong> ✅<br>
+读取文本文件内容（简洁封装）。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制代码</span><br><span class="line">Path(&quot;note.txt&quot;).read_text()</span><br></pre></td></tr></table></figure>
+<hr>
+<p>1️⃣7️⃣ <strong><code>write_text(data, encoding='utf-8')</code></strong> ✅<br>
+写入文本文件内容（会覆盖）。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制代码</span><br><span class="line">Path(&quot;note.txt&quot;).write_text(&quot;Hello World!&quot;)</span><br></pre></td></tr></table></figure>
+<hr>
+<p>1️⃣8️⃣ <strong><code>read_bytes()</code></strong><br>
+读取二进制文件内容。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制代码</span><br><span class="line">data = Path(&quot;image.png&quot;).read_bytes()</span><br></pre></td></tr></table></figure>
+<hr>
+<p>1️⃣9️⃣ <strong><code>Path.iterdir()</code></strong><br>
+写入。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">for child in p.iterdir():</span><br><span class="line">    print(child)</span><br></pre></td></tr></table></figure>
+<hr>
+<p>2️⃣0️⃣ <strong><code>glob(pattern)</code> / <code>rglob(pattern)</code></strong> ✅<br>
+通配符匹配文件名（<code>rglob</code> 递归）。</p>
+<p>例子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python复制代码# 当前目录下所有txt</span><br><span class="line">list(Path(&quot;.&quot;).glob(&quot;*.txt&quot;))</span><br><span class="line"></span><br><span class="line"># 递归查找所有txt</span><br><span class="line">list(Path(&quot;.&quot;).rglob(&quot;*.txt&quot;))</span><br></pre></td></tr></table></figure>
+</blockquote>
 
       
     </div>
@@ -234,9 +355,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>102</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>101</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>30</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>31</strong><br>标签</div></a>
     </div>
 
 
