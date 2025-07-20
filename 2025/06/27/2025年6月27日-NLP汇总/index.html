@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2025年6月27日 NLP汇总 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;685915213   1：NPL NLP 相关的基础知识，包括文本预处理、分词、词性标注、命名实体识别、词向量表示等 Transformer 模型的结构和原理、基于注意力机制的自然语言处理技术 常用 ：Prompt  1 2   NLP任务 实体提取 标签提取  self attention  新的layer实现seq2seq&#x3D;双向rn">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2025年6月27日 NLP汇总">
+<meta property="og:url" content="https://shakewely.github.io/2025/06/27/2025%E5%B9%B46%E6%9C%8827%E6%97%A5-NLP%E6%B1%87%E6%80%BB/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;685915213   1：NPL NLP 相关的基础知识，包括文本预处理、分词、词性标注、命名实体识别、词向量表示等 Transformer 模型的结构和原理、基于注意力机制的自然语言处理技术 常用 ：Prompt  1 2   NLP任务 实体提取 标签提取  self attention  新的layer实现seq2seq&#x3D;双向rn">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2025/06/27/2025%E5%B9%B46%E6%9C%8827%E6%97%A5-NLP%E6%B1%87%E6%80%BB/image-20250711155320542.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/06/27/2025%E5%B9%B46%E6%9C%8827%E6%97%A5-NLP%E6%B1%87%E6%80%BB/image-20250711160450647.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/06/27/2025%E5%B9%B46%E6%9C%8827%E6%97%A5-NLP%E6%B1%87%E6%80%BB/image-20250711161000664.png">
+<meta property="og:image" content="https://picx.zhimg.com/v2-6444601b4c41d99e70569b0ea388c3bd_1440w.jpg">
+<meta property="og:image" content="https://shakewely.github.io/2025/06/27/2025%E5%B9%B46%E6%9C%8827%E6%97%A5-NLP%E6%B1%87%E6%80%BB/image-20250711155753974.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/06/27/2025%E5%B9%B46%E6%9C%8827%E6%97%A5-NLP%E6%B1%87%E6%80%BB/image-20250711160432324.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/06/27/2025%E5%B9%B46%E6%9C%8827%E6%97%A5-NLP%E6%B1%87%E6%80%BB/image-20250711160553196.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/06/27/2025%E5%B9%B46%E6%9C%8827%E6%97%A5-NLP%E6%B1%87%E6%80%BB/image-20250711160618022.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/06/27/2025%E5%B9%B46%E6%9C%8827%E6%97%A5-NLP%E6%B1%87%E6%80%BB/image-20250711160738850.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/06/27/2025%E5%B9%B46%E6%9C%8827%E6%97%A5-NLP%E6%B1%87%E6%80%BB/image-20250711161403459.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/06/27/2025%E5%B9%B46%E6%9C%8827%E6%97%A5-NLP%E6%B1%87%E6%80%BB/image-20250711161836414.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/06/27/2025%E5%B9%B46%E6%9C%8827%E6%97%A5-NLP%E6%B1%87%E6%80%BB/image-20250711162505426.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/06/27/2025%E5%B9%B46%E6%9C%8827%E6%97%A5-NLP%E6%B1%87%E6%80%BB/image-20250711145002536.png">
+<meta property="article:published_time" content="2025-06-27T14:03:06.000Z">
+<meta property="article:modified_time" content="2025-07-11T10:08:14.920Z">
+<meta property="article:author" content="Weakliy">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shakewely.github.io/2025/06/27/2025%E5%B9%B46%E6%9C%8827%E6%97%A5-NLP%E6%B1%87%E6%80%BB/image-20250711155320542.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>108</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>31</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2025年6月27日-NLP汇总" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/06/27/2025%E5%B9%B46%E6%9C%8827%E6%97%A5-NLP%E6%B1%87%E6%80%BB/" class="article-date">
+  <time class="post-time" datetime="2025-06-27T14:03:06.000Z" itemprop="datePublished">
+    <span class="post-month">6月</span><br/>
+    <span class="post-day">27</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2025年6月27日 NLP汇总
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/685915213">https://zhuanlan.zhihu.com/p/685915213</a></p>
+</blockquote>
+<h1 id="1npl"><a class="markdownIt-Anchor" href="#1npl"></a> 1：NPL</h1>
+<p>NLP 相关的基础知识，包括文本预处理、分词、词性标注、命名实体识别、词向量表示等</p>
+<p>Transformer 模型的结构和原理、基于注意力机制的自然语言处理技术</p>
+<p>常用 ：<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/626024467">Prompt</a></p>
+<blockquote>
+<p>1</p>
+<p>2</p>
+</blockquote>
+<h2 id="nlp任务"><a class="markdownIt-Anchor" href="#nlp任务"></a> NLP任务</h2>
+<p>实体提取</p>
+<p>标签提取</p>
+<h3 id="self-attention"><a class="markdownIt-Anchor" href="#self-attention"></a> self attention</h3>
+<blockquote>
+<p>新的layer实现seq2seq=双向rnn+并行</p>
+</blockquote>
+<img src="/2025/06/27/2025%E5%B9%B46%E6%9C%8827%E6%97%A5-NLP%E6%B1%87%E6%80%BB/image-20250711155320542.png" alt="image-20250711155320542" style="zoom:50%;">
+<blockquote>
+<p>q:match 其他人k: 每一个q对每一个k做attention</p>
+<p><img src="/2025/06/27/2025%E5%B9%B46%E6%9C%8827%E6%97%A5-NLP%E6%B1%87%E6%80%BB/image-20250711160450647.png" alt="image-20250711160450647" style="zoom:33%;"><img src="/2025/06/27/2025%E5%B9%B46%E6%9C%8827%E6%97%A5-NLP%E6%B1%87%E6%80%BB/image-20250711161000664.png" alt="image-20250711161000664" style="zoom:33%;"></p>
+<p><img src="https://picx.zhimg.com/v2-6444601b4c41d99e70569b0ea388c3bd_1440w.jpg" alt="img" style="zoom: 67%;"> <img src="/2025/06/27/2025%E5%B9%B46%E6%9C%8827%E6%97%A5-NLP%E6%B1%87%E6%80%BB/image-20250711155753974.png" alt="image-20250711155753974" style="zoom: 33%;">d:维度:scale</p>
+<p>生成:b</p>
+</blockquote>
+<blockquote>
+<p>并行:</p>
+<p><img src="/2025/06/27/2025%E5%B9%B46%E6%9C%8827%E6%97%A5-NLP%E6%B1%87%E6%80%BB/image-20250711160432324.png" alt="image-20250711160432324" style="zoom:33%;"><img src="/2025/06/27/2025%E5%B9%B46%E6%9C%8827%E6%97%A5-NLP%E6%B1%87%E6%80%BB/image-20250711160553196.png" alt="image-20250711160553196" style="zoom:33%;"><img src="/2025/06/27/2025%E5%B9%B46%E6%9C%8827%E6%97%A5-NLP%E6%B1%87%E6%80%BB/image-20250711160618022.png" alt="image-20250711160618022" style="zoom:33%;"><img src="/2025/06/27/2025%E5%B9%B46%E6%9C%8827%E6%97%A5-NLP%E6%B1%87%E6%80%BB/image-20250711160738850.png" alt="image-20250711160738850" style="zoom:33%;"></p>
+</blockquote>
+<blockquote>
+<p>多头注意力机制</p>
+<img src="/2025/06/27/2025%E5%B9%B46%E6%9C%8827%E6%97%A5-NLP%E6%B1%87%E6%80%BB/image-20250711161403459.png" alt="image-20250711161403459" style="zoom:33%;"> 
+<p>不同head关注的点不一样,长短咨询位置</p>
+</blockquote>
+<blockquote>
+<p>位置编码</p>
+<p>似乎位置不重要,都是对邻居和天涯似乎是一样的,v可控制</p>
+<p>为什么直接相加可以呢?<img src="/2025/06/27/2025%E5%B9%B46%E6%9C%8827%E6%97%A5-NLP%E6%B1%87%E6%80%BB/image-20250711161836414.png" alt="image-20250711161836414" style="zoom:33%;"></p>
+</blockquote>
+<blockquote>
+<p>transformer</p>
+<img src="/2025/06/27/2025%E5%B9%B46%E6%9C%8827%E6%97%A5-NLP%E6%B1%87%E6%80%BB/image-20250711162505426.png" alt="image-20250711162505426" style="zoom: 50%;"> 
+</blockquote>
+<blockquote>
+<p>masked attention</p>
+<p>masked为未产生的东西</p>
+</blockquote>
+<h1 id="2llm"><a class="markdownIt-Anchor" href="#2llm"></a> 2：LLM</h1>
+<details>
+<summary>▶ 点击展开 / 折叠</summary>
+这里是被折叠的内容，可以放文字、代码、图片等。
+- 支持列表
+- 支持段落
+- 支持 `代码块`
+<h1 id="3finetune"><a class="markdownIt-Anchor" href="#3finetune"></a> 3：Finetune</h1>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/hiyouga/LLaMA-Factory/tree/main">https://github.com/hiyouga/LLaMA-Factory/tree/main</a></p>
+<p>Integrated methods: (Continuous) pre-training, (multimodal) supervised fine-tuning, reward modeling, PPO, DPO, KTO, ORPO, etc</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/liguodongiot/llm-action">https://github.com/liguodongiot/llm-action</a></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>概念</th>
+<th>区别</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Pretraining（预训练）</strong></td>
+<td>在大语料上学习语言建模能力</td>
+</tr>
+<tr>
+<td><strong>Fine-tuning（微调）</strong></td>
+<td>在小数据上定制特定任务能力</td>
+</tr>
+<tr>
+<td><strong>Instruction tuning（指令微调）</strong></td>
+<td>在“任务指令+答案”数据上微调</td>
+</tr>
+<tr>
+<td><strong>RLHF（强化学习人类反馈）</strong></td>
+<td>用人类反馈进一步优化行为</td>
+</tr>
+<tr>
+<td><strong>Alignment（对齐）</strong></td>
+<td>让模型行为符合人类意图，包含指令微调 + RLHF</td>
+</tr>
+</tbody>
+</table>
+<h4 id="指令微调的语言模型"><a class="markdownIt-Anchor" href="#指令微调的语言模型"></a> 指令微调的语言模型</h4>
+<blockquote>
+<p>普通语言模型只学会了“在大语料里续写文本”；<br>
+指令微调模型进一步学会了：</p>
+<blockquote>
+<p>“当我说 <strong>请翻译成中文</strong> 时，不是续写‘请翻译成中文’，而是<strong>执行翻译任务</strong>。”</p>
+</blockquote>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;instruction&quot;</span><span class="punctuation">:</span> <span class="string">&quot;将下列英文翻译为中文。&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="string">&quot;How are you?&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;output&quot;</span><span class="punctuation">:</span> <span class="string">&quot;你好吗？&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<h4 id="基于人类反馈的强化学习rlhfreinforcement-learning-with-human-feedback"><a class="markdownIt-Anchor" href="#基于人类反馈的强化学习rlhfreinforcement-learning-with-human-feedback"></a> <strong>基于人类反馈的强化学习（RLHF，Reinforcement Learning with Human Feedback）</strong></h4>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://chatgpt.com/s/t_6870b6c17a5081919a2de618af9c434b">https://chatgpt.com/s/t_6870b6c17a5081919a2de618af9c434b</a></p>
+</blockquote>
+<blockquote>
+<p><strong>RLHF 是一种让语言模型通过人类偏好来“对齐”行为的技术</strong>：<br>
+它不是仅仅预测下一个词，而是学会“什么样的回答更符合人类预期”。</p>
+<p>预训练语言模型（如 GPT）是通过大量文本数据学习的，它只知道“语言模式”，<strong>不知道什么是“好回答”、“有害内容”或“礼貌回应”</strong>。</p>
+</blockquote>
+<blockquote>
+<p>🔧 <strong>RLHF 的目标</strong>是：<br>
+在模型已经具备生成能力的基础上，用人类反馈进一步调整模型行为，让它：</p>
+<ul>
+<li>更有用（helpful）</li>
+<li>更无害（harmless）</li>
+<li>更真实（honest）</li>
+<li>更对齐（aligned）</li>
+</ul>
+</blockquote>
+<blockquote>
+<h4 id="rlhf-三阶段工作流程标准流程"><a class="markdownIt-Anchor" href="#rlhf-三阶段工作流程标准流程"></a> ✅ RLHF 三阶段工作流程（标准流程）</h4>
+<p>这就是 OpenAI 的 InstructGPT / ChatGPT 的训练流程，分为三个阶段：</p>
+<p>🔵 <strong>Step 1：监督微调（Supervised Fine-Tuning, SFT）</strong></p>
+<ul>
+<li>用“指令+人类优质响应”对模型做初步微调。</li>
+<li>例如：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">textCopyEditUser: 写一首诗描述春天</span><br><span class="line">Assistant: 春风拂面百花开，柳绿燕归燕剪裁……</span><br></pre></td></tr></table></figure>
+<p>✅ 模型从“语言模型”变成“跟人类说话的模型”。</p>
+<hr>
+<p>🔵 <strong>Step 2：奖励模型（Reward Model, RM）训练</strong></p>
+<ul>
+<li>
+<p>收集人类对模型多个回答的<strong>偏好排序</strong>数据：</p>
+<blockquote>
+<p>输入一个问题，模型生成多个答案 → 人类打分 → 哪个更好？</p>
+</blockquote>
+</li>
+<li>
+<p>训练一个 <strong>Reward Model</strong>（通常是 BERT/Bloom 类模型），学会判断“哪个回答更好”。</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">textCopyEditPrompt: 你如何看待人工智能？</span><br><span class="line">→ Answer A vs Answer B → 人类更喜欢 A → Reward(A) &gt; Reward(B)</span><br></pre></td></tr></table></figure>
+<p>✅ 模型能评估回答质量（越像人，reward 分越高）。</p>
+<hr>
+<p>🔵 <strong>Step 3：强化学习（PPO,DPO等）优化原始模型</strong></p>
+<ul>
+<li>使用策略优化算法（如 PPO：Proximal Policy Optimization）</li>
+<li>目标是让模型生成更高 Reward 的答案</li>
+<li>奖励来自 Reward Model，而不是传统“环境”</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">模型生成答案 → Reward Model 打分 → 优化策略 → 再生成</span><br></pre></td></tr></table></figure>
+<p>✅ 模型行为被“人类价值”引导，而不是语言概率最大。</p>
+</blockquote>
+<h4 id="对齐alignmen"><a class="markdownIt-Anchor" href="#对齐alignmen"></a> 对齐(Alignmen)</h4>
+<table>
+<thead>
+<tr>
+<th>技术</th>
+<th>简介</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>DPO（Direct Preference Optimization）</strong></td>
+<td>替代 RLHF，直接用人类偏好做梯度优化，更高效</td>
+</tr>
+<tr>
+<td><strong>Constitutional AI（宪法式对齐）</strong></td>
+<td>Anthropic 提出，模型通过预设“宪法”规则自我审查和自我学习，无需人工打分</td>
+</tr>
+<tr>
+<td><strong>Self-Reward / Self-Alignment</strong></td>
+<td>让模型基于提示自评行为（如 OpenAI 的 Critic 模块）</td>
+</tr>
+<tr>
+<td><strong>多轮互动对齐（Multi-turn alignment）</strong></td>
+<td>加强模型在长对话、多轮引导下保持对齐状态</td>
+</tr>
+<tr>
+<td><strong>Instruction Backchaining</strong></td>
+<td>自动生成训练用的指令和行为对，用于自监督对齐</td>
+</tr>
+</tbody>
+</table>
+<h1 id="4-agent"><a class="markdownIt-Anchor" href="#4-agent"></a> 4 Agent</h1>
+<h2 id="1rag外挂数据库"><a class="markdownIt-Anchor" href="#1rag外挂数据库"></a> 1：RAG（外挂数据库）</h2>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.langchain.asia/">https://www.langchain.asia/</a></p>
+<p><img src="/2025/06/27/2025%E5%B9%B46%E6%9C%8827%E6%97%A5-NLP%E6%B1%87%E6%80%BB/image-20250711145002536.png" alt="image-20250711145002536"></p>
+</blockquote>
+</details>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/06/27/2025%E5%B9%B46%E6%9C%8827%E6%97%A5-NLP%E6%B1%87%E6%80%BB/" data-id="cmdahfjah0001l4v49z7b9ch9" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2025/07/01/2025%E5%B9%B47%E6%9C%881%E6%97%A5-vue/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          2025年7月1日 vue
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2025/06/27/%E6%95%88%E6%9E%9C%E5%AF%B9%E6%AF%94/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title"></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>108</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>31</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2024 - 2025 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

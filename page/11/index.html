@@ -43,7 +43,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>101</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>108</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>31</strong><br>标签</div></a>
     </div>
@@ -70,6 +70,529 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-2023年8月11日-支持向量机" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/08/10/2023%E5%B9%B48%E6%9C%8811%E6%97%A5-%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/" class="article-date">
+  <time class="post-time" datetime="2023-08-10T14:11:08.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">10</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/08/10/2023%E5%B9%B48%E6%9C%8811%E6%97%A5-%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/">2023年8月11日 支持向量机</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在支持向量机（SVM）的训练过程中，参数更新通常是通过优化算法来实现的，目标是最小化损失函数并找到一个最优的超平面。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 作者：Weakliy</span></span><br><span class="line"><span class="comment"># 创建日期：2023/8/10 22:28</span></span><br><span class="line"><span class="comment"># 描述：这个文件实现了SVM。</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> svm</span><br><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> make_classification</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建虚拟数据集</span></span><br><span class="line">X, y = make_classification(n_samples=<span class="number">100</span>, n_features=<span class="number">2</span>, n_informative=<span class="number">2</span>, n_redundant=<span class="number">0</span>, random_state=<span class="number">42</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将数据集分为训练集和测试集</span></span><br><span class="line">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.2</span>, random_state=<span class="number">42</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一个SVM分类器</span></span><br><span class="line">clf = svm.SVC(kernel=<span class="string">&#x27;linear&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在训练集上训练分类器</span></span><br><span class="line">clf.fit(X_train, y_train)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在测试集上进行预测</span></span><br><span class="line">y_pred = clf.predict(X_test)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 绘制训练集和测试集的散点图以及决策边界</span></span><br><span class="line">plt.scatter(X_train[:, <span class="number">0</span>], X_train[:, <span class="number">1</span>], c=y_train, cmap=plt.cm.Paired, marker=<span class="string">&#x27;o&#x27;</span>, label=<span class="string">&#x27;Train&#x27;</span>)</span><br><span class="line">plt.scatter(X_test[:, <span class="number">0</span>], X_test[:, <span class="number">1</span>], c=y_test, cmap=plt.cm.Paired, marker=<span class="string">&#x27;x&#x27;</span>, label=<span class="string">&#x27;Test&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 绘制决策边界</span></span><br><span class="line">ax = plt.gca()</span><br><span class="line">xlim = ax.get_xlim()</span><br><span class="line">ylim = ax.get_ylim()</span><br><span class="line"></span><br><span class="line">xx, yy = np.meshgrid(np.linspace(xlim[<span class="number">0</span>], xlim[<span class="number">1</span>], <span class="number">100</span>), np.linspace(ylim[<span class="number">0</span>], ylim[<span class="number">1</span>], <span class="number">100</span>))</span><br><span class="line">Z = clf.decision_function(np.c_[xx.ravel(), yy.ravel()])</span><br><span class="line">Z = Z.reshape(xx.shape)</span><br><span class="line"></span><br><span class="line">plt.contour(xx, yy, Z, colors=<span class="string">&#x27;k&#x27;</span>, levels=[-<span class="number">1</span>, <span class="number">0</span>, <span class="number">1</span>], alpha=<span class="number">0.5</span>, linestyles=[<span class="string">&#x27;--&#x27;</span>, <span class="string">&#x27;-&#x27;</span>, <span class="string">&#x27;--&#x27;</span>])</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Feature 1&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;Feature 2&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;SVM Classification&#x27;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 作者：Weakliy</span></span><br><span class="line"><span class="comment"># 创建日期：2023/8/11 12:22</span></span><br><span class="line"><span class="comment"># 描述：这个文件实现了SVM-三维。</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> mpl_toolkits.mplot3d <span class="keyword">import</span> Axes3D</span><br><span class="line"><span class="keyword">from</span> sklearn <span class="keyword">import</span> datasets</span><br><span class="line"><span class="keyword">from</span> sklearn.svm <span class="keyword">import</span> SVC</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成虚拟数据集</span></span><br><span class="line">X, y = datasets.make_classification(n_samples=<span class="number">100</span>, n_features=<span class="number">3</span>, n_informative=<span class="number">3</span>, n_redundant=<span class="number">0</span>, random_state=<span class="number">42</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建SVM模型</span></span><br><span class="line">clf = SVC(kernel=<span class="string">&#x27;linear&#x27;</span>)</span><br><span class="line">clf.fit(X, y)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 绘制支持向量和超平面</span></span><br><span class="line">fig = plt.figure()</span><br><span class="line">ax = fig.add_subplot(<span class="number">111</span>, projection=<span class="string">&#x27;3d&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 绘制支持向量</span></span><br><span class="line">sv = clf.support_vectors_</span><br><span class="line">ax.scatter(sv[:, <span class="number">0</span>], sv[:, <span class="number">1</span>], sv[:, <span class="number">2</span>], c=<span class="string">&#x27;red&#x27;</span>, marker=<span class="string">&#x27;o&#x27;</span>, label=<span class="string">&#x27;Support Vectors&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 绘制非支持向量</span></span><br><span class="line">non_sv = np.array([x <span class="keyword">for</span> idx, x <span class="keyword">in</span> <span class="built_in">enumerate</span>(X) <span class="keyword">if</span> idx <span class="keyword">not</span> <span class="keyword">in</span> clf.support_])</span><br><span class="line">ax.scatter(non_sv[:, <span class="number">0</span>], non_sv[:, <span class="number">1</span>], non_sv[:, <span class="number">2</span>], c=<span class="string">&#x27;blue&#x27;</span>, marker=<span class="string">&#x27;x&#x27;</span>, label=<span class="string">&#x27;Non-Support Vectors&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算超平面上的点</span></span><br><span class="line">xx, yy = np.meshgrid(np.linspace(X[:, <span class="number">0</span>].<span class="built_in">min</span>(), X[:, <span class="number">0</span>].<span class="built_in">max</span>(), <span class="number">50</span>),</span><br><span class="line">                     np.linspace(X[:, <span class="number">1</span>].<span class="built_in">min</span>(), X[:, <span class="number">1</span>].<span class="built_in">max</span>(), <span class="number">50</span>))</span><br><span class="line">zz = (-clf.intercept_[<span class="number">0</span>] - clf.coef_[<span class="number">0</span>][<span class="number">0</span>] * xx - clf.coef_[<span class="number">0</span>][<span class="number">1</span>] * yy) / clf.coef_[<span class="number">0</span>][<span class="number">2</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 绘制超平面</span></span><br><span class="line">ax.plot_surface(xx, yy, zz, alpha=<span class="number">0.2</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置图形参数</span></span><br><span class="line">ax.set_xlabel(<span class="string">&#x27;Feature 1&#x27;</span>)</span><br><span class="line">ax.set_ylabel(<span class="string">&#x27;Feature 2&#x27;</span>)</span><br><span class="line">ax.set_zlabel(<span class="string">&#x27;Feature 3&#x27;</span>)</span><br><span class="line">ax.set_title(<span class="string">&#x27;SVM Hyperplane in 3D&#x27;</span>)</span><br><span class="line">ax.legend()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示交互式图</span></span><br><span class="line">plt.show()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2023/08/10/2023%E5%B9%B48%E6%9C%8811%E6%97%A5-%E6%94%AF%E6%8C%81%E5%90%91%E9%87%8F%E6%9C%BA/" data-id="clrwazlr400137ov45xxlguzq" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2023年8月11日逻辑回归" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/08/09/2023%E5%B9%B48%E6%9C%8811%E6%97%A5%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/" class="article-date">
+  <time class="post-time" datetime="2023-08-09T02:25:31.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">09</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/08/09/2023%E5%B9%B48%E6%9C%8811%E6%97%A5%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/">最优化方法</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id=""><a class="markdownIt-Anchor" href="#"></a> </h1>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2023/08/09/2023%E5%B9%B48%E6%9C%8811%E6%97%A5%E9%80%BB%E8%BE%91%E5%9B%9E%E5%BD%92/" data-id="clrwazlr5001a7ov4dy5wg3ns" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2023年8月8日朴素贝叶斯" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/08/08/2023%E5%B9%B48%E6%9C%888%E6%97%A5%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/" class="article-date">
+  <time class="post-time" datetime="2023-08-08T05:33:14.772Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">08</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/08/08/2023%E5%B9%B48%E6%9C%888%E6%97%A5%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/">朴素贝叶斯1</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="朴素贝叶斯1"><a class="markdownIt-Anchor" href="#朴素贝叶斯1"></a> 朴素贝叶斯1</h1>
+<h2 id="0x1-概念-"><a class="markdownIt-Anchor" href="#0x1-概念-"></a> 0X1 概念-</h2>
+<h3 id="1-条件概率"><a class="markdownIt-Anchor" href="#1-条件概率"></a> 1. 条件概率</h3>
+<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808163209631.png" alt="image-20230808163209631" style="zoom:33%;" />
+<h3 id="2贝叶斯定理逆概率思维"><a class="markdownIt-Anchor" href="#2贝叶斯定理逆概率思维"></a> 2.贝叶斯定理—逆概率思维</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+<pre><code>										&lt;img src=&quot;C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808164650855.png&quot; alt=&quot;image-20230808164650855&quot; style=&quot;zoom: 25%;&quot; /&gt;	
+</code></pre>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808165504803.png" alt="image-20230808165504803" style="zoom:25%;" />
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">贝叶斯分类</span><br></pre></td></tr></table></figure>
+<h3 id="3朴素贝叶斯"><a class="markdownIt-Anchor" href="#3朴素贝叶斯"></a> 3.朴素贝叶斯</h3>
+<p>​</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">样本之间相互独立</span><br></pre></td></tr></table></figure>
+<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808165526844.png" alt="image-20230808165526844" style="zoom:25%;" />
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2023年8月8日16点51分</span><br></pre></td></tr></table></figure>
+<h2 id="0x2-朴素贝叶斯"><a class="markdownIt-Anchor" href="#0x2-朴素贝叶斯"></a> 0X2 朴素贝叶斯</h2>
+<h3 id="1朴素"><a class="markdownIt-Anchor" href="#1朴素"></a> 1.朴素？</h3>
+<p>​			生成方法</p>
+<p>​</p>
+<h3 id="2后验概率最大化"><a class="markdownIt-Anchor" href="#2后验概率最大化"></a> 2.后验概率最大化</h3>
+<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230809161257184.png" alt="image-20230809161257184" style="zoom:25%;" />
+<h2 id="0x3-极大似然估计"><a class="markdownIt-Anchor" href="#0x3-极大似然估计"></a> 0X3 极大似然估计</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">朴素贝叶斯2</span><br></pre></td></tr></table></figure>
+<h2 id="0x4-朴素贝叶斯算法"><a class="markdownIt-Anchor" href="#0x4-朴素贝叶斯算法"></a> 0X4 朴素贝叶斯算法</h2>
+<h3 id="1模型"><a class="markdownIt-Anchor" href="#1模型"></a> 1.模型</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 求出后验概率最大化 ---&gt;分类</span></span><br></pre></td></tr></table></figure>
+<img src="F:\.Hexo\MyBlog\source\_posts\朴素贝叶斯\image-20230809164213626.png" alt="image-20230809164213626" style="zoom:25%;" />
+<h3 id="2例题"><a class="markdownIt-Anchor" href="#2例题"></a> 2.例题</h3>
+<h4 id="1数据"><a class="markdownIt-Anchor" href="#1数据"></a> 1.数据</h4>
+<img src="F:\.Hexo\MyBlog\source\_posts\朴素贝叶斯\image-20230809164353651.png" alt="image-20230809164353651" style="zoom:25%;" />
+<h4 id="2计算"><a class="markdownIt-Anchor" href="#2计算"></a> 2.计算</h4>
+<img src="F:\.Hexo\MyBlog\source\_posts\朴素贝叶斯\image-20230809164823920.png" alt="image-20230809164823920" style="zoom:25%;" />
+<h2 id="0x5-贝叶斯估计"><a class="markdownIt-Anchor" href="#0x5-贝叶斯估计"></a> 0x5 贝叶斯估计</h2>
+<h3 id="1估计方法"><a class="markdownIt-Anchor" href="#1估计方法"></a> 1.估计方法</h3>
+<img src="F:\.Hexo\MyBlog\source\_posts\朴素贝叶斯\image-20230809165328883.png" alt="image-20230809165328883" style="zoom:25%;" />	
+<h1 id="朴素贝叶斯2"><a class="markdownIt-Anchor" href="#朴素贝叶斯2"></a> 朴素贝叶斯2</h1>
+<h3 id="0x1-极大似然估计"><a class="markdownIt-Anchor" href="#0x1-极大似然估计"></a> 0X1 极大似然估计</h3>
+<p>​	样本</p>
+<img src="\image-20230809161514684.png" alt="image-20230809161514684" style="zoom:25%;" />
+<p><img src="./2023%E5%B9%B48%E6%9C%888%E6%97%A5%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/image-20230809194817736.png" alt="" /></p>
+<h3 id="0x2-实例1"><a class="markdownIt-Anchor" href="#0x2-实例1"></a> 0X2 实例1</h3>
+<h4 id="1-求出概率函数"><a class="markdownIt-Anchor" href="#1-求出概率函数"></a> 1. 求出概率函数</h4>
+<p>​	<img src="./2023年8月8日朴素贝叶斯/image-20230809162507251.png" alt="image-20230809162507251" style="zoom:25%;" /></p>
+<h4 id="2根据样本求出似然函数"><a class="markdownIt-Anchor" href="#2根据样本求出似然函数"></a> 2.根据样本求出似然函数</h4>
+<img src="./2023年8月8日朴素贝叶斯/image-20230809162726485.png" alt="image-20230809162726485" style="zoom:33%;" />
+<h4 id="3通过遍历求偏导或者迭代求出极大值"><a class="markdownIt-Anchor" href="#3通过遍历求偏导或者迭代求出极大值"></a> 3.通过遍历，求偏导或者迭代求出极大值</h4>
+<img src="./2023年8月8日朴素贝叶斯/image-20230809163009019.png" alt="image-20230809163009019" style="zoom:25%;" />
+<h4 id="4-如下"><a class="markdownIt-Anchor" href="#4-如下"></a> 4. 如下</h4>
+<img src="./2023年8月8日朴素贝叶斯/image-20230809163338052.png" alt="image-20230809163338052" style="zoom:25%;" />
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="0x2-实例2"><a class="markdownIt-Anchor" href="#0x2-实例2"></a> 0X2 实例2</h3>
+<h4 id="极大似然估计"><a class="markdownIt-Anchor" href="#极大似然估计"></a> 极大似然估计</h4>
+<img src="./2023年8月8日朴素贝叶斯/image-20230809163741725.png" alt="image-20230809163741725" style="zoom:33%;" />
+<p>​</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2023/08/08/2023%E5%B9%B48%E6%9C%888%E6%97%A5%E6%9C%B4%E7%B4%A0%E8%B4%9D%E5%8F%B6%E6%96%AF/" data-id="clrwazlrb00237ov4gf7dbclx" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2023年8月7日感知机" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/08/08/2023%E5%B9%B48%E6%9C%887%E6%97%A5%E6%84%9F%E7%9F%A5%E6%9C%BA/" class="article-date">
+  <time class="post-time" datetime="2023-08-08T02:25:31.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">08</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/08/08/2023%E5%B9%B48%E6%9C%887%E6%97%A5%E6%84%9F%E7%9F%A5%E6%9C%BA/">感知机</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="todo"><a class="markdownIt-Anchor" href="#todo"></a> Todo</h1>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2023/08/08/2023%E5%B9%B48%E6%9C%887%E6%97%A5%E6%84%9F%E7%9F%A5%E6%9C%BA/" data-id="clrwazlra001y7ov49dis7omw" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2023年8月8日K临算法" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/08/07/2023%E5%B9%B48%E6%9C%888%E6%97%A5K%E4%B8%B4%E7%AE%97%E6%B3%95/" class="article-date">
+  <time class="post-time" datetime="2023-08-07T13:19:22.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">07</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/08/07/2023%E5%B9%B48%E6%9C%888%E6%97%A5K%E4%B8%B4%E7%AE%97%E6%B3%95/">K近邻法</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="k近邻法"><a class="markdownIt-Anchor" href="#k近邻法"></a> K近邻法</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 概念</span><br><span class="line">K近邻法 (k-nearest neighbor，k-NN) 是一种基本的分类与回归方法。主要思想: 假定给定一个训练数据集，其中实例标签已定，当输入新的实例时，可以根据其最近的 k 个训练实例的标签，预测新实例对应的标注信息。</span><br><span class="line">分类问题:对新的实例，根据与之相邻的 k 个训练实例的类别，通过多数表决等方式进行预测。</span><br><span class="line">回归问题: 对新的实例，根据与之相邻的 k 个训练实例的标签，通过均值计算进行预测。</span><br></pre></td></tr></table></figure>
+<h2 id="0x1图像理解"><a class="markdownIt-Anchor" href="#0x1图像理解"></a> 0X1图像理解：</h2>
+<p><img src="./K%E4%B8%B4%E7%AE%97%E6%B3%95/image-20230809195539760.png" alt="image-20230809195539760" /></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">(1) k=3，绿色圆点属于红色三角形类别;</span><br><span class="line">(2) k=5，绿色圆点属于蓝色正方形类别;</span><br><span class="line">较小的 k 值，学习的近似误差减小，但估计误差增大，敏感性增强，而且模型复杂，容易过拟合</span><br><span class="line">较大的 k 值，减少学习的估计误差，但近似误差增大，而且模型简单</span><br><span class="line">注: k 的取值可通过交叉验证来选择，一般低于训练集样本量的平方</span><br></pre></td></tr></table></figure>
+<h4 id="拓展欧氏距离三维等等"><a class="markdownIt-Anchor" href="#拓展欧氏距离三维等等"></a> 拓展：欧氏距离，三维等等</h4>
+<h2 id="0x2-算法"><a class="markdownIt-Anchor" href="#0x2-算法"></a> 0X2 算法</h2>
+<p>​	<img src="./K%E4%B8%B4%E7%AE%97%E6%B3%95/image-20230809195555386.png" alt="image-20230809195555386" /></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">输入:训练集:</span><br><span class="line">T=[(x1,y1),(x2,y2)·.·,(xN,yN)&#125;其中，XiEXCR”，yEy=&#123;c,C2,···,CK&#125;，实例x;输出:实例x所属类别 y</span><br><span class="line">(1)r根据给定的距离度量，计算X与 T中点的距离:</span><br><span class="line">(2)在 T中找到与x 最邻近的 k 个点，涵盖这 k 个点的x 的邻域记作Nk(x);</span><br><span class="line">(3)在Nk(x)中根据分类决策规则 (如多数表决) 决定 的类别 y。</span><br></pre></td></tr></table></figure>
+<h2 id="0x3-误差率"><a class="markdownIt-Anchor" href="#0x3-误差率"></a> 0X3 误差率</h2>
+<p><img src="./K%E4%B8%B4%E7%AE%97%E6%B3%95/image-20230809195600717.png" alt="image-20230809195600717" /></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">概率类别求和</span><br></pre></td></tr></table></figure>
+<p><img src="./K%E4%B8%B4%E7%AE%97%E6%B3%95/image-20230809195619673.png" alt="image-20230809195619673" /></p>
+<p><img src="./K%E4%B8%B4%E7%AE%97%E6%B3%95/image-20230809195626591.png" alt="image-20230809195626591" /></p>
+<p><img src="./K%E4%B8%B4%E7%AE%97%E6%B3%95/image-20230809195633498.png" alt="image-20230809195633498" /></p>
+<h2 id="0x4-三要素"><a class="markdownIt-Anchor" href="#0x4-三要素"></a> 0X4 三要素</h2>
+<h3 id="1距离度量lp距离"><a class="markdownIt-Anchor" href="#1距离度量lp距离"></a> 1.距离度量lp距离</h3>
+<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808142018060.png" alt="image-20230808142018060" style="zoom:25%;" />
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">	欧氏距离 p=2</span><br><span class="line"></span><br><span class="line">​	曼哈顿距离 p=1</span><br><span class="line"></span><br><span class="line">​	切比雪夫距离 p=∞</span><br></pre></td></tr></table></figure>
+<h3 id="2p范式取不同值时所计算的距离不相同"><a class="markdownIt-Anchor" href="#2p范式取不同值时所计算的距离不相同"></a> 2.p范式取不同值时，所计算的距离不相同：</h3>
+<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808141722543.png" alt="image-20230808141722543" style="zoom:25%;" />
+<p>​	<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808141732507.png" alt="image-20230808141732507" style="zoom:25%;" /></p>
+<h3 id="3分类决策选择"><a class="markdownIt-Anchor" href="#3分类决策选择"></a> 3.分类决策选择</h3>
+<h4 id="多数表决规则由输入实例的-k-个邻近的训练实例中的多数类决定输入实例的类"><a class="markdownIt-Anchor" href="#多数表决规则由输入实例的-k-个邻近的训练实例中的多数类决定输入实例的类"></a> 多数表决规则:由输入实例的 k 个邻近的训练实例中的多数类决定输入实例的类。</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">分类函数f:Rn=&#123;c1,C2,··,CK&#125;</span><br><span class="line">损失函数L(Y,F(x)=  Y = f(X) or Y≠f(X)</span><br><span class="line">误分类概率P(Y ≠f(X))=1- P(Y = f(X))</span><br></pre></td></tr></table></figure>
+<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808143250462.png" alt="image-20230808143250462" style="zoom:25%;" />
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808143222812.png" alt="image-20230808143222812" style="zoom:25%;" />
+<h2 id="0x5-kd树"><a class="markdownIt-Anchor" href="#0x5-kd树"></a> 0X5 kd树</h2>
+<h3 id="1构造kd树"><a class="markdownIt-Anchor" href="#1构造kd树"></a> 1.构造kd树</h3>
+<h4 id="1概念"><a class="markdownIt-Anchor" href="#1概念"></a> 1.概念</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">概念</span><br><span class="line">kd 树是一种对 k 维空间中的实例点进行储存以便对其进行快速检索的树形数据结构。</span><br><span class="line"></span><br><span class="line">本质:二叉树，表示对 k 维空间的一个划分</span><br><span class="line">构造过程:不断地用垂直于坐标轴的超平面将 k 维空间切分，形成k 维超矩形区域</span><br><span class="line">kd 树的每一个结点对应于一个 k 维超矩形区</span><br></pre></td></tr></table></figure>
+<h4 id="2算法"><a class="markdownIt-Anchor" href="#2算法"></a> 2.算法</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">输入: k 维空间数据集:</span><br><span class="line">T=&#123;x1,X2,···,XN</span><br><span class="line">其中，X;=(x;输出:kd 树</span><br><span class="line">(1) 开始:构造根节点。</span><br><span class="line">选取 x(1)为坐标轴，以训练集中的所有数据 (1) 坐标中的中位数作为切分点，将超矩形区域切割成两个子区域将该切分点作为根结点。由根结点生出深度为 1的左右子结点，左节点对应坐标小于切分点，右结点对应坐标大于切分点。</span><br><span class="line">(2) 重复</span><br><span class="line">对深度为j的结点，选择 x(0)为切分坐标轴,] = ( mod k)+1，以该结点区域中所有实例 ()坐标的中位数</span><br><span class="line">作为切分点，将区域分为两个子区域。</span><br><span class="line">生成深度为i+1的左、右子结点。左节点对应坐标小于切分点，右结点对应坐标大于切分点。</span><br><span class="line">直到两个子区域没有实例时停止。</span><br></pre></td></tr></table></figure>
+ <img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808151948890.png" alt="image-20230808151948890" style="zoom:25%;" />
+<h4 id="3例子"><a class="markdownIt-Anchor" href="#3例子"></a> 3.例子</h4>
+<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808151925879.png" alt="image-20230808151925879" style="zoom:25%;" />
+<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808151934628.png" alt="image-20230808151934628" style="zoom:25%;" />
+<h3 id="2搜索kd树"><a class="markdownIt-Anchor" href="#2搜索kd树"></a> 2.搜索KD树</h3>
+<pre><code>寻找“当前最近点”
+	寻找最近邻的子结点作为目标点的“当前最近点9
+回溯
+	以目标点和“当前最近点”的距离沿树根部进行回溯和迭代
+</code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">输入:已构造的 kd 树，目标点X</span><br><span class="line">输出:X的最近邻</span><br><span class="line">寻找“当前最近点</span><br><span class="line">	从根结点出发，递归访问 kd 树，找出包含X的叶结点:以此叶结点为“当前最近点”</span><br><span class="line">回溯</span><br><span class="line">	若该结点比“当前最近点”距离目标点更近，更新“当前最近点”</span><br><span class="line">	当前最近点一定存在于该结点一个子结点对应的区域，检查子结点的父结点的另一子结点对应的区域是否有更近的点。</span><br><span class="line">当回退到根结点时，搜索结束，最后的“当前最近点”即为 X 的最近邻部o</span><br></pre></td></tr></table></figure>
+<h4 id="1-寻找"><a class="markdownIt-Anchor" href="#1-寻找"></a> 1 寻找</h4>
+<p>根据分离点寻找</p>
+<h4 id="2-回溯"><a class="markdownIt-Anchor" href="#2-回溯"></a> 2 回溯</h4>
+<p>先看最近点—半径画圆—相交父节点超平面—是则：检查兄弟节点–判断距离–迭代回到最初判断；否：确定该点—得到最临点</p>
+<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808154234530.png" alt="image-20230808154234530" style="zoom:25%;" />
+<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808154437522.png" alt="image-20230808154437522" style="zoom:25%;" />
+<img src="C:\Users\admin\AppData\Roaming\Typora\typora-user-images\image-20230808154442954.png" alt="image-20230808154442954" style="zoom:25%;" />
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2023年8月8日</span><br></pre></td></tr></table></figure>
+<h2 id="0x6-代码实现"><a class="markdownIt-Anchor" href="#0x6-代码实现"></a> 0X6 代码实现</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 作者：Weakliy</span></span><br><span class="line"><span class="comment"># 创建日期：2023/8/11 15:50</span></span><br><span class="line"><span class="comment"># 描述：这个文件实现了分类。</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> load_iris</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.neighbors <span class="keyword">import</span> KNeighborsClassifier</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> accuracy_score, confusion_matrix</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加载鸢尾花数据集</span></span><br><span class="line">data = load_iris()</span><br><span class="line">X = data.data</span><br><span class="line">y = data.target</span><br><span class="line">target_names = data.target_names</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将数据集分为训练集和测试集</span></span><br><span class="line">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.2</span>, random_state=<span class="number">42</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建k临近法分类器，这里选择k=3</span></span><br><span class="line">k = <span class="number">3</span></span><br><span class="line">knn_classifier = KNeighborsClassifier(n_neighbors=k)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在训练集上训练分类器</span></span><br><span class="line">knn_classifier.fit(X_train, y_train)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在测试集上进行预测</span></span><br><span class="line">y_pred = knn_classifier.predict(X_test)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算分类器的准确率</span></span><br><span class="line">accuracy = accuracy_score(y_test, y_pred)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Accuracy: <span class="subst">&#123;accuracy:<span class="number">.2</span>f&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 可视化数据分布</span></span><br><span class="line">sns.<span class="built_in">set</span>(style=<span class="string">&quot;whitegrid&quot;</span>)</span><br><span class="line">sns.pairplot(sns.load_dataset(<span class="string">&quot;iris&quot;</span>), hue=<span class="string">&quot;species&quot;</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 可视化混淆矩阵</span></span><br><span class="line">cm = confusion_matrix(y_test, y_pred)</span><br><span class="line">plt.figure(figsize=(<span class="number">8</span>, <span class="number">6</span>))</span><br><span class="line">sns.heatmap(cm, annot=<span class="literal">True</span>, cmap=<span class="string">&quot;Blues&quot;</span>, fmt=<span class="string">&quot;d&quot;</span>, xticklabels=target_names, yticklabels=target_names)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;Predicted&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;True&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;Confusion Matrix&#x27;</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 作者：Weakliy</span></span><br><span class="line"><span class="comment"># 创建日期：2023/8/11 15:51</span></span><br><span class="line"><span class="comment"># 描述：这个文件实现了回归功能。</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">from</span> sklearn.datasets <span class="keyword">import</span> make_regression</span><br><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.neighbors <span class="keyword">import</span> KNeighborsRegressor</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> mean_squared_error</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成模拟的回归数据集</span></span><br><span class="line">X, y = make_regression(n_samples=<span class="number">100</span>, n_features=<span class="number">1</span>, noise=<span class="number">10</span>, random_state=<span class="number">42</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将数据集分为训练集和测试集</span></span><br><span class="line">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.2</span>, random_state=<span class="number">42</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建k临近法回归器，这里选择k=3</span></span><br><span class="line">k = <span class="number">3</span></span><br><span class="line">knn_regressor = KNeighborsRegressor(n_neighbors=k)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在训练集上训练回归器</span></span><br><span class="line">knn_regressor.fit(X_train, y_train)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在测试集上进行预测</span></span><br><span class="line">y_pred = knn_regressor.predict(X_test)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算均方误差</span></span><br><span class="line">mse = mean_squared_error(y_test, y_pred)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Mean Squared Error: <span class="subst">&#123;mse:<span class="number">.2</span>f&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 可视化回归结果</span></span><br><span class="line">plt.scatter(X_test, y_test, color=<span class="string">&#x27;blue&#x27;</span>, label=<span class="string">&#x27;True values&#x27;</span>)</span><br><span class="line">plt.scatter(X_test, y_pred, color=<span class="string">&#x27;red&#x27;</span>, label=<span class="string">&#x27;Predicted values&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;X&#x27;</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;y&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;K-Nearest Neighbors Regression&#x27;</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.show()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2023/08/07/2023%E5%B9%B48%E6%9C%888%E6%97%A5K%E4%B8%B4%E7%AE%97%E6%B3%95/" data-id="clrwazlra00207ov422yeebh9" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2023年8月7日决策树" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/08/07/2023%E5%B9%B48%E6%9C%887%E6%97%A5%E5%86%B3%E7%AD%96%E6%A0%91/" class="article-date">
+  <time class="post-time" datetime="2023-08-07T02:25:31.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">07</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/08/07/2023%E5%B9%B48%E6%9C%887%E6%97%A5%E5%86%B3%E7%AD%96%E6%A0%91/">感知机</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="机器学习-统计学习方法决策树"><a class="markdownIt-Anchor" href="#机器学习-统计学习方法决策树"></a> 机器学习-统计学习方法–决策树</h1>
+<h5 id="p55后剪枝悲观原理"><a class="markdownIt-Anchor" href="#p55后剪枝悲观原理"></a> p5.5后剪枝——悲观原理</h5>
+<h5 id="后剪枝悲观原理"><a class="markdownIt-Anchor" href="#后剪枝悲观原理"></a> 后剪枝——悲观原理</h5>
+<p><img src="C:%5CUsers%5Cadmin%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20230805141501903.png" alt="image-20230805141501903" /></p>
+<h5 id="p56最小误差剪枝"><a class="markdownIt-Anchor" href="#p56最小误差剪枝"></a> p5.6最小误差剪枝</h5>
+<h5 id="p67基于错误剪枝"><a class="markdownIt-Anchor" href="#p67基于错误剪枝"></a> p6.7基于错误剪枝</h5>
+<p><img src="C:%5CUsers%5Cadmin%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20230805144911556.png" alt="image-20230805144911556" /></p>
+<h5 id="p57代价复杂剪枝"><a class="markdownIt-Anchor" href="#p57代价复杂剪枝"></a> p5.7代价复杂剪枝</h5>
+<p><img src="C:%5CUsers%5Cadmin%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20230805151828628.png" alt="image-20230805151828628" /></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2023/08/07/2023%E5%B9%B48%E6%9C%887%E6%97%A5%E5%86%B3%E7%AD%96%E6%A0%91/" data-id="clrwazlr9001w7ov408dqabx8" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2023年10月16日-ONNX2实操" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2023/08/02/2023%E5%B9%B410%E6%9C%8816%E6%97%A5-ONNX2%E5%AE%9E%E6%93%8D/" class="article-date">
+  <time class="post-time" datetime="2023-08-02T06:07:53.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">02</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2023/08/02/2023%E5%B9%B410%E6%9C%8816%E6%97%A5-ONNX2%E5%AE%9E%E6%93%8D/">ONNX2</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1-一般工作流程onnx模型实用全流程"><a class="markdownIt-Anchor" href="#1-一般工作流程onnx模型实用全流程"></a> <strong>1 一般工作流程（ONNX模型实用全流程）</strong></h2>
+<ol>
+<li><strong>导出模型</strong>（如 PyTorch → ONNX）</li>
+<li><strong>简化模型结构</strong>（使用 <code>onnxsim</code>）</li>
+<li><strong>模型检查和可视化</strong>（Netron 或 <code>onnx.checker</code>）</li>
+<li><strong>量化（可选）</strong>（静态/动态/QAT）</li>
+<li><strong>部署测试</strong>（ONNX Runtime、TensorRT、OpenVINO等）</li>
+<li><strong>模型裁剪、修改或转换（可选）</strong></li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">导出 ONNX</span><br><span class="line">     ↓</span><br><span class="line">[模型合法性检查]</span><br><span class="line">     ↓</span><br><span class="line">[结构查看与确认 (Netron)]</span><br><span class="line">     ↓</span><br><span class="line">[模型简化 (onnxsim)]</span><br><span class="line">     ↓</span><br><span class="line">[推理测试 (onnxruntime)]</span><br><span class="line">     ↓</span><br><span class="line">[量化优化 (可选)]</span><br><span class="line">     ↓</span><br><span class="line">[格式转换（TRT, OpenVINO 等）]</span><br><span class="line">     ↓</span><br><span class="line">[部署调优与上线]</span><br></pre></td></tr></table></figure>
+<h2 id="2-基础操作"><a class="markdownIt-Anchor" href="#2-基础操作"></a> 2 基础操作</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 导出模型为ONNX__2</span><br><span class="line">with torch.no_grad():</span><br><span class="line">    torch.onnx.export(</span><br><span class="line">        model,                       # 要转换的模型</span><br><span class="line">        example_input,               # 模型的任意一组输入</span><br><span class="line">        &#x27;resnet18.onnx&#x27;,    # 导出的 ONNX 文件名</span><br><span class="line">        opset_version=11,            # ONNX 算子集版本</span><br><span class="line">        input_names=[&#x27;input&#x27;],       # 输入 Tensor 的名称（自己起名字）</span><br><span class="line">        output_names=[&#x27;output&#x27;]      # 输出 Tensor 的名称（自己起名字）</span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+<p><code>torch.onnx.export()</code>的主要作用是将模型转换为ONNX格式，它不会执行任何需要梯度的操作，因此没有必要关闭梯度跟踪</p>
+<p><strong>with torch.no_grad():</strong></p>
+<p>可以用一下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 导出模型为ONNX__1</span><br><span class="line">torch.onnx.export(model, example_input, onnx_path, verbose=True)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 检查模型格式是否正确</span><br><span class="line">print(onnx.checker.check_model(onnx_model))</span><br></pre></td></tr></table></figure>
+<p>用于验证导出的ONNX模型是否<strong>符合ONNX规范的函数</strong></p>
+<p>出现错误时会抛出异常</p>
+<ol>
+<li><strong>验证模型结构</strong>：检查模型的计算图是否按照ONNX规范正确构建。</li>
+<li><strong>验证数据类型和形状</strong>：检查模型输入和输出节点的数据类型和形状是否与ONNX规范相符。</li>
+<li><strong>检查操作符的支持</strong>：检查模型中使用的操作符是否是ONNX支持的版本。</li>
+<li><strong>检查属性和元属性</strong>：检查模型节点的属性和元属性是否正确设置。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 以可读的形式打印计算图</span><br><span class="line">print(onnx.helper.printable_graph(onnx_model.graph))</span><br></pre></td></tr></table></figure>
+<p>用于可视化<strong>ONNX模型计算图</strong>的函数。</p>
+<p>将ONNX模型的计算图以人类可读的形式打印出来，以便于查看模型的结构和流程。</p>
+<h3 id="21-netron使用教程"><a class="markdownIt-Anchor" href="#21-netron使用教程"></a> 2.1 netron使用教程</h3>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_49963403/article/details/136242313">https://blog.csdn.net/m0_49963403/article/details/136242313</a></p>
+</blockquote>
+<h3 id="22-onnx-parser"><a class="markdownIt-Anchor" href="#22-onnx-parser"></a> 2.2 ONNX Parser</h3>
+<p>1.onnx parser是什么？</p>
+<p>ONNX Parser是一种用于<strong>解析和加载</strong>ONNX模型的工具或库。它负责将ONNX模型文件解析为内存中的数据结构，以便后续在特定的推理引擎或框架（如TensorRT）中使用。</p>
+<p>通常各种推理引擎或框架都会提供ONNX Parser的组件（如TensorRT的trt.OnnxParser()方法）。它能够创建一个Parser解析器读取ONNX模型文件</p>
+<h3 id="23-onnx-graphsurgeon"><a class="markdownIt-Anchor" href="#23-onnx-graphsurgeon"></a> 2.3 onnx-graphsurgeon</h3>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/yitiaoxiaolu/article/details/136378614">https://blog.csdn.net/yitiaoxiaolu/article/details/136378614</a></p>
+</blockquote>
+<p>onnx-graphsurgeon简介<br>
+onnx-graphsurgeon是NVIDIA推出的一种TensorRT开发辅助工具，用于编辑和优化ONNX模型。它提供了一种简单而强大的方式来修改和转换ONNX模型的图形表示，以便更好地适应TensorRT的优化和推理。</p>
+<h2 id="3-全部代码"><a class="markdownIt-Anchor" href="#3-全部代码"></a> 3 全部代码</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"># 作者：Weakliy</span><br><span class="line"># 创建日期：2023/8/2 22:09</span><br><span class="line"># 描述：这个文件实现了一些功能。</span><br><span class="line"></span><br><span class="line">import torch</span><br><span class="line">from torchvision import models</span><br><span class="line">from config import Common, Train  # 你需要导入相应的配置模块</span><br><span class="line"></span><br><span class="line"># 加载模型状态字典</span><br><span class="line">model = torch.load(r&#x27;../model/cress0.0001482023-04-18-08-40-11.pth&#x27;)</span><br><span class="line"></span><br><span class="line"># 构建模型实例</span><br><span class="line">model = model.eval()</span><br><span class="line"></span><br><span class="line"># 示例输入数据</span><br><span class="line">x = torch.randn(1, 3, 224, 224).to(&quot;cuda&quot;)</span><br><span class="line"></span><br><span class="line"># 导出为ONNX模型</span><br><span class="line">onnx_path = &quot;../my_model.onnx&quot;</span><br><span class="line">torch.onnx.export(</span><br><span class="line">    model,</span><br><span class="line">    x,</span><br><span class="line">    onnx_path,</span><br><span class="line">    opset_version=11,</span><br><span class="line">    input_names=[&quot;input&quot;],</span><br><span class="line">    output_names=[&quot;output&quot;]</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h3 id="41运行代码"><a class="markdownIt-Anchor" href="#41运行代码"></a> 4.1运行代码</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"># 作者：Weakliy</span><br><span class="line"># 创建日期：2023/8/5 21:53</span><br><span class="line"># 描述：这个文件实现了一些功能。</span><br><span class="line"></span><br><span class="line">import onnxruntime</span><br><span class="line">import numpy as np</span><br><span class="line">import torch</span><br><span class="line">import torch.nn.functional as F</span><br><span class="line">import pandas as pd</span><br><span class="line"></span><br><span class="line">ort_session = onnxruntime.InferenceSession(&#x27;my_onnx_from_checkpoint.onnx&#x27;)</span><br><span class="line">x = torch.randn(1, 3, 224, 224).numpy()</span><br><span class="line">print(x.shape)</span><br><span class="line">ort_inputs = &#123;&#x27;input&#x27;: x&#125;</span><br><span class="line">ort_output = ort_session.run([&#x27;output&#x27;], ort_inputs)[0]</span><br><span class="line">print(ort_output.shape)</span><br><span class="line"></span><br><span class="line"># 载入一张真正的测试图像</span><br><span class="line">img_path = r&#x27;F:\Pydata\Project\鱼类识别+onnx\data/test\fish_03\fish_000034930001_03337.png&#x27;</span><br><span class="line">from PIL import Image</span><br><span class="line">img_pil = Image.open(img_path)</span><br><span class="line">from torchvision import transforms</span><br><span class="line">from config import Common</span><br><span class="line"># 测试集图像预处理-RCTN：缩放裁剪、转 Tensor、归一化</span><br><span class="line">test_transform = transforms.Compose([</span><br><span class="line">    transforms.ToTensor(),</span><br><span class="line">    transforms.Resize(Common.imageSize),</span><br><span class="line">    transforms.RandomHorizontalFlip(p=0.5),</span><br><span class="line">    transforms.RandomVerticalFlip(p=0.5),</span><br><span class="line">    transforms.RandomRotation(degrees=10),</span><br><span class="line">])</span><br><span class="line">input_img = test_transform(img_pil)</span><br><span class="line">print(input_img.shape)</span><br><span class="line">input_tensor = input_img.unsqueeze(0).numpy()</span><br><span class="line">print(input_tensor.shape)</span><br><span class="line"></span><br><span class="line"># ONNX Runtime 输入</span><br><span class="line">ort_inputs = &#123;&#x27;input&#x27;: input_tensor&#125;</span><br><span class="line"># ONNX Runtime 输出</span><br><span class="line">pred_logits = ort_session.run([&#x27;output&#x27;], ort_inputs)[0]  # ?</span><br><span class="line">pred_logits = torch.tensor(pred_logits)  # ?</span><br><span class="line">print(pred_logits.shape)</span><br><span class="line"># 对 logit 分数做 softmax 运算，得到置信度概率</span><br><span class="line">pred_softmax = F.softmax(pred_logits, dim=1)</span><br><span class="line">print(pred_softmax.shape)</span><br><span class="line">output = torch.argmax(pred_softmax)</span><br><span class="line">print(&quot;结果类别：&quot;, output.item())</span><br><span class="line"># 取置信度最高的前 n 个结果</span><br><span class="line">n = 3</span><br><span class="line">top_n = torch.topk(pred_softmax, n)</span><br><span class="line">print(top_n)</span><br><span class="line"># 预测类别</span><br><span class="line">pred_ids = top_n.indices.numpy()[0]</span><br><span class="line">print(pred_ids)</span><br><span class="line"># 预测置信度</span><br><span class="line">confs = top_n.values.numpy()[0]</span><br><span class="line">print(confs)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">输出：</span><br><span class="line">(1, 3, 224, 224)</span><br><span class="line">(1, 22)</span><br><span class="line">torch.Size([3, 224, 224])</span><br><span class="line">(1, 3, 224, 224)</span><br><span class="line">torch.Size([1, 22])</span><br><span class="line">torch.Size([1, 22])</span><br><span class="line">结果类别： 1</span><br><span class="line">torch.return_types.topk(</span><br><span class="line">values=tensor([[0.1146, 0.0422, 0.0422]]),</span><br><span class="line">indices=tensor([[1, 0, 2]]))</span><br><span class="line">[1 0 2]</span><br><span class="line">[0.11460126 0.0421640 0.04216173]</span><br></pre></td></tr></table></figure>
+<h3 id="42结果比较"><a class="markdownIt-Anchor" href="#42结果比较"></a> 4.2结果比较</h3>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2023/08/02/2023%E5%B9%B410%E6%9C%8816%E6%97%A5-ONNX2%E5%AE%9E%E6%93%8D/" data-id="cmanj8o1r0003lcv4e7c1ed9z" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ONNX/" rel="tag">ONNX</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-2023年10月14日-ONNX1介绍" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -332,7 +855,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>101</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>108</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>31</strong><br>标签</div></a>
     </div>

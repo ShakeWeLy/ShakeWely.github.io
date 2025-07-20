@@ -43,7 +43,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>101</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>108</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>31</strong><br>标签</div></a>
     </div>
@@ -70,6 +70,876 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-2025年5月15日-Linux汇总" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/05/15/2025%E5%B9%B45%E6%9C%8815%E6%97%A5-Linux%E6%B1%87%E6%80%BB/" class="article-date">
+  <time class="post-time" datetime="2025-05-15T02:17:14.000Z" itemprop="datePublished">
+    <span class="post-month">5月</span><br/>
+    <span class="post-day">15</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/05/15/2025%E5%B9%B45%E6%9C%8815%E6%97%A5-Linux%E6%B1%87%E6%80%BB/">2025年5月15日 Linux汇总</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>j</p>
+<h1 id="进程性能"><a class="markdownIt-Anchor" href="#进程性能"></a> 进程性能</h1>
+<p><code>ps</code> —进行查看</p>
+<blockquote>
+<p>:<br>
+ps -a -u -x</p>
+<p>ps -e - f</p>
+<p>pas aux | grep python</p>
+</blockquote>
+<p><code>top</code> —</p>
+<blockquote>
+<p>:<br>
+q 退出</p>
+</blockquote>
+<p><code>htop</code> — <code>top</code> 的增强版本</p>
+<p><code>nice</code> — 启动进程时设置优先级</p>
+<p><code>jobs</code>（当前 Shell 后台作业</p>
+<p><code>bg</code> —</p>
+<blockquote>
+<p>Ctrl + Z   # 暂停前台任务<br>
+bg         # 让它在后台继续跑</p>
+</blockquote>
+<p>. <code>free -h</code></p>
+<p><code>uptime</code></p>
+<h3 id="vmstat-1"><a class="markdownIt-Anchor" href="#vmstat-1"></a> . <code>vmstat 1</code></h3>
+<blockquote>
+<p>实时查看内存、CPU、IO 使用情况（每1秒刷新一次）。</p>
+</blockquote>
+<p>·<code>apt</code></p>
+<blockquote>
+<p>s</p>
+</blockquote>
+<h3 id="tail-f"><a class="markdownIt-Anchor" href="#tail-f"></a> . <code>tail -f</code></h3>
+<blockquote>
+<p>实时查看日志文件末尾，常用于监控程序运行状态（如训练日志）。</p>
+</blockquote>
+<p>systemctl status nginx<br>
+systemctl restart my_ai_server</p>
+<p><code>.service</code> 文件</p>
+<table>
+<thead>
+<tr>
+<th>对比点</th>
+<th>进程（Process）</th>
+<th>服务（Service）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>含义</td>
+<td>程序在系统中的一次执行实例</td>
+<td>一种<strong>系统后台守护进程</strong>，通常由 systemd 或 init 管理</td>
+</tr>
+<tr>
+<td>启动方式</td>
+<td>手动执行命令、用户触发</td>
+<td>自动启动或由 systemd 控制</td>
+</tr>
+<tr>
+<td>持续性</td>
+<td>用户关闭终端或脚本结束后即退出</td>
+<td>一般<strong>长期运行</strong>，自动重启</td>
+</tr>
+<tr>
+<td>常见例子</td>
+<td><code>python train.py</code>，<code>firefox</code>，<code>top</code></td>
+<td><code>nginx</code>、<code>mysql</code>、<code>ssh</code>、<code>docker</code>、你配置的 model 服务</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">进程是你手动跑的程序，</span><br><span class="line">服务是系统托管的后台进程。</span><br><span class="line">服务本质是进程，但进程不一定是服务。</span><br></pre></td></tr></table></figure>
+<p><code>nohup python train.py &amp;</code></p>
+<h3 id="chmod"><a class="markdownIt-Anchor" href="#chmod"></a> 🔸 <code>chmod</code></h3>
+<blockquote>
+<h3 id="方法-1符号法推荐"><a class="markdownIt-Anchor" href="#方法-1符号法推荐"></a> 方法 1：符号法（推荐）</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">chmod [a/u/g/o][+/-=][rwx] 文件名</span><br></pre></td></tr></table></figure>
+<h4 id="示例"><a class="markdownIt-Anchor" href="#示例"></a> 示例：</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">chmod +x run.py         # 所有人添加执行权限</span><br><span class="line">chmod u+x run.py        # 给当前用户添加执行权限</span><br><span class="line">chmod g-w file.txt      # 取消组用户写权限</span><br><span class="line">chmod o=r file.txt      # 其他用户仅读权限</span><br></pre></td></tr></table></figure>
+<h3 id="方法-2数字法经典"><a class="markdownIt-Anchor" href="#方法-2数字法经典"></a> 方法 2：数字法（经典）</h3>
+<p>权限数字对照表：</p>
+<table>
+<thead>
+<tr>
+<th>权限</th>
+<th>数值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>r</code></td>
+<td>4</td>
+</tr>
+<tr>
+<td><code>w</code></td>
+<td>2</td>
+</tr>
+<tr>
+<td><code>x</code></td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>三类用户依次组合：<strong><code>u g o</code></strong></p>
+<h4 id="示例-2"><a class="markdownIt-Anchor" href="#示例-2"></a> 示例：</h4>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>chmod 755 run.sh</code></td>
+<td>u=7(rwx), g=5(r-x), o=5(r-x) → 常用于脚本</td>
+</tr>
+<tr>
+<td><code>chmod 644 model.pt</code></td>
+<td>u=6(rw-), g=4(r–), o=4(r–)</td>
+</tr>
+<tr>
+<td><code>chmod 777 mydir/</code></td>
+<td>所有人可读写执行（危险，开发用）</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<h3 id="bashrc-是做什么的"><a class="markdownIt-Anchor" href="#bashrc-是做什么的"></a> <code>.bashrc</code> 是做什么的？</h3>
+<ul>
+<li><code>.bashrc</code> 是一个隐藏的 shell 启动脚本（以点开头的文件）</li>
+<li>、每次你打开一个<strong>交互式 shell</strong>（比如终端）时都会自动执行这个文件里的内容</li>
+</ul>
+<blockquote>
+<p><code>tmux</code> 是一个<strong>终端会话管理器</strong>，让你即使 SSH 断开也不会中断正在运行的程序，非常适合远程训练模型！</p>
+</blockquote>
+<blockquote>
+<p><code>scp</code> 是 Linux 上用于 <strong>远程文件拷贝</strong> 的命令，通过 <code>SSH</code> 协议进行加密传输。</p>
+</blockquote>
+<h1 id="文件"><a class="markdownIt-Anchor" href="#文件"></a> 文件</h1>
+<h2 id="vim"><a class="markdownIt-Anchor" href="#vim"></a> vim</h2>
+<h3 id="1-保存文件"><a class="markdownIt-Anchor" href="#1-保存文件"></a> 1. <strong>保存文件</strong></h3>
+<ul>
+<li><strong><code>:w</code></strong><br>
+保存当前文件，但不退出编辑模式。如果文件已经存在，会覆盖原文件；如果文件不存在，会创建新文件。</li>
+<li><strong><code>:wq</code></strong><br>
+保存当前文件并退出 <code>vim</code>。这是最常用的保存并退出命令。</li>
+<li><strong><code>:x</code></strong><br>
+保存当前文件并退出 <code>vim</code>。与 <code>:wq</code> 功能相同，但如果文件没有被修改，不会保存。</li>
+<li><strong><code>:wq!</code></strong><br>
+强制保存当前文件并退出。通常用于文件权限不足时，强制覆盖文件。</li>
+</ul>
+<h2 id="命令"><a class="markdownIt-Anchor" href="#命令"></a> 命令</h2>
+<p><code>cat</code></p>
+<p><code>mv</code></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/05/15/2025%E5%B9%B45%E6%9C%8815%E6%97%A5-Linux%E6%B1%87%E6%80%BB/" data-id="cmaqctqhp0000dwv41kw63kjm" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2025年5月1日-backbone汇总" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/05/14/2025%E5%B9%B45%E6%9C%881%E6%97%A5-backbone%E6%B1%87%E6%80%BB/" class="article-date">
+  <time class="post-time" datetime="2025-05-14T08:21:10.000Z" itemprop="datePublished">
+    <span class="post-month">5月</span><br/>
+    <span class="post-day">14</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/05/14/2025%E5%B9%B45%E6%9C%881%E6%97%A5-backbone%E6%B1%87%E6%80%BB/">2025年5月1日 backbone汇总</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/05/14/2025%E5%B9%B45%E6%9C%881%E6%97%A5-backbone%E6%B1%87%E6%80%BB/" data-id="cmaqctqhy0004dwv46nx161p2" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/model/" rel="tag">model</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2025年5月15日-知识蒸馏1-介绍汇总" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/05/14/2025%E5%B9%B45%E6%9C%8815%E6%97%A5-%E7%9F%A5%E8%AF%86%E8%92%B8%E9%A6%8F1-%E4%BB%8B%E7%BB%8D%E6%B1%87%E6%80%BB/" class="article-date">
+  <time class="post-time" datetime="2025-05-14T07:57:53.000Z" itemprop="datePublished">
+    <span class="post-month">5月</span><br/>
+    <span class="post-day">14</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/05/14/2025%E5%B9%B45%E6%9C%8815%E6%97%A5-%E7%9F%A5%E8%AF%86%E8%92%B8%E9%A6%8F1-%E4%BB%8B%E7%BB%8D%E6%B1%87%E6%80%BB/">2025年5月15日 知识蒸馏1-介绍汇总</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="蒸馏介绍"><a class="markdownIt-Anchor" href="#蒸馏介绍"></a> 蒸馏介绍</h2>
+<p>通过设计一个规模较小的学生模型，使其学习大型教师模型的有效信息</p>
+<blockquote>
+<p>知识蒸馏的本质可以被认为是一种正则化方法,即在学生模型中引入一些特殊信息来实现模型性能的提升。</p>
+</blockquote>
+<h2 id="蒸馏分类"><a class="markdownIt-Anchor" href="#蒸馏分类"></a> 蒸馏分类</h2>
+<ol>
+<li>
+<p>知识类型</p>
+<ol>
+<li>
+<p><strong>基于响应/模型输出</strong>的蒸馏（Response-based）：使用教师模型的最后输出层的信息（如类别概率）来训练学生模型。</p>
+</li>
+<li>
+<p>基于<strong>特征</strong>的蒸馏（Feature-based）：利用教师模型的中间层特征来指导学生模型。</p>
+</li>
+<li>
+<p>基于关系的蒸馏（Relation-based）：侧重于教师模型内<strong>不同特征之间的关系</strong>，如特征图之间的相互作用。</p>
+</li>
+</ol>
+</li>
+<li>
+<p>教师模型类型</p>
+</li>
+<li>
+<p>蒸馏策略三方面</p>
+<ol>
+<li>
+<p>在线蒸馏（Online distillation）：教师模型和学生模型同时训练，学生模型实时学习教师模型的知识。</p>
+</li>
+<li>
+<p>离线蒸馏（Offline distillation）：先训练教师模型，再使用该模型来训练学生模型，学生模型不会影响教师模型。</p>
+</li>
+<li>
+<p>自蒸馏（Self distillation）：模型使用自己的预测作为软标签来提高自己的性能。</p>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="11-输出蒸馏"><a class="markdownIt-Anchor" href="#11-输出蒸馏"></a> 1.1 输出蒸馏</h3>
+<h3 id="12-特征蒸馏"><a class="markdownIt-Anchor" href="#12-特征蒸馏"></a> 1.2 特征蒸馏</h3>
+<p>通道</p>
+<h3 id="mgd"><a class="markdownIt-Anchor" href="#mgd"></a> mgd</h3>
+<blockquote>
+<p>之前的知识蒸馏方法着力于使学生去模仿更强的教师的特征，以使学生特征具有更强的表征能力。我们认为提升学生的表征能力并不一定需要通过直接模仿教师实现。从这点出发，我们把模仿任务修改成了生成任务：让学生凭借自己较弱的特征去生成教师较强的特征。在蒸馏过程中，我们对学生特征进行了随机mask，强制学生仅用自己的部分特征去生成教师的所有特征，以提升学生的表征能力。</p>
+<p>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_41335232/article/details/142717122">https://blog.csdn.net/qq_41335232/article/details/142717122</a></p>
+</blockquote>
+<blockquote>
+<p>YOLO11 summary (fused): 100 layers, 2,585,467 parameters, 0 gradients, 6.3 GFLOPs<br>
+all         53        396      0.971      0.954      0.979      0.671<br>
+Bottom1         21         21          1      0.935      0.973      0.779<br>
+Bottom2         26         26          1      0.981      0.995      0.669<br>
+Left1         32         32      0.964      0.969       0.95      0.676<br>
+Left2         16         16      0.978          1      0.995      0.657<br>
+Left3         30         32      0.967      0.902      0.934      0.631<br>
+Left4         28         33          1      0.853       0.94      0.709<br>
+Left5         28         28       0.99      0.929      0.993      0.756<br>
+Right1         38         39       0.96      0.974      0.971      0.559<br>
+Right2         39         39      0.973      0.974      0.951      0.567<br>
+Right3         14         14      0.895          1      0.986      0.734<br>
+Right4         15         15      0.971          1      0.995      0.669<br>
+Top1         32         32      0.974      0.938      0.987      0.697<br>
+Top2         33         33      0.986          1      0.995      0.703<br>
+out1          7          7      0.942          1      0.995      0.541<br>
+out2         11         11          1      0.878      0.995      0.657<br>
+out3         13         13          1      0.891      0.995      0.698<br>
+out4          5          5       0.91          1      0.995      0.711</p>
+</blockquote>
+<h3 id="cwd"><a class="markdownIt-Anchor" href="#cwd"></a> cwd</h3>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/05/14/2025%E5%B9%B45%E6%9C%8815%E6%97%A5-%E7%9F%A5%E8%AF%86%E8%92%B8%E9%A6%8F1-%E4%BB%8B%E7%BB%8D%E6%B1%87%E6%80%BB/" data-id="cmaqctqhp0001dwv417dy0ffa" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%9F%A5%E8%AF%86%E8%92%B8%E9%A6%8F/" rel="tag">知识蒸馏</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2025年5月14日-剪枝1-介绍汇总" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/05/14/2025%E5%B9%B45%E6%9C%8814%E6%97%A5-%E5%89%AA%E6%9E%9D1-%E4%BB%8B%E7%BB%8D%E6%B1%87%E6%80%BB/" class="article-date">
+  <time class="post-time" datetime="2025-05-14T07:38:05.000Z" itemprop="datePublished">
+    <span class="post-month">5月</span><br/>
+    <span class="post-day">14</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/05/14/2025%E5%B9%B45%E6%9C%8814%E6%97%A5-%E5%89%AA%E6%9E%9D1-%E4%BB%8B%E7%BB%8D%E6%B1%87%E6%80%BB/">2025年5月14日 剪枝1-介绍汇总</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="1-剪枝介绍"><a class="markdownIt-Anchor" href="#1-剪枝介绍"></a> 1 剪枝介绍</h2>
+<p>模型过参数化.剪枝就是将模型的<strong>冗余信息/参数</strong>(连接,结构), 以某种<strong>度量标准</strong>进行评估， 然后删减掉评估后不重要的参数，进行去除。</p>
+<blockquote>
+<p><strong>剪枝的核心思想</strong>：<br>
+通过某种**度量标准（例如权重大小、梯度、重要性评分等）**评估网络中每个参数、通道或模块的重要性，将不重要的部分剪除（即设置为零或移除结构）</p>
+</blockquote>
+<h4 id="微调"><a class="markdownIt-Anchor" href="#微调"></a> 微调:</h4>
+<p>剪枝操作通常会对模型性能产生影响，因此在剪枝后需进行<strong>微调</strong>，以恢复模型性能。微调的过程包括：</p>
+<blockquote>
+<ol>
+<li>继续训练保留部分的模型结构。</li>
+<li>使用原始或缩小后的学习率，以避免破坏已有的特征。</li>
+<li>在原始数据集或其子集上进行训练，使模型重新适应当前结构。</li>
+</ol>
+</blockquote>
+<h2 id="2-剪枝分类"><a class="markdownIt-Anchor" href="#2-剪枝分类"></a> 2 剪枝分类</h2>
+<h3 id="21-按粒度划分"><a class="markdownIt-Anchor" href="#21-按粒度划分"></a> 2.1 按粒度划分</h3>
+<ul>
+<li><strong>非结构化剪枝（Unstructured Pruning）</strong>：以单个权重为单位，剪除数值接近零的参数，产生稀疏矩阵</li>
+<li><strong>结构化剪枝（Structured Pruning）</strong>：以卷积核、通道、层等结构为单位剪除参数</li>
+</ul>
+<blockquote>
+<p>1、非结构化稀疏具有更高的模型压缩率和准确性，在通用硬件上的加速效果不好。因为其计算特征上的“不规则”，导致需要特定硬件支持才能实现加速效果。</p>
+<p>2、结构化稀疏虽然牺牲了模型压缩率或准确率，但在通用硬件上的加速效果好，所以其被广泛应用。因为结构化稀疏使得权值矩阵更规则更加结构化，更利于硬件加速</p>
+<p><img src="/2025/05/14/2025%E5%B9%B45%E6%9C%8814%E6%97%A5-%E5%89%AA%E6%9E%9D1-%E4%BB%8B%E7%BB%8D%E6%B1%87%E6%80%BB/F:.Hexo%5CMyBlog%5Csource_posts%5C2025%E5%B9%B45%E6%9C%8814%E6%97%A5-%E5%89%AA%E6%9E%9D1-%E4%BB%8B%E7%BB%8D%E6%B1%87%E6%80%BB%5Cimage-20250515230134271.png" alt="image-20250515230134271"></p>
+</blockquote>
+<h3 id="22-按剪枝时机划分"><a class="markdownIt-Anchor" href="#22-按剪枝时机划分"></a> 2.2 按剪枝时机划分</h3>
+<ul>
+<li><strong>训练后剪枝（Post-training Pruning）</strong>：模型训练完毕后进行剪枝，再微调以恢复精度。</li>
+<li><strong>训练中剪枝（During-training Pruning）</strong>：剪枝嵌入训练过程，边训练边剪除，逐步达到压缩目标。</li>
+</ul>
+<h3 id="23-按剪枝标准划分"><a class="markdownIt-Anchor" href="#23-按剪枝标准划分"></a> 2.3 按剪枝标准划分</h3>
+<ul>
+<li><strong>基于权重大小（Magnitude-based）</strong>：按权重绝对值排序，小于阈值者被剪除，简单高效。</li>
+<li><strong>基于梯度（Gradient-based）</strong>：依据梯度信息评估参数重要性，剪除对损失函数影响小的参数。</li>
+<li><strong>基于敏感度分析（Sensitivity-based）</strong>：模拟移除参数后性能变化，影响小者被剪。</li>
+<li><strong>基于正则化（Regularization-based）</strong>：在训练中引入稀疏性正则（如L1/L2、Group Lasso），促使网络自动趋于稀疏。</li>
+</ul>
+<h2 id="3-常见剪枝算法"><a class="markdownIt-Anchor" href="#3-常见剪枝算法"></a> 3 常见剪枝算法</h2>
+<h3 id="31-基于权重的重要性评分"><a class="markdownIt-Anchor" href="#31-基于权重的重要性评分"></a> 3.1 基于权重的重要性评分</h3>
+<p>✅ <strong>L1范数剪枝（L1-norm Pruning）</strong><br>
+思路：对卷积核/通道等结构计算L1范数（绝对值之和），认为范数较小的结构对模型贡献小，优先剪除。<br>
+特点：简单直观，适用于结构化剪枝，效果较稳健。<br>
+典型应用：用于通道剪枝（Channel Pruning）、滤波器剪枝（Filter Pruning）。</p>
+<blockquote>
+<p>1 通道剪枝:</p>
+<img src="/2025/05/14/2025%E5%B9%B45%E6%9C%8814%E6%97%A5-%E5%89%AA%E6%9E%9D1-%E4%BB%8B%E7%BB%8D%E6%B1%87%E6%80%BB/.Hexo\MyBlog\source\_posts\2025年5月14日-剪枝1-介绍汇总\image-20250515230146271.png" alt="image-20250515230146271" style="zoom:50%;"> 
+<img src="/2025/05/14/2025%E5%B9%B45%E6%9C%8814%E6%97%A5-%E5%89%AA%E6%9E%9D1-%E4%BB%8B%E7%BB%8D%E6%B1%87%E6%80%BB/.Hexo\MyBlog\source\_posts\2025年5月14日-剪枝1-介绍汇总\image-20250515230150294.png" alt="image-20250515230150294" style="zoom:50%;"> 
+</blockquote>
+<p>✅ <strong>LAMP剪枝（Layer-Adaptive Magnitude-based Pruning）</strong><br>
+论文：<em>LAMP: Pruning CNNs via Layer-wise Magnitude-based Pruning with Global Scaling</em><br>
+思路：不是简单地按全局权重大小排序剪枝，而是考虑各层的重要性差异，对每层权重大小进行排序归一化再剪枝，从而实现层感知的稀疏性分配。<br>
+优点：比传统全局剪枝更稳定，提升剪枝鲁棒性和性能保持能力。<br>
+适用场景：特别适合深层网络如 ResNet 等。</p>
+<hr>
+<h3 id="32-基于梯度与敏感度分析"><a class="markdownIt-Anchor" href="#32-基于梯度与敏感度分析"></a> 3.2 基于梯度与敏感度分析</h3>
+<p>✅ <strong>梯度敏感性剪枝（Gradient Sensitivity Pruning）</strong><br>
+思路：分析各个参数对损失函数的梯度贡献，即参数对模型性能的“敏感程度”。<br>
+方法：如 Hessian 矩阵法（如 Optimal Brain Damage）或直接计算损失变化量。</p>
+<p>✅ <strong>Optimal Brain Damage / Optimal Brain Surgeon</strong><br>
+思路：通过二阶导数（Hessian 矩阵）分析每个参数对损失的影响，剪除影响最小的参数。<br>
+缺点：计算复杂度高，通常只适用于小模型或简化近似版本。</p>
+<hr>
+<h3 id="33-基于正则化regularization-based-pruning"><a class="markdownIt-Anchor" href="#33-基于正则化regularization-based-pruning"></a> 3.3 基于正则化（Regularization-based Pruning）</h3>
+<p>✅ <strong>训练中引入稀疏正则项（如 L1/L2 范数）使网络权重自然趋于稀疏。</strong></p>
+<ul>
+<li><strong>L1 正则</strong>：使权重向 0 收敛，利于非结构化剪枝。</li>
+<li><strong>Group Lasso 正则</strong>：适用于结构化剪枝（如整组卷积核、通道）。</li>
+<li><strong>特点</strong>：训练过程中就考虑剪枝可行性，无需额外剪枝步骤。</li>
+</ul>
+<p>✅ <strong>动态约束稀疏训练（e.g. SNIP, GraSP）</strong></p>
+<ul>
+<li><strong>SNIP</strong>：在初始化阶段评估连接重要性，仅保留对损失函数最敏感的连接，适用于极早期剪枝。</li>
+<li><strong>GraSP</strong>：结合梯度与二阶信息选择重要连接，强调剪枝过程中训练稳定性。</li>
+</ul>
+<hr>
+<h3 id="34-训练过程中逐步剪枝dynamic-pruning"><a class="markdownIt-Anchor" href="#34-训练过程中逐步剪枝dynamic-pruning"></a> 3.4 训练过程中逐步剪枝（Dynamic Pruning）</h3>
+<p>✅ <strong>迭代剪枝（Iterative Pruning）</strong><br>
+思路：按固定比例每轮训练后剪除部分参数，再继续训练，重复迭代直至达到目标稀疏度。<br>
+优点：剪枝过程渐进，性能退化小，适用于结构化与非结构化剪枝。</p>
+<p>✅ <strong>Lottery Ticket Hypothesis（LTH）与子网络训练</strong><br>
+论文：<em>The Lottery Ticket Hypothesis</em><br>
+思路：大模型中存在性能不逊于原始模型的“幸运子网络”，可通过剪枝+重初始化发现。<br>
+步骤：训练 → 剪枝 → 重置保留权重 → 再训练。<br>
+意义：揭示模型的冗余性和高效子结构的存在性。</p>
+<hr>
+<h3 id="35-自动化与学习式剪枝方法"><a class="markdownIt-Anchor" href="#35-自动化与学习式剪枝方法"></a> 3.5 自动化与学习式剪枝方法</h3>
+<p>✅ <strong>AMC（AutoML for Model Compression）</strong><br>
+方法：使用强化学习（RL）自动确定每层剪枝率，学习出压缩策略。<br>
+优点：自动化、可适配复杂网络；缺点：训练耗时，需高算力资源。</p>
+<p>✅ <strong>NetAdapt、MetaPruning</strong></p>
+<ul>
+<li><strong>NetAdapt</strong>：逐层评估剪枝对硬件延迟的影响，做出资源感知剪枝决策。</li>
+<li><strong>MetaPruning</strong>：基于元学习，训练出可泛化的剪枝策略网络，快速适配新模型</li>
+</ul>
+<h2 id="4-实例方法实现"><a class="markdownIt-Anchor" href="#4-实例方法实现"></a> 4 实例方法实现</h2>
+<h3 id="lamp剪枝"><a class="markdownIt-Anchor" href="#lamp剪枝"></a> lamp剪枝</h3>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/05/14/2025%E5%B9%B45%E6%9C%8814%E6%97%A5-%E5%89%AA%E6%9E%9D1-%E4%BB%8B%E7%BB%8D%E6%B1%87%E6%80%BB/" data-id="cmaqctqhq0002dwv4efac7890" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%89%AA%E6%9E%9D/" rel="tag">剪枝</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2025年5月14日-cmake" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/05/14/2025%E5%B9%B45%E6%9C%8814%E6%97%A5-cmake/" class="article-date">
+  <time class="post-time" datetime="2025-05-14T01:44:29.000Z" itemprop="datePublished">
+    <span class="post-month">5月</span><br/>
+    <span class="post-day">14</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/05/14/2025%E5%B9%B45%E6%9C%8814%E6%97%A5-cmake/">2025年5月14日 cmake</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="cmake"><a class="markdownIt-Anchor" href="#cmake"></a> cmake</h2>
+<blockquote>
+<p>作用： <em>CMake 通过使用简单的配置文件 CMakeLists.txt，自动生成不同平台的构建文件</em></p>
+</blockquote>
+<img src="/2025/05/14/2025%E5%B9%B45%E6%9C%8814%E6%97%A5-cmake/Users\admin\AppData\Roaming\Typora\typora-user-images\image-20250514101856087.png" alt="image-20250514101856087" style="zoom: 25%;">  
+<h2 id="cmakeliststxt-文件"><a class="markdownIt-Anchor" href="#cmakeliststxt-文件"></a> CMakeLists.txt 文件</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake_minimum_required</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">add_executable(&lt;target&gt; &lt;source_files&gt;...)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">add_library(&lt;target&gt; &lt;source_files&gt;...)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">target_link_libraries(&lt;target&gt; &lt;libraries&gt;...)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">include_directories(&lt;dirs&gt;...)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set(&lt;variable&gt; &lt;value&gt;...)</span><br></pre></td></tr></table></figure>
+<h4 id="target_include_directories设置目标的头文件包含路径"><a class="markdownIt-Anchor" href="#target_include_directories设置目标的头文件包含路径"></a> <code>target_include_directories()</code>：设置目标的头文件包含路径</h4>
+<p>作用：</p>
+<p>用于为某个构建目标（例如可执行文件或库）添加<strong>头文件的搜索路径</strong>，这样在编译时编译器就可以找到相应的头文件</p>
+<h3 id="9-installtargets-安装规则"><a class="markdownIt-Anchor" href="#9-installtargets-安装规则"></a> 9. <code>install(TARGETS ...)</code>：安装规则</h3>
+<h3 id="作用"><a class="markdownIt-Anchor" href="#作用"></a> 作用：</h3>
+<p>定义如何安装构建出来的目标（如可执行文件、库等）到系统目录中，常用于打包部署。</p>
+<h3 id="格式说明"><a class="markdownIt-Anchor" href="#格式说明"></a> 格式说明：</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">cmake复制编辑install(TARGETS &lt;target1&gt; [target2 ...]</span><br><span class="line">        [RUNTIME DESTINATION dir]      # 可执行文件安装路径</span><br><span class="line">        [LIBRARY DESTINATION dir]      # 共享库安装路径（.so/.dll）</span><br><span class="line">        [ARCHIVE DESTINATION dir]      # 静态库安装路径（.a/.lib）</span><br><span class="line">        [INCLUDES DESTINATION [dir ...]]   # 头文件的安装路径</span><br><span class="line">        [PRIVATE_HEADER DESTINATION dir]   # 私有头文件的安装路径</span><br><span class="line">        [PUBLIC_HEADER DESTINATION dir])   # 公共头文件的安装路径</span><br></pre></td></tr></table></figure>
+<h2 id="3-构建"><a class="markdownIt-Anchor" href="#3-构建"></a> 3 构建</h2>
+<p>构建文件放在源代码目录之外的独立目录</p>
+<h3 id="1"><a class="markdownIt-Anchor" href="#1"></a> 1</h3>
+<h3 id="2-生成构建文件"><a class="markdownIt-Anchor" href="#2-生成构建文件"></a> 2  生成构建文件</h3>
+<p>**运行 CMake 配置：**在构建目录中运行 CMake 命令，指定源代码目录。源代码目录是包含 CMakeLists.txt 文件的目录。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake ..</span><br></pre></td></tr></table></figure>
+<p>如果需要指定生成器（如 Ninja、Visual Studio），可以使用 -G 选项。例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake -G &quot;Ninja&quot; ..</span><br></pre></td></tr></table></figure>
+<p>如果需要指定构建类型（如 Debug 或 Release），可以使用 -DCMAKE_BUILD_TYPE 选项。例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake -DCMAKE_BUILD_TYPE=Release ..</span><br></pre></td></tr></table></figure>
+<h3 id="3-编译和构建"><a class="markdownIt-Anchor" href="#3-编译和构建"></a> 3 编译和构建</h3>
+<p>使用生成的<strong>构建文件</strong>进行编译和构建</p>
+<p>**使用 Makefile（或类似构建系统）：**如果使用 Makefile，可以运行 make 命令来编译和构建项目。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make</span><br></pre></td></tr></table></figure>
+<p>如果要构建特定的目标，可以指定目标名称。例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make MyExecutable</span><br></pre></td></tr></table></figure>
+<p>**使用 Ninja：**如果使用 Ninja 构建系统，运行 ninja 命令来编译和构建项目。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ninja</span><br></pre></td></tr></table></figure>
+<p>与 make 类似，可以构建特定的目标：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ninja MyExecutable</span><br></pre></td></tr></table></figure>
+<p>**使用 Visual Studio：**如果生成了 Visual Studio 工程文件，可以打开 <strong>.sln</strong> 文件，然后在 Visual Studio 中选择构建解决方案。</p>
+<p>也可以使用 msbuild 命令行工具来编译：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msbuild MyProject.sln /p:Configuration=Release</span><br></pre></td></tr></table></figure>
+<h3 id="4-实例"><a class="markdownIt-Anchor" href="#4-实例"></a> 4 实例</h3>
+<blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cmake -G &quot;Visual Studio 17 2022&quot; -A x64 ..</span><br></pre></td></tr></table></figure>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">cmake_minimum_required(VERSION 3.10)</span><br><span class="line">project(MyProject CXX)</span><br><span class="line"></span><br><span class="line"># 设置Visual Studio版本</span><br><span class="line">set(CMAKE_GENERATOR_TOOLSET &quot;v143&quot;)  # VS2022</span><br><span class="line">set(CMAKE_GENERATOR_PLATFORM &quot;x64&quot;)</span><br><span class="line"></span><br><span class="line">set(MY_VAR &quot;Hello World&quot;)</span><br><span class="line">message(STATUS &quot;MY_VAR: $&#123;MY_VAR&#125;&quot;)</span><br><span class="line"></span><br><span class="line"># 缓存变量</span><br><span class="line">set(MY_VAR &quot;Hello World&quot; CACHE STRING &quot;My Variable&quot;)</span><br><span class="line">message(STATUS &quot;MY_VAR: $&#123;MY_VAR&#125;&quot;)</span><br><span class="line"></span><br><span class="line"># 设置OpenCV路径</span><br><span class="line">set(OpenCV_DIR &quot;F:/Cppdata/pkg/opencv/build/x64/vc15&quot;)</span><br><span class="line">set(OpenCV_INCLUDE_DIRS &quot;F:/Cppdata/pkg/opencv/build/include&quot;)</span><br><span class="line">set(OpenCV_LIBS_DIR &quot;F:/Cppdata/pkg/opencv/build/x64/vc15/lib&quot;)</span><br><span class="line"></span><br><span class="line"># 添加 OpenCV 库</span><br><span class="line">find_package(OpenCV REQUIRED)</span><br><span class="line">include_directories($&#123;OpenCV_INCLUDE_DIRS&#125;)</span><br><span class="line">link_directories($&#123;OpenCV_LIBS_DIR&#125;)</span><br><span class="line"></span><br><span class="line"># 添加源文件</span><br><span class="line">add_executable(MyExecutable main.cpp)</span><br><span class="line"></span><br><span class="line"># 设置 C++ 标准</span><br><span class="line">set(CMAKE_CXX_STANDARD 11)</span><br><span class="line"></span><br><span class="line"># 添加 OpenCV 库</span><br><span class="line">target_link_libraries(MyExecutable $&#123;OpenCV_LIBS&#125;)</span><br><span class="line"></span><br><span class="line"># 设置输出目录</span><br><span class="line">set(CMAKE_RUNTIME_OUTPUT_DIRECTORY $&#123;CMAKE_BINARY_DIR&#125;/bin)</span><br><span class="line">set(CMAKE_LIBRARY_OUTPUT_DIRECTORY $&#123;CMAKE_BINARY_DIR&#125;/lib)</span><br><span class="line">set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY $&#123;CMAKE_BINARY_DIR&#125;/lib)</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/05/14/2025%E5%B9%B45%E6%9C%8814%E6%97%A5-cmake/" data-id="cmanj8o27000tlcv4h8k61cym" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2025年5月13日-TensorRT3infer" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/05/13/2025%E5%B9%B45%E6%9C%8813%E6%97%A5-TensorRT3infer/" class="article-date">
+  <time class="post-time" datetime="2025-05-13T09:08:00.000Z" itemprop="datePublished">
+    <span class="post-month">5月</span><br/>
+    <span class="post-day">13</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/05/13/2025%E5%B9%B45%E6%9C%8813%E6%97%A5-TensorRT3infer/">2025年5月13日 TensorRT3infer</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="tensorrt-进行推理的流程"><a class="markdownIt-Anchor" href="#tensorrt-进行推理的流程"></a> TensorRT 进行推理的流程</h2>
+<blockquote>
+<h2 id="一般使用-tensorrt-进行推理的流程7-步"><a class="markdownIt-Anchor" href="#一般使用-tensorrt-进行推理的流程7-步"></a> ✅ 一般使用 TensorRT 进行推理的流程（7 步）</h2>
+<h3 id="1-准备模型通常为-onnx-格式"><a class="markdownIt-Anchor" href="#1-准备模型通常为-onnx-格式"></a> 🔹 1. <strong>准备模型（通常为 ONNX 格式）</strong></h3>
+<ul>
+<li>训练好的模型需导出为 <code>ONNX</code> 格式。</li>
+<li>常见工具：
+<ul>
+<li>PyTorch: <code>torch.onnx.export()</code></li>
+<li>TensorFlow → ONNX: 使用 <code>tf2onnx</code> 或 <code>onnx-tf</code></li>
+<li>HuggingFace 模型: 直接支持 ONNX 导出</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="2-构建-tensorrt-引擎engine-文件"><a class="markdownIt-Anchor" href="#2-构建-tensorrt-引擎engine-文件"></a> 🔹 2. <strong>构建 TensorRT 引擎（<code>.engine</code> 文件）</strong></h3>
+<p>你可以使用：</p>
+<ul>
+<li>
+<p><strong>trtexec 命令行工具（推荐）</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">bash</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">trtexec --onnx=model.onnx --saveEngine=model.engine --fp16</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>TensorRT Python API（更灵活）</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑builder = trt.Builder(logger)</span><br><span class="line">network = builder.create_network(...)</span><br><span class="line">parser = trt.OnnxParser(network, logger)</span><br><span class="line">parser.parse_from_file(&quot;model.onnx&quot;)</span><br><span class="line">engine = builder.build_cuda_engine(network)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>注意：此步骤可选，如果你已经有 <code>.engine</code> 文件，就无需重复构建。</p>
+</blockquote>
+<hr>
+<h3 id="3-加载引擎文件并反序列化为可执行模型"><a class="markdownIt-Anchor" href="#3-加载引擎文件并反序列化为可执行模型"></a> 🔹 3. <strong>加载引擎文件并反序列化为可执行模型</strong></h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cpp复制编辑std::ifstream engineFile(&quot;model.engine&quot;, std::ios::binary);</span><br><span class="line">IRuntime* runtime = createInferRuntime(logger);</span><br><span class="line">ICudaEngine* engine = runtime-&gt;deserializeCudaEngine(data, size, nullptr);</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="4-创建执行上下文iexecutioncontext"><a class="markdownIt-Anchor" href="#4-创建执行上下文iexecutioncontext"></a> 🔹 4. <strong>创建执行上下文（IExecutionContext）</strong></h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cpp</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">IExecutionContext* context = engine-&gt;createExecutionContext();</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="5-准备输入数据并分配-gpu-内存"><a class="markdownIt-Anchor" href="#5-准备输入数据并分配-gpu-内存"></a> 🔹 5. <strong>准备输入数据并分配 GPU 内存</strong></h3>
+<ul>
+<li>你需要知道输入 tensor 的 shape（通常是 <code>[1, 3, H, W]</code>）</li>
+<li>分配输入/输出的 GPU 内存（<code>cudaMalloc</code>）</li>
+<li>把输入数据拷贝到 GPU（<code>cudaMemcpy</code>）</li>
+</ul>
+<hr>
+<h3 id="6-执行推理inference"><a class="markdownIt-Anchor" href="#6-执行推理inference"></a> 🔹 6. <strong>执行推理（Inference）</strong></h3>
+<ul>
+<li>使用 <code>enqueueV2</code>（异步）或 <code>executeV2</code>（同步）进行推理：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cpp</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">context-&gt;enqueueV2(buffers, stream, nullptr);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>注意：<code>buffers</code> 是输入/输出 tensor 指针数组。</li>
+</ul>
+<hr>
+<h3 id="7-获取并处理输出结果"><a class="markdownIt-Anchor" href="#7-获取并处理输出结果"></a> 🔹 7. <strong>获取并处理输出结果</strong></h3>
+<ul>
+<li>将输出结果从 GPU 拷贝到 Host：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cpp</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">cudaMemcpy(output_host, output_device, size, cudaMemcpyDeviceToHost);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>通常后处理包括：
+<ul>
+<li>分类任务：取最大值 <code>argmax</code></li>
+<li>检测任务：解析 bbox、类别置信度、NMS 等</li>
+<li>分割任务：取最大通道作为 mask</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/05/13/2025%E5%B9%B45%E6%9C%8813%E6%97%A5-TensorRT3infer/" data-id="cmanj8o27000slcv4fgyigr7f" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/TensorRT/" rel="tag">TensorRT</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2025年5月9日-anchor" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/05/09/2025%E5%B9%B45%E6%9C%889%E6%97%A5-anchor/" class="article-date">
+  <time class="post-time" datetime="2025-05-09T07:33:38.000Z" itemprop="datePublished">
+    <span class="post-month">5月</span><br/>
+    <span class="post-day">09</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/05/09/2025%E5%B9%B45%E6%9C%889%E6%97%A5-anchor/">2025年5月9日 anchor</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="流程"><a class="markdownIt-Anchor" href="#流程"></a> 流程</h2>
+<p><strong>Anchor 生成</strong>：</p>
+<ul>
+<li>在训练过程中，为了检测不同尺度和长宽比的物体，首先会在特征图的每个位置生成一组 Anchor（锚框）。这些 Anchor 通常具有不同的尺度和长宽比，用于捕捉图像中物体的不同尺寸和形状。</li>
+</ul>
+<p><strong>标签分配</strong>：</p>
+<ul>
+<li>每个生成的 Anchor 会与真实框（ground truth box）进行比较，通常使用 <strong>IoU（Intersection over Union）</strong> 来计算重叠程度。</li>
+<li>根据 IoU 的值将 Anchor 分为三类：
+<ul>
+<li><strong>正样本</strong>：当 Anchor 与真实框的 IoU 大于设定阈值（如 0.5）时，视为正样本。</li>
+<li><strong>负样本</strong>：当 Anchor 与所有真实框的 IoU 小于设定的低阈值（如 0.4）时，视为负样本。</li>
+<li><strong>忽略样本</strong>：IoU 介于这两个阈值之间的 Anchor 通常会被忽略。</li>
+</ul>
+</li>
+</ul>
+<p><strong>回归与分类</strong>：</p>
+<ul>
+<li>对于每个正样本 Anchor，模型需要预测一个目标框（预测框），通常通过回归来预测框的偏移量（例如，中心点坐标、宽度、高度）。</li>
+<li>同时，模型对每个 Anchor 进行分类，判断该 Anchor 代表的物体类别。</li>
+</ul>
+<p><strong>损失函数计算</strong>：</p>
+<ul>
+<li>在训练时，模型通过以下两种损失函数来优化：
+<ul>
+<li><strong>分类损失</strong>：通常使用交叉熵损失来计算每个 Anchor 是否正确分类（正样本或负样本）。</li>
+<li><strong>回归损失</strong>：通常使用平滑 L1 损失来计算预测框与真实框之间的差距。</li>
+</ul>
+</li>
+</ul>
+<p><strong>模型优化</strong>：</p>
+<ul>
+<li>根据计算出的损失（分类损失和回归损失），使用优化算法（如 SGD 或 Adam）来更新模型的权重，使其更好地拟合训练数据。</li>
+</ul>
+<p><strong>推理阶段的非极大值抑制（NMS）</strong>：</p>
+<ul>
+<li>在推理时，多个 Anchor 可能会检测到同一个物体，导致多个重叠的框。通过 <strong>NMS（Non-Maximum Suppression）</strong>，选择具有最高置信度的框，去除冗余框，只保留最佳的预测框。</li>
+</ul>
+<h2 id="anchor-生成算法"><a class="markdownIt-Anchor" href="#anchor-生成算法"></a> anchor 生成算法</h2>
+<p>Faster R-CNN 通过在每个特征图位置生成多个不同尺度、不同长宽比的锚框。具体步骤如下：</p>
+<ul>
+<li>对于每个特征图上的位置，选择多个 <strong>尺度</strong>（如 32px、64px、128px 等）和 <strong>长宽比</strong>（如 1:1、2:1、1:2 等）。</li>
+</ul>
+<ol>
+<li><strong>滑动窗口（Sliding Window）</strong>：</li>
+</ol>
+<p>在 <strong>YOLO</strong> 和 <strong>SSD</strong> 中，Anchor 的生成算法通常会在特征图的每个位置生成固定的 Anchor。具体过程包括：</p>
+<ul>
+<li>在每个位置生成多个尺寸和比例的 Anchor。</li>
+</ul>
+<h2 id="iou"><a class="markdownIt-Anchor" href="#iou"></a> IOU</h2>
+<p>定义:</p>
+<blockquote></blockquote>
+<h2 id="nms"><a class="markdownIt-Anchor" href="#nms"></a> NMS</h2>
+<p>算法流程:</p>
+<blockquote></blockquote>
+<h1 id="anchor-free"><a class="markdownIt-Anchor" href="#anchor-free"></a> Anchor free</h1>
+<h3 id="1-目标中心预测center-prediction"><a class="markdownIt-Anchor" href="#1-目标中心预测center-prediction"></a> 1. <strong>目标中心预测（Center Prediction）</strong></h3>
+<ul>
+<li>在 anchor-free 方法中，最常见的一种做法是预测物体的 <strong>中心点</strong>。</li>
+<li><strong>中心点</strong>：每个物体都有一个中心位置，模型的任务是预测这些中心点的位置。</li>
+<li>这些方法通常会在特征图上为每个像素点预测一个 <strong>热力图（heatmap）</strong>，表示该位置是否是某个物体的中心点。这个热力图的值越高，表示该位置是物体中心的概率越大。</li>
+</ul>
+<h3 id="2-标签分配"><a class="markdownIt-Anchor" href="#2-标签分配"></a> 2. <strong>标签分配</strong></h3>
+<p>在 anchor-free 方法中，标签分配的方式与传统的 anchor-based 方法有所不同。以下是一些常见的 anchor-free 标签分配策略：</p>
+<ul>
+<li><strong>正样本（Positive）</strong>：如果某个像素点的中心与某个真实框的中心位置足够接近（通常使用距离阈值），那么该像素点被视为正样本，模型的目标是回归这个位置。
+<ul>
+<li>例如，物体的中心点离特定像素点的距离小于某个阈值（如 5x5 区域），那么这个像素点就会被认为是正样本。</li>
+</ul>
+</li>
+<li><strong>负样本（Negative）</strong>：那些没有包含任何物体中心的像素点被视为负样本。这些像素点的值应该接近零，表示它们不是物体中心。</li>
+<li><strong>忽略样本（Ignore）</strong>：在某些情况下，靠近物体边界的像素点可能不会分配为正样本，而是被忽略。这是因为这些像素点的中心位置不明确，可能会影响模型的训练。</li>
+</ul>
+<h3 id="3-回归目标"><a class="markdownIt-Anchor" href="#3-回归目标"></a> 3. <strong>回归目标</strong></h3>
+<p>对于每个正样本像素点，模型需要预测：</p>
+<ul>
+<li><strong>物体的中心点</strong>：通过回归来预测目标的中心位置。</li>
+<li><strong>物体的尺寸和形状</strong>：例如，预测物体的宽度、高度、方向（如果是旋转框）等。</li>
+</ul>
+<h3 id="4-热力图损失heatmap-loss"><a class="markdownIt-Anchor" href="#4-热力图损失heatmap-loss"></a> 4. <strong>热力图损失（Heatmap Loss）</strong></h3>
+<p>在 anchor-free 方法中，模型通常会通过 <strong>热力图</strong> 来预测目标中心的概率。每个像素点的热力图值表示该位置是目标中心的概率。</p>
+<ul>
+<li><strong>热力图损失</strong>（通常使用 <strong>均方误差（MSE）</strong> 或 <strong>交叉熵损失</strong>）会计算预测的热力图与真实热力图之间的差异。</li>
+<li>对于正样本，目标热力图在该位置会有较高的值，负样本则会有接近零的值。</li>
+</ul>
+<h3 id="5-回归损失regression-loss"><a class="markdownIt-Anchor" href="#5-回归损失regression-loss"></a> 5. <strong>回归损失（Regression Loss）</strong></h3>
+<p>对于每个正样本，模型不仅预测中心点，还需要回归物体的 <strong>边界框</strong>（例如，物体的宽度、高度，或旋转框的角度）。回归损失通常使用平滑L1损失（smooth L1 loss）或其他回归损失函数来进行计算。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/05/09/2025%E5%B9%B45%E6%9C%889%E6%97%A5-anchor/" data-id="cmanj8o2d0017lcv46e4a18ey" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/" rel="tag">目标检测</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-2025年5月8日-MOT汇总" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -619,1338 +1489,6 @@
 
 
   
-    <article id="post-2025年5月4日-yolo汇总" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/" class="article-date">
-  <time class="post-time" datetime="2025-05-04T07:42:49.000Z" itemprop="datePublished">
-    <span class="post-month">5月</span><br/>
-    <span class="post-day">04</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/">2025年5月4日 yolo细节详解</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="yolo版本"><a class="markdownIt-Anchor" href="#yolo版本"></a> Yolo版本</h1>
-<h2 id="yolo-v1"><a class="markdownIt-Anchor" href="#yolo-v1"></a> YOLO V1</h2>
-<h2 id="yolo-v5"><a class="markdownIt-Anchor" href="#yolo-v5"></a> YOLO V5</h2>
-<h3 id="csp"><a class="markdownIt-Anchor" href="#csp"></a> CSP</h3>
-<p>定义: Conv + N个Res模块 + Conv</p>
-<blockquote>
-<p>作用: 特征增强</p>
-</blockquote>
-<p>组成:</p>
-<ol>
-<li>2</li>
-<li>2</li>
-<li>2</li>
-<li>2</li>
-</ol>
-<p>优点:</p>
-<p>区别:</p>
-<p>细节:</p>
-<ol>
-<li></li>
-</ol>
-<h3 id="spp"><a class="markdownIt-Anchor" href="#spp"></a> SPP</h3>
-<p>定义:</p>
-<blockquote>
-<p>作用: 特征增强+全局信息</p>
-</blockquote>
-<p>组成:</p>
-<ol>
-<li>多个不同k_size的maxpooling 进行concat</li>
-</ol>
-<p>区别:</p>
-<h3 id="loss"><a class="markdownIt-Anchor" href="#loss"></a> loss</h3>
-<p><code>[B, H, W, num_anchors*(4+cls+obj)]</code></p>
-<h3 id="创新处理操作"><a class="markdownIt-Anchor" href="#创新处理操作"></a> 创新处理操作</h3>
-<h4 id="1-切片"><a class="markdownIt-Anchor" href="#1-切片"></a> 1 切片</h4>
-<p>2</p>
-<h2 id="yolo-v8"><a class="markdownIt-Anchor" href="#yolo-v8"></a> YOLO V8</h2>
-<blockquote>
-<p>特点: 改进</p>
-</blockquote>
-<h3 id="c2f"><a class="markdownIt-Anchor" href="#c2f"></a> C2F</h3>
-<p>定义:  Concatenate to fusion（可以理解为“融合后连接”）</p>
-<blockquote>
-<p>作用:   <strong>特征融合</strong>和__<strong>模型压缩</strong></p>
-</blockquote>
-<p>组成:</p>
-<ol>
-<li>Conv</li>
-<li>n个Bottleneck</li>
-<li>concat</li>
-<li>Conv</li>
-</ol>
-<p>优点:</p>
-<p>…</p>
-<p>区别:</p>
-<blockquote>
-<p>V5: bottleneck数据进行concat的方式不同(线性向前与分级向前)</p>
-</blockquote>
-<p>细节:</p>
-<ol>
-<li>
-<p>为什么开始和结束要使用1x1卷积</p>
-<blockquote>
-<p>1 开始: 升维</p>
-<p>2  结束: 降维</p>
-</blockquote>
-</li>
-<li>
-<p>bottlenet为什么使用padding0和1的两个卷积</p>
-<blockquote>
-<p>1: **<code>1×1 conv</code> 没有 padding（padding=0）**只在通道维度做变换，不会改变空间大小</p>
-<p>2:<code>3×3 conv</code>，空间特征提取，用 <code>padding=1</code> 是为了保持尺寸</p>
-</blockquote>
-</li>
-</ol>
-<h3 id="sppf"><a class="markdownIt-Anchor" href="#sppf"></a> SPPF</h3>
-<p>定义: 快速金字塔</p>
-<blockquote>
-<p>作用: <strong>特征增强模块</strong> +<strong>多尺度融合</strong></p>
-</blockquote>
-<p>组成:</p>
-<ol>
-<li>将feature map 分为多个不同size的若干个path</li>
-<li>进行max pooling</li>
-<li>concat</li>
-</ol>
-<p>优点:</p>
-<p><strong>不同大小的感受野</strong></p>
-<p>PPF 用连续多次 <code>kernel=5</code> 的池化，避免了并行不同 kernel，转为串行相同 kernel</p>
-<p>区别:</p>
-<blockquote>
-<p>V5 使用了不同K的池化</p>
-</blockquote>
-<ol>
-<li>
-<p>为什么要在backbone的最后才添加?</p>
-<blockquote>
-<p>1: 最后是高级语义 汇聚全局信息maxpooling</p>
-<p>2: 最后size很小进行pooling 不会损失信息</p>
-</blockquote>
-</li>
-</ol>
-<h3 id="detect"><a class="markdownIt-Anchor" href="#detect"></a> Detect</h3>
-<img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250507234632382.png" alt="image-20250507234632382" style="zoom:33%;">
-<p><strong>组成:</strong></p>
-<ol>
-<li>边界框预测</li>
-<li>类别预测:</li>
-</ol>
-<h4 id="loss-2"><a class="markdownIt-Anchor" href="#loss-2"></a> loss</h4>
-<p><strong>区别</strong>: 无ancher</p>
-<p>YOLOv8 head 输出 <code>[B, H, W, 4+cls+obj]</code></p>
-<h3 id="问题"><a class="markdownIt-Anchor" href="#问题"></a> 问题:</h3>
-<p>anchor-free ：如果多个目标落在 <strong>同一个 cell（像素）中心</strong>：</p>
-<ol>
-<li>
-<p><strong>center prior</strong>（中心先验）:</p>
-<blockquote>
-<p>只有 <strong>中心点附近的 cell（通常限定一个 radius 区域）</strong> 才有资格被分配为“正样本”</p>
-</blockquote>
-</li>
-<li>
-<p>YOLOv8 的 <strong>dynamic-k matching：</strong></p>
-<blockquote>
-<p>计算每个候选正样本（中心附近 cell）的 IoU<br>
-按 IoU 排序<br>
-通过 <strong>ΣIoU 确定动态的 k（正样本数）</strong><br>
-选择 top-k 作为正样本</p>
-</blockquote>
-</li>
-<li>
-<p>👉 如果两个目标中心点落在 <strong>同一个 cell</strong>：</p>
-<blockquote>
-<p>按照 <strong>center prior → 同一个 cell 确实是两个目标都“想分配”的 cell</strong></p>
-<p>但！<strong>dynamic-k matching 会用 IoU 排序决定“更合适”分配给谁</strong><br>
-→ 更高 IoU 的目标会“赢” → 另一个目标需要“找附近 cell”作为正样本</p>
-</blockquote>
-</li>
-</ol>
-<h2 id="yolo-v11"><a class="markdownIt-Anchor" href="#yolo-v11"></a> YOLO V11</h2>
-<blockquote>
-<p>特点: 改进</p>
-</blockquote>
-<img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250507230522250.png" alt="image-20250507230522250" style="zoom:33%;">
-<h3 id="c3k2"><a class="markdownIt-Anchor" href="#c3k2"></a> C3K2</h3>
-<p><strong>定义</strong>:  将bottlenetck改为C3K</p>
-<blockquote>
-<p>作用:   <strong>特征融合</strong>和__<strong>模型压缩</strong></p>
-</blockquote>
-<p><strong>组成:</strong></p>
-<ol>
-<li>CBS</li>
-<li>n个Bottleneck = <strong>C3K</strong></li>
-<li>concat</li>
-<li>CBS</li>
-</ol>
-<h4 id="c3k"><a class="markdownIt-Anchor" href="#c3k"></a> C3K:</h4>
-<ol>
-<li>CBS</li>
-<li>1 bottleneck = CBSx2 + res</li>
-<li>concat: 12+ CBS</li>
-<li>CBS</li>
-</ol>
-<p><strong>优点:</strong></p>
-<p>1️⃣ 增加网络的深度和非线性表达能力<br>
-→ 更深的路径可以学到更复杂的特征</p>
-<p>2️⃣ 更高的参数复用效率<br>
-→ 通过残差和重复结构，避免纯深度带来的退化问题</p>
-<p>3️⃣ 提高局部感受野<br>
-→ 套娃 bottleneck 可以让局部更“通透”，减少信息屏蔽</p>
-<p><strong>区别:</strong></p>
-<blockquote>
-<p>V8: 相当于套娃加了深度,多了一个bottleneck</p>
-</blockquote>
-<p><strong>细节:</strong></p>
-<h3 id="c2psa"><a class="markdownIt-Anchor" href="#c2psa"></a> C2PSA</h3>
-<img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250507232147155.png" alt="image-20250507232147155" style="zoom: 25%;">
-<p><strong>定义:</strong></p>
-<blockquote>
-<p>作用:**补充全局感知能力 **优化梯度传播和网络训练效果</p>
-</blockquote>
-<p><strong>组成:</strong></p>
-<ol>
-<li>类似C2f模块</li>
-<li>bottleneck=PSAbBlock</li>
-</ol>
-<p><strong>PSA:</strong></p>
-<h3 id="head"><a class="markdownIt-Anchor" href="#head"></a> head</h3>
-<p><strong>区别</strong>:深度可分离的方法</p>
-<h1 id="结构分析"><a class="markdownIt-Anchor" href="#结构分析"></a> 结构分析</h1>
-<h2 id="3-检测头"><a class="markdownIt-Anchor" href="#3-检测头"></a> 3 检测头</h2>
-<p>解耦头</p>
-<blockquote>
-<p>即分开计算BboxLoss和ClsLoss</p>
-</blockquote>
-<p><strong>reg_max</strong></p>
-<p>定义:</p>
-<blockquote>
-<p>作用</p>
-</blockquote>
-<h1 id="结果分析"><a class="markdownIt-Anchor" href="#结果分析"></a> 结果分析</h1>
-<h2 id="0-labels"><a class="markdownIt-Anchor" href="#0-labels"></a> 0 labels</h2>
-<p><strong>labels</strong></p>
-<p>定义: 混淆矩阵。矩阵的每一列代表一个类的实例预测，而每一行表示一个实际的类的实例。</p>
-<blockquote>
-<p>作用: 是否将两个不同的类混淆了</p>
-<p>分析:</p>
-<ol>
-<li>第一个图是训练集得数据量，每个类别有多少个</li>
-<li>第二个是框的尺寸和数量</li>
-<li>第三个框的center点的位置。</li>
-<li>第四个是labeld的高宽相比于整个图片</li>
-</ol>
-</blockquote>
-<img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/labels.jpg" alt="labels" style="zoom:25%;">   
-<p><strong>labels_correlogram</strong></p>
-<p>定义: <strong>类别相关性热力图（correlation heatmap）</strong>。</p>
-<blockquote>
-<p>作用: 是否将两个不同的类混淆了</p>
-<p>分析: 颜色越深，表示对应标签之间的相关性越强；颜色越浅，表示相关性越弱</p>
-<ol>
-<li>哪些<strong>标签之间具有较强的相关性</strong></li>
-<li>如果我们发现某些标签之间的相关性过强，可以考虑将它们合并成一个标签，从而简化模型并提高效率。</li>
-</ol>
-</blockquote>
-<img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/labels_correlogram.jpg" alt="labels_correlogram" style="zoom:25%;">  
-<h2 id="1-confusion_matrix"><a class="markdownIt-Anchor" href="#1-confusion_matrix"></a> 1 confusion_matrix</h2>
-<p>定义: 混淆矩阵。矩阵的每一列代表一个类的实例预测，而每一行表示一个实际的类的实例。</p>
-<blockquote>
-<p>作用: 是否将两个不同的类混淆了</p>
-<p>分析:</p>
-<ol>
-<li>left4 容易认为是background</li>
-</ol>
-</blockquote>
-<img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/confusion_matrix.png" alt="confusion_matrix" style="zoom: 15%;"> 
-<h2 id="2-prprf1_curve"><a class="markdownIt-Anchor" href="#2-prprf1_curve"></a> 2  P&amp;R&amp;PR&amp;F1_curve</h2>
-<p><strong>2.1 P_curve</strong></p>
-<p>定义: 当我设置置信度为某一数值的时候，各个类别识别的准确率。</p>
-<blockquote>
-<p>作用:</p>
-</blockquote>
-<img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/P_curve.png" alt="P_curve" style="zoom:13%;"> 
-<p><strong>2.2  R_curve</strong></p>
-<p>定义: 当我设置置信度为某一数值的时候，各个类别识别的召回率（查全率）和置信度的关系图。</p>
-<blockquote>
-<p>作用:  越全面</p>
-</blockquote>
-<p><img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/_%E6%A1%8C%E9%9D%A2/train2/PR_curve.png" alt="PR_curve"></p>
-<p><strong>3. PR_curve</strong></p>
-<p>定义: 精度与召回率曲线</p>
-<blockquote>
-<p>作用:  精度与召回率的关系</p>
-<p>分析: 希望mAP曲线的面积尽可能接近1</p>
-</blockquote>
-<img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/PR_curve.png" alt="PR_curve" style="zoom: 15%;"> 
-<p><strong>4 F1_curve</strong></p>
-<p>定义: <img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250508182738579.png" alt="image-20250508182738579" style="zoom:33%;"></p>
-<blockquote>
-<p>作用: <strong>精确率和召回率的调和平均数</strong></p>
-<p>分析:</p>
-</blockquote>
-<img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/F1_curve.png" alt="F1_curve" style="zoom:15%;"> 
-<h2 id="3-other"><a class="markdownIt-Anchor" href="#3-other"></a> 3 other</h2>
-<p><strong>3.1 loss functions</strong></p>
-<blockquote>
-<p>定义: 各类信息</p>
-</blockquote>
-<p><strong>3.2 result.csv</strong></p>
-<blockquote>
-<p>定义: 训练的输出 results.txt中最后三列是验证集结果，前面的是训练集结果</p>
-</blockquote>
-<p><strong>3.3 train_batchx|val_batchx_labels|val_batchx_pred</strong></p>
-<blockquote>
-<p>batchsize’分析</p>
-</blockquote>
-<h1 id="消融实验"><a class="markdownIt-Anchor" href="#消融实验"></a> 消融实验</h1>
-<table>
-<thead>
-<tr>
-<th>Model</th>
-<th>Layers</th>
-<th>Params(M)</th>
-<th>GFLOPs</th>
-<th>mAP@0.5</th>
-<th>mAP@0.5:0.95</th>
-<th>Precision</th>
-<th>Recall</th>
-<th>Val Box</th>
-<th>Val Cls</th>
-<th>Val DFL</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>wire（YOLOv8s）</td>
-<td>129</td>
-<td>11.142</td>
-<td>28.7</td>
-<td><strong>0.97932</strong></td>
-<td><strong>0.61878</strong></td>
-<td>0.96333</td>
-<td>0.95744</td>
-<td>1.34446</td>
-<td>0.68130</td>
-<td>0.98080</td>
-</tr>
-<tr>
-<td>wire-CBAM2</td>
-<td>149</td>
-<td>4.461</td>
-<td>19.8</td>
-<td>0.98499</td>
-<td>0.65787</td>
-<td>0.96523</td>
-<td>0.96764</td>
-<td>1.23725</td>
-<td>0.60513</td>
-<td>0.96018</td>
-</tr>
-<tr>
-<td>wire-ghost</td>
-<td>137</td>
-<td>2.824</td>
-<td>7.8</td>
-<td>0.97932</td>
-<td>0.61878</td>
-<td>0.96333</td>
-<td>0.95744</td>
-<td>1.34446</td>
-<td>0.68130</td>
-<td>0.98080</td>
-</tr>
-<tr>
-<td>wire-Ghost-C3ghost-GSCSP</td>
-<td>291</td>
-<td>5.857</td>
-<td>17.4</td>
-<td>0.97649</td>
-<td>0.61437</td>
-<td>0.95304</td>
-<td>0.94231</td>
-<td>1.34232</td>
-<td>0.67661</td>
-<td>0.97089</td>
-</tr>
-<tr>
-<td>wire-Ghost-x-x-CBAM</td>
-<td>162</td>
-<td>3.399</td>
-<td>15.5</td>
-<td>0.97125</td>
-<td>0.63970</td>
-<td>0.94271</td>
-<td>0.95166</td>
-<td>1.28386</td>
-<td>0.64999</td>
-<td>0.96416</td>
-</tr>
-<tr>
-<td>wire-Ghost-C3ghost-GSCSP-CBAM3</td>
-<td>311</td>
-<td>7.222</td>
-<td>28.8</td>
-<td>0.97058</td>
-<td>0.61882</td>
-<td>0.94713</td>
-<td>0.95569</td>
-<td>1.34975</td>
-<td>0.69796</td>
-<td>0.96739</td>
-</tr>
-<tr>
-<td>wire-Ghost-C3ghost</td>
-<td>259</td>
-<td>3.136</td>
-<td>8.9</td>
-<td>0.96228</td>
-<td>0.58690</td>
-<td>0.87856</td>
-<td>0.93795</td>
-<td>1.43447</td>
-<td>0.77993</td>
-<td>0.96887</td>
-</tr>
-<tr>
-<td>wire-C2Ghost-o</td>
-<td>251</td>
-<td>0.999</td>
-<td>3.2</td>
-<td>0.77162</td>
-<td>0.34710</td>
-<td>0.63183</td>
-<td>0.79332</td>
-<td>1.94767</td>
-<td>1.21099</td>
-<td>1.09901</td>
-</tr>
-</tbody>
-</table>
-<p>总结</p>
-<table>
-<thead>
-<tr>
-<th>模型</th>
-<th>Params(M)</th>
-<th>↓参数压缩</th>
-<th>GFLOPs</th>
-<th>↓GFLOPs</th>
-<th>mAP@0.5</th>
-<th>ΔmAP@0.5</th>
-<th>mAP@0.5:0.95</th>
-<th>ΔmAP@0.5:95</th>
-<th>结论</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>wire</td>
-<td>11.142</td>
-<td>-</td>
-<td>28.7</td>
-<td>-</td>
-<td>0.97932</td>
-<td>0</td>
-<td>0.61878</td>
-<td>0</td>
-<td>基准</td>
-</tr>
-<tr>
-<td>wire-ghost</td>
-<td>2.824</td>
-<td><strong>74.6%↓</strong></td>
-<td>7.8</td>
-<td><strong>72.8%↓</strong></td>
-<td>0.97932</td>
-<td>+0.00000</td>
-<td>0.61878</td>
-<td>+0.00000</td>
-<td>极优</td>
-</tr>
-<tr>
-<td>wire-CBAM2</td>
-<td>4.461</td>
-<td>59.9%↓</td>
-<td>19.8</td>
-<td>31.0%↓</td>
-<td><strong>0.98499</strong></td>
-<td><strong>+0.00567</strong></td>
-<td><strong>0.65787</strong></td>
-<td><strong>+0.03909</strong></td>
-<td>准确性最优</td>
-</tr>
-<tr>
-<td>wire-Ghost-C3ghost</td>
-<td>3.136</td>
-<td>71.8%↓</td>
-<td>8.9</td>
-<td>69.0%↓</td>
-<td>0.96228</td>
-<td>−0.01704</td>
-<td>0.58690</td>
-<td>−0.03188</td>
-<td>稳健但略降</td>
-</tr>
-<tr>
-<td>wire-Ghost-C3ghost-GSCSP</td>
-<td>5.857</td>
-<td>47.4%↓</td>
-<td>17.4</td>
-<td>39.3%↓</td>
-<td>0.97649</td>
-<td>−0.00283</td>
-<td>0.61437</td>
-<td>−0.00441</td>
-<td>平衡最优</td>
-</tr>
-<tr>
-<td>wire-Ghost-C3ghost-GSCSP-CBAM</td>
-<td>7.222</td>
-<td>35.2%↓</td>
-<td>28.8</td>
-<td>≈持平</td>
-<td>0.97068</td>
-<td>−0.00864</td>
-<td>0.63409</td>
-<td>+0.01531</td>
-<td>精度提升轻度补偿</td>
-</tr>
-<tr>
-<td>wire-Ghost-x-x-CBAM</td>
-<td>3.399</td>
-<td>69.5%↓</td>
-<td>15.5</td>
-<td>46.0%↓</td>
-<td>0.97125</td>
-<td>−0.00807</td>
-<td>0.63970</td>
-<td>+0.02092</td>
-<td>轻量+CBAM 平衡型</td>
-</tr>
-<tr>
-<td>wire-C2Ghost-o</td>
-<td>0.999</td>
-<td><strong>91.0%↓</strong></td>
-<td>3.2</td>
-<td><strong>88.9%↓</strong></td>
-<td>0.77162</td>
-<td>−0.20770</td>
-<td>0.34710</td>
-<td>−0.27168</td>
-<td>极端轻量，损失大</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p>在保持较低参数量（&lt;5M）和计算复杂度（&lt;20 GFLOPs）前提下，<code>Ghost + C3ghost + GSCSP + CBAM</code> 的组合在 mAP@0.5 上基本保持在 <strong>0.97 以上</strong>，性能与原始结构相当甚至更优。</p>
-</blockquote>
-<blockquote>
-<p>实际推理速度和资源占用显著优于原版 YOLOv8。量化后的模型在 mAP@0.5 上仅有 <strong>0.5%-1% 左右的下降</strong>，但带来了 <strong>20%-40% 的加速提升</strong>，更适合在嵌入式或边缘设备上部署。</p>
-</blockquote>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/" data-id="cmanj8o28000ylcv48vhi5odp" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/YOLO/" rel="tag">YOLO</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2025年4月24日-训练优化" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/04/24/2025%E5%B9%B44%E6%9C%8824%E6%97%A5-%E8%AE%AD%E7%BB%83%E4%BC%98%E5%8C%96/" class="article-date">
-  <time class="post-time" datetime="2025-04-24T05:39:41.000Z" itemprop="datePublished">
-    <span class="post-month">4月</span><br/>
-    <span class="post-day">24</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/04/24/2025%E5%B9%B44%E6%9C%8824%E6%97%A5-%E8%AE%AD%E7%BB%83%E4%BC%98%E5%8C%96/">2025年4月24日 训练优化</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="数据"><a class="markdownIt-Anchor" href="#数据"></a> 数据</h1>
-<h2 id="1-标注优化"><a class="markdownIt-Anchor" href="#1-标注优化"></a> 1 标注优化</h2>
-<p>✅<strong>1. 常见问题汇总</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">相连的两个数据是一起标还是?</span><br><span class="line">制造进行标定数据可以把之前完成的暂时先设置为未完成状态</span><br><span class="line">有很相似的物体 但是相对位置是明显不同的</span><br><span class="line">AI辅助标注后,要纠正一些错误标注,AI的错误样本和很多相同相似的数据要删除,分析哪几个类别比较容易出错,保留一些难样本,增加这类的样本,和少见比如有遮挡的情景，出现遮挡如何处理?需不需要重新标注呢?</span><br><span class="line">模型效果比我想象的要好很多啊,很多想不到的都能识别正确,关键是别标错数据了</span><br><span class="line">对于变化不大,泛化能力要求不高的场景,将val的比例提高是否有效?</span><br><span class="line">如果发现缺漏的标签需要再添加，可以训练只标定新标签的小model辅助后续标注而不用全部标签</span><br></pre></td></tr></table></figure>
-<table>
-<thead>
-<tr>
-<th>问题</th>
-<th>建议</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>相连物体一起标 or 分开标？</td>
-<td>根据任务需求，区分 instance 则分开，不区分则合并标</td>
-</tr>
-<tr>
-<td>标定数据状态管理</td>
-<td>已完成数据可切换为未完成，用状态标记做复查</td>
-</tr>
-<tr>
-<td>相似物体不同位置 → class 设计</td>
-<td>推荐用不同 class，如有后处理能力也可统一 class 后区分</td>
-</tr>
-<tr>
-<td>AI 标注后纠错与困难样本采集</td>
-<td>分析高误差类别、保留难样本、增加少见情景、遮挡需重新标注</td>
-</tr>
-<tr>
-<td>遮挡样本标注</td>
-<td>标可见部分并加 occluded 属性，完全遮挡则不标</td>
-</tr>
-<tr>
-<td>val 占比调整</td>
-<td>变化小的场景可适当增大 val 比例（<s>20</s>30%），注意别太高</td>
-</tr>
-</tbody>
-</table>
-<h1 id="训练相关"><a class="markdownIt-Anchor" href="#训练相关"></a> 训练相关</h1>
-<h2 id="1-训练数据指标"><a class="markdownIt-Anchor" href="#1-训练数据指标"></a> 1 训练数据指标</h2>
-<p>✅ <strong>1. layers（层数）</strong></p>
-<ul>
-<li>表示网络中包含的层的数量（卷积层、BN层、激活层、C3ghost 模块等）。</li>
-<li><strong>和显存关系：</strong><br>
-→ 层数本身不直接决定显存占用，但更深的网络往往需要更多参数和中间特征，这会增加显存需求。</li>
-</ul>
-<hr>
-<p>✅ <strong>2. parameters（参数量）</strong></p>
-<ul>
-<li>网络中的总参数数量，比如卷积核的权重、偏置等。</li>
-<li><strong>和显存关系：</strong><br>
-→ 需要显存存储这些参数，通常参数量较小（百万级）时，这部分显存占用较低（几十 MB）。<br>
-→ 主要影响模型加载到 GPU 后的静态显存占用。</li>
-</ul>
-<hr>
-<p>✅ <strong>3. gradients（梯度数）</strong></p>
-<ul>
-<li>训练时需要保存每个参数的梯度，用于反向传播。</li>
-<li><strong>和显存关系：</strong><br>
-→ 在训练时会额外占用和参数量几乎相同的显存。<br>
-→ 如果只推理（inference），梯度不计算，不占用显存。</li>
-</ul>
-<hr>
-<p>✅ <strong>4. GFLOPs（每秒十亿次浮点运算）</strong></p>
-<ul>
-<li>每次前向推理所需的大约计算量。</li>
-<li><strong>和显存关系：</strong><br>
-→ 不直接决定显存占用，但通常 GFLOPs 高的模型也会有更大中间特征图（feature map），导致更高的显存占用。</li>
-</ul>
-<hr>
-<h3 id="总结和-gpu-显存相关的部分"><a class="markdownIt-Anchor" href="#总结和-gpu-显存相关的部分"></a> 📌 总结：和 GPU 显存相关的部分</h3>
-<table>
-<thead>
-<tr>
-<th>组件</th>
-<th>训练时显存占用</th>
-<th>推理时显存占用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>parameters</td>
-<td>是</td>
-<td>是</td>
-</tr>
-<tr>
-<td>gradients</td>
-<td>是（主要是训练时）</td>
-<td>否</td>
-</tr>
-<tr>
-<td>feature maps（中间特征图，未在 summary 中列出，但由 layers 结构和输入大小决定）</td>
-<td>是，主要占用</td>
-<td>是，主要占用</td>
-</tr>
-<tr>
-<td>GFLOPs</td>
-<td>间接相关（高 GFLOPs 模型通常特征图也大）</td>
-<td>间接相关</td>
-</tr>
-</tbody>
-</table>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/04/24/2025%E5%B9%B44%E6%9C%8824%E6%97%A5-%E8%AE%AD%E7%BB%83%E4%BC%98%E5%8C%96/" data-id="cmanj8o26000mlcv4fgg5hrf3" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl/" rel="tag">dl</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2025年4月19日-docker记录" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/04/19/2025%E5%B9%B44%E6%9C%8819%E6%97%A5-docker%E8%AE%B0%E5%BD%95/" class="article-date">
-  <time class="post-time" datetime="2025-04-19T01:41:50.000Z" itemprop="datePublished">
-    <span class="post-month">4月</span><br/>
-    <span class="post-day">19</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/04/19/2025%E5%B9%B44%E6%9C%8819%E6%97%A5-docker%E8%AE%B0%E5%BD%95/">2025年4月19日 docker记录</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="docker"><a class="markdownIt-Anchor" href="#docker"></a> Docker</h1>
-<h2 id="1-介绍"><a class="markdownIt-Anchor" href="#1-介绍"></a> 1 介绍</h2>
-<h3 id="11-dockerfile"><a class="markdownIt-Anchor" href="#11-dockerfile"></a> 1.1 dockerfile</h3>
-<p>包含了构建 Docker 镜像的所有指令</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker build -t opencv-detection5 .</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="12-compose"><a class="markdownIt-Anchor" href="#12-compose"></a> 1.2 compose</h3>
-<p>从 YML 文件配置中创建并启动所有服务</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose up -d # 	后台执行</span><br></pre></td></tr></table></figure>
-<h3 id="13-参数"><a class="markdownIt-Anchor" href="#13-参数"></a> 1.3 参数</h3>
-<ul>
-<li>
-<p>使用gpu</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --gpus all xx</span><br></pre></td></tr></table></figure>
-</li>
-<li>
-<p>版本</p>
-</li>
-<li>
-<p>容器退出后自动删除，不保留任何数据或文件系统。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run  --rm xx</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="2-部署"><a class="markdownIt-Anchor" href="#2-部署"></a> 2 部署</h2>
-<h3 id="21-部署报错"><a class="markdownIt-Anchor" href="#21-部署报错"></a> 2.1 部署报错</h3>
-<h4 id="1-尝试使用pytorch-但是不支持python312"><a class="markdownIt-Anchor" href="#1-尝试使用pytorch-但是不支持python312"></a> 1 尝试使用pytorch 但是不支持python312</h4>
-<h4 id="2-尝试使用原始pythoncuda-但是cuda安装超时"><a class="markdownIt-Anchor" href="#2-尝试使用原始pythoncuda-但是cuda安装超时"></a> 2 尝试使用原始python+cuda 但是cuda安装超时</h4>
-<h4 id="3-尝试使用pytorch-自己再安装python312-但是遇到好多问题"><a class="markdownIt-Anchor" href="#3-尝试使用pytorch-自己再安装python312-但是遇到好多问题"></a> 3 尝试使用pytorch 自己再安装python312 但是遇到好多问题。</h4>
-<p>​	多了个时区选择，运行的选择python版本，python 3.12没有正确安装pip，在Ubuntu 22.04上安装Python 3.12有问题等等</p>
-<h4 id="4-修改项目代码-使之支持python311"><a class="markdownIt-Anchor" href="#4-修改项目代码-使之支持python311"></a> 4 修改项目代码 使之支持python311</h4>
-<p>​	改写override</p>
-<h4 id="5-项目代码出现问题-linux大小写敏感"><a class="markdownIt-Anchor" href="#5-项目代码出现问题-linux大小写敏感"></a> 5 项目代码出现问题 linux大小写敏感</h4>
-<h4 id="6-清空给缓存-避免占用空间"><a class="markdownIt-Anchor" href="#6-清空给缓存-避免占用空间"></a> 6 清空给缓存 避免占用空间</h4>
-<p>​	删除未使用的容器、镜像、卷</p>
-<p>​	 查看 Docker 空间使用情况</p>
-<p>使用以下命令查看 Docker 各部分占用的空间：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker system df</span><br></pre></td></tr></table></figure>
-<p>清理 Docker 镜像缓存</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker builder prune</span><br></pre></td></tr></table></figure>
-<h3 id="22-发布-hub"><a class="markdownIt-Anchor" href="#22-发布-hub"></a> 2.2  发布 hub</h3>
-<h4 id="push"><a class="markdownIt-Anchor" href="#push"></a> push</h4>
-<p>docker login</p>
-<p>docker tag opencv-detection8.1:latest weakliy/opencv-detection-gaotie:latest<br>
-docker push weakliy/opencv-detection-gaotie:latest</p>
-<h4 id="pull"><a class="markdownIt-Anchor" href="#pull"></a> pull</h4>
-<blockquote>
-<p>其他机器上</p>
-</blockquote>
-<p>docker pull weakliy/opencv-detection-gaotie2:latest<br>
-docker-compose up -d</p>
-<h3 id="23-打包到本地"><a class="markdownIt-Anchor" href="#23-打包到本地"></a> 2.3 打包到本地</h3>
-<p>docker save -o detection.tar opencv-detection7.1:latest</p>
-<p>docker load -i ./detection-gaotie.tar</p>
-<p>docker-compose up</p>
-<h2 id="3-优化"><a class="markdownIt-Anchor" href="#3-优化"></a> 3 优化</h2>
-<h3 id="31-image层优化"><a class="markdownIt-Anchor" href="#31-image层优化"></a> 3.1 image层优化</h3>
-<h4 id="1-层优化减少不必要的层命令和并"><a class="markdownIt-Anchor" href="#1-层优化减少不必要的层命令和并"></a> 1 层优化减少不必要的层+命令和并</h4>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># 不推荐：每个命令都会创建新层</span><br><span class="line">RUN apt-get update</span><br><span class="line">RUN apt-get install -y python3</span><br><span class="line">RUN pip install numpy</span><br><span class="line">RUN pip install opencv-python</span><br><span class="line"></span><br><span class="line"># 推荐：合并RUN命令</span><br><span class="line">RUN apt-get update &amp;&amp; \</span><br><span class="line">    apt-get install -y python3 &amp;&amp; \</span><br><span class="line">    pip install numpy opencv-python &amp;&amp; \</span><br><span class="line">    apt-get clean &amp;&amp; \</span><br><span class="line">    rm -rf /var/lib/apt/lists/*</span><br></pre></td></tr></table></figure>
-<h4 id="2-dockerignore文件"><a class="markdownIt-Anchor" href="#2-dockerignore文件"></a> 2 .dockerignore文件</h4>
-<h4 id="3-及时清理"><a class="markdownIt-Anchor" href="#3-及时清理"></a> 3 及时清理</h4>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-<h4 id><a class="markdownIt-Anchor" href="#"></a> </h4>
-<h4 id="4-优化copy命令-先复制依赖文件安装依赖再复制代码"><a class="markdownIt-Anchor" href="#4-优化copy命令-先复制依赖文件安装依赖再复制代码"></a> 4 优化COPY命令+ 先复制依赖文件，安装依赖，再复制代码</h4>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 推荐：先复制依赖文件，安装依赖，再复制代码</span><br><span class="line">COPY requirements.txt .</span><br><span class="line">RUN pip install -r requirements.txt</span><br><span class="line">COPY . .</span><br></pre></td></tr></table></figure>
-<h4 id="5-两阶段构建"><a class="markdownIt-Anchor" href="#5-两阶段构建"></a> 5 两阶段构建</h4>
-<ol>
-<li>先构建环境+工具</li>
-<li>只copy环境</li>
-</ol>
-<h3 id="32-标签管理"><a class="markdownIt-Anchor" href="#32-标签管理"></a> 3.2 标签管理</h3>
-<p># 方法1：使用–build-arg参数</p>
-<p>docker build --build-arg VERSION=1.0.0 -t opencv-detection .</p>
-<p>docker build --build-arg VERSION=1.1.0 -t opencv-detection .</p>
-<h3 id="docker都休眠了-pip还在安装呢-没内存了"><a class="markdownIt-Anchor" href="#docker都休眠了-pip还在安装呢-没内存了"></a> <strong>docker都休眠了 pip还在安装呢。。。。——没内存了</strong></h3>
-<h2 id="4-报错"><a class="markdownIt-Anchor" href="#4-报错"></a> 4 报错</h2>
-<p>docker export 和load</p>
-<p>open /var/lib/docker/tmp/docker-import-929897693/blobs/json: no such file or directory</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/04/19/2025%E5%B9%B44%E6%9C%8819%E6%97%A5-docker%E8%AE%B0%E5%BD%95/" data-id="cmanj8o25000klcv45461flou" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9D%82/" rel="tag">杂</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2025年4月4日-triton" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/04/02/2025%E5%B9%B44%E6%9C%884%E6%97%A5-triton/" class="article-date">
-  <time class="post-time" datetime="2025-04-02T13:45:53.000Z" itemprop="datePublished">
-    <span class="post-month">4月</span><br/>
-    <span class="post-day">02</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/04/02/2025%E5%B9%B44%E6%9C%884%E6%97%A5-triton/">2025年4月4日 triton</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/684473453">https://zhuanlan.zhihu.com/p/684473453</a></p>
-<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/703256080">https://zhuanlan.zhihu.com/p/703256080</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/04/02/2025%E5%B9%B44%E6%9C%884%E6%97%A5-triton/" data-id="cmanj8o26000nlcv4hdsi2bjg" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl%E3%80%81infer/" rel="tag">dl、infer</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-算法设计" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/03/31/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1/" class="article-date">
-  <time class="post-time" datetime="2025-03-31T13:50:35.913Z" itemprop="datePublished">
-    <span class="post-month">3月</span><br/>
-    <span class="post-day">31</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="动态规划"><a class="markdownIt-Anchor" href="#动态规划"></a> 动态规划</h2>
-<ul>
-<li>暴力穷举
-<ul>
-<li>记录避免重复</li>
-<li>
-<img src="/2025/03/31/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1/image-20250331215153891.png" alt="image-20250331215153891" style="zoom:33%;">
-</li>
-</ul>
-</li>
-<li>方向进行
-<ul>
-<li>
-<img src="/2025/03/31/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1/image-20250331215203800.png" alt="image-20250331215203800" style="zoom:33%;">
-</li>
-</ul>
-</li>
-</ul>
-<h2 id="分子法"><a class="markdownIt-Anchor" href="#分子法"></a> 分子法</h2>
-<img src="/2025/03/31/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1/image-20250331215909614.png" alt="image-20250331215909614" style="zoom:50%;">
-<ul>
-<li>分 二分</li>
-<li>治 递归</li>
-<li>处理 子问题合并</li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/03/31/%E7%AE%97%E6%B3%95%E8%AE%BE%E8%AE%A1/" data-id="cmc9s779y00022ov4bcfddpu2" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2025年4月16日-TensorRT2export汇总" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/03/16/2025%E5%B9%B44%E6%9C%8816%E6%97%A5-TensorRT2export%E6%B1%87%E6%80%BB/" class="article-date">
-  <time class="post-time" datetime="2025-03-16T09:30:04.000Z" itemprop="datePublished">
-    <span class="post-month">3月</span><br/>
-    <span class="post-day">16</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/03/16/2025%E5%B9%B44%E6%9C%8816%E6%97%A5-TensorRT2export%E6%B1%87%E6%80%BB/">2023年11月16日 TensorRT推理汇总</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>去</p>
-<h3 id><a class="markdownIt-Anchor" href="#"></a> </h3>
-<h1 id="流程"><a class="markdownIt-Anchor" href="#流程"></a> 流程</h1>
-<p><strong>“ONNX → TensorRT Engine → 加载引擎文件并反序列化为可执行模型 → 分配输入输出 → 推理执行 → 拷出结果 → 后处理”</strong></p>
-<blockquote>
-<ol>
-<li>？反序列化为可执行模型</li>
-<li>？？ 创建执行上下文（IExecutionContext）</li>
-</ol>
-</blockquote>
-<h2 id="1-exe-导出"><a class="markdownIt-Anchor" href="#1-exe-导出"></a> 1 Exe 导出</h2>
-<p><strong>加上 <code>--verbose</code></strong> 运行 <code>trtexec</code></p>
-<p>模型汇总</p>
-<table>
-<thead>
-<tr>
-<th>格式</th>
-<th>文件扩展名</th>
-<th>内容</th>
-<th>用途</th>
-<th>生成方式</th>
-<th>可直接推理？</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>WTS</td>
-<td><code>.wts</code></td>
-<td>网络结构各层的权重（文本或二进制）</td>
-<td>通常用于从 PyTorch 到 TensorRT 的自定义转换流程，如通过 C++ 的 API 加载</td>
-<td>通常通过 PyTorch 脚本导出</td>
-<td>❌</td>
-</tr>
-<tr>
-<td>TRT Engine</td>
-<td><code>.trt</code> / <code>.engine</code></td>
-<td>已优化的推理引擎（含网络结构 + 权重 + TensorRT 优化）</td>
-<td>TensorRT 的最终部署格式</td>
-<td>使用 <code>trtexec</code> 或 TensorRT API 编译 <code>.onnx</code> 或 <code>.wts</code> 模型生成</td>
-<td>✅</td>
-</tr>
-</tbody>
-</table>
-<h1 id="问题汇总"><a class="markdownIt-Anchor" href="#问题汇总"></a> 问题汇总</h1>
-<h3 id="️-自定义层问题"><a class="markdownIt-Anchor" href="#️-自定义层问题"></a> ⚠️ 自定义层问题</h3>
-<h4 id="1-eyelike动态形状"><a class="markdownIt-Anchor" href="#1-eyelike动态形状"></a> 1 EyeLike动态形状</h4>
-<p><code>EyeLike</code> 是 ONNX 中一个用于生成单位矩阵的操作。该错误说明：</p>
-<ul>
-<li>你模型中的某个节点使用了 <code>EyeLike</code> 操作；</li>
-<li>但这个操作的输入张量是动态维度（即维度在推理时不固定）；</li>
-<li>而 TensorRT <strong>不支持对动态维度使用 EyeLike</strong>。</li>
-</ul>
-<p><strong>EyeLike 操作</strong>：这是一个自定义层或特殊层，在某些情况下，TensorRT 不支持动态形状。</p>
-<p><strong>动态形状问题</strong>：TensorRT 不支持动态形状的输入（<code>EyeLike</code> 操作的输入是动态形状），这导致了错误。</p>
-<blockquote>
-<p>使用batch 大小不需要变化的minShapes时没用的！</p>
-</blockquote>
-<h3 id="️-动态输入尺寸问题"><a class="markdownIt-Anchor" href="#️-动态输入尺寸问题"></a> ⚠️ 动态输入尺寸问题：</h3>
-<h4 id="1-onnx参数dynamictrue"><a class="markdownIt-Anchor" href="#1-onnx参数dynamictrue"></a> 1 ONNX参数dynamic=True</h4>
-<p>你导出的 ONNX 模型使用了 <strong>动态输入尺寸</strong>（<code>dynamic=True</code>），导致 <code>trtexec</code> 在构建 TensorRT 引擎时需要你<strong>明确地指定输入尺寸 profile</strong>，否则就会报错。</p>
-<p>解决：</p>
-<blockquote>
-<p>trtexec <br>
-–onnx=best_dynamic.onnx <br>
-–saveEngine=best.engine <br>
-–fp16 <br>
-–minShapes=images:1x3x640x640 <br>
-–optShapes=images:8x3x640x640 <br>
-–maxShapes=images:16x3x640x640</p>
-</blockquote>
-<h3 id="️-量化问题"><a class="markdownIt-Anchor" href="#️-量化问题"></a> ⚠️  量化问题</h3>
-<h4 id="1-int64数据"><a class="markdownIt-Anchor" href="#1-int64数据"></a> 1 INT64数据</h4>
-<p>你的 ONNX 模型中包含了一些 <strong><code>INT64</code> 类型的权重或常量</strong>，而 TensorRT <strong>原生只支持 <code>INT32</code> 及以下的整数类型</strong>，因此它尝试<strong>自动将 <code>INT64</code> 转换为 <code>INT32</code></strong>。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">onnx2trt_utils.cpp:374: Your ONNX model has been generated with INT64 weights, while TensorRT does not natively support INT64. Attempting to cast down to INT32.</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="️错误"><a class="markdownIt-Anchor" href="#️错误"></a> ⚠️错误</h3>
-<p>[05/13/2025-15:25:59] [TRT] [E] 1: [defaultAllocator.cpp::nvinfer1::internal::DefaultAllocator::deallocate::61] Error Code 1: Cuda Runtime (invalid argument)</p>
-<h1 id="success"><a class="markdownIt-Anchor" href="#success"></a> success！</h1>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">trtexec --onnx=F:\Pydata\DL_NEW\fuxian\ultralytics\runs\detect\wire-Ghost-C3ghost-GSCSP-CBAM3\weights\best_simplify_dynamic=False.onnx --saveEngine=best_int8.trt --int8 --verbose  --minShapes=images:1x3x640x640 --optShapes=images:8x3x640x640 --maxShapes=images:16x3x640x640trtexec ^</span><br><span class="line">--onnx=F:\Pydata\DL_NEW\fuxian\ultralytics\runs\detect\wire-Ghost-C3ghost-GSCSP-CBAM3\weights\best_simplify_dynamic.onnx ^</span><br><span class="line">--saveEngine=best_int8.trt ^</span><br><span class="line">--int8 ^</span><br><span class="line">--verbose ^</span><br><span class="line">--minShapes=images:1x3x640x640 ^</span><br><span class="line">--optShapes=images:8x3x640x640 ^</span><br><span class="line">--maxShapes=images:16x3x640x640</span><br></pre></td></tr></table></figure>
-<p><img src="/2025/03/16/2025%E5%B9%B44%E6%9C%8816%E6%97%A5-TensorRT2export%E6%B1%87%E6%80%BB/C:%5CUsers%5Cadmin%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20250513135551397.png" alt="image-20250513135551397"></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/03/16/2025%E5%B9%B44%E6%9C%8816%E6%97%A5-TensorRT2export%E6%B1%87%E6%80%BB/" data-id="cmanj8o27000plcv44xiw84f2" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/TensorRT/" rel="tag">TensorRT</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2025年3月16日-DL八股文" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/03/14/2025%E5%B9%B43%E6%9C%8816%E6%97%A5-DL%E5%85%AB%E8%82%A1%E6%96%87/" class="article-date">
-  <time class="post-time" datetime="2025-03-14T06:44:16.000Z" itemprop="datePublished">
-    <span class="post-month">3月</span><br/>
-    <span class="post-day">14</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/03/14/2025%E5%B9%B43%E6%9C%8816%E6%97%A5-DL%E5%85%AB%E8%82%A1%E6%96%87/">2025年3月16日 DL八股文</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>记录一些学了又忘或是没学的DL八股文知识</p>
-</blockquote>
-<h1 id="dl八股文"><a class="markdownIt-Anchor" href="#dl八股文"></a> DL八股文</h1>
-<h1 id="原理"><a class="markdownIt-Anchor" href="#原理"></a> 原理</h1>
-<p>一种基于深层神经网络的机器学习方法，通过多层次的非线性变换自动提取数据特征，实现复杂模式的识别与预测。核心是模仿人脑神经元的连接方式，构建“输入-隐藏-输出”层级的计算模型，从数据中学习从简单到抽象的特征表示</p>
-<h1 id="训练"><a class="markdownIt-Anchor" href="#训练"></a> 训练</h1>
-<blockquote>
-<p>模型训练的核心是通过调整参数（如权重 <em>w</em> 和偏置 <em>b</em>） 最小化损失函数 L</p>
-</blockquote>
-<h2 id="过拟合"><a class="markdownIt-Anchor" href="#过拟合"></a> 过拟合</h2>
-<h3 id="1-什么是过拟合"><a class="markdownIt-Anchor" href="#1-什么是过拟合"></a> 1 什么是过拟合</h3>
-<p>指模型在训练集上表现优异，但在测试集或新数据上泛化能力显著下降的现象。其核心矛盾是模型过度<strong>学习了训练数据中的噪声和非全局性特征</strong>，而非数据背后的真实规律 。</p>
-<h3 id="2-原因"><a class="markdownIt-Anchor" href="#2-原因"></a> 2 原因</h3>
-<ol>
-<li>数据层面：<strong>数据量不足</strong>，导致没有学到全局特征。<strong>噪声干扰</strong>，数据中存在异常值或错误标签，模型误将其作为学习目标</li>
-<li>模型层面：模型过于复杂，<strong>过度适应训练数据细节</strong></li>
-<li>训练层面：迭代次数过多（未早停）或学习率未优化/</li>
-</ol>
-<h3 id="3-如何解决"><a class="markdownIt-Anchor" href="#3-如何解决"></a> 3 如何解决</h3>
-<ol>
-<li>
-<p>：数据增强与数据清洗</p>
-</li>
-<li>
-<p>：选用简单模型。添加正则化策略，<strong>Dropout</strong>、<strong>批量归一化</strong>BatchNorm、<strong>池化</strong></p>
-</li>
-<li>
-<p>：早停法、动态学习率、</p>
-</li>
-<li>
-<p><strong>集成方法</strong>：结合多个模型的预测结果（如随机森林投票），减少单个模型方差</p>
-<p><strong>迁移学习等</strong></p>
-</li>
-</ol>
-<h3 id="4-欠拟合呢"><a class="markdownIt-Anchor" href="#4-欠拟合呢"></a> 4 欠拟合呢？</h3>
-<h2 id="训练方法"><a class="markdownIt-Anchor" href="#训练方法"></a> 训练方法</h2>
-<p>训练方法</p>
-<h3 id="1-监督学习"><a class="markdownIt-Anchor" href="#1-监督学习"></a> 1 监督学习</h3>
-<h3 id="3-自监督学习"><a class="markdownIt-Anchor" href="#3-自监督学习"></a> 3 自监督学习</h3>
-<blockquote>
-<p>参考：<a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/1257862?spm=a2c6h.24874632.expert-profile.15.45a63181v37e02%5C">https://developer.aliyun.com/article/1257862?spm=a2c6h.24874632.expert-profile.15.45a63181v37e02\</a></p>
-</blockquote>
-<h4 id="定义"><a class="markdownIt-Anchor" href="#定义"></a> 定义</h4>
-<p>​	它利用未标记的数据来训练模型，而无需人工标注的标签</p>
-<p>​	利用数据中的自动生成的标签或任务来训练模型</p>
-<h4 id="自监督学习方法"><a class="markdownIt-Anchor" href="#自监督学习方法"></a> 自监督学习方法</h4>
-<h3 id="4-zero-shot-one-shot-and-few-shot-learning概念"><a class="markdownIt-Anchor" href="#4-zero-shot-one-shot-and-few-shot-learning概念"></a> 4 Zero-Shot, One-Shot, and Few-Shot Learning概念</h3>
-<ol>
-<li>Zero-Shot是指训练一个模型来对其从未见过的对象进行分类。其核心思想是利用另一个模型的现有知识，以获得新类别的有意义的表示。</li>
-<li>One-Shot是确定图像A是否等同于图像B。这是通过将模型从先前任务的经验中获得的信息进行概括来实现的。</li>
-<li>Few-Shot Learning它是元学习的一个子领域，旨在开发能够从少量有标签示例中学习的算法</li>
-</ol>
-<h2 id="迁移学习微调-️"><a class="markdownIt-Anchor" href="#迁移学习微调-️"></a> 迁移学习+微调 ☑️</h2>
-<h3 id="1-迁移学习"><a class="markdownIt-Anchor" href="#1-迁移学习"></a> 1 迁移学习</h3>
-<p>在大型数据集上训练好的模型可以被“迁移”到新的任务中，从而避免从零开始训练。大地缩短训练时间，并显著提高性能</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 加载预训练的ResNet模型</span></span><br><span class="line">resnet = models.resnet50(pretrained=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
-<h3 id="2-微调"><a class="markdownIt-Anchor" href="#2-微调"></a> 2 微调</h3>
-<ul>
-<li>通过对预训练模型<strong>进行部分或全部参数的微调</strong>，模型可以适应新任务中的特定数据。微调的程度取决于新任务的相似性和目标。</li>
-<li>通常会冻结模型的部分层，以保留通用的特征提取能力，针对新任务<strong>只对高层</strong>进行微调。</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 冻结所有层的参数，以便只微调最后的全连接层</span></span><br><span class="line"><span class="keyword">for</span> param <span class="keyword">in</span> resnet.parameters():</span><br><span class="line">    param.requires_grad = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 解冻部分层，允许更多层进行训练</span></span><br><span class="line"><span class="keyword">for</span> name, param <span class="keyword">in</span> resnet.named_parameters():</span><br><span class="line">    <span class="keyword">if</span> <span class="string">&quot;layer4&quot;</span> <span class="keyword">in</span> name:  <span class="comment"># 假设只解冻ResNet的最后一层</span></span><br><span class="line">        param.requires_grad = <span class="literal">True</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        param.requires_grad = <span class="literal">False</span></span><br></pre></td></tr></table></figure>
-<h2 id="梯度"><a class="markdownIt-Anchor" href="#梯度"></a> 梯度</h2>
-<p><img src="/2025/03/14/2025%E5%B9%B43%E6%9C%8816%E6%97%A5-DL%E5%85%AB%E8%82%A1%E6%96%87/image-20250320184024743.png" alt></p>
-<h3 id="2-梯度稀疏化问题"><a class="markdownIt-Anchor" href="#2-梯度稀疏化问题"></a> 2 梯度稀疏化问题</h3>
-<h4 id="定义-2"><a class="markdownIt-Anchor" href="#定义-2"></a> 定义</h4>
-<p>在深度学习中，梯度是指损失函数对模型参数的偏导数。通过反向传播算法，我们可以计算得到每个参数的梯度，并使用优化算法（如随机梯度下降）来更新参数。然而，在深层神经网络中，梯度通常具有很高的维度，<strong>其中大部分元素都是接近于零或者非常小的值</strong>。这些接近于零的梯度元素对参数更新几乎没有贡献，并且会占用大量内存空间和计算资源。</p>
-<ul>
-<li>
-<p>模型更新偏差：仅部分参数被有效更新，可能偏离全局最优解</p>
-</li>
-<li>
-<p>训练不稳定：梯度分布不均加剧收敛震荡</p>
-</li>
-</ul>
-<h4 id="成因"><a class="markdownIt-Anchor" href="#成因"></a> <strong>成因</strong></h4>
-<ol>
-<li><strong>模型结构与激活函数</strong>
-<ul>
-<li>局部激活稀疏性：ReLU等激活函数在输入为负时输出零梯度，导致大量神经元处于“死亡”状态</li>
-<li>深度网络层间依赖：深层网络中矩阵连乘导致梯度衰减或爆炸，加剧稀疏性</li>
-</ul>
-</li>
-<li><strong>优化策略与正则化</strong>
-<ul>
-<li>L1正则化：通过惩罚权重绝对值，强制稀疏参数分布，间接导致梯度稀疏</li>
-<li>梯度裁剪：限制梯度幅值，抑制小梯度更新</li>
-</ul>
-</li>
-<li><strong>训练数据分布</strong>
-<ul>
-<li>数据不均衡：长尾数据导致部分类别梯度贡献微弱</li>
-<li>特征冗余：输入数据中存在大量无关特征，相关梯度趋近于零</li>
-</ul>
-</li>
-</ol>
-<h4 id="处理方法"><a class="markdownIt-Anchor" href="#处理方法"></a> <strong>处理方法</strong></h4>
-<p><strong>优化算法改进</strong></p>
-<ul>
-<li><strong>动量修正与误差补偿</strong>：如DGC中的Momentum Correction，缓解因稀疏化导致的梯度滞后问题</li>
-<li><strong>自适应优化器</strong>：Adam等算法动态调整学习率，避免小梯度参数被完全抑制</li>
-</ul>
-<p><strong>数据与训练策略调整</strong></p>
-<ul>
-<li><strong>数据增强与重采样</strong>：平衡类别分布，提升尾部数据的梯度贡献</li>
-<li><strong>渐进式稀疏训练</strong>：初期保留更多梯度，逐步增加稀疏率以避免过早信息丢失</li>
-</ul>
-<h4 id="应用"><a class="markdownIt-Anchor" href="#应用"></a> 应用</h4>
-<ol>
-<li>剪枝与梯度量化</li>
-<li></li>
-</ol>
-<h2 id="激活函数"><a class="markdownIt-Anchor" href="#激活函数"></a> 激活函数</h2>
-<h3 id="1-定义"><a class="markdownIt-Anchor" href="#1-定义"></a> 1 定义</h3>
-<p>引入<strong>非线性因素</strong>,处理复杂的问题</p>
-<h3 id="2-常见激活函数"><a class="markdownIt-Anchor" href="#2-常见激活函数"></a> 2 常见激活函数</h3>
-<h4 id="1-sigmoid"><a class="markdownIt-Anchor" href="#1-sigmoid"></a> 1 Sigmoid</h4>
-<img src="/2025/03/14/2025%E5%B9%B43%E6%9C%8816%E6%97%A5-DL%E5%85%AB%E8%82%A1%E6%96%87/image-20250320185054836.png" alt="image-20250320185054836" style="zoom:33%;"> 
-<h4 id="2-tanh"><a class="markdownIt-Anchor" href="#2-tanh"></a> 2 Tanh</h4>
-<img src="/2025/03/14/2025%E5%B9%B43%E6%9C%8816%E6%97%A5-DL%E5%85%AB%E8%82%A1%E6%96%87/image-20250320185034344.png" alt="image-20250320185034344" style="zoom: 33%;">  
-<blockquote>
-<p>存在梯度消失的问题，因为它们的导数（连乘）在两端会趋近于零，导致深层网络训练困难</p>
-</blockquote>
-<h4 id="3-relu"><a class="markdownIt-Anchor" href="#3-relu"></a> 3 relu</h4>
-<img src="/2025/03/14/2025%E5%B9%B43%E6%9C%8816%E6%97%A5-DL%E5%85%AB%E8%82%A1%E6%96%87/image-20250320184950902.png" alt="image-20250320184950902" style="zoom: 67%;"> 
-<h5 id="优势"><a class="markdownIt-Anchor" href="#优势"></a> 优势</h5>
-<ol>
-<li><strong>缓解梯度消失</strong>：
-<ul>
-<li>Sigmoid/Tanh的饱和区：导数在输入绝对值较大时趋近于0（如Sigmoid导数值最大仅0.25），导致深层网络梯度链式相乘后指数级衰减</li>
-<li>ReLU的非饱和性：<strong>正区间的导数为1</strong>，保证梯度稳定传递，支持深层网络训练</li>
-</ul>
-</li>
-<li><strong>计算高效</strong>：ReLU仅需判断输入是否大于0（<strong>无指数运算</strong>），比Sigmoid/Tanh快6倍以上，适合大规模数据和复杂模型</li>
-<li><strong>稀疏激活</strong>：ReLU将负输入强制置零，使网络<strong>稀疏化</strong>（约50%神经元激活），降低参数依赖性和过拟合风险，增强模型鲁棒性</li>
-</ol>
-<h5 id="不足"><a class="markdownIt-Anchor" href="#不足"></a> 不足</h5>
-<ol>
-<li>为负时，ReLU输出恒为0，梯度为0，导致对应权重无法更新（“<strong>死亡</strong>”）</li>
-</ol>
-<h5 id="改进"><a class="markdownIt-Anchor" href="#改进"></a> 改进</h5>
-<blockquote>
-<p>改进ReLU的方法，比如Leaky ReLU、Parametric ReLU（PReLU）和ELU，</p>
-</blockquote>
-<h2 id="损失函数"><a class="markdownIt-Anchor" href="#损失函数"></a> 损失函数</h2>
-<blockquote>
-<p>解释什么是损失函数，它的作用，常见的损失函数类型，以及如何根据不同的任务选择合适的损失函数，还有在训练过程中如何优化损失。</p>
-</blockquote>
-<h3 id="1-定义-2"><a class="markdownIt-Anchor" href="#1-定义-2"></a> <strong>1 定义</strong>：</h3>
-<p>损失函数是衡量模型预测值与真实值<strong>差异的量化指标</strong>，</p>
-<p><strong>用于指导模型参数优化</strong>。反向传播更新梯度</p>
-<p><img src="/2025/03/14/2025%E5%B9%B43%E6%9C%8816%E6%97%A5-DL%E5%85%AB%E8%82%A1%E6%96%87/image-20250320182842833.png" alt="image-20250320182842833"></p>
-<h3 id="2-常见"><a class="markdownIt-Anchor" href="#2-常见"></a> 2 常见</h3>
-<ol>
-<li><strong>均方误差</strong> 绝对误差等等</li>
-<li>交叉熵</li>
-</ol>
-<h1 id="模型"><a class="markdownIt-Anchor" href="#模型"></a> 模型</h1>
-<h2 id="cnn"><a class="markdownIt-Anchor" href="#cnn"></a> CNN</h2>
-<h3 id="0-图像性质"><a class="markdownIt-Anchor" href="#0-图像性质"></a> 0 图像性质</h3>
-<ol>
-<li><strong>平移不变性</strong>：池化与卷积核滑动使模型对目标位置变化不敏感。</li>
-</ol>
-<h3 id="1-定义-3"><a class="markdownIt-Anchor" href="#1-定义-3"></a> 1 定义</h3>
-<p>核心思想是通过<strong>局部感受野</strong>和<strong>参数共享</strong>，高效提取空间或时序特征。<br>
-从原始像素中学习到“边缘→纹理→物体部件→完整物体”的层次化特征表示</p>
-<h3 id="2-组成"><a class="markdownIt-Anchor" href="#2-组成"></a> 2 组成</h3>
-<h4 id="卷积层"><a class="markdownIt-Anchor" href="#卷积层"></a> <strong>卷积层</strong></h4>
-<p><strong>卷积层堆叠</strong>：</p>
-<ul>
-<li>浅层卷积核提取边缘、颜色等低级特征。</li>
-<li>深层卷积核组合低级特征，形成高级语义（如车轮、车窗</li>
-</ul>
-<h4 id="池化层"><a class="markdownIt-Anchor" href="#池化层"></a> <strong>池化层</strong></h4>
-<blockquote>
-<p>减少计算量并增强平移不变性。</p>
-</blockquote>
-<h2 id="resnet"><a class="markdownIt-Anchor" href="#resnet"></a> resnet</h2>
-<h3 id="1思想"><a class="markdownIt-Anchor" href="#1思想"></a> 1<strong>思想</strong></h3>
-<blockquote>
-<p><strong>学习残差而非直接学习目标映射</strong>   通过（跳跃连接）实现残差学习</p>
-</blockquote>
-<h3 id="2-解决问题"><a class="markdownIt-Anchor" href="#2-解决问题"></a> 2 解决问题</h3>
-<h5 id="1-深层网络退化degradation"><a class="markdownIt-Anchor" href="#1-深层网络退化degradation"></a> 1. <strong>深层网络退化（Degradation）</strong></h5>
-<ul>
-<li><strong>现象</strong>：传统CNN（如VGG）随着层数增加（如20层以上），训练误差和测试误差反而上升，<strong>这不是过拟合，而是模型难以优化</strong>。</li>
-<li><strong>原因</strong>：叠加非线性层导致信息传递效率下降，深层网络难以学习有效的恒等映射（Identity Mapping）。</li>
-<li><strong>解决</strong>：跳跃连接强制网络学习残差 F(x)<em>F</em>(<em>x</em>)，当最优解接近恒等映射时，F(x)<em>F</em>(<em>x</em>) 只需逼近0，比直接拟合 H(x)=x<em>H</em>(<em>x</em>)=<em>x</em> 更简单。</li>
-</ul>
-<h5 id="2-梯度消失vanishing-gradient"><a class="markdownIt-Anchor" href="#2-梯度消失vanishing-gradient"></a> 2. <strong>梯度消失（Vanishing Gradient）</strong></h5>
-<ul>
-<li><strong>现象</strong>：反向传播时，梯度在深层网络中逐层连乘，导致浅层权重更新缓慢甚至停滞。</li>
-<li><strong>解决</strong>：跳跃连接提供<strong>梯度高速公路</strong>，梯度可通过加法操作直接回传至浅层（如公式 ∂L∂x=∂L∂H(x)⋅(1+∂F(x)∂x)∂<em>x</em>∂<em>L</em>=∂<em>H</em>(<em>x</em>)∂<em>L</em>⋅(1+∂<em>x</em>∂<em>F</em>(<em>x</em>))），避免梯度被多次非线性变换稀释。</li>
-</ul>
-<h2 id="模型难以优化"><a class="markdownIt-Anchor" href="#模型难以优化"></a> <strong>模型难以优化</strong></h2>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/03/14/2025%E5%B9%B43%E6%9C%8816%E6%97%A5-DL%E5%85%AB%E8%82%A1%E6%96%87/" data-id="cm8q1tfhq0011pcv41q1mcut5" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl/" rel="tag">dl</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -1995,7 +1533,7 @@ docker-compose up -d</p>
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>101</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>108</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>31</strong><br>标签</div></a>
     </div>
