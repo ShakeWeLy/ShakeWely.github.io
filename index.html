@@ -43,9 +43,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>108</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>110</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>31</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>32</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -70,6 +70,123 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-2025年7月28日-agent3开源项目" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/07/28/2025%E5%B9%B47%E6%9C%8828%E6%97%A5-agent3%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/" class="article-date">
+  <time class="post-time" datetime="2025-07-28T05:22:56.000Z" itemprop="datePublished">
+    <span class="post-month">7月</span><br/>
+    <span class="post-day">28</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/07/28/2025%E5%B9%B47%E6%9C%8828%E6%97%A5-agent3%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/">2025年7月28日 agent3开源项目</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="重试机制"><a class="markdownIt-Anchor" href="#重试机制"></a> 重试机制</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">make_plan</span>(<span class="params">self, prompt: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        Asks the LLM to make a plan.</span></span><br><span class="line"><span class="string">        Args:</span></span><br><span class="line"><span class="string">            prompt (str): The prompt to be sent to the LLM.</span></span><br><span class="line"><span class="string">        Returns:</span></span><br><span class="line"><span class="string">            str: The plan made by the LLM.</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        ok = <span class="literal">False</span></span><br><span class="line">        answer = <span class="literal">None</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">not</span> ok:</span><br><span class="line">            animate_thinking(<span class="string">&quot;Thinking...&quot;</span>, color=<span class="string">&quot;status&quot;</span>)</span><br><span class="line">            self.memory.push(<span class="string">&#x27;user&#x27;</span>, prompt)</span><br><span class="line">            answer, reasoning = <span class="keyword">await</span> self.llm_request()</span><br><span class="line">            <span class="keyword">if</span> <span class="string">&quot;NO_UPDATE&quot;</span> <span class="keyword">in</span> answer:</span><br><span class="line">                <span class="keyword">return</span> []</span><br><span class="line">            agents_tasks = self.parse_agent_tasks(answer)</span><br><span class="line">            <span class="keyword">if</span> agents_tasks == []:</span><br><span class="line">                self.show_plan(agents_tasks, answer)</span><br><span class="line">                prompt = <span class="string">f&quot;Failed to parse the tasks. Please write down your task followed by a json plan within ```json. Do not ask for clarification.\n&quot;</span></span><br><span class="line">                pretty_print(<span class="string">&quot;Failed to make plan. Retrying...&quot;</span>, color=<span class="string">&quot;warning&quot;</span>)</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            self.show_plan(agents_tasks, answer)</span><br><span class="line">            ok = <span class="literal">True</span></span><br><span class="line">        self.logger.info(<span class="string">f&quot;Plan made:\n<span class="subst">&#123;answer&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> self.parse_agent_tasks(answer)</span><br></pre></td></tr></table></figure>
+<h2 id="每个子任务都判断是否update_plan"><a class="markdownIt-Anchor" href="#每个子任务都判断是否update_plan"></a> 每个子任务都判断是否update_plan</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">update_plan</span>(<span class="params">self, goal: <span class="built_in">str</span>, agents_tasks: <span class="type">List</span>[<span class="built_in">dict</span>], agents_work_result: <span class="built_in">dict</span>, <span class="built_in">id</span>: <span class="built_in">str</span>, success: <span class="built_in">bool</span></span>) -&gt; <span class="built_in">dict</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Updates the plan with the results of the agents work.</span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        goal (str): The goal to be achieved.</span></span><br><span class="line"><span class="string">        agents_tasks (list): The tasks assigned to each agent.</span></span><br><span class="line"><span class="string">        agents_work_result (dict): The results of the agents work.</span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">        dict: The updated plan.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    self.status_message = <span class="string">&quot;Updating plan...&quot;</span></span><br><span class="line">    last_agent_work = agents_work_result[<span class="built_in">id</span>]</span><br><span class="line">    tool_success_str = <span class="string">&quot;success&quot;</span> <span class="keyword">if</span> success <span class="keyword">else</span> <span class="string">&quot;failure&quot;</span></span><br><span class="line">    pretty_print(<span class="string">f&quot;Agent <span class="subst">&#123;<span class="built_in">id</span>&#125;</span> work <span class="subst">&#123;tool_success_str&#125;</span>.&quot;</span>, color=<span class="string">&quot;success&quot;</span> <span class="keyword">if</span> success <span class="keyword">else</span> <span class="string">&quot;failure&quot;</span>)</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        id_int = <span class="built_in">int</span>(<span class="built_in">id</span>)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="keyword">return</span> agents_tasks</span><br><span class="line">    <span class="keyword">if</span> id_int == <span class="built_in">len</span>(agents_tasks):</span><br><span class="line">        next_task = <span class="string">&quot;No task follow, this was the last step. If it failed add a task to recover.&quot;</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        next_task = <span class="string">f&quot;Next task is: <span class="subst">&#123;agents_tasks[<span class="built_in">int</span>(<span class="built_in">id</span>)][<span class="number">0</span>]&#125;</span>.&quot;</span></span><br><span class="line">    <span class="comment">#if success:</span></span><br><span class="line">    <span class="comment">#    return agents_tasks # we only update the plan if last task failed, for now</span></span><br><span class="line">    update_prompt = <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Your goal is : <span class="subst">&#123;goal&#125;</span></span></span><br><span class="line"><span class="string">    You previously made a plan, agents are currently working on it.</span></span><br><span class="line"><span class="string">    The last agent working on task: <span class="subst">&#123;<span class="built_in">id</span>&#125;</span>, did the following work:</span></span><br><span class="line"><span class="string">    <span class="subst">&#123;last_agent_work&#125;</span></span></span><br><span class="line"><span class="string">    Agent <span class="subst">&#123;<span class="built_in">id</span>&#125;</span> work was a <span class="subst">&#123;tool_success_str&#125;</span> according to system interpreter.</span></span><br><span class="line"><span class="string">    <span class="subst">&#123;next_task&#125;</span></span></span><br><span class="line"><span class="string">    Is the work done for task <span class="subst">&#123;<span class="built_in">id</span>&#125;</span> leading to success or failure ? Did an agent fail with a task?</span></span><br><span class="line"><span class="string">    If agent work was good: answer &quot;NO_UPDATE&quot;</span></span><br><span class="line"><span class="string">    If agent work is leading to failure: update the plan.</span></span><br><span class="line"><span class="string">    If a task failed add a task to try again or recover from failure. You might have near identical task twice.</span></span><br><span class="line"><span class="string">    plan should be within ```json like before.</span></span><br><span class="line"><span class="string">    You need to rewrite the whole plan, but only change the tasks after task <span class="subst">&#123;<span class="built_in">id</span>&#125;</span>.</span></span><br><span class="line"><span class="string">    Make the plan the same length as the original one or with only one additional step.</span></span><br><span class="line"><span class="string">    Do not change past tasks. Change next tasks.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    pretty_print(<span class="string">&quot;Updating plan...&quot;</span>, color=<span class="string">&quot;status&quot;</span>)</span><br><span class="line">    plan = <span class="keyword">await</span> self.make_plan(update_prompt)</span><br><span class="line">    <span class="keyword">if</span> plan == []:</span><br><span class="line">        pretty_print(<span class="string">&quot;No plan update required.&quot;</span>, color=<span class="string">&quot;info&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> agents_tasks</span><br><span class="line">    self.logger.info(<span class="string">f&quot;Plan updated:\n<span class="subst">&#123;plan&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> plan</span><br></pre></td></tr></table></figure>
+<h1 id="plan"><a class="markdownIt-Anchor" href="#plan"></a> plan</h1>
+<ol>
+<li>
+<p>给sql增加重试</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="built_in">COUNT</span>(<span class="keyword">CASE</span> <span class="keyword">WHEN</span> <span class="keyword">result</span><span class="operator">=</span><span class="number">1</span> <span class="keyword">THEN</span> <span class="number">1</span> <span class="keyword">END</span>)<span class="operator">/</span><span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">AS</span> 良品率, <span class="built_in">COUNT</span>(<span class="keyword">CASE</span> <span class="keyword">WHEN</span> <span class="keyword">result</span><span class="operator">=</span><span class="number">0</span> <span class="keyword">THEN</span> <span class="number">1</span> <span class="keyword">END</span>)<span class="operator">/</span><span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">AS</span> 不良率 <span class="keyword">FROM</span> &#123;workshop_db&#125; <span class="keyword">WHERE</span> line<span class="operator">=</span><span class="string">&#x27;line1&#x27;</span> <span class="keyword">AND</span> created_at <span class="operator">&gt;=</span> CURDATE();</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>prompt</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">请分析用户意图并生成执行计划。请严格按照以下JSON格式输出：</span><br><span class="line"></span><br><span class="line">&#123;&#123;</span><br><span class="line">    &quot;intent&quot;: &quot;主要意图类型&quot;,</span><br><span class="line">    &quot;sub_intents&quot;: [&quot;子意图列表&quot;],</span><br><span class="line">    &quot;plan&quot;: &#123;&#123;</span><br><span class="line">        &quot;steps&quot;: [</span><br><span class="line">            &#123;&#123;</span><br><span class="line">                &quot;step&quot;: 1,</span><br><span class="line">                &quot;action&quot;: &quot;具体操作&quot;,</span><br><span class="line">                &quot;service&quot;: &quot;使用的服务&quot;,</span><br><span class="line">                &quot;description&quot;: &quot;操作描述&quot;</span><br><span class="line">            &#125;&#125;</span><br><span class="line">        ],</span><br><span class="line">        &quot;priority&quot;: &quot;high/medium/low&quot;,</span><br><span class="line">        &quot;estimated_time&quot;: &quot;预估执行时间&quot;</span><br><span class="line">    &#125;&#125;,</span><br><span class="line">    &quot;parameters&quot;: &#123;&#123;</span><br><span class="line">        &quot;required_params&quot;: [&quot;必需参数&quot;],</span><br><span class="line">        &quot;optional_params&quot;: [&quot;可选参数&quot;]</span><br><span class="line">    &#125;&#125;</span><br><span class="line">&#125;&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>选择分析query语义-&gt; 不同的agent运行-&gt;</p>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/07/28/2025%E5%B9%B47%E6%9C%8828%E6%97%A5-agent3%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/" data-id="cmdmwdi1a0003bgv46jpn534c" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/agent/" rel="tag">agent</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2025年7月25日-coding-汇总" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/07/25/2025%E5%B9%B47%E6%9C%8825%E6%97%A5-coding-%E6%B1%87%E6%80%BB/" class="article-date">
+  <time class="post-time" datetime="2025-07-25T13:23:48.000Z" itemprop="datePublished">
+    <span class="post-month">7月</span><br/>
+    <span class="post-day">25</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/07/25/2025%E5%B9%B47%E6%9C%8825%E6%97%A5-coding-%E6%B1%87%E6%80%BB/">2025年7月25日 coding\汇总</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>持续<a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=117326396&amp;content_type=Article&amp;match_order=1&amp;q=%E9%87%8D%E6%9E%84&amp;zhida_source=entity">重构</a>和<a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=117326396&amp;content_type=Article&amp;match_order=1&amp;q=%E6%B5%8B%E8%AF%95%E9%A9%B1%E5%8A%A8%E5%BC%80%E5%8F%91&amp;zhida_source=entity">测试驱动开发</a>（TDD）</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/07/25/2025%E5%B9%B47%E6%9C%8825%E6%97%A5-coding-%E6%B1%87%E6%80%BB/" data-id="cmdmwdi0y0001bgv4e5n14iqh" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-2025年7月15日-RL" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -154,7 +271,7 @@
 <blockquote>
 <p>只会学到fire是好的</p>
 </blockquote>
-<p>Version 1</p>
+<p>Version 115</p>
 <img src="/2025/07/15/2025%E5%B9%B47%E6%9C%8815%E6%97%A5-RL/image-20250715230952964.png" alt="image-20250715230952964" style="zoom:50%;">
 <blockquote>
 <p>累加, 用之后的结果来批判之前的action 是否好快</p>
@@ -225,21 +342,93 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>1</p>
-<h2 id="策略"><a class="markdownIt-Anchor" href="#策略"></a> 策略</h2>
-<h3 id="cot"><a class="markdownIt-Anchor" href="#cot"></a> Cot</h3>
+        <h1 id><a class="markdownIt-Anchor" href="#"></a> </h1>
+<blockquote>
+<p>主要介绍AI的实现策略</p>
+</blockquote>
+<h1 id="1-agent设计模式"><a class="markdownIt-Anchor" href="#1-agent设计模式"></a> 1 Agent设计模式</h1>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/692971105">https://zhuanlan.zhihu.com/p/692971105</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_57081622/article/details/147892638">https://blog.csdn.net/m0_57081622/article/details/147892638</a></p>
+</blockquote>
+<h2 id="1-react-模式"><a class="markdownIt-Anchor" href="#1-react-模式"></a> <strong>1 ReAct</strong> <strong>模式</strong></h2>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/samwit/langchain-tutorials/blob/main/agents/YT_Exploring_ReAct_on_Langchain.ipynb">https://github.com/samwit/langchain-tutorials/blob/main/agents/YT_Exploring_ReAct_on_Langchain.ipynb</a></p>
+</blockquote>
+<p><strong>原理</strong></p>
+<ol>
+<li>接收任务：Agent获取来自用户或系统的任务指令。</li>
+<li>推理（Thought）：Agent依据当前任务和已有知识展开推理，形成初步的行动计划。</li>
+<li>行动（Action）：Agent执行经推理得出的行动。</li>
+<li>观察（Observation）：Agent对行动产生的结果进行观察，获取反馈信息。</li>
+<li>循环迭代：将观察结果反馈至推理过程，Agent依据新信息重新推理，生成新的行动计划，并持续执行行动与观察，直至任务完成</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">think</span>(<span class="params">self, task</span>):</span><br><span class="line">    <span class="comment"># 推理：根据任务生成行动计划</span></span><br><span class="line">    <span class="keyword">for</span> location <span class="keyword">in</span> self.knowledge_base[<span class="string">&quot;locations&quot;</span>]:</span><br><span class="line">        <span class="keyword">yield</span><span class="string">f&quot;检查 <span class="subst">&#123;location&#125;</span> 是否有胡椒粉&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">act</span>(<span class="params">self, action</span>):</span><br><span class="line">    <span class="comment"># 行动：执行具体的行动</span></span><br><span class="line">    <span class="keyword">if</span> action == <span class="string">&quot;检查 台面上 是否有胡椒粉&quot;</span>:</span><br><span class="line">        <span class="keyword">return</span><span class="string">&quot;台面上没有胡椒粉&quot;</span></span><br><span class="line">    <span class="keyword">elif</span> action == <span class="string">&quot;检查 灶台底下抽屉 是否有胡椒粉&quot;</span>:</span><br><span class="line">        <span class="keyword">return</span><span class="string">&quot;灶台底下抽屉有胡椒粉&quot;</span></span><br><span class="line">    <span class="keyword">elif</span> action == <span class="string">&quot;检查 油烟机左边吊柜 是否有胡椒粉&quot;</span>:</span><br><span class="line">        <span class="keyword">return</span><span class="string">&quot;油烟机左边吊柜没有胡椒粉&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">observe</span>(<span class="params">self, action_result</span>):</span><br><span class="line">    <span class="comment"># 观察：记录行动的结果</span></span><br><span class="line">    <span class="keyword">return</span> action_result</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="2-plan-and-solve-模式"><a class="markdownIt-Anchor" href="#2-plan-and-solve-模式"></a> 2 <strong>Plan</strong> <strong>and</strong> <strong>solve</strong> <strong>模式</strong></h2>
+<blockquote>
+<p>《Plan-and-Solve Prompting: Improving Zero-Shot Chain-of-Thought Reasoning by Large Language Models》</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Fosowl/agenticSeek">https://github.com/Fosowl/agenticSeek</a></p>
+</blockquote>
+<p>原理</p>
+<ol>
+<li>
+<p>接收任务：Agent接收来自用户或系统下达的任务指令。</p>
+</li>
+<li>
+<p>规划（Plan）：Agent基于任务目标生成一个多步骤的详细计划，清晰界定每个步骤的具体内容与执行顺序。</p>
+</li>
+<li>
+<p>执行（Solve）：Agent依照既定计划，依次执行每个步骤。</p>
+</li>
+<li>
+<p>观察（Observation）：Agent对执行结果展开观察，判断是否有必要启动重新规划流程。</p>
+</li>
+<li>
+<p>重新规划（Replan）：若发现计划无法实施，或需要根据实际情况调整，Agent将结合当前状态重新生成计划，并继续执行。</p>
+</li>
+</ol>
+<h2 id="3-reason-without-observation"><a class="markdownIt-Anchor" href="#3-reason-without-observation"></a> <strong>3. Reason</strong> <strong>without</strong> <strong>Observation</strong></h2>
+<ol>
+<li>Planner：负责生成一个相互依赖的“链式计划”，定义每一步所依赖的上一步的输出。</li>
+<li>Worker：循环遍历每个任务，并将任务输出分配给相应的变量。当调用后续调用时，它还会用变量的结果替换变量。</li>
+<li>Solver：求解器将所有这些输出整合为最终答案。</li>
+</ol>
+<h2 id="4-llmcompiler"><a class="markdownIt-Anchor" href="#4-llmcompiler"></a> <strong>4. LLMCompiler</strong></h2>
+<p><strong>原理</strong></p>
+<p>变成并行执行</p>
+<ol>
+<li>
+<p>接收任务：Agent 接收到用户或系统的任务指令，任务可能包含多个子任务。</p>
+</li>
+<li>
+<p>任务分解（Task Decomposition）：Agent 将复杂任务分解为多个子任务，并确定这些子任务之间的依赖关系。</p>
+</li>
+<li>
+<p>并行执行（Parallel Execution）：Agent 根据子任务之间的依赖关系，将可以并行处理的子任务同时发送给多个执行器进行处理。</p>
+</li>
+<li>
+<p>结果合并（Result Merging）：各个执行器完成子任务后，Agent 将结果合并，形成最终的输出。</p>
+</li>
+<li>
+<p>循环迭代（Iteration）：如果任务需要进一步处理或调整，Agent 会根据当前结果重新分解任务，并继续并行执行和结果合并，直到任务完成。</p>
+</li>
+</ol>
+<img src="/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250728164505011.png" alt="image-20250728164505011" style="zoom:33%;">
+<p>…</p>
+<h1 id="2-设计策略"><a class="markdownIt-Anchor" href="#2-设计策略"></a> 2 设计策略</h1>
+<h2 id="21-cot"><a class="markdownIt-Anchor" href="#21-cot"></a> 2.1 Cot</h2>
 <p>除了model本身的cot还可以是prompt的cot</p>
 <p><img src="/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250711095328828.png" alt="image-20250711095328828"></p>
-<h3 id="few-shot-1357error"><a class="markdownIt-Anchor" href="#few-shot-1357error"></a> few-shot-{1,3,5,7,error}</h3>
+<h2 id="22few-shot-1357error"><a class="markdownIt-Anchor" href="#22few-shot-1357error"></a> 2.2few-shot-{1,3,5,7,error}</h2>
 <img src="/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250711094439528.png" alt="image-20250711094439528" style="zoom:50%;">
-<h3 id="多-prompt-template-路由机制"><a class="markdownIt-Anchor" href="#多-prompt-template-路由机制"></a> 多 prompt-template 路由机制</h3>
+<h2 id="23-多-prompt-template-路由机制"><a class="markdownIt-Anchor" href="#23-多-prompt-template-路由机制"></a> 2.3 多 prompt-template 路由机制</h2>
 <p>你提到 <strong>“垂类资源路由到不同的 prompt 模板”</strong>，这是非常前沿的技术，通常涉及：</p>
 <ul>
 <li>使用一个 <strong>Query Router / Prompt Router</strong></li>
 <li>对用户输入先进行分类（如：情感分析 / 法律判断 / 财经摘要）</li>
 <li>然后调用对应 prompt 模板 + 指定模型</li>
 </ul>
-<h3 id="sequential-prompting"><a class="markdownIt-Anchor" href="#sequential-prompting"></a> sequential prompting</h3>
+<h2 id="24sequential-prompting"><a class="markdownIt-Anchor" href="#24sequential-prompting"></a> 2.4sequential prompting</h2>
 
       
     </div>
@@ -247,6 +436,8 @@
       <a data-url="https://shakewely.github.io/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/" data-id="cmdahfjal0003l4v475ah4uo2" class="article-share-link">分享</a>
       
       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/agent/" rel="tag">agent</a></li></ul>
+
     </footer>
   </div>
   
@@ -336,18 +527,25 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="1-agent"><a class="markdownIt-Anchor" href="#1-agent"></a> 1 agent</h1>
+        <blockquote>
+<p>主要介绍和AI相关的内容</p>
+</blockquote>
+<h1 id="1-agent"><a class="markdownIt-Anchor" href="#1-agent"></a> 1 agent</h1>
+<p><img src="/2025/07/08/2025%E5%B9%B47%E6%9C%888%E6%97%A5-agent/image-20250725211838857.png" alt="image-20250725211838857"></p>
 <p><img src="/2025/07/08/2025%E5%B9%B47%E6%9C%888%E6%97%A5-agent/image-20250711132318639.png" alt="image-20250711132318639"><img src="/2025/07/08/2025%E5%B9%B47%E6%9C%888%E6%97%A5-agent/image-20250711133401333.png" alt="image-20250711133401333" style="zoom:50%;"></p>
 <blockquote>
 <p>assistant之后还是assistant</p>
 </blockquote>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># Moderation 是 OpenAI 的内容审核函数，旨在评估并检测文本内容中的潜在风险。</span><br><span class="line">response = openai.Moderation.create(</span><br><span class="line">    input=final_response_to_customer</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<h1 id="2开发"><a class="markdownIt-Anchor" href="#2开发"></a> 2开发</h1>
+<h1 id="2-openai-api"><a class="markdownIt-Anchor" href="#2-openai-api"></a> 2 openai API</h1>
+<h1 id="3-开发"><a class="markdownIt-Anchor" href="#3-开发"></a> 3 开发</h1>
 <h2 id="prompt"><a class="markdownIt-Anchor" href="#prompt"></a> prompt</h2>
 <blockquote>
 <p><a target="_blank" rel="noopener" href="https://datawhalechina.github.io/llm-cookbook%E2%9C%85">https://datawhalechina.github.io/llm-cookbook✅</a></p>
 </blockquote>
-<h3 id="评估"><a class="markdownIt-Anchor" href="#评估"></a> 评估</h3>
+<h2 id="function-call"><a class="markdownIt-Anchor" href="#function-call"></a> function call</h2>
+<h2 id="stream"><a class="markdownIt-Anchor" href="#stream"></a> stream</h2>
+<h1 id="4-评估"><a class="markdownIt-Anchor" href="#4-评估"></a> 4 评估</h1>
 <img src="/2025/07/08/2025%E5%B9%B47%E6%9C%888%E6%97%A5-agent/image-20250711133708839.png" alt="image-20250711133708839" style="zoom: 50%;"> 
 
       
@@ -356,6 +554,8 @@
       <a data-url="https://shakewely.github.io/2025/07/08/2025%E5%B9%B47%E6%9C%888%E6%97%A5-agent/" data-id="cmdahfjap0005l4v47w5n4yqb" class="article-share-link">分享</a>
       
       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/agent/" rel="tag">agent</a></li></ul>
+
     </footer>
   </div>
   
@@ -1179,403 +1379,6 @@
 
 
   
-    <article id="post-2025年6月20日-huggingface" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/06/20/2025%E5%B9%B46%E6%9C%8820%E6%97%A5-huggingface/" class="article-date">
-  <time class="post-time" datetime="2025-06-20T02:44:42.000Z" itemprop="datePublished">
-    <span class="post-month">6月</span><br/>
-    <span class="post-day">20</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/06/20/2025%E5%B9%B46%E6%9C%8820%E6%97%A5-huggingface/">2025年6月20日 huggingface</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/06/20/2025%E5%B9%B46%E6%9C%8820%E6%97%A5-huggingface/" data-id="cmc9s779v00002ov4g96ba50c" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2025年6月5日-后处理" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/06/05/2025%E5%B9%B46%E6%9C%885%E6%97%A5-%E5%90%8E%E5%A4%84%E7%90%86/" class="article-date">
-  <time class="post-time" datetime="2025-06-05T03:36:49.000Z" itemprop="datePublished">
-    <span class="post-month">6月</span><br/>
-    <span class="post-day">05</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/06/05/2025%E5%B9%B46%E6%9C%885%E6%97%A5-%E5%90%8E%E5%A4%84%E7%90%86/">2025年6月5日 后处理</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="2-基于空间位置关系的计数逻辑"><a class="markdownIt-Anchor" href="#2-基于空间位置关系的计数逻辑"></a> 2. <strong>基于空间位置关系的计数逻辑</strong></h3>
-<h4 id="技术含义"><a class="markdownIt-Anchor" href="#技术含义"></a> 技术含义</h4>
-<ul>
-<li>
-<p><strong>定义</strong>：基于空间位置关系的计数逻辑利用目标边界框的空间分布特性（如位置、距离、方向等），对检测结果进行后处理，以减少误报并优化计数准确性。</p>
-</li>
-<li>
-<p><strong>应用场景</strong>：在流水线检测中，目标（如零件、包裹）通常具有特定的空间分布规律（如沿传送带排列、在固定区域内出现）。通过分析边界框的空间关系，可以过滤不符合场景逻辑的误报。</p>
-</li>
-<li>
-<p>实现方式</p>
-<p>：</p>
-<ol>
-<li>
-<p>空间聚类</p>
-<p>：</p>
-<ul>
-<li>对检测到的边界框进行聚类（如DBSCAN算法），根据空间距离合并或过滤重叠框。</li>
-<li>示例：若两个边界框中心距离过近（&lt;某个阈值），则认为是同一目标，保留置信度较高的框。</li>
-</ul>
-</li>
-<li>
-<p>轨迹约束</p>
-<p>：</p>
-<ul>
-<li>在视频或连续帧中，利用目标的空间运动轨迹（如流水线上的线性移动）过滤异常框。</li>
-<li>示例：若检测框的位置偏离预期轨迹（如传送带路径），则视为误报。</li>
-</ul>
-</li>
-<li>
-<p>计数规则</p>
-<p>：</p>
-<ul>
-<li>根据空间分布规律（如目标在图像中的网格区域），统计目标数量。</li>
-<li>示例：在流水线场景中，只计数位于传送带区域的检测框。</li>
-</ul>
-</li>
-</ol>
-</li>
-</ul>
-<p>‘’</p>
-<h3 id="3-关键区域roi检测"><a class="markdownIt-Anchor" href="#3-关键区域roi检测"></a> 3. <strong>关键区域ROI检测</strong></h3>
-<h4 id="技术含义-2"><a class="markdownIt-Anchor" href="#技术含义-2"></a> 技术含义</h4>
-<ul>
-<li>
-<p><strong>定义</strong>：ROI（Region of Interest，感兴趣区域）检测是指在图像中预定义关键区域，仅对这些区域内的检测结果进行处理，忽略其他区域的预测框，从而过滤误报。</p>
-</li>
-<li>
-<p><strong>应用场景</strong>：在流水线检测中，目标通常出现在特定区域（如传送带中心、固定工作台）。通过定义ROI，可以聚焦于关键区域，减少背景区域的误报。</p>
-</li>
-<li>
-<p>实现方式</p>
-<p>：</p>
-<ol>
-<li>
-<p>定义ROI</p>
-<p>：</p>
-<ul>
-<li>手动指定ROI区域（如矩形坐标[x, y, w, h]）或通过图像分割算法自动提取（如基于颜色、纹理）。</li>
-<li>示例：传送带区域为图像中部，定义为[x1, y1, x2, y2] = [100, 50, 540, 590]（基于640x640分辨率）。</li>
-</ul>
-</li>
-<li>
-<p>过滤检测框</p>
-<p>：</p>
-<ul>
-<li>仅保留中心点位于ROI内的边界框，或IoU与ROI区域大于某个阈值（如0.5）的框。</li>
-</ul>
-</li>
-<li>
-<p>计数优化</p>
-<p>：</p>
-<ul>
-<li>在ROI内进行目标计数，忽略ROI外的检测结果。</li>
-</ul>
-</li>
-</ol>
-</li>
-</ul>
-<p><strong>Soft-NMS（Soft Non-Maximum Suppression）</strong>：</p>
-<ul>
-<li>
-<p><strong>定义</strong>：传统NMS通过IoU阈值直接丢弃重叠框，Soft-NMS通过降低重叠框的置信度（而非直接丢弃）保留更多潜在目标。</p>
-</li>
-<li>
-<p><strong>优势</strong>：提升召回率（约2%-5%），尤其适合密集目标场景。</p>
-</li>
-<li>
-<p>实现</p>
-<p>：</p>
-<ul>
-<li>
-<p>修改YOLOv5/v8的utils/general.py中的non_max_suppression函数，添加Soft-NMS逻辑。</p>
-</li>
-<li>
-<p>示例（伪代码）：</p>
-</li>
-</ul>
-</li>
-<li>
-<p><strong>适用场景</strong>：密集目标检测（如流水线上的零件堆叠）。</p>
-</li>
-</ul>
-<p><strong>时序平滑（Temporal Smoothing）</strong>：</p>
-<ul>
-<li>
-<p><strong>定义</strong>：在视频或连续帧中，利用多帧检测结果的时序一致性，平滑边界框位置和置信度，过滤抖动或瞬时误报。</p>
-</li>
-<li>
-<p>实现</p>
-<p>：</p>
-<ul>
-<li>使用卡尔曼滤波或均值滤波对边界框坐标进行平滑。</li>
-<li>示例：对连续5帧的检测框取平均值，过滤异常框。</li>
-</ul>
-</li>
-<li>
-<p><strong>适用场景</strong>：流水线视频检测，目标运动轨迹可预测。</p>
-</li>
-</ul>
-<h3 id="2-智能抽帧的实现方法"><a class="markdownIt-Anchor" href="#2-智能抽帧的实现方法"></a> 2. <strong>智能抽帧的实现方法</strong></h3>
-<p>智能抽帧算法通常结合<strong>帧间差异分析</strong>、<strong>目标跟踪</strong>和<strong>场景上下文</strong>，动态决定哪些帧需要处理。以下是实现步骤和关键技术：</p>
-<h4 id="步骤1帧间差异分析"><a class="markdownIt-Anchor" href="#步骤1帧间差异分析"></a> 步骤1：帧间差异分析</h4>
-<ul>
-<li>
-<p><strong>目的</strong>：通过比较连续帧的差异，识别内容变化显著的帧作为关键帧。</p>
-</li>
-<li>
-<p>方法</p>
-<p>：</p>
-<ol>
-<li>
-<p>像素级差异</p>
-<p>：</p>
-<ul>
-<li>
-<p>计算相邻帧的像素差异（如灰度差值的均方误差MSE）。</p>
-</li>
-<li>
-<p>如果差异超过阈值，则认为当前帧为关键帧。</p>
-</li>
-<li>
-<p>示例代码：</p>
-<p>python</p>
-<p>收起自动换行运行</p>
-<p>复制</p>
-<p><code>import cv2 import numpy as np def frame_diff(prev_frame, curr_frame, thres=0.1):    prev_gray = cv2.cvtColor(prev_frame, cv2.COLOR_BGR2GRAY)    curr_gray = cv2.cvtColor(curr_frame, cv2.COLOR_BGR2GRAY)    diff = np.mean((prev_gray - curr_gray) ** 2)    return diff &gt; thres</code></p>
-</li>
-</ul>
-</li>
-<li>
-<p>特征级差异</p>
-<p>：</p>
-<ul>
-<li>
-<p>提取帧的特征（如HOG、SIFT或深度特征），比较特征向量距离。</p>
-</li>
-<li>
-<p>使用预训练模型（如ResNet提取特征）计算余弦相似度或L2距离。</p>
-</li>
-<li>
-<p>示例代码：</p>
-<p>python</p>
-<p>收起自动换行运行</p>
-<p>复制</p>
-<p><code>from torchvision.models import resnet18 import torch model = resnet18(pretrained=True).eval().cuda() def feature_diff(prev_frame, curr_frame, thres=0.5):    prev_feat = model(preprocess(prev_frame).cuda())    curr_feat = model(preprocess(curr_frame).cuda())    dist = torch.norm(prev_feat - curr_feat, p=2)    return dist &gt; thres</code></p>
-</li>
-</ul>
-</li>
-<li>
-<p>光流分析</p>
-<p>：</p>
-<ul>
-<li>
-<p>使用光流算法（如Farneback光流）检测帧间运动变化，识别目标移动或场景变化。</p>
-</li>
-<li>
-<p>示例代码：</p>
-<p>python</p>
-<p>收起自动换行运行</p>
-<p>复制</p>
-<p><code>def optical_flow_diff(prev_frame, curr_frame, thres=1.0):    prev_gray = cv2.cvtColor(prev_frame, cv2.COLOR_BGR2GRAY)    curr_gray = cv2.cvtColor(curr_frame, cv2.COLOR_BGR2GRAY)    flow = cv2.calcOpticalFlowFarneback(prev_gray, curr_gray, None, 0.5, 3, 15, 3, 5, 1.2, 0)    mag = np.sqrt(flow[..., 0]**2 + flow[..., 1]**2)    return np.mean(mag) &gt; thres</code></p>
-</li>
-</ul>
-</li>
-</ol>
-</li>
-</ul>
-<h4 id="步骤2目标跟踪辅助抽帧"><a class="markdownIt-Anchor" href="#步骤2目标跟踪辅助抽帧"></a> 步骤2：目标跟踪辅助抽帧</h4>
-<ul>
-<li>
-<p><strong>目的</strong>：利用目标跟踪算法（如DeepSORT、ByteTrack）减少对YOLO模型的调用频率，仅在目标状态变化时触发检测。</p>
-</li>
-<li>
-<p>方法</p>
-<p>：</p>
-<ol>
-<li>
-<p>初始化检测</p>
-<p>：</p>
-<ul>
-<li>在首帧或关键帧上运行YOLO模型，获取目标边界框。</li>
-</ul>
-</li>
-<li>
-<p>跟踪目标</p>
-<p>：</p>
-<ul>
-<li>使用跟踪算法（如DeepSORT）预测目标在后续帧中的位置。</li>
-<li>如果跟踪置信度下降（如目标丢失或位置偏移过大），触发YOLO检测。</li>
-</ul>
-</li>
-<li>
-<p>动态抽帧</p>
-<p>：</p>
-<ul>
-<li>若跟踪结果稳定（目标位置变化小），跳过若干帧，仅进行跟踪。</li>
-<li>若目标发生显著变化（如新目标进入、目标离开ROI），立即运行YOLO检测。</li>
-</ul>
-</li>
-</ol>
-</li>
-<li>
-<p>实现</p>
-<p>：</p>
-<ul>
-<li>
-<p>使用ByteTrack（轻量、高效）结合YOLOv5/v8：</p>
-<p>python</p>
-<p>收起自动换行运行</p>
-<p>复制</p>
-<p><code>from yolov5 import YOLOv5 from byte_tracker import BYTETracker model = YOLOv5('yolov5s.pt') tracker = BYTETracker(track_thresh=0.5, match_thresh=0.8) def process_frame(frame, prev_tracks):    # YOLO检测    results = model(frame)    dets = results.xyxy[0].cpu().numpy()  # [x1, y1, x2, y2, conf, cls]    # 跟踪更新    tracks = tracker.update(dets)    # 判断是否需要再次检测    if len(tracks) != len(prev_tracks) or significant_change(tracks, prev_tracks):        return tracks, True  # 需要检测    return tracks, False  # 跳过检测</code></p>
-</li>
-</ul>
-</li>
-<li>
-<p><strong>效果</strong>：减少50%-80%的YOLO调用，吞吐量提升2-5倍。</p>
-</li>
-</ul>
-<h4 id="步骤3基于场景上下文的抽帧"><a class="markdownIt-Anchor" href="#步骤3基于场景上下文的抽帧"></a> 步骤3：基于场景上下文的抽帧</h4>
-<ul>
-<li>
-<p><strong>目的</strong>：结合流水线场景的上下文（如传送带速度、目标出现频率），动态调整抽帧间隔。</p>
-</li>
-<li>
-<p>方法</p>
-<p>：</p>
-<ol>
-<li>
-<p>ROI监控</p>
-<p>：</p>
-<ul>
-<li>定义关键区域（如传送带区域），仅对ROI内发生变化的帧运行YOLO检测。</li>
-<li>示例：结合前述ROI检测，仅处理ROI内像素变化显著的帧。</li>
-</ul>
-</li>
-<li>
-<p>时间间隔预测</p>
-<p>：</p>
-<ul>
-<li>根据流水线速度（如传送带每秒移动1米）估算目标出现频率，动态调整抽帧间隔。</li>
-<li>示例：若目标每2秒出现一次，抽帧间隔可设为1秒。</li>
-</ul>
-</li>
-<li>
-<p>异常检测触发</p>
-<p>：</p>
-<ul>
-<li>使用轻量级异常检测（如像素变化、光流异常）触发关键帧检测。</li>
-<li>示例：若光流幅度异常增大（如零件掉落），立即运行YOLO。</li>
-</ul>
-</li>
-</ol>
-</li>
-<li>
-<p>实现</p>
-<p>：</p>
-<p>python</p>
-<p>收起自动换行运行</p>
-<p>复制</p>
-<p><code>def dynamic_frame_skip(frame, prev_frame, roi, speed=1.0, base_interval=5):    if frame_diff(frame, prev_frame, thres=0.1) or roi_change(frame, roi):        return True  # 处理当前帧    interval = int(base_interval / speed)  # 根据速度调整间隔    return False if frame_idx % interval == 0 else True</code></p>
-</li>
-</ul>
-<h4 id="步骤4后处理优化"><a class="markdownIt-Anchor" href="#步骤4后处理优化"></a> 步骤4：后处理优化</h4>
-<ul>
-<li>
-<p><strong>目的</strong>：结合前述后处理规则（如空间位置计数、ROI检测）过滤误报，确保关键事件不被漏检。</p>
-</li>
-<li>
-<p>方法</p>
-<p>：</p>
-<ul>
-<li>空间位置计数：对检测到的目标进行聚类，过滤异常框。</li>
-<li>ROI检测：仅保留ROI内的检测结果。</li>
-<li>时序平滑：利用多帧结果平滑目标位置和置信度，减少抖动。</li>
-</ul>
-</li>
-<li>
-<p><strong>效果</strong>：精度提升约5%-10%，召回率保持高水平。</p>
-</li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/06/05/2025%E5%B9%B46%E6%9C%885%E6%97%A5-%E5%90%8E%E5%A4%84%E7%90%86/" data-id="cmbpr6lmp000034v4495x3tvb" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -1620,9 +1423,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>108</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>110</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>31</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>32</strong><br>标签</div></a>
     </div>
 
 

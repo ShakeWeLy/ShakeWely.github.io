@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="第一周 人形机器人角度偏差预研，需要提供2~3个检测方案，在利事丰AI小队准备文档（1MD）    AI平台前后端代码重构：参考deepseek模式，参考open-webui代码，前端传入session id，parent id获取历史对话数据，将对话数据保存至数据库中（3MD）  先看webui代码实现方式 主要是query的传输方式     post+ws   &amp;#123;   &quot;">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Weakliy_Blog">
+<meta property="og:url" content="https://shakewely.github.io/week.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="第一周 人形机器人角度偏差预研，需要提供2~3个检测方案，在利事丰AI小队准备文档（1MD）    AI平台前后端代码重构：参考deepseek模式，参考open-webui代码，前端传入session id，parent id获取历史对话数据，将对话数据保存至数据库中（3MD）  先看webui代码实现方式 主要是query的传输方式     post+ws   &amp;#123;   &quot;">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-07-28T01:38:40.687Z">
+<meta property="article:modified_time" content="2025-07-28T01:38:40.687Z">
+<meta property="article:author" content="Weakliy">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>110</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>32</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="page-" class="wow slideInRight article article-type-page" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/week.html" class="article-date">
+  <time class="post-time" datetime="2025-07-28T01:38:40.687Z" itemprop="datePublished">
+    <span class="post-month">7月</span><br/>
+    <span class="post-day">28</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="第一周"><a class="markdownIt-Anchor" href="#第一周"></a> 第一周</h1>
+<p>人形机器人角度偏差预研，需要提供2~3个检测方案，在利事丰AI小队准备文档（1MD）</p>
+<ol>
+<li></li>
+</ol>
+<p>AI平台前后端代码重构：参考deepseek模式，参考open-webui代码，前端传入session id，parent id获取历史对话数据，将对话数据保存至数据库中（3MD）</p>
+<ol>
+<li>先看webui代码实现方式</li>
+<li>主要是query的传输方式</li>
+</ol>
+<blockquote>
+<ol>
+<li>
+<p>post+ws</p>
+</li>
+<li>
+<pre class="highlight"><code class="json"><span class="punctuation">&#123;</span>
+  <span class="attr">&quot;content&quot;</span><span class="punctuation">:</span> <span class="string">&quot;大家好，这是一条群聊消息&quot;</span><span class="punctuation">,</span>
+  <span class="attr">&quot;parent_id&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span>      <span class="comment">// 可选，回复某条消息时用</span>
+  <span class="attr">&quot;data&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span><span class="punctuation">,</span>           <span class="comment">// 可选，附加数据</span>
+  <span class="attr">&quot;meta&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">null</span></span>            <span class="comment">// 可选，元数据</span>
+<span class="punctuation">&#125;</span>
+&lt;!--code￼<span class="number">0</span>--&gt;
+
+</code></pre>
+</li>
+</ol>
+<p>就是简单没工具函数没有复用空间,那就直接写在当前py文件,也能提高复用性</p>
+</blockquote>
+<blockquote>
+<p>重构参数:增加传入字段,使之适应新功能比如,保存到数据库</p>
+</blockquote>
+<blockquote>
+<p>修改schema 提高可读性</p>
+</blockquote>
+<blockquote>
+<p>多个模块彼此依赖太紧</p>
+<p>一个模块修改会牵连很多地方</p>
+<p>改 <code>SqlService</code> 的函数，适配<code>ClockAgent</code> ,但是<code>ChatAgent</code> 就报错,</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sql_response = self.sql_service.get_response(user_query, request_setting, sql_template)</span><br></pre></td></tr></table></figure>
+<p>增加了request_setting适配clock,但是chat就少了参数字段…</p>
+<blockquote>
+<h3 id="使用参数默认值最小改动"><a class="markdownIt-Anchor" href="#使用参数默认值最小改动"></a> 使用参数默认值（最小改动）</h3>
+<p>给 <code>get_response()</code> 加默认参数：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">def get_response(self, user_query, request_setting=None, sql_template=None):</span><br></pre></td></tr></table></figure>
+<h3 id="agent-类型拆出接口或适配层中期方案"><a class="markdownIt-Anchor" href="#agent-类型拆出接口或适配层中期方案"></a> Agent 类型拆出接口或适配层（中期方案）</h3>
+<p>如果 <code>ChatAgent</code> 和 <code>ClockAgent</code> 对 <code>get_response()</code> 的需求不同，那你可以为它们<strong>提供适配器函数</strong>或封装各自的调用逻辑：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">pythonCopyEdit# ChatAgent 用的</span><br><span class="line">def get_chat_response(user_query):</span><br><span class="line">    return sql_service.get_response(user_query)</span><br><span class="line"></span><br><span class="line"># ClockAgent 用的</span><br><span class="line">def get_clock_response(user_query, request_setting):</span><br><span class="line">    return sql_service.get_response(user_query, request_setting=request_setting)</span><br></pre></td></tr></table></figure>
+</blockquote>
+</blockquote>
+<blockquote>
+<p>可以获取数据库也是迭代器? 然后传输,有必要吗?好像只有全部数据后才能展示数据呢…</p>
+</blockquote>
+<blockquote>
+<p>当prompt很长且多变的时候就可以解耦了, 不同车间用不同的prompt</p>
+</blockquote>
+<blockquote>
+<p><strong>策略模式（Strategy Pattern）</strong></p>
+<ul>
+<li>
+<p><strong>适用场景</strong>：有多个行为可以互换，比如不同类型的算法或处理方式。</p>
+</li>
+<li>
+<p><strong>做法</strong>：把不同的行为封装成类，在运行时根据情况选择其中一个使用。</p>
+</li>
+<li>
+<p><strong>例子</strong>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">pythonCopyEditclass PayStrategy: </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">pay</span>(<span class="params">self, amount</span>): <span class="keyword">pass</span></span><br><span class="line">  </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">WeChatPay</span>(<span class="title class_ inherited__">PayStrategy</span>): </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">pay</span>(<span class="params">self, amount</span>): <span class="built_in">print</span>(<span class="string">&quot;用微信支付&quot;</span>, amount)</span><br><span class="line">  </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Alipay</span>(<span class="title class_ inherited__">PayStrategy</span>): </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">pay</span>(<span class="params">self, amount</span>): <span class="built_in">print</span>(<span class="string">&quot;用支付宝支付&quot;</span>, amount)</span><br><span class="line">  </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">process_payment</span>(<span class="params">strategy: PayStrategy</span>):</span><br><span class="line">    strategy.pay(<span class="number">100</span>)</span><br></pre></td></tr></table></figure>
+<p>不同情况下,但是都是pay 100 参数少哦</p>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>观察者模式（Observer Pattern）</strong></p>
+<ul>
+<li>
+<p><strong>适用场景</strong>：一个对象变化后，需要通知其他对象更新，比如事件系统、消息订阅。</p>
+</li>
+<li>
+<p><strong>做法</strong>：一个对象维护多个“观察者”，一旦自己状态变化就通知他们。</p>
+</li>
+<li>
+<p><strong>例子</strong>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">pythonCopyEditclass Event:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        self.listeners = []</span><br><span class="line">  </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">subscribe</span>(<span class="params">self, listener</span>):</span><br><span class="line">        self.listeners.append(listener)</span><br><span class="line">  </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">notify</span>(<span class="params">self, data</span>):</span><br><span class="line">        <span class="keyword">for</span> listener <span class="keyword">in</span> self.listeners:</span><br><span class="line">            listener.update(data)</span><br><span class="line">  </span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Logger</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">update</span>(<span class="params">self, data</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;记录日志:&quot;</span>, data)</span><br><span class="line">  </span><br><span class="line">event = Event()</span><br><span class="line">event.subscribe(Logger())</span><br><span class="line">event.notify(<span class="string">&quot;用户登录&quot;</span>)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</blockquote>
+<h1 id="第二周"><a class="markdownIt-Anchor" href="#第二周"></a> 第二周</h1>
+<p>人形机器人角度偏差预研，需要提供2~3个检测方案，在利事丰AI小队准备文档，包括标定过程，模板设定（2MD）</p>
+<p><a target="_blank" rel="noopener" href="https://dcnkpjkfc37p.feishu.cn/record/O5VXr1SQ9eHu01chqTccVV2knhe">https://dcnkpjkfc37p.feishu.cn/record/O5VXr1SQ9eHu01chqTccVV2knhe</a></p>
+<p>yolo方案，识别准确率和可拓展性（1MD）</p>
+<p><a target="_blank" rel="noopener" href="https://dcnkpjkfc37p.feishu.cn/record/O5VXr1SQ9eHu01chqTccVV2knhe">https://dcnkpjkfc37p.feishu.cn/record/O5VXr1SQ9eHu01chqTccVV2knhe</a></p>
+<ol start="5">
+<li>AI平台项目数据库设计，参考系统架构设计，先合格率+完成率+稼动率=&gt;function调用，agent流程（3MD）</li>
+</ol>
+<p><a target="_blank" rel="noopener" href="https://dcnkpjkfc37p.feishu.cn/record/ME7ur7JpRe8wjscfwbTcQvhUnXf">https://dcnkpjkfc37p.feishu.cn/record/ME7ur7JpRe8wjscfwbTcQvhUnXf</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/week.html" data-id="cmdmwdi0y0000bgv4ctyv6l3g" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>110</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>32</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2024 - 2025 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

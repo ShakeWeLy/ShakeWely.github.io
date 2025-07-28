@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2025年7月28日 agent3开源项目 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="重试机制 1234567891011121314151617181920212223242526async def make_plan(self, prompt: str) -&gt; str:        &quot;&quot;&quot;        Asks the LLM to make a plan.        Args:            prompt (str): T">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2025年7月28日 agent3开源项目">
+<meta property="og:url" content="https://shakewely.github.io/2025/07/28/2025%E5%B9%B47%E6%9C%8828%E6%97%A5-agent3%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="重试机制 1234567891011121314151617181920212223242526async def make_plan(self, prompt: str) -&gt; str:        &quot;&quot;&quot;        Asks the LLM to make a plan.        Args:            prompt (str): T">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-07-28T05:22:56.000Z">
+<meta property="article:modified_time" content="2025-07-28T09:20:05.534Z">
+<meta property="article:author" content="Weakliy">
+<meta property="article:tag" content="agent">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>110</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>32</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2025年7月28日-agent3开源项目" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/07/28/2025%E5%B9%B47%E6%9C%8828%E6%97%A5-agent3%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/" class="article-date">
+  <time class="post-time" datetime="2025-07-28T05:22:56.000Z" itemprop="datePublished">
+    <span class="post-month">7月</span><br/>
+    <span class="post-day">28</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2025年7月28日 agent3开源项目
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="重试机制"><a class="markdownIt-Anchor" href="#重试机制"></a> 重试机制</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">make_plan</span>(<span class="params">self, prompt: <span class="built_in">str</span></span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        Asks the LLM to make a plan.</span></span><br><span class="line"><span class="string">        Args:</span></span><br><span class="line"><span class="string">            prompt (str): The prompt to be sent to the LLM.</span></span><br><span class="line"><span class="string">        Returns:</span></span><br><span class="line"><span class="string">            str: The plan made by the LLM.</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        ok = <span class="literal">False</span></span><br><span class="line">        answer = <span class="literal">None</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">not</span> ok:</span><br><span class="line">            animate_thinking(<span class="string">&quot;Thinking...&quot;</span>, color=<span class="string">&quot;status&quot;</span>)</span><br><span class="line">            self.memory.push(<span class="string">&#x27;user&#x27;</span>, prompt)</span><br><span class="line">            answer, reasoning = <span class="keyword">await</span> self.llm_request()</span><br><span class="line">            <span class="keyword">if</span> <span class="string">&quot;NO_UPDATE&quot;</span> <span class="keyword">in</span> answer:</span><br><span class="line">                <span class="keyword">return</span> []</span><br><span class="line">            agents_tasks = self.parse_agent_tasks(answer)</span><br><span class="line">            <span class="keyword">if</span> agents_tasks == []:</span><br><span class="line">                self.show_plan(agents_tasks, answer)</span><br><span class="line">                prompt = <span class="string">f&quot;Failed to parse the tasks. Please write down your task followed by a json plan within ```json. Do not ask for clarification.\n&quot;</span></span><br><span class="line">                pretty_print(<span class="string">&quot;Failed to make plan. Retrying...&quot;</span>, color=<span class="string">&quot;warning&quot;</span>)</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            self.show_plan(agents_tasks, answer)</span><br><span class="line">            ok = <span class="literal">True</span></span><br><span class="line">        self.logger.info(<span class="string">f&quot;Plan made:\n<span class="subst">&#123;answer&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> self.parse_agent_tasks(answer)</span><br></pre></td></tr></table></figure>
+<h2 id="每个子任务都判断是否update_plan"><a class="markdownIt-Anchor" href="#每个子任务都判断是否update_plan"></a> 每个子任务都判断是否update_plan</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">update_plan</span>(<span class="params">self, goal: <span class="built_in">str</span>, agents_tasks: <span class="type">List</span>[<span class="built_in">dict</span>], agents_work_result: <span class="built_in">dict</span>, <span class="built_in">id</span>: <span class="built_in">str</span>, success: <span class="built_in">bool</span></span>) -&gt; <span class="built_in">dict</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Updates the plan with the results of the agents work.</span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        goal (str): The goal to be achieved.</span></span><br><span class="line"><span class="string">        agents_tasks (list): The tasks assigned to each agent.</span></span><br><span class="line"><span class="string">        agents_work_result (dict): The results of the agents work.</span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">        dict: The updated plan.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    self.status_message = <span class="string">&quot;Updating plan...&quot;</span></span><br><span class="line">    last_agent_work = agents_work_result[<span class="built_in">id</span>]</span><br><span class="line">    tool_success_str = <span class="string">&quot;success&quot;</span> <span class="keyword">if</span> success <span class="keyword">else</span> <span class="string">&quot;failure&quot;</span></span><br><span class="line">    pretty_print(<span class="string">f&quot;Agent <span class="subst">&#123;<span class="built_in">id</span>&#125;</span> work <span class="subst">&#123;tool_success_str&#125;</span>.&quot;</span>, color=<span class="string">&quot;success&quot;</span> <span class="keyword">if</span> success <span class="keyword">else</span> <span class="string">&quot;failure&quot;</span>)</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        id_int = <span class="built_in">int</span>(<span class="built_in">id</span>)</span><br><span class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">        <span class="keyword">return</span> agents_tasks</span><br><span class="line">    <span class="keyword">if</span> id_int == <span class="built_in">len</span>(agents_tasks):</span><br><span class="line">        next_task = <span class="string">&quot;No task follow, this was the last step. If it failed add a task to recover.&quot;</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        next_task = <span class="string">f&quot;Next task is: <span class="subst">&#123;agents_tasks[<span class="built_in">int</span>(<span class="built_in">id</span>)][<span class="number">0</span>]&#125;</span>.&quot;</span></span><br><span class="line">    <span class="comment">#if success:</span></span><br><span class="line">    <span class="comment">#    return agents_tasks # we only update the plan if last task failed, for now</span></span><br><span class="line">    update_prompt = <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    Your goal is : <span class="subst">&#123;goal&#125;</span></span></span><br><span class="line"><span class="string">    You previously made a plan, agents are currently working on it.</span></span><br><span class="line"><span class="string">    The last agent working on task: <span class="subst">&#123;<span class="built_in">id</span>&#125;</span>, did the following work:</span></span><br><span class="line"><span class="string">    <span class="subst">&#123;last_agent_work&#125;</span></span></span><br><span class="line"><span class="string">    Agent <span class="subst">&#123;<span class="built_in">id</span>&#125;</span> work was a <span class="subst">&#123;tool_success_str&#125;</span> according to system interpreter.</span></span><br><span class="line"><span class="string">    <span class="subst">&#123;next_task&#125;</span></span></span><br><span class="line"><span class="string">    Is the work done for task <span class="subst">&#123;<span class="built_in">id</span>&#125;</span> leading to success or failure ? Did an agent fail with a task?</span></span><br><span class="line"><span class="string">    If agent work was good: answer &quot;NO_UPDATE&quot;</span></span><br><span class="line"><span class="string">    If agent work is leading to failure: update the plan.</span></span><br><span class="line"><span class="string">    If a task failed add a task to try again or recover from failure. You might have near identical task twice.</span></span><br><span class="line"><span class="string">    plan should be within ```json like before.</span></span><br><span class="line"><span class="string">    You need to rewrite the whole plan, but only change the tasks after task <span class="subst">&#123;<span class="built_in">id</span>&#125;</span>.</span></span><br><span class="line"><span class="string">    Make the plan the same length as the original one or with only one additional step.</span></span><br><span class="line"><span class="string">    Do not change past tasks. Change next tasks.</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    pretty_print(<span class="string">&quot;Updating plan...&quot;</span>, color=<span class="string">&quot;status&quot;</span>)</span><br><span class="line">    plan = <span class="keyword">await</span> self.make_plan(update_prompt)</span><br><span class="line">    <span class="keyword">if</span> plan == []:</span><br><span class="line">        pretty_print(<span class="string">&quot;No plan update required.&quot;</span>, color=<span class="string">&quot;info&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span> agents_tasks</span><br><span class="line">    self.logger.info(<span class="string">f&quot;Plan updated:\n<span class="subst">&#123;plan&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> plan</span><br></pre></td></tr></table></figure>
+<h1 id="plan"><a class="markdownIt-Anchor" href="#plan"></a> plan</h1>
+<ol>
+<li>
+<p>给sql增加重试</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="built_in">COUNT</span>(<span class="keyword">CASE</span> <span class="keyword">WHEN</span> <span class="keyword">result</span><span class="operator">=</span><span class="number">1</span> <span class="keyword">THEN</span> <span class="number">1</span> <span class="keyword">END</span>)<span class="operator">/</span><span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">AS</span> 良品率, <span class="built_in">COUNT</span>(<span class="keyword">CASE</span> <span class="keyword">WHEN</span> <span class="keyword">result</span><span class="operator">=</span><span class="number">0</span> <span class="keyword">THEN</span> <span class="number">1</span> <span class="keyword">END</span>)<span class="operator">/</span><span class="built_in">COUNT</span>(<span class="operator">*</span>) <span class="keyword">AS</span> 不良率 <span class="keyword">FROM</span> &#123;workshop_db&#125; <span class="keyword">WHERE</span> line<span class="operator">=</span><span class="string">&#x27;line1&#x27;</span> <span class="keyword">AND</span> created_at <span class="operator">&gt;=</span> CURDATE();</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>prompt</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">请分析用户意图并生成执行计划。请严格按照以下JSON格式输出：</span><br><span class="line"></span><br><span class="line">&#123;&#123;</span><br><span class="line">    &quot;intent&quot;: &quot;主要意图类型&quot;,</span><br><span class="line">    &quot;sub_intents&quot;: [&quot;子意图列表&quot;],</span><br><span class="line">    &quot;plan&quot;: &#123;&#123;</span><br><span class="line">        &quot;steps&quot;: [</span><br><span class="line">            &#123;&#123;</span><br><span class="line">                &quot;step&quot;: 1,</span><br><span class="line">                &quot;action&quot;: &quot;具体操作&quot;,</span><br><span class="line">                &quot;service&quot;: &quot;使用的服务&quot;,</span><br><span class="line">                &quot;description&quot;: &quot;操作描述&quot;</span><br><span class="line">            &#125;&#125;</span><br><span class="line">        ],</span><br><span class="line">        &quot;priority&quot;: &quot;high/medium/low&quot;,</span><br><span class="line">        &quot;estimated_time&quot;: &quot;预估执行时间&quot;</span><br><span class="line">    &#125;&#125;,</span><br><span class="line">    &quot;parameters&quot;: &#123;&#123;</span><br><span class="line">        &quot;required_params&quot;: [&quot;必需参数&quot;],</span><br><span class="line">        &quot;optional_params&quot;: [&quot;可选参数&quot;]</span><br><span class="line">    &#125;&#125;</span><br><span class="line">&#125;&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>选择分析query语义-&gt; 不同的agent运行-&gt;</p>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/07/28/2025%E5%B9%B47%E6%9C%8828%E6%97%A5-agent3%E5%BC%80%E6%BA%90%E9%A1%B9%E7%9B%AE/" data-id="cmdmwdi1a0003bgv46jpn534c" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/agent/" rel="tag">agent</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2025/07/25/2025%E5%B9%B47%E6%9C%8825%E6%97%A5-coding-%E6%B1%87%E6%80%BB/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2025年7月25日 coding\汇总</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>110</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>32</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2024 - 2025 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

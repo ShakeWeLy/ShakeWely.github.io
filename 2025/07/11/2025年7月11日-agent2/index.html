@@ -5,20 +5,22 @@
   
   <title>2025年7月11日 agent2 | Weakliy_Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="1  策略  Cot 除了model本身的cot还可以是prompt的cot   few-shot-{1,3,5,7,error}   多 prompt-template 路由机制 你提到 “垂类资源路由到不同的 prompt 模板”，这是非常前沿的技术，通常涉及：  使用一个 Query Router &#x2F; Prompt Router 对用户输入先进行分类（如：情感分析 &#x2F; 法律判断 &#x2F; 财经摘要">
+  <meta name="description" content="主要介绍AI的实现策略   1 Agent设计模式  https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;692971105 https:&#x2F;&#x2F;blog.csdn.net&#x2F;m0_57081622&#x2F;article&#x2F;details&#x2F;147892638   1 ReAct 模式  https:&#x2F;&#x2F;github.com&#x2F;samwit&#x2F;langchain-tutorials&#x2F;blob&#x2F;main&#x2F;a">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2025年7月11日 agent2">
 <meta property="og:url" content="https://shakewely.github.io/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/index.html">
 <meta property="og:site_name" content="Weakliy_Blog">
-<meta property="og:description" content="1  策略  Cot 除了model本身的cot还可以是prompt的cot   few-shot-{1,3,5,7,error}   多 prompt-template 路由机制 你提到 “垂类资源路由到不同的 prompt 模板”，这是非常前沿的技术，通常涉及：  使用一个 Query Router &#x2F; Prompt Router 对用户输入先进行分类（如：情感分析 &#x2F; 法律判断 &#x2F; 财经摘要">
+<meta property="og:description" content="主要介绍AI的实现策略   1 Agent设计模式  https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;692971105 https:&#x2F;&#x2F;blog.csdn.net&#x2F;m0_57081622&#x2F;article&#x2F;details&#x2F;147892638   1 ReAct 模式  https:&#x2F;&#x2F;github.com&#x2F;samwit&#x2F;langchain-tutorials&#x2F;blob&#x2F;main&#x2F;a">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250728164505011.png">
 <meta property="og:image" content="https://shakewely.github.io/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250711095328828.png">
 <meta property="og:image" content="https://shakewely.github.io/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250711094439528.png">
 <meta property="article:published_time" content="2025-07-11T01:44:22.000Z">
-<meta property="article:modified_time" content="2025-07-11T02:42:33.720Z">
+<meta property="article:modified_time" content="2025-07-28T09:08:38.933Z">
 <meta property="article:author" content="Weakliy">
+<meta property="article:tag" content="agent">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://shakewely.github.io/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250711095328828.png">
+<meta name="twitter:image" content="https://shakewely.github.io/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250728164505011.png">
   
     <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
   
@@ -50,9 +52,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>108</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>110</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>31</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>32</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -108,21 +110,93 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>1</p>
-<h2 id="策略"><a class="markdownIt-Anchor" href="#策略"></a> 策略</h2>
-<h3 id="cot"><a class="markdownIt-Anchor" href="#cot"></a> Cot</h3>
+        <h1 id><a class="markdownIt-Anchor" href="#"></a> </h1>
+<blockquote>
+<p>主要介绍AI的实现策略</p>
+</blockquote>
+<h1 id="1-agent设计模式"><a class="markdownIt-Anchor" href="#1-agent设计模式"></a> 1 Agent设计模式</h1>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/692971105">https://zhuanlan.zhihu.com/p/692971105</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_57081622/article/details/147892638">https://blog.csdn.net/m0_57081622/article/details/147892638</a></p>
+</blockquote>
+<h2 id="1-react-模式"><a class="markdownIt-Anchor" href="#1-react-模式"></a> <strong>1 ReAct</strong> <strong>模式</strong></h2>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/samwit/langchain-tutorials/blob/main/agents/YT_Exploring_ReAct_on_Langchain.ipynb">https://github.com/samwit/langchain-tutorials/blob/main/agents/YT_Exploring_ReAct_on_Langchain.ipynb</a></p>
+</blockquote>
+<p><strong>原理</strong></p>
+<ol>
+<li>接收任务：Agent获取来自用户或系统的任务指令。</li>
+<li>推理（Thought）：Agent依据当前任务和已有知识展开推理，形成初步的行动计划。</li>
+<li>行动（Action）：Agent执行经推理得出的行动。</li>
+<li>观察（Observation）：Agent对行动产生的结果进行观察，获取反馈信息。</li>
+<li>循环迭代：将观察结果反馈至推理过程，Agent依据新信息重新推理，生成新的行动计划，并持续执行行动与观察，直至任务完成</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">think</span>(<span class="params">self, task</span>):</span><br><span class="line">    <span class="comment"># 推理：根据任务生成行动计划</span></span><br><span class="line">    <span class="keyword">for</span> location <span class="keyword">in</span> self.knowledge_base[<span class="string">&quot;locations&quot;</span>]:</span><br><span class="line">        <span class="keyword">yield</span><span class="string">f&quot;检查 <span class="subst">&#123;location&#125;</span> 是否有胡椒粉&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">act</span>(<span class="params">self, action</span>):</span><br><span class="line">    <span class="comment"># 行动：执行具体的行动</span></span><br><span class="line">    <span class="keyword">if</span> action == <span class="string">&quot;检查 台面上 是否有胡椒粉&quot;</span>:</span><br><span class="line">        <span class="keyword">return</span><span class="string">&quot;台面上没有胡椒粉&quot;</span></span><br><span class="line">    <span class="keyword">elif</span> action == <span class="string">&quot;检查 灶台底下抽屉 是否有胡椒粉&quot;</span>:</span><br><span class="line">        <span class="keyword">return</span><span class="string">&quot;灶台底下抽屉有胡椒粉&quot;</span></span><br><span class="line">    <span class="keyword">elif</span> action == <span class="string">&quot;检查 油烟机左边吊柜 是否有胡椒粉&quot;</span>:</span><br><span class="line">        <span class="keyword">return</span><span class="string">&quot;油烟机左边吊柜没有胡椒粉&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">observe</span>(<span class="params">self, action_result</span>):</span><br><span class="line">    <span class="comment"># 观察：记录行动的结果</span></span><br><span class="line">    <span class="keyword">return</span> action_result</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="2-plan-and-solve-模式"><a class="markdownIt-Anchor" href="#2-plan-and-solve-模式"></a> 2 <strong>Plan</strong> <strong>and</strong> <strong>solve</strong> <strong>模式</strong></h2>
+<blockquote>
+<p>《Plan-and-Solve Prompting: Improving Zero-Shot Chain-of-Thought Reasoning by Large Language Models》</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Fosowl/agenticSeek">https://github.com/Fosowl/agenticSeek</a></p>
+</blockquote>
+<p>原理</p>
+<ol>
+<li>
+<p>接收任务：Agent接收来自用户或系统下达的任务指令。</p>
+</li>
+<li>
+<p>规划（Plan）：Agent基于任务目标生成一个多步骤的详细计划，清晰界定每个步骤的具体内容与执行顺序。</p>
+</li>
+<li>
+<p>执行（Solve）：Agent依照既定计划，依次执行每个步骤。</p>
+</li>
+<li>
+<p>观察（Observation）：Agent对执行结果展开观察，判断是否有必要启动重新规划流程。</p>
+</li>
+<li>
+<p>重新规划（Replan）：若发现计划无法实施，或需要根据实际情况调整，Agent将结合当前状态重新生成计划，并继续执行。</p>
+</li>
+</ol>
+<h2 id="3-reason-without-observation"><a class="markdownIt-Anchor" href="#3-reason-without-observation"></a> <strong>3. Reason</strong> <strong>without</strong> <strong>Observation</strong></h2>
+<ol>
+<li>Planner：负责生成一个相互依赖的“链式计划”，定义每一步所依赖的上一步的输出。</li>
+<li>Worker：循环遍历每个任务，并将任务输出分配给相应的变量。当调用后续调用时，它还会用变量的结果替换变量。</li>
+<li>Solver：求解器将所有这些输出整合为最终答案。</li>
+</ol>
+<h2 id="4-llmcompiler"><a class="markdownIt-Anchor" href="#4-llmcompiler"></a> <strong>4. LLMCompiler</strong></h2>
+<p><strong>原理</strong></p>
+<p>变成并行执行</p>
+<ol>
+<li>
+<p>接收任务：Agent 接收到用户或系统的任务指令，任务可能包含多个子任务。</p>
+</li>
+<li>
+<p>任务分解（Task Decomposition）：Agent 将复杂任务分解为多个子任务，并确定这些子任务之间的依赖关系。</p>
+</li>
+<li>
+<p>并行执行（Parallel Execution）：Agent 根据子任务之间的依赖关系，将可以并行处理的子任务同时发送给多个执行器进行处理。</p>
+</li>
+<li>
+<p>结果合并（Result Merging）：各个执行器完成子任务后，Agent 将结果合并，形成最终的输出。</p>
+</li>
+<li>
+<p>循环迭代（Iteration）：如果任务需要进一步处理或调整，Agent 会根据当前结果重新分解任务，并继续并行执行和结果合并，直到任务完成。</p>
+</li>
+</ol>
+<img src="/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250728164505011.png" alt="image-20250728164505011" style="zoom:33%;">
+<p>…</p>
+<h1 id="2-设计策略"><a class="markdownIt-Anchor" href="#2-设计策略"></a> 2 设计策略</h1>
+<h2 id="21-cot"><a class="markdownIt-Anchor" href="#21-cot"></a> 2.1 Cot</h2>
 <p>除了model本身的cot还可以是prompt的cot</p>
 <p><img src="/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250711095328828.png" alt="image-20250711095328828"></p>
-<h3 id="few-shot-1357error"><a class="markdownIt-Anchor" href="#few-shot-1357error"></a> few-shot-{1,3,5,7,error}</h3>
+<h2 id="22few-shot-1357error"><a class="markdownIt-Anchor" href="#22few-shot-1357error"></a> 2.2few-shot-{1,3,5,7,error}</h2>
 <img src="/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250711094439528.png" alt="image-20250711094439528" style="zoom:50%;">
-<h3 id="多-prompt-template-路由机制"><a class="markdownIt-Anchor" href="#多-prompt-template-路由机制"></a> 多 prompt-template 路由机制</h3>
+<h2 id="23-多-prompt-template-路由机制"><a class="markdownIt-Anchor" href="#23-多-prompt-template-路由机制"></a> 2.3 多 prompt-template 路由机制</h2>
 <p>你提到 <strong>“垂类资源路由到不同的 prompt 模板”</strong>，这是非常前沿的技术，通常涉及：</p>
 <ul>
 <li>使用一个 <strong>Query Router / Prompt Router</strong></li>
 <li>对用户输入先进行分类（如：情感分析 / 法律判断 / 财经摘要）</li>
 <li>然后调用对应 prompt 模板 + 指定模型</li>
 </ul>
-<h3 id="sequential-prompting"><a class="markdownIt-Anchor" href="#sequential-prompting"></a> sequential prompting</h3>
+<h2 id="24sequential-prompting"><a class="markdownIt-Anchor" href="#24sequential-prompting"></a> 2.4sequential prompting</h2>
 
       
     </div>
@@ -130,6 +204,8 @@
       <a data-url="https://shakewely.github.io/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/" data-id="cmdahfjal0003l4v475ah4uo2" class="article-share-link">分享</a>
       
       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/agent/" rel="tag">agent</a></li></ul>
+
     </footer>
   </div>
   
@@ -197,9 +273,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>108</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>110</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>31</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>32</strong><br>标签</div></a>
     </div>
 
 
