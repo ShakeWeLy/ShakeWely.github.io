@@ -13,10 +13,18 @@
 <meta property="og:description" content="主要介绍AI的实现策略   1 Agent设计模式  https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;692971105 https:&#x2F;&#x2F;blog.csdn.net&#x2F;m0_57081622&#x2F;article&#x2F;details&#x2F;147892638   1 ReAct 模式  https:&#x2F;&#x2F;github.com&#x2F;samwit&#x2F;langchain-tutorials&#x2F;blob&#x2F;main&#x2F;a">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://shakewely.github.io/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250728164505011.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250806085752423.png">
 <meta property="og:image" content="https://shakewely.github.io/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250711095328828.png">
 <meta property="og:image" content="https://shakewely.github.io/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250711094439528.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250729213840616.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250729214326614.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250804185241403.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250804185258449.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250804185309119.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/v2-6972ee535aa270b97356fbc29bde2105_720w.webp">
+<meta property="og:image" content="https://shakewely.github.io/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250806224118390.png">
 <meta property="article:published_time" content="2025-07-11T01:44:22.000Z">
-<meta property="article:modified_time" content="2025-07-28T09:08:38.933Z">
+<meta property="article:modified_time" content="2025-08-06T15:00:22.957Z">
 <meta property="article:author" content="Weakliy">
 <meta property="article:tag" content="agent">
 <meta name="twitter:card" content="summary">
@@ -52,9 +60,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>110</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>115</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>32</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>33</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -182,11 +190,21 @@
 </li>
 </ol>
 <img src="/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250728164505011.png" alt="image-20250728164505011" style="zoom:33%;">
-<p>…</p>
+<h2 id="5-生成智能体generative-agent"><a class="markdownIt-Anchor" href="#5-生成智能体generative-agent"></a> 5 <strong>生成智能体（Generative Agent）</strong></h2>
+<blockquote>
+<p>斯坦福小镇 <a target="_blank" rel="noopener" href="https://github.com/joonspk-research/generative_agents?tab=readme-ov-file">https://github.com/joonspk-research/generative_agents?tab=readme-ov-file</a></p>
+</blockquote>
 <h1 id="2-设计策略"><a class="markdownIt-Anchor" href="#2-设计策略"></a> 2 设计策略</h1>
-<h2 id="21-cot"><a class="markdownIt-Anchor" href="#21-cot"></a> 2.1 Cot</h2>
+<h2 id="21-提示词工程"><a class="markdownIt-Anchor" href="#21-提示词工程"></a> 2.1 提示词工程</h2>
+<h3 id="21-cot"><a class="markdownIt-Anchor" href="#21-cot"></a> 2.1 Cot</h3>
+<p><strong>定义</strong></p>
+<blockquote>
+<p>让模型一步一步来<img src="/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250806085752423.png" alt="image-20250806085752423" style="zoom:67%;"></p>
+</blockquote>
 <p>除了model本身的cot还可以是prompt的cot</p>
 <p><img src="/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250711095328828.png" alt="image-20250711095328828"></p>
+<h3 id="tottree-of-thought"><a class="markdownIt-Anchor" href="#tottree-of-thought"></a> ToT（Tree of Thought）</h3>
+<p>一种推理策略，它通过构建多条思维路径（像树一样分叉）并探索、评估每条路径，从而更系统地解决复杂问题。</p>
 <h2 id="22few-shot-1357error"><a class="markdownIt-Anchor" href="#22few-shot-1357error"></a> 2.2few-shot-{1,3,5,7,error}</h2>
 <img src="/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250711094439528.png" alt="image-20250711094439528" style="zoom:50%;">
 <h2 id="23-多-prompt-template-路由机制"><a class="markdownIt-Anchor" href="#23-多-prompt-template-路由机制"></a> 2.3 多 prompt-template 路由机制</h2>
@@ -197,6 +215,45 @@
 <li>然后调用对应 prompt 模板 + 指定模型</li>
 </ul>
 <h2 id="24sequential-prompting"><a class="markdownIt-Anchor" href="#24sequential-prompting"></a> 2.4sequential prompting</h2>
+<h2 id="function-call"><a class="markdownIt-Anchor" href="#function-call"></a> function call</h2>
+<p><img src="/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250729213840616.png" alt="image-20250729213840616"></p>
+<p><img src="/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250729214326614.png" alt="image-20250729214326614"></p>
+<h1 id="3-workflow工作流"><a class="markdownIt-Anchor" href="#3-workflow工作流"></a> 3 workflow工作流</h1>
+<p>什么是workflow</p>
+<blockquote>
+<p>接</p>
+</blockquote>
+<blockquote>
+<p>参考:<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/1913932324036379153">https://www.zhihu.com/question/1913932324036379153</a></p>
+</blockquote>
+<h2 id="31-准确率ai-agent的生命线"><a class="markdownIt-Anchor" href="#31-准确率ai-agent的生命线"></a> 3.1 准确率：AI Agent的生命线</h2>
+<p><img src="/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250804185241403.png" alt="image-20250804185241403"></p>
+<h2 id="32-长尾问题-28原则聚焦核心场景"><a class="markdownIt-Anchor" href="#32-长尾问题-28原则聚焦核心场景"></a> 3.2 长尾问题: 28原则：聚焦核心场景</h2>
+<p><img src="/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250804185258449.png" alt="image-20250804185258449"></p>
+<h2 id="33-100防幻觉沙盒化策略"><a class="markdownIt-Anchor" href="#33-100防幻觉沙盒化策略"></a> 3.3 100%防幻觉：沙盒化策略</h2>
+<p><img src="/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250804185309119.png" alt="image-20250804185309119"></p>
+<h2 id="34-提示工程从玩具到生产的跨越"><a class="markdownIt-Anchor" href="#34-提示工程从玩具到生产的跨越"></a> 3.4 提示工程：从玩具到生产的跨越</h2>
+<img src="/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/v2-6972ee535aa270b97356fbc29bde2105_720w.webp" alt="img" style="zoom:67%;">
+<h2 id="35-框架选择要不要用ai框架"><a class="markdownIt-Anchor" href="#35-框架选择要不要用ai框架"></a> 3.5 框架选择：要不要用AI框架</h2>
+<h1 id="4-prompt处理-上下文工程"><a class="markdownIt-Anchor" href="#4-prompt处理-上下文工程"></a> 4 Prompt处理 上下文工程</h1>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.youware.com/project/7529x70z4p">https://www.youware.com/project/7529x70z4p</a></p>
+</blockquote>
+<p><img src="/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250806224118390.png" alt="image-20250806224118390"></p>
+<h2 id="41-写入"><a class="markdownIt-Anchor" href="#41-写入"></a> 4.1 写入</h2>
+<blockquote>
+<p>持久化</p>
+</blockquote>
+<h4 id="选择"><a class="markdownIt-Anchor" href="#选择"></a> 选择</h4>
+<blockquote>
+<p>选择有用信息 concat</p>
+</blockquote>
+<h4 id="压缩"><a class="markdownIt-Anchor" href="#压缩"></a> 压缩</h4>
+<blockquote>
+<p>压缩总结</p>
+</blockquote>
+<h4 id="隔离"><a class="markdownIt-Anchor" href="#隔离"></a> 隔离</h4>
+<h3 id="上下文压缩"><a class="markdownIt-Anchor" href="#上下文压缩"></a> 上下文压缩</h3>
 
       
     </div>
@@ -273,9 +330,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>110</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>115</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>32</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>33</strong><br>标签</div></a>
     </div>
 
 
