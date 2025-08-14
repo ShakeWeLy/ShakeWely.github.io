@@ -43,9 +43,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>115</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>116</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>33</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>34</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -70,6 +70,165 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-2024年1月27日-gradio实践" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/" class="article-date">
+  <time class="post-time" datetime="2024-01-27T14:28:32.000Z" itemprop="datePublished">
+    <span class="post-month">1月</span><br/>
+    <span class="post-day">27</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/">2024年1月27日 gradio实践</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="gradio-实践"><a class="markdownIt-Anchor" href="#gradio-实践"></a> Gradio 实践</h1>
+<h2 id="demo1"><a class="markdownIt-Anchor" href="#demo1"></a> demo1</h2>
+<h3 id="1测试运行"><a class="markdownIt-Anchor" href="#1测试运行"></a> <strong>1.测试运行</strong></h3>
+<p>gradio的核心是它的<code>gr.Interface</code>函数，用来构建可视化界面。</p>
+<ul>
+<li>
+<p>fn：放你用来处理的函数</p>
+</li>
+<li>
+<p>inputs：写你的输入类型，这里输入的是图像，所以是&quot;image&quot;</p>
+</li>
+<li>
+<p>outputs：写你的输出类型，这里输出的是图像，所以是&quot;image&quot;</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># 作者：Weakliy</span><br><span class="line"># 创建日期：2024/1/27 0027 下午 22:42</span><br><span class="line"># 描述：测试运行</span><br><span class="line"></span><br><span class="line">import gradio as gr</span><br><span class="line">import cv2</span><br><span class="line"></span><br><span class="line">def to_black(image):</span><br><span class="line">    output = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)</span><br><span class="line">    return output</span><br><span class="line">interface = gr.Interface(fn=to_black, inputs=&quot;image&quot;, outputs=&quot;image&quot;)</span><br><span class="line">interface.launch()</span><br></pre></td></tr></table></figure>
+<img src="/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/image-20240127224425399.png" alt="image-20240127224425399" style="zoom: 50%;">
+<img src="/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/image-20240127224627553.png" alt="image-20240127224627553" style="zoom:50%;">
+<h3 id="2增加example"><a class="markdownIt-Anchor" href="#2增加example"></a> <strong>2.增加example</strong></h3>
+<p>我们可以在页面下方添加供用户选择的测试样例。</p>
+<p>在<code>gr.Interface</code>里的<code>examples</code>中放入图片路径</p>
+<p><code>examples=[[&quot;test.png&quot;] </code>or 1examples=&quot;path&quot;1</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">import gradio as gr</span><br><span class="line">import cv2</span><br><span class="line">​</span><br><span class="line">def to_black(image):</span><br><span class="line">    output = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)</span><br><span class="line">    return output</span><br><span class="line">​</span><br><span class="line">interface = gr.Interface(fn=to_black, inputs=&quot;image&quot;, outputs=&quot;image&quot;,</span><br><span class="line">                        examples=[[&quot;test.png&quot;]])</span><br><span class="line">interface.launch()</span><br></pre></td></tr></table></figure>
+<h3 id="3创建一个外部访问链接"><a class="markdownIt-Anchor" href="#3创建一个外部访问链接"></a> <strong>3.创建一个外部访问链接</strong></h3>
+<p>创建外部访问链接非常简单，只需要<code>launch(share=True)</code>即可，在打印信息中会看到你的外部访问链接。</p>
+<p><strong>免费用户的链接可以使用24小时，想要长期的话需要在gradio官方购买云服务</strong></p>
+<h2 id="demo2-文本输入"><a class="markdownIt-Anchor" href="#demo2-文本输入"></a> demo2 文本输入</h2>
+<h3 id="1-同理"><a class="markdownIt-Anchor" href="#1-同理"></a> 1 同理</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">import gradio as gr</span><br><span class="line">#输入文本处理程序</span><br><span class="line">def greet(name):</span><br><span class="line">    return &quot;Hello &quot; + name + &quot;!&quot;</span><br><span class="line">demo = gr.Interface(fn=greet, inputs=&quot;text&quot;, outputs=&quot;text&quot;)</span><br><span class="line">demo.launch()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="demo3-interface类"><a class="markdownIt-Anchor" href="#demo3-interface类"></a> demo3 Interface类</h2>
+<h3 id="1基础入门"><a class="markdownIt-Anchor" href="#1基础入门"></a> 1.基础入门</h3>
+<h4 id="11-interface需要通过以下三个参数进行初始化"><a class="markdownIt-Anchor" href="#11-interface需要通过以下三个参数进行初始化"></a> 1.1 <strong>interface需要通过以下三个参数进行初始化：</strong></h4>
+<ul>
+<li>fn：包装的函数</li>
+<li>inputs：输入组件类型，（例如：“text”、&quot;image）</li>
+<li>ouputs：输出组件类型，（例如：“text”、&quot;image）</li>
+</ul>
+<h4 id="12-控件列表"><a class="markdownIt-Anchor" href="#12-控件列表"></a> 1.2 控件列表</h4>
+<ul>
+<li>
+<p><strong>输入输出</strong>：gr.Image(图像), gr.Textbox(文本框), gr.DataFrame(数据框), gr.Dropdown(下拉选项), gr.Number(数字), gr.Markdown, gr.Files</p>
+</li>
+<li>
+<p><strong>控制组件</strong>：gr.Button(按钮)</p>
+</li>
+<li>
+<p><strong>布局组件</strong>：gr.Tab(标签页), gr.Row(行布局), gr.Column(列布局)</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">__all__ = [</span><br><span class="line">    &quot;Audio&quot;,</span><br><span class="line">    &quot;BarPlot&quot;,</span><br><span class="line">    &quot;Button&quot;,</span><br><span class="line">    &quot;Chatbot&quot;,</span><br><span class="line">    &quot;ClearButton&quot;,</span><br><span class="line">    &quot;Component&quot;,</span><br><span class="line">    &quot;component&quot;,</span><br><span class="line">    &quot;get_component_instance&quot;,</span><br><span class="line">    &quot;_Keywords&quot;,</span><br><span class="line">    &quot;Checkbox&quot;,</span><br><span class="line">    &quot;CheckboxGroup&quot;,</span><br><span class="line">    &quot;Code&quot;,</span><br><span class="line">    &quot;ColorPicker&quot;,</span><br><span class="line">    &quot;Dataframe&quot;,</span><br><span class="line">    &quot;DataFrame&quot;,</span><br><span class="line">    &quot;Dataset&quot;,</span><br><span class="line">    &quot;DuplicateButton&quot;,</span><br><span class="line">    &quot;Fallback&quot;,</span><br><span class="line">    &quot;Form&quot;,</span><br><span class="line">    &quot;FormComponent&quot;,</span><br><span class="line">    &quot;Gallery&quot;,</span><br><span class="line">    &quot;HTML&quot;,</span><br><span class="line">    &quot;FileExplorer&quot;,</span><br><span class="line">    &quot;Image&quot;,</span><br><span class="line">    &quot;JSON&quot;,</span><br><span class="line">    &quot;Json&quot;,</span><br><span class="line">    &quot;Label&quot;,</span><br><span class="line">    &quot;LinePlot&quot;,</span><br><span class="line">    &quot;LoginButton&quot;,</span><br><span class="line">    &quot;LogoutButton&quot;,</span><br><span class="line">    &quot;Markdown&quot;,</span><br><span class="line">    &quot;Textbox&quot;,</span><br><span class="line">    &quot;Dropdown&quot;,</span><br><span class="line">    &quot;Model3D&quot;,</span><br><span class="line">    &quot;File&quot;,</span><br><span class="line">    &quot;HighlightedText&quot;,</span><br><span class="line">    &quot;AnnotatedImage&quot;,</span><br><span class="line">    &quot;CheckboxGroup&quot;,</span><br><span class="line">    &quot;Text&quot;,</span><br><span class="line">    &quot;Highlightedtext&quot;,</span><br><span class="line">    &quot;Annotatedimage&quot;,</span><br><span class="line">    &quot;Highlight&quot;,</span><br><span class="line">    &quot;Checkboxgroup&quot;,</span><br><span class="line">    &quot;Number&quot;,</span><br><span class="line">    &quot;Plot&quot;,</span><br><span class="line">    &quot;Radio&quot;,</span><br><span class="line">    &quot;ScatterPlot&quot;,</span><br><span class="line">    &quot;Slider&quot;,</span><br><span class="line">    &quot;State&quot;,</span><br><span class="line">    &quot;UploadButton&quot;,</span><br><span class="line">    &quot;Video&quot;,</span><br><span class="line">    &quot;StreamingInput&quot;,</span><br><span class="line">    &quot;StreamingOutput&quot;,</span><br><span class="line">    &quot;ImageEditor&quot;,</span><br><span class="line">    &quot;ParamViewer&quot;,</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<h5 id="121-控件参数"><a class="markdownIt-Anchor" href="#121-控件参数"></a> 1.2.1 控件参数</h5>
+<p>​	Todo</p>
+<h5 id="122-控件效果展示"><a class="markdownIt-Anchor" href="#122-控件效果展示"></a> 1.2.2 控件效果展示</h5>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gradio <span class="keyword">as</span> gr</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建控件</span></span><br><span class="line">textbox = gr.Textbox(label=<span class="string">&quot;输入文本&quot;</span>)</span><br><span class="line">slider = gr.Slider(minimum=<span class="number">0</span>, maximum=<span class="number">100</span>, label=<span class="string">&quot;滑动条&quot;</span>)</span><br><span class="line">checkbox = gr.Checkbox(label=<span class="string">&quot;复选框&quot;</span>)</span><br><span class="line">radio = gr.Radio([<span class="string">&quot;选项1&quot;</span>, <span class="string">&quot;选项2&quot;</span>, <span class="string">&quot;选项3&quot;</span>], label=<span class="string">&quot;单选按钮&quot;</span>)</span><br><span class="line">button = gr.Button(label=<span class="string">&quot;提交&quot;</span>)</span><br><span class="line">dropdown = gr.Dropdown([<span class="string">&quot;选项A&quot;</span>, <span class="string">&quot;选项B&quot;</span>, <span class="string">&quot;选项C&quot;</span>], label=<span class="string">&quot;下拉菜单&quot;</span>)</span><br><span class="line">file = gr.File(label=<span class="string">&quot;文件上传&quot;</span>)</span><br><span class="line">upload_button = gr.UploadButton(label=<span class="string">&quot;上传按钮&quot;</span>)</span><br><span class="line">image = gr.Image(label=<span class="string">&quot;图像上传&quot;</span>)</span><br><span class="line">video = gr.Video(label=<span class="string">&quot;视频上传&quot;</span>)</span><br><span class="line">audio = gr.Audio(label=<span class="string">&quot;音频上传&quot;</span>)</span><br><span class="line">number = gr.Number(label=<span class="string">&quot;数字输入&quot;</span>)</span><br><span class="line">checkboxgroup = gr.CheckboxGroup([<span class="string">&quot;选项1&quot;</span>, <span class="string">&quot;选项2&quot;</span>, <span class="string">&quot;选项3&quot;</span>], label=<span class="string">&quot;复选框组&quot;</span>)</span><br><span class="line">highlightedtext = gr.HighlightedText(label=<span class="string">&quot;高亮文本&quot;</span>)</span><br><span class="line">annotatedimage = gr.AnnotatedImage(label=<span class="string">&quot;标注图像&quot;</span>)</span><br><span class="line">timeseries = gr.Timeseries(label=<span class="string">&quot;时间序列&quot;</span>)</span><br><span class="line">dataframe = gr.Dataframe(label=<span class="string">&quot;数据框&quot;</span>)</span><br><span class="line">json = gr.JSON(label=<span class="string">&quot;JSON输入&quot;</span>)</span><br><span class="line">code = gr.Code(label=<span class="string">&quot;代码输入&quot;</span>)</span><br><span class="line">colorpicker = gr.ColorPicker(label=<span class="string">&quot;颜色选择器&quot;</span>)</span><br><span class="line">markdown = gr.Markdown(label=<span class="string">&quot;Markdown文本&quot;</span>)</span><br><span class="line">html = gr.HTML(label=<span class="string">&quot;HTML文本&quot;</span>)</span><br><span class="line">label = gr.Label(<span class="string">&quot;标签文本&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义回调函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">submit_values</span>(<span class="params">text, slider_val, checkbox_val, radio_val, dropdown_val, file_val, image_val, video_val, audio_val, number_val, checkboxgroup_val, highlightedtext_val, annotatedimage_val, timeseries_val, dataframe_val, json_val, code_val, colorpicker_val, markdown_val, html_val</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;文本:&quot;</span>, text)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;滑动条值:&quot;</span>, slider_val)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;复选框选中:&quot;</span>, checkbox_val)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;单选按钮选择:&quot;</span>, radio_val)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;下拉菜单选择:&quot;</span>, dropdown_val)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;上传的文件:&quot;</span>, file_val.name <span class="keyword">if</span> file_val <span class="keyword">else</span> <span class="literal">None</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;上传的图像:&quot;</span>, image_val.name <span class="keyword">if</span> image_val <span class="keyword">else</span> <span class="literal">None</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;上传的视频:&quot;</span>, video_val.name <span class="keyword">if</span> video_val <span class="keyword">else</span> <span class="literal">None</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;上传的音频:&quot;</span>, audio_val.name <span class="keyword">if</span> audio_val <span class="keyword">else</span> <span class="literal">None</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;数字输入:&quot;</span>, number_val)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;复选框组选中:&quot;</span>, checkboxgroup_val)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;高亮文本:&quot;</span>, highlightedtext_val)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;标注图像:&quot;</span>, annotatedimage_val)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;时间序列:&quot;</span>, timeseries_val)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;数据框:&quot;</span>, dataframe_val)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;JSON输入:&quot;</span>, json_val)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;代码输入:&quot;</span>, code_val)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;颜色选择器选择:&quot;</span>, colorpicker_val)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Markdown文本:&quot;</span>, markdown_val)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;HTML文本:&quot;</span>, html_val)</span><br><span class="line"><span class="comment"># 创建界面</span></span><br><span class="line">interface = gr.Interface(</span><br><span class="line">    fn=submit_values,</span><br><span class="line">    inputs=[textbox, slider, checkbox, radio, dropdown, file, upload_button, image, video, audio, number, checkboxgroup, highlightedtext, annotatedimage, timeseries, dataframe, json, code, colorpicker, markdown, html, label, button],</span><br><span class="line">    outputs=<span class="string">&quot;text&quot;</span>,</span><br><span class="line">    title=<span class="string">&quot;包含所有控件的交互式界面示例&quot;</span>,</span><br><span class="line">)</span><br><span class="line"><span class="comment"># 启动应用</span></span><br><span class="line">interface.launch()</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/image-20240131004239219.png" alt="image-20240131004239219" style="zoom:50%;"><img src="/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/image-20240131004301148.png" alt="image-20240131004301148"></p>
+<h4 id="13-interfacelaunch方法返回三个值"><a class="markdownIt-Anchor" href="#13-interfacelaunch方法返回三个值"></a> 1.3 <strong>Interface.launch()方法返回三个值</strong></h4>
+<ul>
+<li>app，为 Gradio 演示提供支持的 FastAPI 应用程序</li>
+<li>local_url，本地地址</li>
+<li>share_url，公共地址，当share=True时生成</li>
+</ul>
+<h4 id="14-多输入输出"><a class="markdownIt-Anchor" href="#14-多输入输出"></a> 1.4 多输入输出</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import gradio as gr</span><br><span class="line">#该函数有3个输入参数和2个输出参数</span><br><span class="line">def greet(name, is_morning, temperature):</span><br><span class="line">    salutation = &quot;Good morning&quot; if is_morning else &quot;Good evening&quot;</span><br><span class="line">    greeting = f&quot;&#123;salutation&#125; &#123;name&#125;. It is &#123;temperature&#125; degrees today&quot;</span><br><span class="line">    celsius = (temperature - 32) * 5 / 9</span><br><span class="line">    return greeting, round(celsius, 2)</span><br><span class="line">demo = gr.Interface(</span><br><span class="line">    fn=greet,</span><br><span class="line">    #按照处理程序设置输入组件</span><br><span class="line">    inputs=[gr.Textbox(lines=3, placeholder=&quot;preName Here...&quot;,label=&quot;your name&quot;),</span><br><span class="line">            gr.Checkbox(min_width=100), gr.Slider(0, 100)],</span><br><span class="line">    #按照处理程序设置输出组件</span><br><span class="line">    outputs=[&quot;text&quot;, &quot;number&quot;],</span><br><span class="line">)</span><br><span class="line">demo.launch()</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/image-20240127231747733.png" alt="image-20240127231747733"></p>
+<h3 id="2-进阶"><a class="markdownIt-Anchor" href="#2-进阶"></a> 2 进阶</h3>
+<h4 id="21-interface状态"><a class="markdownIt-Anchor" href="#21-interface状态"></a> 2.1 interface状态</h4>
+<h5 id="全局变量"><a class="markdownIt-Anchor" href="#全局变量"></a> 全局变量</h5>
+<p>pass</p>
+<h5 id="state状态保留"><a class="markdownIt-Anchor" href="#state状态保留"></a> state状态保留</h5>
+<p>Gradio支持的另一种数据持久性是会话状态，数据在一个页面会话中的多次提交中持久存在</p>
+<h4 id="22-interface交互"><a class="markdownIt-Anchor" href="#22-interface交互"></a> 2.2 interface交互</h4>
+<h5 id="实时变化"><a class="markdownIt-Anchor" href="#实时变化"></a> 实时变化</h5>
+<p>在Interface中设置live=True，则输出会跟随输入实时变化。这个时候界面不会有submit按钮，因为不需要手动提交输入。</p>
+<h5 id="流模式"><a class="markdownIt-Anchor" href="#流模式"></a> 流模式</h5>
+<p>在许多情形下，我们的输入是实时视频流或者音频流，那么意味这数据不停地发送到后端，这是可以采用streaming模式处理数据。</p>
+<p>添加<code>(streaming=True)</code>and <code> live=True</code>即可</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># import gradio as gr</span><br><span class="line"># import numpy as np</span><br><span class="line"># def flip(im):</span><br><span class="line">#     return np.flipud(im)</span><br><span class="line"># demo = gr.Interface(</span><br><span class="line">#     flip,</span><br><span class="line">#     gr.Image(streaming=True),</span><br><span class="line">#     &quot;image&quot;,</span><br><span class="line">#     live=True</span><br><span class="line"># )</span><br><span class="line"># demo.launch()</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/image-20240127233945848.png" alt="image-20240127233945848"></p>
+<h3 id="3-flagging标记"><a class="markdownIt-Anchor" href="#3-flagging标记"></a> 3 Flagging标记</h3>
+<p>输出框下有个Flag按钮。</p>
+<p>当测试您的模型的用户看到某个输入导致输出错误或意外的模型行为，他们可以标记这个输入让开发者知道。这个文件夹由Interface的flagging_dir参数指定，默认为’flagged’</p>
+<p><img src="/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/image-20240127234521491.png" alt="image-20240127234521491"></p>
+<h3 id="4-样式-队列-生成器"><a class="markdownIt-Anchor" href="#4-样式-队列-生成器"></a> 4 样式、队列、生成器</h3>
+<ul>
+<li>样式</li>
+</ul>
+<p>在Gradio官方文档，搜索不同的组件加.style（如image.style），可以获取该组件的样式参数设置样例。例如image组件的设置如下：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">img = gr.Image(&quot;lion.jpg&quot;).style(height=&#x27;24&#x27;, rounded=False)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>队列 如果函数推理时间较长，比如目标检测；或者应用程序处理流量过大，则需要使用queue方法进行排队。queue方法使用websockets，可以防止网络超时。使用方式如下：</li>
+</ul>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">demo = gr.Interface(...).queue()</span><br><span class="line">demo.launch()</span><br><span class="line">#或</span><br><span class="line">with gr.Blocks() as demo:</span><br><span class="line">    #...</span><br><span class="line">demo.queue()</span><br><span class="line">demo.launch()</span><br></pre></td></tr></table></figure>
+<ul>
+<li>生成器</li>
+</ul>
+<p>在某些情况下，你可能想显示一连串的输出，而不是单一的输出。例如，你可能有一个图像生成模型，如果你想显示在每个步骤中生成的图像，从而得到最终的图像。在这种情况下，你可以向Gradio提供一个生成器函数，而不是一个常规函数。下面是一个生成器的例子，每隔1秒返回1张图片。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import gradio as gr</span><br><span class="line">import numpy as np</span><br><span class="line">import time</span><br><span class="line">#生成steps张图片，每隔1秒钟返回</span><br><span class="line">def fake_diffusion(steps):</span><br><span class="line">    for _ in range(steps):</span><br><span class="line">        time.sleep(1)</span><br><span class="line">        image = np.random.randint(255, size=(300, 600, 3))</span><br><span class="line">        yield image</span><br><span class="line">demo = gr.Interface(fake_diffusion,</span><br><span class="line">                    #设置滑窗，最小值为1，最大值为10，初始值为3，每次改动增减1位</span><br><span class="line">                    inputs=gr.Slider(1, 10, value=3, step=1),</span><br><span class="line">                    outputs=&quot;image&quot;)</span><br><span class="line">#生成器必须要queue函数</span><br><span class="line">demo.queue()</span><br><span class="line">demo.launch()</span><br></pre></td></tr></table></figure>
+<h2 id="demo4-自定义blocks使用"><a class="markdownIt-Anchor" href="#demo4-自定义blocks使用"></a> demo4 自定义Blocks使用</h2>
+<h2 id="11-基础入门"><a class="markdownIt-Anchor" href="#11-基础入门"></a> 1.1 基础入门</h2>
+<p>Blocks提供了一个低级别的API，用于设计具有更灵活布局和数据流的网络应用。Blocks允许控制组件在页面上出现的位置，处理复杂的数据流（例如，输出可以作为其他函数的输入），并根据用户交互更新组件的属性可见性。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">import gradio as gr</span><br><span class="line">def greet(name):</span><br><span class="line">    return &quot;Hello &quot; + name + &quot;!&quot;</span><br><span class="line">with gr.Blocks() as demo:</span><br><span class="line">    #设置输入组件</span><br><span class="line">    name = gr.Textbox(label=&quot;Name&quot;)</span><br><span class="line">    # 设置输出组件</span><br><span class="line">    output = gr.Textbox(label=&quot;Output Box&quot;)</span><br><span class="line">    #设置按钮</span><br><span class="line">    greet_btn = gr.Button(&quot;Greet&quot;)</span><br><span class="line">    #设置按钮点击事件</span><br><span class="line">    greet_btn.click(fn=greet, inputs=name, outputs=output)</span><br><span class="line">demo.launch()</span><br></pre></td></tr></table></figure>
+<h2 id="12-tab"><a class="markdownIt-Anchor" href="#12-tab"></a> 1.2 tab</h2>
+<p>通过自定义实现不同的标签页内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line">import gradio as gr</span><br><span class="line">def flip_text(x):</span><br><span class="line">    return x[::-1]</span><br><span class="line">def flip_image(x):</span><br><span class="line">    return np.fliplr(x)</span><br><span class="line">with gr.Blocks() as demo:</span><br><span class="line">    #用markdown语法编辑输出一段话</span><br><span class="line">    gr.Markdown(&quot;Flip text or image files using this demo.&quot;)</span><br><span class="line">    # 设置tab选项卡</span><br><span class="line">    with gr.Tab(&quot;Flip Text&quot;):</span><br><span class="line">        #Blocks特有组件，设置所有子组件按垂直排列</span><br><span class="line">        #垂直排列是默认情况，不加也没关系</span><br><span class="line">        with gr.Column():</span><br><span class="line">            text_input = gr.Textbox()</span><br><span class="line">            text_output = gr.Textbox()</span><br><span class="line">            text_button = gr.Button(&quot;Flip&quot;)</span><br><span class="line">    with gr.Tab(&quot;Flip Image&quot;):</span><br><span class="line">        #Blocks特有组件，设置所有子组件按水平排列</span><br><span class="line">        with gr.Row():</span><br><span class="line">            image_input = gr.Image()</span><br><span class="line">            image_output = gr.Image()</span><br><span class="line">        image_button = gr.Button(&quot;Flip&quot;)</span><br><span class="line">    #设置折叠内容</span><br><span class="line">    with gr.Accordion(&quot;Open for More!&quot;):</span><br><span class="line">        gr.Markdown(&quot;Look at me...&quot;)</span><br><span class="line">    text_button.click(flip_text, inputs=text_input, outputs=text_output)</span><br><span class="line">    image_button.click(flip_image, inputs=image_input, outputs=image_output)</span><br><span class="line">demo.launch()</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/image-20240127234217252.png" alt="image-20240127234217252"></p>
+<h2 id="13-进阶"><a class="markdownIt-Anchor" href="#13-进阶"></a> 1.3 进阶</h2>
+<h3 id="可交互设置"><a class="markdownIt-Anchor" href="#可交互设置"></a> 可交互设置</h3>
+<p>任何输入的组件内容都是可编辑的，而输出组件默认是不能编辑的。如果想要使得输出组件内容可编辑，设置interactive=True即可。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">import gradio as gr</span><br><span class="line">def greet(name):</span><br><span class="line">    return &quot;Hello &quot; + name + &quot;!&quot;</span><br><span class="line">with gr.Blocks() as demo:</span><br><span class="line">    name = gr.Textbox(label=&quot;Name&quot;)</span><br><span class="line">    # 不可交互</span><br><span class="line">    # output = gr.Textbox(label=&quot;Output Box&quot;)</span><br><span class="line">    # 可交互</span><br><span class="line">    output = gr.Textbox(label=&quot;Output&quot;, interactive=True)</span><br><span class="line">    greet_btn = gr.Button(&quot;Greet&quot;)</span><br><span class="line">    greet_btn.click(fn=greet, inputs=name, outputs=output)</span><br><span class="line">demo.launch()</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/" data-id="clrwazlri003g7ov48i2dd58c" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-2024年1月23日-python基础总结" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -1190,91 +1349,6 @@ from mypackage import utils  # ✅ OK，因为 utils 是个模块</p>
 
 
   
-    <article id="post-2023年10月19日-量化2代码实现" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%962%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0/" class="article-date">
-  <time class="post-time" datetime="2023-10-19T08:49:29.000Z" itemprop="datePublished">
-    <span class="post-month">10月</span><br/>
-    <span class="post-day">19</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%962%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0/">2023年10月19日 量化2代码实现</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/kuan__/article/details/109539007">https://blog.csdn.net/kuan__/article/details/109539007</a></p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42506418/article/details/131234818">https://blog.csdn.net/weixin_42506418/article/details/131234818</a></p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/ljp1919/article/details/126231261">https://blog.csdn.net/ljp1919/article/details/126231261</a></p>
-<h2 id="3-训练后动态量化技术dynamic-quantization"><a class="markdownIt-Anchor" href="#3-训练后动态量化技术dynamic-quantization"></a> 3 **训练后动态量化技术（dynamic quantization）</h2>
-<p>将模型的权重从浮点精度（例如32位浮点数）转换为低精度整数类型（例如8位整数）</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">quantized_model = torch.quantization.quantize_dynamic(model, &#123;nn.Linear, nn.Conv2d&#125;, dtype=torch.qint8)</span><br></pre></td></tr></table></figure>
-<ol>
-<li><code>model</code>: 这个变量应该是你想要进行量化的原始PyTorch模型，它可能是使用<code>torch.nn.Module</code>类定义的神经网络模型。</li>
-<li><code>&#123;nn.Linear, nn.Conv2d&#125;</code>: 这个参数指定了你希望量化的模型层类型。在这个例子中，<code>nn.Linear</code>和<code>nn.Conv2d</code>表示对模型中的线性层和二维卷积层进行量化。
-<ol>
-<li><strong>线性层（Linear Layers）</strong>：<code>nn.Linear</code></li>
-<li><strong>卷积层（Convolutional Layers）</strong>：<code>nn.Conv1d</code>, <code>nn.Conv2d</code>, <code>nn.Conv3d</code></li>
-<li><strong>循环神经网络层（Recurrent Layers）</strong>：<code>nn.RNN</code>, <code>nn.LSTM</code>, <code>nn.GRU</code></li>
-<li><strong>批归一化层（Batch Normalization Layers）</strong>：<code>nn.BatchNorm1d</code>, <code>nn.BatchNorm2d</code>, <code>nn.BatchNorm3d</code></li>
-<li><strong>激活函数（Activation Functions）</strong>：<code>nn.ReLU</code>, <code>nn.LeakyReLU</code>, <code>nn.PReLU</code>, <code>nn.ReLU6</code>, 等等。</li>
-<li><strong>池化层（Pooling Layers）</strong>：<code>nn.MaxPool1d</code>, <code>nn.MaxPool2d</code>, <code>nn.AvgPool1d</code>, <code>nn.AvgPool2d</code>, 等等。</li>
-</ol>
-</li>
-<li><code>dtype=torch.qint8</code>: 这个参数指定了量化后的数据类型，这里是8位整数（qint8）。在推断时，量化模型将使用这种低精度整数类型进行计算。
-<ol>
-<li><strong><code>torch.qint8</code></strong>: 8位有符号整数。通常用于量化权重和激活值。</li>
-<li><strong><code>torch.quint8</code></strong>: 8位无符号整数。通常用于量化正数的权重和激活值。</li>
-<li><strong><code>torch.qint32</code></strong>: 32位有符号整数。通常用于量化权重和激活值。</li>
-<li><strong><code>torch.float16</code></strong>: 16位浮点数。通常用于量化权重和激活值。不是整数量化，但比32位浮点数（<code>torch.float32</code>）占用更少内存。</li>
-<li><strong><code>torch.bfloat16</code></strong>: 16位浮点数（Brain Floating Point）</li>
-</ol>
-</li>
-</ol>
-<h2 id="4-量化感知训练"><a class="markdownIt-Anchor" href="#4-量化感知训练"></a> 4 <strong>量化感知训练</strong></h2>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">torch.quantization.FakeQuantize QAT</span><br></pre></td></tr></table></figure>
-<p><strong>get_default_qconfig</strong></p>
-<p>​	在使用量化（quantization）技术时，PyTorch会改变模型的结构，并为每个权重参数添加量化相关的信息。因此需要重新写一个量化model</p>
-<p>量化后的模型（quantized model）的state_dict的键（keys）与原始模型的state_dict的键不匹配。</p>
-<p>使用<code>torch.quantization.quantize_dynamic()</code>对模型进行量化时，它会在state_dict中添加与量化参数相关的额外键（比如scale、zero_point、dtype和_packed_params）。</p>
-<p>为了解决这个问题，需要修改加载量化模型的代码。在加载量化模型的state_dict时，应该指定<code>map_location</code>参数，将量化模型的参数映射到适当的设备（GPU或CPU）（设备不匹配的错误）。此外，你需要传递<code>strict=False</code>参数给<code>load_state_dict()</code>，忽略量化模型state_dict中存在的额外键。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%962%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0/" data-id="clrwazlqu00057ov4bn1tbi46" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%87%8F%E5%8C%96/" rel="tag">量化</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -1319,9 +1393,9 @@ from mypackage import utils  # ✅ OK，因为 utils 是个模块</p>
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>115</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>116</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>33</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>34</strong><br>标签</div></a>
     </div>
 
 

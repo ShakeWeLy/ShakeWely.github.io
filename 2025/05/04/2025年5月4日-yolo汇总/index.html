@@ -5,16 +5,19 @@
   
   <title>2025年5月4日 yolo细节详解 | Weakliy_Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Yolo版本  YOLO V1  YOLO V5  CSP 定义: Conv + N个Res模块 + Conv  作用: 特征增强  组成:  2 2 2 2  优点: 区别: 细节:     SPP 定义:  作用: 特征增强+全局信息  组成:  多个不同k_size的maxpooling 进行concat  区别:  loss [B, H, W, num_anchors*(4+cls+ob">
+  <meta name="description" content="1.Yolo版本  YOLO V1  YOLO V5  CSP 定义: Conv + N个Res模块 + Conv  作用: 特征增强  组成:  2 2 2 2  优点: 区别: 细节:     SPP 定义:  作用: 特征增强+全局信息  组成:  多个不同k_size的maxpooling 进行concat  区别:  loss [B, H, W, num_anchors*(4+cls+">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2025年5月4日 yolo细节详解">
 <meta property="og:url" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/index.html">
 <meta property="og:site_name" content="Weakliy_Blog">
-<meta property="og:description" content="Yolo版本  YOLO V1  YOLO V5  CSP 定义: Conv + N个Res模块 + Conv  作用: 特征增强  组成:  2 2 2 2  优点: 区别: 细节:     SPP 定义:  作用: 特征增强+全局信息  组成:  多个不同k_size的maxpooling 进行concat  区别:  loss [B, H, W, num_anchors*(4+cls+ob">
+<meta property="og:description" content="1.Yolo版本  YOLO V1  YOLO V5  CSP 定义: Conv + N个Res模块 + Conv  作用: 特征增强  组成:  2 2 2 2  优点: 区别: 细节:     SPP 定义:  作用: 特征增强+全局信息  组成:  多个不同k_size的maxpooling 进行concat  区别:  loss [B, H, W, num_anchors*(4+cls+">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250507234632382.png">
 <meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250507230522250.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/yolo_v11.png">
 <meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250507232147155.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/v2-f1284a6e6c67a40fd67266ce81c06a39_r.jpg">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/framework-1754701975877-3.png">
 <meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/labels.jpg">
 <meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/labels_correlogram.jpg">
 <meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/confusion_matrix.png">
@@ -24,7 +27,7 @@
 <meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250508182738579.png">
 <meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/F1_curve.png">
 <meta property="article:published_time" content="2025-05-04T07:42:49.000Z">
-<meta property="article:modified_time" content="2025-05-21T16:12:15.027Z">
+<meta property="article:modified_time" content="2025-08-09T01:50:11.740Z">
 <meta property="article:author" content="Weakliy">
 <meta property="article:tag" content="YOLO">
 <meta name="twitter:card" content="summary">
@@ -60,9 +63,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>115</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>116</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>33</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>34</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -118,7 +121,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="yolo版本"><a class="markdownIt-Anchor" href="#yolo版本"></a> Yolo版本</h1>
+        <h1 id="1yolo版本"><a class="markdownIt-Anchor" href="#1yolo版本"></a> 1.Yolo版本</h1>
 <h2 id="yolo-v1"><a class="markdownIt-Anchor" href="#yolo-v1"></a> YOLO V1</h2>
 <h2 id="yolo-v5"><a class="markdownIt-Anchor" href="#yolo-v5"></a> YOLO V5</h2>
 <h3 id="csp"><a class="markdownIt-Anchor" href="#csp"></a> CSP</h3>
@@ -261,8 +264,9 @@
 <blockquote>
 <p>特点: 改进</p>
 </blockquote>
-<img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250507230522250.png" alt="image-20250507230522250" style="zoom:33%;">
-<h3 id="c3k2"><a class="markdownIt-Anchor" href="#c3k2"></a> C3K2</h3>
+<img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250507230522250.png" alt="image-20250507230522250">
+<p><img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/yolo_v11.png" alt="yolo_v11"></p>
+<h3 id="21-c3k2"><a class="markdownIt-Anchor" href="#21-c3k2"></a> 2.1 C3K2</h3>
 <p><strong>定义</strong>:  将bottlenetck改为C3K</p>
 <blockquote>
 <p>作用:   <strong>特征融合</strong>和__<strong>模型压缩</strong></p>
@@ -293,7 +297,7 @@
 <p>V8: 相当于套娃加了深度,多了一个bottleneck</p>
 </blockquote>
 <p><strong>细节:</strong></p>
-<h3 id="c2psa"><a class="markdownIt-Anchor" href="#c2psa"></a> C2PSA</h3>
+<h3 id="22-c2psa"><a class="markdownIt-Anchor" href="#22-c2psa"></a> 2.2 C2PSA</h3>
 <img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250507232147155.png" alt="image-20250507232147155" style="zoom: 25%;">
 <p><strong>定义:</strong></p>
 <blockquote>
@@ -305,9 +309,172 @@
 <li>bottleneck=PSAbBlock</li>
 </ol>
 <p><strong>PSA:</strong></p>
-<h3 id="head"><a class="markdownIt-Anchor" href="#head"></a> head</h3>
+<h3 id="23-head"><a class="markdownIt-Anchor" href="#23-head"></a> 2.3 head</h3>
 <p><strong>区别</strong>:深度可分离的方法</p>
-<h1 id="结构分析"><a class="markdownIt-Anchor" href="#结构分析"></a> 结构分析</h1>
+<h2 id="yolov12"><a class="markdownIt-Anchor" href="#yolov12"></a> YOLOv12</h2>
+<blockquote>
+<p>将注意力机制直接融入目标检测框架的核心设计</p>
+</blockquote>
+<p><img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/v2-f1284a6e6c67a40fd67266ce81c06a39_r.jpg" alt="img"></p>
+<h3 id="1-关键技术改进"><a class="markdownIt-Anchor" href="#1-关键技术改进"></a> 1 关键技术改进</h3>
+<blockquote>
+<h4 id="11-区域注意力area-attention"><a class="markdownIt-Anchor" href="#11-区域注意力area-attention"></a> <strong>1.1 区域注意力（Area Attention）</strong></h4>
+<ul>
+<li><strong>原理</strong>：将特征图划分为相等区域（默认 4 部分）以降低计算复杂度，同时保持较大的感受野。</li>
+<li><strong>优势</strong>：相比传统自注意力机制的 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span> 复杂度，区域注意力将计算成本降低 <strong>50%</strong>。</li>
+</ul>
+<hr>
+<h4 id="12-残差高效层聚合网络r-elan"><a class="markdownIt-Anchor" href="#12-残差高效层聚合网络r-elan"></a> 1.2 残差高效层聚合网络（R-ELAN）</h4>
+<ul>
+<li><strong>改进点</strong>：在原始 ELAN 架构基础上，引入 <strong>块级残差连接</strong> 与 <strong>缩放技术</strong>（缩放因子 0.01）。</li>
+<li><strong>解决问题</strong>：提升大规模模型训练的稳定性。</li>
+<li><strong>效果</strong>：
+<ul>
+<li>参数减少 <strong>18%</strong></li>
+<li>FLOPs 降低 <strong>24%</strong></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="13-flashattention-集成"><a class="markdownIt-Anchor" href="#13-flashattention-集成"></a> 1.3 FlashAttention 集成</h4>
+<ul>
+<li><strong>优化</strong>：改进内存访问模式，显著加速注意力计算。</li>
+<li><strong>硬件适配</strong>：针对现代 GPU 架构（Turing / Ampere / Ada Lovelace / Hopper）优化。</li>
+<li><strong>实测结果</strong>（RTX 3080）：加速 <strong>0.3-0.4 ms</strong>。</li>
+</ul>
+</blockquote>
+<h3 id="2-具体细节"><a class="markdownIt-Anchor" href="#2-具体细节"></a> 2 具体细节</h3>
+<h4 id="21-区域注意力area-attention机制"><a class="markdownIt-Anchor" href="#21-区域注意力area-attention机制"></a> 2.1 区域注意力（Area Attention）机制</h4>
+<p>YOLOv12 的核心创新之一，主要解决传统自注意力的两大瓶颈：</p>
+<p><strong>1. 计算复杂度优化</strong></p>
+<ul>
+<li><strong>传统自注意力</strong>：对 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo>×</mo><mi>W</mi></mrow><annotation encoding="application/x-tex">H \times W</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span></span></span></span> 特征图的计算复杂度为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>H</mi><mn>2</mn></msup><msup><mi>W</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(H^2 W^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></li>
+<li><strong>区域注意力</strong>：将特征图按水平方向或垂直方向划分为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>l</mi></mrow><annotation encoding="application/x-tex">l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span></span></span></span> 个相等部分（默认 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>l</mi><mo>=</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">l=4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">4</span></span></span></span>），复杂度降至：
+<ul>
+<li>水平划分：<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mrow><mo fence="true">(</mo><mfrac><msup><mi>H</mi><mn>2</mn></msup><msup><mi>l</mi><mn>2</mn></msup></mfrac><msup><mi>W</mi><mn>2</mn></msup><mo fence="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">O\left(\frac{H^2}{l^2} W^2\right)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.80002em;vertical-align:-0.65002em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size2">(</span></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.01792em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7463142857142857em;"><span style="top:-2.786em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.08125em;">H</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913142857142857em;"><span style="top:-2.931em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size2">)</span></span></span></span></span></span></li>
+<li>垂直划分：<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mrow><mo fence="true">(</mo><msup><mi>H</mi><mn>2</mn></msup><mfrac><msup><mi>W</mi><mn>2</mn></msup><msup><mi>l</mi><mn>2</mn></msup></mfrac><mo fence="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">O\left(H^2 \frac{W^2}{l^2}\right)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.80002em;vertical-align:-0.65002em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size2">(</span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.01792em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7463142857142857em;"><span style="top:-2.786em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913142857142857em;"><span style="top:-2.931em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size2">)</span></span></span></span></span></span></li>
+</ul>
+</li>
+<li><strong>优势</strong>：无需复杂窗口划分，降低计算成本同时保持较大感受野。</li>
+</ul>
+<p><strong>2. 内存访问效率提升</strong></p>
+<ul>
+<li>结合 <strong>FlashAttention</strong> 技术，通过 I/O 优化减少内存访问次数，充分利用 GPU 内存层次结构。</li>
+<li>测试表明，<strong>纯卷积实现</strong> 比线性替代方案速度更快。</li>
+</ul>
+<p><strong>实现方式</strong></p>
+<ol>
+<li>将特征图按指定方向划分为多个区域</li>
+<li>在各区域内分别计算注意力</li>
+<li>合并结果得到全局特征</li>
+</ol>
+<ul>
+<li>在固定分辨率（如 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>640</mn></mrow><annotation encoding="application/x-tex">n=640</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">6</span><span class="mord">4</span><span class="mord">0</span></span></span></span>）下可实现实时检测</li>
+<li>与 <strong>轴向注意力</strong> 对比：
+<ul>
+<li>感受野扩大 <strong>4 倍</strong></li>
+<li>速度下降（实测 YOLOv12 ≈ 180 FPS vs YOLOv11 ≈ 250 FPS）</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="22-残差高效层聚合网络r-elan"><a class="markdownIt-Anchor" href="#22-残差高效层聚合网络r-elan"></a> 2.2 残差高效层聚合网络（R-ELAN）</h4>
+<p>R-ELAN 是对原始 ELAN 架构的重要改进，主要针对以下两个问题：</p>
+<p><strong>1. 训练不稳定性</strong></p>
+<ul>
+<li>在较大模型（YOLOv12-L / YOLOv12-X）中，原始 ELAN 容易出现 <strong>梯度阻塞</strong> 与 <strong>优化困难</strong>。</li>
+<li><strong>改进方法</strong>：
+<ul>
+<li>添加 <strong>输入到输出的残差连接（跳跃连接）</strong></li>
+<li>使用 <strong>层缩放技术</strong>（缩放因子 0.01）</li>
+</ul>
+</li>
+<li><strong>效果</strong>：显著提升大规模模型训练稳定性。</li>
+</ul>
+<p><strong>2. 特征聚合效率</strong></p>
+<ul>
+<li><strong>原始 ELAN</strong>：输入 → 过渡层 → 拆分多路并行处理 → 拼接</li>
+<li><strong>R-ELAN</strong>：输入 → 过渡层调整通道 → 单一特征图 → 并行处理 → 拼接成瓶颈结构</li>
+<li><strong>优势</strong>：
+<ul>
+<li>降低计算成本</li>
+<li>提升特征聚合效率</li>
+</ul>
+</li>
+</ul>
+<h4 id="23-其他架构优化"><a class="markdownIt-Anchor" href="#23-其他架构优化"></a> 2.3 其他架构优化</h4>
+<p>YOLOv12 在核心模块之外，还进行了多项精细化的结构改进：</p>
+<p><strong>1. MLP 比例调整</strong></p>
+<ul>
+<li>将典型 Transformer 中 MLP 扩展比例 <strong>从 4 降至 1.2~2</strong></li>
+<li>目的：平衡 <strong>注意力层</strong> 与 <strong>前馈层</strong> 的计算量，减少冗余计算。</li>
+</ul>
+<p><strong>2. 位置编码替代</strong></p>
+<ul>
+<li>去除显式位置编码</li>
+<li>引入 <strong>7×7 深度可分离卷积</strong>（“位置感知器”）来隐式建模位置信息</li>
+<li><strong>优势</strong>：架构更简洁、速度更快。</li>
+</ul>
+<p><strong>3. 块数量减少</strong></p>
+<ul>
+<li>减少堆叠块的数量</li>
+<li>简化优化过程、降低推理时间。</li>
+</ul>
+<p><strong>4. 卷积算子集成</strong></p>
+<ul>
+<li>在适当位置保留高效卷积操作</li>
+<li>降低整体参数数量与计算成本。</li>
+</ul>
+<hr>
+<h2 id="yolov13"><a class="markdownIt-Anchor" href="#yolov13"></a> YOLOv13</h2>
+<blockquote>
+<p>属于社区开发的衍生版本（非 Ultralytics 官方版本）</p>
+</blockquote>
+<p><img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/framework-1754701975877-3.png" alt="framework"></p>
+<h3 id="1-核心技术创新"><a class="markdownIt-Anchor" href="#1-核心技术创新"></a> 1 核心技术创新</h3>
+<blockquote>
+<h4 id="11-hyperace基于超图的自适应关联增强"><a class="markdownIt-Anchor" href="#11-hyperace基于超图的自适应关联增强"></a> 1.1 HyperACE：基于超图的自适应关联增强</h4>
+<ul>
+<li>
+<p><strong>技术原理</strong>：<br>
+将多尺度特征图中的像素视为超图顶点，通过可学习的超边构建模块自适应探索顶点间的高阶关联，<br>
+并利用线性复杂度的消息传递模块聚合特征，提升复杂场景下的视觉感知能力。</p>
+</li>
+<li>
+<p><strong>作用</strong>：<br>
+强化不同尺度特征间的语义关联，尤其对小目标和密集目标检测效果显著。</p>
+</li>
+</ul>
+<hr>
+<h4 id="12-fullpad全流程聚合-分布范式"><a class="markdownIt-Anchor" href="#12-fullpad全流程聚合-分布范式"></a> 1.2 FullPAD：全流程聚合 - 分布范式</h4>
+<ul>
+<li>
+<p><strong>技术原理</strong>：<br>
+通过 HyperACE 聚合骨干网络的多尺度特征，再通过三条独立“隧道”将增强后的特征分别传递到：</p>
+<ul>
+<li>骨干与颈部连接处</li>
+<li>颈部内部</li>
+<li>颈部与头部连接处<br>
+实现全流程细粒度信息流协同。</li>
+</ul>
+</li>
+<li>
+<p><strong>作用</strong>：<br>
+改善梯度传播效率，提升模型整体检测性能。</p>
+</li>
+</ul>
+<hr>
+<h4 id="13-轻量级卷积替换"><a class="markdownIt-Anchor" href="#13-轻量级卷积替换"></a> 1.3 轻量级卷积替换</h4>
+<ul>
+<li><strong>技术原理</strong>：<br>
+使用深度可分离卷积（DSConv、DS-Bottleneck 等）替代大核卷积，<br>
+在保持感受野的同时大幅减少参数和计算量。</li>
+</ul>
+</blockquote>
+<h3 id="2-hyperace"><a class="markdownIt-Anchor" href="#2-hyperace"></a> 2 HyperACE</h3>
+<h2 id="yoloe"><a class="markdownIt-Anchor" href="#yoloe"></a> YOLOE</h2>
+<blockquote></blockquote>
+<h1 id="2结构分析"><a class="markdownIt-Anchor" href="#2结构分析"></a> 2.结构分析</h1>
 <h2 id="3-检测头"><a class="markdownIt-Anchor" href="#3-检测头"></a> 3 检测头</h2>
 <p>解耦头</p>
 <blockquote>
@@ -715,9 +882,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>115</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>116</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>33</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>34</strong><br>标签</div></a>
     </div>
 
 

@@ -43,9 +43,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>115</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>116</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>33</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>34</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -70,6 +70,83 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-2025年3月10日-onnx3进阶使用与常见问题" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/03/10/2025%E5%B9%B43%E6%9C%8810%E6%97%A5-onnx3%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" class="article-date">
+  <time class="post-time" datetime="2025-03-10T13:15:13.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">10</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/03/10/2025%E5%B9%B43%E6%9C%8810%E6%97%A5-onnx3%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/">2025年3月10日 onnx2</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li></li>
+</ul>
+<h2 id="导出报错"><a class="markdownIt-Anchor" href="#导出报错"></a> 导出报错</h2>
+<p>Unsupported: ONNX export of convolution for kernel of unknown shape”，这通常与动态形状或无法推断的卷积核尺寸有</p>
+<ol>
+<li>
+<p>静态化Reshape操作</p>
+</li>
+<li>
+<p>修复多级融合的TracerWarning fused_cls = sum(w * c for w, c in zip(weights_cls, preds_cls))</p>
+<p><code>sum(w * c for w, c in zip(...))</code>中的迭代操作会被PyTorch的JIT Tracer识别为动态控制流，导致ONNX导出时无法生成静态计算图。这种Python层的迭代操作在模型跟踪阶段会被视为潜在动态行为，从而触发TracerWarning</p>
+</li>
+</ol>
+<h3 id="2-importerror-dll-load-failed-while-importing-onnx_cpp2py_export-动态链接库dll初始化例程失败"><a class="markdownIt-Anchor" href="#2-importerror-dll-load-failed-while-importing-onnx_cpp2py_export-动态链接库dll初始化例程失败"></a> 2 ImportError: DLL load failed while importing onnx_cpp2py_export: 动态链接库(DLL)初始化例程失败。</h3>
+<blockquote>
+<p>重新安装 onnx</p>
+</blockquote>
+<h2 id="结构报错"><a class="markdownIt-Anchor" href="#结构报错"></a> 结构报错</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="1-为什么导出的onnx会有那么多identity这是什么怎么消除"><a class="markdownIt-Anchor" href="#1-为什么导出的onnx会有那么多identity这是什么怎么消除"></a> 1 为什么导出的onnx会有那么多Identity，这是什么，怎么消除</h3>
+<p><img src="/2025/03/10/2025%E5%B9%B43%E6%9C%8810%E6%97%A5-onnx3%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/image-20250310215555781.png" alt="image-20250310215555781"></p>
+<ol>
+<li><strong>数据传递占位符</strong> Identity节点的核心功能是将输入张量原样输出，不进行任何计算</li>
+<li><strong>框架转换机制缺陷</strong></li>
+<li><strong>自定义算子副作用</strong></li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/03/10/2025%E5%B9%B43%E6%9C%8810%E6%97%A5-onnx3%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" data-id="cmanj8o1s0006lcv45hyj3669" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/onnx/" rel="tag">onnx</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-2025年3月10日-C-记录" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -1781,57 +1858,6 @@ y.data: -0.262973</p>
 
 
   
-    <article id="post-2025年2月14日-推理框架2" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/02/13/2025%E5%B9%B42%E6%9C%8814%E6%97%A5-%E6%8E%A8%E7%90%86%E6%A1%86%E6%9E%B62/" class="article-date">
-  <time class="post-time" datetime="2025-02-13T14:12:11.000Z" itemprop="datePublished">
-    <span class="post-month">2月</span><br/>
-    <span class="post-day">13</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/02/13/2025%E5%B9%B42%E6%9C%8814%E6%97%A5-%E6%8E%A8%E7%90%86%E6%A1%86%E6%9E%B62/">2025年2月14日 推理框架2——MNN</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="mnn"><a class="markdownIt-Anchor" href="#mnn"></a> MNN</h1>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/02/13/2025%E5%B9%B42%E6%9C%8814%E6%97%A5-%E6%8E%A8%E7%90%86%E6%A1%86%E6%9E%B62/" data-id="cm8q1tfhm000npcv4gkf71mcg" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl%E3%80%81infer/" rel="tag">dl、infer</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -1876,9 +1902,9 @@ y.data: -0.262973</p>
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>115</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>116</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>33</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>34</strong><br>标签</div></a>
     </div>
 
 

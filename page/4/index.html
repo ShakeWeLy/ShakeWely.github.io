@@ -43,9 +43,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>115</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>116</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>33</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>34</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -70,6 +70,125 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-2025年5月15日-知识蒸馏1-介绍汇总" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/05/14/2025%E5%B9%B45%E6%9C%8815%E6%97%A5-%E7%9F%A5%E8%AF%86%E8%92%B8%E9%A6%8F1-%E4%BB%8B%E7%BB%8D%E6%B1%87%E6%80%BB/" class="article-date">
+  <time class="post-time" datetime="2025-05-14T07:57:53.000Z" itemprop="datePublished">
+    <span class="post-month">5月</span><br/>
+    <span class="post-day">14</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/05/14/2025%E5%B9%B45%E6%9C%8815%E6%97%A5-%E7%9F%A5%E8%AF%86%E8%92%B8%E9%A6%8F1-%E4%BB%8B%E7%BB%8D%E6%B1%87%E6%80%BB/">2025年5月15日 知识蒸馏1-介绍汇总</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="蒸馏介绍"><a class="markdownIt-Anchor" href="#蒸馏介绍"></a> 蒸馏介绍</h2>
+<p>通过设计一个规模较小的学生模型，使其学习大型教师模型的有效信息</p>
+<blockquote>
+<p>知识蒸馏的本质可以被认为是一种正则化方法,即在学生模型中引入一些特殊信息来实现模型性能的提升。</p>
+</blockquote>
+<h2 id="蒸馏分类"><a class="markdownIt-Anchor" href="#蒸馏分类"></a> 蒸馏分类</h2>
+<ol>
+<li>
+<p>知识类型</p>
+<ol>
+<li>
+<p><strong>基于响应/模型输出</strong>的蒸馏（Response-based）：使用教师模型的最后输出层的信息（如类别概率）来训练学生模型。</p>
+</li>
+<li>
+<p>基于<strong>特征</strong>的蒸馏（Feature-based）：利用教师模型的中间层特征来指导学生模型。</p>
+</li>
+<li>
+<p>基于关系的蒸馏（Relation-based）：侧重于教师模型内<strong>不同特征之间的关系</strong>，如特征图之间的相互作用。</p>
+</li>
+</ol>
+</li>
+<li>
+<p>教师模型类型</p>
+</li>
+<li>
+<p>蒸馏策略三方面</p>
+<ol>
+<li>
+<p>在线蒸馏（Online distillation）：教师模型和学生模型同时训练，学生模型实时学习教师模型的知识。</p>
+</li>
+<li>
+<p>离线蒸馏（Offline distillation）：先训练教师模型，再使用该模型来训练学生模型，学生模型不会影响教师模型。</p>
+</li>
+<li>
+<p>自蒸馏（Self distillation）：模型使用自己的预测作为软标签来提高自己的性能。</p>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="11-输出蒸馏"><a class="markdownIt-Anchor" href="#11-输出蒸馏"></a> 1.1 输出蒸馏</h3>
+<h3 id="12-特征蒸馏"><a class="markdownIt-Anchor" href="#12-特征蒸馏"></a> 1.2 特征蒸馏</h3>
+<p>通道</p>
+<h3 id="mgd"><a class="markdownIt-Anchor" href="#mgd"></a> mgd</h3>
+<blockquote>
+<p>之前的知识蒸馏方法着力于使学生去模仿更强的教师的特征，以使学生特征具有更强的表征能力。我们认为提升学生的表征能力并不一定需要通过直接模仿教师实现。从这点出发，我们把模仿任务修改成了生成任务：让学生凭借自己较弱的特征去生成教师较强的特征。在蒸馏过程中，我们对学生特征进行了随机mask，强制学生仅用自己的部分特征去生成教师的所有特征，以提升学生的表征能力。</p>
+<p>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_41335232/article/details/142717122">https://blog.csdn.net/qq_41335232/article/details/142717122</a></p>
+</blockquote>
+<blockquote>
+<p>YOLO11 summary (fused): 100 layers, 2,585,467 parameters, 0 gradients, 6.3 GFLOPs<br>
+all         53        396      0.971      0.954      0.979      0.671<br>
+Bottom1         21         21          1      0.935      0.973      0.779<br>
+Bottom2         26         26          1      0.981      0.995      0.669<br>
+Left1         32         32      0.964      0.969       0.95      0.676<br>
+Left2         16         16      0.978          1      0.995      0.657<br>
+Left3         30         32      0.967      0.902      0.934      0.631<br>
+Left4         28         33          1      0.853       0.94      0.709<br>
+Left5         28         28       0.99      0.929      0.993      0.756<br>
+Right1         38         39       0.96      0.974      0.971      0.559<br>
+Right2         39         39      0.973      0.974      0.951      0.567<br>
+Right3         14         14      0.895          1      0.986      0.734<br>
+Right4         15         15      0.971          1      0.995      0.669<br>
+Top1         32         32      0.974      0.938      0.987      0.697<br>
+Top2         33         33      0.986          1      0.995      0.703<br>
+out1          7          7      0.942          1      0.995      0.541<br>
+out2         11         11          1      0.878      0.995      0.657<br>
+out3         13         13          1      0.891      0.995      0.698<br>
+out4          5          5       0.91          1      0.995      0.711</p>
+</blockquote>
+<h3 id="cwd"><a class="markdownIt-Anchor" href="#cwd"></a> cwd</h3>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/05/14/2025%E5%B9%B45%E6%9C%8815%E6%97%A5-%E7%9F%A5%E8%AF%86%E8%92%B8%E9%A6%8F1-%E4%BB%8B%E7%BB%8D%E6%B1%87%E6%80%BB/" data-id="cmaqctqhp0001dwv417dy0ffa" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E7%9F%A5%E8%AF%86%E8%92%B8%E9%A6%8F/" rel="tag">知识蒸馏</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-2025年5月14日-剪枝1-介绍汇总" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -1150,7 +1269,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="yolo版本"><a class="markdownIt-Anchor" href="#yolo版本"></a> Yolo版本</h1>
+        <h1 id="1yolo版本"><a class="markdownIt-Anchor" href="#1yolo版本"></a> 1.Yolo版本</h1>
 <h2 id="yolo-v1"><a class="markdownIt-Anchor" href="#yolo-v1"></a> YOLO V1</h2>
 <h2 id="yolo-v5"><a class="markdownIt-Anchor" href="#yolo-v5"></a> YOLO V5</h2>
 <h3 id="csp"><a class="markdownIt-Anchor" href="#csp"></a> CSP</h3>
@@ -1293,8 +1412,9 @@
 <blockquote>
 <p>特点: 改进</p>
 </blockquote>
-<img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250507230522250.png" alt="image-20250507230522250" style="zoom:33%;">
-<h3 id="c3k2"><a class="markdownIt-Anchor" href="#c3k2"></a> C3K2</h3>
+<img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250507230522250.png" alt="image-20250507230522250">
+<p><img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/yolo_v11.png" alt="yolo_v11"></p>
+<h3 id="21-c3k2"><a class="markdownIt-Anchor" href="#21-c3k2"></a> 2.1 C3K2</h3>
 <p><strong>定义</strong>:  将bottlenetck改为C3K</p>
 <blockquote>
 <p>作用:   <strong>特征融合</strong>和__<strong>模型压缩</strong></p>
@@ -1325,7 +1445,7 @@
 <p>V8: 相当于套娃加了深度,多了一个bottleneck</p>
 </blockquote>
 <p><strong>细节:</strong></p>
-<h3 id="c2psa"><a class="markdownIt-Anchor" href="#c2psa"></a> C2PSA</h3>
+<h3 id="22-c2psa"><a class="markdownIt-Anchor" href="#22-c2psa"></a> 2.2 C2PSA</h3>
 <img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250507232147155.png" alt="image-20250507232147155" style="zoom: 25%;">
 <p><strong>定义:</strong></p>
 <blockquote>
@@ -1337,9 +1457,172 @@
 <li>bottleneck=PSAbBlock</li>
 </ol>
 <p><strong>PSA:</strong></p>
-<h3 id="head"><a class="markdownIt-Anchor" href="#head"></a> head</h3>
+<h3 id="23-head"><a class="markdownIt-Anchor" href="#23-head"></a> 2.3 head</h3>
 <p><strong>区别</strong>:深度可分离的方法</p>
-<h1 id="结构分析"><a class="markdownIt-Anchor" href="#结构分析"></a> 结构分析</h1>
+<h2 id="yolov12"><a class="markdownIt-Anchor" href="#yolov12"></a> YOLOv12</h2>
+<blockquote>
+<p>将注意力机制直接融入目标检测框架的核心设计</p>
+</blockquote>
+<p><img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/v2-f1284a6e6c67a40fd67266ce81c06a39_r.jpg" alt="img"></p>
+<h3 id="1-关键技术改进"><a class="markdownIt-Anchor" href="#1-关键技术改进"></a> 1 关键技术改进</h3>
+<blockquote>
+<h4 id="11-区域注意力area-attention"><a class="markdownIt-Anchor" href="#11-区域注意力area-attention"></a> <strong>1.1 区域注意力（Area Attention）</strong></h4>
+<ul>
+<li><strong>原理</strong>：将特征图划分为相等区域（默认 4 部分）以降低计算复杂度，同时保持较大的感受野。</li>
+<li><strong>优势</strong>：相比传统自注意力机制的 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>n</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span> 复杂度，区域注意力将计算成本降低 <strong>50%</strong>。</li>
+</ul>
+<hr>
+<h4 id="12-残差高效层聚合网络r-elan"><a class="markdownIt-Anchor" href="#12-残差高效层聚合网络r-elan"></a> 1.2 残差高效层聚合网络（R-ELAN）</h4>
+<ul>
+<li><strong>改进点</strong>：在原始 ELAN 架构基础上，引入 <strong>块级残差连接</strong> 与 <strong>缩放技术</strong>（缩放因子 0.01）。</li>
+<li><strong>解决问题</strong>：提升大规模模型训练的稳定性。</li>
+<li><strong>效果</strong>：
+<ul>
+<li>参数减少 <strong>18%</strong></li>
+<li>FLOPs 降低 <strong>24%</strong></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="13-flashattention-集成"><a class="markdownIt-Anchor" href="#13-flashattention-集成"></a> 1.3 FlashAttention 集成</h4>
+<ul>
+<li><strong>优化</strong>：改进内存访问模式，显著加速注意力计算。</li>
+<li><strong>硬件适配</strong>：针对现代 GPU 架构（Turing / Ampere / Ada Lovelace / Hopper）优化。</li>
+<li><strong>实测结果</strong>（RTX 3080）：加速 <strong>0.3-0.4 ms</strong>。</li>
+</ul>
+</blockquote>
+<h3 id="2-具体细节"><a class="markdownIt-Anchor" href="#2-具体细节"></a> 2 具体细节</h3>
+<h4 id="21-区域注意力area-attention机制"><a class="markdownIt-Anchor" href="#21-区域注意力area-attention机制"></a> 2.1 区域注意力（Area Attention）机制</h4>
+<p>YOLOv12 的核心创新之一，主要解决传统自注意力的两大瓶颈：</p>
+<p><strong>1. 计算复杂度优化</strong></p>
+<ul>
+<li><strong>传统自注意力</strong>：对 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>H</mi><mo>×</mo><mi>W</mi></mrow><annotation encoding="application/x-tex">H \times W</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">W</span></span></span></span> 特征图的计算复杂度为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><msup><mi>H</mi><mn>2</mn></msup><msup><mi>W</mi><mn>2</mn></msup><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(H^2 W^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></li>
+<li><strong>区域注意力</strong>：将特征图按水平方向或垂直方向划分为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>l</mi></mrow><annotation encoding="application/x-tex">l</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span></span></span></span> 个相等部分（默认 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>l</mi><mo>=</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">l=4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">4</span></span></span></span>），复杂度降至：
+<ul>
+<li>水平划分：<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mrow><mo fence="true">(</mo><mfrac><msup><mi>H</mi><mn>2</mn></msup><msup><mi>l</mi><mn>2</mn></msup></mfrac><msup><mi>W</mi><mn>2</mn></msup><mo fence="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">O\left(\frac{H^2}{l^2} W^2\right)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.80002em;vertical-align:-0.65002em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size2">(</span></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.01792em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7463142857142857em;"><span style="top:-2.786em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.08125em;">H</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913142857142857em;"><span style="top:-2.931em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size2">)</span></span></span></span></span></span></li>
+<li>垂直划分：<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mrow><mo fence="true">(</mo><msup><mi>H</mi><mn>2</mn></msup><mfrac><msup><mi>W</mi><mn>2</mn></msup><msup><mi>l</mi><mn>2</mn></msup></mfrac><mo fence="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">O\left(H^2 \frac{W^2}{l^2}\right)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.80002em;vertical-align:-0.65002em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="minner"><span class="mopen delimcenter" style="top:0em;"><span class="delimsizing size2">(</span></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.01792em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7463142857142857em;"><span style="top:-2.786em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8913142857142857em;"><span style="top:-2.931em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose delimcenter" style="top:0em;"><span class="delimsizing size2">)</span></span></span></span></span></span></li>
+</ul>
+</li>
+<li><strong>优势</strong>：无需复杂窗口划分，降低计算成本同时保持较大感受野。</li>
+</ul>
+<p><strong>2. 内存访问效率提升</strong></p>
+<ul>
+<li>结合 <strong>FlashAttention</strong> 技术，通过 I/O 优化减少内存访问次数，充分利用 GPU 内存层次结构。</li>
+<li>测试表明，<strong>纯卷积实现</strong> 比线性替代方案速度更快。</li>
+</ul>
+<p><strong>实现方式</strong></p>
+<ol>
+<li>将特征图按指定方向划分为多个区域</li>
+<li>在各区域内分别计算注意力</li>
+<li>合并结果得到全局特征</li>
+</ol>
+<ul>
+<li>在固定分辨率（如 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>=</mo><mn>640</mn></mrow><annotation encoding="application/x-tex">n=640</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">6</span><span class="mord">4</span><span class="mord">0</span></span></span></span>）下可实现实时检测</li>
+<li>与 <strong>轴向注意力</strong> 对比：
+<ul>
+<li>感受野扩大 <strong>4 倍</strong></li>
+<li>速度下降（实测 YOLOv12 ≈ 180 FPS vs YOLOv11 ≈ 250 FPS）</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="22-残差高效层聚合网络r-elan"><a class="markdownIt-Anchor" href="#22-残差高效层聚合网络r-elan"></a> 2.2 残差高效层聚合网络（R-ELAN）</h4>
+<p>R-ELAN 是对原始 ELAN 架构的重要改进，主要针对以下两个问题：</p>
+<p><strong>1. 训练不稳定性</strong></p>
+<ul>
+<li>在较大模型（YOLOv12-L / YOLOv12-X）中，原始 ELAN 容易出现 <strong>梯度阻塞</strong> 与 <strong>优化困难</strong>。</li>
+<li><strong>改进方法</strong>：
+<ul>
+<li>添加 <strong>输入到输出的残差连接（跳跃连接）</strong></li>
+<li>使用 <strong>层缩放技术</strong>（缩放因子 0.01）</li>
+</ul>
+</li>
+<li><strong>效果</strong>：显著提升大规模模型训练稳定性。</li>
+</ul>
+<p><strong>2. 特征聚合效率</strong></p>
+<ul>
+<li><strong>原始 ELAN</strong>：输入 → 过渡层 → 拆分多路并行处理 → 拼接</li>
+<li><strong>R-ELAN</strong>：输入 → 过渡层调整通道 → 单一特征图 → 并行处理 → 拼接成瓶颈结构</li>
+<li><strong>优势</strong>：
+<ul>
+<li>降低计算成本</li>
+<li>提升特征聚合效率</li>
+</ul>
+</li>
+</ul>
+<h4 id="23-其他架构优化"><a class="markdownIt-Anchor" href="#23-其他架构优化"></a> 2.3 其他架构优化</h4>
+<p>YOLOv12 在核心模块之外，还进行了多项精细化的结构改进：</p>
+<p><strong>1. MLP 比例调整</strong></p>
+<ul>
+<li>将典型 Transformer 中 MLP 扩展比例 <strong>从 4 降至 1.2~2</strong></li>
+<li>目的：平衡 <strong>注意力层</strong> 与 <strong>前馈层</strong> 的计算量，减少冗余计算。</li>
+</ul>
+<p><strong>2. 位置编码替代</strong></p>
+<ul>
+<li>去除显式位置编码</li>
+<li>引入 <strong>7×7 深度可分离卷积</strong>（“位置感知器”）来隐式建模位置信息</li>
+<li><strong>优势</strong>：架构更简洁、速度更快。</li>
+</ul>
+<p><strong>3. 块数量减少</strong></p>
+<ul>
+<li>减少堆叠块的数量</li>
+<li>简化优化过程、降低推理时间。</li>
+</ul>
+<p><strong>4. 卷积算子集成</strong></p>
+<ul>
+<li>在适当位置保留高效卷积操作</li>
+<li>降低整体参数数量与计算成本。</li>
+</ul>
+<hr>
+<h2 id="yolov13"><a class="markdownIt-Anchor" href="#yolov13"></a> YOLOv13</h2>
+<blockquote>
+<p>属于社区开发的衍生版本（非 Ultralytics 官方版本）</p>
+</blockquote>
+<p><img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/framework-1754701975877-3.png" alt="framework"></p>
+<h3 id="1-核心技术创新"><a class="markdownIt-Anchor" href="#1-核心技术创新"></a> 1 核心技术创新</h3>
+<blockquote>
+<h4 id="11-hyperace基于超图的自适应关联增强"><a class="markdownIt-Anchor" href="#11-hyperace基于超图的自适应关联增强"></a> 1.1 HyperACE：基于超图的自适应关联增强</h4>
+<ul>
+<li>
+<p><strong>技术原理</strong>：<br>
+将多尺度特征图中的像素视为超图顶点，通过可学习的超边构建模块自适应探索顶点间的高阶关联，<br>
+并利用线性复杂度的消息传递模块聚合特征，提升复杂场景下的视觉感知能力。</p>
+</li>
+<li>
+<p><strong>作用</strong>：<br>
+强化不同尺度特征间的语义关联，尤其对小目标和密集目标检测效果显著。</p>
+</li>
+</ul>
+<hr>
+<h4 id="12-fullpad全流程聚合-分布范式"><a class="markdownIt-Anchor" href="#12-fullpad全流程聚合-分布范式"></a> 1.2 FullPAD：全流程聚合 - 分布范式</h4>
+<ul>
+<li>
+<p><strong>技术原理</strong>：<br>
+通过 HyperACE 聚合骨干网络的多尺度特征，再通过三条独立“隧道”将增强后的特征分别传递到：</p>
+<ul>
+<li>骨干与颈部连接处</li>
+<li>颈部内部</li>
+<li>颈部与头部连接处<br>
+实现全流程细粒度信息流协同。</li>
+</ul>
+</li>
+<li>
+<p><strong>作用</strong>：<br>
+改善梯度传播效率，提升模型整体检测性能。</p>
+</li>
+</ul>
+<hr>
+<h4 id="13-轻量级卷积替换"><a class="markdownIt-Anchor" href="#13-轻量级卷积替换"></a> 1.3 轻量级卷积替换</h4>
+<ul>
+<li><strong>技术原理</strong>：<br>
+使用深度可分离卷积（DSConv、DS-Bottleneck 等）替代大核卷积，<br>
+在保持感受野的同时大幅减少参数和计算量。</li>
+</ul>
+</blockquote>
+<h3 id="2-hyperace"><a class="markdownIt-Anchor" href="#2-hyperace"></a> 2 HyperACE</h3>
+<h2 id="yoloe"><a class="markdownIt-Anchor" href="#yoloe"></a> YOLOE</h2>
+<blockquote></blockquote>
+<h1 id="2结构分析"><a class="markdownIt-Anchor" href="#2结构分析"></a> 2.结构分析</h1>
 <h2 id="3-检测头"><a class="markdownIt-Anchor" href="#3-检测头"></a> 3 检测头</h2>
 <p>解耦头</p>
 <blockquote>
@@ -1841,132 +2124,6 @@
 
 
   
-    <article id="post-2025年4月19日-docker记录" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/04/19/2025%E5%B9%B44%E6%9C%8819%E6%97%A5-docker%E8%AE%B0%E5%BD%95/" class="article-date">
-  <time class="post-time" datetime="2025-04-19T01:41:50.000Z" itemprop="datePublished">
-    <span class="post-month">4月</span><br/>
-    <span class="post-day">19</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/04/19/2025%E5%B9%B44%E6%9C%8819%E6%97%A5-docker%E8%AE%B0%E5%BD%95/">2025年4月19日 docker记录</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="docker"><a class="markdownIt-Anchor" href="#docker"></a> Docker</h1>
-<h2 id="1-介绍"><a class="markdownIt-Anchor" href="#1-介绍"></a> 1 介绍</h2>
-<h3 id="11-dockerfile"><a class="markdownIt-Anchor" href="#11-dockerfile"></a> 1.1 dockerfile</h3>
-<p>包含了构建 Docker 镜像的所有指令</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker build -t opencv-detection5 .</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="12-compose"><a class="markdownIt-Anchor" href="#12-compose"></a> 1.2 compose</h3>
-<p>从 YML 文件配置中创建并启动所有服务</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker-compose up -d # 	后台执行</span><br></pre></td></tr></table></figure>
-<h3 id="13-参数"><a class="markdownIt-Anchor" href="#13-参数"></a> 1.3 参数</h3>
-<ul>
-<li>
-<p>使用gpu</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run --gpus all xx</span><br></pre></td></tr></table></figure>
-</li>
-<li>
-<p>版本</p>
-</li>
-<li>
-<p>容器退出后自动删除，不保留任何数据或文件系统。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run  --rm xx</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<h2 id="2-部署"><a class="markdownIt-Anchor" href="#2-部署"></a> 2 部署</h2>
-<h3 id="21-部署报错"><a class="markdownIt-Anchor" href="#21-部署报错"></a> 2.1 部署报错</h3>
-<h4 id="1-尝试使用pytorch-但是不支持python312"><a class="markdownIt-Anchor" href="#1-尝试使用pytorch-但是不支持python312"></a> 1 尝试使用pytorch 但是不支持python312</h4>
-<h4 id="2-尝试使用原始pythoncuda-但是cuda安装超时"><a class="markdownIt-Anchor" href="#2-尝试使用原始pythoncuda-但是cuda安装超时"></a> 2 尝试使用原始python+cuda 但是cuda安装超时</h4>
-<h4 id="3-尝试使用pytorch-自己再安装python312-但是遇到好多问题"><a class="markdownIt-Anchor" href="#3-尝试使用pytorch-自己再安装python312-但是遇到好多问题"></a> 3 尝试使用pytorch 自己再安装python312 但是遇到好多问题。</h4>
-<p>​	多了个时区选择，运行的选择python版本，python 3.12没有正确安装pip，在Ubuntu 22.04上安装Python 3.12有问题等等</p>
-<h4 id="4-修改项目代码-使之支持python311"><a class="markdownIt-Anchor" href="#4-修改项目代码-使之支持python311"></a> 4 修改项目代码 使之支持python311</h4>
-<p>​	改写override</p>
-<h4 id="5-项目代码出现问题-linux大小写敏感"><a class="markdownIt-Anchor" href="#5-项目代码出现问题-linux大小写敏感"></a> 5 项目代码出现问题 linux大小写敏感</h4>
-<h4 id="6-清空给缓存-避免占用空间"><a class="markdownIt-Anchor" href="#6-清空给缓存-避免占用空间"></a> 6 清空给缓存 避免占用空间</h4>
-<p>​	删除未使用的容器、镜像、卷</p>
-<p>​	 查看 Docker 空间使用情况</p>
-<p>使用以下命令查看 Docker 各部分占用的空间：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker system df</span><br></pre></td></tr></table></figure>
-<p>清理 Docker 镜像缓存</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker builder prune</span><br></pre></td></tr></table></figure>
-<h3 id="22-发布-hub"><a class="markdownIt-Anchor" href="#22-发布-hub"></a> 2.2  发布 hub</h3>
-<h4 id="push"><a class="markdownIt-Anchor" href="#push"></a> push</h4>
-<p>docker login</p>
-<p>docker tag opencv-detection8.1:latest weakliy/opencv-detection-gaotie:latest<br>
-docker push weakliy/opencv-detection-gaotie:latest</p>
-<h4 id="pull"><a class="markdownIt-Anchor" href="#pull"></a> pull</h4>
-<blockquote>
-<p>其他机器上</p>
-</blockquote>
-<p>docker pull weakliy/opencv-detection-gaotie2:latest<br>
-docker-compose up -d</p>
-<h3 id="23-打包到本地"><a class="markdownIt-Anchor" href="#23-打包到本地"></a> 2.3 打包到本地</h3>
-<p>docker save -o detection.tar opencv-detection7.1:latest</p>
-<p>docker load -i ./detection-gaotie.tar</p>
-<p>docker-compose up</p>
-<h2 id="3-优化"><a class="markdownIt-Anchor" href="#3-优化"></a> 3 优化</h2>
-<h3 id="31-image层优化"><a class="markdownIt-Anchor" href="#31-image层优化"></a> 3.1 image层优化</h3>
-<h4 id="1-层优化减少不必要的层命令和并"><a class="markdownIt-Anchor" href="#1-层优化减少不必要的层命令和并"></a> 1 层优化减少不必要的层+命令和并</h4>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># 不推荐：每个命令都会创建新层</span><br><span class="line">RUN apt-get update</span><br><span class="line">RUN apt-get install -y python3</span><br><span class="line">RUN pip install numpy</span><br><span class="line">RUN pip install opencv-python</span><br><span class="line"></span><br><span class="line"># 推荐：合并RUN命令</span><br><span class="line">RUN apt-get update &amp;&amp; \</span><br><span class="line">    apt-get install -y python3 &amp;&amp; \</span><br><span class="line">    pip install numpy opencv-python &amp;&amp; \</span><br><span class="line">    apt-get clean &amp;&amp; \</span><br><span class="line">    rm -rf /var/lib/apt/lists/*</span><br></pre></td></tr></table></figure>
-<h4 id="2-dockerignore文件"><a class="markdownIt-Anchor" href="#2-dockerignore文件"></a> 2 .dockerignore文件</h4>
-<h4 id="3-及时清理"><a class="markdownIt-Anchor" href="#3-及时清理"></a> 3 及时清理</h4>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-<h4 id><a class="markdownIt-Anchor" href="#"></a> </h4>
-<h4 id="4-优化copy命令-先复制依赖文件安装依赖再复制代码"><a class="markdownIt-Anchor" href="#4-优化copy命令-先复制依赖文件安装依赖再复制代码"></a> 4 优化COPY命令+ 先复制依赖文件，安装依赖，再复制代码</h4>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># 推荐：先复制依赖文件，安装依赖，再复制代码</span><br><span class="line">COPY requirements.txt .</span><br><span class="line">RUN pip install -r requirements.txt</span><br><span class="line">COPY . .</span><br></pre></td></tr></table></figure>
-<h4 id="5-两阶段构建"><a class="markdownIt-Anchor" href="#5-两阶段构建"></a> 5 两阶段构建</h4>
-<ol>
-<li>先构建环境+工具</li>
-<li>只copy环境</li>
-</ol>
-<h3 id="32-标签管理"><a class="markdownIt-Anchor" href="#32-标签管理"></a> 3.2 标签管理</h3>
-<p># 方法1：使用–build-arg参数</p>
-<p>docker build --build-arg VERSION=1.0.0 -t opencv-detection .</p>
-<p>docker build --build-arg VERSION=1.1.0 -t opencv-detection .</p>
-<h3 id="docker都休眠了-pip还在安装呢-没内存了"><a class="markdownIt-Anchor" href="#docker都休眠了-pip还在安装呢-没内存了"></a> <strong>docker都休眠了 pip还在安装呢。。。。——没内存了</strong></h3>
-<h2 id="4-报错"><a class="markdownIt-Anchor" href="#4-报错"></a> 4 报错</h2>
-<p>docker export 和load</p>
-<p>open /var/lib/docker/tmp/docker-import-929897693/blobs/json: no such file or directory</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/04/19/2025%E5%B9%B44%E6%9C%8819%E6%97%A5-docker%E8%AE%B0%E5%BD%95/" data-id="cmanj8o25000klcv45461flou" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9D%82/" rel="tag">杂</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -2011,9 +2168,9 @@ docker-compose up -d</p>
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>115</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>116</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>33</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>34</strong><br>标签</div></a>
     </div>
 
 
