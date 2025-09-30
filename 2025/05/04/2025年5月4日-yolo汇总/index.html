@@ -5,13 +5,55 @@
   
   <title>2025年5月4日 yolo细节详解 | Weakliy_Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="1.Yolo版本  YOLO V1  YOLO V5  CSP 定义: Conv + N个Res模块 + Conv  作用: 特征增强  组成:  2 2 2 2  优点: 区别: 细节:     SPP 定义:  作用: 特征增强+全局信息  组成:  多个不同k_size的maxpooling 进行concat  区别:  loss [B, H, W, num_anchors*(4+cls+">
+  <meta name="description" content="1.Yolo版本  YOLOv1   端到端单阶段 目标检测问题看作回归问题    1 bounding box  x——框中心的横坐标 y——框中心的纵坐标 w——框的宽度 h——框的高度 置信度（confidence）  ​	在YOLOV1中S &#x3D; 7 , B &#x3D; 2即将每个输入图片通过卷积, 将最后特征图分成7 × 7 个网格，每个网格将生成2 个预测框，用来框出图片中的物体。 每个框会预">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2025年5月4日 yolo细节详解">
 <meta property="og:url" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/index.html">
 <meta property="og:site_name" content="Weakliy_Blog">
-<meta property="og:description" content="1.Yolo版本  YOLO V1  YOLO V5  CSP 定义: Conv + N个Res模块 + Conv  作用: 特征增强  组成:  2 2 2 2  优点: 区别: 细节:     SPP 定义:  作用: 特征增强+全局信息  组成:  多个不同k_size的maxpooling 进行concat  区别:  loss [B, H, W, num_anchors*(4+cls+">
+<meta property="og:description" content="1.Yolo版本  YOLOv1   端到端单阶段 目标检测问题看作回归问题    1 bounding box  x——框中心的横坐标 y——框中心的纵坐标 w——框的宽度 h——框的高度 置信度（confidence）  ​	在YOLOV1中S &#x3D; 7 , B &#x3D; 2即将每个输入图片通过卷积, 将最后特征图分成7 × 7 个网格，每个网格将生成2 个预测框，用来框出图片中的物体。 每个框会预">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250104151446113.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250104154104316.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/64c2116c3e9f6d55b5aa2a8fab982a26.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/dba9296aa0d24233abe7b02e75e4b7e9.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250104155000144.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250104155310820.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250104152002611.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/d358fa901b47a00baa710246af0ea197.gif">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250104164542277.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250104160704522.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250104160931404.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250104161259611.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250824144528553.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250824144658414.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250824145130304.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250824145841206.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250105151656124.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250105151712577.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250105130506026.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250105152215756.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250105150718121.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250105150726295.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250105150948205.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250105150823004.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250303181539006.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250105150606229.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250105143153315.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250105143449548.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250105143750945.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250105143836518.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250105143846925.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250105143912123.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250105143920723.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250105144012738.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250105130645146.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250829092526213.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/yolo_v5.jpg">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250829093454150.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250829093457474.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250829092726729.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/YOLOv8.jpeg">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250829095601636.png">
 <meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250507234632382.png">
 <meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250507230522250.png">
 <meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/yolo_v11.png">
@@ -32,11 +74,11 @@
 <meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250508182738579.png">
 <meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/F1_curve.png">
 <meta property="article:published_time" content="2025-05-04T07:42:49.000Z">
-<meta property="article:modified_time" content="2025-08-16T09:31:37.479Z">
+<meta property="article:modified_time" content="2025-08-29T01:57:02.729Z">
 <meta property="article:author" content="Weakliy">
 <meta property="article:tag" content="YOLO">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250507234632382.png">
+<meta name="twitter:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250104151446113.png">
   
     <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
   
@@ -68,7 +110,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>116</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>118</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>34</strong><br>标签</div></a>
     </div>
@@ -127,46 +169,404 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="1yolo版本"><a class="markdownIt-Anchor" href="#1yolo版本"></a> 1.Yolo版本</h1>
-<h2 id="yolo-v1"><a class="markdownIt-Anchor" href="#yolo-v1"></a> YOLO V1</h2>
+<h2 id="yolov1"><a class="markdownIt-Anchor" href="#yolov1"></a> <a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43334693/article/details/129011644?spm=1001.2014.3001.5501">YOLOv1</a></h2>
+<blockquote>
+<ul>
+<li>端到端单阶段</li>
+<li>目标检测问题看作回归问题</li>
+</ul>
+</blockquote>
+<h3 id="1-bounding-box"><a class="markdownIt-Anchor" href="#1-bounding-box"></a> 1 bounding box</h3>
+<ul>
+<li>x——框中心的横坐标</li>
+<li>y——框中心的纵坐标</li>
+<li>w——框的宽度</li>
+<li>h——框的高度</li>
+<li>置信度（confidence）</li>
+</ul>
+<p>​	在YOLOV1中S = 7 , B = 2即将每个输入图片通过卷积, 将最后特征图分成<strong>7 × 7 个网格</strong>，每个网格将生成<strong>2 个预测框</strong>，用来框出图片中的物体。 <strong>每个框会预测出5个变量值</strong>，所以一个网格生成两个框，一个框带有5个属性，所以一个格就需要预测出<strong>5 × 2 = 10 个变量值</strong>。<br>
+​	在YOLOv1中有<strong>20个类别的物体的条件概率</strong>，所以输出结果的后20个值就表示每一个小网格（grid cell）对应每一类物体的概率，即由该网格生产的两个预测框对应每一类物体的概率。 由此，输出的<strong>7 × 7 × 30(10+20) 向量</strong>的每一项含义便清楚了。<br>
+<img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250104151446113.png" alt="image-20250104151446113" style="zoom: 67%;"></p>
+<img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250104154104316.png" alt="image-20250104154104316" style="zoom: 33%;">
+<h3 id="2-训练"><a class="markdownIt-Anchor" href="#2-训练"></a> 2 训练</h3>
+<h4 id="网络结构"><a class="markdownIt-Anchor" href="#网络结构"></a> 网络结构</h4>
+<p><img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/64c2116c3e9f6d55b5aa2a8fab982a26.png" alt="img"></p>
+<p>YOLOV1的输入为448 × 448 × 3 图像，输出大小为7 × 7 × 30 向量</p>
+<p>在网络结构的最后一层使用的是线性激活函数，其他层使用的是**leaky ReLU**激活函数，YOLOv1中采用的leaky ReLU定义公式如下</p>
+<p><img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/dba9296aa0d24233abe7b02e75e4b7e9.png" alt="img"></p>
+<h4 id="数据处理"><a class="markdownIt-Anchor" href="#数据处理"></a> 数据处理</h4>
+<h4 id="损失计算"><a class="markdownIt-Anchor" href="#损失计算"></a> 损失计算</h4>
+<p>yolov1里将损失函数分为三部分,</p>
+<ol>
+<li>坐标损失（boudiing Loss）:用于优化预测边界框的坐标（位置和大小），确保预测框与真实框尽可能接近。</li>
+<li><strong>置信度损失</strong>（Confidence Loss）: 用于优化边界框的置信度分数，反映边界框是否包含目标以及框的准确性。</li>
+<li>分类损失（Classification Loss）: 用于优化每个网格的类别预测，确保模型正确识别目标的类别。</li>
+</ol>
+<img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250104155000144.png" alt="image-20250104155000144" style="zoom:67%;">
+<img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250104155310820.png" alt="image-20250104155310820" style="zoom:33%;">
+<blockquote>
+<p>为什么用根号?   =&gt;  大小目标对偏移影响不同</p>
+</blockquote>
+<h3 id="3-预测极大值抑制"><a class="markdownIt-Anchor" href="#3-预测极大值抑制"></a> 3 预测–极大值抑制</h3>
+<p>7X7X2个bounding box 进行 过滤与非极大值抑制</p>
+<h4 id="nms-算法步骤"><a class="markdownIt-Anchor" href="#nms-算法步骤"></a> NMS 算法步骤</h4>
+<ol>
+<li>
+<p>收集所有预测框：</p>
+<ul>
+<li>从模型输出中提取所有边界框，包括坐标、置信度分数和类别。</li>
+<li>通常**只保留置信度高于某个阈值（例如 conf=0.25）的框，**以减少计算量。</li>
+</ul>
+</li>
+<li>
+<p>按置信度排序：</p>
+<ul>
+<li>对所有边界框按置信度分数从高到低排序。</li>
+</ul>
+</li>
+<li>
+<p>选择最高置信度框：</p>
+<ul>
+<li>从排序后的列表中选取置信度最高的边界框，<strong>作为当前目标的代表框</strong>。</li>
+</ul>
+</li>
+<li>
+<p>计算 IoU 并抑制重叠框：</p>
+<ul>
+<li>
+<p>计算当前最高置信度框与其他框的 <strong>交并比（IoU, Intersection over Union）</strong>。</p>
+</li>
+<li>
+<p>IoU 公式：</p>
+<p class="katex-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>I</mi><mi>o</mi><mi>U</mi><mo>=</mo><mfrac><mtext>Intersection Area</mtext><mtext>Union Area</mtext></mfrac></mrow><annotation encoding="application/x-tex">IoU=\frac{\text{Intersection Area}}{\text{Union Area}}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.10903em;">U</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.04633em;vertical-align:-0.686em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.36033em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord text"><span class="mord">Union Area</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord text"><span class="mord">Intersection Area</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.686em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
+</li>
+<li>
+<p>如果其他框与当前框的 IoU 高于某个阈值（例如 iou=0.45），则认为这些框检测的是同一目标，将它们从候选列表中移除。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>重复直到处理完所有框：</p>
+<ul>
+<li>从剩余框中再次选取置信度最高的框，重复步骤 3 和 4，直到列表为空或无框满足条件。</li>
+</ul>
+</li>
+<li>
+<p>输出最终结果：</p>
+<ul>
+<li>返回保留下来的边界框列表，作为最终检测结果。</li>
+</ul>
+</li>
+</ol>
+<p><img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250104152002611.png" alt></p>
+<p><img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/d358fa901b47a00baa710246af0ea197.gif" alt="img"></p>
+<h3 id="4-优缺"><a class="markdownIt-Anchor" href="#4-优缺"></a> 4 优缺</h3>
+<ul>
+<li>相比同时期算法, 简单统一, 实时性强,</li>
+<li>但是 无法很好地处理小目标和重叠目标,边界框定位精度较低对的,每个网格只能预测两个类别等等</li>
+</ul>
+<h3 id="5-qa"><a class="markdownIt-Anchor" href="#5-qa"></a> 5 QA</h3>
+<ol>
+<li>
+<h5 id="为什么两个bounding-box"><a class="markdownIt-Anchor" href="#为什么两个bounding-box"></a> 为什么两个bounding box</h5>
+</li>
+</ol>
+<p>每个 bounding box 都有一组独立的参数，包括中心坐标、宽度、高度和置信度，能够分别拟合不同的目标。</p>
+<h2 id="yolov2"><a class="markdownIt-Anchor" href="#yolov2"></a> YOLOV2</h2>
+<blockquote>
+<p>引入了多种优化技术，解决了 YOLOv1 在小目标和重叠目标检测上的局限性</p>
+</blockquote>
+<h3 id="1主要改进"><a class="markdownIt-Anchor" href="#1主要改进"></a> 1.主要改进</h3>
+<h4 id="11-bn-加入"><a class="markdownIt-Anchor" href="#11-bn-加入"></a> 1.1 BN 加入</h4>
+<p>卷积层后添加批归一化（Batch Normalization）, 形成<strong>CBL结构</strong></p>
+<h4 id="12-anchor"><a class="markdownIt-Anchor" href="#12-anchor"></a> 1.2 anchor</h4>
+<p>引入基于 Faster R-CNN 的 anchor box 机制，</p>
+<blockquote>
+<p>什么是anchor ?</p>
+</blockquote>
+<ol>
+<li>每个网格<strong>预测多个预定义形状的锚框</strong>, 而不是对每一个进行从0的回归</li>
+<li>每个网格预测 <strong>5 个 anchor box</strong></li>
+<li>边界框坐标预测从直接回归 (x,y,w,h) 改为预测<strong>相对于 anchor box 的偏移量</strong>(t_x, t_y, t_w, t_h)</li>
+<li></li>
+</ol>
+<img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250104164542277.png" alt="image-20250104164542277" style="zoom: 67%;">
+<h4 id="13-维度聚类"><a class="markdownIt-Anchor" href="#13-维度聚类"></a> 1.3 维度聚类</h4>
+<p>通过K-mean聚类, 模型学习如何调整预定义的 anchor，而不是从零开始预测边界框的所有参数。</p>
+<h3 id="2-训练-2"><a class="markdownIt-Anchor" href="#2-训练-2"></a> 2. 训练</h3>
+<h4 id="21-darknet-19"><a class="markdownIt-Anchor" href="#21-darknet-19"></a> 2.1 Darknet-19</h4>
+<h4 id="22-pass-through-layer"><a class="markdownIt-Anchor" href="#22-pass-through-layer"></a> 2.2 pass through layer</h4>
+<p>将高分辨率特征图（例如 26x26）与低分辨率特征图（13x13）连接，保留更多细节信息.</p>
+<img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250104160704522.png" alt="image-20250104160704522" style="zoom:67%;"> 
+<img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250104160931404.png" alt="image-20250104160931404" style="zoom:50%;"> 
+<h4 id="23-多尺度数据输入"><a class="markdownIt-Anchor" href="#23-多尺度数据输入"></a> 2.3 多尺度数据输入</h4>
+<p>在训练时随机调整输入图像分辨率（如 320x320、416x416、608x608 等），使模型适应不同尺度的输入。</p>
+<img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250104161259611.png" alt="image-20250104161259611" style="zoom:50%;"> 
+<h4 id="24-损失函数优化"><a class="markdownIt-Anchor" href="#24-损失函数优化"></a> 2.4 <strong>损失函数优化</strong>：</h4>
+<p>YOLOv2 延续了 YOLOv1 的三部分损失函数（坐标损失、置信度损失、分类损失），但对坐标预测进行了优化，使用 anchor box 的偏移量预测。</p>
+<h3 id="3-优缺"><a class="markdownIt-Anchor" href="#3-优缺"></a> 3. 优缺</h3>
+<ul>
+<li>passthrough提高小目标检测, Darknet调高速度,9000 多种类别检测广泛性高</li>
+<li>调整 anchor的复杂性, NMS重叠目标处理不足,</li>
+</ul>
+<h2 id="yolo-v3"><a class="markdownIt-Anchor" href="#yolo-v3"></a> YOLO V3</h2>
+<blockquote>
+<p>从v2的darknet-19到v3的darknet-53</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/564855770">https://zhuanlan.zhihu.com/p/564855770</a></p>
+</blockquote>
+<h3 id="1主要改进-2"><a class="markdownIt-Anchor" href="#1主要改进-2"></a> 1.主要改进</h3>
+<ol>
+<li><strong>backbone网络的提升</strong></li>
+<li><strong>引入FPN进行多尺度预测</strong></li>
+<li><strong>损失函数不再使用softmax(v2)，采用binary cross-entropy loss（二分类交叉损失熵）</strong></li>
+</ol>
+<h3 id="2-darknet-53"><a class="markdownIt-Anchor" href="#2-darknet-53"></a> 2 darknet-53</h3>
+<p><img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250824144528553.png" alt="image-20250824144528553"></p>
+<ol>
+<li><strong>CBL：<strong>Yolov3网络结构中的最小组件，由</strong>Conv+Bn+Leaky_relu</strong>激活函数三者组成。</li>
+<li><strong>Res unit：<strong>借鉴</strong>Resnet</strong>网络中的残差结构，让网络可以构建的更深。</li>
+<li><strong>ResX：<strong>由一个</strong>CBL</strong>和<strong>X</strong>个残差组件构成，是Yolov3中的大组件。每个Res模块前面的CBL都起到下采样的作用，因此经过5次Res模块后，得到的特征图是<strong>416-&gt;208-&gt;104-&gt;52-&gt;26-&gt;13大小</strong>。</li>
+</ol>
+<p><strong>三种尺度的特征图如下</strong>：</p>
+<ul>
+<li>尺度1: 在基础网络之后添加一些卷积层，输出13x13大小的特征图.</li>
+<li>尺度2: 从尺度1中的倒数第二层的卷积层上采样(x2)再与darknet的最后一个26x26大小的特征图相加,再次通过多个卷积后，输出26 26大小的特征图.</li>
+<li>尺度3: 从尺度2中的倒数第二层的卷积层上采样(x2)再与darknet的最后一个52x52大小的特征图相加,再次通过多个卷积后，输出52 52大小的特征图.</li>
+</ul>
+<p><img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250824144658414.png" alt="image-20250824144658414"></p>
+<h3 id="3-fpn"><a class="markdownIt-Anchor" href="#3-fpn"></a> 3 FPN</h3>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/1612.03144">https://arxiv.org/abs/1612.03144</a></p>
+</blockquote>
+<p>FPN主要解决的是物体检测中的多尺度问题，通过简单的<strong>网络连接改变</strong>，在基本不增加原有模型计算量的情况下，大幅度<strong>提升了小物体检测的性能。</strong></p>
+<p>主要是因为: <strong>低层的特征语义信息比较少，但是目标位置准确；高层的特征语义信息比较丰富，但是目标位置比较粗略</strong>。</p>
+<p><strong>FPN中, 自下向上就是深度卷积网络的前向提取特征的过程，自上而下则是对最后卷积层的特征图进行上采样的过程，横向的连接则是融合深层的卷积层特征和浅层卷积特征的过程</strong>。</p>
+<p>合了深层卷积层的高级别特征和浅层卷积层的低级别特征。</p>
+<p><img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250824145130304.png" alt="image-20250824145130304"></p>
+<img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250824145841206.png" alt="image-20250824145841206" style="zoom:50%;">
+<h3 id="4-损失改进"><a class="markdownIt-Anchor" href="#4-损失改进"></a> 4. 损失改进</h3>
+<p>不使用Softmax而是改成使用logistic的输出进行预测。这样能够支持多标签对象</p>
+<h2 id="yolov4"><a class="markdownIt-Anchor" href="#yolov4"></a> YOLOV4</h2>
+<h3 id="1-主要改进"><a class="markdownIt-Anchor" href="#1-主要改进"></a> 1 主要改进</h3>
+<ol>
+<li>数据增强</li>
+<li>各种trick</li>
+</ol>
+<h3 id="2-数据增强"><a class="markdownIt-Anchor" href="#2-数据增强"></a> 2 数据增强</h3>
+<h4 id="1-sat自对抗训练"><a class="markdownIt-Anchor" href="#1-sat自对抗训练"></a> 1 SAT自对抗训练</h4>
+<img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250105151656124.png" alt="image-20250105151656124" style="zoom:67%;">
+<img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250105151712577.png" alt="image-20250105151712577" style="zoom:67%;">
+<h4 id="2-mosaic数据增强"><a class="markdownIt-Anchor" href="#2-mosaic数据增强"></a> 2 Mosaic数据增强</h4>
+<h4 id="3-label-smoothing类标签平滑"><a class="markdownIt-Anchor" href="#3-label-smoothing类标签平滑"></a> 3. Label Smoothing类标签平滑</h4>
+<h3 id="3-网络结构改进"><a class="markdownIt-Anchor" href="#3-网络结构改进"></a> 3 网络结构改进</h3>
+<h4 id="1-backbone"><a class="markdownIt-Anchor" href="#1-backbone"></a> 1 Backbone</h4>
+<h5 id="311-csp"><a class="markdownIt-Anchor" href="#311-csp"></a> 3.1.1 CSP</h5>
+<blockquote>
+<p>作用: 特征增强</p>
+</blockquote>
+<h5 id="img-src2025年5月4日-yolo汇总image-20250105130506026png-altimage-20250105130506026-stylezoom50"><a class="markdownIt-Anchor" href="#img-src2025年5月4日-yolo汇总image-20250105130506026png-altimage-20250105130506026-stylezoom50"></a> <img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250105130506026.png" alt="image-20250105130506026" style="zoom:50%;"></h5>
+<img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250105152215756.png" alt="image-20250105152215756" style="zoom:50%;"> 
+<h4 id="4-neck"><a class="markdownIt-Anchor" href="#4-neck"></a> 4 Neck</h4>
+<p>一个颈部neck由几个自下而上的路径和几个自上而下的路径组成。具有该机制的网络包括特征金字塔网络(FPN)、路径汇聚网络(PAN)、BiFPN和NAS-FPN。</p>
+<h5 id="41-fpn"><a class="markdownIt-Anchor" href="#41-fpn"></a> 4.1 FPN</h5>
+<p>引入了自底向上的路径，使得底层信息更容易传到顶部</p>
+<p><img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250105150718121.png" alt="image-20250105150718121"></p>
+<p><img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250105150726295.png" alt="image-20250105150726295"></p>
+<h5 id="42-pan"><a class="markdownIt-Anchor" href="#42-pan"></a> 4.2 PAN</h5>
+<p>特征层之间融合时是直接通过addition的方式进行融合的，而<strong>Yolov4中则采用在通道方向concat拼接</strong>操作融合的</p>
+<img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250105150948205.png" alt="image-20250105150948205" style="zoom:67%;">
+<p><img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250105150823004.png" alt="image-20250105150823004"></p>
+<h5 id="43-spp"><a class="markdownIt-Anchor" href="#43-spp"></a> 4.3 SPP</h5>
+<blockquote>
+<p>作用: <strong>特征增强+全局信息</strong></p>
+</blockquote>
+<p>空间金字塔池化 特征提取池化</p>
+<p>通过在输入特征图上<strong>采用不同尺度的池化窗口</strong>（如1×1、2×2、4×4 等），SPP 能够从不同的空间范围内有效地捕获图像中不同大小和比例的目标特征</p>
+<blockquote>
+<p>旨在解决卷积神经网络中固定大小输入的限制。它能够对任意大小的 输入特征图进行处理，并在不同尺度下提取特征，从而显著增强模型对不同大小目标的感 知能力</p>
+</blockquote>
+<p><img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250303181539006.png" alt="image-20250303181539006"></p>
+<img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250105150606229.png" alt="image-20250105150606229" style="zoom:50%;">
+<h3 id="4-bof"><a class="markdownIt-Anchor" href="#4-bof"></a> 4 BoF</h3>
+<p>我们把这些只会<strong>改变培训策略或只增加培训成本</strong>的方法称为“bag of freebies”。</p>
+<h4 id="1-数据增强"><a class="markdownIt-Anchor" href="#1-数据增强"></a> 1 数据增强</h4>
+<h4 id="2-解决数据集中语义分布偏差问题"><a class="markdownIt-Anchor" href="#2-解决数据集中语义分布偏差问题"></a> 2 解决数据集中语义分布偏差问题</h4>
+<p>不同类之间存在数据不平衡的问题</p>
+<img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250105143153315.png" alt="image-20250105143153315" style="zoom: 67%;"> 
+<h4 id="3-边界框bbox回归的目标函数"><a class="markdownIt-Anchor" href="#3-边界框bbox回归的目标函数"></a> 3 边界框(BBox)回归的目标函数 ??</h4>
+<p>直接估计BBox中每个点的坐标值是要将这些点作为自变量来处理，但实际上并没有考虑对象本身的完整性</p>
+<img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250105143449548.png" alt="image-20250105143449548" style="zoom:67%;">
+<h3 id="5-bos"><a class="markdownIt-Anchor" href="#5-bos"></a> 5 BoS</h3>
+<p>对于那些只增加少量推理成本但又能显著提高目标检测精度的<strong>插件模块和后处理方法</strong>，我们称它们为“bag of specials&quot;</p>
+<h4 id="1-增强感受野"><a class="markdownIt-Anchor" href="#1-增强感受野"></a> 1 增强感受野</h4>
+<p><strong>①改进的SPP模块</strong></p>
+<p><img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250105143750945.png" alt="image-20250105143750945"></p>
+<p><strong>②ASPP模块</strong></p>
+<p><img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250105143836518.png" alt="image-20250105143836518"></p>
+<p><strong>③RFB模块</strong></p>
+<p><img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250105143846925.png" alt="image-20250105143846925"></p>
+<h4 id="2-注意力机制"><a class="markdownIt-Anchor" href="#2-注意力机制"></a> 2 注意力机制</h4>
+<img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250105143912123.png" alt="image-20250105143912123" style="zoom:50%;"> 
+<img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250105143920723.png" alt="image-20250105143920723" style="zoom: 50%;"> 
+<h4 id="3-特征融合"><a class="markdownIt-Anchor" href="#3-特征融合"></a> 3 特征融合</h4>
+<p><strong>①SFAM：</strong> 主要思想是利用SE模块在多尺度的拼接特征图上进行信道级重加权。</p>
+<p><strong>②ASFF：</strong> 使用softmax对多尺度拼接特征图在点维度进行加权。</p>
+<p><strong>③BiFPN：</strong> 提出了多输入加权剩余连接来执行按比例的水平重加权，然后添加不同比例的特征图。</p>
+<h4 id="4-激活函数"><a class="markdownIt-Anchor" href="#4-激活函数"></a> 4 激活函数</h4>
+<img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250105144012738.png" alt="image-20250105144012738" style="zoom:50%;"> 
+<h4 id="5-dropblock正则化"><a class="markdownIt-Anchor" href="#5-dropblock正则化"></a> 5 Dropblock正则化</h4>
+<img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250105130645146.png" alt="image-20250105130645146" style="zoom: 50%;"> 
+<blockquote>
+<p>Q：全连接层上效果很好的Dropout在卷积层上效果并不好？</p>
+<p>中间Dropout的方式会随机的删减丢弃一些信息，但Dropblock的研究者认为，卷积层对于这种随机丢弃并不敏感，因为卷积层通常是三层连用：卷积+激活+池化层，池化层本身就是对相邻单元起作用。</p>
+<p>而且即使随机丢弃，卷积层仍然可以从相邻的激活单元学习到相同的信息。因此，在全连接层上效果很好的Dropout在卷积层上效果并不好。所以右图Dropblock的研究者则干脆整个局部区域进行删减丢弃。</p>
+</blockquote>
 <h2 id="yolo-v5"><a class="markdownIt-Anchor" href="#yolo-v5"></a> YOLO V5</h2>
-<h3 id="csp"><a class="markdownIt-Anchor" href="#csp"></a> CSP</h3>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43334693/article/details/129312409">https://blog.csdn.net/weixin_43334693/article/details/129312409</a></p>
+</blockquote>
+<h3 id="1-主要改进-2"><a class="markdownIt-Anchor" href="#1-主要改进-2"></a> 1 主要改进</h3>
+<ol>
+<li>增加不同size 从轻量级（YOLOv5n）到高精度（YOLOv5x）的多种模型变体</li>
+<li>自适应锚点计算</li>
+<li>训练优化</li>
+</ol>
+<h3 id="2-自适应锚点计算"><a class="markdownIt-Anchor" href="#2-自适应锚点计算"></a> 2. 自适应锚点计算</h3>
+<p>在Yolov3、Yolov4中，训练不同的数据集时，计算初始锚框的值是通过单独的程序运行的。</p>
+<p>但Yolov5中将此功能嵌入到代码中，每次训练时，自适应的计算不同训练集中的最佳锚框值。</p>
+<p><img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250829092526213.png" alt="image-20250829092526213"></p>
+<h3 id="3-网络结构改进-2"><a class="markdownIt-Anchor" href="#3-网络结构改进-2"></a> 3.  网络结构改进</h3>
+<p><img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/yolo_v5.jpg" alt="yolo_v5"></p>
+<p><img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250829093454150.png" alt="image-20250829093454150"></p>
+<p><img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250829093457474.png" alt="image-20250829093457474"></p>
+<h4 id="31-focus结构"><a class="markdownIt-Anchor" href="#31-focus结构"></a> 3.1 Focus结构</h4>
+<img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250829092726729.png" alt="image-20250829092726729" style="zoom: 50%;">
+<p>后改为6x6卷积操作</p>
+<h4 id="32-csp"><a class="markdownIt-Anchor" href="#32-csp"></a> 3.2 CSP</h4>
 <p>定义: Conv + N个Res模块 + Conv</p>
 <blockquote>
 <p>作用: 特征增强</p>
 </blockquote>
-<p>组成:</p>
-<ol>
-<li>2</li>
-<li>2</li>
-<li>2</li>
-<li>2</li>
-</ol>
-<p>优点:</p>
-<p>区别:</p>
-<p>细节:</p>
-<ol>
-<li></li>
-</ol>
-<h3 id="spp"><a class="markdownIt-Anchor" href="#spp"></a> SPP</h3>
-<p>定义:</p>
-<blockquote>
-<p>作用: 特征增强+全局信息</p>
-</blockquote>
-<p>组成:</p>
-<ol>
-<li>多个不同k_size的maxpooling 进行concat</li>
-</ol>
-<p>区别:</p>
-<h3 id="loss"><a class="markdownIt-Anchor" href="#loss"></a> loss</h3>
-<p><code>[B, H, W, num_anchors*(4+cls+obj)]</code></p>
-<h3 id="创新处理操作"><a class="markdownIt-Anchor" href="#创新处理操作"></a> 创新处理操作</h3>
-<h4 id="1-切片"><a class="markdownIt-Anchor" href="#1-切片"></a> 1 切片</h4>
-<p>2</p>
+<p>在v5中, 出backbone加入CSP结构, <strong>neck也加入了CSP结构</strong></p>
+<h3 id="4-训练优化"><a class="markdownIt-Anchor" href="#4-训练优化"></a> 4. 训练优化</h3>
+<h4 id="41-数据增强"><a class="markdownIt-Anchor" href="#41-数据增强"></a> 4.1 <strong>数据增强</strong>：</h4>
+<ul>
+<li><strong>Mosaic 数据增强</strong>：从 YOLOv4 继承，将 4 张图像拼接为一张，模拟复杂场景，提升小目标和遮挡目标的检测能力。</li>
+<li><strong>AutoAugment</strong> 和 <strong>MixUp</strong>：自动增强和图像混合，进一步提高模型鲁棒性。</li>
+<li><strong>HSV 增强</strong>：调整色调、饱和度和亮度，增强对光照变化的适应性。</li>
+</ul>
+<h4 id="42-ciou_loss"><a class="markdownIt-Anchor" href="#42-ciou_loss"></a> 4.2 CIOU_LOSS</h4>
+<h4 id="43-softnms"><a class="markdownIt-Anchor" href="#43-softnms"></a> 4.3 SoftNMS</h4>
+<h2 id="yolo-v6"><a class="markdownIt-Anchor" href="#yolo-v6"></a> YOLO V6</h2>
+<p>YOLOv6 是由美团改进版本</p>
+<h3 id="主要改进"><a class="markdownIt-Anchor" href="#主要改进"></a> 主要改进</h3>
+<p>YOLOv6 结合了最新的计算机视觉技术，针对 YOLOv5 的局限性进行了优化，以下是主要改进点（部分信息参考搜索结果）：</p>
+<h4 id="1-骨干网络efficientrep-backbone"><a class="markdownIt-Anchor" href="#1-骨干网络efficientrep-backbone"></a> 1. 骨干网络：EfficientRep Backbone</h4>
+<ul>
+<li>
+<p>设计</p>
+<p>：</p>
+<ul>
+<li>YOLOv6 引入了 <strong>EfficientRep Backbone</strong>，一个高效的特征提取器，基于 RepVGG 风格的重新参数化（Reparameterization）结构。</li>
+<li>在训练阶段使用 RepBlock（多分支结构），在推理阶段将其转换为单一的 3x3 卷积层（RepConv），减少计算量并提升推理速度。</li>
+</ul>
+</li>
+<li>
+<p>优势</p>
+<p>：</p>
+<ul>
+<li>高效的特征提取能力，参数量和计算量更少（例如 YOLOv6-N 参数量仅为 4.7M，FLOPs 为 11.4G）。</li>
+<li>适合移动设备和 CPU 部署，兼顾精度和速度。</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-特征融合rep-pan-neck"><a class="markdownIt-Anchor" href="#2-特征融合rep-pan-neck"></a> 2. 特征融合：Rep-PAN Neck</h4>
+<ul>
+<li>设计：
+<ul>
+<li>YOLOv6 使用 <strong>Rep-PAN Neck</strong>（基于 PANet 的重新参数化版本），结合自底向上和自顶向下的特征融合路径。</li>
+<li>在训练阶段使用 CSPStackRep 模块（类似 YOLOv5 的 CSP 结构），推理阶段转换为高效卷积层。</li>
+</ul>
+</li>
+<li>优势：
+<ul>
+<li>增强多尺度特征融合，尤其对小目标的特征提取更有效。</li>
+<li>提高对复杂场景的上下文理解能力。</li>
+</ul>
+</li>
+</ul>
+<h4 id="3-双向连接模块bic-module"><a class="markdownIt-Anchor" href="#3-双向连接模块bic-module"></a> 3. 双向连接模块（BiC Module）</h4>
+<ul>
+<li>设计：
+<ul>
+<li>在 Neck 中引入 <strong>Bidirectional Concatenation (BiC)</strong> 模块，增强定位信号的传播。</li>
+</ul>
+</li>
+<li>优势：
+<ul>
+<li>提高边界框定位精度，同时对推理速度影响微乎其微。</li>
+<li>特别适合工业场景中对精准定位的需求。</li>
+</ul>
+</li>
+</ul>
+<h4 id="4-anchor-aided-trainingaat策略"><a class="markdownIt-Anchor" href="#4-anchor-aided-trainingaat策略"></a> 4. Anchor-Aided Training（AAT）策略</h4>
+<ul>
+<li>设计：
+<ul>
+<li>YOLOv6 提出 <strong>Anchor-Aided Training (AAT)</strong>，结合 anchor-based 和 anchor-free 的优点。</li>
+<li>在训练阶段使用 anchor box 辅助定位，在<strong>推理阶段移除 anchor 依赖，保持高效性。</strong></li>
+</ul>
+</li>
+<li>优势：
+<ul>
+<li>提升训练稳定性，同时避免 anchor-free 模型的复杂性。</li>
+<li>推理效率更高，适合实时应用。</li>
+</ul>
+</li>
+</ul>
+<h4 id="5-数据增强与训练优化"><a class="markdownIt-Anchor" href="#5-数据增强与训练优化"></a> 5. 数据增强与训练优化</h4>
+<ul>
+<li>Mosaic 数据增强：
+<ul>
+<li>继承 YOLOv4/YOLOv5 的 Mosaic 增强，拼接多张图像模拟复杂场景，提升小目标和遮挡目标的检测能力。</li>
+</ul>
+</li>
+<li>自蒸馏（Self-Distillation）：
+<ul>
+<li>在训练时引入辅助回归分支，提升小模型（如 YOLOv6-N/S）的性能，推理时移除该分支以保持速度。</li>
+</ul>
+</li>
+<li>损失函数：
+<ul>
+<li><strong>坐标损失</strong>：使用 <strong>Varifocal Loss</strong> 或 <strong>GIoU Loss</strong>（根据模型变体），优化边界框定位。</li>
+<li><strong>置信度损失</strong>：使用二元交叉熵损失优化 objectness score。</li>
+<li><strong>分类损失</strong>：使用 <strong>Varifocal Loss</strong> 或 <strong>Quality Focal Loss</strong>，支持多标签分类，适应复杂场景。</li>
+</ul>
+</li>
+<li>量化优化：
+<ul>
+<li>支持 <strong>Post-Training Quantization (PTQ)</strong> 和 <strong>Quantization-Aware Training (QAT)</strong>，生成 INT8 量化模型（如 YOLOv6Lite），适合移动设备部署。</li>
+</ul>
+</li>
+</ul>
+<h2 id="yolo-v7"><a class="markdownIt-Anchor" href="#yolo-v7"></a> YOLO V7</h2>
+<p>专注于优化训练过程bo，在不增加推理成本的情况下显著提升精度。</p>
 <h2 id="yolo-v8"><a class="markdownIt-Anchor" href="#yolo-v8"></a> YOLO V8</h2>
 <blockquote>
 <p>特点: 改进</p>
 </blockquote>
-<h3 id="c2f"><a class="markdownIt-Anchor" href="#c2f"></a> C2F</h3>
+<h3 id="1-主要改进-3"><a class="markdownIt-Anchor" href="#1-主要改进-3"></a> 1. 主要改进</h3>
+<ol>
+<li>Anchor-Free 架构</li>
+<li>C2f 模块</li>
+<li>特征融合, SPPF 和 FPN/PANet</li>
+<li>支持 对象检测、实例分割（YOLOv8-seg）、姿态估计（YOLOv8-pose）和 图像分类（YOLOv8-cls）。</li>
+</ol>
+<h3 id="2-anchor-free"><a class="markdownIt-Anchor" href="#2-anchor-free"></a> 2 Anchor-Free</h3>
+<h3 id="3-网络结构改进-3"><a class="markdownIt-Anchor" href="#3-网络结构改进-3"></a> 3. 网络结构改进</h3>
+<p><img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/YOLOv8.jpeg" alt="YOLOv8"></p>
+<h4 id="31-c2f"><a class="markdownIt-Anchor" href="#31-c2f"></a> 3.1 C2F</h4>
 <p>定义:  Concatenate to fusion（可以理解为“融合后连接”）</p>
 <blockquote>
 <p>作用:   <strong>特征融合</strong>和__<strong>模型压缩</strong></p>
@@ -178,9 +578,11 @@
 <li>concat</li>
 <li>Conv</li>
 </ol>
-<p>优点:</p>
+<p><strong>操作:</strong></p>
+<p>每次bottleneck后取出半数通道, 最后进行concat</p>
+<p><strong>优点:</strong></p>
 <p>…</p>
-<p>区别:</p>
+<p><strong>区别:</strong></p>
 <blockquote>
 <p>V5: bottleneck数据进行concat的方式不同(线性向前与分级向前)</p>
 </blockquote>
@@ -201,7 +603,8 @@
 </blockquote>
 </li>
 </ol>
-<h3 id="sppf"><a class="markdownIt-Anchor" href="#sppf"></a> SPPF</h3>
+<h4 id="32-sppf"><a class="markdownIt-Anchor" href="#32-sppf"></a> 3.2 SPPF</h4>
+<img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250829095601636.png" alt="image-20250829095601636" style="zoom:50%;">
 <p>定义: 快速金字塔</p>
 <blockquote>
 <p>作用: <strong>特征增强模块</strong> +<strong>多尺度融合</strong></p>
@@ -212,10 +615,11 @@
 <li>进行max pooling</li>
 <li>concat</li>
 </ol>
-<p>优点:</p>
-<p><strong>不同大小的感受野</strong></p>
-<p>PPF 用连续多次 <code>kernel=5</code> 的池化，避免了并行不同 kernel，转为串行相同 kernel</p>
-<p>区别:</p>
+<p><strong>操作</strong></p>
+<p>SPPF 用连续多次 <code>kernel=5</code> 的池化，避免了并行不同 kernel，转为<strong>串行相同 kernel</strong></p>
+<p><strong>优点:</strong></p>
+<p>不同大小的感受野</p>
+<p><strong>区别:</strong></p>
 <blockquote>
 <p>V5 使用了不同K的池化</p>
 </blockquote>
@@ -228,14 +632,14 @@
 </blockquote>
 </li>
 </ol>
-<h3 id="detect"><a class="markdownIt-Anchor" href="#detect"></a> Detect</h3>
+<h4 id="33-detect"><a class="markdownIt-Anchor" href="#33-detect"></a> 3.3 Detect</h4>
 <img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250507234632382.png" alt="image-20250507234632382" style="zoom:33%;">
 <p><strong>组成:</strong></p>
 <ol>
 <li>边界框预测</li>
 <li>类别预测:</li>
 </ol>
-<h4 id="loss-2"><a class="markdownIt-Anchor" href="#loss-2"></a> loss</h4>
+<h4 id="loss"><a class="markdownIt-Anchor" href="#loss"></a> loss</h4>
 <p><strong>区别</strong>: 无ancher</p>
 <p>YOLOv8 head 输出 <code>[B, H, W, 4+cls+obj]</code></p>
 <h3 id="问题"><a class="markdownIt-Anchor" href="#问题"></a> 问题:</h3>
@@ -265,6 +669,8 @@
 </blockquote>
 </li>
 </ol>
+<h2 id="yolo-v9"><a class="markdownIt-Anchor" href="#yolo-v9"></a> YOLO V9</h2>
+<h2 id="yolo-v10"><a class="markdownIt-Anchor" href="#yolo-v10"></a> YOLO V10</h2>
 <h2 id="yolo-v11"><a class="markdownIt-Anchor" href="#yolo-v11"></a> YOLO V11</h2>
 <blockquote>
 <p>特点: 改进</p>
@@ -864,6 +1270,344 @@
 <blockquote>
 <p>实际推理速度和资源占用显著优于原版 YOLOv8。量化后的模型在 mAP@0.5 上仅有 <strong>0.5%-1% 左右的下降</strong>，但带来了 <strong>20%-40% 的加速提升</strong>，更适合在嵌入式或边缘设备上部署。</p>
 </blockquote>
+<h1 id="ultralytics-库"><a class="markdownIt-Anchor" href="#ultralytics-库"></a> Ultralytics 库</h1>
+<p>Ultralytics 是一个强大的 Python 库，主要用于计算机视觉任务，尤其是对象检测、实例分割和图像分类。它以 YOLO（You Only Look Once）系列模型为核心，提供简单易用的 API，适用于研究和生产环境。以下是对 YOLO.predict() 方法及其返回结果 result 的中文介绍。</p>
+<h2 id="yolo"><a class="markdownIt-Anchor" href="#yolo"></a> YOLO</h2>
+<p>YOLO 是 Ultralytics 库的核心模型，基于 YOLOv8 等先进架构，支持高效、实时的对象检测、分割和关键点检测。用户可以通过预训练模型或自定义训练模型来处理图像或视频中的目标检测任务。</p>
+<h2 id="yolopredict"><a class="markdownIt-Anchor" href="#yolopredict"></a> YOLO.predict()</h2>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://docs.ultralytics.com/modes/predict/#inference-arguments">https://docs.ultralytics.com/modes/predict/#inference-arguments</a></p>
+</blockquote>
+<p>YOLO.predict() 是 Ultralytics YOLO 模型的主要推理方法，用于对输入数据（图像、视频或数据流）进行预测</p>
+<h3 id="1-用法参数说明"><a class="markdownIt-Anchor" href="#1-用法参数说明"></a> 1 用法/参数说明</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> ultralytics <span class="keyword">import</span> YOLO</span><br><span class="line">model = YOLO(<span class="string">&quot;yolov8n.pt&quot;</span>)  <span class="comment"># 使用预训练模型（如 yolov8n.pt）</span></span><br><span class="line">result = model.predict(source=<span class="string">&quot;image.jpg&quot;</span>,  save=<span class="literal">True</span>, conf=<span class="number">0.25</span>, iou=<span class="number">0.45</span>)</span><br></pre></td></tr></table></figure>
+<p><strong>推理参数说明</strong>：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Argument</th>
+<th style="text-align:left">Type</th>
+<th style="text-align:left">Default</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>source</code></td>
+<td style="text-align:left"><code>str</code></td>
+<td style="text-align:left"><code>'ultralytics/assets'</code></td>
+<td style="text-align:left">Specifies the data source for inference. Can be an image path, video file, directory, URL, or device ID for live feeds. Supports a wide range of formats and sources, enabling flexible application across <a target="_blank" rel="noopener" href="https://docs.ultralytics.com/modes/predict/#inference-sources">different types of input</a>.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>conf</code></td>
+<td style="text-align:left"><code>float</code></td>
+<td style="text-align:left"><code>0.25</code></td>
+<td style="text-align:left">Sets the minimum confidence threshold for detections. Objects detected with confidence below this threshold will be disregarded. Adjusting this value can help reduce false positives.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>iou</code></td>
+<td style="text-align:left"><code>float</code></td>
+<td style="text-align:left"><code>0.7</code></td>
+<td style="text-align:left"><a target="_blank" rel="noopener" href="https://www.ultralytics.com/glossary/intersection-over-union-iou">Intersection Over Union</a> (IoU) threshold for Non-Maximum Suppression (NMS). Lower values result in fewer detections by eliminating overlapping boxes, useful for reducing duplicates.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>imgsz</code></td>
+<td style="text-align:left"><code>int</code> or <code>tuple</code></td>
+<td style="text-align:left"><code>640</code></td>
+<td style="text-align:left">Defines the image size for inference. Can be a single integer <code>640</code> for square resizing or a (height, width) tuple. Proper sizing can improve detection <a target="_blank" rel="noopener" href="https://www.ultralytics.com/glossary/accuracy">accuracy</a> and processing speed.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>rect</code></td>
+<td style="text-align:left"><code>bool</code></td>
+<td style="text-align:left"><code>True</code></td>
+<td style="text-align:left">If enabled, <strong>minimally</strong> pads the shorter side of the image until it’s divisible by stride to improve inference speed. If disabled, pads the image to a square during inference.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>half</code></td>
+<td style="text-align:left"><code>bool</code></td>
+<td style="text-align:left"><code>False</code></td>
+<td style="text-align:left">Enables half-<a target="_blank" rel="noopener" href="https://www.ultralytics.com/glossary/precision">precision</a> (FP16) inference, which can speed up model inference on supported GPUs with minimal impact on accuracy.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>device</code></td>
+<td style="text-align:left"><code>str</code></td>
+<td style="text-align:left"><code>None</code></td>
+<td style="text-align:left">Specifies the device for inference (e.g., <code>cpu</code>, <code>cuda:0</code> or <code>0</code>). Allows users to select between CPU, a specific GPU, or other compute devices for model execution.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>batch</code></td>
+<td style="text-align:left"><code>int</code></td>
+<td style="text-align:left"><code>1</code></td>
+<td style="text-align:left">Specifies the batch size for inference (only works when the source is <a target="_blank" rel="noopener" href="https://docs.ultralytics.com/modes/predict/#inference-sources">a directory, video file or <code>.txt</code> file</a>). A larger batch size can provide higher throughput, shortening the total amount of time required for inference.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>max_det</code></td>
+<td style="text-align:left"><code>int</code></td>
+<td style="text-align:left"><code>300</code></td>
+<td style="text-align:left"><strong>Maximum number of detections allowed per image.</strong> Limits the total number of objects the model can detect in a single inference, preventing excessive outputs in dense scenes.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>vid_stride</code></td>
+<td style="text-align:left"><code>int</code></td>
+<td style="text-align:left"><code>1</code></td>
+<td style="text-align:left">Frame stride for video inputs. <strong>Allows skipping frames in videos</strong> to speed up processing at the cost of temporal resolution. A value of 1 processes every frame, higher values skip frames.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>stream_buffer</code></td>
+<td style="text-align:left"><code>bool</code></td>
+<td style="text-align:left"><code>False</code></td>
+<td style="text-align:left">Determines whether to queue incoming frames for video streams. If <code>False</code>, old frames get dropped to accommodate new frames (optimized for real-time applications). If <code>True</code>, queues new frames in a buffer, ensuring no frames get skipped, but will cause latency if inference FPS is lower than stream FPS.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>visualize</code></td>
+<td style="text-align:left"><code>bool</code></td>
+<td style="text-align:left"><code>False</code></td>
+<td style="text-align:left">Activates visualization of model features during inference, providing insights into <strong>what the model is “seeing”.</strong> Useful for debugging and model interpretation.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>augment</code></td>
+<td style="text-align:left"><code>bool</code></td>
+<td style="text-align:left"><code>False</code></td>
+<td style="text-align:left">Enables test-time augmentation (TTA) for predictions, potentially improving detection robustness at the cost of inference speed.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>agnostic_nms</code></td>
+<td style="text-align:left"><code>bool</code></td>
+<td style="text-align:left"><code>False</code></td>
+<td style="text-align:left">Enables class-agnostic Non-Maximum Suppression (NMS), which merges overlapping boxes of different classes. Useful in multi-class detection scenarios where <strong>class overlap</strong> is common.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>classes</code></td>
+<td style="text-align:left"><code>list[int]</code></td>
+<td style="text-align:left"><code>None</code></td>
+<td style="text-align:left">Filters predictions to a set of class IDs. <strong>Only detections belonging to the specified classes will be returned.</strong> Useful for focusing on relevant objects in multi-class detection tasks.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>retina_masks</code></td>
+<td style="text-align:left"><code>bool</code></td>
+<td style="text-align:left"><code>False</code></td>
+<td style="text-align:left">Returns high-resolution segmentation masks. The returned masks (<code>masks.data</code>) will match the original image size if enabled. If disabled, they have the image size used during inference.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>embed</code></td>
+<td style="text-align:left"><code>list[int]</code></td>
+<td style="text-align:left"><code>None</code></td>
+<td style="text-align:left">Specifies the layers from which to extract feature vectors or <a target="_blank" rel="noopener" href="https://www.ultralytics.com/glossary/embeddings">embeddings</a>. Useful for downstream tasks like clustering or similarity search.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>project</code></td>
+<td style="text-align:left"><code>str</code></td>
+<td style="text-align:left"><code>None</code></td>
+<td style="text-align:left"><strong>Name of the project</strong> directory where prediction outputs are saved if <code>save</code> is enabled.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>name</code></td>
+<td style="text-align:left"><code>str</code></td>
+<td style="text-align:left"><code>None</code></td>
+<td style="text-align:left"><strong>Name of the prediction run.</strong> Used for creating a subdirectory within the project folder, where prediction outputs are stored if <code>save</code> is enabled.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>stream</code></td>
+<td style="text-align:left"><code>bool</code></td>
+<td style="text-align:left"><code>False</code></td>
+<td style="text-align:left">Enables memory-efficient processing for long videos or numerous images by returning a generator of Results objects instead of loading all frames into memory at once.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>verbose</code></td>
+<td style="text-align:left"><code>bool</code></td>
+<td style="text-align:left"><code>True</code></td>
+<td style="text-align:left">Controls whether to display detailed inference logs in the terminal, providing real-time feedback on the prediction process.</td>
+</tr>
+</tbody>
+</table>
+<p><strong>可视化参数</strong></p>
+<table>
+<thead>
+<tr>
+<th><code>save_crop</code></th>
+<th><code>bool</code></th>
+<th><code>False</code></th>
+<th>Saves cropped images of detections. Useful for dataset augmentation, analysis, or creating focused datasets for specific objects.</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>…</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-result"><a class="markdownIt-Anchor" href="#2-result"></a> 2 result</h3>
+<p>All Ultralytics <code>predict()</code> calls will return a list of <code>Results</code> objects:</p>
+<h4 id="主要属性"><a class="markdownIt-Anchor" href="#主要属性"></a> 主要属性</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Attribute</th>
+<th style="text-align:left">Type</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>orig_img</code></td>
+<td style="text-align:left"><code>np.ndarray</code></td>
+<td style="text-align:left">The original image as a numpy array.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>orig_shape</code></td>
+<td style="text-align:left"><code>tuple</code></td>
+<td style="text-align:left">The original image shape in (height, width) format.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>boxes</code></td>
+<td style="text-align:left"><code>Boxes, optional</code></td>
+<td style="text-align:left">A Boxes object containing the detection bounding boxes.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>masks</code></td>
+<td style="text-align:left"><code>Masks, optional</code></td>
+<td style="text-align:left">A Masks object containing the detection masks.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>probs</code></td>
+<td style="text-align:left"><code>Probs, optional</code></td>
+<td style="text-align:left">A Probs object containing probabilities of each class for classification task.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>keypoints</code></td>
+<td style="text-align:left"><code>Keypoints, optional</code></td>
+<td style="text-align:left">A Keypoints object containing detected keypoints for each object.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>obb</code></td>
+<td style="text-align:left"><code>OBB, optional</code></td>
+<td style="text-align:left">An OBB object containing oriented bounding boxes.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>speed</code></td>
+<td style="text-align:left"><code>dict</code></td>
+<td style="text-align:left">A dictionary of preprocess, inference, and postprocess speeds in milliseconds per image.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>names</code></td>
+<td style="text-align:left"><code>dict</code></td>
+<td style="text-align:left">A dictionary mapping class indices to class names.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>path</code></td>
+<td style="text-align:left"><code>str</code></td>
+<td style="text-align:left">The path to the image file.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>save_dir</code></td>
+<td style="text-align:left"><code>str, optional</code></td>
+<td style="text-align:left">Directory to save results.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="3-boxes"><a class="markdownIt-Anchor" href="#3-boxes"></a> 3 Boxes</h3>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://docs.ultralytics.com/reference/engine/results/#ultralytics.engine.results.Boxes"><code>Boxes</code> class documentation</a>.</p>
+</blockquote>
+<p><code>result[i].boxes</code></p>
+<h4 id="说明"><a class="markdownIt-Anchor" href="#说明"></a> 说明</h4>
+<p><strong>Boxes(boxes: Union[Tensor, ndarray], orig_shape: Tuple[int, int])</strong></p>
+<p><strong>Parameters:</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Name</th>
+<th style="text-align:left">Type</th>
+<th style="text-align:left">Description</th>
+<th style="text-align:left">Default</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>boxes</code></td>
+<td style="text-align:left">`Tensor</td>
+<td style="text-align:left">ndarray`</td>
+<td style="text-align:left">A tensor or numpy array with detection boxes of shape (num_boxes, 6) or (num_boxes, 7). Columns should contain [x1, y1, x2, y2, confidence, class, (optional) track_id].</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>orig_shape</code></td>
+<td style="text-align:left"><code>Tuple[int, int]</code></td>
+<td style="text-align:left">The original image shape as (height, width). Used for normalization.</td>
+<td style="text-align:left"><em>required</em></td>
+</tr>
+</tbody>
+</table>
+<h4 id="方法和功能"><a class="markdownIt-Anchor" href="#方法和功能"></a> 方法和功能</h4>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Name</th>
+<th style="text-align:left">Type</th>
+<th style="text-align:left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>cpu()</code></td>
+<td style="text-align:left">Method</td>
+<td style="text-align:left">Move the object to CPU memory.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>numpy()</code></td>
+<td style="text-align:left">Method</td>
+<td style="text-align:left">Convert the object to a numpy array.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>cuda()</code></td>
+<td style="text-align:left">Method</td>
+<td style="text-align:left">Move the object to CUDA memory.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>to()</code></td>
+<td style="text-align:left">Method</td>
+<td style="text-align:left">Move the object to the specified device.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>xyxy</code></td>
+<td style="text-align:left">Property (<code>torch.Tensor</code>)</td>
+<td style="text-align:left">Return the boxes in xyxy format.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>conf</code></td>
+<td style="text-align:left">Property (<code>torch.Tensor</code>)</td>
+<td style="text-align:left">Return the confidence values of the boxes.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>cls</code></td>
+<td style="text-align:left">Property (<code>torch.Tensor</code>)</td>
+<td style="text-align:left">Return the class values of the boxes.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>id</code></td>
+<td style="text-align:left">Property (<code>torch.Tensor</code>)</td>
+<td style="text-align:left">Return the track IDs of the boxes (if available).</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>xywh</code></td>
+<td style="text-align:left">Property (<code>torch.Tensor</code>)</td>
+<td style="text-align:left">Return the boxes in xywh format.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>xyxyn</code></td>
+<td style="text-align:left">Property (<code>torch.Tensor</code>)</td>
+<td style="text-align:left">Return the boxes in xyxy format normalized by original image size.</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>xywhn</code></td>
+<td style="text-align:left">Property (<code>torch.Tensor</code>)</td>
+<td style="text-align:left">Return the boxes in xywh format normalized by original image size.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="4-plot"><a class="markdownIt-Anchor" href="#4-plot"></a> 4 plot()</h3>
 
       
     </div>
@@ -940,7 +1684,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>116</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>118</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>34</strong><br>标签</div></a>
     </div>

@@ -43,7 +43,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>116</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>118</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>34</strong><br>标签</div></a>
     </div>
@@ -70,6 +70,199 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-2025年3月12日-onnx4-图优化" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/03/12/2025%E5%B9%B43%E6%9C%8812%E6%97%A5-onnx4-%E5%9B%BE%E4%BC%98%E5%8C%96/" class="article-date">
+  <time class="post-time" datetime="2025-03-12T14:14:32.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">12</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/03/12/2025%E5%B9%B43%E6%9C%8812%E6%97%A5-onnx4-%E5%9B%BE%E4%BC%98%E5%8C%96/">2025年3月12日 onnx3</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="图优化"><a class="markdownIt-Anchor" href="#图优化"></a> 图优化</h1>
+<h3 id="1"><a class="markdownIt-Anchor" href="#1"></a> 1</h3>
+<p><img src="/2025/03/12/2025%E5%B9%B43%E6%9C%8812%E6%97%A5-onnx4-%E5%9B%BE%E4%BC%98%E5%8C%96/image-20250312222559294.png" alt="image-20250312222559294"></p>
+<p><strong>引擎能够针对特定硬件进行深度优化，实现最佳的性能和效率</strong></p>
+<p><img src="/2025/03/12/2025%E5%B9%B43%E6%9C%8812%E6%97%A5-onnx4-%E5%9B%BE%E4%BC%98%E5%8C%96/image-20250312224327684.png" alt="image-20250312224327684"></p>
+<h3 id="3-查看netron节点"><a class="markdownIt-Anchor" href="#3-查看netron节点"></a> 3 查看netron节点</h3>
+<p>ONNX的optimizer模块提供部分图优化的功能，例如最常用的：fuse_bn_into_conv，fuse_pad_into_conv等等。</p>
+<p><img src="/2025/03/12/2025%E5%B9%B43%E6%9C%8812%E6%97%A5-onnx4-%E5%9B%BE%E4%BC%98%E5%8C%96/image-20250312232520596.png" alt="image-20250312232520596"></p>
+<h3 id="2-为什么需要forward_fuse"><a class="markdownIt-Anchor" href="#2-为什么需要forward_fuse"></a> 2. 为什么需要forward_fuse？</h3>
+<ul>
+<li>
+<p>forward_fuse通常用于把卷积和BN层合并，或者把多个卷积分支合并，减少计算量，提高推理速度。</p>
+</li>
+<li>
+<p>如果你的模块没有BN层，或者结构很简单，不需要合并，也应该定义一个forward_fuse，让它和forward一样。</p>
+</li>
+</ul>
+<h3 id="4-onnxslim-模块未安装简化失败"><a class="markdownIt-Anchor" href="#4-onnxslim-模块未安装简化失败"></a> <code>4 onnxslim</code> 模块未安装，简化失败</h3>
+<h4 id="简化-onnx-的主要作用"><a class="markdownIt-Anchor" href="#简化-onnx-的主要作用"></a> ✅ 简化 ONNX 的主要作用：</h4>
+<table>
+<thead>
+<tr>
+<th>好处</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>📦 减少模型大小</td>
+<td>去除冗余算子与中间变量，减小 <code>.onnx</code> 文件大小</td>
+</tr>
+<tr>
+<td>🚀 加速推理速度</td>
+<td>简化计算图后，ONNX Runtime / TensorRT 推理更快</td>
+</tr>
+<tr>
+<td>🔧 提高兼容性</td>
+<td>某些部署平台（如 OpenVINO、MNN）对简化后的模型兼容性更强</td>
+</tr>
+<tr>
+<td>🧩 易于可视化分析</td>
+<td>模型结构更清晰，利于在 Netron 中查看和理解</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/03/12/2025%E5%B9%B43%E6%9C%8812%E6%97%A5-onnx4-%E5%9B%BE%E4%BC%98%E5%8C%96/" data-id="cmanj8o210008lcv42fxu34el" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/onnx/" rel="tag">onnx</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2025年3月11日-yolov5-5-0训练" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/03/11/2025%E5%B9%B43%E6%9C%8811%E6%97%A5-yolov5-5-0%E8%AE%AD%E7%BB%83/" class="article-date">
+  <time class="post-time" datetime="2025-03-11T03:59:58.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">11</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/03/11/2025%E5%B9%B43%E6%9C%8811%E6%97%A5-yolov5-5-0%E8%AE%AD%E7%BB%83/">2025年3月11日 yolov5 5.0训练</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="sad"><a class="markdownIt-Anchor" href="#sad"></a> sad</h2>
+<h2 id="报错"><a class="markdownIt-Anchor" href="#报错"></a> 报错</h2>
+<p>库的版本要匹配上 否则会出现不确定错误</p>
+<ol>
+<li>
+<p>pydantic_core._pydantic_core.ValidationError: 1 validation error for Settings<br>
+anonymous<br>
+Input should be ‘allow’, ‘must’ or ‘never’ [type=literal_error, input_value=‘true’, input_type=str]<br>
+For further information visit <a target="_blank" rel="noopener" href="https://errors.pydantic.dev/2.10/v/literal_error">https://errors.pydantic.dev/2.10/v/literal_error</a></p>
+<p>建议：wandb 下降版本<code>pip install wandb==0.12.10</code></p>
+</li>
+<li>
+<p>You are using <code>torch.load</code> with <code>weights_only=False</code> (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling</p>
+<p>修改代码中加载模型权重的部分</p>
+<p><code> run_id = torch.load(weights, weights_only=True).get('wandb_id')  # 添加weights_only=True</code></p>
+</li>
+<li>
+<p>File “F:\Pydata\DL_NEW\YOLO\yolov5-5.0\utils\datasets.py”, line 411, in <strong>init</strong><br>
+bi = np.floor(np.arange(n) / batch_size).astype(np.int)  # batch index</p>
+</li>
+</ol>
+<p><code>pip install numpy==1.22.4       # 部分新库兼容的中间版本</code></p>
+<ol start="4">
+<li>
+<p>TypeError: Descriptors cannot be created directly.<br>
+If this call came from a _pb2.py file, your generated code is out of date and must be regenerated with protoc &gt;= 3.19.0.<br>
+If you cannot immediately regenerate your protos, some other possible workarounds are:</p>
+<ol>
+<li>Downgrade the protobuf package to 3.20.x or lower.</li>
+<li>Set PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION=python (but this will use pure-Python parsing and will be much slower).</li>
+</ol>
+<p><code>pip install protobuf==3.20.1 </code></p>
+</li>
+<li>
+<p>是</p>
+</li>
+</ol>
+<p>代码出现的问题:</p>
+<ol>
+<li>
+<p>手动添加SSF层</p>
+</li>
+<li>
+<p>缺少logger</p>
+<p>手动添加 <code>logger = logging.getLogger(__name__)</code></p>
+</li>
+<li></li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/03/11/2025%E5%B9%B43%E6%9C%8811%E6%97%A5-yolov5-5-0%E8%AE%AD%E7%BB%83/" data-id="cm8q1tfhp000upcv4f52t1sn8" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/yolo/" rel="tag">yolo</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-2025年3月10日-onnx3进阶使用与常见问题" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -1709,155 +1902,6 @@ y.data: -0.262973</p>
 
 
   
-    <article id="post-2025年2月19日-CRNN模型" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/" class="article-date">
-  <time class="post-time" datetime="2025-02-19T06:46:09.000Z" itemprop="datePublished">
-    <span class="post-month">2月</span><br/>
-    <span class="post-day">19</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/">2025年2月19日 CRNN模型</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="ocr"><a class="markdownIt-Anchor" href="#ocr"></a> OCR</h1>
-<h2 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h2>
-<p>CRNN主要是<strong>CNN（卷积神经网络）+ RNN（循环神经网络）+ CTC（连接时序分类）</strong> 的组合，广泛用于 <strong>场景文本识别（STR, Scene Text Recognition）</strong></p>
-<p><img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219145436243.png" alt="image-20250219145436243"></p>
-<p>在早期，OCR任务通常分为两个步骤：单字切割和分类任务。首先，使用投影法等技术将文本文件中的连续文字切割成单个字符，然后将这些字符输入到卷积神经网络（CNN）中进行分类。然而，这种方法现在已经有些过时。</p>
-<p>目前更流行的方法是基于深度学习的端到端的文本识别，这种方法不需要显式地进行文字切割。而是将文字识别转化为序列学习问题。尽管输入的图像尺度和文本长度可能不同，但是通过深度卷积神经网络（DCNN）和循环神经网络（RNN）的处理，以及在输出阶段应用一定的连接时序分类（CTC）翻译转录后，就可以对整个文本图像进行识别。这意味着文字的切割过程已经被融入到深度学习模型中，从而简化了整个OCR流程。</p>
-<p>深度学习在端到端OCR（光学字符识别）技术中的应用，特别是CRNN OCR和attention OCR两种技术。这两种技术都使用了CNN+RNN的网络结构进行特征学习，但在最后的输出层（翻译层）有所不同。CRNN OCR使用CTC（连接时序分类）算法进行序列对齐，而attention OCR则采用attention机制来进行序列对齐。文件中提到，CRNN算法应用更为广泛，因此主要介绍的是CRNN算法。</p>
-<h2 id="crnn"><a class="markdownIt-Anchor" href="#crnn"></a> CRNN</h2>
-<h3 id="网络结构"><a class="markdownIt-Anchor" href="#网络结构"></a> 网络结构</h3>
-<img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219150224189.png" style="zoom: 50%;">
-<h4 id="1cnn"><a class="markdownIt-Anchor" href="#1cnn"></a> 1.CNN</h4>
-<img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219150328966.png" alt="image-20250219150328966" style="zoom: 33%;">
-<h5 id="1x2-池化"><a class="markdownIt-Anchor" href="#1x2-池化"></a> 1x2 池化</h5>
-<h4 id="2map2feature-sequence"><a class="markdownIt-Anchor" href="#2map2feature-sequence"></a> 2.Map2Feature sequence</h4>
-<p><img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219150833633.png" alt="image-20250219150833633"></p>
-<img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219150936041.png" alt="image-20250219150936041" style="zoom:50%;">
-<h4 id="3rnn"><a class="markdownIt-Anchor" href="#3rnn"></a> 3.RNN</h4>
-<h5 id="lstm"><a class="markdownIt-Anchor" href="#lstm"></a> LSTM</h5>
-<img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219150959428.png" alt="image-20250219150959428" style="zoom: 50%;">
-<h5 id="双向lstm"><a class="markdownIt-Anchor" href="#双向lstm"></a> 双向LSTM</h5>
-<h5 id><a class="markdownIt-Anchor" href="#"></a> </h5>
-<h4 id="4ctcloss"><a class="markdownIt-Anchor" href="#4ctcloss"></a> 4.CTCLoss</h4>
-<img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219154341960.png" alt="image-20250219154341960" style="zoom: 80%;">
-<p>如上图，对于最简单的时序为 2 的字符识别，有两个时间步长(t0，t1)和三个可能的字符为“ａ”，“ｂ”和“-”，我们得到两个概率分布向量，如果采取最大概率路径解码的方法，则“–”的概率最大，即真实字符为空的概率为0.6*0.6=0.36。</p>
-<p>但是为字符“ａ”的情况有多种对齐组合，“aa”, “a-“和“-a”都是代表“ａ”，所以，输出“ａ”的概率应该为三种之和：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0.4 * 0.4 + 0.4 * 0.6 + 0.6 * 0.4 = 0.16 + 0.24 + 0.24 = 0.64</span><br></pre></td></tr></table></figure>
-<h4 id="5attention"><a class="markdownIt-Anchor" href="#5attention"></a> 5.Attention</h4>
-<p>基于Attention的OCR解码算法，把OCR文字识别当成文字翻译任务，即通过Attention Decoder出文字序列。</p>
-<h5 id="rnn-seq2seq"><a class="markdownIt-Anchor" href="#rnn-seq2seq"></a> <strong>RNN -&gt; Seq2Seq</strong></h5>
-<p><img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219155949098.png" alt="image-20250219155949098"></p>
-<p>左图是经典的RNN结构，右图是Seq2Seq结构。RNN的输入序列和输出序列必须有相同的时间长度，而机器翻译以及文字识别任务都是输入输出不对齐的，不能直接使用RNN结构进行解码。于是在Seq2Seq结构中，将输入序列进行Encoder编码成一个统一的语义向量Context，然后送入Decoder中一个一个解码出输出序列。在Decoder解码过程中，第一个输入字符为<start>，然后不断将前一个时刻的输出作为下一个时刻的输入，循环解码，直到输出<stop></stop>字符为止</start></p>
-<p><strong>Seq2Seq -&gt; Attention Decoder</strong></p>
-<img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219160050009.png" alt="image-20250219160050009" style="zoom: 50%;">
-<p>Seq2Seq把所有的输入序列都编码成一个统一的语义向量Context，然后再由Decoder解码。由于context包含原始序列中的所有信息，它的长度就成了限制模型性能的瓶颈。</p>
-<p>所以如果要改进Seq2Seq结构，最好的切入角度就是：**利用Encoder所有隐藏层状态解决Context长度限制问题。**于是Attention Decoder在Seq2Seq的基础上，增加了一个Attention Layer，如上图所示。</p>
-<img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219160149932.png" alt="image-20250219160149932" style="zoom: 50%;">
-<p>在Decoder时，每个时刻的解码状态跟Encoder的所有隐藏层状态进行cross-attention计算，cross-attention将当前解码的隐藏层状态和encoder的所有隐藏层状态做相关性计算，然后对encoder的所有隐藏层加权求和，最后和当前解码的隐藏层状态concat得到最终的状态。</p>
-<h4 id="6ace"><a class="markdownIt-Anchor" href="#6ace"></a> 6.ACE</h4>
-<p>基于ACE的解码方法不同于CTC和Attention，ACE的监督信号实际上是一种弱监督(<strong>输入输出没有做形式上的对齐，没有先后顺序信息，倾向于学习表征</strong>)，并且可以用于多行文字识别。</p>
-<p><img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219160702221.png" alt="image-20250219160702221"></p>
-<p><img src="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/image-20250219160636874.png" alt="image-20250219160636874"></p>
-<p>从模型设计上来看，可以采用结合上面3种方法的**多任务文本识别模型。在训练时，以CTC为主，Attention Decoder和ACE辅助训练。在预测时，考虑到速度和性能，只采用CTC进行解码预测。**多任务可以提高模型的泛化性，同时如果对预测时间要求不高，多结果也可以提供更多的选择和对比。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">    Encoder+Decoder+Attention is implemented from:</span></span><br><span class="line"><span class="string">    https://pytorch.org/tutorials/intermediate/seq2seq_translation_tutorial.html</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">CNN</span>(nn.Module):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, channel_size</span>):</span><br><span class="line">        <span class="built_in">super</span>(CNN, self).__init__()</span><br><span class="line">        self.cnn = nn.Sequential(</span><br><span class="line">                      nn.Conv2d(channel_size, <span class="number">64</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">1</span>), nn.ReLU(<span class="literal">True</span>), nn.MaxPool2d(<span class="number">2</span>, <span class="number">2</span>),</span><br><span class="line">                      nn.Conv2d(<span class="number">64</span>, <span class="number">128</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">1</span>), nn.ReLU(<span class="literal">True</span>), nn.MaxPool2d(<span class="number">2</span>, <span class="number">2</span>),</span><br><span class="line">                      nn.Conv2d(<span class="number">128</span>, <span class="number">256</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">1</span>), nn.BatchNorm2d(<span class="number">256</span>), nn.ReLU(<span class="literal">True</span>),</span><br><span class="line">                      nn.Conv2d(<span class="number">256</span>, <span class="number">256</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">1</span>), nn.ReLU(<span class="literal">True</span>), nn.MaxPool2d((<span class="number">2</span>,<span class="number">2</span>), (<span class="number">2</span>,<span class="number">1</span>), (<span class="number">0</span>,<span class="number">1</span>)),</span><br><span class="line">                      nn.Conv2d(<span class="number">256</span>, <span class="number">512</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">1</span>), nn.BatchNorm2d(<span class="number">512</span>), nn.ReLU(<span class="literal">True</span>),</span><br><span class="line">                      nn.Conv2d(<span class="number">512</span>, <span class="number">512</span>, <span class="number">3</span>, <span class="number">1</span>, <span class="number">1</span>), nn.ReLU(<span class="literal">True</span>), nn.MaxPool2d((<span class="number">2</span>,<span class="number">2</span>), (<span class="number">2</span>,<span class="number">1</span>), (<span class="number">0</span>,<span class="number">1</span>)),</span><br><span class="line">                      nn.Conv2d(<span class="number">512</span>, <span class="number">512</span>, <span class="number">2</span>, <span class="number">1</span>, <span class="number">0</span>), nn.BatchNorm2d(<span class="number">512</span>), nn.ReLU(<span class="literal">True</span>))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, <span class="built_in">input</span></span>):</span><br><span class="line">        <span class="comment"># [n, channel_size, 32, 280] -&gt; [n, 512, 1, 71]</span></span><br><span class="line">        conv = self.cnn(<span class="built_in">input</span>)</span><br><span class="line">        <span class="keyword">return</span> conv</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">BidirectionalLSTM</span>(nn.Module):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, input_size, hidden_size, output_size</span>):</span><br><span class="line">        <span class="built_in">super</span>(BidirectionalLSTM, self).__init__()</span><br><span class="line"></span><br><span class="line">        self.rnn = nn.LSTM(input_size, hidden_size, bidirectional=<span class="literal">True</span>)</span><br><span class="line">        self.embedding = nn.Linear(hidden_size * <span class="number">2</span>, output_size)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, <span class="built_in">input</span></span>):</span><br><span class="line">        recurrent, _ = self.rnn(<span class="built_in">input</span>)</span><br><span class="line">        T, b, h = recurrent.size()</span><br><span class="line">        t_rec = recurrent.view(T * b, h)</span><br><span class="line"></span><br><span class="line">        output = self.embedding(t_rec)  <span class="comment"># [T * b, output_size]</span></span><br><span class="line">        output = output.view(T, b, -<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> output</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">AttnDecoderRNN</span>(nn.Module):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, hidden_size, output_size, dropout_p=<span class="number">0.1</span>, max_length=<span class="number">71</span></span>):</span><br><span class="line">        <span class="built_in">super</span>(AttnDecoderRNN, self).__init__()</span><br><span class="line">        self.hidden_size = hidden_size</span><br><span class="line">        self.output_size = output_size</span><br><span class="line">        self.dropout_p = dropout_p</span><br><span class="line">        self.max_length = max_length</span><br><span class="line"></span><br><span class="line">        self.embedding = nn.Embedding(self.output_size, self.hidden_size)</span><br><span class="line">        self.attn = nn.Linear(self.hidden_size * <span class="number">2</span>, self.max_length)</span><br><span class="line">        self.attn_combine = nn.Linear(self.hidden_size * <span class="number">2</span>, self.hidden_size)</span><br><span class="line">        self.dropout = nn.Dropout(self.dropout_p)</span><br><span class="line">        self.gru = nn.GRU(self.hidden_size, self.hidden_size)</span><br><span class="line">        self.out = nn.Linear(self.hidden_size, self.output_size)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, <span class="built_in">input</span>, hidden, encoder_outputs</span>):</span><br><span class="line">        embedded = self.embedding(<span class="built_in">input</span>)</span><br><span class="line">        embedded = self.dropout(embedded)</span><br><span class="line"></span><br><span class="line">        attn_weights = F.softmax(self.attn(torch.cat((embedded, hidden[<span class="number">0</span>]), <span class="number">1</span>)), dim=<span class="number">1</span>)</span><br><span class="line">        attn_applied = torch.bmm(attn_weights.unsqueeze(<span class="number">1</span>), encoder_outputs.permute(<span class="number">1</span>, <span class="number">0</span>, <span class="number">2</span>))</span><br><span class="line"></span><br><span class="line">        output = torch.cat((embedded, attn_applied.squeeze(<span class="number">1</span>)), <span class="number">1</span>)</span><br><span class="line">        output = self.attn_combine(output).unsqueeze(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">        output = F.relu(output)</span><br><span class="line">        output, hidden = self.gru(output, hidden)</span><br><span class="line"></span><br><span class="line">        output = F.log_softmax(self.out(output[<span class="number">0</span>]), dim=<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> output, hidden, attn_weights</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">initHidden</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> torch.zeros(<span class="number">1</span>, <span class="number">1</span>, self.hidden_size, device=device)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Encoder</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, channel_size, hidden_size</span>):</span><br><span class="line">        <span class="built_in">super</span>(Encoder, self).__init__()</span><br><span class="line">        self.cnn = CNN(channel_size)</span><br><span class="line">        self.rnn = nn.Sequential(</span><br><span class="line">            BidirectionalLSTM(<span class="number">512</span>, hidden_size, hidden_size),</span><br><span class="line">            BidirectionalLSTM(hidden_size, hidden_size, hidden_size))</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, <span class="built_in">input</span></span>):</span><br><span class="line">        <span class="comment"># conv features</span></span><br><span class="line">        conv = self.cnn(<span class="built_in">input</span>)</span><br><span class="line">        b, c, h, w = conv.size()</span><br><span class="line">        <span class="keyword">assert</span> h == <span class="number">1</span>, <span class="string">&quot;the height of conv must be 1&quot;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># rnn feature</span></span><br><span class="line">        conv = conv.squeeze(<span class="number">2</span>)        <span class="comment"># [b, c, 1, w] -&gt; [b, c, w]</span></span><br><span class="line">        conv = conv.permute(<span class="number">2</span>, <span class="number">0</span>, <span class="number">1</span>)  <span class="comment"># [b, c, w] -&gt; [w, b, c]</span></span><br><span class="line">        output = self.rnn(conv)</span><br><span class="line">        <span class="keyword">return</span> output</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Decoder</span>(nn.Module):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, hidden_size, output_size, dropout_p=<span class="number">0.1</span>, max_length=<span class="number">71</span></span>):</span><br><span class="line">        <span class="built_in">super</span>(Decoder, self).__init__()</span><br><span class="line">        self.hidden_size = hidden_size</span><br><span class="line">        self.decoder = AttnDecoderRNN(hidden_size, output_size, dropout_p, max_length)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, <span class="built_in">input</span>, hidden, encoder_outputs</span>):</span><br><span class="line">        <span class="keyword">return</span> self.decoder(<span class="built_in">input</span>, hidden, encoder_outputs)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">initHidden</span>(<span class="params">self, batch_size</span>):</span><br><span class="line">        result = torch.autograd.Variable(torch.zeros(<span class="number">1</span>, batch_size, self.hidden_size))</span><br><span class="line">        <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="model改进"><a class="markdownIt-Anchor" href="#model改进"></a> Model改进</h2>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-CRNN%E6%A8%A1%E5%9E%8B/" data-id="cm8q1tfhm000mpcv41rh6e84u" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl%E3%80%81model/" rel="tag">dl、model</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2025年2月19日-pytorch2" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-pytorch2/" class="article-date">
-  <time class="post-time" datetime="2025-02-19T03:10:27.000Z" itemprop="datePublished">
-    <span class="post-month">2月</span><br/>
-    <span class="post-day">19</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-pytorch2/">2025年2月19日 pytorch2</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>TorchScript是PyTorch中实现**即时编译（JIT）**的核心工具，它通过将动态图模型转换为静态图形式，解决了PyTorch模型在部署、性能优化和多平台支持等方面的关键问题</p>
-<p><strong>即时编译（JIT）</strong>：一种程序优化技术，通过将代码在运行时编译为机器码来提升性能。PyTorch JIT通过TorchScript实现这一机制</p>
-<p>动态图是在运行时动态构建计算图，允许灵活修改，适合开发和调试；</p>
-<p>而静态图是预先定义完整的计算图，然后进行优化和执行，适合部署和性能优化</p>
-<p>例如，PyTorch的动态图允许在训练循环中修改模型结构，而TensorFlow的静态图一旦编译后无法更改。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/02/19/2025%E5%B9%B42%E6%9C%8819%E6%97%A5-pytorch2/" data-id="cm8q1tfhh000jpcv4fh4o5snj" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl%E3%80%81python/" rel="tag">dl、python</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -1902,7 +1946,7 @@ y.data: -0.262973</p>
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>116</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>118</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>34</strong><br>标签</div></a>
     </div>
