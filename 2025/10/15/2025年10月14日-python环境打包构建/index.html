@@ -12,11 +12,19 @@
 <meta property="og:site_name" content="Weakliy_Blog">
 <meta property="og:description" content="python环境打包构建 在 Electron + Python 项目中，为了在无 Python 环境的客户端运行，需要实现 Python 环境自包含打包。 实践过程中共尝试三种方案：  方式 A：复制本地 Python + venv 方式 B：PyInstaller 打包成独立 EXE 方式 C：Embeddable Python（嵌入式解释器）  最终发现仅方案 B 可行，A、C 在兼容性和">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/559be49c692108c9f627895ec0597657.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/b79fe447ce392f07779af6faed4b573a.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/d9f4b09992f0773c7e8cdc6ee79117b1.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/2792c7754ce5fba8cb8ba4e6a876313b.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/ea40f78d3410bcecc36d5e3bfaa2c48c.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/image-20251022134718481.png">
+<meta property="og:image" content="https://shakewely.github.io/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/image-20251022150309599.png">
 <meta property="article:published_time" content="2025-10-15T15:13:52.000Z">
-<meta property="article:modified_time" content="2025-10-17T01:03:26.517Z">
+<meta property="article:modified_time" content="2025-11-15T06:27:06.011Z">
 <meta property="article:author" content="Weakliy">
 <meta property="article:tag" content="chore">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shakewely.github.io/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/559be49c692108c9f627895ec0597657.png">
   
     <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
   
@@ -197,6 +205,7 @@
 <blockquote>
 <p>经典版本不对</p>
 </blockquote>
+<p><img src="/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/559be49c692108c9f627895ec0597657.png" alt="559be49c692108c9f627895ec0597657"></p>
 <p><strong>2:运行时动态导入问题</strong></p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># app/main.py 第120行（你的项目）</span><br><span class="line">if project_name.lower() == &quot;biyi&quot;:</span><br><span class="line">    from app.api.v1 import biyi  # ← 运行时才导入</span><br><span class="line">    app.include_router(biyi.router, tags=[&quot;biyi&quot;])</span><br></pre></td></tr></table></figure>
 <blockquote>
@@ -207,16 +216,48 @@
 <blockquote>
 <p>没装上torch -&gt;改用cpu版本</p>
 </blockquote>
+<p><img src="/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/b79fe447ce392f07779af6faed4b573a.png" alt="b79fe447ce392f07779af6faed4b573a"></p>
 <h3 id="3-实现可热更新的"><a class="markdownIt-Anchor" href="#3-实现可热更新的"></a> 3. 实现可热更新的</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">extra_trees = []</span><br><span class="line">if os.path.exists(&#x27;app/companies/biyi&#x27;):</span><br><span class="line">    extra_trees.append(Tree(&#x27;app/companies/biyi&#x27;, prefix=&#x27;app/companies/biyi&#x27;))</span><br><span class="line">if os.path.exists(&#x27;app/config/Biyi&#x27;):</span><br><span class="line">    extra_trees.append(Tree(&#x27;app/config/Biyi&#x27;, prefix=&#x27;app/config/Biyi&#x27;))</span><br></pre></td></tr></table></figure>
 <p>通过extra_tree递归查找+ COLLECT</p>
+<img src="/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/d9f4b09992f0773c7e8cdc6ee79117b1.png" alt="d9f4b09992f0773c7e8cdc6ee79117b1" style="zoom: 50%;">
 <h3 id="4-成功运行exe-功能待测试"><a class="markdownIt-Anchor" href="#4-成功运行exe-功能待测试"></a> 4. 成功运行exe 功能待测试…</h3>
 <p>测试注意事项</p>
-<ol>
-<li>路径问题</li>
-<li>动态导入问题</li>
-<li></li>
-</ol>
+<h4 id="41路径问题"><a class="markdownIt-Anchor" href="#41路径问题"></a> 4.1路径问题</h4>
+<blockquote>
+<p>相对路径问题</p>
+</blockquote>
+<blockquote>
+<p>原本是写在<code>opencv-detection-embodiedrobot\_internal/app</code>; 但是读取不到</p>
+<p>后修改cd到后端路径 <code>opencv-detection-embodiedrobot</code>再启动<code>opencv-detection-embodiedrobot\app\config</code></p>
+</blockquote>
+<h4 id="42-大小写问题"><a class="markdownIt-Anchor" href="#42-大小写问题"></a> 4.2 大小写问题</h4>
+<blockquote>
+<p>导致一直读取不到config</p>
+</blockquote>
+<blockquote>
+<p>全部改为小写</p>
+</blockquote>
+<h4 id="43-c盘内存不足"><a class="markdownIt-Anchor" href="#43-c盘内存不足"></a> 4.3  C盘内存不足</h4>
+<img src="/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/2792c7754ce5fba8cb8ba4e6a876313b.png" alt="2792c7754ce5fba8cb8ba4e6a876313b" style="zoom: 25%;">
+<h4 id="44-模型路径问题"><a class="markdownIt-Anchor" href="#44-模型路径问题"></a> 4.4 模型路径问题</h4>
+<img src="/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/ea40f78d3410bcecc36d5e3bfaa2c48c.png" alt="ea40f78d3410bcecc36d5e3bfaa2c48c" style="zoom:33%;">
+<blockquote>
+<p>继承model 重写代码 <a target="_blank" rel="noopener" href="http://xn--model-bi1hx0gxz5jstci4a021y.pt">使用项目下的model.pt</a></p>
+</blockquote>
+<h4 id="45-env问题"><a class="markdownIt-Anchor" href="#45-env问题"></a> 4.5 .env问题</h4>
+<blockquote>
+<p>添加 .env.sample和手动添加.env</p>
+</blockquote>
+<h4 id="46-导入问题"><a class="markdownIt-Anchor" href="#46-导入问题"></a> 4.6 导入问题</h4>
+<img src="/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/image-20251022134718481.png" alt="image-20251022134718481" style="zoom:50%;">
+<blockquote>
+<p>Python Backend Error: ModuleNotFoundError: No module named 'app.companies.gaotiePYI-13836:ERRORl Failed to execute script’main’due to unhandled exception!</p>
+</blockquote>
+<p>代码错误导入<code>from app.companies.gaotie.detector import GaotieVideoDetector</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">\# Before:</span><br><span class="line"></span><br><span class="line">from app.companies.gaotie.detector import GaotieVideoDetector</span><br><span class="line"></span><br><span class="line">\# After:</span><br><span class="line"></span><br><span class="line">from app.companies.embodiedrobot.detector import EmbodiedVideoDetector</span><br></pre></td></tr></table></figure>
+<h4 id="47成功"><a class="markdownIt-Anchor" href="#47成功"></a> 4.7成功</h4>
+<img src="/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/image-20251022150309599.png" alt="image-20251022150309599" style="zoom: 50%;">
 <blockquote>
 <h1 id="pyinstaller打包biyi项目准备工作计划"><a class="markdownIt-Anchor" href="#pyinstaller打包biyi项目准备工作计划"></a> PyInstaller打包Biyi项目准备工作计划</h1>
 <h2 id="1-清理和准备项目文件"><a class="markdownIt-Anchor" href="#1-清理和准备项目文件"></a> 1. 清理和准备项目文件</h2>
@@ -424,6 +465,19 @@
 </ol>
 <h3 id="4总结"><a class="markdownIt-Anchor" href="#4总结"></a> 4.总结</h3>
 <p>嵌入式 Python 自带python, 但是很多包和库基本上pipy都不支持, 导致无法安装完整的环境, 这反而失去了python的优势, 所以放弃改方案</p>
+<h2 id="electron打包阶段-部分完成-️"><a class="markdownIt-Anchor" href="#electron打包阶段-部分完成-️"></a> Electron打包阶段 - 部分完成 ⚠️</h2>
+<ol>
+<li>NSIS安装程序生成阶段 ❌</li>
+</ol>
+<ul>
+<li>
+<p>错误：failed creating mmap of “cve-electron-1.0.0-x64.nsis.7z”</p>
+</li>
+<li>
+<p>问题：NSIS无法创建内存映射文件来处理7z压缩包</p>
+</li>
+</ul>
+<p>后端逻辑未修改, 还是用的python</p>
 <h2 id="打包总结"><a class="markdownIt-Anchor" href="#打包总结"></a> 打包总结</h2>
 <h3 id="1-venv-并非独立环境"><a class="markdownIt-Anchor" href="#1-venv-并非独立环境"></a> 1. venv 并非独立环境</h3>
 <ul>
@@ -435,6 +489,7 @@
 <h2 id="后续计划"><a class="markdownIt-Anchor" href="#后续计划"></a> 后续计划</h2>
 <ul>
 <li>完善 <code>.spec</code> 文件模板</li>
+<li>使用了单文件的pyinstaller 生产<code>_internal</code>文件夹</li>
 </ul>
 
       
