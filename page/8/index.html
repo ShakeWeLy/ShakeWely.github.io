@@ -43,9 +43,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>119</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>122</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>35</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>36</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -70,6 +70,666 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-2025年2月10日-轻量化神经网络3" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/02/10/2025%E5%B9%B42%E6%9C%8810%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C3/" class="article-date">
+  <time class="post-time" datetime="2025-02-10T03:40:45.000Z" itemprop="datePublished">
+    <span class="post-month">2月</span><br/>
+    <span class="post-day">10</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/02/10/2025%E5%B9%B42%E6%9C%8810%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C3/">2025年2月10日 轻量化神经网络3</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="introduction"><a class="markdownIt-Anchor" href="#introduction"></a> <strong>Introduction</strong></h1>
+<p>近期卷积网络的设计除了注重准确率之外，还需要兼顾运行性能，特别是在移动设备上的运行性能，这使得卷积神经网络的设计变得更加难，主要有以下难点：</p>
+<ul>
+<li>Intractable design space，由于卷积网络参数很多，导致设计空间十分复杂，目前很多方法提出自动化搜索，能够简化人工设计的流程，但这种方法一般需要大量的算力。</li>
+<li>Nontransferable optimality，卷积网络的性能取决于很多因素，比如输入分辨率和目标设备，不同的分辨率需要调整不同的网络参数，而相同block在不同的设备上的效率也可能大不相同，所以需要对网络在特定的条件下进行特定的调优。</li>
+<li>Inconsistent efficiency metrics，大多数效率指标不仅与网络结构相关，也和目标设备上的软硬件设置有关。为了简化，很多研究都采用硬件无关的指标来表示卷积的效率，比如FLOPs，但FLOPs并不能总等同于性能，还跟block的实现方式相关，这使得网络的设计更加困难。</li>
+</ul>
+<h1 id="nas"><a class="markdownIt-Anchor" href="#nas"></a> NAS</h1>
+<h2 id="总结nas-发展历程"><a class="markdownIt-Anchor" href="#总结nas-发展历程"></a> <strong>总结：NAS 发展历程</strong></h2>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>方法</th>
+<th>主要创新点</th>
+<th>计算成本</th>
+<th>代表性模型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>早期 NAS</strong></td>
+<td>强化学习 NAS</td>
+<td>RNN 控制器搜索网络结构</td>
+<td>高</td>
+<td>NASNet</td>
+</tr>
+<tr>
+<td><strong>进化 NAS</strong></td>
+<td>进化算法 NAS</td>
+<td>变异 + 交叉进化优化网络</td>
+<td>高</td>
+<td>AmoebaNet</td>
+</tr>
+<tr>
+<td><strong>梯度优化 NAS</strong></td>
+<td>DARTS</td>
+<td>采用梯度下降进行高效搜索</td>
+<td>低</td>
+<td>DARTS、ProxylessNAS</td>
+</tr>
+<tr>
+<td><strong>高效 NAS</strong></td>
+<td>Efficient NAS</td>
+<td>共享参数 + 复合缩放 + 硬件感知搜索</td>
+<td>低</td>
+<td>EfficientNet、FBNet、OFA</td>
+</tr>
+</tbody>
+</table>
+<h1 id="fbnet"><a class="markdownIt-Anchor" href="#fbnet"></a> FBNet</h1>
+<img src="/2025/02/10/2025%E5%B9%B42%E6%9C%8810%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C3/image-20250219134545540.png" style="zoom:67%;">
+<p>将 <strong>硬件性能约束</strong>（如浮点运算量 FLOPs、内存使用量、计算延迟等）引入到 NAS 的搜索过程，使得网络架构不仅能够实现高精度，还能在指定硬件上具有良好的执行效率。</p>
+<p>BNet 的工作流程可以分为以下几个步骤：</p>
+<ol>
+<li><strong>硬件感知的目标函数</strong>：<br>
+在设计过程中，FBNet 将目标硬件（如移动设备、嵌入式设备等）的约束（如内存、计算量等）纳入考虑。FBNet 的目标是最小化 <strong>计算资源的消耗</strong>，同时保证较高的 <strong>分类精度</strong>。这个目标函数是硬件感知的，旨在寻找在硬件上性能最优的网络架构。</li>
+<li><strong>可微分架构搜索</strong>：<br>
+FBNet 使用了一种基于梯度优化的搜索方法，即将 NAS 搜索过程转化为可微分的优化问题。这使得 FBNet 可以在较少的计算资源下快速找到高效的网络架构。具体来说，FBNet 在 <strong>超网络（SuperNet）</strong> 中进行架构搜索，超网络包含了多种候选网络结构，通过训练和优化选择最优的架构。</li>
+<li><strong>选择模块</strong>：<br>
+在 FBNet 中，网络结构的选择是模块化的，每个模块（如卷积、深度可分离卷积等）都有多个候选结构，而这些候选结构的选择在搜索过程中是通过<strong>可微分的路径选择</strong>来实现的。最终，FBNet 在候选模块中选择一个最优的结构。</li>
+<li><strong>搜索策略</strong>：<br>
+为了加速搜索过程，FBNet 使用了 <strong>混合搜索策略</strong>，即结合了 <strong>强化学习</strong> 和 <strong>梯度优化</strong> 两种方法。强化学习用于生成架构的候选方案，而梯度优化则用于对这些方案进行优化。通过这种方式，FBNet 能够在复杂的搜索空间中找到最优的架构。</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/02/10/2025%E5%B9%B42%E6%9C%8810%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C3/" data-id="cm8q1tfhg000hpcv4f8qg1hic" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E3%80%81model/" rel="tag">轻量化神经网络、model</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2025年2月9日-轻量化神经网络2" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/" class="article-date">
+  <time class="post-time" datetime="2025-02-09T07:21:36.000Z" itemprop="datePublished">
+    <span class="post-month">2月</span><br/>
+    <span class="post-day">09</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/">2025年2月9日 轻量化神经网络2</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="lcnet"><a class="markdownIt-Anchor" href="#lcnet"></a> LCNet</h1>
+<blockquote>
+<p>CPU端的最强轻量型架构</p>
+</blockquote>
+<img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250219133119899.png" alt="image-20250219133119899" style="zoom:33%;">
+<h3 id="主要解决方案"><a class="markdownIt-Anchor" href="#主要解决方案"></a> 主要解决方案：</h3>
+<ol>
+<li>采用H-Swish作为激活函数，性能大幅提升，而推理速度几乎不变。</li>
+<li>在网络合适的位置添加少量的SE模块可以进一步提升模型性能；实验表明：当把SE置于模型的尾部时，它具有更好的效果。因此，我们仅将SE模块添加到接近网络尾部的模块即可, 这种处理方式具有更好的精度-速度平衡。</li>
+<li>根据MixNet的实验论证结果:在一定范围内大的卷积核可以提升模型的性能，但是超过这个范围会有损模型的性能。本文通过实验总结了一些更大的卷积核在不同位置的作用，类似SE模块的位置，更大的卷积核在网络的中后部作用更明显。比如5x5卷积。</li>
+<li>GAP后使用更大的1x1卷积层；在GoogLeNet之后，GAP（Global-Average-Pooling）后往往直接接分类层，但是在轻量级网络中，这样会导致GAP后提取的特征没有得到进一步的融合和加工。如果在此后使用一个更大的1x1卷积层（等同于FC层），GAP后的特征便不会直接经过分类层，而是先进行了融合，并将融合的特征进行分类。这样可以在不影响模型推理速度的同时大大提升准确率。</li>
+<li>使用dropout技术可以进一步提升模型的精度。</li>
+</ol>
+<p><strong>低秩卷积的引入</strong>：</p>
+<ul>
+<li>低秩卷积的引入是 LCNet 的最大创新之一。通过矩阵低秩分解，LCNet 能够将卷积操作的计算复杂度降到最低，从而显著减少了卷积神经网络的计算负担和内存消耗。</li>
+</ul>
+<p><strong>高效的通道剪枝</strong>：</p>
+<ul>
+<li>LCNet 提出了通道剪枝的概念，即对卷积层中的不重要通道进行剪枝，减少冗余计算。这个过程通过分析每个通道的贡献，剔除那些对最终输出没有显著影响的通道，从而大幅减小模型的规模。</li>
+</ul>
+<p><strong>集成深度可分离卷积</strong>：</p>
+<ul>
+<li>深度可分离卷积已经被证明是提升计算效率的一种有效手段，LCNet 将其应用到各个卷积层中，通过拆解卷积操作来减少计算量和参数量，提高了模型的运行效率。</li>
+</ul>
+<p><strong>硬件友好设计</strong>：</p>
+<ul>
+<li>LCNet 强调了硬件友好的设计理念，特别是在移动设备和嵌入式设备上。网络架构通过采用低计算量的卷积和模块化设计，使得 LCNet 在计算资源受限的设备上表现更好。</li>
+</ul>
+<p><strong>优化的注意力机制</strong>：</p>
+<ul>
+<li>LCNet 在设计中还结合了高效的注意力机制，通过优化网络对输入信息的加权方式，使得网络能够更好地关注到重要特征，从而提升分类性能，同时保持较低的计算开销。</li>
+</ul>
+<h1 id="squeezenet"><a class="markdownIt-Anchor" href="#squeezenet"></a> SqueezeNet</h1>
+<h2 id="fire-module"><a class="markdownIt-Anchor" href="#fire-module"></a> Fire Module</h2>
+<p><strong>Fire Module</strong>：每个 Fire Module 由两个主要部分组成：</p>
+<ul>
+<li><strong>Squeeze层</strong>：一个1x1的卷积层，用来减少特征图的深度。</li>
+<li><strong>Expand层</strong>：两个分支，一个是1x1卷积，另一个是3x3卷积，用来增加特征图的深度。</li>
+</ul>
+<p>通过这种结构，SqueezeNet能够有效地减少参数量，而不牺牲太多的准确度。</p>
+<p><strong>减少全连接层的参数</strong>：SqueezeNet中没有传统的全连接层，而是使用全局平均池化（Global Average Pooling）来替代。这样大大减少了参数数量，且仍然保留了模型的表现力。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">torch.cat([x1, x2], 1)</span><br></pre></td></tr></table></figure>
+<h1 id="mobilenethttpsblogcsdnnetqq_37555071articledetails108393809"><a class="markdownIt-Anchor" href="#mobilenethttpsblogcsdnnetqq_37555071articledetails108393809"></a> [MobileNet][<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_37555071/article/details/108393809">https://blog.csdn.net/qq_37555071/article/details/108393809</a>]</h1>
+<h2 id="深度可分离卷积depthwise-separable-convolutions"><a class="markdownIt-Anchor" href="#深度可分离卷积depthwise-separable-convolutions"></a> 深度可分离卷积(Depthwise Separable Convolutions)</h2>
+<p>（Depthwise Separable Convolutions）</p>
+<p><strong>深度卷积（Depthwise Convolution）</strong>：对每个输入通道独立进行卷积操作，而不是像传统卷积那样对所有通道进行卷积。这大大减少了计算量。</p>
+<p><strong>逐点卷积（Pointwise Convolution）</strong>：即1x1卷积，用于将深度卷积的输出进行线性组合，融合通道信息。</p>
+<p><strong>宽度和分辨率的可调性</strong>： MobileNet引入了两个超参数，分别是<strong>宽度系数（Width Multiplier）**和**分辨率系数（Resolution Multiplier）</strong>，使得网络的大小和计算量可以根据实际需求进行调整。</p>
+<ul>
+<li><strong>宽度系数（α）</strong>：用于控制网络每一层的通道数。通过减小α的值，可以降低网络的复杂度和参数数量。</li>
+<li><strong>分辨率系数（ρ）</strong>：用于控制输入图像的分辨率，通过减小分辨率来减少计算量。</li>
+</ul>
+<p><img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209162740618.png" alt="image-20250209162740618"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">self.depthwise = nn.Conv2d(in_channels, in_channels, kernel_size=<span class="number">3</span>, stride=stride, padding=<span class="number">1</span>, groups=in_channels, bias=<span class="literal">False</span>)</span><br><span class="line">// groups=in_channels</span><br></pre></td></tr></table></figure>
+<h1 id="shufflenet"><a class="markdownIt-Anchor" href="#shufflenet"></a> ShuffleNet</h1>
+<p><strong>深度可分离卷积（Depthwise Separable Convolution） 和</strong></p>
+<h2 id="通道混洗channel-shuffle"><a class="markdownIt-Anchor" href="#通道混洗channel-shuffle"></a> <strong>通道混洗（Channel Shuffle）</strong></h2>
+<p>通道混洗技术会在<strong>每个卷积层的输出中打乱通道的顺序</strong>，使得不同通道的特征能够进行更好的融合，从而提高模型的表达能力和准确率。</p>
+<h2 id="分组卷积grouped-convolution"><a class="markdownIt-Anchor" href="#分组卷积grouped-convolution"></a> <strong>分组卷积（Grouped Convolution）</strong></h2>
+<p>为了进一步提高网络的计算效率，ShuffleNet 采用了 <strong>分组卷积（Grouped Convolution）</strong>。分组卷积将输入通道分成多个组，每个组内的通道与一个独立的卷积核进行卷积，从而减少了卷积运算的计算量。</p>
+<h1 id="googlenet"><a class="markdownIt-Anchor" href="#googlenet"></a> GoogLeNet</h1>
+<h2 id="inception块"><a class="markdownIt-Anchor" href="#inception块"></a> Inception块</h2>
+<p>各种模块全都要</p>
+<img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209172824970.png" alt="image-20250209172824970" style="zoom:50%;">
+<img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209172918099.png" alt="image-20250209172918099" style="zoom:67%;">
+<h2 id="xception-块"><a class="markdownIt-Anchor" href="#xception-块"></a> <strong>Xception 块</strong></h2>
+<p>极限情况</p>
+<h1 id="efficientnet"><a class="markdownIt-Anchor" href="#efficientnet"></a> EfficientNet</h1>
+<p><img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209173848541.png" alt="image-20250209173848541" style="zoom: 80%;"><img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209174104028.png" alt="image-20250209174104028" style="zoom: 67%;"></p>
+<h2 id="原理"><a class="markdownIt-Anchor" href="#原理"></a> 原理</h2>
+<h3 id="网络架构搜索nas"><a class="markdownIt-Anchor" href="#网络架构搜索nas"></a> <strong>网络架构搜索（NAS）</strong>：</h3>
+<ul>
+<li>EfficientNet 使用了 <strong>神经架构搜索</strong>（NAS）来自动化地找到最适合的卷积神经网络架构。在这个过程中，作者通过 NAS 来寻找一个 <strong>基础架构</strong>，该架构在计算效率和性能之间取得了最佳的平衡。</li>
+</ul>
+<h3 id="优化网络的宽度-深度和分辨率"><a class="markdownIt-Anchor" href="#优化网络的宽度-深度和分辨率"></a> <strong>优化网络的宽度、深度和分辨率</strong>：</h3>
+<ul>
+<li>EfficientNet 在进行网络扩展时，并不是简单地增加网络的层数或通道数，而是采用了更加 <strong>均衡的增长策略</strong>。通过在深度、宽度和输入图像分辨率上都进行扩展，模型能够获得更强的表达能力，同时保持较低的计算成本。</li>
+</ul>
+<h3 id="高效的卷积操作"><a class="markdownIt-Anchor" href="#高效的卷积操作"></a> <strong>高效的卷积操作</strong>：</h3>
+<ul>
+<li>EfficientNet 采用了高效的卷积操作，如 <strong>Depthwise Separable Convolution</strong>，以进一步减少计算量。</li>
+</ul>
+<p>通过结构搜索（NAS, Neural Architecture Search）和优化策略，在精度和计算效率之间找到最好的平衡。</p>
+<h2 id="mbconvefficientnet块"><a class="markdownIt-Anchor" href="#mbconvefficientnet块"></a> MBConv/EfficientNet块</h2>
+<p><img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209180216944.png" alt="image-20250209180216944"></p>
+<p><img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209174529781.png" alt="image-20250209174529781"></p>
+<h3 id="倒残差结构inverted-residuals"><a class="markdownIt-Anchor" href="#倒残差结构inverted-residuals"></a> 倒残差结构（Inverted Residuals)</h3>
+<p><img src="https://pic2.zhimg.com/v2-7c42cff2fa3c346d2e41be95848fc619_1440w.jpg" alt="img"></p>
+<blockquote>
+<p>使用逐通道卷积和逐点卷积来提高计算效率。</p>
+</blockquote>
+<h2 id="注意力机制"><a class="markdownIt-Anchor" href="#注意力机制"></a> 注意力机制</h2>
+<h3 id="se模块squeeze-and-excitation-block"><a class="markdownIt-Anchor" href="#se模块squeeze-and-excitation-block"></a> SE模块（Squeeze-and-Excitation Block）</h3>
+<p>来源于人类视觉系统中的注意机制：大脑会根据不同的视觉刺激，<strong>自动聚焦于最重要的信息，并忽略不相关的部分</strong>。SE模块通过类似的机制，<strong>自动为每个通道分配不同的重要性</strong>，从而增强模型对重要特征的敏感度。</p>
+<ul>
+<li>
+<p><strong>queeze-and-Excitation</strong>（SE）模块，提升了特征通道之间的依赖关系.仅在 <strong>通道维度</strong> 上进行加权</p>
+</li>
+<li>
+<p>通过一个 <strong>“Squeeze”</strong> 操作来压缩空间维度信息，再通过 <strong>“Excitation”</strong> 操作生成通道权重</p>
+</li>
+</ul>
+<p><strong>Squeeze（压缩）</strong>：</p>
+<ul>
+<li>输入是一个 <strong>H×W×C</strong> 的特征图，其中 H和 W 分别是空间维度的高度和宽度，C 是通道数。</li>
+<li><strong>通过全局平均池化</strong>（Global Average Pooling）对每个通道进行压缩。即对每个通道的空间维度（H×W）求平均，得到一个 <strong>C</strong> 维的向量，表示每个通道的“全局特征”。</li>
+</ul>
+<p><strong>Excitation（激励）</strong>：</p>
+<ul>
+<li>对通道的全局特征向量进行<strong>两层全连接层操作</strong>，其中第二层是激活函数（通常是 <strong>Sigmoid</strong>），生成每个通道的 <strong>注意力系数</strong>。</li>
+<li>第一个全连接层是 <strong>瓶颈层（bottleneck layer）</strong>，通常通过降低维度来减少计算量。然后通过第二个全连接层，将输出恢复到原始通道数，得到每个通道的权重。</li>
+</ul>
+<img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209174719710.png" alt="image-20250209174719710" style="zoom:67%;">
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">_make_se_block</span>(<span class="params">self, channels, se_ratio</span>):</span><br><span class="line">        reduction = <span class="built_in">int</span>(channels * se_ratio)</span><br><span class="line">        <span class="keyword">return</span> nn.Sequential(</span><br><span class="line">            nn.AdaptiveAvgPool2d(<span class="number">1</span>),</span><br><span class="line">            nn.Conv2d(channels, reduction, kernel_size=<span class="number">1</span>),</span><br><span class="line">            nn.ReLU(),</span><br><span class="line">            nn.Conv2d(reduction, channels, kernel_size=<span class="number">1</span>),</span><br><span class="line">            nn.Sigmoid()</span><br><span class="line">        )</span><br></pre></td></tr></table></figure>
+<h4 id="空间注意力机制"><a class="markdownIt-Anchor" href="#空间注意力机制"></a> 空间注意力机制</h4>
+<p>对特征图的<strong>每个位置</strong>分配一个权重来决定哪些空间区域应该被网络更多关注</p>
+<blockquote>
+<p>人类的视觉注意力更多的是<strong>空间注意力</strong>，也就是对图片上不同区域赋予不同的权重</p>
+</blockquote>
+<img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209183640934.png" alt="image-20250209183640934" style="zoom:67%;">
+<p><img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250303211827687.png" alt="image-20250303211827687"></p>
+<h4 id="通道注意力机制"><a class="markdownIt-Anchor" href="#通道注意力机制"></a> 通道注意力机制</h4>
+<p><img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250303211752599.png" alt="image-20250303211752599"></p>
+<h4 id="cbam注意力"><a class="markdownIt-Anchor" href="#cbam注意力"></a> CBAM注意力</h4>
+<p>CBAM 通过融合 <strong>通道注意力机制</strong> 和 <strong>空间注意力机制</strong></p>
+<h4 id="视觉自注意力non-local"><a class="markdownIt-Anchor" href="#视觉自注意力non-local"></a> 视觉自注意力(Non Local))</h4>
+<p>用来在不引入过多计算量的基础上提高CNN网络的<strong>远程依赖</strong></p>
+<p><img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209184403579.png" alt="image-20250209184403579"></p>
+<blockquote>
+<p>我可能先识别到篮球，然后在其周围找到人和篮筐，并根据他们的位置我们才能判断这个图是不是表达人在灌篮这个动作。其中，篮球位置可以理解为<strong>查询点</strong>，周边（可能离得较远）的人和篮筐就是<strong>查询点对应的关联区域</strong>。</p>
+</blockquote>
+<p>查询点到关联区域的对应可以加深CNN网络对场景<strong>从局部到整体</strong>的理解，因此可以有效提高CNN网络在视觉任务的效率。</p>
+<ul>
+<li>
+<p>该模块建立了图像中<strong>每个像素/区域之间的关联</strong>，有效提升了CNN网络的感受野</p>
+</li>
+<li>
+<p>对每个空间位置生成与所有其他位置的<strong>相似度</strong>。</p>
+</li>
+<li>
+<p>基于<strong>相似度进行加权</strong>，使得每个位置可以融合其他位置的信息。</p>
+</li>
+</ul>
+<p><img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209184638406.png" alt="image-20250209184638406"></p>
+<blockquote>
+<p>其大概的运算过程是：</p>
+<p>（1）为了降低运算量，采用三个不同1x1卷积层进行维度减半，即图上的 x→ϕ(x),θ(x),g(x) ;</p>
+<p>（2）为 ϕ(x),θ(x),g(x) 按照w,h维度进行铺平，即图上三个flatten；</p>
+<p>（3）利用铺平的 ϕ(x),θ(x) 进行矩阵乘法运算，并通过softmax获得各空间位置之间的<strong>关联图</strong>（即图中的 vc ），很明显这个关联图的大小为 (w×h,w×h) ，表征着各个像素点（区域）之间的联系；</p>
+<p>（4）将铺平转置的 g(x) 与vc进行矩阵乘法，获得 y ；</p>
+<p>（5）对y进行展开与特征提取（Conv4），获得注意力（refined）;</p>
+<p>（6）利用注意力调整原始输入的分布，Over!!!</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/350760243">https://zhuanlan.zhihu.com/p/350760243</a></p>
+</blockquote>
+<h4 id="non-local改进版-gcnet"><a class="markdownIt-Anchor" href="#non-local改进版-gcnet"></a> Non Local改进版 — GCNet</h4>
+<p>原因:<strong>不同查询点（区域）居然对应相同的attention map</strong></p>
+<img src="https://pic4.zhimg.com/v2-31d05dfac01c6ae64bd5bf4e52ffc069_1440w.jpg" alt="img" style="zoom: 33%;">
+<p>与查询（点）无关的依赖（query-independent dependency）。那么这是否意味着原始Non Local中<strong>query分支可以剪去不要</strong>呢</p>
+<img src="https://pic4.zhimg.com/v2-dc2339ac78de452e286317dd259070f5_1440w.jpg" alt="img" style="zoom: 50%;">
+<img src="https://pic3.zhimg.com/v2-104058d724746316b12298ec27fafe26_1440w.jpg" alt="img" style="zoom:50%;">
+<h3 id="dfc-注意力模块"><a class="markdownIt-Anchor" href="#dfc-注意力模块"></a> DFC 注意力模块</h3>
+<p>利用固定权重的全连接层来创建具有全局感受野的注意力图，以捕 获长距离空间位置的依赖关系</p>
+<h1 id="efficientdet"><a class="markdownIt-Anchor" href="#efficientdet"></a> EfficientDet</h1>
+<h2 id="结构概述"><a class="markdownIt-Anchor" href="#结构概述"></a> <strong>结构概述</strong></h2>
+<h3 id="1-backboneefficientnet"><a class="markdownIt-Anchor" href="#1-backboneefficientnet"></a> 1 Backbone（EfficientNet）</h3>
+<ul>
+<li>EfficientDet 的 backbone 使用了 EfficientNet 作为特征提取器。EfficientNet 是一种使用<strong>复合缩放</strong>策略的高效网络，在目标检测任务中，EfficientDet 对 EfficientNet 进行调整和优化，使得其能更好地适应目标检测的要求。</li>
+</ul>
+<p>BiFPN（双向特征金字塔网络）**</p>
+<ul>
+<li>BiFPN 通过对低层和高层特征的加权融合，使得低层和高层的特征能够互相补充，提升了多尺度特征的利用率。</li>
+</ul>
+<h3 id="2-head"><a class="markdownIt-Anchor" href="#2-head"></a> 2 Head</h3>
+<ul>
+<li><strong>分类头</strong>：用于对目标进行分类，预测每个框的类别。</li>
+<li><strong>回归头</strong>：用于回归目标的边界框坐标。</li>
+</ul>
+<h3 id="3-复合缩放"><a class="markdownIt-Anchor" href="#3-复合缩放"></a> 3 复合缩放</h3>
+<ul>
+<li>EfficientDet 通过复合缩放策略调整模型的深度、宽度和输入分辨率，使得模型可以在不同的硬件环境下进行灵活的调整，同时提升了精度和效率。</li>
+</ul>
+<h2 id="fpn到bifpn"><a class="markdownIt-Anchor" href="#fpn到bifpn"></a> FPN.到BiFPN</h2>
+<img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209190732084.png" style="zoom: 80%;">
+<img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209224653761.png" style="zoom: 80%;">
+<blockquote>
+<p>a. 网络只是针对某一特点的分辨率进行训练, 如果只是在测试和推理阶段使用图像金字塔的话, 可能导致训练和测试推理过程不匹配</p>
+<p>b. 利用单个高层特征图(主干网络产生)进行物体的分类和bounding box的回归</p>
+<p>c. 在 <strong>多个不同尺度的特征图（如 38×38、19×19、10×10）</strong> 上直接预测目标框。</p>
+<p>d 尽管在SSD中我们已经使用了特征金字塔, 但该金字塔中的所有要素都处于不同的比例, 并且由于网络中层的深度不同而存在巨大的语义鸿沟. 高分辨率地图具有低级语义特征, 而低分辨率地图具有较高的语义特征, 这会损害其对象识别的表示能力.</p>
+</blockquote>
+<img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209223353104.png" alt="image-20250209223353104" style="zoom:50%;">
+<blockquote>
+<p>先对高阶特征进行上采样, 然后使用横向连接将其与低阶特征进行组合, 该横向连接基本上是1x1卷积, 然后进行求和,</p>
+</blockquote>
+<h3 id="fully-connected-fpn-and-nas-fpn"><a class="markdownIt-Anchor" href="#fully-connected-fpn-and-nas-fpn"></a> Fully connected FPN and NAS-FPN</h3>
+<p><img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209224903212.png" alt="image-20250209224903212"></p>
+<blockquote>
+<p>a. 传统fpn</p>
+<p>b. 全连接网络</p>
+<p>c. NAS</p>
+</blockquote>
+<h3 id="panet"><a class="markdownIt-Anchor" href="#panet"></a> PANet</h3>
+<p><img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209224555819.png" alt="image-20250209224555819"></p>
+<blockquote>
+<p>添加<strong>自下而上的路径</strong>以增强FPN中的自上而下的路径</p>
+</blockquote>
+<h3 id="simplified-fpn-and-bifpn"><a class="markdownIt-Anchor" href="#simplified-fpn-and-bifpn"></a> Simplified FPN and BiFPN</h3>
+<p><img src="https://pic4.zhimg.com/v2-faec285a27615d8829af43172d9d1385_1440w.jpg" alt="img"></p>
+<blockquote>
+<p>a. 如果一个节点只有一个输入边并且没有特征融合, 那么它对特征网络的融合贡献较小, 这个节点可以删除(Simplified PANET)</p>
+<p>b. 添加一条额外的连接路径,融合更多功能(BiFPN). 这点其实跟skip connection很相似</p>
+<p>c. 重复叠加相同的特征网络层 复合缩放</p>
+</blockquote>
+<h2 id="权重计算"><a class="markdownIt-Anchor" href="#权重计算"></a> 权重计算</h2>
+<p>快速归一化融合特征网络.计算路径,计算出不同特征节点的输入最合适的权值</p>
+<p><img src="https://pic4.zhimg.com/v2-a0f1319eae0571829c79b1a70d4fc1b9_1440w.jpg" alt="img"></p>
+<h2 id="compound-scaling"><a class="markdownIt-Anchor" href="#compound-scaling"></a> Compound Scaling</h2>
+<p>复合缩放的目标是在任何给定的资源约束下最大化模型精度, 因此可以表述为优化问题.</p>
+<p><strong>对网络深度、宽度和分辨率中的任何尺度进行缩放都可以提高精度, 但是当模型足够大时, 这种放大的收益会减弱。</strong></p>
+<p><strong>FLOPS</strong>是floating point operations per second的缩写, 意指每秒浮点运算次数, 理解为计算速度. 是一个衡量硬件性能的指标. 我们假设我们能使用的FLOPS是2.</p>
+<p><img src="https://pic2.zhimg.com/v2-032dfea7e52345c3f26a543e3dbcc6fd_1440w.jpg" alt="img"></p>
+<blockquote>
+<p>a. 对于网络模型depth来说, 加倍深度会使得FLOPS加倍.</p>
+</blockquote>
+<p><img src="https://pic1.zhimg.com/v2-4f1414b59ea6700387f0dea2dac0d878_1440w.jpg" alt="img"></p>
+<blockquote>
+<p>b. 对于网络模型width来说, 由于width(#channel)的增加导致卷积计算的路径平方级增加, 因此加倍宽度会使得FLOPS加4倍.</p>
+</blockquote>
+<p><img src="https://pica.zhimg.com/v2-646a538d15c17d28145024953ff90eda_1440w.jpg" alt="img"></p>
+<blockquote>
+<p>c. 对于网络模型resolution来说, 和width的情况一样, 由于resolution的增加会导致feather map呈现平方级扩张, 因此加倍图像分辨率也会使得FLOPS加4倍.</p>
+</blockquote>
+<p><strong>复合缩放公式:</strong></p>
+<p><img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209230157789.png" alt="image-20250209230157789"></p>
+<p><strong>网格搜索</strong></p>
+<p><img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209230342459.png" alt></p>
+<p><strong>复合缩放的总结图:</strong></p>
+<p><img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250209231222947.png" alt="image-20250209231222947"></p>
+<h1 id="ghostnet"><a class="markdownIt-Anchor" href="#ghostnet"></a> GhostNet</h1>
+<p>特征图存在<strong>冗余性</strong> 廉价操作 生成 Ghost 特征图</p>
+<h2 id="原理-2"><a class="markdownIt-Anchor" href="#原理-2"></a> 原理</h2>
+<h2 id="ghost-卷积"><a class="markdownIt-Anchor" href="#ghost-卷积"></a> Ghost 卷积</h2>
+<p>利用计算量较低的线性操作来增加特征图的数量， 从而在保持输出特征图不变的同时，显著地降低了计算复杂度</p>
+<ol>
+<li>使用1×1卷积对输入特征进行压缩，以获取少量特征图</li>
+<li>这部分特征图通过线性变换生成另一部分特征图</li>
+<li>将两部分特征图进行拼接，形 成最终的输出特征图</li>
+</ol>
+<img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250303184803366.png" alt="image-20250303184803366" style="zoom:67%;">
+<h1 id="mobilevit"><a class="markdownIt-Anchor" href="#mobilevit"></a> MobileViT</h1>
+<p><strong>融合 CNN 和 Transformer</strong>：通过将卷积操作与 Transformer 结合，模型能够同时捕捉局部和全局特征，提高了特征表达能力。</p>
+<p><strong>高效的特征处理</strong>：通过<strong>展开和折叠操作</strong>(unfold )，将特征映射到序列空间进行处理，然后再映射回原始空间，实现了高效的特征处理。</p>
+<p><strong>模型图：</strong></p>
+<img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250210155707027.png" alt="image-20250210155707027" style="zoom:50%;">
+<h2 id="mobile-vit-块"><a class="markdownIt-Anchor" href="#mobile-vit-块"></a> Mobile ViT 块</h2>
+<img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250210155825206.png" alt="image-20250210155825206" style="zoom: 50%;">
+<blockquote>
+<p>…</p>
+</blockquote>
+<p>减少self-attention</p>
+<img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250210160135377.png" alt="image-20250210160135377" style="zoom:50%;"> 
+<blockquote>
+<p>冗余信息多,相邻token信息差异小</p>
+</blockquote>
+<h3 id="fold"><a class="markdownIt-Anchor" href="#fold"></a> fold</h3>
+<img src="/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/image-20250210160342687.png" alt="image-20250210160342687" style="zoom:33%;">
+<h1 id="emo结合-cnn-和-transformerhttpsdeveloperaliyuncomarticle1210407"><a class="markdownIt-Anchor" href="#emo结合-cnn-和-transformerhttpsdeveloperaliyuncomarticle1210407"></a> [EMO：结合 CNN 和 Transformer][<a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/1210407">https://developer.aliyun.com/article/1210407</a>]</h1>
+<h3 id="1-特征提取网络sd-ghostnet"><a class="markdownIt-Anchor" href="#1-特征提取网络sd-ghostnet"></a> 1. 特征提取网络（SD-Ghostnet）</h3>
+<ul>
+<li><strong>输入图像</strong>：原始图像作为输入。</li>
+<li><strong>Conv(64,6,2,2)</strong>：首先通过一个卷积层，输出通道数为64，核大小为6x6，步长为2，填充为2。</li>
+<li><strong>S-GhostConv (128,3,2)</strong> 和 <strong>SD-Ghost(128)</strong>：经过一系列的S-GhostConv和SD-Ghost模块，逐步增加通道数到128。</li>
+<li><strong>S-GhostConv (256,3,2)</strong> 和 <strong>SD-Ghost(256)</strong>：进一步通过S-GhostConv和SD-Ghost模块，通道数增加到256。</li>
+<li><strong>S-GhostConv (512,3,2)</strong> 和 <strong>SD-Ghost(512)</strong>：继续通过S-GhostConv和SD-Ghost模块，通道数增加到512。</li>
+<li><strong>S-GhostConv (1024,3,2)</strong> 和 <strong>SD-Ghost(1024)</strong>：最后通过S-GhostConv和SD-Ghost模块，通道数增加到1024。</li>
+<li><strong>SPPF(1024,5)</strong>：空间金字塔池化模块，进一步增强特征表示。</li>
+</ul>
+<h3 id="2-特征融合网络ffn"><a class="markdownIt-Anchor" href="#2-特征融合网络ffn"></a> 2. 特征融合网络（FFN）</h3>
+<ul>
+<li><strong>Concat(512)</strong>：将特征提取网络中不同层次的特征进行拼接，形成512通道的特征图。</li>
+<li><strong>Upsample(256)</strong>：对特征图进行上采样，通道数减少到256。</li>
+<li><strong>GSCovn (256,1,1)</strong>：通过一个1x1的卷积层调整通道数。</li>
+<li><strong>VOVGSCSP (256)</strong>：通过VOVGSCSP模块进一步处理特征。</li>
+<li><strong>GSCovn (256,3,2)</strong>：通过一个1x1的卷积层调整通道数。</li>
+<li><strong>Concat(512)</strong>：再次拼接特征，形成512通道的特征图。</li>
+<li><strong>VOVGSCSP (512)</strong>：通过VOVGSCSP模块进一步处理特征。</li>
+<li><strong>GSCovn (512,3,2)</strong>：通过一个1x1的卷积层调整通道数。</li>
+<li><strong>Concat(1024)</strong>：再次拼接特征，形成1024通道的特征图。</li>
+<li><strong>VOVGSCSP (1024)</strong>：通过VOVGSCSP模块进一步处理特征。</li>
+</ul>
+<h3 id="3-多尺度检测网络mdn"><a class="markdownIt-Anchor" href="#3-多尺度检测网络mdn"></a> 3. 多尺度检测网络（MDN）</h3>
+<ul>
+<li><strong>CBAM (256)</strong>：通过CBAM注意力机制模块，增强特征表示。</li>
+<li><strong>Conv2d (256)</strong>：通过一个卷积层，输出通道数为256。</li>
+<li><strong>CBAM (512)</strong>：通过CBAM注意力机制模块，增强特征表示。</li>
+<li><strong>Conv2d (512)</strong>：通过一个卷积层，输出通道数为512。</li>
+<li><strong>CBAM (1024)</strong>：通过CBAM注意力机制模块，增强特征表示。</li>
+<li><strong>Conv2d (1024)</strong>：通过一个卷积层，输出通道数为1024。</li>
+<li><strong>输出图像</strong>：最终生成输出图像。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/02/09/2025%E5%B9%B42%E6%9C%889%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C2/" data-id="cm6yfcd2b0000mcv4hi073hzf" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E3%80%81model/" rel="tag">轻量化神经网络、model</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2025年2月5日-轻量化神经网络" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/02/05/2025%E5%B9%B42%E6%9C%885%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" class="article-date">
+  <time class="post-time" datetime="2025-02-05T08:28:10.000Z" itemprop="datePublished">
+    <span class="post-month">2月</span><br/>
+    <span class="post-day">05</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/02/05/2025%E5%B9%B42%E6%9C%885%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">2025年2月5日 轻量化神经网络1</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="简介"><a class="markdownIt-Anchor" href="#简介"></a> 简介</h1>
+<p><img src="/2025/02/05/2025%E5%B9%B42%E6%9C%885%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20250205162820154.png" alt="image-20250205162820154"></p>
+<h1 id="知识蒸馏"><a class="markdownIt-Anchor" href="#知识蒸馏"></a> 知识蒸馏</h1>
+<h2 id="soft-target"><a class="markdownIt-Anchor" href="#soft-target"></a> soft target</h2>
+<img src="/2025/02/05/2025%E5%B9%B42%E6%9C%885%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20250205163735260.png" alt="image-20250205163735260" style="zoom:33%;">
+<blockquote>
+<p>更多信息+</p>
+</blockquote>
+<h4 id="蒸馏温度"><a class="markdownIt-Anchor" href="#蒸馏温度"></a> 蒸馏温度</h4>
+<img src="/2025/02/05/2025%E5%B9%B42%E6%9C%885%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20250205164432943.png" alt="image-20250205164432943" style="zoom:50%;">
+<img src="/2025/02/05/2025%E5%B9%B42%E6%9C%885%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20250205164308480.png" alt="image-20250205164308480" style="zoom:67%;">
+<h4 id="训练"><a class="markdownIt-Anchor" href="#训练"></a> 训练</h4>
+<img src="/2025/02/05/2025%E5%B9%B42%E6%9C%885%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/image-20250205164454289.png" alt="image-20250205164454289" style="zoom:33%;">
+<h1 id="量化"><a class="markdownIt-Anchor" href="#量化"></a> 量化</h1>
+<h1 id="剪枝"><a class="markdownIt-Anchor" href="#剪枝"></a> 剪枝</h1>
+<h2 id="定义"><a class="markdownIt-Anchor" href="#定义"></a> 定义</h2>
+<h3 id="剪枝方法总结表"><a class="markdownIt-Anchor" href="#剪枝方法总结表"></a> <strong>剪枝方法总结表</strong></h3>
+<table>
+<thead>
+<tr>
+<th>剪枝方法</th>
+<th>主要剪枝对象</th>
+<th>优点</th>
+<th>缺点</th>
+<th>示例方法/应用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>权重剪枝（Weight Pruning）</strong></td>
+<td>单个权重</td>
+<td>剪枝率高，可应用于各种网络</td>
+<td>需要稀疏矩阵优化，不适合硬件加速</td>
+<td>TensorFlow <code>tf.sparsity</code>, PyTorch <code>torch.nn.utils.prune</code></td>
+</tr>
+<tr>
+<td><strong>结构化剪枝（Structured Pruning）</strong></td>
+<td>神经元、通道、卷积核</td>
+<td>适合硬件加速</td>
+<td>剪枝率受限，可能影响模型结构</td>
+<td><code>Channel Pruning</code>, <code>Filter Pruning</code></td>
+</tr>
+<tr>
+<td><strong>低秩分解剪枝（Low-Rank Approximation）</strong></td>
+<td>整体权重矩阵</td>
+<td>计算加速明显</td>
+<td>需要额外的分解计算</td>
+<td>SVD 分解, CP 分解, Tensor Train 分解</td>
+</tr>
+<tr>
+<td><strong>剪枝 + 训练（Prune and Fine-tune）</strong></td>
+<td>结合剪枝和微调</td>
+<td>可恢复精度</td>
+<td>训练时间增加</td>
+<td>迭代剪枝（Iterative Pruning）, 一次性剪枝（One-shot Pruning）</td>
+</tr>
+<tr>
+<td><strong>软剪枝（Soft Pruning）</strong></td>
+<td>权重</td>
+<td>更温和的剪枝方式</td>
+<td>需要更多训练步骤</td>
+<td>逐步缩小权重（Weight Decay），平滑剪枝（Gradual Magnitude Pruning）</td>
+</tr>
+<tr>
+<td><strong>剪枝 + 蒸馏（Pruning with Distillation）</strong></td>
+<td>剪枝后蒸馏</td>
+<td>精度损失小</td>
+<td>需要额外教师模型</td>
+<td><code>Knowledge Distillation (KD)</code>, MobileBERT, TinyBERT</td>
+</tr>
+<tr>
+<td><strong>幸运票剪枝（Lottery Ticket Hypothesis）</strong></td>
+<td>子网络</td>
+<td>保留重要子结构</td>
+<td>训练步骤复杂</td>
+<td>训练大模型后剪枝，重新初始化训练</td>
+</tr>
+<tr>
+<td><strong>正则化剪枝（Regularization-based Pruning）</strong></td>
+<td>L1/L2 约束</td>
+<td>无需额外剪枝步骤</td>
+<td>训练需额外超参数</td>
+<td><code>L1 Regularization</code>, <code>Group Lasso Pruning</code></td>
+</tr>
+<tr>
+<td><strong>动态剪枝（Movement Pruning）</strong></td>
+<td>Transformer 模型</td>
+<td>适合 NLP</td>
+<td>计算复杂度高</td>
+<td><code>BERT Pruning</code>, <code>MobileBERT</code></td>
+</tr>
+<tr>
+<td><strong>自动剪枝（AutoML Pruning）</strong></td>
+<td>NAS/强化学习</td>
+<td>自动优化</td>
+<td>计算成本高</td>
+<td><code>AMC (AutoML for Model Compression)</code>, <code>Meta-Pruning</code></td>
+</tr>
+</tbody>
+</table>
+<img src="https://ucc.alicdn.com/yysinyik4knec/developer-article1644450/20241207/de25bb1591524da481677d9008ecc078.png?x-oss-process=image/resize,w_1400/format,webp" alt="image" style="zoom: 67%;">
+<ul>
+<li><strong>非结构化剪枝（Unstructured Pruning）</strong>：直接删除模型中的某些参数，通常基于参数的绝对值大小。这种方法可以实现较高的压缩比，但可能会破坏模型的整体结构。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 应用权重剪枝</span><br><span class="line">def apply_pruning(model, amount=0.2):</span><br><span class="line">    for name, module in model.named_modules():</span><br><span class="line">        if isinstance(module, nn.Conv2d) or isinstance(module, nn.Linear):</span><br><span class="line">            prune.l1_unstructured(module, name=&#x27;weight&#x27;, amount=amount)</span><br><span class="line">            print(f&quot;Applied pruning on &#123;name&#125;&quot;)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>结构化剪枝（Structured Pruning）</strong>：删除模型中的特定结构单元，如滤波器、通道或层。这种方法不会破坏模型的整体结构，更适合硬件加速。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">threshold = 0.01</span><br><span class="line">for name, module in model.named_modules():</span><br><span class="line">    if isinstance(module, nn.Conv2d):</span><br><span class="line">        # 计算每个卷积核的L2范数</span><br><span class="line">        kernel_norms = torch.norm(module.weight, dim=(1, 2, 3))</span><br><span class="line">        # 找到小于阈值的卷积核索引</span><br><span class="line">        prune_indices = torch.where(kernel_norms &lt; threshold)[0]</span><br><span class="line">        # 将这些卷积核的权重置零</span><br><span class="line">        module.weight[prune_indices] = 0</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<h4 id="基于梯度的剪枝"><a class="markdownIt-Anchor" href="#基于梯度的剪枝"></a> <strong>基于梯度的剪枝</strong></h4>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">import torch</span><br><span class="line"></span><br><span class="line">def gradient_magnitude_pruning(weight, gradient, percentile=0.5):</span><br><span class="line">    &quot;&quot;&quot;基于梯度幅值剪枝权重&quot;&quot;&quot;</span><br><span class="line">    num_zeros = round(weight.numel() * percentile)  # 计算剪枝元素数量</span><br><span class="line">    threshold = gradient.abs().view(-1).kthvalue(num_zeros).values  # 计算剪枝阈值</span><br><span class="line">    mask = gradient.abs() &gt; threshold  # 生成掩码</span><br><span class="line">    weight.mul_(mask.to(weight.device))  # 应用掩码剪枝</span><br><span class="line">    return weight</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h1 id="注意力迁移"><a class="markdownIt-Anchor" href="#注意力迁移"></a> 注意力迁移</h1>
+<p><a target="_blank" rel="noopener" href="https://github.com/szagoruyko/attention-transfer?tab=readme-ov-file">https://github.com/szagoruyko/attention-transfer?tab=readme-ov-file</a></p>
+<h2 id="定义-2"><a class="markdownIt-Anchor" href="#定义-2"></a> 定义</h2>
+<ul>
+<li>注意力迁移的思想来源于知识蒸馏，但与<strong>传统知识蒸馏主要关注最后层的知识不同，注意力迁移关注训练过程中特征图中的知识</strong>。</li>
+<li>其目的是通过将教师网络的注意力图迁移到学生网络，提升学生网络的性能，同时实现模型的轻量化。</li>
+</ul>
+<h2 id="注意力机制"><a class="markdownIt-Anchor" href="#注意力机制"></a> 注意力机制</h2>
+<ul>
+<li><strong>空间域（Spatial Domain）</strong>：关注特征空间信息，决定空间中哪些区域重要。例如，通过动态注意力机制来选择性地关注图像中的特定区域。</li>
+<li><strong>通道域（Channel Domain）</strong>：关注通道信息，如Squeeze-and-Excitation Networks（SENet）。SENet通过全局平均池化、降维再升维的方式为通道分配权重，增强重要通道的特征。</li>
+<li><strong>混合域（Mixed Domain）</strong>：同时关注空间域和通道域，如CBAM等注意力机制，综合考虑特征空间和通道信息来生成注意力图。</li>
+</ul>
+<h2 id="算法部分"><a class="markdownIt-Anchor" href="#算法部分"></a> 算法部分</h2>
+<ul>
+<li><strong>基于激活的注意力迁移（Activation-based Attention Transfer）</strong>：
+<ul>
+<li>在前馈过程中，通过教师网络的激活特征图来引导学生网络的学习。</li>
+<li>教师网络的激活特征图反映了输入数据在不同区域的重要性，<strong>学生网络通过模仿这些激活特征图</strong>来学习关注重要的区域。</li>
+</ul>
+</li>
+<li><strong>基于梯度的注意力迁移（Gradient-based Attention Transfer）</strong>：
+<ul>
+<li>在反馈过程中，对教师网络和学生网络的交叉熵损失函数分别求梯度，<strong>将教师网络的梯度作为注意力图转移到学生网络</strong>。</li>
+<li>关注那些对输出影响大的区域，通过构造损失函数，使得学生网络的梯度注意力图与教师网络的梯度注意力图接近，从而实现知识的迁移。</li>
+</ul>
+</li>
+</ul>
+<h1 id="低秩分解"><a class="markdownIt-Anchor" href="#低秩分解"></a> 低秩分解</h1>
+<h1 id="轻量化网络结构"><a class="markdownIt-Anchor" href="#轻量化网络结构"></a> 轻量化网络结构</h1>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/02/05/2025%E5%B9%B42%E6%9C%885%E6%97%A5-%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" data-id="cm6rncay50000xgv42v0x1l8p" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E8%BD%BB%E9%87%8F%E5%8C%96%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E3%80%81model/" rel="tag">轻量化神经网络、model</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-2025年1月9日-语言模型" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -1127,622 +1787,10 @@
 
 
   
-    <article id="post-2024年2月12日-转载文章" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2024/02/12/2024%E5%B9%B42%E6%9C%8812%E6%97%A5-%E8%BD%AC%E8%BD%BD%E6%96%87%E7%AB%A0/" class="article-date">
-  <time class="post-time" datetime="2024-02-12T14:16:29.000Z" itemprop="datePublished">
-    <span class="post-month">2月</span><br/>
-    <span class="post-day">12</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2024/02/12/2024%E5%B9%B42%E6%9C%8812%E6%97%A5-%E8%BD%AC%E8%BD%BD%E6%96%87%E7%AB%A0/">2024年2月12日 转载文章</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="转载ai文章"><a class="markdownIt-Anchor" href="#转载ai文章"></a> 转载AI文章</h1>
-<h2 id="python"><a class="markdownIt-Anchor" href="#python"></a> python</h2>
-<h3 id="100-个-python-练手项目"><a class="markdownIt-Anchor" href="#100-个-python-练手项目"></a> <strong>100 个 Python 练手项目</strong></h3>
-<p>1、【Python 图片转字符画】</p>
-<p>2、【200行Python代码实现2048】</p>
-<p>3、【Python3 实现火车票查询工具】</p>
-<p>4、【高德API+Python解决租房问题】</p>
-<p>5、【Python3色情图片识别】</p>
-<p>6、【Python 破解验证码】</p>
-<p>7、【Python实现简单的Web服务器】</p>
-<p>8、【pygame开发打飞机游戏】</p>
-<p>9、【Django 搭建简易博客】</p>
-<p>10、【Python基于共现提取《釜山行》人物关系】</p>
-<p>11、【基于scrapy爬虫的天气数据采集（python）】</p>
-<p>12、【Flask 开发轻博客】</p>
-<p>13、【Python3图片隐写术】</p>
-<p>14、【Python 实现简易Shell】</p>
-<p>15、【使用Python解数学方程】</p>
-<p>16、【PyQt 实现简易浏览器】</p>
-<p>17、【神经网络实现手写字符识别系统】</p>
-<p>18、【Python 实现简单画板】</p>
-<p>19、【Python实现3D建模工具】</p>
-<p>20、【NBA常规寒结果预测——利用Python进行比赛数据分析】</p>
-<p>21、【神经网络实现人脸识别任务】</p>
-<p>22、【Python文本解析器】</p>
-<p>23、【Python3&amp;；amp；OpenCV 视频转字符动画】</p>
-<p>24、【Python3 实现淘女郎照片爬虫】</p>
-<p>25、【Python3实现简单的FTP认证服务器】</p>
-<p>26、【基于Flask 与MySQL 实现番剧推荐系统】</p>
-<p>27、【Python 实现端口扫描器】</p>
-<p>28、【使用Python3编写系列实用脚本】</p>
-<p>29、【Python 实现康威生命游戏】</p>
-<p>30、【川普撞脸希拉里（基于OpenCV的面部特征交换）】</p>
-<p>31、【Python 3实现Markdown 解析器】</p>
-<p>32、【Python气象数据分析–《Python 数据分析实战》】</p>
-<p>33、【Python实现键值数据库】</p>
-<p>34、【k-近邻算法实现手写数字识别系统】</p>
-<p>35、【ebay在线拍卖数据分析】</p>
-<p>36、【Python 实现英文新闻摘要自动提取】</p>
-<p>37、【Python实现简易局域网视频聊天工具】</p>
-<p>38、【基于Flask及爬虫实现微信娱乐机器人】</p>
-<p>39、【Python实现Python解释器】</p>
-<p>40、【Python3基于Scapy实现DDos】</p>
-<p>41、【Python 实现密码强度检测器】</p>
-<p>42、【使用Python 实现深度神经网络】</p>
-<p>43、【Python实现从excel读取数据并绘制成精美图像】</p>
-<p>44、【人机对战初体验：Python基于Pygame实现四子棋游戏】</p>
-<p>45、【Python3实现可控制肉鸡的反向Shell】</p>
-<p>46、【Python打造漏洞扫描器】</p>
-<p>47、【Python应用马尔可夫链算法实现随机文本生成】</p>
-<p>48、【数独游戏的Python实现与破解】</p>
-<p>49、【使用Python定制词云】</p>
-<p>50、【Python开发简单计算器】</p>
-<p>50、【Python开发简单计算器】</p>
-<p>51、【Python 实现FTP弱口令扫描器】</p>
-<p>52、【Python实现Huffman编码解压缩文件】</p>
-<p>53、【Python实现Zip文件的暴力破解】</p>
-<p>54、【Python3智能裁切图片】</p>
-<p>55、【Python实现网站模拟登陆】</p>
-<p>56、【给Python3爬虫做一个界面.妹子图网实战】</p>
-<p>57、【Python3实现图片转彩色字符】</p>
-<p>58、【自联想器的Python 实现】</p>
-<p>59、【Python 实现简单流镜】</p>
-<p>60、【Flask实现简单聊天室】</p>
-<p>61、【基于PyQt5实现地图中定位相片拍摄位置】</p>
-<p>62、【Python实现模板引擎】</p>
-<p>63、【Python实现遗传算法求解n-queens问题】</p>
-<p>64、【Python3实现命令行动态进度条】</p>
-<p>65、【Python获取挂号信息并邮件通知】</p>
-<p>66、【Python实现java web项目远端自动化更新部署】</p>
-<p>67、【使用Python3编写Github 自动周报生成器】</p>
-<p>68、【使用Python生成分形图片】</p>
-<p>69、【Python 实现Redis 异步客户端】</p>
-<p>70、【Python 实现中文错别字高亮系统】</p>
-<p>71、【Python自动获取小说工具】</p>
-<p>72、【python自动获取酷狗音乐工具】</p>
-<p>73、【python自动获取海量IP工具】</p>
-<p>74、【Python自动化开发-制作名片卡】</p>
-<p>75、【Python自动化开发-微信统计】</p>
-<p>76、【Python自动化开发-批量发邮件通知】</p>
-<p>77、【Python自动化开发-考勒处理】</p>
-<p>78、【Python双色球系统】</p>
-<p>79、【Python批量获取王者荣耀皮肤】</p>
-<p>80、【Python获取阴阳师壁纸】</p>
-<p>81、【Python获取小说数据并分析】</p>
-<p>82、【python获取拉钩工具】</p>
-<p>83、【Python获取房天下数据】</p>
-<p>84、【Python获取彩票信息】</p>
-<p>85、【Python获取NBA数据】</p>
-<p>86、【Python合成女神图片】</p>
-<p>87、【Python法拍网数据】</p>
-<p>88、【Python操作Excel自动化开发】</p>
-<p>89、【python百行制作登录系统】</p>
-<p>90、【python百行制作查询工具】</p>
-<p>91、【Python百行代码实现点赞系统】</p>
-<p>92、【Python百行代码实现抽奖系统】</p>
-<p>93、【python自动工资条】</p>
-<p>94、【python抓取相亲网数据</p>
-<p>95、【python抓取百合网数据</p>
-<p>96、【python制作12306查票工具</p>
-<p>97、【python游戏开发公开课</p>
-<p>98、【python协程详解公开课</p>
-<p>99、【python吧中30行拿LOL皮肤</p>
-<p>100、【python快速获取斗图表情</p>
-<h3 id="数据分析"><a class="markdownIt-Anchor" href="#数据分析"></a> <a target="_blank" rel="noopener" href="https://blog.csdn.net/qazwsxpy/article/details/128192090?spm=1001.2100.3001.7377&amp;utm_medium=distribute.pc_feed_blog_category.none-task-blog-classify_tag-6-128192090-null-null.nonecase&amp;depth_1-utm_source=distribute.pc_feed_blog_category.none-task-blog-classify_tag-6-128192090-null-null.nonecase">数据分析</a></h3>
-<h2 id="机器学习"><a class="markdownIt-Anchor" href="#机器学习"></a> 机器学习</h2>
-<h3 id="机器学习-梯度下降"><a class="markdownIt-Anchor" href="#机器学习-梯度下降"></a> <a target="_blank" rel="noopener" href="https://techlead.blog.csdn.net/article/details/133819132?spm=1001.2014.3001.5502">机器学习-梯度下降</a></h3>
-<p>目录<br>
-一、简介<br>
-什么是梯度下降？<br>
-为什么梯度下降重要？<br>
-二、梯度下降的数学原理<br>
-代价函数（Cost Function）<br>
-梯度（Gradient）<br>
-更新规则<br>
-代码示例：基础的梯度下降更新规则<br>
-三、批量梯度下降（Batch Gradient Descent）<br>
-基础算法<br>
-代码示例<br>
-四、随机梯度下降（Stochastic Gradient Descent）<br>
-基础算法<br>
-代码示例<br>
-优缺点<br>
-五、小批量梯度下降（Mini-batch Gradient Descent）<br>
-基础算法<br>
-代码示例<br>
-优缺点<br>
-————————————————</p>
-<p>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/magicyangjay111/article/details/133819132">https://blog.csdn.net/magicyangjay111/article/details/133819132</a></p>
-<h3 id><a class="markdownIt-Anchor" href="#"></a> </h3>
-<h3 id="遗传算法可选"><a class="markdownIt-Anchor" href="#遗传算法可选"></a> 遗传算法（可选）</h3>
-<h2 id="深度学习"><a class="markdownIt-Anchor" href="#深度学习"></a> <a target="_blank" rel="noopener" href="https://blog.csdn.net/chenlycly/article/details/134043297?spm=1001.2100.3001.7377&amp;utm_medium=distribute.pc_feed_blog_category.none-task-blog-classify_tag-3-134043297-null-null.nonecase&amp;depth_1-utm_source=distribute.pc_feed_blog_category.none-task-blog-classify_tag-3-134043297-null-null.nonecase">深度学习</a></h2>
-<h3 id="前馈神经网络"><a class="markdownIt-Anchor" href="#前馈神经网络"></a> <a target="_blank" rel="noopener" href="https://techlead.blog.csdn.net/article/details/132421817?spm=1001.2014.3001.5502">前馈神经网络</a></h3>
-<p>目录<br>
-一、前馈神经网络概述<br>
-什么是前馈神经网络<br>
-前馈神经网络的工作原理<br>
-应用场景及优缺点<br>
-二、前馈神经网络的基本结构<br>
-输入层、隐藏层和输出层<br>
-激活函数的选择与作用<br>
-网络权重和偏置<br>
-三、前馈神经网络的训练方法<br>
-损失函数与优化算法<br>
-反向传播算法详解<br>
-避免过拟合的策略<br>
-四、使用Python和PyTorch实现FNN<br>
-4.1 准备数据集<br>
-选择合适的数据集<br>
-数据预处理<br>
-PyTorch数据加载器<br>
-4.2 构建模型结构<br>
-定义网络架构<br>
-选择激活函数<br>
-权重初始化<br>
-构建与任务相匹配的损失函数<br>
-4.3 训练模型<br>
-选择优化器<br>
-训练循环<br>
-模型验证<br>
-调整学习率<br>
-保存和加载模型<br>
-可视化训练过程<br>
-4.4 模型评估与可视化<br>
-评估指标<br>
-模型验证<br>
-混淆矩阵<br>
-ROC和AUC<br>
-特征重要性和模型解释<br>
-可视化隐藏层<br>
-五、前馈神经网络的先进变体与应用<br>
-多层感知器（MLP）<br>
-卷积神经网络（CNN）<br>
-循环神经网络（RNN）<br>
-Transformer结构<br>
-强化学习中的FNN<br>
-生成对抗网络（GAN）<br>
-FNN在医学图像分析中的应用<br>
-六、总结与未来展望<br>
-总结<br>
-未来展望<br>
-结语<br>
-————————————————</p>
-<p>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/magicyangjay111/article/details/132421817">https://blog.csdn.net/magicyangjay111/article/details/132421817</a></p>
-<p>损失函数和优化算法是神经网络训练的基石，决定了网络如何学习和调整其权重。</p>
-<ul>
-<li><strong>损失函数：</strong> 用于衡量网络预测与实际目标之间的差异，常见的损失函数包括均方误差（MSE）、交叉熵损失等。</li>
-<li><strong>优化算法：</strong> 通过最小化损失函数来更新网络权重，常见的优化算法包括随机梯度下降（SGD）、Adam、RMSProp等。</li>
-</ul>
-<h3 id="长短时记忆网络lstm"><a class="markdownIt-Anchor" href="#长短时记忆网络lstm"></a> <a target="_blank" rel="noopener" href="https://techlead.blog.csdn.net/article/details/132480035">长短时记忆网络（LSTM）</a></h3>
-<p>目录</p>
-<ol>
-<li>LSTM的背景<br>
-人工神经网络的进化<br>
-循环神经网络（RNN）的局限性<br>
-LSTM的提出背景</li>
-<li>LSTM的基础理论<br>
-2.1 LSTM的数学原理<br>
-遗忘门（Forget Gate）<br>
-输入门（Input Gate）<br>
-记忆单元（Cell State）<br>
-输出门（Output Gate）<br>
-2.2 LSTM的结构逻辑<br>
-遗忘门：决定丢弃的信息<br>
-输入门：选择性更新记忆单元<br>
-更新单元状态<br>
-输出门：决定输出的隐藏状态<br>
-门的相互作用<br>
-逻辑结构的实际应用<br>
-总结<br>
-2.3 LSTM与GRU的对比</li>
-<li>结构<br>
-LSTM<br>
-GRU</li>
-<li>数学表达<br>
-LSTM<br>
-GRU</li>
-<li>性能和应用<br>
-小结</li>
-<li>LSTM在实际应用中的优势<br>
-处理长期依赖问题<br>
-遗忘门机制<br>
-梯度消失问题的缓解<br>
-广泛的应用领域<br>
-灵活的架构选项<br>
-成熟的开源实现<br>
-小结</li>
-<li>LSTM的实战演示<br>
-4.1 使用PyTorch构建LSTM模型<br>
-定义LSTM模型<br>
-训练模型<br>
-评估和预测</li>
-<li>LSTM总结<br>
-<strong>解决长期依赖问题</strong><br>
-<strong>广泛的应用领域</strong><br>
-<strong>灵活与强大</strong><br>
-<strong>开源支持</strong><br>
-<strong>持战与展望</strong><br>
-总结反思<br>
-————————————————</li>
-</ol>
-<p>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/magicyangjay111/article/details/132480035">https://blog.csdn.net/magicyangjay111/article/details/132480035</a></p>
-<h4 id="lstm的提出背景"><a class="markdownIt-Anchor" href="#lstm的提出背景"></a> LSTM的提出背景</h4>
-<p>长短时记忆网络（LSTM）是一种特殊类型的RNN，由Hochreiter和Schmidhuber于1997年提出，目的是解决传统RNN的问题。</p>
-<ul>
-<li><strong>解决梯度消失问题</strong>: 通过引入“记忆单元”，LSTM能够在长序列中保持信息的流动。</li>
-<li><strong>捕捉长依赖性</strong>: LSTM结构允许网络捕捉和理解长序列中的复杂依赖关系。</li>
-<li><strong>广泛应用</strong>: 由于其强大的性能和灵活性，LSTM已经被广泛应用于许多序列学习任务，如语音识别、机器翻译和时间序列分析等。</li>
-</ul>
-<h4 id="记忆单元的结构"><a class="markdownIt-Anchor" href="#记忆单元的结构"></a> “记忆单元”的结构</h4>
-<h3 id="深度信念网络dbn"><a class="markdownIt-Anchor" href="#深度信念网络dbn"></a> <a target="_blank" rel="noopener" href="https://techlead.blog.csdn.net/article/details/132531255?spm=1001.2014.3001.5502">深度信念网络（DBN）</a></h3>
-<p>一、概述<br>
-1.1 深度信念网络的概述<br>
-1.2 深度信念网络与其他深度学习模型的比较<br>
-结构层次<br>
-学习方式<br>
-训练和优化<br>
-应用领域<br>
-1.3 应用领域<br>
-图像识别与处理<br>
-自然语言处理<br>
-推荐系统<br>
-语音识别<br>
-无监督学习与异常检测<br>
-药物发现与生物信息学<br>
-二、结构<br>
-2.1 受限玻尔兹曼机（RBM）<br>
-结构与组成<br>
-工作原理<br>
-学习算法<br>
-应用<br>
-2.2 DBN的结构和组成<br>
-层次结构<br>
-网络连接<br>
-训练过程<br>
-应用领域<br>
-2.3 训练和学习算法<br>
-预训练<br>
-微调<br>
-优化方法<br>
-评估和验证<br>
-三、实战<br>
-3.1 DBN模型的构建<br>
-定义RBM层<br>
-构建DBN模型<br>
-定义DBN的超参数<br>
-3.2 预训练<br>
-RBM的逐层训练<br>
-对比散度（CD）算法<br>
-3.3 微调<br>
-监督训练<br>
-微调训练<br>
-模型验证和测试<br>
-3.4 应用<br>
-分类或回归任务<br>
-特征学习<br>
-转移学习<br>
-在线应用<br>
-四、总结<br>
-————————————————</p>
-<p>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/magicyangjay111/article/details/132531255">https://blog.csdn.net/magicyangjay111/article/details/132531255</a></p>
-<h2 id="项目实战"><a class="markdownIt-Anchor" href="#项目实战"></a> 项目实战</h2>
-<h3 id="图像分类发展历史-技术全解与实战"><a class="markdownIt-Anchor" href="#图像分类发展历史-技术全解与实战"></a> <a target="_blank" rel="noopener" href="https://blog.csdn.net/magicyangjay111/article/details/134698103">图像分类：发展历史、技术全解与实战</a></h3>
-<ul>
-<li>自动化的神经网络架构搜索（NAS）技术</li>
-<li>轻量级模型和少样本学习也成为研究的热点</li>
-<li>图像分类有望实现更复杂的应用，如情感分析、自动化标注等</li>
-</ul>
-<p><img src="/2024/02/12/2024%E5%B9%B42%E6%9C%8812%E6%97%A5-%E8%BD%AC%E8%BD%BD%E6%96%87%E7%AB%A0/image-20240212222002730.png" alt="image-20240212222002730"></p>
-<h3 id="计算机视觉五大核心研究任务分类识别-检测分割-人体分析-三维视觉-视频分析"><a class="markdownIt-Anchor" href="#计算机视觉五大核心研究任务分类识别-检测分割-人体分析-三维视觉-视频分析"></a> <a target="_blank" rel="noopener" href="https://techlead.blog.csdn.net/article/details/132321843?spm=1001.2014.3001.5502">计算机视觉五大核心研究任务：分类识别、检测分割、人体分析、三维视觉、视频分析</a></h3>
-<p>目录<br>
-一、引言<br>
-1.1 计算机视觉的定义<br>
-1.1.1 核心技术<br>
-1.1.2 应用场景<br>
-1.2 历史背景及发展<br>
-1.2.1 1960s-1980s: 初期阶段<br>
-1.2.2 1990s-2000s: 机器学习时代<br>
-1.2.3 2010s-现在: 深度学习的革命<br>
-1.3 应用领域概览<br>
-1.3.1 工业自动化<br>
-1.3.2 医疗图像分析<br>
-1.3.3 自动驾驶<br>
-1.3.4 虚拟现实与增强现实<br>
-二、计算机视觉五大核心任务<br>
-2.1 图像分类与识别<br>
-2.1.1 图像分类与识别的基本概念<br>
-2.1.2 早期方法与技术演进<br>
-2.1.3 深度学习的引入与革新<br>
-卷积神经网络在图像分类中的应用<br>
-总结<br>
-2.2 物体检测与分割<br>
-2.2.1 物体检测<br>
-早期方法<br>
-深度学习方法<br>
-2.2.2 物体分割<br>
-语义分割<br>
-实例分割<br>
-总结<br>
-2.3 人体分析<br>
-2.3.1 人脸识别<br>
-2.3.2 人体姿态估计<br>
-2.3.3 动作识别<br>
-2.3.4 人体分割<br>
-2.4 三维计算机视觉<br>
-2.4.1 三维重建<br>
-立体视觉<br>
-多视图几何<br>
-点云生成和融合<br>
-2.4.2 3D物体检测和识别<br>
-基于2D图像的方法<br>
-基于点云的方法<br>
-2.4.3 三维语义分割<br>
-基于体素的方法<br>
-基于点云的方法<br>
-2.4.4 三维姿态估计<br>
-单视图方法<br>
-多视图方法<br>
-总结<br>
-2.5 视频理解与分析<br>
-2.5.1 视频分类<br>
-2.5.2 动作识别<br>
-2.5.3 视频物体检测与分割<br>
-2.5.4 视频摘要与高亮检测<br>
-2.5.5 视频生成和编辑<br>
-总结<br>
-三、无监督学习与自监督学习在计算机视觉中的应用<br>
-3.1 无监督学习<br>
-聚类<br>
-降维与表示学习<br>
-3.2 自监督学习<br>
-对比学习<br>
-预训练任务设计<br>
-3.3 跨模态学习</p>
-<ol start="4">
-<li>总结</li>
-</ol>
-<p>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/magicyangjay111/article/details/132321843">https://blog.csdn.net/magicyangjay111/article/details/132321843</a></p>
-<p><img src="/2024/02/12/2024%E5%B9%B42%E6%9C%8812%E6%97%A5-%E8%BD%AC%E8%BD%BD%E6%96%87%E7%AB%A0/image-20240212224535849.png" alt="image-20240212224535849"></p>
-<h3 id="人脸识别"><a class="markdownIt-Anchor" href="#人脸识别"></a> <a target="_blank" rel="noopener" href="https://techlead.blog.csdn.net/article/details/134762161">人脸识别</a>：</h3>
-<p>目录<br>
-一、人脸识别技术的发展历程<br>
-早期探索：20世纪60至80年代<br>
-技术价值点：<br>
-自动化与算法化：20世纪90年代<br>
-技术价值点：<br>
-深度学习的革命：21世纪初至今<br>
-技术价值点：<br>
-二、几何特征方法详解与实战<br>
-几何特征方法的原理<br>
-几何特征方法的局限性<br>
-实战案例：简单的几何特征人脸识别<br>
-环境配置<br>
-代码实现<br>
-代码说明<br>
-三、自动化与算法化详解与实战<br>
-自动化与算法化的进展<br>
-技术创新点：<br>
-实战案例：基于特征匹配的人脸识别<br>
-环境配置<br>
-代码实现<br>
-代码说明<br>
-四、深度学习方法<br>
-深度学习方法的核心概念<br>
-技术创新点<br>
-实战案例：使用深度学习进行人脸识别<br>
-环境配置<br>
-代码实现<br>
-代码说明<br>
-总结<br>
-————————————————</p>
-<p>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/magicyangjay111/article/details/134762161">https://blog.csdn.net/magicyangjay111/article/details/134762161</a></p>
-<p><img src="/2024/02/12/2024%E5%B9%B42%E6%9C%8812%E6%97%A5-%E8%BD%AC%E8%BD%BD%E6%96%87%E7%AB%A0/image-20240212232302240.png" alt="image-20240212232302240"></p>
-<p><img src="/2024/02/12/2024%E5%B9%B42%E6%9C%8812%E6%97%A5-%E8%BD%AC%E8%BD%BD%E6%96%87%E7%AB%A0/image-20240212232432194.png" alt="image-20240212232432194"></p>
-<h3 id="时间序列预测"><a class="markdownIt-Anchor" href="#时间序列预测"></a> <a target="_blank" rel="noopener" href="https://snu77.blog.csdn.net/article/details/133272874?spm=1001.2014.3001.5502">时间序列预测：</a></h3>
-<h2 id="深度学习-前沿"><a class="markdownIt-Anchor" href="#深度学习-前沿"></a> 深度学习 前沿</h2>
-<h3 id="可变形卷积deformable-conv"><a class="markdownIt-Anchor" href="#可变形卷积deformable-conv"></a> <a target="_blank" rel="noopener" href="https://blog.csdn.net/panghuzhenbang/article/details/129816869?spm=1001.2100.3001.7377&amp;utm_medium=distribute.pc_feed_blog_category.none-task-blog-classify_tag-13-129816869-null-null.nonecase&amp;depth_1-utm_source=distribute.pc_feed_blog_category.none-task-blog-classify_tag-13-129816869-null-null.nonecase">可变形卷积(Deformable Conv)</a></h3>
-<p><img src="/2024/02/12/2024%E5%B9%B42%E6%9C%8812%E6%97%A5-%E8%BD%AC%E8%BD%BD%E6%96%87%E7%AB%A0/image-20240212235532908.png" alt="image-20240212235532908"></p>
-<h3 id="llm"><a class="markdownIt-Anchor" href="#llm"></a> LLM</h3>
-<h3 id="sd"><a class="markdownIt-Anchor" href="#sd"></a> SD</h3>
-<h2 id="深度学习-项目优化"><a class="markdownIt-Anchor" href="#深度学习-项目优化"></a> 深度学习 项目优化</h2>
-<h3 id="量化"><a class="markdownIt-Anchor" href="#量化"></a> 量化</h3>
-<h3 id="cuda"><a class="markdownIt-Anchor" href="#cuda"></a> CUDA</h3>
-<h4 id="c-cuda手搓一个简单的神经网络推理"><a class="markdownIt-Anchor" href="#c-cuda手搓一个简单的神经网络推理"></a> <a target="_blank" rel="noopener" href="https://blog.csdn.net/Bartender_VA11/article/details/135999169">C++ CUDA手搓一个简单的神经网络推理</a></h4>
-<h3 id="trt"><a class="markdownIt-Anchor" href="#trt"></a> TRT</h3>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2024/02/12/2024%E5%B9%B42%E6%9C%8812%E6%97%A5-%E8%BD%AC%E8%BD%BD%E6%96%87%E7%AB%A0/" data-id="cltgreey1000aw8v4ahty4aie" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9D%82/" rel="tag">杂</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2024年2月4日-Transformer" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/" class="article-date">
-  <time class="post-time" datetime="2024-02-04T07:45:25.000Z" itemprop="datePublished">
-    <span class="post-month">2月</span><br/>
-    <span class="post-day">04</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/">2024年2月4日 Transformer</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="11"><a class="markdownIt-Anchor" href="#11"></a> 11</h1>
-<p>Transformer</p>
-<p>类似</p>
-<img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204154832886.png" alt="image-20240204154832886" style="zoom: 33%;">
-<p>编码器内部结构</p>
-<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204154915719.png" alt="image-20240204154915719"></p>
-<p>解码器</p>
-<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204154933875.png" alt="image-20240204154933875"></p>
-<p>计算注意力</p>
-<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204155008356.png" alt="image-20240204155008356"></p>
-<p>a embedding 转换成向量</p>
-<p>乘wq wk wv 成为 QKV</p>
-<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204155229925.png" alt="image-20240204155229925"></p>
-<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204155321645.png" alt="image-20240204155321645"></p>
-<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204155426496.png" alt="image-20240204155426496"></p>
-<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204155505816.png" alt="image-20240204155505816"></p>
-<h3 id="多头注意力"><a class="markdownIt-Anchor" href="#多头注意力"></a> 多头注意力</h3>
-<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204155513230.png" alt="image-20240204155513230"></p>
-<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204155611126.png" alt="image-20240204155611126"></p>
-<p>z相加之后乘w 等到 Z</p>
-<h2 id="词向量编码"><a class="markdownIt-Anchor" href="#词向量编码"></a> 词向量编码</h2>
-<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204155845984.png" alt="image-20240204155845984"></p>
-<h3 id="位置编码"><a class="markdownIt-Anchor" href="#位置编码"></a> 位置编码</h3>
-<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204160027009.png" alt="image-20240204160027009"></p>
-<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204160316504.png" alt="image-20240204160316504"></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/" data-id="cltgreey3000hw8v46fth0d3s" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl/" rel="tag">dl</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2024年2月4日-VAEmodel" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-VAEmodel/" class="article-date">
-  <time class="post-time" datetime="2024-02-04T07:38:05.000Z" itemprop="datePublished">
-    <span class="post-month">2月</span><br/>
-    <span class="post-day">04</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-VAEmodel/">2024年2月4日 AE.VAEmodel</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="1-ae"><a class="markdownIt-Anchor" href="#1-ae"></a> 1 AE</h1>
-<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-VAEmodel/image-20240205131208025.png" alt="image-20240205131208025"></p>
-<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-VAEmodel/image-20240205131307904.png" alt="image-20240205131307904"></p>
-<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-VAEmodel/image-20240205131344755.png" alt="image-20240205131344755"></p>
-<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-VAEmodel/image-20240205131436686.png" alt="image-20240205131436686"></p>
-<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-VAEmodel/image-20240205131442988.png" alt="image-20240205131442988"></p>
-<h1 id="2-vae"><a class="markdownIt-Anchor" href="#2-vae"></a> 2 vae</h1>
-<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-VAEmodel/image-20240205131914693.png" alt="image-20240205131914693"></p>
-<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-VAEmodel/image-20240205131929419.png" alt="image-20240205131929419"></p>
-<h3 id="正态分布"><a class="markdownIt-Anchor" href="#正态分布"></a> 正态分布</h3>
-<p>Wgan</p>
-<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-VAEmodel/image-20240205163221816.png" alt="image-20240205163221816"></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-VAEmodel/" data-id="cltgreey3000jw8v43huzdi8u" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/llm-dl/" rel="tag">llm;dl</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
-    <a class="extend prev" rel="prev" href="/page/7/">&amp;laquo; pre</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" href="/page/9/">next &amp;raquo;</a>
+    <a class="extend prev" rel="prev" href="/page/7/">&amp;laquo; pre</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="page-number" href="/page/7/">7</a><span class="page-number current">8</span><a class="page-number" href="/page/9/">9</a><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/9/">next &amp;raquo;</a>
   </nav>
 </section>
         
@@ -1783,9 +1831,9 @@ RBM的逐层训练<br>
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>119</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>122</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>35</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>36</strong><br>标签</div></a>
     </div>
 
 
