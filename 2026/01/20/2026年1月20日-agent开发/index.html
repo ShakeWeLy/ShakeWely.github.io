@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2026年1月20日 agent开发 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="https:&#x2F;&#x2F;datawhalechina.github.io&#x2F;hello-agents&#x2F;#&#x2F;.&#x2F;README   第一章 初识智能体 定义为任何能够通过传感器（Sensors）感知其所处环境（Environment），并自主地通过**执行器（Actuators）采取行动（Action）**以达成特定目标的实体。  第二章 智能体发展史   第三章 大语言模型基础  3.1 从 N-gram">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2026年1月20日 agent开发">
+<meta property="og:url" content="https://shakewely.github.io/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="https:&#x2F;&#x2F;datawhalechina.github.io&#x2F;hello-agents&#x2F;#&#x2F;.&#x2F;README   第一章 初识智能体 定义为任何能够通过传感器（Sensors）感知其所处环境（Environment），并自主地通过**执行器（Actuators）采取行动（Action）**以达成特定目标的实体。  第二章 智能体发展史   第三章 大语言模型基础  3.1 从 N-gram">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260122150603627.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260120114037739.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260120143018637.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260120152649779.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260120155840148.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260121094514872.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260121104900475.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260121105007222.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260121105651824.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260121110322406.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260121110417193.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260121110430647.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260121113215186.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260121114824331.png">
+<meta property="article:published_time" content="2026-01-20T00:26:08.000Z">
+<meta property="article:modified_time" content="2026-01-31T08:43:03.120Z">
+<meta property="article:author" content="Weakliy">
+<meta property="article:tag" content="Agent">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shakewely.github.io/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260122150603627.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>134</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>38</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2026年1月20日-agent开发" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/" class="article-date">
+  <time class="post-time" datetime="2026-01-20T00:26:08.000Z" itemprop="datePublished">
+    <span class="post-month">1月</span><br/>
+    <span class="post-day">20</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2026年1月20日 agent开发
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p><a target="_blank" rel="noopener" href="https://datawhalechina.github.io/hello-agents/#/./README">https://datawhalechina.github.io/hello-agents/#/./README</a></p>
+</blockquote>
+<h1 id="第一章-初识智能体"><a class="markdownIt-Anchor" href="#第一章-初识智能体"></a> <strong>第一章 初识智能体</strong></h1>
+<p>定义为任何能够通过<strong>传感器（Sensors）<strong>感知其所处</strong>环境（Environment）</strong>，并<strong>自主</strong>地通过**执行器（Actuators）<strong>采取</strong>行动（Action）**以达成特定目标的实体。</p>
+<h1 id="第二章-智能体发展史"><a class="markdownIt-Anchor" href="#第二章-智能体发展史"></a> <strong>第二章 智能体发展史</strong></h1>
+<img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260122150603627.png" alt="image-20260122150603627" style="zoom:50%;">
+<h1 id="第三章-大语言模型基础"><a class="markdownIt-Anchor" href="#第三章-大语言模型基础"></a> <strong>第三章 大语言模型基础</strong></h1>
+<h2 id="31-从-n-gram-到-rnn"><a class="markdownIt-Anchor" href="#31-从-n-gram-到-rnn"></a> 3.1 从 N-gram 到 RNN</h2>
+<p><strong>马尔科夫</strong></p>
+<p>极大似然估计</p>
+<img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260120114037739.png" alt="image-20260120114037739" style="zoom:50%;">
+<h2 id="32-交互"><a class="markdownIt-Anchor" href="#32-交互"></a> 3.2 交互</h2>
+<p>温度 TOP_k TOP_p</p>
+<p><strong>零样本、单样本与少样本提示</strong></p>
+<p><strong>指令调优</strong> <strong>(Instruction Tuning)</strong> 是一种微调技术，它使用大量“指令-回答”格式的数据对预训练模型进行进一步的训</p>
+<p>练。经过指令调优后，模型能更好地理解并遵循用户的指令。我们今天日常工作学习中使用的所有模型（如</p>
+<p>ChatGPT , DeepSeek , Qwen ）都是其模型家族中经过指令调优过的模型。</p>
+<p>COT</p>
+<blockquote>
+<p>请一步一步地思考并解答。</p>
+</blockquote>
+<p>分词</p>
+<blockquote>
+<p><strong>子词分词</strong> <strong>(Subword Tokenization)</strong> 算法。它的核心思想</p>
+<p>是：将常见的词（如 “agent”）保留为完整的词元，同时将不常见的词（如 “Tokenization”）拆分成多个有意义的子</p>
+<p>词片段（如 “Token” 和 “ization”）。</p>
+</blockquote>
+<p>BPE 算法</p>
+<blockquote></blockquote>
+<p>后续的许多算法都是在BPE的基础上进行优化的。其中，Google 开发的 WordPiece 和 SentencePiece 是影响力最大</p>
+<p>的两种</p>
+<h3 id="模型选型的关键考量"><a class="markdownIt-Anchor" href="#模型选型的关键考量"></a> <strong>模型选型的关键考量</strong></h3>
+<p>公开的基准测试排行榜（如 LMSys Chatbot Arena</p>
+<p>Leaderboard）来评估模型的综合能力。</p>
+<h2 id="33-大语言模型的缩放法则与局限性"><a class="markdownIt-Anchor" href="#33-大语言模型的缩放法则与局限性"></a> <strong>3.3</strong> <strong>大语言模型的缩放法则与局限性</strong></h2>
+<h3 id="331-缩放法则"><a class="markdownIt-Anchor" href="#331-缩放法则"></a> <strong>3.3.1</strong> <strong>缩放法则</strong></h3>
+<p><strong>缩放法则</strong></p>
+<p>模型的性能（通常用损失 Loss 来衡量）与参数量、数据量和计算量这三个因素都</p>
+<p>呈现出平滑的幂律关系[9]。简单来说，只要我们持续、按比例地增加这三个要素，模型的性能就会可预测地、平滑地</p>
+<p>提升，而不会出现明显的瓶颈。</p>
+<p><strong>能力涌现</strong>，</p>
+<p>指当模型规模达到一定阈值后，会突然展现出在小规</p>
+<p>模模型中完全不存在或表现不佳的全新能力。例如，<strong>链式思考</strong> <strong>(Chain-of-Thought)</strong> 、<strong>指令遵循</strong> <strong>(Instruction</strong></p>
+<p><strong>Following)</strong> 、多步推理、代码生成等能力，都是在模型参数量达到数百亿甚至千亿级别后才显著出现的。</p>
+<h3 id="332-模型幻觉"><a class="markdownIt-Anchor" href="#332-模型幻觉"></a> <strong>3.3.2</strong> <strong>模型幻觉</strong></h3>
+<blockquote>
+<p><strong>事实性幻觉</strong> <strong>(Factual Hallucinations)</strong> ： 模型生成与现实世界事实不符的信息。</p>
+<p><strong>忠实性幻觉</strong> <strong>(Faithfulness Hallucinations)</strong> ： 在文本摘要、翻译等任务中，生成的内容未能忠实地反映源文</p>
+<p>本的含义。</p>
+<p><strong>内在幻觉</strong> <strong>(Intrinsic Hallucinations)</strong> ： 模型生成的内容与输入信息直接矛盾。</p>
+</blockquote>
+<p>索多种检测和缓解幻觉的方法：</p>
+<blockquote>
+<p><strong>数据层面</strong>： 通过高质量数据清洗、引入事实性知识以及强化学习与人类反馈 (RLHF) 等方式[13]，从源头减少幻</p>
+<p>觉。</p>
+<ol start="2">
+<li><strong>模型层面</strong>： 探索新的模型架构，或让模型能够表达其对生成内容的不确定性。</li>
+<li><strong>推理与生成层面</strong>：</li>
+<li><strong>检索增强生成</strong> <strong>(Retrieval-Augmented Generation, RAG)</strong> [14]： 这是目前缓解幻觉的有效方法之一。</li>
+</ol>
+<p>RAG 系统通过在生成之前从外部知识库（如文档数据库、网页）中检索相关信息，然后将检索到的信息</p>
+<p>作为上下文，引导模型生成基于事实的回答。</p>
+<ol start="2">
+<li><strong>多步推理与验证</strong>： 引导模型进行多步推理，并在每一步进行自我检查或外部验证。</li>
+<li><strong>引入外部工具</strong>： 允许模型调用外部工具（如搜索引擎、计算器、代码解释器）来获取实时信息或进行精确计算。</li>
+</ol>
+</blockquote>
+<p>Transformer架构[4]是现代大语言模型的基础。其中：</p>
+<p><strong>提示</strong>：可以结合本章3.1.2节的代码实现来辅助理解</p>
+<ul>
+<li>自注意力机制（Self-Attention）的核心思想是什么？</li>
+<li>为什么Transformer能够并行处理序列，而RNN必须串行处理？位置编码（Positional Encoding）在其</li>
+<li>中起什么作用？</li>
+<li>Decoder-Only架构与完整的Encoder-Decoder架构有什么区别？为什么现在主流的大语言模型都采用Decoder-Only架构？</li>
+</ul>
+<h2 id><a class="markdownIt-Anchor" href="#"></a> </h2>
+<blockquote>
+<p>在本章中，我们将聚焦于其中最具</p>
+<p>代表性的三种，并一步步从零实现它们：</p>
+<p><strong>ReAct (Reasoning and Acting)****：</strong> 一种将“思考”和“行动”紧密结合的范式，让智能体边想边做，动态调整。</p>
+<p><strong>Plan-and-Solve</strong>**：** 一种“三思而后行”的范式，智能体首先生成一个完整的行动计划，然后严格执行。</p>
+<p><strong>Reflection</strong>**：** 一种赋予智能体“反思”能力的范式，通过自我批判和修正来优化结果。</p>
+</blockquote>
+<h1 id="-2"><a class="markdownIt-Anchor" href="#-2"></a> </h1>
+<p><strong>思维链</strong> <strong>(Chain-of-Thought)</strong></p>
+<blockquote>
+<p>它能引导模型进</p>
+<p>行复杂的逻辑推理，但无法与外部世界交互，容易产生事实幻觉</p>
+</blockquote>
+<h1 id="第四章-智能体经典"><a class="markdownIt-Anchor" href="#第四章-智能体经典"></a> <strong>第四章 智能体经典</strong></h1>
+<h2 id="41-react"><a class="markdownIt-Anchor" href="#41-react"></a> 4.1 React</h2>
+<p>ReAct 像一个经验丰富的侦探，根据现场的蛛丝马迹（Observation）一步步推理，随时调整自己的调查方向；</p>
+<p>ReAct范式通过一种特殊的提示工程来引导模型，使其每一步的输出都遵循一个固定的轨迹：</p>
+<ul>
+<li><strong>Thought (<strong><strong>思考</strong></strong>)****：</strong> 这是智能体的“内心独白”。它会分析当前情况、分解任务、制定下一步计划，或者反思上一</li>
+<li>步的结果。</li>
+<li><strong>Action (<strong><strong>行动</strong></strong>)****：</strong> 这是智能体决定采取的具体动作，通常是调用一个外部工具，例如 Search['华为最新款手</li>
+<li>机’] 。</li>
+<li><strong>Observation (<strong><strong>观察</strong></strong>)****：</strong> 这是执行 Action 后从外部工具返回的结果，例如搜索结果的摘要或API的返回值。</li>
+</ul>
+<p>智能体将不断重复这个 <strong>Thought -&gt; Action -&gt; Observation</strong> 的循环，将新的观察结果追加到历史记录中，形成一个</p>
+<p>不断增长的上下文，直到它在 Thought 中认为已经找到了最终答案，然后输出结果。这个过程形成了一个强大的协同</p>
+<p>效应：<strong>推理使得行动更具目的性，而行动则为推理提供了事实依据。</strong></p>
+<p><img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260120143018637.png" alt="image-20260120143018637"></p>
+<blockquote>
+<ul>
+<li><strong>需要外部知识的任务</strong>：如查询实时信息（天气、新闻、股价）、搜索专业领域的知识等。</li>
+<li><strong>需要精确计算的任务</strong>：将数学问题交给计算器工具，避免LLM的计算错误。</li>
+<li><strong>需要与API交互的任务</strong>：如操作数据库、调用某个服务的API来完成特定功能。</li>
+</ul>
+</blockquote>
+<ol>
+<li>整个机制的稳定运行建立在一个精心设计的提示词模板之上。模板中的任何微小变动，甚至是用词的差异，都可能影响 LLM 的行为。</li>
+<li></li>
+</ol>
+<h2 id="42-plan-and-solve"><a class="markdownIt-Anchor" href="#42-plan-and-solve"></a> <strong>4.2 Plan-and-Solve</strong></h2>
+<p>Plan-and-Solve 则更像一位建筑师，在动工之前必须先绘制出完整的蓝图（Plan），然后严格按照蓝图来施工（Solve）</p>
+<p>Plan-and-Solve 将整个流程解耦为两个核心阶段：</p>
+<ol>
+<li>
+<p><strong>规划阶段</strong> <strong>(Planning Phase)</strong>： 首先，智能体会接收用户的完整问题。它的第一个任务不是直接去解决问题或调用工具，而是<strong>将问题分解，并制定出一个清晰、分步骤的行动计划</strong>。这个计划本身就是一次大语言模型的调用产物。</p>
+</li>
+<li>
+<p><strong>执行阶段</strong> <strong>(Solving Phase)</strong>： 在获得完整的计划后，智能体进入执行阶段。它会<strong>严格按照计划中的步骤，逐一执行</strong>。每一步的执行都可能是一次独立的 LLM 调用，或者是对上一步结果的加工处理，直到计划中的所有步骤都完成，最终得出答案。</p>
+</li>
+</ol>
+<img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260120152649779.png" alt="image-20260120152649779" style="zoom:50%;">
+<blockquote>
+<p>尤其适用于那些结构性强、可以被清晰分解的复杂任务，例如：</p>
+<ul>
+<li><strong>多步数学应用题</strong>：需要先列出计算步骤，再逐一求解。</li>
+<li><strong>需要整合多个信息源的报告撰写</strong>：需要先规划好报告结构（引言、数据来源A、数据来源B、总结），再逐一填充内容。</li>
+<li><strong>代码生成任务</strong>：需要先构思好函数、类和模块的结构，再逐一实现。</li>
+</ul>
+</blockquote>
+<h3 id="432-规划阶段"><a class="markdownIt-Anchor" href="#432-规划阶段"></a> <strong>4.3.2</strong> <strong>规划阶段</strong></h3>
+<h3 id="433-执行器与状态管理"><a class="markdownIt-Anchor" href="#433-执行器与状态管理"></a> <strong>4.3.3</strong> <strong>执行器与状态管理</strong></h3>
+<h2 id="43-reflection"><a class="markdownIt-Anchor" href="#43-reflection"></a> 4.3 <strong>Reflection</strong></h2>
+<p>Reflection 机制的核心思想，正是为智能体引入一种<strong>事后（post-hoc）的自我校正循环</strong></p>
+<p>其核心工作流程可以概括为一个简洁的三步循环：<strong>执行 -&gt; 反思 -&gt; 优化</strong>。</p>
+<ol>
+<li><strong>执行 (Execution)</strong>：首先，智能体使用我们熟悉的方法（如 ReAct 或 Plan-and-Solve）尝试完成任务，生成一个初步的解决方案或行动轨迹。这可以看作是“初稿”。</li>
+<li><strong>反思 (Reflection)</strong>：接着，智能体进入反思阶段。它会调用一个独立的、或者带有特殊提示词的大语言模型实例，来扮演一个“评审员”的角色。这个“评审员”会审视第一步生成的“初稿”，并从多个维度进行评估，例如：
+<ul>
+<li><strong>事实性错误</strong>：是否存在与常识或已知事实相悖的内容？</li>
+<li><strong>逻辑漏洞</strong>：推理过程是否存在不连贯或矛盾之处？</li>
+<li><strong>效率问题</strong>：是否有更直接、更简洁的路径来完成任务？</li>
+<li><strong>遗漏信息</strong>：是否忽略了问题的某些关键约束或方面？ 根据评估，它会生成一段结构化的<strong>反馈 (Feedback)</strong>，指出具体的问题所在和改进建议。</li>
+</ul>
+</li>
+<li><strong>优化 (Refinement)</strong>：最后，智能体将“初稿”和“反馈”作为新的上下文，再次调用大语言模型，要求它根据反馈内容对初稿进行修正，生成一个更完善的“修订稿”。</li>
+</ol>
+<img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260120155840148.png" alt="image-20260120155840148" style="zoom:50%;">
+<blockquote>
+<ul>
+<li>生成关键的业务代码或技术报告。</li>
+<li>在科学研究中进行复杂的逻辑推演。</li>
+<li>需要深度分析和规划的决策支持系统。</li>
+</ul>
+</blockquote>
+<p>Reflection 的价值在于：</p>
+<ul>
+<li>它为智能体提供了一个内部纠错回路，使其<strong>不再完全依赖于外部工具的反馈（ReAct 的 Observation），从而能够修正更高层次的逻辑和策略错误</strong>。</li>
+<li>它将一次性的任务执行，转变为一个<strong>持续优化</strong>的过程，显著提升了复杂任务的最终成功率和答案质量。</li>
+<li>它为智能体构建了一个临时的**“短期记忆”<strong>。整个“执行-反思-优化”的轨迹形成了一个宝贵的经验记录，智能体不仅知道最终答案，还记得自己是如何从有缺陷的初稿迭代到最终版本的。更进一步，这个记忆系统还可以是</strong>多模态的**，允许智能体反思和修正文本以外的输出（如代码、图像等），为构建更强大的多模态智能体奠定了基础。</li>
+</ul>
+<h4 id="记忆管理机制"><a class="markdownIt-Anchor" href="#记忆管理机制"></a> <strong>记忆管理机制</strong></h4>
+<h1 id="第五章-基于低代码平台的智能体搭建"><a class="markdownIt-Anchor" href="#第五章-基于低代码平台的智能体搭建"></a> 第五章 基于低代码平台的智能体搭建❌</h1>
+<h1 id="第六章-框架开发实践"><a class="markdownIt-Anchor" href="#第六章-框架开发实践"></a> 第六章 框架开发实践❌</h1>
+<p><img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260121094514872.png" alt="image-20260121094514872"></p>
+<h1 id="第七章-构建你的智能体框架"><a class="markdownIt-Anchor" href="#第七章-构建你的智能体框架"></a> <strong>第七章 构建你的智能体框架</strong> ❌</h1>
+<h1 id="第八章-记忆与检索"><a class="markdownIt-Anchor" href="#第八章-记忆与检索"></a> <strong>第八章 记忆与检索❌</strong></h1>
+<h1 id="第九章-上下文工程"><a class="markdownIt-Anchor" href="#第九章-上下文工程"></a> <strong>第九章 上下文工程</strong></h1>
+<p>我们需要一套工程化方法，持续、系统地为模型构造恰当的“上下文”。</p>
+<blockquote>
+<p>====================================================================</p>
+<p>构建的上下文:</p>
+<p>====================================================================</p>
+<p>[Role &amp; Policies]</p>
+<p>你是一位资深的Python数据工程顾问。你的回答需要:1) 提供具体可行的建议 2) 解释技术原理 3) 给出代码示例</p>
+<p>[Task]</p>
+<p>如何优化Pandas的内存占用?</p>
+<p>[Evidence]</p>
+<p>Pandas内存优化的核心策略包括:</p>
+<ol>
+<li>使用合适的数据类型(如category代替object)</li>
+<li>分块读取大文件</li>
+<li>使用 chunksize 参数</li>
+</ol>
+<p>-–</p>
+<p>数据类型优化可以显著减少内存占用。例如,将int64降级为int32可以节省50%的内存。</p>
+<p>[Context]</p>
+<p>user: 我正在开发一个数据分析工具</p>
+<p>assistant: 很好!数据分析工具通常需要处理大量数据。您计划使用什么技术栈?</p>
+<p>user: 我打算使用Python和Pandas,已经完成了CSV读取模块</p>
+<p>assistant: 不错的选择!Pandas在数据处理方面非常强大。接下来您可能需要考虑数据清洗和转换。</p>
+<p>记忆: 用户正在开发数据分析工具,使用Python和Pandas</p>
+<p>记忆: 已完成CSV读取模块的开发</p>
+<p>[Output]</p>
+<p>请基于以上信息,提供准确、有据的回答。</p>
+<p>====================================================================</p>
+</blockquote>
+<h1 id="第十章-智能体通信协议"><a class="markdownIt-Anchor" href="#第十章-智能体通信协议"></a> 第十章 智能体通信协议</h1>
+<p>如果说 MCP 解决的是&quot;如何访问工具&quot;，A2A 解决的是&quot;如何与其他智能体对话&quot;，那么 ANP 解决的是&quot;如何在大规模网络中发现和连接智能体&quot;。</p>
+<h2 id="mcp"><a class="markdownIt-Anchor" href="#mcp"></a> MCP</h2>
+<blockquote>
+<p>主要解决function call调用方式不统一, 本质还是function_call加入到prompt上下文</p>
+</blockquote>
+<img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260121104900475.png" alt="image-20260121104900475" style="zoom:50%;">
+<h4 id="流程"><a class="markdownIt-Anchor" href="#流程"></a> 流程</h4>
+<p>当用户提出问题时，完整的工具选择流程如下：</p>
+<ol>
+<li>
+<p><strong>工具发现阶段</strong>：MCP Client 连接到 Server 后，首先调用<code>list_tools()</code>获取所有可用工具的描述信息（包括工具名称、功能说明、参数定义）</p>
+</li>
+<li>
+<p><strong>上下文构建</strong>：Client 将工具列表转换为 LLM 能理解的格式，添加到系统提示词中。例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">你可以使用以下工具：</span><br><span class="line">- read_file(path: str): 读取指定路径的文件内容</span><br><span class="line">- search_code(query: str, language: str): 在代码库中搜索Copy to clipboardErrorCopied</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>模型推理</strong>：LLM 分析用户问题和可用工具，决定是否需要调用工具以及调用哪个工具。这个决策基于工具的描述和当前对话上下文</p>
+</li>
+<li>
+<p><strong>工具执行</strong>：如果 LLM 决定使用工具，Client 通过 MCP Server 执行所选工具，获取结果</p>
+</li>
+<li>
+<p><strong>结果整合</strong>：工具执行结果被送回给 LLM，LLM 结合结果生成最终回答</p>
+</li>
+</ol>
+<p>这个过程是<strong>完全自动化</strong>的，LLM 会根据工具描述的质量来决定是否使用以及如何使用工具。因此，编写清晰、准确的工具描述至关重要。</p>
+<h4 id="mcp-与-function-calling-的差异"><a class="markdownIt-Anchor" href="#mcp-与-function-calling-的差异"></a> <strong>MCP 与 Function Calling 的差异</strong></h4>
+<p>一个简单的类比来理解：Function Calling 相当于你学会了“如何打电话”这项技能，包括何时拨号、如何与对方沟通、何时挂断。而 MCP 则是那个全球统一的“电话通信标准”，确保了任何一部电话都能顺利地拨通另一部。</p>
+<img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260121105007222.png" alt="image-20260121105007222" style="zoom:50%;">
+<blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 步骤1：为每个LLM提供商定义函数</span></span><br><span class="line"><span class="comment"># OpenAI格式</span></span><br><span class="line">openai_tools = [</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">&quot;type&quot;</span>: <span class="string">&quot;function&quot;</span>,</span><br><span class="line">        <span class="string">&quot;function&quot;</span>: &#123;</span><br><span class="line">            <span class="string">&quot;name&quot;</span>: <span class="string">&quot;search_github&quot;</span>,</span><br><span class="line">            <span class="string">&quot;description&quot;</span>: <span class="string">&quot;搜索GitHub仓库&quot;</span>,</span><br><span class="line">            <span class="string">&quot;parameters&quot;</span>: &#123;</span><br><span class="line">                <span class="string">&quot;type&quot;</span>: <span class="string">&quot;object&quot;</span>,</span><br><span class="line">                <span class="string">&quot;properties&quot;</span>: &#123;</span><br><span class="line">                    <span class="string">&quot;query&quot;</span>: &#123;<span class="string">&quot;type&quot;</span>: <span class="string">&quot;string&quot;</span>, <span class="string">&quot;description&quot;</span>: <span class="string">&quot;搜索关键词&quot;</span>&#125;</span><br><span class="line">                &#125;,</span><br><span class="line">                <span class="string">&quot;required&quot;</span>: [<span class="string">&quot;query&quot;</span>]</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="comment"># Claude格式</span></span><br><span class="line">claude_tools = [</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="string">&quot;name&quot;</span>: <span class="string">&quot;search_github&quot;</span>,</span><br><span class="line">        <span class="string">&quot;description&quot;</span>: <span class="string">&quot;搜索GitHub仓库&quot;</span>,</span><br><span class="line">        <span class="string">&quot;input_schema&quot;</span>: &#123;  <span class="comment"># 注意：不是parameters</span></span><br><span class="line">            <span class="string">&quot;type&quot;</span>: <span class="string">&quot;object&quot;</span>,</span><br><span class="line">            <span class="string">&quot;properties&quot;</span>: &#123;</span><br><span class="line">                <span class="string">&quot;query&quot;</span>: &#123;<span class="string">&quot;type&quot;</span>: <span class="string">&quot;string&quot;</span>, <span class="string">&quot;description&quot;</span>: <span class="string">&quot;搜索关键词&quot;</span>&#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="string">&quot;required&quot;</span>: [<span class="string">&quot;query&quot;</span>]</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 步骤2：自己实现工具函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">search_github</span>(<span class="params">query</span>):</span><br><span class="line">    <span class="keyword">import</span> requests</span><br><span class="line">    response = requests.get(</span><br><span class="line">        <span class="string">&quot;https://api.github.com/search/repositories&quot;</span>,</span><br><span class="line">        params=&#123;<span class="string">&quot;q&quot;</span>: query&#125;</span><br><span class="line">    )</span><br><span class="line">    <span class="keyword">return</span> response.json()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 步骤3：处理不同模型的响应格式</span></span><br><span class="line"><span class="comment"># OpenAI的响应</span></span><br><span class="line"><span class="keyword">if</span> response.choices[<span class="number">0</span>].message.tool_calls:</span><br><span class="line">    tool_call = response.choices[<span class="number">0</span>].message.tool_calls[<span class="number">0</span>]</span><br><span class="line">    result = search_github(**json.loads(tool_call.function.arguments))</span><br><span class="line"></span><br><span class="line"><span class="comment"># Claude的响应</span></span><br><span class="line"><span class="keyword">if</span> response.content[<span class="number">0</span>].<span class="built_in">type</span> == <span class="string">&quot;tool_use&quot;</span>:</span><br><span class="line">    tool_use = response.content[<span class="number">0</span>]</span><br><span class="line">    result = search_github(**tool_use.<span class="built_in">input</span>)</span><br><span class="line">    </span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> hello_agents.protocols <span class="keyword">import</span> MCPClient</span><br><span class="line"></span><br><span class="line"><span class="comment"># 步骤1：连接到社区提供的MCP服务器（无需自己实现）</span></span><br><span class="line">github_client = MCPClient([</span><br><span class="line">    <span class="string">&quot;npx&quot;</span>, <span class="string">&quot;-y&quot;</span>, <span class="string">&quot;@modelcontextprotocol/server-github&quot;</span></span><br><span class="line">])</span><br><span class="line"></span><br><span class="line">fs_client = MCPClient([</span><br><span class="line">    <span class="string">&quot;npx&quot;</span>, <span class="string">&quot;-y&quot;</span>, <span class="string">&quot;@modelcontextprotocol/server-filesystem&quot;</span>, <span class="string">&quot;.&quot;</span></span><br><span class="line">])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 步骤2：统一的调用方式（与模型无关）</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">with</span> github_client:</span><br><span class="line">    <span class="comment"># 自动发现工具</span></span><br><span class="line">    tools = <span class="keyword">await</span> github_client.list_tools()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 调用工具（标准化接口）</span></span><br><span class="line">    result = <span class="keyword">await</span> github_client.call_tool(</span><br><span class="line">        <span class="string">&quot;search_repositories&quot;</span>,</span><br><span class="line">        &#123;<span class="string">&quot;query&quot;</span>: <span class="string">&quot;AI agents&quot;</span>&#125;</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line"><span class="comment"># 步骤3：任何支持MCP的模型都能使用</span></span><br><span class="line"><span class="comment"># OpenAI、Claude、Llama等都使用相同的MCP客户端</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<h4 id="传输方式"><a class="markdownIt-Anchor" href="#传输方式"></a> 传输方式</h4>
+<p>五种传输方式，每种都有不同的使用场景</p>
+<img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260121105651824.png" alt="image-20260121105651824" style="zoom: 50%;">
+<h3 id="a2a"><a class="markdownIt-Anchor" href="#a2a"></a> A2A</h3>
+<blockquote>
+<p>MCP 协议解决了智能体与工具的交互，而 A2A 协议则解决智能体之间的协作问题。在一个需要多智能体（如研究员、撰写员、编辑）协作的任务中，它们需要通信、委托任务、协商能力和同步状态。</p>
+</blockquote>
+<p><strong>A2A与MCP的差异</strong></p>
+<img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260121110322406.png" alt="image-20260121110322406" style="zoom:50%;">
+<h4 id="流程-2"><a class="markdownIt-Anchor" href="#流程-2"></a> 流程</h4>
+<img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260121110417193.png" alt="image-20260121110417193" style="zoom:50%;">
+<img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260121110430647.png" alt="image-20260121110430647" style="zoom: 50%;">
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">    <span class="comment"># 创建 A2A 服务器</span></span><br><span class="line">    calculator = A2AServer(</span><br><span class="line">        name=<span class="string">&quot;calculator-agent&quot;</span>,</span><br><span class="line">        description=<span class="string">&quot;专业的数学计算智能体&quot;</span>,</span><br><span class="line">        version=<span class="string">&quot;1.0.0&quot;</span>,</span><br><span class="line">        capabilities=&#123;</span><br><span class="line">            <span class="string">&quot;math&quot;</span>: [<span class="string">&quot;addition&quot;</span>, <span class="string">&quot;subtraction&quot;</span>, <span class="string">&quot;multiplication&quot;</span>, <span class="string">&quot;division&quot;</span>],</span><br><span class="line">            <span class="string">&quot;advanced&quot;</span>: [<span class="string">&quot;power&quot;</span>, <span class="string">&quot;sqrt&quot;</span>, <span class="string">&quot;factorial&quot;</span>]</span><br><span class="line">        &#125;</span><br><span class="line">    )</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 2. 启动所有服务</span></span><br><span class="line">threading.Thread(target=<span class="keyword">lambda</span>: researcher.run(port=<span class="number">5000</span>), daemon=<span class="literal">True</span>).start()</span><br><span class="line">threading.Thread(target=<span class="keyword">lambda</span>: writer.run(port=<span class="number">5001</span>), daemon=<span class="literal">True</span>).start()</span><br><span class="line">threading.Thread(target=<span class="keyword">lambda</span>: editor.run(port=<span class="number">5002</span>), daemon=<span class="literal">True</span>).start()</span><br><span class="line">time.sleep(<span class="number">2</span>)  <span class="comment"># 等待服务启动</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 创建客户端连接到各个Agent</span></span><br><span class="line">researcher_client = A2AClient(<span class="string">&quot;http://localhost:5000&quot;</span>)</span><br><span class="line">writer_client = A2AClient(<span class="string">&quot;http://localhost:5001&quot;</span>)</span><br><span class="line">editor_client = A2AClient(<span class="string">&quot;http://localhost:5002&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 协作流程</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">create_content</span>(<span class="params">topic</span>):</span><br><span class="line">    <span class="comment"># 步骤1：研究</span></span><br><span class="line">    research = researcher_client.execute_skill(<span class="string">&quot;research&quot;</span>, <span class="string">f&quot;research <span class="subst">&#123;topic&#125;</span>&quot;</span>)</span><br><span class="line">    research_data = research.get(<span class="string">&#x27;result&#x27;</span>, <span class="string">&#x27;&#x27;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 步骤2：撰写</span></span><br><span class="line">    article = writer_client.execute_skill(<span class="string">&quot;write&quot;</span>, <span class="string">f&quot;write <span class="subst">&#123;research_data&#125;</span>&quot;</span>)</span><br><span class="line">    article_content = article.get(<span class="string">&#x27;result&#x27;</span>, <span class="string">&#x27;&#x27;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 步骤3：编辑</span></span><br><span class="line">    final = editor_client.execute_skill(<span class="string">&quot;edit&quot;</span>, <span class="string">f&quot;edit <span class="subst">&#123;article_content&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span> final.get(<span class="string">&#x27;result&#x27;</span>, <span class="string">&#x27;&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用</span></span><br><span class="line">result = create_content(<span class="string">&quot;AI在医疗领域的应用&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;\n最终结果：\n<span class="subst">&#123;result&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="anp"><a class="markdownIt-Anchor" href="#anp"></a> ANP</h3>
+<blockquote>
+<p>pass</p>
+</blockquote>
+<h1 id="第十一章-agentic-rl"><a class="markdownIt-Anchor" href="#第十一章-agentic-rl"></a> 第十一章 Agentic-RL</h1>
+<p><img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260121113215186.png" alt="image-20260121113215186"></p>
+<p>agent 示例</p>
+<p><img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260121114824331.png" alt="image-20260121114824331"></p>
+<ul>
+<li>**AttractionSearchAgent(景点搜索专家)**专注于搜索景点信息。它只需要理解用户的偏好(比如&quot;历史文化&quot;、“自然风光”)，然后调用高德地图的 POI 搜索工具，返回相关的景点列表。它的提示词很简单，只需要说明如何根据偏好选择关键词，如何调用工具。</li>
+<li>**WeatherQueryAgent(天气查询专家)**专注于查询天气信息。它只需要知道城市名称，然后调用天气查询工具，返回未来几天的天气预报。它的任务非常明确，几乎不会出错。</li>
+<li>**HotelAgent(酒店推荐专家)**专注于搜索酒店信息。它需要理解用户的住宿需求(比如&quot;经济型&quot;、“豪华型”)，然后调用 POI 搜索工具，返回符合要求的酒店列表。</li>
+<li>**PlannerAgent(行程规划专家)**负责整合所有信息。它接收前三个 Agent 的输出，加上用户的原始需求(日期、预算等)，然后生成完整的旅行计划。它不需要调用任何外部工具，只需要专注于信息的整合和行程的安排。</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/" data-id="cml62702y000b4kv44oacay2m" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Agent/" rel="tag">Agent</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2026/01/24/2026%E5%B9%B41%E6%9C%8824%E6%97%A5-%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E5%92%8C%E6%95%B0%E6%8D%AE%E6%9D%82%E8%B0%88/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          2026年1月24日 模型训练和数据杂谈
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2026/01/14/2026%E5%B9%B41%E6%9C%8814%E6%97%A5-%E5%A4%9A%E8%BF%9B%E7%A8%8B/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2026年1月14日 多进程</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>134</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>38</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2025 - 2026 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

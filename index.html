@@ -43,9 +43,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>122</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>134</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>36</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>38</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -71,12 +71,12 @@
 
         <section id="main">
   
-    <article id="post-2025年12月24日-mem0" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2026年2月3日-All-in-RAG" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2025/12/24/2025%E5%B9%B412%E6%9C%8824%E6%97%A5-mem0/" class="article-date">
-  <time class="post-time" datetime="2025-12-24T06:12:39.000Z" itemprop="datePublished">
-    <span class="post-month">12月</span><br/>
-    <span class="post-day">24</span>
+    <a href="/2026/02/03/2026%E5%B9%B42%E6%9C%883%E6%97%A5-All-in-RAG/" class="article-date">
+  <time class="post-time" datetime="2026-02-03T01:14:13.000Z" itemprop="datePublished">
+    <span class="post-month">2月</span><br/>
+    <span class="post-day">03</span>
   </time>
 </a>
    
@@ -88,7 +88,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2025/12/24/2025%E5%B9%B412%E6%9C%8824%E6%97%A5-mem0/">2025年12月24日 mem0</a>
+      <a class="article-title" href="/2026/02/03/2026%E5%B9%B42%E6%9C%883%E6%97%A5-All-in-RAG/">2026年2月3日 All in RAG</a>
     </h1>
   
 
@@ -103,244 +103,466 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="mem0"><a class="markdownIt-Anchor" href="#mem0"></a> mem0</h1>
+        <blockquote></blockquote>
+<h1 id="all-in-rag"><a class="markdownIt-Anchor" href="#all-in-rag"></a> All in RAG</h1>
+<p><img src="/2026/02/03/2026%E5%B9%B42%E6%9C%883%E6%97%A5-All-in-RAG/1_1_1.svg+xml" alt="RAG 双阶段架构示意图"></p>
+<p><img src="/2026/02/03/2026%E5%B9%B42%E6%9C%883%E6%97%A5-All-in-RAG/image-20260203092100302.png" alt="image-20260203092100302"></p>
+<h1 id="一-rag"><a class="markdownIt-Anchor" href="#一-rag"></a> 一、RAG？</h1>
+<h3 id="21-技术选型rag-vs-微调"><a class="markdownIt-Anchor" href="#21-技术选型rag-vs-微调"></a> 2.1 技术选型：RAG vs. 微调</h3>
+<h3 id="31-基础工具链选择"><a class="markdownIt-Anchor" href="#31-基础工具链选择"></a> 3.1 基础工具链选择</h3>
+<p>构建 RAG 系统通常涉及几个关键环节的选型。在<strong>开发模式</strong>上，我们可以利用 <strong>LangChain</strong> 或 <strong>LlamaIndex</strong> 等成熟框架快速集成，<strong>也可以选择不依赖框架的原生开发</strong>，以获得对系统流程更精细的控制力（在 AI 编程辅助下这并非难事）。而在<strong>记忆载体</strong>（向量数据库）方面，既有 <strong>Milvus</strong>、<strong>Pinecone</strong> 等适合大规模数据的方案，也有 <strong>FAISS</strong>、<strong>Chroma</strong> 等轻量级或本地化的选择，需根据具体业务规模灵活决定。后期为了量化效果，还可以引入 <strong>RAGAS</strong> 或 <strong>TruLens</strong> 等自动化<strong>评估工具</strong>。</p>
+<h3 id="评估维度与挑战"><a class="markdownIt-Anchor" href="#评估维度与挑战"></a> <strong>评估维度与挑战</strong></h3>
+<p>业界通常会从几个维度进行量化评估，</p>
+<p>首先是<strong>检索相关性</strong>（找到的内容是否包含答案），</p>
+<p>其次是<strong>生成质量</strong>，这又可以细分为<strong>语义准确性</strong>（回答的意思是否正确）和<strong>词汇匹配度</strong>（专业术语是否使用得当）。</p>
+<h3 id="优化方向与架构演进"><a class="markdownIt-Anchor" href="#优化方向与架构演进"></a> <strong>优化方向与架构演进</strong></h3>
+<p>在<strong>性能层面</strong>，可以通过<strong>索引分层</strong>（对高频数据启用缓存）和<strong>多模态扩展</strong>（支持图像/表格检索）来提升效率和能力边界。而在<strong>架构层面</strong>，简单的线性流程正在被更复杂的<strong>设计模式</strong>所取代。</p>
+<p>例如，系统可以通过<strong>分支模式</strong>并行处理多路检索，或通过<strong>循环模式</strong>进行自我修正，这些灵活的架构是通往更智能 RAG 的必由之路。</p>
+<h1 id="二-数据"><a class="markdownIt-Anchor" href="#二-数据"></a> 二 数据</h1>
+<h2 id="1-文档加载"><a class="markdownIt-Anchor" href="#1-文档加载"></a> 1 文档加载</h2>
+<p>文档加载器负责将各种格式的非结构化文档（如PDF、Word、Markdown、HTML等）转换为程序可以处理的结构化数据。</p>
+<h3 id="11-主流rag文档加载器"><a class="markdownIt-Anchor" href="#11-主流rag文档加载器"></a> 1.1 主流RAG文档加载器</h3>
+<p><img src="/2026/02/03/2026%E5%B9%B42%E6%9C%883%E6%97%A5-All-in-RAG/image-20260203093525277.png" alt="image-20260203093525277"></p>
+<h3 id="12-unstructured"><a class="markdownIt-Anchor" href="#12-unstructured"></a> 1.2 <strong>Unstructured</strong></h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unstructured</span><br></pre></td></tr></table></figure>
+<h2 id="2-文本分块"><a class="markdownIt-Anchor" href="#2-文本分块"></a> 2 文本分块</h2>
+<p>文本分块（Text Chunking)</p>
+<img src="/2026/02/03/2026%E5%B9%B42%E6%9C%883%E6%97%A5-All-in-RAG/image-20260203094115462.png" alt="image-20260203094115462" style="zoom:50%;">
+<h3 id="21-满足模型上下文限制"><a class="markdownIt-Anchor" href="#21-满足模型上下文限制"></a> 2.1 满足模型上下文限制</h3>
+<p>将文本<strong>分块的首要原因</strong>，是为了适应 RAG 系统中两个核心组件的硬性限制：</p>
+<ul>
+<li><strong>嵌入模型 (Embedding Model)</strong>: 负责将文本块转换为向量。许多常用的嵌入模型（如 <code>bge-base-zh-v1.5</code>）的上下文窗口为512个token。任何超出此限制的文本块在输入时都会被截断，导致信息丢失，生成的向量也无法完整代表原文的语义。因此，文本块的大小<strong>必须</strong>小于等于嵌入模型的上下文窗口。</li>
+<li><strong>大语言模型 (LLM)</strong>: 负责根据检索到的上下文生成答案。LLM同样有上下文窗口限制（尽管通常比嵌入模型大得多，从几千到上百万token不等）。检索到的所有文本块，连同用户问题和提示词，都必须能被放入这个窗口中。如果单个块过大，可能会导致只能容纳少数几个相关的块，限制了LLM回答问题时可参考的信息广度。</li>
+</ul>
+<h3 id="22-嵌入过程中的信息损失"><a class="markdownIt-Anchor" href="#22-嵌入过程中的信息损失"></a> 2.2 嵌入过程中的信息损失</h3>
+<p>大多数嵌入模型都基于 Transformer 编码器。其工作流程大致如下：</p>
+<ul>
+<li><strong>分词 (Tokenization)</strong>: 将输入的文本块分解成一个个 token。</li>
+<li><strong>向量化 (Vectorization)</strong>: Transformer 为<strong>每个 token</strong> 生成一个高维向量表示。</li>
+<li><strong>池化 (Pooling)</strong>: 通过某种方法（如取 <code>[CLS]</code> 位的向量、对所有token向量求平均 <code>mean pooling</code> 等），将所有 token 的向量<strong>压缩</strong>成一个<strong>单一的向量</strong>，这个向量代表了整个文本块的语义。</li>
+</ul>
 <blockquote>
-<p><a target="_blank" rel="noopener" href="https://docs.mem0.ai/open-source/overview">https://docs.mem0.ai/open-source/overview</a></p>
+<p><code>[CLS]</code> 是BERT等Transformer模型在输入文本开头添加的特殊标记，它通过自注意力机制动态聚合整个序列的上下文信息，其最终向量被训练用作代表全局语义的嵌入。</p>
 </blockquote>
-<h2 id="本质"><a class="markdownIt-Anchor" href="#本质"></a> 本质</h2>
-<p>先向量化–&gt; 存储 --search --&gt;rerank</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> mem0 <span class="keyword">import</span> Memory</span><br><span class="line"></span><br><span class="line">config = &#123;</span><br><span class="line">    <span class="string">&quot;vector_store&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;provider&quot;</span>: <span class="string">&quot;qdrant&quot;</span>,</span><br><span class="line">        <span class="string">&quot;config&quot;</span>: &#123;<span class="string">&quot;host&quot;</span>: <span class="string">&quot;localhost&quot;</span>, <span class="string">&quot;port&quot;</span>: <span class="number">6333</span>&#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">&quot;llm&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;provider&quot;</span>: <span class="string">&quot;openai&quot;</span>,</span><br><span class="line">        <span class="string">&quot;config&quot;</span>: &#123;<span class="string">&quot;model&quot;</span>: <span class="string">&quot;gpt-4.1-mini&quot;</span>, <span class="string">&quot;temperature&quot;</span>: <span class="number">0.1</span>&#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">&quot;embedder&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;provider&quot;</span>: <span class="string">&quot;vertexai&quot;</span>,</span><br><span class="line">        <span class="string">&quot;config&quot;</span>: &#123;<span class="string">&quot;model&quot;</span>: <span class="string">&quot;textembedding-gecko@003&quot;</span>&#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">&quot;reranker&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;provider&quot;</span>: <span class="string">&quot;cohere&quot;</span>,</span><br><span class="line">        <span class="string">&quot;config&quot;</span>: &#123;<span class="string">&quot;model&quot;</span>: <span class="string">&quot;rerank-english-v3.0&quot;</span>&#125;,</span><br><span class="line">    &#125;,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">memory = Memory.from_config(config)</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/12/24/2025%E5%B9%B412%E6%9C%8824%E6%97%A5-mem0/" data-id="cmjjqkpyx00064ov4c53lauj2" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Agent/" rel="tag">Agent</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2025年12月24日-agent记忆管理" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/12/24/2025%E5%B9%B412%E6%9C%8824%E6%97%A5-agent%E8%AE%B0%E5%BF%86%E7%AE%A1%E7%90%86/" class="article-date">
-  <time class="post-time" datetime="2025-12-24T03:19:12.000Z" itemprop="datePublished">
-    <span class="post-month">12月</span><br/>
-    <span class="post-day">24</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/12/24/2025%E5%B9%B412%E6%9C%8824%E6%97%A5-agent%E8%AE%B0%E5%BF%86%E7%AE%A1%E7%90%86/">2025年12月24日 agent记忆管理</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="agent记忆管理"><a class="markdownIt-Anchor" href="#agent记忆管理"></a> Agent记忆管理</h1>
+<p>在这个<code>压缩</code>过程中，信息损失是不可避免的。一个768维的向量需要概括整个文本块的所有信息。<strong>文本块越长，包含的语义点越多，这个单一向量所承载的信息就越稀释</strong>，<strong>导致其表示变得笼统，关键细节被模糊化，从而降低了检索的精度。</strong></p>
+<blockquote>
+<p>假设有一个关于《王者荣耀》英雄鲁班七号的攻略文档。</p>
 <ul>
-<li><strong>短期记忆</strong>：类似于我们临时记住一个电话号码，过一会儿就可能忘记。大模型通过在输入中嵌入提示语句（prompt），借助自身强大的上下文理解能力来“记住”最近的对话内容。但这种记忆会随着上下文窗口的限制而被覆盖或遗忘。</li>
-<li><strong>长期记忆</strong>：更像是我们记住一段旅行经历，或者对某个朋友的长期印象。智能体通过建立<strong>外部记忆库</strong>来实现知识和经验的持久化存储，可以在需要时随时检索出来，帮助它更高效地解决问题</li>
+<li><strong>糟糕的分块策略</strong>：将“技能介绍”、“推荐出装”和“背景故事”这三个完全不同主题的内容，全部放在一个巨大的文本块里。
+<ul>
+<li>当玩家查询“鲁班七号怎么出装？”时，这个大块虽然包含了出装信息，但由于被技能说明和英雄故事等无关主题严重稀释，其整体的检索相关性得分可能会很低，导致无法被召回。</li>
 </ul>
-<h2 id="0-本质"><a class="markdownIt-Anchor" href="#0-本质"></a> 0 本质</h2>
-<h3 id="1-核心机制你已点明的部分"><a class="markdownIt-Anchor" href="#1-核心机制你已点明的部分"></a> 1. 核心机制（你已点明的部分）</h3>
+</li>
+<li><strong>优秀的分块策略</strong>：将“技能”、“出装”和“故事”分别切分为三个独立的、主题聚焦的块。
 <ul>
-<li><strong>序列化</strong>：将对话历史、知识、用户画像等压缩进有限上下文（Prompt）。</li>
-<li><strong>检索</strong>：从向量库、数据库或记忆中查找相关信息。</li>
-<li><strong>TopK</strong>：选择最相关的几条信息。</li>
-<li><strong>拼接</strong>：将检索结果与原问题拼接，送入模型。</li>
-</ul>
-<h3 id="2-超越简单拼接的关键演进"><a class="markdownIt-Anchor" href="#2-超越简单拼接的关键演进"></a> 2. 超越“简单拼接”的关键演进</h3>
-<p>虽然基础操作类似，但先进系统在以下方面做了大量工作：</p>
-<p><strong>a. 记忆的层次与结构</strong></p>
-<ul>
-<li><strong>短期记忆</strong>：当前会话的上下文（直接拼接）。</li>
-<li><strong>长期记忆</strong>：
-<ul>
-<li><strong>向量记忆</strong>：语义搜索，处理非结构化知识。</li>
-<li><strong>图记忆</strong>：存储实体、关系，用于推理（如知识图谱）。</li>
-<li><strong>结构化记忆</strong>：SQL/键值存储，存储精确信息（如用户偏好）。</li>
-<li><strong>程序性记忆</strong>：让LLM学会调用工具、API，扩展能力边界。</li>
+<li>当玩家再次查询时，“推荐出装”这个块会因为与查询高度相关而获得极高的分数，从而被精准地检索出来。</li>
 </ul>
 </li>
 </ul>
-<h2 id="1-短期记忆"><a class="markdownIt-Anchor" href="#1-短期记忆"></a> 1 短期记忆</h2>
-<h2 id="2-长期记忆"><a class="markdownIt-Anchor" href="#2-长期记忆"></a> 2 长期记忆</h2>
-<h3 id="rag"><a class="markdownIt-Anchor" href="#rag"></a> <strong>RAG</strong></h3>
-<h3 id="memory-bank"><a class="markdownIt-Anchor" href="#memory-bank"></a> Memory Bank</h3>
-<blockquote>
-<p>MemoryBank 包含三个核心模块：</p>
-<ol>
-<li><strong>记忆存储</strong>：保存对话记录、事件总结和用户个性分析，就像建立一个多层次的记忆档案。</li>
-<li><strong>记忆检索</strong>：根据上下文快速找到相关的“回忆”。它使用一种稠密向量检索方法（类似 <strong>Dense Passage Retrieval, DPR</strong>），把每条记忆片段编码成向量，再用 FAISS 进行高效搜索。</li>
-<li><strong>记忆更新</strong>：受到心理学中的 <strong>艾宾浩斯遗忘曲线</strong>启发。该理论认为，人类在学习后的最初几个小时内遗忘最快，之后遗忘速度逐渐放缓。如果不断复习，就能延缓遗忘的速度。MemoryBank 将这种机制引入到 AI 中，让它在合适的时候忘掉不重要的记忆，保留和强化真正重要的信息。</li>
-</ol>
 </blockquote>
-<p><strong>TiM（记忆内思考）</strong></p>
-<p>，使LLMs能够维护一个随对话流不断演进的记忆库，用于存储历史思考痕迹。TiM框架包含两个关键阶段：(1) 响应生成前：LLM智能体从记忆库中检索相关思考；(2) 响应生成后：LLM智能体通过事后反思(post-think)，将历史与新生成思考整合以更新记忆库。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/12/24/2025%E5%B9%B412%E6%9C%8824%E6%97%A5-agent%E8%AE%B0%E5%BF%86%E7%AE%A1%E7%90%86/" data-id="cmjjqkpyx00044ov41qsdbq61" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Agent/" rel="tag">Agent</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2025年12月21日-ResNeXt" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/12/24/2025%E5%B9%B412%E6%9C%8821%E6%97%A5-ResNeXt/" class="article-date">
-  <time class="post-time" datetime="2025-12-24T01:39:56.000Z" itemprop="datePublished">
-    <span class="post-month">12月</span><br/>
-    <span class="post-day">24</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/12/24/2025%E5%B9%B412%E6%9C%8821%E6%97%A5-ResNeXt/">2025年12月21日 ResNeXt</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/12/24/2025%E5%B9%B412%E6%9C%8821%E6%97%A5-ResNeXt/" data-id="cmjjqkpys00004ov41lmf8t7w" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2025年12月22日-ConvNeXt" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/12/24/2025%E5%B9%B412%E6%9C%8822%E6%97%A5-ConvNeXt/" class="article-date">
-  <time class="post-time" datetime="2025-12-24T01:10:13.000Z" itemprop="datePublished">
-    <span class="post-month">12月</span><br/>
-    <span class="post-day">24</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/12/24/2025%E5%B9%B412%E6%9C%8822%E6%97%A5-ConvNeXt/">2025年12月22日 ConvNeXt</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="convnext"><a class="markdownIt-Anchor" href="#convnext"></a> ConvNeXt</h1>
-<p>从传统 ResNet 逐渐演变到具有Transformer特点的卷积神经网络的演变路径，仍然基于卷积神经网络架构，但它在设计上融入了一些Transformer的元素或特性，使得它在某种程度上与Transformer相似，但仍然保持了ConvNet的基本性质。</p>
-<img src="/2025/12/24/2025%E5%B9%B412%E6%9C%8822%E6%97%A5-ConvNeXt/image-20251224092418956.png" alt="image-20251224092418956" style="zoom: 67%;">
+<h2 id="23-分块策略"><a class="markdownIt-Anchor" href="#23-分块策略"></a> 2.3  分块策略</h2>
+<h3 id="1-固定分块"><a class="markdownIt-Anchor" href="#1-固定分块"></a> 1 固定分块</h3>
+<p>根据LangChain源码，这种方法的工作原理分为两个主要阶段：</p>
+<p>（1）<strong>按段落分割</strong>：<code>CharacterTextSplitter</code> 采用默认<strong>分隔符</strong> <code>&quot;\n\n&quot;</code>，使用正则表达式将文本按段落进行分割，通过 <code>_split_text_with_regex</code> 函数处理。</p>
+<p>（2）<strong>智能合并</strong>：调用继承自父类的 <code>_merge_splits</code> 方法，将分割后的段落依次合并。该方法会监控<strong>累积长度</strong>，当超过 <code>chunk_size</code> 时形成新块，并通过重叠机制（<code>chunk_overlap</code>）保持上下文连续性，同时在必要时发出超长块的警告。</p>
 <blockquote>
-<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/1928810982915941594">https://zhuanlan.zhihu.com/p/1928810982915941594</a></p>
+<p>需要注意，<code>CharacterTextSplitter</code> 实际实现的并非严格的固定大小分块。根据 <code>_merge_splits</code> 源码逻辑，这种方法会：</p>
+<ul>
+<li><strong>优先保持段落完整性</strong>：只有当添加新段落会导致总长度超过 <code>chunk_size</code> 时，才会结束当前块</li>
+<li><strong>处理超长段落</strong>：如果单个段落超过 <code>chunk_size</code>，系统会发出警告但仍将其作为完整块保留</li>
+<li><strong>应用重叠机制</strong>：通过 <code>chunk_overlap</code> 参数在块之间保持内容重叠，确保上下文连续性</li>
+</ul>
 </blockquote>
-<h2 id="1-超参数调优重塑-resnet"><a class="markdownIt-Anchor" href="#1-超参数调优重塑-resnet"></a> 1 超参数调优：重塑 ResNet</h2>
-<p>ConvNeXt 的核心思想其实就是：对 ResNet 架构进行系统性的超参数调优。具体来说，作者主要从五个方面进行了实验探索：</p>
+<h3 id="2-递归字符分块"><a class="markdownIt-Anchor" href="#2-递归字符分块"></a> 2 递归字符分块</h3>
+<p><code>RecursiveCharacterTextSplitter</code> 的实现。这种分块器通过<strong>分隔符层级</strong>递归处理，相对与固定大小分块，改善了超长文本的处理效果。</p>
+<p><strong>算法流程</strong>：</p>
+<p>（1）<strong>寻找有效分隔符</strong>: 从分隔符列表中从前到后遍历，找到第一个在当前文本中<strong>存在</strong>的分隔符。如果都不存在，使用最后一个分隔符（通常是空字符串 <code>&quot;&quot;</code>）。</p>
+<p>（2）<strong>切分与分类处理</strong>: 使用选定的分隔符切分文本，然后遍历所有片段：</p>
+<ul>
+<li><strong>如果片段不超过块大小</strong>: 暂存到 <code>_good_splits</code> 中，准备合并</li>
+<li>如果片段超过块大小:
+<ul>
+<li>首先，将暂存的合格片段通过 <code>_merge_splits</code> 合并成块</li>
+<li>然后，检查是否还有剩余分隔符：
+<ul>
+<li><strong>有剩余分隔符</strong>: 递归调用 <code>_split_text</code> 继续分割</li>
+<li><strong>无剩余分隔符</strong>: 直接保留为超长块</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>（3）<strong>最终处理</strong>: 将剩余的暂存片段合并成最后的块</p>
+<p><strong>实现细节</strong>：</p>
+<ul>
+<li><strong>批处理机制</strong>: 先收集所有合格片段（<code>_good_splits</code>），遇到超长片段时才触发合并操作。</li>
+<li><strong>递归终止条件</strong>: 关键在于 <code>if not new_separators</code> 判断。当分隔符用尽时（<code>new_separators</code> 为空），停止递归，直接保留超长片段。确保算法不会无限递归。</li>
+</ul>
+<p><strong>与固定大小分块的关键差异</strong>：</p>
+<ul>
+<li>固定大小分块遇到超长段落时只能发出警告并保留。</li>
+<li>递归分块会继续使用更细粒度的分隔符（句子→单词→字符）直到满足大小要求。</li>
+</ul>
+<h3 id="3-语义分块"><a class="markdownIt-Anchor" href="#3-语义分块"></a> 3 语义分块</h3>
+<p>据文本的语义内涵来切分。</p>
+<p><strong>实现原理</strong></p>
+<p><code>SemanticChunker</code> 的工作流程可以概括为以下几个步骤：</p>
+<p>（1）<strong>句子分割 (Sentence Splitting)</strong>：首先，使用标准的句子分割规则（例如，基于句号、问号、感叹号）将输入文本拆分成一个句子列表。</p>
+<p>（2）<strong>上下文感知嵌入 (Context-Aware Embedding)</strong>：这是 <code>SemanticChunker</code> 的一个关键设计。该分块器不是对每个句子独立进行嵌入，而是通过 <code>buffer_size</code> 参数（默认为1）来捕捉上下文信息。对于列表中的每一个句子，这种方法会将其与前后各 <code>buffer_size</code> 个句子组合起来，然后对这个临时的、更长的组合文本进行嵌入。这样，每个句子最终得到的嵌入向量就融入了其上下文的语义。</p>
+<p>（3）<strong>计算语义距离 (Distance Calculation)**：计算每对**相邻</strong>句子的嵌入向量之间的余弦距离。这个距离值量化了两个句子之间的语义差异——距离越大，表示语义关联越弱，跳跃越明显。</p>
+<p>（4）<strong>识别断点 (Breakpoint Identification)</strong>：<code>SemanticChunker</code> 会分析所有计算出的距离值，并根据一个统计方法（默认为 <code>percentile</code>）来确定一个动态阈值。例如，它可能会将所有距离中第95百分位的值作为切分阈值。所有距离大于此阈值的点，都被识别为语义上的“断点”。</p>
+<p>（5）<strong>合并成块 (Merging into Chunks)</strong>：最后，根据识别出的所有断点位置，将原始的句子序列进行切分，并将每个切分后的部分内的所有句子合并起来，形成一个最终的、语义连贯的文本块。</p>
+<p><strong>断点识别方法 (<code>breakpoint_threshold_type</code>)</strong></p>
+<p>如何定义“显著的语义跳跃”是语义分块的关键。<code>SemanticChunker</code> 提供了几种基于统计的方法来识别断点：</p>
+<blockquote>
+<ul>
+<li><code>percentile</code> (百分位法 - <strong>默认方法</strong>):
+<ul>
+<li><strong>逻辑</strong>: 计算所有相邻句子的语义差异值，并将这些差异值进行排序。当一个差异值超过某个百分位阈值时，就认为该差异值是一个断点。</li>
+<li><strong>参数</strong>: <code>breakpoint_threshold_amount</code> (默认为 <code>95</code>)，表示使用第95个百分位作为阈值。这意味着，只有最显著的5%的语义差异点会被选为切分点。</li>
+</ul>
+</li>
+<li><code>standard_deviation</code> (标准差法):
+<ul>
+<li><strong>逻辑</strong>: 计算所有差异值的平均值和标准差。当一个差异值超过“平均值 + N * 标准差”时，被视为异常高的跳跃，即断点。</li>
+<li><strong>参数</strong>: <code>breakpoint_threshold_amount</code> (默认为 <code>3</code>)，表示使用3倍标准差作为阈值。</li>
+</ul>
+</li>
+<li><code>interquartile</code> (四分位距法):
+<ul>
+<li><strong>逻辑</strong>: 使用统计学中的四分位距（IQR）来识别异常值。当一个差异值超过 <code>Q3 + N * IQR</code> 时，被视为断点。</li>
+<li><strong>参数</strong>: <code>breakpoint_threshold_amount</code> (默认为 <code>1.5</code>)，表示使用1.5倍的IQR。</li>
+</ul>
+</li>
+<li><code>gradient</code> (梯度法):
+<ul>
+<li><strong>逻辑</strong>: 这是一种更复杂的方法。它首先计算差异值的变化率（梯度），然后对梯度应用百分位法。对于那些句子间语义联系紧密、差异值普遍较低的文本（如法律、医疗文档）特别有效，因为这种方法能更好地捕捉到语义变化的“拐点”。</li>
+<li><strong>参数</strong>: <code>breakpoint_threshold_amount</code> (默认为 <code>95</code>)。</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<h3 id="4-基于文档结构的分块"><a class="markdownIt-Anchor" href="#4-基于文档结构的分块"></a> 4 基于文档结构的分块</h3>
+<p><code>MarkdownHeaderTextSplitter</code></p>
+<h2 id="24chunkviz简易的可视化分块工具"><a class="markdownIt-Anchor" href="#24chunkviz简易的可视化分块工具"></a> 2.4ChunkViz：简易的可视化分块工具</h2>
+<h1 id="三-索引"><a class="markdownIt-Anchor" href="#三-索引"></a> 三 索引</h1>
+<h2 id="1-向量空间的语义表示"><a class="markdownIt-Anchor" href="#1-向量空间的语义表示"></a> 1 向量空间的语义表示</h2>
+<ul>
+<li>
+<p>关键度量</p>
+<p>：我们通常使用以下数学方法来衡量向量间的“距离”或“相似度”：</p>
+<ul>
+<li><strong>余弦相似度 (Cosine Similarity)</strong> ：计算两个向量夹角的余弦值。值越接近 1，代表方向越一致，语义越相似。这是最常用的度量方式。</li>
+<li><strong>点积 (Dot Product)</strong> ：计算两个向量的乘积和。在向量归一化后，点积等价于余弦相似度。</li>
+<li><strong>欧氏距离 (Euclidean Distance)</strong> ：计算两个向量在空间中的直线距离。距离越小，语义越相似。</li>
+</ul>
+</li>
+</ul>
+<h3 id="12-通用流程如下"><a class="markdownIt-Anchor" href="#12-通用流程如下"></a> 1.2 通用流程如下：</h3>
+<p>（1）<strong>离线索引构建</strong>：将知识库内文档切分后，使用 Embedding 模型将每个文档块（Chunk）转换为向量，存入专门的向量数据库中。</p>
+<p>（2）<strong>在线查询检索</strong>：当用户提出问题时，使用<strong>同一个</strong> Embedding 模型将用户的问题也转换为一个向量。</p>
+<p>（3）<strong>相似度计算</strong>：在向量数据库中，计算“问题向量”与所有“文档块向量”的相似度。</p>
+<p>（4）<strong>召回上下文</strong>：选取相似度最高的 Top-K 个文档块，作为补充的上下文信息，与原始问题一同送给大语言模型（LLM）生成最终答案。</p>
+<h2 id="2-模型"><a class="markdownIt-Anchor" href="#2-模型"></a> 2 模型</h2>
+<h3 id="21-静态词嵌入上下文无关的表示"><a class="markdownIt-Anchor" href="#21-静态词嵌入上下文无关的表示"></a> <a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#/chapter3/06_vector_embedding?id=_21-%E9%9D%99%E6%80%81%E8%AF%8D%E5%B5%8C%E5%85%A5%EF%BC%9A%E4%B8%8A%E4%B8%8B%E6%96%87%E6%97%A0%E5%85%B3%E7%9A%84%E8%A1%A8%E7%A4%BA">2.1 静态词嵌入：上下文无关的表示</a></h3>
+<ul>
+<li><strong>代表模型</strong>：Word2Vec (2013), GloVe (2014)</li>
+<li><strong>主要原理</strong>：为词汇表中的每个单词生成一个固定的、与上下文无关的向量。例如，<code>Word2Vec</code> 通过 Skip-gram 和 CBOW 架构，利用局部上下文窗口学习词向量，并验证了<strong>向量运算</strong>的语义能力（如 <code>国王 - 男人 + 女人 ≈ 王后</code>）。<code>GloVe</code> 则融合了全局词-词共现矩阵的统计信息。</li>
+<li><strong>局限性</strong>：无法处理一词多义问题。在“苹果公司发布了新手机”和“我吃了一个苹果”中，“苹果”的词向量是完全相同的，这限制了其在复杂语境下的语义表达能力。</li>
+</ul>
+<h3 id="22-动态上下文嵌入"><a class="markdownIt-Anchor" href="#22-动态上下文嵌入"></a> <a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#/chapter3/06_vector_embedding?id=_22-%E5%8A%A8%E6%80%81%E4%B8%8A%E4%B8%8B%E6%96%87%E5%B5%8C%E5%85%A5">2.2 动态上下文嵌入</a></h3>
+<ul>
+<li>2017年，<code>Transformer</code> 架构的诞生带来了自注意力机制（Self-Attention），它允许模型在生成一个词的向量时，<strong>动态地考虑句子中所有其他词的影响</strong>。基于此，</li>
+<li>2018年 <code>BERT</code> 模型利用 <code>Transformer</code> 的编码器，通过掩码语言模型（MLM）等自监督任务进行预训练，生成了深度上下文相关的嵌入。同一个词<strong>在不同语境中会生成不同的向量</strong>，这有效解决了静态嵌入的一词多义难题。</li>
+</ul>
+<h3 id="23-rag-对嵌入技术的新要求"><a class="markdownIt-Anchor" href="#23-rag-对嵌入技术的新要求"></a> <a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#/chapter3/06_vector_embedding?id=_23-rag-%E5%AF%B9%E5%B5%8C%E5%85%A5%E6%8A%80%E6%9C%AF%E7%9A%84%E6%96%B0%E8%A6%81%E6%B1%82">2.3 RAG 对嵌入技术的新要求</a></h3>
+<p>RAG 的兴起对嵌入技术提出了更高、更具体的要求：</p>
+<ul>
+<li><strong>领域自适应能力</strong>：通用的嵌入模型在专业领域（如法律、医疗）往往表现不佳，这就要求<strong>嵌入模型具备领域自适应的能力</strong>，能够通过微调或使用指令（如 INSTRUCTOR 模型）来适应特定领域的术语和语义。</li>
+<li><strong>多粒度与多模态支持</strong>：RAG 系统需要处理的不仅仅是短句，还可能包括长文档、代码，甚至是图像和表格。这就要求嵌入模型能够处理不同长度和类型的输入数据。</li>
+<li><strong>检索效率与混合检索</strong>：嵌入<strong>向量的维度和模型大小直接影响存储成本和检索速度</strong>。同时，为了结合语义相似性（密集检索）和关键词匹配（稀疏检索）的优点，支持混合检索的嵌入模型（如 BGE-M3）应运而生，在某些任务中成为提升召回率的关键。</li>
+</ul>
+<h2 id="3-嵌入模型训练原理"><a class="markdownIt-Anchor" href="#3-嵌入模型训练原理"></a> 3、嵌入模型训练原理</h2>
+<p>BERT 的成功很大程度上归功于 <strong>自监督学习</strong> 策略，它允许模型从海量的、无标注的文本数据中学习知识。</p>
+<h3 id="任务一掩码语言模型-masked-language-model-mlm"><a class="markdownIt-Anchor" href="#任务一掩码语言模型-masked-language-model-mlm"></a> <a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#/chapter3/06_vector_embedding?id=%E4%BB%BB%E5%8A%A1%E4%B8%80%EF%BC%9A%E6%8E%A9%E7%A0%81%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B-masked-language-model-mlm">任务一：掩码语言模型 (Masked Language Model, MLM)</a></h3>
+<ul>
+<li>过程：
+<ul>
+<li>随机地将输入句子中 15% 的词元（Token）替换为一个特殊的 <code>[MASK]</code> 标记。</li>
+<li>让模型去预测这些被遮盖住的原始词元是什么。</li>
+</ul>
+</li>
+<li><strong>目标</strong>：通过这个任务，模型被迫学习每个词元与其上下文之间的关系，从而掌握深层次的语境语义。</li>
+</ul>
+<h3 id="任务二下一句预测-next-sentence-prediction-nsp"><a class="markdownIt-Anchor" href="#任务二下一句预测-next-sentence-prediction-nsp"></a> <a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#/chapter3/06_vector_embedding?id=%E4%BB%BB%E5%8A%A1%E4%BA%8C%EF%BC%9A%E4%B8%8B%E4%B8%80%E5%8F%A5%E9%A2%84%E6%B5%8B-next-sentence-prediction-nsp">任务二：下一句预测 (Next Sentence Prediction, NSP)</a></h3>
+<ul>
+<li>过程：
+<ul>
+<li>构造训练样本，每个样本包含两个句子 A 和 B。</li>
+<li>其中 50% 的样本，B 是 A 的真实下一句（IsNext）；另外 50% 的样本，B 是从语料库中随机抽取的句子（NotNext）。</li>
+<li>让模型判断 B 是否是 A 的下一句。</li>
+</ul>
+</li>
+<li><strong>目标</strong>：这个任务让模型学习句子与句子之间的逻辑关系、连贯性和主题相关性。</li>
+<li><strong>重要说明</strong>：后续的研究（如 RoBERTa）发现<a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#fn-2">2</a>，NSP 任务可能过于简单，甚至会损害模型性能。因此，许多现代的预训练模型（如 RoBERTa、SBERT）在预训练阶段移除了 NSP。</li>
+</ul>
+<blockquote>
+<p>更多细节可查看 <a target="_blank" rel="noopener" href="https://github.com/datawhalechina/base-nlp/blob/main/docs/chapter5/13_Bert.md">BERT 架构及应用</a></p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#/chapter3/06_vector_embedding?id=_32-%E6%95%88%E6%9E%9C%E5%A2%9E%E5%BC%BA%E7%AD%96%E7%95%A5">3.2 效果增强策略</a></p>
+<p>虽然 MLM 和 NSP 赋予了模型强大的基础语义理解能力，但为了在检索任务中表现更佳，现代嵌入模型通常会引入更具针对性的训练策略。</p>
+<ul>
+<li><strong>度量学习 (Metric Learning)</strong> ：
+<ul>
+<li><strong>思想</strong>：直接以“相似度”作为优化目标。</li>
+<li><strong>方法</strong>：收集大量相关的文本对（例如，（问题，答案）、（新闻标题，正文））。训练的目标是优化向量空间中的<strong>相对距离</strong>：让“正例对”的向量表示在空间中被“拉近”，而“负例对”的向量表示被“推远”。关键在于优化排序关系，而非追求绝对的相似度值（如 1 或 0），因为过度追求极端值可能导致模型过拟合。</li>
+</ul>
+</li>
+<li><strong>对比学习 (Contrastive Learning)</strong> ：
+<ul>
+<li><strong>思想</strong>：在向量空间中，将相似的样本“拉近”，将不相似的样本“推远”。</li>
+<li><strong>方法</strong>：构建一个三元组（Anchor, Positive, Negative）。其中，Anchor 和 Positive 是相关的（例如，同一个问题的两种不同问法），Anchor 和 Negative 是不相关的。训练的目标是让 <code>distance(Anchor, Positive)</code> 尽可能小，同时让 <code>distance(Anchor, Negative)</code> 尽可能大。</li>
+</ul>
+</li>
+</ul>
+<h2 id="4-多模态"><a class="markdownIt-Anchor" href="#4-多模态"></a> 4 多模态</h2>
+<h3 id="41-clip-模型浅析"><a class="markdownIt-Anchor" href="#41-clip-模型浅析"></a> 4.1 CLIP 模型浅析</h3>
+<h2 id="5-向量数据库"><a class="markdownIt-Anchor" href="#5-向量数据库"></a> 5 向量数据库</h2>
+<p>高效处理海量高维向量的能力。</p>
+<ul>
+<li><strong>高效的相似性搜索</strong>：这是向量数据库最重要的功能。它利用专门的索引技术（如 HNSW, IVF），能够在数十亿级别的向量中实现<strong>毫秒级的近似最近邻（ANN）查询，快速找到与给定查询最相似的数据。</strong></li>
+<li><strong>高维数据存储与管理</strong>：专门为存储高维向量（通常维度成百上千）而<strong>优化</strong>，支持对向量数据进行增、删、改、查等基本操作。</li>
+<li><strong>丰富的查询能力</strong>：除了基本的相似性搜索，还支持按<strong>标量字段过滤查询</strong>（例如，在搜索相似图片的同时，指定<code>年份 &gt; 2023</code>）、范围查询和聚类分析等，满足复杂业务需求。</li>
+<li><strong>可扩展与高可用</strong>：现代向量数据库通常采用分布式架构，具备良好的水平扩展能力和容错性，能够通过增加节点来应对数据量的增长，并确保服务的稳定可靠。</li>
+<li><strong>数据与模型生态集成</strong>：与主流的 AI 框架（如 LangChain, LlamaIndex）和机器学习工作流无缝集成，简化了从模型训练到向量检索的应用开发流程。</li>
+</ul>
+<p>向量数据库与传统数据库的主要差异如下：</p>
+<img src="/2026/02/03/2026%E5%B9%B42%E6%9C%883%E6%97%A5-All-in-RAG/image-20260203105943455.png" alt="image-20260203105943455" style="zoom:50%;">
+<h3 id="主流数据库"><a class="markdownIt-Anchor" href="#主流数据库"></a> 主流数据库</h3>
+<img src="/2026/02/03/2026%E5%B9%B42%E6%9C%883%E6%97%A5-All-in-RAG/image-20260203110048526.png" alt="image-20260203110048526" style="zoom:50%;">
+<h2 id="6-milvus介绍"><a class="markdownIt-Anchor" href="#6-milvus介绍"></a> 6 Milvus介绍</h2>
+<h2 id="7-索引优化"><a class="markdownIt-Anchor" href="#7-索引优化"></a> 7 索引优化</h2>
+<h3 id="71-上下文扩展"><a class="markdownIt-Anchor" href="#71-上下文扩展"></a> 7.1 上下文扩展</h3>
+<p>：使用小块文本进行检索可以获得更高的精确度，但小块文本缺乏足够的上下文，可能导致大语言模型（LLM）无法生成高质量的答案；而使用大块文本虽然上下文丰富，却容易引入噪音，降低检索的相关性。</p>
+<h4 id="1-主要思路"><a class="markdownIt-Anchor" href="#1-主要思路"></a> 1 主要思路</h4>
+<p>句子窗口检索的思想可以概括为：<strong>为检索精确性而索引小块，为上下文丰富性而检索大块</strong>。</p>
+<p>其工作流程如下：</p>
+<p>（1）<strong>索引阶段</strong>：在构建索引时，文档被分割成<strong>单个句子</strong>。每个句子都作为一个独立的“节点（Node）”存入向量数据库。同时，每个句子节点都会在元数据（metadata）中存储其<strong>上下文窗口</strong>，即该句子原文中的<strong>前N个和后N个句子</strong>。这个窗口内的文本不会被索引，仅仅是作为元数据存储。</p>
+<p>（2）<strong>检索阶段</strong>：当用户发起查询时，系统会在所有<strong>单一句子节点</strong>上执行相似度搜索。因为句子是表达完整语义的最小单位，所以这种方式可以非常精确地定位到与用户问题最相关的核心信息。</p>
+<p>（3）<strong>后处理阶段</strong>：在检索到最相关的句子节点后，系统会使用一个名为 <code>MetadataReplacementPostProcessor</code> 的后处理模块。该模块会读取到检索到的句子节点的元数据，并用元数据中存储的<strong>完整上下文窗口</strong>来替换节点中原来的单一句子内容。</p>
+<p>（4）<strong>生成阶段</strong>：最后，这些被替换了内容的、包含丰富上下文的节点被传递给LLM，用于生成最终的答案。</p>
+<h3 id="72-结构化索引"><a class="markdownIt-Anchor" href="#72-结构化索引"></a> 7.2 结构化索引</h3>
+<p>知识库的规模不断扩大（例如，包含数百个PDF文件），传统的RAG方法（即对所有文本块进行top-k相似度搜索）会遇到瓶颈。</p>
+<p>查询可能只与其中一两个文档相关时，在整个文档库中进行无差别的向量搜索，不仅效率低下，还容易被不相关的文本块干扰，导致检索结果不精确。</p>
+<p>有效的方法是利用<strong>结构化索引</strong>。其原理是在索引文本块的同时，为其<strong>附加结构化的元数据（Metadata）</strong>。这些元数据可以是任何有助于筛选和定位信息的标签，例如：</p>
+<ul>
+<li>文件名</li>
+<li>文档创建日期</li>
+<li>章节标题</li>
+<li>作者</li>
+<li>任何自定义的分类标签</li>
+</ul>
+<img src="/2026/02/03/2026%E5%B9%B42%E6%9C%883%E6%97%A5-All-in-RAG/image-20260203110917396.png" alt="image-20260203110917396" style="zoom:50%;">
+<h1 id="四-索引优化"><a class="markdownIt-Anchor" href="#四-索引优化"></a> 四 索引优化</h1>
+<h2 id="1-混合索引"><a class="markdownIt-Anchor" href="#1-混合索引"></a> 1 混合索引</h2>
+<p>混合检索（Hybrid Search）是一种结合了 <strong>稀疏向量（Sparse Vectors）</strong> 和 <strong>密集向量（Dense Vectors）</strong></p>
+<h3 id="11-稀疏向量-和-密集向量"><a class="markdownIt-Anchor" href="#11-稀疏向量-和-密集向量"></a> 1.1 **稀疏向量 和 **密集向量</h3>
+<ul>
+<li>
+<p>稀疏向量，也常被称为“词法向量”，是基于词频统计的传统信息检索方法的数学表示。它通常是一个维度极高（与词汇表大小相当）但绝大多数元素为零的向量。</p>
+<ul>
+<li>优点是可解释性极强（<strong>每个维度都代表一个确切的词</strong>），无需训练，能够实现关键词的精确匹配，对于专业术语和特定名词的检索效果好。</li>
+<li>缺点是<strong>无法理解语义</strong>，例如它无法识别“汽车”和“轿车”是同义词，存在“词汇鸿沟”。</li>
+</ul>
+</li>
+<li>
+<p>密集向量，也常被称为“语义向量”，是通过深度学习模型学习到的数据（如文本、图像）的低维、稠密的浮点数表示。这些向量旨在将原始数据映射到一个连续的、充满意义的“语义空间”中来捕捉“语义”或“概念”。</p>
+<ul>
+<li>
+<p>主要优点是能够<strong>理解同义词、近义词和上下文关系</strong>，泛化能力强，在语义搜索任务中表现卓越。</p>
+</li>
+<li>
+<p>缺点也同样明显：可解释性差（向量中的每个维度通常没有具体的物理意义），需要大量数据和算力进行模型训练，且对于<strong>未登录词（OOV</strong>）的处理相对困难。</p>
+<blockquote>
+<p><strong>OOV（Out-of-Vocabulary）未登录词</strong>：指在模型训练时没有出现在词汇表中，但在实际使用时遇到的新词汇。例如，如果模型训练时词汇表中没有&quot;ChatGPT&quot;这个词，那么在实际应用中遇到它时就是OOV。传统的稀疏向量方法（如BM25）对OOV词汇会完全忽略，而现代的密集向量方法通过子词分割（如BPE、WordPiece）可以更好地处理OOV问题。</p>
+<p>以下是我处理 “不认识” 的词的具体机制：</p>
+<h3 id="1-核心原理基于-子词-而非-整词"><a class="markdownIt-Anchor" href="#1-核心原理基于-子词-而非-整词"></a> 1. 核心原理：基于 “子词” 而非 “整词”</h3>
+<p>我和 GPT、BERT 等现代 Transformer 模型一样，使用 <strong>Byte-level BPE（字节级别的子词分词）</strong> 作为底层编码方式。</p>
+<ul>
+<li><strong>传统模型</strong>：词汇表是固定的几万到几十万个 “整词”。遇到新词（如 “栓 Q”、“绝绝子”），直接标记为 <code>&lt;UNK&gt;</code>（未知），信息丢失。</li>
+<li>我（及同类大模型）：词汇表包含常见的词、词根、词缀，甚至单个字符 / 字节。
+<ul>
+<li>遇到新词时，我会把它<strong>拆分成已知的子词或字符</strong>。</li>
+<li>例如：遇到一个生僻的名字 “𰻞𰻞面”，或者一个新造词 “AI 爆改”，我不会把它当成一个整体扔掉，而是拆分成模型认识的基础单元，然后通过上下文去理解它的语义。</li>
+</ul>
+</li>
+</ul>
+<p><strong>结论</strong>：我<strong>不会</strong>把新词变成 <code>&lt;UNK&gt;</code>，而是通过拆解，保留了绝大部分语义信息。</p>
+<h3 id="2-如何理解-新词-和-专有名词"><a class="markdownIt-Anchor" href="#2-如何理解-新词-和-专有名词"></a> 2. 如何理解 “新词” 和 “专有名词”？</h3>
+<p>虽然我能编码新词，但 “能不能理解” 取决于<strong>上下文学习能力</strong>和<strong>训练数据</strong>：</p>
 <ol>
-<li><strong>宏观结构设计（Macro Design）</strong></li>
-<li><strong>引入 ResNeXt 模块（ResNeXt）</strong></li>
-<li><strong>反向瓶颈结构（Inverted Bottleneck）</strong></li>
-<li><strong>使用大卷积核（Large Kernel）</strong></li>
-<li><strong>微观结构设计（Micro Design）</strong></li>
+<li>
+<p><strong>新词 / 网络热词</strong>：</p>
+<ul>
+<li>如果这个词（如 “YYDS”、“挖呀挖”）在我的训练语料中大量出现，我就像认识 “你好” 一样认识它。</li>
+<li>如果是<strong>2025 年之后</strong>才流行的新词（我的训练数据截止时间之前未普及），我虽然能 “看见” 这个词（不会丢），但可能无法准确理解其网络含义，只能从字面或语境推断。</li>
+</ul>
+</li>
+<li>
+<p><strong>专有名词（人名、地名、品牌）</strong>：</p>
+<ul>
+<li>对于知名实体（如 “马斯克”、“故宫”），训练数据充足，理解准确。</li>
+<li>对于小众实体（如你的名字、一个冷门公司名），我不认识它，但我知道它是一个 “名词 / 实体”，并能根据上下文进行合理的互动（比如复述、询问、围绕它进行创作），而不是直接说 “我不懂”。</li>
+</ul>
+</li>
 </ol>
-<h3 id="宏观设计macro-design"><a class="markdownIt-Anchor" href="#宏观设计macro-design"></a> 宏观设计（Macro Design）</h3>
-<p>将 ResNet 的阶段比例（stage ratio）调整为与 Swin-T 架构一致，也就是 1:1:3:1。</p>
-<p><img src="/2025/12/24/2025%E5%B9%B412%E6%9C%8822%E6%97%A5-ConvNeXt/image-20251224093026502.png" alt="image-20251224093026502"><img src="/2025/12/24/2025%E5%B9%B412%E6%9C%8822%E6%97%A5-ConvNeXt/image-20251224093032563.png" alt="image-20251224093032563"></p>
-<h3 id="resnext-化resnext-ification"><a class="markdownIt-Anchor" href="#resnext-化resnext-ification"></a> ResNeXt 化（ResNeXt-ification）</h3>
-<p>主要是在 ResNet 的 bottleneck 模块中引入了<strong>组卷积（group convolution）</strong></p>
-<h3 id="倒置瓶颈结构inverted-bottleneck"><a class="markdownIt-Anchor" href="#倒置瓶颈结构inverted-bottleneck"></a> 倒置瓶颈结构（Inverted Bottleneck）</h3>
-<p>ResNet属于 “宽 → 窄 → 宽” 的布局，因此被称为“瓶颈结构”。但 ConvNeXt 并没有采用这个经典设计，而是引入了“倒置瓶颈”（Inverted Bottleneck），也就是 “窄 → 宽 → 窄”，这个结构灵感来自 Transformer 架构中的前馈网络层。</p>
-<p><img src="/2025/12/24/2025%E5%B9%B412%E6%9C%8822%E6%97%A5-ConvNeXt/image-20251224093319560.png" alt="image-20251224093319560"></p>
-<h3 id="卷积核大小"><a class="markdownIt-Anchor" href="#卷积核大小"></a> 卷积核大小</h3>
-<p>让深度卷积（depthwise convolution）放到了模块的开头，这一设计灵感来源于 Transformer 结构，在 Transformer 中多头自注意力层（MSA）会放在前面，后面才是前馈网络层（MLP）。</p>
-<h3 id="微观设计"><a class="markdownIt-Anchor" href="#微观设计"></a> 微观设计</h3>
-<p>论文中调优的最后一个方面是“微观设计”，主要是网络细节层面的调整。和之前一样，这些参数大多借鉴了 Transformer 的设计。首先，作者用 GELU 激活函数替代了 ReLU。虽然替换后准确率保持不变（仍是 80.6%），但他们决定在后续实验中采用 GELU。</p>
-<p>之后，他们发现减少激活函数的使用次数能提升准确率。具体做法是，不再在 ConvNeXt 块中的每个卷积层后都使用 GELU，而只在两个点卷积层之间使用一次。这样一改，准确率提升到了 81.3%，已经追平了 Swin-T 架构，而且计算复杂度更低（4.2 vs 4.5 GFLOPS）。</p>
-<p>接下来是批量归一化（Batch Normalization，BN）层的调整。传统 CNN 架构常用 Conv-BN-ReLU 结构，ResNet 也沿用了这个设计。但作者们选择只用一层 BN，放在第一个点卷积层之前。这个改动使准确率微升至 81.4%，略微超过了 Swin-T。</p>
-<p>尽管如此，参数调优还没结束，接着用层归一化（Layer Normalization）替代了 BN，准确率再次提升了 0.1%，达到 81.5%。</p>
-<p>所有这些微观设计的改动最终汇总成了图 5（最右侧）的架构示意图。从图中可以清楚看出 ConvNeXt 块与 Swin Transformer 及 ResNet 块的不同之处。</p>
-<p><img src="/2025/12/24/2025%E5%B9%B412%E6%9C%8822%E6%97%A5-ConvNeXt/image-20251224093529803.png" alt="image-20251224093529803"></p>
-<h2 id="convnext-实现"><a class="markdownIt-Anchor" href="#convnext-实现"></a> ConvNeXt 实现</h2>
-<p><img src="/2025/12/24/2025%E5%B9%B412%E6%9C%8822%E6%97%A5-ConvNeXt/image-20251224093544684.png" alt="image-20251224093544684"></p>
+<h3 id="3-我的-oov-处理流程"><a class="markdownIt-Anchor" href="#3-我的-oov-处理流程"></a> 3. 我的 “OOV” 处理流程</h3>
+<p>当你输入一个我从未见过的词（比如一个新的网络梗或生僻字）时，我的处理步骤是：</p>
+<ol>
+<li>
+<p><strong>分词</strong>：将新词切分为子词序列（如 “AI 爆改” -&gt; [“AI”, “爆”, “改”]）。</p>
+</li>
+<li>
+<p><strong>编码</strong>：将子词转为向量，输入模型。</p>
+</li>
+<li>
+<p>推理：利用强大的</p>
+<p>上下文语义理解能力</p>
+<p>，结合周围的文字，推断这个新词的含义、词性和作用。</p>
+<ul>
+<li><em>例子</em>：即使我没见过 “挖呀挖”，但在 “在小小的花园里挖呀挖呀挖” 这句话中，我能推断出它是一个表示动作的、有节奏感的语气词。</li>
+</ul>
+</li>
+</ol>
+<h3 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h3>
+<ul>
+<li><strong>传统 OOV 问题</strong>：对我<strong>基本不存在</strong>，因为我用子词编码，不会丢失信息。</li>
+<li><strong>真正的挑战</strong>：不是 “看不见”，而是 “认不出”。对于训练数据中<strong>从未出现过</strong>的全新概念，我只能依赖上下文推理，可能会出现理解偏差。</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="12-混合索引实现"><a class="markdownIt-Anchor" href="#12-混合索引实现"></a> 1.2 混合索引实现</h3>
+<h4 id="1-倒排序"><a class="markdownIt-Anchor" href="#1-倒排序"></a> 1 倒排序</h4>
+<p>其思想是：一个文档在<strong>不同检索系统</strong>中的排名越靠前，它的最终得分就越高。</p>
+<h4 id="2-加权线性组合"><a class="markdownIt-Anchor" href="#2-加权线性组合"></a> 2 加权线性组合</h4>
+<p>这种方法需要先将不同检索系统的得分进行归一化（例如，统一到 0-1 区间），然后通过一个权重参数 <code>α</code> 来进行线性组合。</p>
+<h4 id="13-代码实现"><a class="markdownIt-Anchor" href="#13-代码实现"></a> 1.3  代码实现</h4>
+<h2 id="2-查询构建"><a class="markdownIt-Anchor" href="#2-查询构建"></a> 2 查询构建</h2>
+<p>在实际应用中，我们常常需要处理更加复杂和多样化的数据，包括结构化数据（如SQL数据库）、半结构化数据（如带有元数据的文档）以及图数据。</p>
+<p>用户的查询也可能不仅仅是简单的语义匹配，而是包含复杂<strong>的过滤条件、聚合操作或关系查询</strong>。</p>
+<p>将用户的<strong>自然语言查询“翻译”成针对特定数据源的结构化查询语言或带有过滤条件的请求</strong>。这使得RAG系统能够无缝地连接和利用各种类型的数据，从而极大地扩展了其应用场景和能力。</p>
+<img src="/2026/02/03/2026%E5%B9%B42%E6%9C%883%E6%97%A5-All-in-RAG/image-20260203112641110.png" alt="image-20260203112641110" style="zoom:33%;">
+<h3 id="21-文本到元数据过滤器"><a class="markdownIt-Anchor" href="#21-文本到元数据过滤器"></a> 2.1 文本到元数据过滤器</h3>
+<h4 id="自查询检索器self-query-retriever"><a class="markdownIt-Anchor" href="#自查询检索器self-query-retriever"></a> <strong>自查询检索器（Self-Query Retriever）</strong></h4>
+<blockquote>
+<p>类似 skills</p>
+</blockquote>
+<p>它的工作流程如下：</p>
+<ol>
+<li>
+<p><strong>定义元数据结构</strong>：首先，需要向LLM清晰地描述文档内容和每个元数据字段的含义及类型。</p>
+</li>
+<li>
+<p>查询解析</p>
+<p>：当用户输入一个自然语言查询时，自查询检索器会调用LLM，将查询分解为两部分：</p>
+<ul>
+<li><strong>查询字符串（Query String）</strong>：用于进行语义搜索的部分。</li>
+<li><strong>元数据过滤器（Metadata Filter）</strong>：从查询中提取出的结构化过滤条件。</li>
+</ul>
+</li>
+<li>
+<p><strong>执行查询</strong>：检索器将解析出的查询字符串和元数据过滤器发送给向量数据库，执行一次同时包含语义搜索和元数据过滤的查询。</p>
+</li>
+</ol>
+<h3 id="22-文本到cypher"><a class="markdownIt-Anchor" href="#22-文本到cypher"></a> 2.2 文本到Cypher</h3>
+<p>Cypher 是<strong>图数据库</strong>（如 Neo4j）中最常用的查询语言，其地位类似于 SQL 之于关系数据库。</p>
+<p>它采用一种直观的方式来匹配图中的模式和关系，例如 <code>(:Person &#123;name:&quot;Tomaz&quot;&#125;)-[:LIVES_IN]-&gt;(:Country &#123;name:&quot;Slovenia&quot;&#125;)</code> 描述了一个人和一个国家以及他们之间的“居住在”关系。</p>
+<p>与“文本到元数据过滤器”类似，“文本到Cypher”技术利用大语言模型（LLM）将用户的自然语言问题直接翻译成一句精准的 Cypher 查询语句。</p>
+<h4 id="graphcypherqachain"><a class="markdownIt-Anchor" href="#graphcypherqachain"></a> <code>GraphCypherQAChain</code></h4>
+<p>其工作流程通常是：</p>
+<ol>
+<li>接收用户的自然语言问题。</li>
+<li>LLM 根据预先提供的图谱模式（Schema），将问题转换为 Cypher 查询。</li>
+<li>在图数据库上执行该查询，获取精确的结构化数据。</li>
+<li>(可选)将查询结果再次交由 LLM，生成通顺的自然语言答案。</li>
+</ol>
+<h2 id="3-text2sql"><a class="markdownIt-Anchor" href="#3-text2sql"></a> 3 Text2SQL</h2>
+<p>利用大语言模型（LLM）将用户的自然语言问题，直接翻译成可以在数据库上执行的SQL查询语句。</p>
+<h3 id="31-业务挑战"><a class="markdownIt-Anchor" href="#31-业务挑战"></a> 3.1 业务挑战</h3>
+<ul>
+<li><strong>“幻觉”问题✅</strong>：LLM 可能会“想象”出数据库中<strong>不存在的表或字段</strong>，导致生成的SQL语句无效。</li>
+<li><strong>对数据库结构理解不足</strong>✅：LLM 需要准确理解表的结构、字段的含义以及表与表之间的关联关系，才能生成正确的 <code>JOIN</code> 和 <code>WHERE</code> 子句。</li>
+<li><strong>处理用户输入的模糊性✅</strong>：用户的提问可能存在拼写<strong>错误\模糊或不规范的表达</strong>（例如，“上个月的销售冠军是谁？”），模型需要具备一定的容错和推理能力。</li>
+</ul>
+<h3 id="32-优化策略"><a class="markdownIt-Anchor" href="#32-优化策略"></a> 3.2 优化策略</h3>
+<ol>
+<li><strong>提供精确的数据库模式</strong>✅：这是最基础也是最关键的一步。我们需要向LLM提供数据库中相关表的 <code>CREATE TABLE</code> 语句。这就像是给了LLM一张地图，让它了解数据库的结构，包括表名、列名、数据类型和外键关系。</li>
+<li><strong>提供少量高质量的示例</strong>✅：在提示（Prompt）中加入一些**“问题-SQL”的示例**对，可以极大地提升LLM生成查询的准确性。这相当于给了LLM几个范例，让它学习如何根据相似的问题构建查询。</li>
+<li><strong>利用RAG增强上下文</strong>：这是更进一步的策略。我们可以像RAGFlow一样，为数据库构建一个专门的“知识库”, 其中不仅包含表的DDL（数据定义语言），还可以包含：
+<ul>
+<li><strong>表和字段的详细描述</strong>✅：用自然语言解释每个表是做什么的，每个字段代表什么业务含义。</li>
+<li><strong>同义词和业务术语</strong>✅：例如，将用户的**“花费”映射到数据库的 <code>cost</code> 字段**。</li>
+<li><strong>复杂的查询示例</strong>：提供一些包含 <code>JOIN</code>、<code>GROUP BY</code> 或子查询的复杂问答对。 当用户提问时，系统首先从**这个知识库中检索最相关的信息（如相关的表结构、字段描述、相似的Q&amp;A），然后将这些信息和用户的问题一起组合成一个内容更丰富的提示，交给LLM生成最终的SQL查询。**这种方式极大地降低了“幻觉”的风险，提高了查询的准确度。</li>
+</ul>
+</li>
+<li><strong>错误修正与反思 (Error Correction and Reflection)<strong>✅：在生成SQL后，系统会尝试执行它。如果</strong>数据库返回错误，可以将错误信息反馈给LLM，让它“反思”并修正SQL语句，然后重试</strong>。这个迭代过程可以显著提高查询的成功率。</li>
+</ol>
+<h3 id="33-实现一个简单的text2sql框架to-do"><a class="markdownIt-Anchor" href="#33-实现一个简单的text2sql框架to-do"></a> 3.3 <a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#/chapter4/13_text2sql?id=%E4%B8%89%E3%80%81%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84text2sql%E6%A1%86%E6%9E%B6">实现一个简单的Text2SQL框架</a>to-do📋</h3>
+<h2 id="4-重构和分发"><a class="markdownIt-Anchor" href="#4-重构和分发"></a> 4 重构和分发</h2>
+<p>在检索之前对用户的查询进行“预处理”</p>
+<blockquote>
+<p>类似skills?</p>
+</blockquote>
+<h3 id="42-多查询分解-multi-query"><a class="markdownIt-Anchor" href="#42-多查询分解-multi-query"></a> <a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#/chapter4/14_query_rewriting?id=_12-%E5%A4%9A%E6%9F%A5%E8%AF%A2%E5%88%86%E8%A7%A3-multi-query">4.2 多查询分解 (Multi-query)</a></h3>
+<p>当用户提出一个复杂的问题时，直接用整个问题去检索可能效果不佳，因为它可能包含多个子主题或意图。分解技术的核心思想是将这个复杂问题拆分成多个更简单、更具体的子问题。然后，系统分别对每个子问题进行检索，最后将所有检索到的结果合并、去重，形成一个更全面的上下文，再交给 LLM 生成最终答案。</p>
+<h3 id="43-退步提示step-back-prompting"><a class="markdownIt-Anchor" href="#43-退步提示step-back-prompting"></a> <a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#/chapter4/14_query_rewriting?id=_13-%E9%80%80%E6%AD%A5%E6%8F%90%E7%A4%BA%EF%BC%88step-back-prompting%EF%BC%89">4.3 退步提示（Step-Back Prompting）</a></h3>
+<p>退步提示是由 Google DeepMind 团队提出的一种旨在提升大语言模型推理能力的提示工程技巧<a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#fn-2">2</a>。当面对一个细节繁多或过于具体的问题时，模型直接作答（即便是使用思维链）也容易出错。退步提示通过引导模型“退后一步”来解决这个问题。</p>
+<p>其核心流程分为两步：</p>
+<p>（1）<strong>抽象化</strong>：首先，引导 LLM 从用户的原始具体问题中，生成一个更高层次、更概括的“退步问题”（Step-back Question）。这个退步问题旨在探寻原始问题背后的通用原理或核心概念。</p>
+<p>（2）<strong>推理</strong>：接着，系统会先获取“退步问题”的答案（例如，一个物理定律、一段历史背景等），然后将这个通用原理作为上下文，再结合原始的具体问题，进行推理并生成最终答案。</p>
+<h3 id="44-假设性文档嵌入-hyde"><a class="markdownIt-Anchor" href="#44-假设性文档嵌入-hyde"></a> <a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#/chapter4/14_query_rewriting?id=_14-%E5%81%87%E8%AE%BE%E6%80%A7%E6%96%87%E6%A1%A3%E5%B5%8C%E5%85%A5-hyde">4.4 假设性文档嵌入 (HyDE)</a></h3>
+<p>用户的查询（Query）通常简短、关键词有限，而数据库中存储的文档则内容详实、上下文丰富，两者在语义向量空间中可能存在“鸿沟”，导致直接用查询向量进行搜索效果不佳。不直接使用用户的原始查询，而是先利用一个生成式大语言模型（LLM）来生成一个“假设性”的、能够完美回答该查询的文档。</p>
+<p>分为三个步骤：</p>
+<p>（1）<strong>生成</strong>：当接收到用户查询时，首先调用一个生成式 LLM（例如，GPT-3.5）。提示该模型根据查询生成一个详细的、可能是理想答案的文档。这个文档不必完全符合事实，但它必须在语义上与一个好的答案高度相关。</p>
+<p>（2）<strong>编码</strong>：将上一步生成的假设性文档输入到一个对比编码器（如 Contriever）中，将其转换为一个高维向量嵌入。这个向量在语义上代表了一个“理想答案”的位置。</p>
+<p>（3）<strong>检索</strong>：使用这个假设性文档的向量，在向量数据库中执行相似性搜索，找出与这个“理想答案”最接近的真实文档。这些被检索出的文档将作为最终的上下文信息。</p>
+<p>通过这种方式，HyDE 将困难的“查询到文档”的匹配问题，转化为了一个相对容易的“文档到文档”的匹配问题，从而提升检索的准确率。</p>
+<h3 id="45-查询路由"><a class="markdownIt-Anchor" href="#45-查询路由"></a> <a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#/chapter4/14_query_rewriting?id=%E4%BA%8C%E3%80%81%E6%9F%A5%E8%AF%A2%E8%B7%AF%E7%94%B1">4.5 查询路由</a></h3>
+<p><strong>查询路由（Query Routing）</strong> 是用于优化复杂 RAG 系统的一项关键技术。当系统接入了多个不同的数据源或具备多种处理能力时，就需要一个“智能调度中心”来分析用户的查询，并动态选择最合适的处理路径。</p>
+<ol>
+<li><strong>数据源路由</strong>：这是最常见的场景。根据查询意图，将其路由到不同的知识库。例如：
+<ul>
+<li>查询“最新的 iPhone 有什么功能？” -&gt; 路由到<strong>产品文档向量数据库</strong>。</li>
+<li>查询“我上次订购了什么？” -&gt; 路由到<strong>用户历史SQL数据库</strong>（执行Text-to-SQL）。</li>
+<li>查询“A公司和B公司的投资关系是怎样的？” -&gt; 路由到<strong>企业知识图谱数据库</strong>。</li>
+</ul>
+</li>
+<li><strong>组件路由</strong>：根据问题的复杂性，将其分配给不同的处理组件，以平衡成本和效果。
+<ul>
+<li>简单FAQ → 直接进行向量检索，速度快、成本低。</li>
+<li>复杂操作或需要与外部API交互 → 调用 Agent 来执行任务。</li>
+</ul>
+</li>
+<li><strong>提示模板路由</strong>：为不同类型的任务动态选择最优的提示词模板，以优化生成效果。
+<ul>
+<li>数学问题 → 选用包含分步思考（Step-by-Step）逻辑的提示模板。</li>
+<li>代码生成 → 选用专门为代码优化过的提示模板。</li>
+</ul>
+</li>
+</ol>
+<h3 id="22-实现方法"><a class="markdownIt-Anchor" href="#22-实现方法"></a> <a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#/chapter4/14_query_rewriting?id=_22-%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%B3%95">2.2 实现方法</a>📋</h3>
+<h2 id="5-其他-pass"><a class="markdownIt-Anchor" href="#5-其他-pass"></a> 5 其他❌ pass</h2>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/12/24/2025%E5%B9%B412%E6%9C%8822%E6%97%A5-ConvNeXt/" data-id="cmjjqkpyw00024ov4d1pv3ms8" class="article-share-link">分享</a>
+      <a data-url="https://shakewely.github.io/2026/02/03/2026%E5%B9%B42%E6%9C%883%E6%97%A5-All-in-RAG/" data-id="cml627034000t4kv47gp012d1" class="article-share-link">分享</a>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/model/" rel="tag">model</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/agent/" rel="tag">agent</a></li></ul>
 
     </footer>
   </div>
@@ -351,12 +573,12 @@
 
 
   
-    <article id="post-2025年12月24日-DINOv3" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2025年2月2日-agent框架LangGraph" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2025/12/24/2025%E5%B9%B412%E6%9C%8824%E6%97%A5-DINOv3/" class="article-date">
-  <time class="post-time" datetime="2025-12-24T00:20:03.000Z" itemprop="datePublished">
-    <span class="post-month">12月</span><br/>
-    <span class="post-day">24</span>
+    <a href="/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6LangGraph/" class="article-date">
+  <time class="post-time" datetime="2026-02-02T06:21:00.000Z" itemprop="datePublished">
+    <span class="post-month">2月</span><br/>
+    <span class="post-day">02</span>
   </time>
 </a>
    
@@ -368,7 +590,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2025/12/24/2025%E5%B9%B412%E6%9C%8824%E6%97%A5-DINOv3/">2025年12月24日 DINOv3</a>
+      <a class="article-title" href="/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6LangGraph/">2025年2月2日 agent框架LangGraph</a>
     </h1>
   
 
@@ -384,549 +606,707 @@
     <div class="article-entry" itemprop="articleBody">
       
         <blockquote>
-<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/1986387271688139358">https://zhuanlan.zhihu.com/p/1986387271688139358</a></p>
-<p><a target="_blank" rel="noopener" href="https://github.com/facebookresearch/dinov3?tab=readme-ov-file">https://github.com/facebookresearch/dinov3?tab=readme-ov-file</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/1934589308813156455">https://zhuanlan.zhihu.com/p/1934589308813156455</a></p>
 </blockquote>
-<h2 id="1-自监督与弱监督"><a class="markdownIt-Anchor" href="#1-自监督与弱监督"></a> 1. 自监督与弱监督</h2>
-<p><strong>自监督</strong>：<br>
-👉 <em>监督信号从数据本身自动构造</em>，<strong>不需要人工标签</strong></p>
-<p><strong>弱监督</strong>：<br>
-👉 <em>有标签，但标签不精确 / 不完整 / 有噪声</em></p>
+<h1 id="langgraph-框架"><a class="markdownIt-Anchor" href="#langgraph-框架"></a> <strong>LangGraph 框架</strong></h1>
+<h1 id="一-agent架构介绍"><a class="markdownIt-Anchor" href="#一-agent架构介绍"></a> 一 Agent架构介绍</h1>
+<h2 id="1-概述"><a class="markdownIt-Anchor" href="#1-概述"></a> 1 概述</h2>
+<img src="/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6LangGraph/image-20260202152153771.png" alt="image-20260202152153771" style="zoom: 67%;">
 <blockquote>
-<h4 id="常见弱监督形式"><a class="markdownIt-Anchor" href="#常见弱监督形式"></a> 常见弱监督形式</h4>
-<h5 id="1️⃣-标签不精确最常见"><a class="markdownIt-Anchor" href="#1️⃣-标签不精确最常见"></a> 1️⃣ 标签不精确（最常见）</h5>
+<p>router其实就是我代码写的workflow</p>
+<p>full 相当于panner?</p>
+</blockquote>
+<h3 id="11-工具调用代理"><a class="markdownIt-Anchor" href="#11-工具调用代理"></a> 1.1 工具调用代理</h3>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2210.03629">ReAct</a> 是一种流行的通用代理架构，它结合了这些扩展，并整合了三个核心概念。</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/agentic_concepts.1.html#tool-calling">工具调用</a>：允许 LLM 根据需要选择和使用各种工具。</li>
+<li><a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/agentic_concepts.1.html#memory">记忆</a>：使代理能够保留和使用来自先前步骤的信息。</li>
+<li><a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/agentic_concepts.1.html#planning">规划</a>：使 LLM 能够创建并遵循多步计划以实现目标。</li>
+</ol>
+<h4 id="工具调用"><a class="markdownIt-Anchor" href="#工具调用"></a> 工具调用<a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/agentic_concepts.1.html#tool-calling">¶</a></h4>
+<h4 id="记忆"><a class="markdownIt-Anchor" href="#记忆"></a> 记忆</h4>
+<p>LangGraph 提供对记忆实现的完全控制：</p>
 <ul>
-<li>只有图像级标签，没有 bbox / mask</li>
-<li>如：这张图“有猫”，但不知道猫在哪</li>
+<li><a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/low_level.1.html#state"><code>状态（State）</code></a>：用户定义的模式，指定要保留的记忆的确切结构。</li>
+<li><a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/persistence.1.html#checkpoints"><code>检查点（Checkpointer）</code></a>：一种机制，用于在会话内不同交互的每一步存储状态。</li>
+<li><a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/persistence.1.html#memory-store"><code>存储（Store）</code></a>：一种机制，用于跨会话存储用户特定或应用程序级别的数据。</li>
 </ul>
-<p>📌 弱监督目标检测、弱监督分割</p>
-<hr>
-<h5 id="2️⃣-标签不完整"><a class="markdownIt-Anchor" href="#2️⃣-标签不完整"></a> 2️⃣ 标签不完整</h5>
+<h4 id="规划"><a class="markdownIt-Anchor" href="#规划"></a> 规划<a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/agentic_concepts.1.html#planning">¶</a></h4>
+<p>在工具调用<a target="_blank" rel="noopener" href="https://langgraph.com.cn/agents/overview.1.html#what-is-an-agent">代理</a>中，LLM 在一个 while 循环中被重复调用。在每一步，代理决定要调用哪些工具以及这些工具的输入应该是什么。然后执行这些工具，并将输出作为观察结果反馈给 LLM。当代理决定它有足够的信息来解决用户请求并且不值得再调用任何工具时，while 循环终止。</p>
+<h3 id="12-自定义agent架构"><a class="markdownIt-Anchor" href="#12-自定义agent架构"></a> 1.2 自定义Agent架构<a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/agentic_concepts.1.html#custom-agent-architectures">¶</a></h3>
+<p>虽然路由器和工具调用代理（如 ReAct）很常见，但<a target="_blank" rel="noopener" href="https://blog.langchain.ac.cn/why-you-should-outsource-your-agentic-infrastructure-but-own-your-cognitive-architecture/">定制代理架构</a>通常能为特定任务带来更好的性能。LangGraph 提供了几个强大的功能来构建定制的代理系统：</p>
+<h4 id="人机协作"><a class="markdownIt-Anchor" href="#人机协作"></a> 人机协作<a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/agentic_concepts.1.html#human-in-the-loop">¶</a></h4>
+<p>人工介入可以显著提高代理的可靠性，特别是对于敏感任务。这可能涉及：</p>
 <ul>
-<li>只标一部分样本</li>
-<li>如：数据集中只有 10% 有标注</li>
+<li><strong>批准特定行动</strong></li>
+<li>提供反馈以更新代理状态</li>
+<li>在复杂决策过程中提供指导</li>
 </ul>
-<hr>
-<h5 id="3️⃣-标签有噪声"><a class="markdownIt-Anchor" href="#3️⃣-标签有噪声"></a> 3️⃣ 标签有噪声</h5>
+<p>当完全自动化不可行或不可取时，人机协作模式至关重要。在我们的<a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/human_in_the_loop.1.html">人机协作指南</a>中了解更多信息。</p>
+<h4 id="并行化"><a class="markdownIt-Anchor" href="#并行化"></a> 并行化<a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/agentic_concepts.1.html#parallelization">¶</a></h4>
+<p>并行处理对于高效的多代理系统和复杂任务至关重要。LangGraph 通过其<a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/low_level.1.html#send">Send</a> API 支持并行化，从而实现：</p>
 <ul>
-<li>自动生成标签</li>
-<li>爬虫数据、规则生成标签</li>
+<li>并发处理多个状态</li>
+<li>实现类似 MapReduce 的操作</li>
+<li>高效处理独立的子任务</li>
 </ul>
-<p>📌 工业场景、日志规则系统（你现在做的 SQL 规则也很像）</p>
-<hr>
-<h4 id="典型方法"><a class="markdownIt-Anchor" href="#典型方法"></a> 典型方法</h4>
+<p>有关实际实现，请参阅我们的<a target="_blank" rel="noopener" href="https://langgraph.com.cn/how-tos/graph-api.1.html#map-reduce-and-the-send-api">MapReduce 教程</a>。</p>
+<h4 id="子图"><a class="markdownIt-Anchor" href="#子图"></a> 子图<a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/agentic_concepts.1.html#subgraphs">¶</a></h4>
+<p><a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/subgraphs.1.html">子图</a>对于管理复杂的代理架构至关重要，特别是在<a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/multi_agent.1.html">多代理系统</a>中。它们允许：</p>
+<ul>
+<li><strong>对单个代理进行隔离的状态管理</strong></li>
+<li>代理团队的分层组织</li>
+<li>代理与主系统之间的受控通信</li>
+</ul>
+<p>子图通过状态模式中的重叠键与父图进行通信。这使得灵活的模块化代理设计成为可能。有关实现细节，请参阅我们的<a target="_blank" rel="noopener" href="https://langgraph.com.cn/how-tos/subgraph/index.html">子图操作指南</a>。</p>
+<h4 id="反思"><a class="markdownIt-Anchor" href="#反思"></a> 反思<a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/agentic_concepts.1.html#reflection">¶</a></h4>
+<p>反思机制可以通过以下方式显著提高代理的可靠性：</p>
+<ol>
+<li>评估任务完成情况和正确性</li>
+<li>提供反馈以进行迭代改进</li>
+<li>实现自我纠正和学习</li>
+</ol>
+<p>虽然反思通常基于 LLM，但也可以使用确定性方法。例如，在编码任务中，编译错误可以作为反馈。这种方法在<a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=MvNdgmM7uyc">这个使用 LangGraph 进行自我纠正代码生成的视频</a>中得到了演示。</p>
+<p>通过利用这些功能，LangGraph 能够创建复杂的、特定于任务的代理架构，这些架构可以处理复杂的工作流，有效协作，并持续提高其性能。</p>
+<h2 id="2-例子工作流与智能体"><a class="markdownIt-Anchor" href="#2-例子工作流与智能体"></a> 2 (例子)工作流与智能体<a target="_blank" rel="noopener" href="https://langgraph.com.cn/tutorials/workflows/index.html#workflows-and-agents">¶</a></h2>
+<p><img src="/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6LangGraph/image-20260202152908141.png" alt="image-20260202152908141"></p>
+<h3 id="21-增强型rag"><a class="markdownIt-Anchor" href="#21-增强型rag"></a> 2.1 增强型RAG</h3>
+<img src="/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6LangGraph/image-20260202153345375.png" alt="image-20260202153345375" style="zoom:50%;">
+<h3 id="22-提示链"><a class="markdownIt-Anchor" href="#22-提示链"></a> 2.2 提示链</h3>
+<img src="/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6LangGraph/image-20260202153358812.png" alt="image-20260202153358812" style="zoom:67%;">
+<blockquote>
+<p>提示链将任务分解为一系列步骤，其中每个 LLM 调用都会处理前一个调用的输出。</p>
+</blockquote>
+<h3 id="23-并行化"><a class="markdownIt-Anchor" href="#23-并行化"></a> 2.3 并行化</h3>
+<p>通过并行化，LLM 可以同时处理任务</p>
+<blockquote>
+<p>LLM 有时可以同时处理一个任务，并通过编程方式聚合其输出。这种工作流，即并行化，体现在两种关键变体中：<strong>分段</strong>：将任务分解为并行运行的独立子任务。<strong>投票</strong>：多次运行同一任务以获取多样化输出。</p>
+</blockquote>
+<img src="/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6LangGraph/image-20260202155547181.png" alt="image-20260202155547181" style="zoom:50%;">
+<h3 id="24-路由"><a class="markdownIt-Anchor" href="#24-路由"></a> 2.4 路由</h3>
+<p>路由对输入进行分类，并将其导向后续任务</p>
+<blockquote>
+<p>路由对输入进行分类，并将其导向专门的后续任务。此工作流允许关注点分离，并构建更专业的提示。</p>
+</blockquote>
+<img src="/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6LangGraph/image-20260202161758081.png" alt="image-20260202161758081" style="zoom:50%;">
+<h3 id="25-编排器-工作器"><a class="markdownIt-Anchor" href="#25-编排器-工作器"></a> 2.5 编排器-工作器</h3>
+<p>在编排器-工作器模式下，编排器将任务分解并委托给工作器。</p>
+<img src="/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6LangGraph/image-20260202162737982.png" alt="image-20260202162737982" style="zoom:50%;">
+<h3 id="26-评估器-优化器"><a class="markdownIt-Anchor" href="#26-评估器-优化器"></a> 2.6 评估器-优化器</h3>
+<p>在评估器-优化器工作流中，一个 LLM 调用生成响应，而另一个在循环中提供评估和反馈</p>
+<img src="/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6LangGraph/image-20260202163054457.png" alt="image-20260202163054457" style="zoom:50%;">
+<h3 id="27-智能体"><a class="markdownIt-Anchor" href="#27-智能体"></a> 2.7 智能体</h3>
+<p>智能体通常被实现为 LLM，它在循环中根据环境反馈执行操作（通过工具调用）。</p>
+<p><img src="/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6LangGraph/image-20260202163420622.png" alt="image-20260202163420622"></p>
+<h1 id="二-核心概念"><a class="markdownIt-Anchor" href="#二-核心概念"></a> 二 核心概念</h1>
+<h2 id="1-图"><a class="markdownIt-Anchor" href="#1-图"></a> 1 图</h2>
+<p>LangGraph 的核心是将代理工作流建模为图。您可以使用三个关键组件来定义代理的行为：</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/low_level.1.html#state"><code>State</code></a>：一个共享数据结构，表示应用程序的当前快照。它可以是任何 Python 类型，但通常是 <code>TypedDict</code> 或 Pydantic <code>BaseModel</code>。</li>
+<li><a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/low_level.1.html#nodes"><code>Nodes</code></a>：编码代理逻辑的 Python 函数。它们接收当前的 <code>State</code> 作为输入，执行一些计算或副作用，并返回一个更新的 <code>State</code>。</li>
+<li><a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/low_level.1.html#edges"><code>Edges</code></a>：Python 函数，根据当前的 <code>State</code> 决定接下来执行哪个 <code>Node</code>。它们可以是条件分支或固定转换。</li>
+</ol>
+<p><strong><code>StateGraph</code></strong> : 类是主要的图类。它通过用户定义的 <code>State</code> 对象进行参数化。</p>
+<p><strong>compile</strong>: 进行一些基本检查（例如，没有孤立节点）。</p>
+<h3 id="11-state"><a class="markdownIt-Anchor" href="#11-state"></a> 1.1 State</h3>
+<p>State 包含图的模式以及指定如何应用状态更新的reducer 函数。</p>
+<p>State 的模式将是<strong>图中所有 Nodes 和 Edges 的输入模式</strong>，可以是 TypedDict 或 Pydantic 模型。所有 Nodes 都将发出对 State 的更新，然后使用指定的 reducer 函数应用这些更新。</p>
+<h3 id="图graph"><a class="markdownIt-Anchor" href="#图graph"></a> 图（Graph）</h3>
+<p>LangGraph的核心是基于有向图的工作流模型。图由节点（Nodes）和边（Edges）组成，定义了工作流的结构和执行路径。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langgraph.graph <span class="keyword">import</span> StateGraph</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一个状态图</span></span><br><span class="line">graph = StateGraph()</span><br></pre></td></tr></table></figure>
+<h3 id="节点nodes"><a class="markdownIt-Anchor" href="#节点nodes"></a> 节点（Nodes）</h3>
+<p>节点代表工作流中的处理单元，可以是函数、LangChain组件或其他可调用对象。每个节点接收状态作为输入，并返回更新后的状态。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">process_input</span>(<span class="params">state</span>):</span><br><span class="line">    <span class="comment"># 处理输入并更新状态</span></span><br><span class="line">    <span class="keyword">return</span> &#123;<span class="string">&quot;messages&quot;</span>: state[<span class="string">&quot;messages&quot;</span>] + [<span class="string">&quot;处理后的消息&quot;</span>]&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加节点到图中</span></span><br><span class="line">graph.add_node(<span class="string">&quot;process_input&quot;</span>, process_input)</span><br></pre></td></tr></table></figure>
+<h3 id="边edges"><a class="markdownIt-Anchor" href="#边edges"></a> 边（Edges）</h3>
+<p>边定义了节点之间的连接和数据流向。LangGraph支持条件边，使工作流能够根据状态动态选择执行路径。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 添加简单边</span></span><br><span class="line">graph.add_edge(<span class="string">&quot;start&quot;</span>, <span class="string">&quot;process_input&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加条件边</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">router</span>(<span class="params">state</span>):</span><br><span class="line">    <span class="keyword">if</span> <span class="string">&quot;error&quot;</span> <span class="keyword">in</span> state:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;error_handler&quot;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;normal_process&quot;</span></span><br><span class="line"></span><br><span class="line">graph.add_conditional_edges(<span class="string">&quot;process_input&quot;</span>, router, &#123;<span class="string">&quot;error_handler&quot;</span>: error_handler, <span class="string">&quot;normal_process&quot;</span>: normal_process&#125;)</span><br></pre></td></tr></table></figure>
+<h3 id="状态state"><a class="markdownIt-Anchor" href="#状态state"></a> 状态（State）</h3>
+<p>状态是工作流执行过程中的数据容器，包含了节点间传递的所有信息。LangGraph提供了多种状态类型，支持不同的数据管理需求。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langgraph.graph <span class="keyword">import</span> StateGraph, State</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义状态类型</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ChatState</span>(<span class="title class_ inherited__">State</span>):</span><br><span class="line">    messages: <span class="built_in">list</span></span><br><span class="line">    context: <span class="built_in">dict</span> = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用类型化状态创建图</span></span><br><span class="line">graph = StateGraph(ChatState)</span><br></pre></td></tr></table></figure>
+<h3 id="基本工作流构建"><a class="markdownIt-Anchor" href="#基本工作流构建"></a> 基本工作流构建</h3>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6LangGraph/" data-id="cml62702g00064kv48qwe1jyi" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/agent/" rel="tag">agent</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2025年2月2日-agent框架dify" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6dify/" class="article-date">
+  <time class="post-time" datetime="2026-02-02T03:29:25.000Z" itemprop="datePublished">
+    <span class="post-month">2月</span><br/>
+    <span class="post-day">02</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6dify/">2025年2月2日 agent框架dify</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6dify/" data-id="cml62702f00044kv4ap9lb9r1" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2026年2月2日-agent-Skills" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/02/02/2026%E5%B9%B42%E6%9C%882%E6%97%A5-agent-Skills/" class="article-date">
+  <time class="post-time" datetime="2026-02-02T01:26:44.000Z" itemprop="datePublished">
+    <span class="post-month">2月</span><br/>
+    <span class="post-day">02</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2026/02/02/2026%E5%B9%B42%E6%9C%882%E6%97%A5-agent-Skills/">2026年2月2日 agent Skills</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/02/02/2026%E5%B9%B42%E6%9C%882%E6%97%A5-agent-Skills/" data-id="cml627034000r4kv413v6b9es" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2026年1月30日-agent框架AutoGen" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/01/31/2026%E5%B9%B41%E6%9C%8830%E6%97%A5-agent%E6%A1%86%E6%9E%B6AutoGen/" class="article-date">
+  <time class="post-time" datetime="2026-01-31T07:49:16.000Z" itemprop="datePublished">
+    <span class="post-month">1月</span><br/>
+    <span class="post-day">31</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2026/01/31/2026%E5%B9%B41%E6%9C%8830%E6%97%A5-agent%E6%A1%86%E6%9E%B6AutoGen/">2026年1月30日 agent框架AutoGen</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="1-初步认识"><a class="markdownIt-Anchor" href="#1-初步认识"></a> 1 初步认识</h1>
+<p>导语</p>
+<p>AutoGen 作为微软研究院开源的编程框架，为构建可扩展、灵活且可调试的<strong>智能体协作</strong>应用提供了完备的工具与最佳实践。</p>
+<ol>
+<li><strong>什么是 AutoGen？</strong></li>
+<li><strong>安装与快速上手</strong></li>
+<li><strong>架构与核心组件</strong></li>
+<li><strong>深度解析：Agent (智能体)</strong></li>
+<li><strong>深度解析：Task (任务)</strong></li>
+<li><strong>深度解析：Tool (工具)</strong></li>
+<li><strong>深度解析：Crew (团队) 与 Process (流程)</strong></li>
+<li><strong>工作流与内部机制</strong></li>
+<li><strong>与其他框架的比较</strong></li>
+<li><strong>结语</strong></li>
+</ol>
+<h2 id="1-什么是-autogen"><a class="markdownIt-Anchor" href="#1-什么是-autogen"></a> <strong>1 什么是 AutoGen？</strong></h2>
+<p>传统的 LLM 应用框架（如 LangChain）主要采用“链式”调用（Chain）模式，适合线性、单一任务流程；但在应对复杂、长流程、需分支、循环及状态管理的场景时便显得捉襟见肘。AutoGen 从多智能体协作的角度出发，通过事件驱动的 <strong>Actor 模型</strong>，实现灵活的流程编排与动态决策</p>
+<p><strong>框架定位</strong>：AutoGen 是一个面向多智能体协作的<strong>事件驱动编程框架</strong>，支持从本地单进程到分布式云端的多语言、多节点部署 (<a href="https://link.zhihu.com/?target=https%3A//github.com/microsoft/autogen">GitHub - microsoft/autogen: A programming framework for agentic AI PyPi: autogen-agentchat Discord: https://aka.ms/autogen-discord Office Hour: https://aka.ms/autogen-officehour</a>, <a href="https://link.zhihu.com/?target=https%3A//microsoft.github.io/autogen/stable//index.html">AutoGen — AutoGen</a>)。</p>
+<p><strong>分层架构</strong>：框架分为三大核心层——Core（事件总线与运行时）、AgentChat（对话式智能体编排）、<strong>[Extensions]</strong>)（模型与工具集成），并配套 AutoGen Studio 与 Bench 等开发者工具 (<a href="https://link.zhihu.com/?target=https%3A//microsoft.github.io/autogen/0.2/blog/2024/10/02/new-autogen-architecture-preview/%3Futm_source%3Dchatgpt.com">New AutoGen Architecture Preview - Microsoft Open Source</a>, <a href="https://link.zhihu.com/?target=https%3A//www.microsoft.com/en-us/research/blog/autogen-v0-4-reimagining-the-foundation-of-agentic-ai-for-scale-extensibility-and-robustness/%3Futm_source%3Dchatgpt.com">AutoGen v0.4: Reimagining the foundation of agentic AI for scale …</a>)。</p>
+<p><strong>关键特性</strong>：支持灵活的多智能体对话、内置丰富工具（如浏览器代理、代码执行沙箱）、人机混合（Human-in-the-loop）、状态持久化与断点续跑，以及强大的可视化调试能力 (<a href="https://link.zhihu.com/?target=https%3A//github.com/AgentOps-AI/autogen-agentops%3Futm_source%3Dchatgpt.com">AgentOps-AI/autogen-agentops: A programming framework … - GitHub</a>, <a href="https://link.zhihu.com/?target=https%3A//microsoft.github.io/autogen/dev//user-guide/core-user-guide/core-concepts/architecture.html%3Futm_source%3Dchatgpt.com">Agent Runtime Environments — AutoGen - Microsoft Open Source</a>)。</p>
+<p><strong>典型应用</strong>：涵盖对话式 AI 代理、复杂业务自动化流水线、大数据 ML 编排、研发生产效率提升等多种场景 (<a href="https://link.zhihu.com/?target=https%3A//www.wired.com/story/chatbot-teamwork-makes-the-ai-dream-work%3Futm_source%3Dchatgpt.com">Chatbot Teamwork Makes the AI Dream Work</a>, <a href="https://link.zhihu.com/?target=https%3A//www.akira.ai/blog/microsoft-autogen-with-multi-agent-system%3Futm_source%3Dchatgpt.com">Microsoft AutoGen: Redefining Multi-Agent System Frameworks</a>)。</p>
+<p><strong>生态与扩展</strong>：社区活跃，拥有丰富的第三方扩展、Weekly Office Hour、Discord 实时支持、GitHub Discussions 与定期 Release 更新，形成繁荣的多智能体生态 (<a href="https://link.zhihu.com/?target=https%3A//github.com/microsoft/autogen">GitHub - microsoft/autogen: A programming framework for agentic AI PyPi: autogen-agentchat Discord: https://aka.ms/autogen-discord Office Hour: https://aka.ms/autogen-officehour</a>, <a href="https://link.zhihu.com/?target=https%3A//github.com/microsoft/Multi-Agent-Custom-Automation-Engine-Solution-Accelerator%3Futm_source%3Dchatgpt.com">The Multi-Agent Custom Automation Engine Solution Accelerator is …</a>)。</p>
+<h2 id="2-安装与快速上手"><a class="markdownIt-Anchor" href="#2-安装与快速上手"></a> 2 安装与快速上手</h2>
+<h2 id="3-架构与核心组件"><a class="markdownIt-Anchor" href="#3-架构与核心组件"></a> 3 架构与核心组件</h2>
+<p>AutoGen 生态共包含三大核心库及两大开发者工具：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">flowchart TD</span><br><span class="line">    subgraph Framework</span><br><span class="line">      A[Core 层] --&gt; B[AgentChat 层]</span><br><span class="line">      B --&gt; C[Extensions 层]</span><br><span class="line">    end</span><br><span class="line">    subgraph Tools</span><br><span class="line">      D[AutoGen Studio] &amp; E[AutoGen Bench]</span><br><span class="line">    end</span><br><span class="line">    A --&gt; D</span><br><span class="line">    C --&gt; E</span><br></pre></td></tr></table></figure>
+<h3 id="21-core-层事件驱动运行时"><a class="markdownIt-Anchor" href="#21-core-层事件驱动运行时"></a> 2.1 Core 层：事件驱动运行时</h3>
+<ul>
+<li><strong>消息总线（Event Bus）</strong>：所有智能体通过消息事件异步通信，支持本地单进程（SingleThreadedAgentRuntime）及分布式多进程（Host Servicer + Worker Gateway）部署模式 (<a href="https://link.zhihu.com/?target=https%3A//microsoft.github.io/autogen/dev//user-guide/core-user-guide/core-concepts/architecture.html%3Futm_source%3Dchatgpt.com">Agent Runtime Environments — AutoGen - Microsoft Open Source</a>)。</li>
+<li><strong>Agent 生命周期</strong>：统一管理代理的启动、停止、心跳与故障恢复，确保系统鲁棒性。</li>
+</ul>
+<h3 id="22-agentchat-层对话式-api"><a class="markdownIt-Anchor" href="#22-agentchat-层对话式-api"></a> 2.2 AgentChat 层：对话式 API</h3>
+<ul>
+<li><strong>AssistantAgent</strong>：面向单体任务的对话智能体，简化对 LLM 的调用与状态管理。</li>
+<li><strong>GroupChat</strong>：支持轮询（RoundRobin）、并发或自定义策略的多智能体群聊模式，灵活组织多角色协作流程。</li>
+<li><strong>UserProxyAgent</strong>：桥接人机交互，实现 Human-in-the-loop 与自动化流程的无缝切换 (<a href="https://link.zhihu.com/?target=https%3A//microsoft.github.io/autogen/stable//index.html">AutoGen — AutoGen</a>, <a href="https://link.zhihu.com/?target=https%3A//www.akira.ai/blog/microsoft-autogen-with-multi-agent-system%3Futm_source%3Dchatgpt.com">Microsoft AutoGen: Redefining Multi-Agent System Frameworks</a>)。</li>
+</ul>
+<h3 id="23-extensions-层工具与模型接入"><a class="markdownIt-Anchor" href="#23-extensions-层工具与模型接入"></a> 2.3 Extensions 层：工具与模型接入</h3>
+<ul>
+<li><strong>模型客户端</strong>：OpenAI、AzureOpenAI、多语言模型等多种实现，方便替换与扩展。</li>
+<li><strong>工具套件</strong>：包括 WebSurfer（浏览器交互）、DockerExecutor（代码运行沙箱）、向量数据库存储等，赋能智能体多模态与长期记忆能力。</li>
+</ul>
+<h3 id="24-开发者工具"><a class="markdownIt-Anchor" href="#24-开发者工具"></a> 2.4 开发者工具</h3>
+<ul>
+<li><strong>AutoGen Studio</strong>：零代码 GUI，用于快速原型、多智能体流程可视化与拖拽式调试 (<a href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/2408.15247%3Futm_source%3Dchatgpt.com">AutoGen Studio: A No-Code Developer Tool for Building and Debugging Multi-Agent Systems</a>)。</li>
+<li><strong>AutoGen Bench</strong>：基准测试套件，评估智能体在不同任务与模型配置下的性能与成本。</li>
+</ul>
+<h2 id="5-典型应用场景"><a class="markdownIt-Anchor" href="#5-典型应用场景"></a> 5、典型应用场景</h2>
+<h3 id="51-对话式-ai-代理"><a class="markdownIt-Anchor" href="#51-对话式-ai-代理"></a> 5.1 对话式 AI 代理</h3>
+<p>利用 GroupChat 与条件分支，可构建具备上下文记忆、多轮交互、动态决策的对话系统，如智能客服、虚拟助理等 (<a href="https://link.zhihu.com/?target=https%3A//www.wired.com/story/chatbot-teamwork-makes-the-ai-dream-work%3Futm_source%3Dchatgpt.com">Chatbot Teamwork Makes the AI Dream Work</a>, <a href="https://link.zhihu.com/?target=https%3A//microsoft.github.io/autogen/0.2/docs/Use-Cases/agent_chat/%3Futm_source%3Dchatgpt.com">Multi-agent Conversation Framework | AutoGen 0.2</a>)。</p>
+<h3 id="52-复杂流程自动化"><a class="markdownIt-Anchor" href="#52-复杂流程自动化"></a> 5.2 复杂流程自动化</h3>
+<p>在电商订单处理、IT 运维、财务报告生成等流程中，可将各子任务抽象为独立智能体，通过有向图编排，支持异常恢复与断点续跑，显著提升自动化鲁棒性 (<a href="https://link.zhihu.com/?target=https%3A//github.com/microsoft/Multi-Agent-Custom-Automation-Engine-Solution-Accelerator%3Futm_source%3Dchatgpt.com">The Multi-Agent Custom Automation Engine Solution Accelerator is …</a>, <a href="https://link.zhihu.com/?target=https%3A//www.akira.ai/blog/microsoft-autogen-with-multi-agent-system%3Futm_source%3Dchatgpt.com">Microsoft AutoGen: Redefining Multi-Agent System Frameworks</a>)。</p>
+<h3 id="53-大数据-ml-流水线"><a class="markdownIt-Anchor" href="#53-大数据-ml-流水线"></a> 5.3 大数据 ML 流水线</h3>
+<p>与 Spark、Dask 等大数据框架结合，可实现可视化、模块化的机器学习流水线设计；智能体承担数据清洗、特征工程、模型训练与评估职责，实现端到端自动化 (<a href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/2309.17288%3Futm_source%3Dchatgpt.com">AutoAgents: A Framework for Automatic Agent Generation</a>)。</p>
+<h3 id="54-研发辅助与自动化"><a class="markdownIt-Anchor" href="#54-研发辅助与自动化"></a> 5.4 研发辅助与自动化</h3>
+<p>如代码审查、PR 生成、技术文档编写等，可通过多智能体分工协作（如“作者”、“审稿人”、“格式校验”智能体），实现高效的研发自动化流程 (<a href="https://link.zhihu.com/?target=https%3A//github.com/victordibia/multiagent-systems-with-autogen%3Futm_source%3Dchatgpt.com">Building LLM-Enabled Multi Agent Applications with AutoGen - GitHub</a>, <a href="https://link.zhihu.com/?target=https%3A//www.reddit.com/r/AutoGenAI/comments/1ds56y2/i_built_a_github_pr_agent_with_autogen_and_4/%3Futm_source%3Dchatgpt.com">I built a Github PR Agent with Autogen and 4 other frameworks, Here …</a>)。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/01/31/2026%E5%B9%B41%E6%9C%8830%E6%97%A5-agent%E6%A1%86%E6%9E%B6AutoGen/" data-id="cml627032000l4kv4afje4wlq" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/agent/" rel="tag">agent</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2026年1月30日-agent框架crewAI" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/01/31/2026%E5%B9%B41%E6%9C%8830%E6%97%A5-agent%E6%A1%86%E6%9E%B6crewAI/" class="article-date">
+  <time class="post-time" datetime="2026-01-31T05:55:13.000Z" itemprop="datePublished">
+    <span class="post-month">1月</span><br/>
+    <span class="post-day">31</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2026/01/31/2026%E5%B9%B41%E6%9C%8830%E6%97%A5-agent%E6%A1%86%E6%9E%B6crewAI/">2026年1月30日 agent框架crewAI</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/1960361706967536590">https://zhuanlan.zhihu.com/p/1960361706967536590</a></p>
+</blockquote>
+<h2 id="1-初步认识"><a class="markdownIt-Anchor" href="#1-初步认识"></a> 1 初步认识</h2>
+<p><img src="/2026/01/31/2026%E5%B9%B41%E6%9C%8830%E6%97%A5-agent%E6%A1%86%E6%9E%B6crewAI/image-20260131154804874.png" alt="image-20260131154804874"></p>
+<p>导语</p>
+<p>CrewAI 是一个专为简化和协调基于<a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=264056703&amp;content_type=Article&amp;match_order=1&amp;q=%E5%A4%A7%E5%9E%8B%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B&amp;zhida_source=entity">大型语言模型</a>（LLM）的<strong>多个智能体（Multi-Agents）的协作</strong>而设计的框架。通过引**入角色扮演（Role-Playing）、任务分解（Task Decomposition）和流程控制（Process Control）**等概念，CrewAI 使得构建能够协同工作、解决复杂问题的<a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=264056703&amp;content_type=Article&amp;match_order=1&amp;q=%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E7%B3%BB%E7%BB%9F&amp;zhida_source=entity">多智能体系统</a>变得简单和高效。</p>
+<ol>
+<li><strong>什么是 CrewAI？</strong></li>
+<li><strong>安装与快速上手</strong></li>
+<li><strong>架构与核心组件</strong></li>
+<li><strong>深度解析：Agent (智能体)</strong></li>
+<li><strong>深度解析：Task (任务)</strong></li>
+<li><strong>深度解析：Tool (工具)</strong></li>
+<li><strong>深度解析：Crew (团队) 与 Process (流程)</strong></li>
+<li><strong>工作流与内部机制</strong></li>
+<li><strong>与其他框架的比较</strong></li>
+<li><strong>结语</strong></li>
+</ol>
+<h3 id="1-什么是-crewai"><a class="markdownIt-Anchor" href="#1-什么是-crewai"></a> <strong>1、什么是 CrewAI ？</strong></h3>
+<p>从零开始构建，完全独立于 LangChain 或其他代理框架。它为开发人员提供了高级的简洁性和精确的底层控制，非常适合创建适合任何场景的自主 AI 代理。</p>
+<ul>
+<li>CrewAI Crews：优化自主性和协作智能。</li>
+<li>CrewAI Flows：支持细粒度、事件驱动的控制，单个 LLM 调用精确的任务编排，并原生支持 Crews</li>
+</ul>
+<h3 id="3-架构与核心组件"><a class="markdownIt-Anchor" href="#3-架构与核心组件"></a> 3、架构与核心组件</h3>
+<p>CrewAI 让开发者不再需要手动管理智能体之间的状态、消息传递和任务交接，而是通过定义清晰的“角色”（Agents）和“任务”（Tasks），然后将它们组织进一个“团队”（Crew）中，并指定一个“工作流程”（Process），剩下的编排工作全部由框架自动完成。</p>
+<p><strong>3.1 四个核心组件概览</strong></p>
+<ol>
+<li>
+<p>Agent (智能体): 团队中的“成员”。每个 Agent 都有明确的角色、目标和背景故事，可以被赋予特定的工具来执行任务。</p>
+</li>
+<li>
+<p>Task (任务): 需要完成的“工作单元”。每个 Task 都有一份详细的描述和预期输出，并被指派给一个 Agent 来执行。</p>
+</li>
+<li>
+<p>Tool (工具): Agent 用来与外部世界交互的“能力”。这可以是任何函数或 API，例如搜索引擎、代码执行器、数据库查询接口等。</p>
+</li>
+<li>
+<p>Crew (团队): 将 Agents 和 Tasks 组织在一起的“容器”。Crew 负责根据指定的流程（Process）来编排任务的执行，管理智能体之间的协作。</p>
+</li>
+</ol>
+<p><strong>3.2 整体架构与数据流</strong></p>
+<p>1）开发工作流程：</p>
+<p><strong>定义 Agents -&gt; 定义 Tasks -&gt; 组建 Crew -&gt; 启动 (kickoff) -&gt; 产生结果</strong></p>
+<p>2）数据流向:</p>
+<ul>
+<li>
+<p>1）用户通过 crew.kickoff() 启动流程。</p>
+</li>
+<li>
+<p>2）Crew 根据 Process 决定第一个要执行的 Task。</p>
+</li>
+<li>
+<p>3）Crew 将 Task 的描述和可用的上下文（Context）传递给指定的 Agent。</p>
+</li>
+<li>
+<p>4）agent 的 LLM 大脑接收到信息，进行思考（Thought），决定下一步行动（Action），可能是使用某个 Tool，也可能是直接生成最终答案。</p>
+</li>
+<li>
+<p>5）如果使用 Tool，Agent 会执行它并获得观察结果（Observation）。</p>
+</li>
+<li>
+<p>6）Agent 将观察结果融入下一次思考，循环此过程，直到认为任务已完成。</p>
+</li>
+<li>
+<p>7）Agent 生成任务的最终输出。</p>
+</li>
+<li>
+<p>8）该 Task 的输出被存储起来，并作为下一个 Task 的上下文（Context）输入。</p>
+</li>
+<li>
+<p>9）Crew 根据 Process 启动下一个 Task，重复步骤 3-8，直到所有任务完成。</p>
+</li>
+<li>
+<p>10）Crew 返回最终的、经过整合的或最后一个任务的结果。</p>
+</li>
+</ul>
+<h3 id="4-深度解析agent-智能体"><a class="markdownIt-Anchor" href="#4-深度解析agent-智能体"></a> 4、深度解析：Agent (智能体)</h3>
+<p><strong>class Agent(BaseAgent):</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Agent(</span><br><span class="line">role=『首席财务分析师』,</span><br><span class="line">goal=『分析公司的财务报表，并提供投资建议』,</span><br><span class="line">backstory=(</span><br><span class="line">    「你是一位拥有超过 <span class="number">20</span> 年经验的资深财务分析师，曾在高盛和摩根士丹利任职。」</span><br><span class="line">    「你以对细节的敏锐洞察力和从复杂数据中提取可行动见解的能力而闻名。」</span><br><span class="line">    「你精通财务建模、风险评估，并且总是以数据驱动你的每一个结论。」</span><br><span class="line">),</span><br><span class="line">llm=my_llm_instance, <span class="comment"># 例如 ChatOpenAI(model=「gpt-4o」)</span></span><br><span class="line">tools=[search_tool, financial_data_tool],</span><br><span class="line">verbose=<span class="literal">True</span>,</span><br><span class="line">memory=<span class="literal">True</span>,</span><br><span class="line">allow_delegation=<span class="literal">True</span></span><br><span class="line">）</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<ul>
+<li>role (角色)：这是 Agent 的身份标识。一个清晰的 role (如“高级软件工程师”、“市场营销总监”) 能极大地帮助 LLM 理解其行为边界和沟通风格。这是最重要的参数之一。</li>
+<li>goal (目标)：这是 Agent 的核心使命。它应该是一个清晰、简洁的句子，描述 Agent 存在的最终目的。例如，“开发高质量、可扩展的软件模块”。</li>
+<li>backstory (背景故事)： 这是 CrewAI 的一个精妙设计。backstory 为 Agent 注入了“灵魂”。一段详细的背景故事，包括其经验、技能、个性甚至工作风格，能够极大地提升 Agent 的表现。它通过丰富的上下文“预热”（prime）LLM，使其在后续任务中表现得更像一个真正的专家。</li>
+<li>llm (语言模型)：指定驱动 Agent 的具体 LLM 实例。这使得 CrewAI 具有高度灵活性，可以轻松接入 OpenAI、Google、Anthropic 的模型，甚至是本地运行的 Ollama 模型。</li>
+<li>tools (工具)：一个 Tool 对象的列表。这些是 Agent 可以用来与外部世界交互的武器。没有工具，Agent 就只能依赖其内部知识，无法获取实时信息或执行实际操作。</li>
+<li>verbose (详细模式)： 设置为 True 时，Agent 的完整思考-行动链（ReAct prompt）将被打印到控制台。这对于调试和理解 Agent 的决策过程至关重要。</li>
+<li>memory (记忆功能)：设置为 True 时，Agent 将拥有一个简单的短期记忆。它会记住在当前任务执行过程中的对话和工具使用历史，有助于在复杂的多步任务中保持上下文连贯。</li>
+<li>allow_delegation (允许委托)： 一个非常强大的功能。当设置为 True 时，如果一个 Agent 认为当前任务的某一部分超出了它的能力范围，或者由另一个 Agent 处理更合适，它可以将该子任务委托给团队中的其他 Agent。这在层级流程（Hierarchical Process）中尤其重要。</li>
+</ul>
+<h3 id="5-深度解析task-任务"><a class="markdownIt-Anchor" href="#5-深度解析task-任务"></a> 5、深度解析：Task (任务)</h3>
+<p><strong>class Task(BaseModel):</strong></p>
+<p>Task 是需要完成的具体工作。它定义了“做什么”和“期望输出什么”，并指定了“谁来做”。</p>
+<p><strong>5.1 Task 的定义与生命周期</strong></p>
+<p>一个 Task 代表了工作流中的一个步骤。它的生命周期很简单：被创建 -&gt; 被分配 -&gt; 被执行 -&gt; 完成并产出结果。这个结果将成为后续任务的重要输入。</p>
+<p><strong>5.2 关键参数详解</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">from CrewAI  import Task</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">market_analysis_task = Task(</span><br><span class="line">   description=(</span><br><span class="line">       「对 &#123;product&#125; 的市场进行全面分析。」</span><br><span class="line">       「识别主要竞争对手、他们的优势和劣势。」</span><br><span class="line">       「评估市场规模和增长潜力，并确定目标客户群体。」</span><br><span class="line">   ),</span><br><span class="line"></span><br><span class="line">   expected_output=(</span><br><span class="line">       「一份完整的市场分析报告，格式为 Markdown。」</span><br><span class="line">       「报告应包含以下部分：1. 市场概述 2. 竞争格局分析 」</span><br><span class="line">       「3. 目标客户画像 4. 市场机会与风险总结。」</span><br><span class="line">   ),</span><br><span class="line">   agent=market_researcher_agent, # 将任务指派给特定的 agent</span><br><span class="line">   context=[ competitor_analysis_task ] # 使用其他任务的输出作为上下文</span><br><span class="line">）</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>description (描述)</strong>: 这是任务的核心。它应该是一段清晰、无歧义的指令，详细说明了 Agent 需要做什么。可以使用 {placeholder} 语法来动态插入变量，增加了任务的复用性。</li>
+<li><strong>expected_output (预期输出)</strong>: 这是成功的标尺。它精确地告诉 Agent，任务完成时应该交付什么样的成果，包括格式、结构和关键内容。一个明确的 expected_output 可以极大地提升输出结果的质量和稳定性。 agent (执行者): 指定哪个 Agent 负责执行此任务。</li>
+<li><strong>context (上下文):</strong> 这是一个 Task 对象的列表。CrewAI 会自动将 context 列表中所有任务的执行结果（result）拼接起来，作为当前任务的附加输入信息。这是实现任务间信息流动的关键机制。例如，一个“撰写博客文章”的任务，可以将一个“收集研究资料”的任务作为其上下文。</li>
+</ul>
+<h3 id="6-深度解析tool-工具"><a class="markdownIt-Anchor" href="#6-深度解析tool-工具"></a> 6、深度解析：Tool (工具)</h3>
+<p>工具是 Agent 的手和脚，使其能够不仅使用 LLM 的大脑，还可以与真实世界交互。</p>
+<p><strong>6.1 Tool 的重要性</strong></p>
+<p>LLM 的知识是静态的（截止到某个训练日期），并且它无法执行任何外部操作。工具解决了这两个核心问题：</p>
+<ul>
+<li><strong>获取实时信息</strong>: 如通过搜索引擎查询今天的新闻。</li>
+<li><strong>与外部系统交互</strong>: 如读写文件、查询数据库、调用 API。</li>
+<li><strong>执行确定性计算</strong>: 如复杂的数学运算。</li>
+</ul>
+<p><strong>6.2 使用现有工具 (LangChain Tools)</strong></p>
+<p>CrewAI 与 LangChain 生态系统无缝集成。你可以直接使用 langchain_community.tools 中已经封装好的大量工具。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">from langchain_community.tools import DuckDuckGoSearchRun</span><br><span class="line"></span><br><span class="line">search_tool = DuckDuckGoSearchRun()</span><br><span class="line">然后在 Agent 中使用</span><br><span class="line">researcher = Agent(</span><br><span class="line">...,</span><br><span class="line">tools=[search_tool]</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p><strong>6.3 创建自定义工具</strong></p>
+<p>CrewAI 提供了极其简单的方式来创建自定义工具——使用 @tool 装饰器。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">from CrewAI _tools import tool</span><br><span class="line"></span><br><span class="line">@tool(“计算器工具”) </span><br><span class="line">def calculator(expression: str) -&gt; str:</span><br><span class="line">    「」「当需要进行数学计算时，使用此工具。输入应该是一个有效的数学表达式。」「」</span><br><span class="line">    try:</span><br><span class="line">       result = eval(expression)</span><br><span class="line">       return f「计算结果是: &#123;result&#125;」</span><br><span class="line">    except Exception as e:</span><br><span class="line">       return f「计算出错: &#123;e&#125;」</span><br><span class="line"># 使用</span><br><span class="line">financial_agent = Agent(</span><br><span class="line">...,</span><br><span class="line">tools=[calculator]</span><br><span class="line">）</span><br></pre></td></tr></table></figure>
+<h3 id="7-深度解析crew-团队-与-process-流程"><a class="markdownIt-Anchor" href="#7-深度解析crew-团队-与-process-流程"></a> 7、深度解析：Crew (团队) 与 Process (流程)</h3>
+<p><strong>class Crew(FlowTrackable, BaseModel):</strong></p>
+<p><strong>class Process(str, Enum):</strong></p>
+<p>Crew 是整个协作系统的指挥中心，它定义了团队的构成和工作方式。</p>
+<p><strong>7.1 Crew：智能体与任务的编排者</strong></p>
+<p>Crew 对象将定义好的 Agent 和 Task 组装起来，并配置协作流程。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">from CrewAI  import Crew, Process</span><br><span class="line"></span><br><span class="line">my_crew = Crew(</span><br><span class="line">    agents=[researcher, writer],</span><br><span class="line">    tasks=[research_task, writing_task],</span><br><span class="line">    process=Process.sequential,  # 或者 Process.hierarchical</span><br><span class="line">    verbose=2</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>agents: 团队中的所有 Agent 成员列表。</li>
+<li>tasks: 需要完成的所有 Task 列表。</li>
+<li>process: 定义任务执行的流程。</li>
+<li>verbose: 设置详细级别。1 会打印 Agent 的行动和工具使用，2 会打印更详细的调试信息。</li>
+</ul>
+<p><strong>7.2 kickoff(): 启动团队协作</strong></p>
+<p>调用 my_crew.kickoff() 方法将正式启动整个工作流。Crew 会根据设定的 process 开始执行任务，直到所有任务完成，并返回最终结果。</p>
+<p><strong>7.3 Process：定义协作模式</strong></p>
+<p>这是 CrewAI 的核心功能之一，它决定了团队如何协作。</p>
+<ul>
+<li>顺序流程 (Sequential Process)</li>
+</ul>
+<p>这是默认的流程。任务将按照在 tasks 列表中的顺序，一个接一个地被执行。<strong>前一个任务的输出会自动成为下一个任务的上下文。</strong></p>
+<ul>
+<li>适用场景: 适用于线性的、有明确步骤依赖关系的工作流。例如：第一步调研 -&gt; 第二步写初稿 -&gt; 第三步润色。</li>
+<li>层级流程 (Hierarchical Process)</li>
+</ul>
+<p>这是一个更高级、更强大的流程。它会动态地创建一个**“管理者 Agent”**来协调整个工作流程。</p>
+<ul>
+<li>工作方式: 管理者 Agent 会审视所有待完成的任务，然后智能地决定执行顺序，甚至可以将复杂的任务分解并委托给合适的“员工 Agent”去执行。所有员工 Agent 完成任务后，会将结果汇报给管理者，由管理者进行汇总、提炼，最终形成一个高质量的综合性输出。</li>
+<li>适用场景: 适用于复杂的、非结构化的问题，需要规划、决策和综合分析的场景。例如，制定一份完整的商业计划书，需要市场分析、产品规划、财务预测等多个方面的协作</li>
+</ul>
+<h3 id="8-工作流与内部机制"><a class="markdownIt-Anchor" href="#8-工作流与内部机制"></a> <strong>8、工作流与内部机制</strong></h3>
+<p><strong>8.1 ReAct 框架：CrewAI 的思考-行动循环</strong></p>
+<p>CrewAI 的 Agent 底层采用了 ReAct (Reasoning and Acting) 框架。</p>
+<ol>
+<li>1）Thought (思考): Agent 首先会思考它需要做什么，以及如何去完成。它会分析当前的目标和已有的信息。</li>
+<li>2）Action (行动): 基于思考，Agent 决定一个行动。这个行动可能是：<br>
+使用某个 Tool，并指定输入参数。 将任务委托给另一个 Agent (如果 allow_delegation=True)。 认为任务已完成，输出最终答案 (Final Answer)。</li>
+<li>3）Observation (观察): 如果行动是使用 Tool，Agent 会得到一个执行结果，这就是“观察”。</li>
+<li>4）循环: Agent 将“观察”到的新信息融入到下一次的“思考”中，重复这个循环，直到它认为已经收集到足够的信息来完成任务。</li>
+</ol>
+<p>这个过程可以在 verbose=True 时清晰地看到，是 CrewAI 实现智能的关键。</p>
+<p><strong>8.2 上下文（Context）传递机制</strong></p>
+<p>CrewAI 通过 Task 的 context 参数和 Process 的设计，实现了上下文管理。</p>
+<ul>
+<li>显式传递: 通过在 Task 定义中指定 <strong>context=[task_A, task_B]</strong>，可以精确控制信息流。</li>
+<li>隐式传递 (顺序流程): 在顺序流程中，<strong>上一个任务的结果会自动成为下一个任务可用的上下文，无需手动指定。</strong></li>
+</ul>
+<p><strong>8.3 委托（Delegation）机制的实现</strong></p>
+<p>当 Agent 的 allow_delegation 为 True 且流程为层级模式时，Agent 的可用工具列表中会自动增加一个 delegate_work 工具。**当 Agent 在其思考过程中认为需要委托时，它会调用这个工具，并将子任务的描述和指定的接收 Agent 作为参数传入。**这个机制使得动态的任务分配和协作成为可能。</p>
+<h3 id="9-与其他框架的比较"><a class="markdownIt-Anchor" href="#9-与其他框架的比较"></a> 9、与其他框架的比较</h3>
+<p>9.1 CrewAI vs. Autogen</p>
+<ul>
+<li>Autogen (Microsoft): 更加关注于 Agent 之间的对话和交互模式（Conversation Patterns）。它非常灵活，但需要开发者更多地关注对话管理的细节。</li>
+<li>CrewAI : 更加关注于工作流和任务编排（Orchestration）。它通过 Agent, Task, Process 的抽象，提供了一个更高层次、更结构化的编程范式，使得构建目标导向的团队协作流程更为直观。</li>
+</ul>
+<p>9.2 CrewAI vs. LangGraph]</p>
+<ul>
+<li>LangGraph: 是一个基于图（Graph）的框架，将多智能体系统建模为状态图。它提供了极高的灵活性和控制力，可以构建任意复杂的循环、分支和并发流程，但学习曲线也更陡峭。</li>
+<li>CrewAI : 可以看作是 LangGraph 的一种高度抽象和特定应用。它预设了顺序和层级这两种最常见的协作模式，牺牲了一部分 LangGraph 的灵活性，换来了无与伦比的开发速度和易用性。对于大多数应用场景，CrewAI 的抽象已经足够强大。</li>
+</ul>
+<h2 id="2-委托模式深入"><a class="markdownIt-Anchor" href="#2-委托模式深入"></a> 2 委托模式深入</h2>
+<h3 id><a class="markdownIt-Anchor" href="#"></a> </h3>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/01/31/2026%E5%B9%B41%E6%9C%8830%E6%97%A5-agent%E6%A1%86%E6%9E%B6crewAI/" data-id="cml627033000n4kv4318c0zp7" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/agent/" rel="tag">agent</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2026年1月27日-torch实战3" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/01/27/2026%E5%B9%B41%E6%9C%8827%E6%97%A5-torch%E5%AE%9E%E6%88%983/" class="article-date">
+  <time class="post-time" datetime="2026-01-27T07:17:56.000Z" itemprop="datePublished">
+    <span class="post-month">1月</span><br/>
+    <span class="post-day">27</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2026/01/27/2026%E5%B9%B41%E6%9C%8827%E6%97%A5-torch%E5%AE%9E%E6%88%983/">2026年1月27日 torch实战3</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<h3 id="1-模型部署与生产化-torchscript-libtorch"><a class="markdownIt-Anchor" href="#1-模型部署与生产化-torchscript-libtorch"></a> 1. 模型部署与生产化 (TorchScript &amp; LibTorch)</h3>
+<p>在实际工业界，模型通常不会运行在 Python 环境下（因为 Python 太重且慢）。你需要学会如何把 PyTorch 模型“脱离” Python。</p>
+<ul>
+<li><strong>TorchScript：</strong> 学习使用 <code>torch.jit.trace</code>（追踪）和 <code>torch.jit.script</code>（脚本化）。这会将你的 Python 代码转换成一种中间表示（IR），它可以被 C++ 直接读取。</li>
+<li><strong>LibTorch：</strong> 这是一个纯 C++ 库。进阶目标是：<strong>在 C++ 环境中加载导出的 .pt 模型，并完成前向推理。</strong></li>
+</ul>
+<h3 id="2-分布式训练与大规模计算-distributed"><a class="markdownIt-Anchor" href="#2-分布式训练与大规模计算-distributed"></a> 2. 分布式训练与大规模计算 (Distributed)</h3>
+<p>当你处理的数据量达到 TB 级别时，单张 GPU 就力不从心了。</p>
+<ul>
+<li><strong>DDP (Distributed Data Parallel)：</strong> 这是 PyTorch 官方推荐的分布式模式。你需要理解它如何利用 C++ 层的 <strong>NCCL 库</strong> 在多张显卡之间同步梯度。</li>
+<li><strong>混合精度训练 (AMP)：</strong> 学习 <code>torch.cuda.amp</code>，利用 Tensor Cores 加速计算，同时减少显存占用。</li>
+<li><strong>性能调优 (Profiler)：</strong> 使用 <code>torch.profiler</code> 寻找代码瓶颈，看看是 CPU 预处理太慢，还是 GPU 计算太满。</li>
+</ul>
+<h3 id="3-底层自定义算子-ccuda-extensions"><a class="markdownIt-Anchor" href="#3-底层自定义算子-ccuda-extensions"></a> 3. 底层自定义算子 (C++/CUDA Extensions)</h3>
+<p>如果你发现 PyTorch 官方提供的函数（如 <code>conv2d</code>）无法满足你的特殊数学需求，或者 Python 实现的速度太慢，你就需要自己写底层代码。</p>
+<ul>
+<li><strong>编写 C++ 扩展：</strong> 利用 <code>pybind11</code> 将 C++ 函数映射到 Python。</li>
+<li><strong>CUDA 编程：</strong> 学习编写 <code>.cu</code> 文件，直接操作 GPU 核函数（Kernel）。这是最硬核的技能，能让你的自定义运算速度提升几十甚至上百倍。</li>
+</ul>
+<h3 id="4-源码级阅读-internal-mechanism"><a class="markdownIt-Anchor" href="#4-源码级阅读-internal-mechanism"></a> 4. 源码级阅读 (Internal Mechanism)</h3>
+<p>既然你对 C++ 感兴趣，可以尝试克隆 PyTorch 的 GitHub 仓库，重点阅读以下模块：</p>
+<ul>
+<li><strong>ATen 库：</strong> 这是 PyTorch 的基础张量库，几乎所有的 C++ 运算都在这里。</li>
+<li><strong>Autograd 引擎：</strong> 查看 <code>torch/csrc/autograd</code>，理解它是如何通过动态链表记录梯度路径的。</li>
+</ul>
+</blockquote>
+<h2 id="模型准备与优化"><a class="markdownIt-Anchor" href="#模型准备与优化"></a> 模型准备与优化</h2>
+<h3 id="模型导出格式"><a class="markdownIt-Anchor" href="#模型导出格式"></a> 模型导出格式</h3>
+<p>PyTorch 主要支持以下导出格式：</p>
 <table>
 <thead>
 <tr>
-<th>方法</th>
-<th>说明</th>
+<th style="text-align:left">格式</th>
+<th style="text-align:left">特点</th>
+<th style="text-align:left">适用场景</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>MIL</td>
-<td>Multiple Instance Learning</td>
+<td style="text-align:left">TorchScript</td>
+<td style="text-align:left">PyTorch原生格式，保持动态图特性</td>
+<td style="text-align:left">PyTorch生态内部使用</td>
 </tr>
 <tr>
-<td>CAM</td>
-<td>Class Activation Map</td>
+<td style="text-align:left">ONNX</td>
+<td style="text-align:left">开放标准，跨框架兼容</td>
+<td style="text-align:left">多框架协作环境</td>
 </tr>
 <tr>
-<td>伪标签</td>
-<td>模型预测 → 当新标签</td>
-</tr>
-<tr>
-<td>规则 + 学习</td>
-<td>人工规则生成弱标签</td>
+<td style="text-align:left">Torch-TensorRT</td>
+<td style="text-align:left">NVIDIA优化格式</td>
+<td style="text-align:left">GPU推理加速</td>
 </tr>
 </tbody>
 </table>
-</blockquote>
-<h3 id="11-自监督-传统无监督"><a class="markdownIt-Anchor" href="#11-自监督-传统无监督"></a> 1.1 自监督 ≠ 传统无监督</h3>
-<p><strong>自监督 = 用无标签数据 + 人为设计的监督目标</strong><br>
-<strong>无监督 = 没有监督目标，主要做结构发现</strong></p>
-<blockquote>
-<p>👉 <strong>自监督是“披着无监督外衣的监督学习”</strong></p>
-<h4 id="关键差别在有没有监督信号"><a class="markdownIt-Anchor" href="#关键差别在有没有监督信号"></a> 关键差别在「有没有监督信号」</h4>
-<table>
-<thead>
-<tr>
-<th>方式</th>
-<th>有无标签</th>
-<th>有无明确目标</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>无监督</td>
-<td>❌</td>
-<td>❌</td>
-</tr>
-<tr>
-<td>自监督</td>
-<td>❌</td>
-<td>✅（伪标签）</td>
-</tr>
-<tr>
-<td>有监督</td>
-<td>✅</td>
-<td>✅</td>
-</tr>
-</tbody>
-</table>
-<h4 id="举个直观例子视觉"><a class="markdownIt-Anchor" href="#举个直观例子视觉"></a> 举个直观例子（视觉）</h4>
-<ul>
-<li><strong>无监督</strong>：
-<ul>
-<li>K-means 聚类</li>
-<li>PCA / ICA</li>
-<li>只是“发现结构”</li>
-</ul>
-</li>
-<li><strong>自监督</strong>：
-<ul>
-<li>预测旋转角度</li>
-<li>图像遮挡 → 复原</li>
-<li>对比学习（谁和谁是同一张）</li>
-</ul>
-</li>
-</ul>
-</blockquote>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/12/24/2025%E5%B9%B412%E6%9C%8824%E6%97%A5-DINOv3/" data-id="cmjjqkpyv00014ov4f7bo4ft7" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/model/" rel="tag">model</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2025年10月14日-python环境打包构建" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/" class="article-date">
-  <time class="post-time" datetime="2025-10-15T15:13:52.000Z" itemprop="datePublished">
-    <span class="post-month">10月</span><br/>
-    <span class="post-day">15</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/">2025年10月14日 python环境打包构建</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="python环境打包构建"><a class="markdownIt-Anchor" href="#python环境打包构建"></a> python环境打包构建</h1>
-<p>在 Electron + Python 项目中，为了在无 Python 环境的客户端运行，需要实现 <strong>Python 环境自包含打包</strong>。<br>
-实践过程中共尝试三种方案：</p>
+<h3 id="导出为torchscript"><a class="markdownIt-Anchor" href="#导出为torchscript"></a> 导出为TorchScript</h3>
+<p># 方法1: 通过追踪(tracing)导出<br>
+traced_script = torch.jit.trace(model, example_input)<br>
+traced_script.save(“resnet18_traced.pt”)</p>
+<p># 方法2: 通过脚本(scripting)导出<br>
+scripted_model = torch.jit.script(model)<br>
+scripted_model.save(“resnet18_scripted.pt”)</p>
+<p><strong>注意事项</strong>：</p>
 <ol>
-<li><strong>方式 A</strong>：复制本地 Python + venv</li>
-<li><strong>方式 B</strong>：PyInstaller 打包成独立 EXE</li>
-<li><strong>方式 C</strong>：Embeddable Python（嵌入式解释器）</li>
-</ol>
-<p>最终发现仅方案 B 可行，A、C 在兼容性和安装层面存在根本性限制。</p>
-<h2 id="方式-acopy环境-electron-启动独立-python-进程"><a class="markdownIt-Anchor" href="#方式-acopy环境-electron-启动独立-python-进程"></a> 方式 A：copy环境: Electron 启动独立 Python 进程</h2>
-<h3 id="1-venv-的原理"><a class="markdownIt-Anchor" href="#1-venv-的原理"></a> 1. venv 的原理</h3>
-<p><code>venv</code> 并不是完全<strong>自包含</strong>的 Python，它依赖创建时 <strong>系统 Python</strong> 的文件来构建：</p>
-<ul>
-<li><code>Scripts/python.exe</code> → 指向 venv 内的可执行文件（<strong>拷贝或软链接</strong>）</li>
-<li><code>Lib/</code> → 包含标准库</li>
-<li><code>pyvenv.cfg</code> → 记录 <code>home</code>（原系统 Python 位置）和 <code>executable</code></li>
-</ul>
-<p>关键是：</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">home = &lt;创建 venv 时的系统 Python 安装路径&gt;</span><br><span class="line">executable = &lt;创建 venv 时的 python.exe&gt;</span><br></pre></td></tr></table></figure>
-<p>当你在其他机器运行 venv：</p>
-<ul>
-<li><strong>只要 venv 内的 python.exe 和 Lib 完整</strong>，路径不同一般不会报错。</li>
-<li><strong>如果 venv 内缺少标准库或 DLL</strong>，就会报错 <code>ModuleNotFoundError: encodings</code> 或启动失败。</li>
-</ul>
-<h4 id="vеnv-依赖系统-python-的路径pyvenvcfg-指向打包路径"><a class="markdownIt-Anchor" href="#vеnv-依赖系统-python-的路径pyvenvcfg-指向打包路径"></a> vеnv 依赖系统 Python 的路径（pyvenv.cfg 指向打包路径）</h4>
-<ul>
-<li><code>home</code> 指向你本地的系统 打包的Python路径</li>
-<li>客户机上路径不同 → venv 找不到标准库 → 报错 <code>ModuleNotFoundError: encodings</code></li>
-<li>⚠️ 这是之前遇到的错误的根本原因 → 安装新环境并修改对应的path文件</li>
-</ul>
-<h3 id="2问题分析"><a class="markdownIt-Anchor" href="#2问题分析"></a> 2.问题分析:</h3>
-<blockquote>
-<p>原因: cursor 给我错的步骤, 以为做了形象工程: <strong>copy和pip了新的环境, 但是运行的确实本地的环境的</strong>python, 导致后续一直在错的分支上修改(不了解本质, 一直以为是python copy的错误, 见下面分析).</p>
-</blockquote>
-<h4 id="21-自包含方式python错误"><a class="markdownIt-Anchor" href="#21-自包含方式python错误"></a> 2.1 自包含方式python错误</h4>
-<blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">execSync</span>(<span class="string">`<span class="subst">$&#123;pythonCmd&#125;</span> -m venv &quot;<span class="subst">$&#123;pythonDir&#125;</span>&quot;`</span>, &#123; </span><br><span class="line">  <span class="attr">stdio</span>: <span class="string">&#x27;inherit&#x27;</span>,</span><br><span class="line">  <span class="attr">cwd</span>: path.<span class="title function_">join</span>(__dirname, <span class="string">&#x27;..&#x27;</span>)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>这样运行会依赖创建venv的python</p>
-<p><strong>本质上依赖于系统 Python</strong>，因为 venv 只是拷贝/软链接系统 Python 的部分文件（可执行文件 + 标准库）。所以：</p>
-<ol>
-<li>如果用户机器没有 Python，或者版本不对，Electron 打包后的程序 <strong>无法独立运行</strong>。</li>
-<li>同时, 打包的pyvenv.cfg 指向了本地机的python导致客户机的python找不到,</li>
-</ol>
-</blockquote>
-<p>**核心问题 : **</p>
-<ul>
-<li><strong>venv 本身不是自包含的</strong>，它只是一个「隔离的环境」，依赖底层 Python。</li>
-<li><strong>要想 Electron 完全自包含</strong>，你必须用 <strong>Embedded Python</strong> 或 <strong>完整 Python 安装 + Lib</strong>，而不是 venv。之前手动 copy python.exe + DLL + venv，这本质就是想绕开系统 Python，但做法容易出错（缺标准库，导致 <code>encodings</code> 不存在）</li>
-</ul>
-<p><strong>尝试解决1:</strong></p>
-<p>​	手动 copy python.exe + DLL + venv，这本质就是想绕开系统 Python，但做法容易出错（缺标准库，导致 <code>encodings</code> 不存在）。</p>
-<blockquote>
-<p>真正的解决办法是在客户机安装python并修改路径和使用打包的环境</p>
-</blockquote>
-<p><strong>尝试解决2</strong></p>
-<p>​	方案 C：Embedded Python（推荐）</p>
-<h4 id="22-环境迁移出错-自包含的-python-runtime人为地融合了解释器-库-虚拟环境-手动-copy-pythonexe-dll-venv"><a class="markdownIt-Anchor" href="#22-环境迁移出错-自包含的-python-runtime人为地融合了解释器-库-虚拟环境-手动-copy-pythonexe-dll-venv"></a> 2.2 环境迁移出错: <strong>自包含的 Python runtime</strong>，人为地「融合」了解释器 + 库 + 虚拟环境, 手动 copy python.exe + DLL + venv</h4>
-<blockquote>
-<p>本质就是意识到其实venv是python的软连接, 而不是真正的python解释器</p>
-</blockquote>
-<p>1:python的pyvenv.cfg路径错误(修改build的配置为相对路径),</p>
-<blockquote>
-<p>一直以为是venv的<code>Scripts/python.exe</code> 就是python</p>
-</blockquote>
-<p>2: 构建脚本没有复制Python核心DLL文件</p>
-<blockquote>
-<p>copy了一个python运行exe</p>
-</blockquote>
-<p>3: copy python 不完整, 无法完全copy–&gt;embed</p>
-<blockquote>
-<p>copy了半个python环境</p>
-</blockquote>
-<p><s>4: pip 安装慢</s></p>
-<p><s>5: pip似乎一直安装失败了…=&gt;重构放弃了</s></p>
-<h2 id="方式-b-pyinstaller-打包成独立-exe推荐"><a class="markdownIt-Anchor" href="#方式-b-pyinstaller-打包成独立-exe推荐"></a> 方式 B： PyInstaller 打包成独立 EXE✅（推荐）</h2>
-<blockquote>
-<p>创建新环境并打包成exe</p>
-</blockquote>
-<h3 id="1-备选方案"><a class="markdownIt-Anchor" href="#1-备选方案"></a> 1. 备选方案</h3>
-<p>之前尝试遇到很多问题, 有点主动规避了, 所以作为备选</p>
-<h3 id="2-问题分析"><a class="markdownIt-Anchor" href="#2-问题分析"></a> 2. 问题分析</h3>
-<p><strong>0:config绝对路径 加载失败</strong></p>
-<blockquote>
-<p>需修改代码路径引用</p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ProjectConfig 在打包态用的是 exe 目录作为基准：base_path = Path(sys.executable).parent，然后拼 app/config/&lt;PROJECT_NAME&gt;</span><br></pre></td></tr></table></figure>
-<p>因此需要修改为相对于exe的运行路径 +app/config/</p>
-<p><strong>1:numpy包版本报错, 运行失败,</strong></p>
-<blockquote>
-<p>经典版本不对</p>
-</blockquote>
-<p><img src="/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/559be49c692108c9f627895ec0597657.png" alt="559be49c692108c9f627895ec0597657"></p>
-<p><strong>2:运行时动态导入问题</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># app/main.py 第120行（你的项目）</span><br><span class="line">if project_name.lower() == &quot;biyi&quot;:</span><br><span class="line">    from app.api.v1 import biyi  # ← 运行时才导入</span><br><span class="line">    app.include_router(biyi.router, tags=[&quot;biyi&quot;])</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>OpenCV (cv2)：依赖大量 .so/.dll 和子模块，静态分析可能漏掉</p>
-<p>Ultralytics (YOLO)：内部动态加载模型、后端引擎（如 TensorRT、ONNX），需要手动收集</p>
-</blockquote>
-<p><strong>3: torch 库版本问题,</strong></p>
-<blockquote>
-<p>没装上torch -&gt;改用cpu版本</p>
-</blockquote>
-<p><img src="/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/b79fe447ce392f07779af6faed4b573a.png" alt="b79fe447ce392f07779af6faed4b573a"></p>
-<h3 id="3-实现可热更新的"><a class="markdownIt-Anchor" href="#3-实现可热更新的"></a> 3. 实现可热更新的</h3>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">extra_trees = []</span><br><span class="line">if os.path.exists(&#x27;app/companies/biyi&#x27;):</span><br><span class="line">    extra_trees.append(Tree(&#x27;app/companies/biyi&#x27;, prefix=&#x27;app/companies/biyi&#x27;))</span><br><span class="line">if os.path.exists(&#x27;app/config/Biyi&#x27;):</span><br><span class="line">    extra_trees.append(Tree(&#x27;app/config/Biyi&#x27;, prefix=&#x27;app/config/Biyi&#x27;))</span><br></pre></td></tr></table></figure>
-<p>通过extra_tree递归查找+ COLLECT</p>
-<img src="/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/d9f4b09992f0773c7e8cdc6ee79117b1.png" alt="d9f4b09992f0773c7e8cdc6ee79117b1" style="zoom: 50%;">
-<h3 id="4-成功运行exe-功能待测试"><a class="markdownIt-Anchor" href="#4-成功运行exe-功能待测试"></a> 4. 成功运行exe 功能待测试…</h3>
-<p>测试注意事项</p>
-<h4 id="41路径问题"><a class="markdownIt-Anchor" href="#41路径问题"></a> 4.1路径问题</h4>
-<blockquote>
-<p>相对路径问题</p>
-</blockquote>
-<blockquote>
-<p>原本是写在<code>opencv-detection-embodiedrobot\_internal/app</code>; 但是读取不到</p>
-<p>后修改cd到后端路径 <code>opencv-detection-embodiedrobot</code>再启动<code>opencv-detection-embodiedrobot\app\config</code></p>
-</blockquote>
-<h4 id="42-大小写问题"><a class="markdownIt-Anchor" href="#42-大小写问题"></a> 4.2 大小写问题</h4>
-<blockquote>
-<p>导致一直读取不到config</p>
-</blockquote>
-<blockquote>
-<p>全部改为小写</p>
-</blockquote>
-<h4 id="43-c盘内存不足"><a class="markdownIt-Anchor" href="#43-c盘内存不足"></a> 4.3  C盘内存不足</h4>
-<img src="/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/2792c7754ce5fba8cb8ba4e6a876313b.png" alt="2792c7754ce5fba8cb8ba4e6a876313b" style="zoom: 25%;">
-<h4 id="44-模型路径问题"><a class="markdownIt-Anchor" href="#44-模型路径问题"></a> 4.4 模型路径问题</h4>
-<img src="/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/ea40f78d3410bcecc36d5e3bfaa2c48c.png" alt="ea40f78d3410bcecc36d5e3bfaa2c48c" style="zoom:33%;">
-<blockquote>
-<p>继承model 重写代码 <a target="_blank" rel="noopener" href="http://xn--model-bi1hx0gxz5jstci4a021y.pt">使用项目下的model.pt</a></p>
-</blockquote>
-<h4 id="45-env问题"><a class="markdownIt-Anchor" href="#45-env问题"></a> 4.5 .env问题</h4>
-<blockquote>
-<p>添加 .env.sample和手动添加.env</p>
-</blockquote>
-<h4 id="46-导入问题"><a class="markdownIt-Anchor" href="#46-导入问题"></a> 4.6 导入问题</h4>
-<img src="/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/image-20251022134718481.png" alt="image-20251022134718481" style="zoom:50%;">
-<blockquote>
-<p>Python Backend Error: ModuleNotFoundError: No module named 'app.companies.gaotiePYI-13836:ERRORl Failed to execute script’main’due to unhandled exception!</p>
-</blockquote>
-<p>代码错误导入<code>from app.companies.gaotie.detector import GaotieVideoDetector</code></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">\# Before:</span><br><span class="line"></span><br><span class="line">from app.companies.gaotie.detector import GaotieVideoDetector</span><br><span class="line"></span><br><span class="line">\# After:</span><br><span class="line"></span><br><span class="line">from app.companies.embodiedrobot.detector import EmbodiedVideoDetector</span><br></pre></td></tr></table></figure>
-<h4 id="47成功"><a class="markdownIt-Anchor" href="#47成功"></a> 4.7成功</h4>
-<img src="/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/image-20251022150309599.png" alt="image-20251022150309599" style="zoom: 50%;">
-<blockquote>
-<h1 id="pyinstaller打包biyi项目准备工作计划"><a class="markdownIt-Anchor" href="#pyinstaller打包biyi项目准备工作计划"></a> PyInstaller打包Biyi项目准备工作计划</h1>
-<h2 id="1-清理和准备项目文件"><a class="markdownIt-Anchor" href="#1-清理和准备项目文件"></a> 1. 清理和准备项目文件</h2>
-<h3 id="11-创建打包配置文件"><a class="markdownIt-Anchor" href="#11-创建打包配置文件"></a> 1.1 创建打包配置文件</h3>
-<ul>
-<li>创建 <code>.spec</code> 文件配置PyInstaller打包参数</li>
-<li>配置包含Biyi项目相关的数据文件（模型、配置、模板）</li>
-<li>排除其他公司项目的文件以减小体积</li>
-</ul>
-<h3 id="12-整理依赖项"><a class="markdownIt-Anchor" href="#12-整理依赖项"></a> 1.2 整理依赖项</h3>
-<ul>
-<li>修改 <code>requirements.txt</code> 创建CPU版本依赖清单</li>
-<li>移除GPU相关依赖：<code>tensorrt</code></li>
-<li>确保使用CPU版本的torch/ultralytics</li>
-</ul>
-<h3 id="13-清理不必要文件"><a class="markdownIt-Anchor" href="#13-清理不必要文件"></a> 1.3 清理不必要文件</h3>
-<ul>
-<li>排除其他公司项目文件夹（保留biyi）</li>
-<li>排除测试文件、文档、日志</li>
-<li>排除开发环境配置文件</li>
-</ul>
-<h2 id="2-处理动态加载和资源文件"><a class="markdownIt-Anchor" href="#2-处理动态加载和资源文件"></a> 2. 处理动态加载和资源文件</h2>
-<h3 id="21-模型文件处理"><a class="markdownIt-Anchor" href="#21-模型文件处理"></a> 2.1 模型文件处理</h3>
-<ul>
-<li>确认 <code>app/companies/biyi/</code> 下的 <code>.pt</code> 模型文件</li>
-<li>确认 <code>app/core/angle/</code>, <code>app/core/object/</code> 等核心模块的模型文件</li>
-<li>在.spec中配置为数据文件</li>
-</ul>
-<h3 id="22-配置文件处理"><a class="markdownIt-Anchor" href="#22-配置文件处理"></a> 2.2 配置文件处理</h3>
-<ul>
-<li>包含 <code>app/config/Biyi/</code> 下所有JSON配置文件</li>
-<li>处理 <code>.env</code> 文件（创建示例配置）</li>
-</ul>
-<h3 id="23-模板文件处理"><a class="markdownIt-Anchor" href="#23-模板文件处理"></a> 2.3 模板文件处理</h3>
-<ul>
-<li>包含 <code>app/templates/Biyi/</code> HTML模板</li>
-<li>包含 <code>app/templates/shared/</code> 共享模板</li>
-<li>包含 <code>app/templates/js/</code> JavaScript文件</li>
-</ul>
-<h3 id="24-修复动态导入"><a class="markdownIt-Anchor" href="#24-修复动态导入"></a> 2.4 修复动态导入</h3>
-<ul>
-<li>检查 <code>app/main.py</code> 中的项目名称动态导入逻辑</li>
-<li>确保PyInstaller能正确打包Biyi相关模块</li>
-</ul>
-<h2 id="3-创建pyinstaller-spec文件"><a class="markdownIt-Anchor" href="#3-创建pyinstaller-spec文件"></a> 3. 创建PyInstaller spec文件</h2>
-<h3 id="31-核心配置"><a class="markdownIt-Anchor" href="#31-核心配置"></a> 3.1 核心配置</h3>
-<ul>
-<li>入口点：<code>app/main.py</code></li>
-<li>单文件/单目录模式选择</li>
-<li>隐藏导入配置（ultralytics、cv2等）</li>
-</ul>
-<h3 id="32-数据文件配置"><a class="markdownIt-Anchor" href="#32-数据文件配置"></a> 3.2 数据文件配置</h3>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">datas = [    (&#x27;app/companies/biyi&#x27;, &#x27;app/companies/biyi&#x27;),    (&#x27;app/config/Biyi&#x27;, &#x27;app/config/Biyi&#x27;),    (&#x27;app/templates&#x27;, &#x27;app/templates&#x27;),    (&#x27;.env.example&#x27;, &#x27;.&#x27;),]</span><br></pre></td></tr></table></figure>
-<h3 id="33-排除项配置"><a class="markdownIt-Anchor" href="#33-排除项配置"></a> 3.3 排除项配置</h3>
-<ul>
-<li>排除其他公司项目模块</li>
-<li>排除测试、文档相关包</li>
-</ul>
-<h2 id="4-环境配置文件"><a class="markdownIt-Anchor" href="#4-环境配置文件"></a> 4. 环境配置文件</h2>
-<h3 id="41-创建环境配置模板"><a class="markdownIt-Anchor" href="#41-创建环境配置模板"></a> 4.1 创建环境配置模板</h3>
-<ul>
-<li>创建 <code>.env.example</code> 包含必要配置项</li>
-<li>创建 <code>config_template.txt</code> 说明配置方法</li>
-</ul>
-<h3 id="42-创建启动脚本"><a class="markdownIt-Anchor" href="#42-创建启动脚本"></a> 4.2 创建启动脚本</h3>
-<ul>
-<li>Windows批处理文件 <code>start_biyi.bat</code></li>
-<li>包含环境变量设置和启动逻辑</li>
-</ul>
-<h2 id="5-打包测试准备"><a class="markdownIt-Anchor" href="#5-打包测试准备"></a> 5. 打包测试准备</h2>
-<h3 id="51-创建打包脚本"><a class="markdownIt-Anchor" href="#51-创建打包脚本"></a> 5.1 创建打包脚本</h3>
-<ul>
-<li><code>build_biyi.bat</code> - Windows打包脚本</li>
-<li>包含清理旧构建、执行打包、验证输出</li>
-</ul>
-<h3 id="52-创建部署文档"><a class="markdownIt-Anchor" href="#52-创建部署文档"></a> 5.2 创建部署文档</h3>
-<ul>
-<li><code>DEPLOYMENT.md</code> - 部署说明文档</li>
-<li>包含：系统要求、安装步骤、配置说明、故障排除</li>
-</ul>
-<h2 id="6-验证检查清单"><a class="markdownIt-Anchor" href="#6-验证检查清单"></a> 6. 验证检查清单</h2>
-<ul>
-<li>[ ] 确认requirements.txt无GPU依赖</li>
-<li>[ ] 确认.spec文件包含所有必要资源</li>
-<li>[ ] 确认只包含Biyi相关代码和配置</li>
-<li>[ ] 确认动态导入已处理</li>
-<li>[ ] 准备好.env配置示例</li>
-<li>[ ] 准备好部署文档</li>
-</ul>
-<h2 id="关键文件说明"><a class="markdownIt-Anchor" href="#关键文件说明"></a> 关键文件说明</h2>
-<ul>
-<li><code>opencv_detection_biyi.spec</code> - PyInstaller配置文件</li>
-<li><code>requirements_cpu.txt</code> - CPU版本依赖清单</li>
-<li><code>build_biyi.bat</code> - 打包执行脚本</li>
-<li><code>.env.example</code> - 环境配置示例</li>
-<li><code>DEPLOYMENT_BIYI.md</code> - 部署说明文档</li>
-</ul>
-</blockquote>
-<h2 id="方式-cembeddable-python嵌入式"><a class="markdownIt-Anchor" href="#方式-cembeddable-python嵌入式"></a> 方式 C：<strong>Embeddable Python（嵌入式） ❌</strong></h2>
-<blockquote>
-<p>❌❌很多库都安装不了</p>
-</blockquote>
-<blockquote>
-<p>Cursor 分步安装的原因 跳过了包的安装导致缺少库, 运行不了</p>
-</blockquote>
-<h3 id="1-pip-安装问题"><a class="markdownIt-Anchor" href="#1-pip-安装问题"></a> 1. pip 安装问题</h3>
-<blockquote>
-<p>embeddable python不带pip需要手动下载和修改</p>
-</blockquote>
-<p>需要删除import site在python312._pth文件中</p>
-<h3 id="2-embeddable-python特性"><a class="markdownIt-Anchor" href="#2-embeddable-python特性"></a> 2. embeddable python特性:</h3>
-<h4 id="21-库编译问题"><a class="markdownIt-Anchor" href="#21-库编译问题"></a> 2.1 库编译问题</h4>
-<ol>
-<li><strong>依赖</strong>
-<ul>
-<li><code>opencv-python</code> 本身提供了预编译 wheel，但有些依赖（如 matplotlib）可能需要 <strong>源代码编译</strong>，尤其在缺少 wheel 或版本不匹配的情况下</li>
-<li><code>matplotlib</code> 依赖 <code>cycler</code>、<code>kiwisolver</code>、<code>pillow</code> 等，某些组件可能需要 <strong>C/C++ 编译工具</strong></li>
-<li><code>mesonpy</code> 是最近 matplotlib 构建系统的一部分，用于编译扩展</li>
-</ul>
-</li>
-<li><strong>嵌入式 Python 不包含编译环境</strong>
-<ul>
-<li>没有 Visual Studio C++ Build Tools</li>
-<li>没有 <code>python-config</code>、<code>make</code>、<code>ninja</code> 等工具</li>
-</ul>
-</li>
-</ol>
-<p>所以在 <strong>嵌入式 Python 下 pip install opencv-python 或 matplotlib</strong> 就会失败，因为它需要编译环境，嵌入式 Python 只能提供一个纯净的解释器和标准库。</p>
-<hr>
-<h4 id="22可行解决方案"><a class="markdownIt-Anchor" href="#22可行解决方案"></a> <strong>2.2可行解决方案</strong></h4>
-<ol>
-<li>
-<p><strong>使用预编译 wheel</strong>（</p>
-<ul>
-<li>
-<p>下载适合你 Python 版本和架构的 <code>.whl</code> 文件，直接安装：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python\python.exe -m pip install opencv_python‑4.9.0‑cp312‑cp312‑win_amd64.whl</span><br></pre></td></tr></table></figure>
-</li>
-<li>
-<p>这样就不用本地编译了。</p>
-</li>
-<li>
-<p>你可以在 <a target="_blank" rel="noopener" href="https://pypi.org/project/opencv-python/#files">PyPI opencv-python</a> 找到对应 wheel。</p>
-</li>
-</ul>
-</li>
-<li>
-<p><strong>下载相关编译工具集</strong></p>
-</li>
+<li><code>torch.jit.trace</code> 更适合没有控制流的模型</li>
+<li><code>torch.jit.script</code> 能处理包含条件判断等复杂逻辑的模型</li>
+<li>导出前务必调用 <code>model.eval()</code></li>
 </ol>
 <hr>
-<h3 id="3-问题分析"><a class="markdownIt-Anchor" href="#3-问题分析"></a> 3. 问题分析：</h3>
-<h4 id="31-matplotlib-编译失败"><a class="markdownIt-Anchor" href="#31-matplotlib-编译失败"></a> 3.1 matplotlib 编译失败</h4>
-<ol>
-<li>
-<p>matplotlib 编译失败：matplotlib==3.10.1 需要从源码编译，但缺少 mesonpy 构建工具</p>
-</li>
-<li>
-<p>mesonpy 后端不可用：Cannot import ‘mesonpy’ - 构建工具链不完整</p>
-</li>
-<li>
-<p>依赖解析失败：pip 无法找到兼容的包版本</p>
-</li>
-</ol>
-<p><strong>解决方案：</strong></p>
-<ol>
-<li>特殊处理 matplotlib：</li>
-</ol>
-<ul>
-<li>
-<p>优先使用预编译的 wheel 包：–only-binary=:all: --prefer-binary</p>
-</li>
-<li>
-<p>如果指定版本失败，尝试不指定版本的最新版本</p>
-</li>
-</ul>
-<h4 id="32-工具链安装失败"><a class="markdownIt-Anchor" href="#32-工具链安装失败"></a> 3.2 工具链安装失败</h4>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ERROR: Could not find a version that satisfies the requirement mesonpy (from versions: none)</span><br><span class="line">ERROR: No matching distribution found for mesonpy</span><br><span class="line">⚠️  Warning: some build tools failed: Command failed: &quot;F:\_Work\cve\electron\python\python.exe&quot; -m pip install setuptools&gt;&gt;=65.0.0 wheel&gt;=0.38.0 Cython&gt;=3.0.0 meson&gt;=1.0.0 ninja&gt;=1.10.0 mesonpy&gt;=0.15.0 pyproject-hooks&gt;=1.0.0 build&gt;=0.10.0 packaging&gt;=21.0 tomli&gt;=2.0.0 pyparsing&gt;=3.0.0 installer&gt;=0.7.0 -i https://pypi.tuna.tsinghua.edu.cn/simple --trusted-host pypi.tuna.tsinghua.edu.cn</span><br></pre></td></tr></table></figure>
-<h4 id="33-torch-安装失败"><a class="markdownIt-Anchor" href="#33-torch-安装失败"></a> 3.3 torch 安装失败</h4>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ERROR: Could not find a version that satisfies the requirement torch (from versions: none)ERROR: No matching distribution found for torch</span><br></pre></td></tr></table></figure>
-<p>这是因为<strong>嵌入式Python环境可能缺少某些系统库，导致torch无法安装。</strong></p>
-<ul>
-<li>需要手动编译!!</li>
-<li></li>
-</ul>
-<h4 id="32-依赖matplotlib的opencv-ultralytics安装失败"><a class="markdownIt-Anchor" href="#32-依赖matplotlib的opencv-ultralytics安装失败"></a> 3.2. 依赖matplotlib的opencv, ultralytics安装失败</h4>
-<ol>
-<li>下载相关编译工具</li>
-<li>ultralytics 8.0.2 depends on matplotlib&gt;=3.2.2</li>
-</ol>
-<h4 id="3-ultralytics版本高要求新版本的matplotlib"><a class="markdownIt-Anchor" href="#3-ultralytics版本高要求新版本的matplotlib"></a> 3. ultralytics版本高要求新版本的matplotlib</h4>
-<p>内部库依赖版本冲突无交集</p>
-<ol>
-<li>不指定版本</li>
-<li>使用更宽松的安装策略</li>
-<li>torch要求</li>
-</ol>
-<h4 id="3av库版本问题webrtc"><a class="markdownIt-Anchor" href="#3av库版本问题webrtc"></a> 3.av库版本问题(webrtc)</h4>
-<p>无法找到合适版本</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ERROR: Could not find a version that satisfies the requirement av==16.8.8 (from versions: none)ERROR: No matching distribution found for av==16.0.00 Warning: some dependencies failed to install: command failed: &quot;F:\_Work\cvelelectron\python\python.exe&quot;&quot;-m pip install -r &quot;F:\ Work\cvelopencv-detection\requirements.txt&quot; -i https://pypi.tuna.tsinghua.edu.cn/simple --trusted-host pypi.tuna.tsinghua.edu.cn --prefer-binary --only-binary=:all: --no-build-isolation</span><br></pre></td></tr></table></figure>
-<ol>
-<li>修改版本</li>
-<li>不指定版本</li>
-<li>暂时不安装了</li>
-</ol>
-<h3 id="4总结"><a class="markdownIt-Anchor" href="#4总结"></a> 4.总结</h3>
-<p>嵌入式 Python 自带python, 但是很多包和库基本上pipy都不支持, 导致无法安装完整的环境, 这反而失去了python的优势, 所以放弃改方案</p>
-<h2 id="electron打包阶段-部分完成-️"><a class="markdownIt-Anchor" href="#electron打包阶段-部分完成-️"></a> Electron打包阶段 - 部分完成 ⚠️</h2>
-<ol>
-<li>NSIS安装程序生成阶段 ❌</li>
-</ol>
-<ul>
-<li>
-<p>错误：failed creating mmap of “cve-electron-1.0.0-x64.nsis.7z”</p>
-</li>
-<li>
-<p>问题：NSIS无法创建内存映射文件来处理7z压缩包</p>
-</li>
-</ul>
-<p>后端逻辑未修改, 还是用的python</p>
-<h2 id="打包总结"><a class="markdownIt-Anchor" href="#打包总结"></a> 打包总结</h2>
-<h3 id="1-venv-并非独立环境"><a class="markdownIt-Anchor" href="#1-venv-并非独立环境"></a> 1. venv 并非独立环境</h3>
-<ul>
-<li><code>venv</code> 本质上是系统 Python 的隔离副本；</li>
-<li><code>pyvenv.cfg</code> 中的 <code>home</code> 和 <code>executable</code> 会绑定本地 Python；</li>
-<li>换机后路径失效导致运行错误；</li>
-<li><strong>结论</strong>：venv 不适合打包分发。</li>
-</ul>
-<h2 id="后续计划"><a class="markdownIt-Anchor" href="#后续计划"></a> 后续计划</h2>
-<ul>
-<li>完善 <code>.spec</code> 文件模板</li>
-<li>使用了单文件的pyinstaller 生产<code>_internal</code>文件夹</li>
-</ul>
+<h3 id="部署方案选择"><a class="markdownIt-Anchor" href="#部署方案选择"></a> 部署方案选择</h3>
+<h4 id="libtorch-c-api"><a class="markdownIt-Anchor" href="#libtorch-c-api"></a> LibTorch (C++ API)</h4>
+<p>#include &lt;torch/script.h&gt;</p>
+<p>int main() {<br>
+// 加载模型<br>
+torch::jit::script::Module module;<br>
+module = torch::jit::load(“<a target="_blank" rel="noopener" href="http://resnet18.pt">resnet18.pt</a>”);</p>
+<p>// 准备输入<br>
+std::vector<a href="torch::jit::IValue">torch::jit::IValue</a> inputs;<br>
+inputs.push_back(torch::ones({1, 3, 224, 224}));</p>
+<p>// 执行推理<br>
+auto output = module.forward(inputs).toTensor();<br>
+std::cout &lt;&lt; output.slice(*/*dim=*/*1, */*start=*/*0, */*end=*/*5) &lt;&lt; ‘<strong>\n</strong>’;<br>
+}</p>
+<h4 id="onnx-runtime"><a class="markdownIt-Anchor" href="#onnx-runtime"></a> ONNX Runtime</h4>
+<p><strong>import</strong> onnxruntime <strong>as</strong> ort</p>
+<p># 创建推理会话<br>
+sess = ort.InferenceSession(“model.onnx”)</p>
+<p># 准备输入<br>
+input_name = sess.get_inputs()[0].name<br>
+input_data = np.random.rand(1, 3, 224, 224).astype(np.float32)</p>
+<p># 执行推理<br>
+outputs = sess.run(None, {input_name: input_data})</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/" data-id="cmgs67i4000004gv4bfd09pcl" class="article-share-link">分享</a>
+      <a data-url="https://shakewely.github.io/2026/01/27/2026%E5%B9%B41%E6%9C%8827%E6%97%A5-torch%E5%AE%9E%E6%88%983/" data-id="cml627032000j4kv4cmlo7szb" class="article-share-link">分享</a>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/chore/" rel="tag">chore</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl-python/" rel="tag">dl, python</a></li></ul>
 
     </footer>
   </div>
@@ -937,12 +1317,12 @@
 
 
   
-    <article id="post-2025年9月3日-认知" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2026年1月27日-torch介绍0" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2025/09/03/2025%E5%B9%B49%E6%9C%883%E6%97%A5-%E8%AE%A4%E7%9F%A5/" class="article-date">
-  <time class="post-time" datetime="2025-09-03T01:19:30.000Z" itemprop="datePublished">
-    <span class="post-month">9月</span><br/>
-    <span class="post-day">03</span>
+    <a href="/2026/01/27/2026%E5%B9%B41%E6%9C%8827%E6%97%A5-torch%E4%BB%8B%E7%BB%8D0/" class="article-date">
+  <time class="post-time" datetime="2026-01-27T05:36:46.000Z" itemprop="datePublished">
+    <span class="post-month">1月</span><br/>
+    <span class="post-day">27</span>
   </time>
 </a>
    
@@ -954,7 +1334,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2025/09/03/2025%E5%B9%B49%E6%9C%883%E6%97%A5-%E8%AE%A4%E7%9F%A5/">2025年9月3日 认知</a>
+      <a class="article-title" href="/2026/01/27/2026%E5%B9%B41%E6%9C%8827%E6%97%A5-torch%E4%BB%8B%E7%BB%8D0/">2026年1月27日 torch介绍0</a>
     </h1>
   
 
@@ -969,114 +1349,98 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>对我们来说，什么是最宝贵的？它是否值得我们用一生去坚守?</p>
-<p>你认为，对你来说什么是有价值的，是值得坚持的，什么又是最宝贵的呢？</p>
-<h2 id="价值观探索的多维度方法"><a class="markdownIt-Anchor" href="#价值观探索的多维度方法"></a> 🌟 价值观探索的多维度方法</h2>
-<h3 id="1️⃣-回溯反思法"><a class="markdownIt-Anchor" href="#1️⃣-回溯反思法"></a> 1️⃣ 回溯反思法</h3>
-<p>通过回顾过去的经历，我们可以发现那些指引我们的隐形价值观：</p>
+        <blockquote>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/647001891">https://zhuanlan.zhihu.com/p/647001891</a></li>
+</ol>
+</blockquote>
+<h1 id="pytorch"><a class="markdownIt-Anchor" href="#pytorch"></a> Pytorch</h1>
+<h1 id="1-介绍"><a class="markdownIt-Anchor" href="#1-介绍"></a> 1 介绍</h1>
+<p>PyTorch 是一个开源的深度学习框架，以其灵活性和动态计算图而广受欢迎。</p>
+<p>PyTorch 主要有以下几个基础概念：张量（Tensor）、自动求导（Autograd）、神经网络模块（nn.Module）、优化器（optim）等。</p>
 <ul>
-<li><strong>列出你感到最自豪的3个人生时刻</strong>：详细写下为什么这些时刻让你感到满足，其中体现了你看重什么</li>
-<li><strong>回忆5次最难的决定</strong>：分析什么因素最终让你做出了选择，背后是什么价值观在权衡</li>
-<li><strong>思考什么让你愤怒或不平</strong>：我们强烈的负面情绪往往源于价值观被侵犯</li>
+<li><strong>张量（Tensor）</strong>：PyTorch 的核心数据结构，支持多维数组，并可以在 CPU 或 GPU 上进行加速计算。</li>
+<li><strong>自动求导（Autograd）</strong>：PyTorch 提供了自动求导功能，可以轻松计算模型的梯度，便于进行反向传播和优化。</li>
+<li><strong>神经网络（nn.Module）</strong>：PyTorch 提供了简单且强大的 API 来构建神经网络模型，可以方便地进行前向传播和模型定义。</li>
+<li><strong>优化器（Optimizers）</strong>：使用优化器（如 Adam、SGD 等）来更新模型的参数，使得损失最小化。</li>
+<li><strong>设备（Device）</strong>：可以将模型和张量移动到 GPU 上以加速计算。</li>
 </ul>
-<h3 id="2️⃣-情境测试法"><a class="markdownIt-Anchor" href="#2️⃣-情境测试法"></a> 2️⃣ 情境测试法</h3>
-<p>当面临假设情境时，我们的价值排序会清晰显现：</p>
+<hr>
+<h2 id="pytorch-架构总览"><a class="markdownIt-Anchor" href="#pytorch-架构总览"></a> PyTorch 架构总览</h2>
+<p>PyTorch 采用模块化设计，由多个相互协作的核心组件构成。理解这些组件的作用和相互关系，是掌握 PyTorch 的关键。</p>
+<h3 id="pytorch-架构图"><a class="markdownIt-Anchor" href="#pytorch-架构图"></a> PyTorch 架构图</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">┌─────────────────────────────────────────────────────────────┐</span><br><span class="line">│                    PyTorch 生态系统                          │</span><br><span class="line">├─────────────────────────────────────────────────────────────┤</span><br><span class="line">│  torchvision  │  torchtext  │  torchaudio  │  其他专业库     │</span><br><span class="line">├─────────────────────────────────────────────────────────────┤</span><br><span class="line">│                     PyTorch 核心                            │</span><br><span class="line">├───────────────┬─────────────────┬───────────────────────────┤</span><br><span class="line">│   torch.nn    │   torch.optim   │      torch.utils          │</span><br><span class="line">│   (神经网络)   │   (优化器)      │      (工具函数)           │</span><br><span class="line">├───────────────┼─────────────────┼───────────────────────────┤</span><br><span class="line">│               │                 │   torch.utils.data        │</span><br><span class="line">│  torch 核心   │  autograd       │   (数据加载)              │</span><br><span class="line">│  (张量计算)   │  (自动微分)     │                           │</span><br><span class="line">└───────────────┴─────────────────┴───────────────────────────┘</span><br></pre></td></tr></table></figure>
+<h2 id="1-分层架构"><a class="markdownIt-Anchor" href="#1-分层架构"></a> 1. 分层架构</h2>
+<p>PyTorch 采用<strong>分层架构</strong>设计，从上层到底层依次为：</p>
+<p><strong>1、Python API（顶层）</strong></p>
 <ul>
-<li>“如果只剩下一年生命，你会如何度过？”——这会暴露你最深层的优先项</li>
-<li>“如果你有无限资源，你会解决什么世界问题？”——这反映你的理想和关怀</li>
-<li>“你希望别人在你的葬礼上如何纪念你？”——这揭示你希望活出的生命品质</li>
+<li><code>torch</code>：核心张量计算（类似NumPy，支持GPU）。</li>
+<li><code>torch.nn</code>：神经网络层、损失函数等。</li>
+<li><code>torch.autograd</code>：自动微分（反向传播）。</li>
+<li>开发者直接调用的接口，简单易用。</li>
 </ul>
-<h3 id="3️⃣-日常观察法"><a class="markdownIt-Anchor" href="#3️⃣-日常观察法"></a> 3️⃣ 日常观察法</h3>
-<p>价值观渗透在我们最平凡的选择中：</p>
+<p><strong>2、C++核心（中层）</strong></p>
 <ul>
-<li>检查你的银行账单和时间支出：<strong>你的资源流向哪里，你的价值就住在哪里</strong></li>
-<li>注意什么新闻让你感动或愤怒：这些强烈情绪指向你关心的价值议题</li>
-<li>观察你羡慕什么样的人：羡慕是价值观的镜子，映照出我们内心渴望的品质</li>
+<li><strong>ATen</strong>：张量运算核心库（400+操作）。</li>
+<li><strong>JIT</strong>：即时编译优化模型。</li>
+<li><strong>Autograd引擎</strong>：自动微分的底层实现。</li>
+<li>高性能计算，连接Python与底层硬件。</li>
 </ul>
-<h2 id="价值观分类与排序工具"><a class="markdownIt-Anchor" href="#价值观分类与排序工具"></a> 📊 价值观分类与排序工具</h2>
-<p>这里有一个实用的价值观清单，可以帮助你更好地识别和排序自己的核心价值观：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">个人成长类价值观</th>
-<th style="text-align:left">人际关系类价值观</th>
-<th style="text-align:left">社会贡献类价值观</th>
-<th style="text-align:left">生活品质类价值观</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">知识与智慧</td>
-<td style="text-align:left">真诚与诚实</td>
-<td style="text-align:left">公平与正义</td>
-<td style="text-align:left">健康与活力</td>
-</tr>
-<tr>
-<td style="text-align:left">创造力</td>
-<td style="text-align:left">爱与亲密</td>
-<td style="text-align:left">帮助他人</td>
-<td style="text-align:left">安全感</td>
-</tr>
-<tr>
-<td style="text-align:left">成就感</td>
-<td style="text-align:left">忠诚</td>
-<td style="text-align:left">环境保护</td>
-<td style="text-align:left">自由与独立</td>
-</tr>
-<tr>
-<td style="text-align:left">勇气</td>
-<td style="text-align:left">尊重</td>
-<td style="text-align:left">社会责任</td>
-<td style="text-align:left">平静与和谐</td>
-</tr>
-</tbody>
-</table>
-<p><strong>实践建议</strong>：从每个类别中选择1-2个对你最重要的价值观，然后尝试将所有选择排序，找出你的top 5核心价值观</p>
+<p><strong>3、基础库（底层）</strong></p>
+<ul>
+<li><strong>TH/THNN</strong>：C语言实现的基础张量和神经网络操作。</li>
+<li><strong>THC/THCUNN</strong>：对应的CUDA（GPU）版本。</li>
+<li>直接操作硬件（CPU/GPU），极致优化速度。</li>
+</ul>
+<p><img src="/2026/01/27/2026%E5%B9%B41%E6%9C%8827%E6%97%A5-torch%E4%BB%8B%E7%BB%8D0/image-20260127140243046.png" alt="image-20260127140243046"></p>
+<h3 id="2pytorch-的双层架构"><a class="markdownIt-Anchor" href="#2pytorch-的双层架构"></a> 2.PyTorch 的“双层”架构</h3>
+<p>PyTorch 的设计哲学是：<strong>用 Python 保证易用性，用 C++ 保证高性能。</strong></p>
+<ul>
+<li><strong>Python 层（Frontend）：</strong> 也就是我们直接接触的 API。它负责逻辑组织、用户交互和提供灵活的开发体验。</li>
+<li><strong>C++ 层（Backend）：</strong> 核心库被称为 <strong>LibTorch</strong>。它包含了张量运算（Tensor library）、自动求导引擎（Autograd）以及对硬件（如 CPU、GPU）的底层调用。</li>
+</ul>
+<h3 id="3-python-和-c-是如何通信的"><a class="markdownIt-Anchor" href="#3-python-和-c-是如何通信的"></a> 3. Python 和 C++ 是如何通信的？</h3>
+<p>PyTorch 使用了像 <strong>pybind11</strong> 这样的工具，在 Python 和 C++ 之间架起了一座桥梁。当你执行 <code>a + b</code>（两个张量相加）时：</p>
+<ol>
+<li>Python 调用指令。</li>
+<li>通过桥梁进入底层的 C++ 实现。</li>
+<li>C++ 调度 CUDA 核心或 CPU 指令完成运算。</li>
+<li>结果返回给 Python。</li>
+</ol>
+<h3 id="4-什么时候你会接触到-c-部分"><a class="markdownIt-Anchor" href="#4-什么时候你会接触到-c-部分"></a> 4. 什么时候你会接触到 C++ 部分？</h3>
+<p>普通用户通常不需要碰 C++，但在以下场景中它是必不可少的：</p>
+<ul>
+<li><strong>部署（Deployment）：</strong> 在嵌入式设备或对延迟要求极高的服务器上，开发者会直接使用 <strong>LibTorch</strong>（PyTorch 的 C++ 版本）来加载模型，完全脱离 Python 环境。</li>
+<li><strong>自定义算子：</strong> 如果你发明了一种极其复杂的数学运算，且 Python 实现太慢，你可以用 C++ 编写该算子并将其作为插件引入 PyTorch。</li>
+</ul>
+<h1 id="2-特征"><a class="markdownIt-Anchor" href="#2-特征"></a> 2 特征</h1>
+<h2 id="1-动态计算图"><a class="markdownIt-Anchor" href="#1-动态计算图"></a> 1 动态计算图</h2>
 <blockquote>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">个人成长类价值观</th>
-<th style="text-align:left">人际关系类价值观</th>
-<th style="text-align:left">社会贡献类价值观</th>
-<th style="text-align:left">生活品质类价值观</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">知识与智慧</td>
-<td style="text-align:left">真诚与诚实</td>
-<td style="text-align:left">公平</td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left">爱与亲密</td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left">自由与独立</td>
-</tr>
-<tr>
-<td style="text-align:left">勇气</td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left">平静与和谐</td>
-</tr>
-</tbody>
-</table>
+<p>import torch</p>
+<p>def dynamic_model(x):<br>
+# 这里的 Python 逻辑直接决定了计算图的结构<br>
+if x.sum() &gt; 0:<br>
+out = x * 2  # 动态生成分支 A 的路径<br>
+else:<br>
+out = x + 5  # 动态生成分支 B 的路径</p>
+<pre><code># 甚至可以用循环，循环多少次，计算图就自动延伸多少个节点
+for i in range(int(torch.randint(1, 5, (1,)))):
+    out = out + i
+return out
+</code></pre>
+<p>x = torch.randn(2, 2, requires_grad=True)<br>
+y = dynamic_model(x)<br>
+y.backward(torch.ones_like(y)) # 自动求导引擎会沿着刚才“长”出来的路径反向走回去</p>
 </blockquote>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/09/03/2025%E5%B9%B49%E6%9C%883%E6%97%A5-%E8%AE%A4%E7%9F%A5/" data-id="cmg5tcxzf0001k0v4h8gianju" class="article-share-link">分享</a>
+      <a data-url="https://shakewely.github.io/2026/01/27/2026%E5%B9%B41%E6%9C%8827%E6%97%A5-torch%E4%BB%8B%E7%BB%8D0/" data-id="cml627031000h4kv49ygcaqvd" class="article-share-link">分享</a>
       
       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl-pyhton/" rel="tag">dl,pyhton</a></li></ul>
+
     </footer>
   </div>
   
@@ -1086,12 +1450,12 @@
 
 
   
-    <article id="post-2025年8月8日-vlm" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2026年1月24日-agent开发杂谈" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2025/08/08/2025%E5%B9%B48%E6%9C%888%E6%97%A5-vlm/" class="article-date">
-  <time class="post-time" datetime="2025-08-08T01:48:16.000Z" itemprop="datePublished">
-    <span class="post-month">8月</span><br/>
-    <span class="post-day">08</span>
+    <a href="/2026/01/24/2026%E5%B9%B41%E6%9C%8824%E6%97%A5-agent%E5%BC%80%E5%8F%91%E6%9D%82%E8%B0%88/" class="article-date">
+  <time class="post-time" datetime="2026-01-24T06:12:01.000Z" itemprop="datePublished">
+    <span class="post-month">1月</span><br/>
+    <span class="post-day">24</span>
   </time>
 </a>
    
@@ -1103,111 +1467,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2025/08/08/2025%E5%B9%B48%E6%9C%888%E6%97%A5-vlm/">2025年8月8日-vlm</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="任务"><a class="markdownIt-Anchor" href="#任务"></a> 任务</h1>
-<p><img src="/2025/08/08/2025%E5%B9%B48%E6%9C%888%E6%97%A5-vlm/ca214dcc555fde779a1c3904b64aa2d7.png" alt="task"></p>
-<h2 id="下游任务"><a class="markdownIt-Anchor" href="#下游任务"></a> 下游任务</h2>
-<p>图像-文本的下游任务主要分为4类：</p>
-<p><img src="/2025/08/08/2025%E5%B9%B48%E6%9C%888%E6%97%A5-vlm/image-20250808113047965.png" alt="image-20250808113047965"></p>
-<ul>
-<li><strong>闭集分类</strong>：限定<strong>选项/类别</strong>的 VQA视觉问答、Image-Text Matching图文匹配、NLVR2两图一文匹配、VCR视觉常识推理、Visual Entailment视觉蕴涵–&gt;<strong>分类</strong><img src="/2025/08/08/2025%E5%B9%B48%E6%9C%888%E6%97%A5-vlm/image-20250808113055059.png" alt="image-20250808113055059"></li>
-<li><strong>开放文本序列生成</strong>：<strong>开放文本生成</strong>的 Visual Captioning视觉描述、Paragreph Captioning段落描述、Open-ended VQA开放域VQA–&gt;<strong>clip</strong><img src="/2025/08/08/2025%E5%B9%B48%E6%9C%888%E6%97%A5-vlm/image-20250808113112005.png" alt="image-20250808113112005"></li>
-<li><strong>方框/遮罩定位</strong>：Groundded Captioning定位描述、REC指向性表达理解(bounding box)、RES指向性表达分割(segment mask)–&gt;<strong>detection</strong><img src="/2025/08/08/2025%E5%B9%B48%E6%9C%888%E6%97%A5-vlm/image-20250808113138901.png" alt="image-20250808113138901"></li>
-<li><strong>像素预测</strong>：T2I文生图、I2I基于文本的图像编辑–&gt;<strong>segment</strong><img src="/2025/08/08/2025%E5%B9%B48%E6%9C%888%E6%97%A5-vlm/image-20250808113143731.png" alt="image-20250808113143731"></li>
-</ul>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_54338498/article/details/135258723">https://blog.csdn.net/weixin_54338498/article/details/135258723</a></p>
-</blockquote>
-<h1 id="原理"><a class="markdownIt-Anchor" href="#原理"></a> 原理</h1>
-<h2 id="vlms的分类"><a class="markdownIt-Anchor" href="#vlms的分类"></a> VLMs的分类：</h2>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://2048ai.net/6801fcf4e98581517972bb6a.html?dp_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6OTk5MjM2LCJleHAiOjE3NTUyMjcyMTgsImlhdCI6MTc1NDYyMjQxOCwidXNlcm5hbWUiOiJMaV94dXJ1byJ9.9bm2V70dZNVYMoVZoxCETNrk3tZqIhEGz1CzYPWXD7o&amp;spm=1001.2101.3001.6650.5&amp;utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Eactivity-5-141557711-blog-149836506.235%5Ev43%5Epc_blog_bottom_relevance_base5&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Eactivity-5-141557711-blog-149836506.235%5Ev43%5Epc_blog_bottom_relevance_base5&amp;utm_relevant_index=5">综述</a></p>
-</blockquote>
-<p>根据VLM的输入处理和输出生成能力将其分为三个不同的组：</p>
-<ul>
-<li><strong>视觉语言理解模型：<strong>专门为视觉信息与语言的解释和理解而设计的模型. 比如</strong>CLIP</strong></li>
-<li>**多模态输入文本生成模型：**擅长利用多模态输入（如图像、视频和文本）来生成文本内容</li>
-<li>**多模态输入多模态输出模型：**不仅接受多模态输入，还能产生多模态的输出</li>
-</ul>
-<blockquote>
-<p><img src="/2025/08/08/2025%E5%B9%B48%E6%9C%888%E6%97%A5-vlm/5433afcee5b24dedbf8c14cb95c74a29.png" alt="5433afcee5b24dedbf8c14cb95c74a29"></p>
-</blockquote>
-<h1 id="模型结构"><a class="markdownIt-Anchor" href="#模型结构"></a> 模型结构</h1>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_54338498/article/details/135258723?spm=1001.2101.3001.6650.6">https://blog.csdn.net/weixin_54338498/article/details/135258723?spm=1001.2101.3001.6650.6</a></p>
-<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/667865945">https://zhuanlan.zhihu.com/p/667865945</a></p>
-</blockquote>
-<p><img src="/2025/08/08/2025%E5%B9%B48%E6%9C%888%E6%97%A5-vlm/57d55cc697da1d6ebcd4579eccfc046e.png" alt="img"></p>
-<h2 id="1llava"><a class="markdownIt-Anchor" href="#1llava"></a> 1.LLaVA</h2>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.c/p/713126534">详解视觉语言模型原理及代码，以DeepSeek-VL为例</a></p>
-</blockquote>
-<p>通过建立统一的多模态表示空间，将不同模态的信息转换为统一的token表示，然后在同一个架构中进行联合建模和推理。既然大语言模型擅长处理token序列，那么就把所有模态的信息都转换成token。</p>
-<p>视觉token：将图像切分为固定大小的patches（如16×16像素块），每个patch编码为一个视觉token<br>
-语言token：保持传统的subword tokenization，每个词汇对应一个语言token<br>
-统一建模：将视觉token和语言token拼接成统一序列，用同一个Transformer架构处理</p>
-<h4 id="视觉编码编码器"><a class="markdownIt-Anchor" href="#视觉编码编码器"></a> 视觉编码编码器</h4>
-<p>视觉编码器用于将图像转换为向量表示，在DeepSeek-VL中，图像被视觉编码器转换为576个向量（图像的token embedding）。VLM的视觉编码器<strong>直接使其他模型预训练好的参数</strong>，普遍使用的视觉编码器结构为<a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=246602978&amp;content_type=Article&amp;match_order=1&amp;q=ViT&amp;zhida_source=entity">ViT</a>（Vision Transformer），但可能是不同方式训练出来的，例如DeepSeek-VL使用的是Siglip和<a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=246602978&amp;content_type=Article&amp;match_order=1&amp;q=SAM&amp;zhida_source=entity">SAM</a>训练出来的ViT，而Qwen-VL使用的是OpenCLIP的ViT。</p>
-<h4 id="视觉适配器"><a class="markdownIt-Anchor" href="#视觉适配器"></a> 视觉适配器</h4>
-<p>视觉适配器用于将用于将ViT的输出图像的token embeeding映射到与文本embedding相同的空间，便于让LLM理解图像中的内容。常见的结构有多层MLP、cross attention等。</p>
-<h4 id="llm"><a class="markdownIt-Anchor" href="#llm"></a> LLM</h4>
-<p>LLM是VLM的核心，视觉编码器和适配器最终产出的图像的token embedding都是要输入到LLM进行理解的，并由LLM输出关于图像的回答。</p>
-<h3 id="训练阶段"><a class="markdownIt-Anchor" href="#训练阶段"></a> 训练阶段</h3>
-<p><img src="/2025/08/08/2025%E5%B9%B48%E6%9C%888%E6%97%A5-vlm/image-20250808101530719.png" alt="image-20250808101530719"></p>
-<h2 id="2flamingo"><a class="markdownIt-Anchor" href="#2flamingo"></a> 2.Flamingo</h2>
-<p>GPT-4V的核心创新在于彻底打破了模态边界，实现了真正的统一多模态架构。不同于传统的&quot;视觉编码器+语言解码器&quot;拼接方式，GPT-4V将视觉和语言信息在同一个Transformer中进行统一处理。</p>
-<h2 id="3gpt-v"><a class="markdownIt-Anchor" href="#3gpt-v"></a> 3.GPT-V</h2>
-<h2 id="4-sora"><a class="markdownIt-Anchor" href="#4-sora"></a> 4. Sora</h2>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/08/08/2025%E5%B9%B48%E6%9C%888%E6%97%A5-vlm/" data-id="cmeaspt2h0000egv4grgfe104" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/VLM/" rel="tag">VLM</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2025年8月6日-软件开发" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/08/06/2025%E5%B9%B48%E6%9C%886%E6%97%A5-%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/" class="article-date">
-  <time class="post-time" datetime="2025-08-06T14:20:35.000Z" itemprop="datePublished">
-    <span class="post-month">8月</span><br/>
-    <span class="post-day">06</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/08/06/2025%E5%B9%B48%E6%9C%886%E6%97%A5-%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/">2025年8月6日 软件开发</a>
+      <a class="article-title" href="/2026/01/24/2026%E5%B9%B41%E6%9C%8824%E6%97%A5-agent%E5%BC%80%E5%8F%91%E6%9D%82%E8%B0%88/">2026年1月24日 agent开发杂谈</a>
     </h1>
   
 
@@ -1226,7 +1486,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/08/06/2025%E5%B9%B48%E6%9C%886%E6%97%A5-%E8%BD%AF%E4%BB%B6%E5%BC%80%E5%8F%91/" data-id="cme10nnyv00036cv47nirgtj5" class="article-share-link">分享</a>
+      <a data-url="https://shakewely.github.io/2026/01/24/2026%E5%B9%B41%E6%9C%8824%E6%97%A5-agent%E5%BC%80%E5%8F%91%E6%9D%82%E8%B0%88/" data-id="cml62702z000e4kv41i3l8wwf" class="article-share-link">分享</a>
       
       
     </footer>
@@ -1238,12 +1498,12 @@
 
 
   
-    <article id="post-2025年8月6日-MLOps" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2026年1月24日-模型训练和数据杂谈" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2025/08/06/2025%E5%B9%B48%E6%9C%886%E6%97%A5-MLOps/" class="article-date">
-  <time class="post-time" datetime="2025-08-06T01:27:38.000Z" itemprop="datePublished">
-    <span class="post-month">8月</span><br/>
-    <span class="post-day">06</span>
+    <a href="/2026/01/24/2026%E5%B9%B41%E6%9C%8824%E6%97%A5-%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E5%92%8C%E6%95%B0%E6%8D%AE%E6%9D%82%E8%B0%88/" class="article-date">
+  <time class="post-time" datetime="2026-01-24T01:27:25.000Z" itemprop="datePublished">
+    <span class="post-month">1月</span><br/>
+    <span class="post-day">24</span>
   </time>
 </a>
    
@@ -1255,7 +1515,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2025/08/06/2025%E5%B9%B48%E6%9C%886%E6%97%A5-MLOps/">2025年8月6日  MLOps</a>
+      <a class="article-title" href="/2026/01/24/2026%E5%B9%B41%E6%9C%8824%E6%97%A5-%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E5%92%8C%E6%95%B0%E6%8D%AE%E6%9D%82%E8%B0%88/">2026年1月24日 模型训练和数据杂谈</a>
     </h1>
   
 
@@ -1270,11 +1530,30 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h1 id="1"><a class="markdownIt-Anchor" href="#1"></a> 1</h1>
+<ol>
+<li>
+<p>之前因为因为经常识别不到的问题, 我任务是数据集杂乱的原因造成的, 索性我进行了数据全面的筛查筛选, 结果: 筛查之后的数据集确实识别效果可以, 但是容易误识别, 特别是背景杂乱, 且有相似物干扰的情况下; 这个最后的办法就是直接加NG反例数据</p>
+</li>
+<li>
+<p>我减少了数据量 结果yolo26缺识别不出来? 是数据量减少的问题吗? 还是说是模型的问题. 待验证</p>
+<blockquote>
+<p>yolov26+500images = ❌</p>
+<p>yolov11+500images = ❓</p>
+<p>yolov26+1000images = ❓</p>
+<p>yolov11+1000images = ❓</p>
+</blockquote>
+</li>
+<li>
+<p>遮挡显示只有一半的到底要不要标注呢?</p>
+<img src="/2026/01/24/2026%E5%B9%B41%E6%9C%8824%E6%97%A5-%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E5%92%8C%E6%95%B0%E6%8D%AE%E6%9D%82%E8%B0%88/image-20260129115111340.png" alt="image-20260129115111340" style="zoom:33%;">
+</li>
+</ol>
+
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/08/06/2025%E5%B9%B48%E6%9C%886%E6%97%A5-MLOps/" data-id="cme10nnyw00056cv4gv372xw4" class="article-share-link">分享</a>
+      <a data-url="https://shakewely.github.io/2026/01/24/2026%E5%B9%B41%E6%9C%8824%E6%97%A5-%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E5%92%8C%E6%95%B0%E6%8D%AE%E6%9D%82%E8%B0%88/" data-id="cml627030000g4kv4hykmdi31" class="article-share-link">分享</a>
       
       
     </footer>
@@ -1289,7 +1568,7 @@
 
 
   <nav id="page-nav">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/2/">next &amp;raquo;</a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/2/">next &amp;raquo;</a>
   </nav>
 </section>
         
@@ -1330,9 +1609,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>122</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>134</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>36</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>38</strong><br>标签</div></a>
     </div>
 
 
@@ -1364,7 +1643,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy;2024 - 2025 Weakliy<br>
+      &copy;2025 - 2026 Weakliy<br>
       由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
       主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
       

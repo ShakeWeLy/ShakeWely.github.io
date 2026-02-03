@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2025年2月2日 agent框架LangGraph | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;1934589308813156455   LangGraph 框架  一 Agent架构介绍  1 概述   router其实就是我代码写的workflow full 相当于panner?   1.1 工具调用代理 ReAct 是一种流行的通用代理架构，它结合了这些扩展，并整合了三个核心概念。  工具调用：允许 LLM 根据需要选择和使">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2025年2月2日 agent框架LangGraph">
+<meta property="og:url" content="https://shakewely.github.io/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6LangGraph/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;1934589308813156455   LangGraph 框架  一 Agent架构介绍  1 概述   router其实就是我代码写的workflow full 相当于panner?   1.1 工具调用代理 ReAct 是一种流行的通用代理架构，它结合了这些扩展，并整合了三个核心概念。  工具调用：允许 LLM 根据需要选择和使">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6LangGraph/image-20260202152153771.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6LangGraph/image-20260202152908141.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6LangGraph/image-20260202153345375.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6LangGraph/image-20260202153358812.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6LangGraph/image-20260202155547181.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6LangGraph/image-20260202161758081.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6LangGraph/image-20260202162737982.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6LangGraph/image-20260202163054457.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6LangGraph/image-20260202163420622.png">
+<meta property="article:published_time" content="2026-02-02T06:21:00.000Z">
+<meta property="article:modified_time" content="2026-02-03T01:20:56.280Z">
+<meta property="article:author" content="Weakliy">
+<meta property="article:tag" content="agent">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shakewely.github.io/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6LangGraph/image-20260202152153771.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>134</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>38</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2025年2月2日-agent框架LangGraph" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6LangGraph/" class="article-date">
+  <time class="post-time" datetime="2026-02-02T06:21:00.000Z" itemprop="datePublished">
+    <span class="post-month">2月</span><br/>
+    <span class="post-day">02</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2025年2月2日 agent框架LangGraph
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/1934589308813156455">https://zhuanlan.zhihu.com/p/1934589308813156455</a></p>
+</blockquote>
+<h1 id="langgraph-框架"><a class="markdownIt-Anchor" href="#langgraph-框架"></a> <strong>LangGraph 框架</strong></h1>
+<h1 id="一-agent架构介绍"><a class="markdownIt-Anchor" href="#一-agent架构介绍"></a> 一 Agent架构介绍</h1>
+<h2 id="1-概述"><a class="markdownIt-Anchor" href="#1-概述"></a> 1 概述</h2>
+<img src="/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6LangGraph/image-20260202152153771.png" alt="image-20260202152153771" style="zoom: 67%;">
+<blockquote>
+<p>router其实就是我代码写的workflow</p>
+<p>full 相当于panner?</p>
+</blockquote>
+<h3 id="11-工具调用代理"><a class="markdownIt-Anchor" href="#11-工具调用代理"></a> 1.1 工具调用代理</h3>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2210.03629">ReAct</a> 是一种流行的通用代理架构，它结合了这些扩展，并整合了三个核心概念。</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/agentic_concepts.1.html#tool-calling">工具调用</a>：允许 LLM 根据需要选择和使用各种工具。</li>
+<li><a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/agentic_concepts.1.html#memory">记忆</a>：使代理能够保留和使用来自先前步骤的信息。</li>
+<li><a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/agentic_concepts.1.html#planning">规划</a>：使 LLM 能够创建并遵循多步计划以实现目标。</li>
+</ol>
+<h4 id="工具调用"><a class="markdownIt-Anchor" href="#工具调用"></a> 工具调用<a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/agentic_concepts.1.html#tool-calling">¶</a></h4>
+<h4 id="记忆"><a class="markdownIt-Anchor" href="#记忆"></a> 记忆</h4>
+<p>LangGraph 提供对记忆实现的完全控制：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/low_level.1.html#state"><code>状态（State）</code></a>：用户定义的模式，指定要保留的记忆的确切结构。</li>
+<li><a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/persistence.1.html#checkpoints"><code>检查点（Checkpointer）</code></a>：一种机制，用于在会话内不同交互的每一步存储状态。</li>
+<li><a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/persistence.1.html#memory-store"><code>存储（Store）</code></a>：一种机制，用于跨会话存储用户特定或应用程序级别的数据。</li>
+</ul>
+<h4 id="规划"><a class="markdownIt-Anchor" href="#规划"></a> 规划<a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/agentic_concepts.1.html#planning">¶</a></h4>
+<p>在工具调用<a target="_blank" rel="noopener" href="https://langgraph.com.cn/agents/overview.1.html#what-is-an-agent">代理</a>中，LLM 在一个 while 循环中被重复调用。在每一步，代理决定要调用哪些工具以及这些工具的输入应该是什么。然后执行这些工具，并将输出作为观察结果反馈给 LLM。当代理决定它有足够的信息来解决用户请求并且不值得再调用任何工具时，while 循环终止。</p>
+<h3 id="12-自定义agent架构"><a class="markdownIt-Anchor" href="#12-自定义agent架构"></a> 1.2 自定义Agent架构<a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/agentic_concepts.1.html#custom-agent-architectures">¶</a></h3>
+<p>虽然路由器和工具调用代理（如 ReAct）很常见，但<a target="_blank" rel="noopener" href="https://blog.langchain.ac.cn/why-you-should-outsource-your-agentic-infrastructure-but-own-your-cognitive-architecture/">定制代理架构</a>通常能为特定任务带来更好的性能。LangGraph 提供了几个强大的功能来构建定制的代理系统：</p>
+<h4 id="人机协作"><a class="markdownIt-Anchor" href="#人机协作"></a> 人机协作<a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/agentic_concepts.1.html#human-in-the-loop">¶</a></h4>
+<p>人工介入可以显著提高代理的可靠性，特别是对于敏感任务。这可能涉及：</p>
+<ul>
+<li><strong>批准特定行动</strong></li>
+<li>提供反馈以更新代理状态</li>
+<li>在复杂决策过程中提供指导</li>
+</ul>
+<p>当完全自动化不可行或不可取时，人机协作模式至关重要。在我们的<a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/human_in_the_loop.1.html">人机协作指南</a>中了解更多信息。</p>
+<h4 id="并行化"><a class="markdownIt-Anchor" href="#并行化"></a> 并行化<a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/agentic_concepts.1.html#parallelization">¶</a></h4>
+<p>并行处理对于高效的多代理系统和复杂任务至关重要。LangGraph 通过其<a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/low_level.1.html#send">Send</a> API 支持并行化，从而实现：</p>
+<ul>
+<li>并发处理多个状态</li>
+<li>实现类似 MapReduce 的操作</li>
+<li>高效处理独立的子任务</li>
+</ul>
+<p>有关实际实现，请参阅我们的<a target="_blank" rel="noopener" href="https://langgraph.com.cn/how-tos/graph-api.1.html#map-reduce-and-the-send-api">MapReduce 教程</a>。</p>
+<h4 id="子图"><a class="markdownIt-Anchor" href="#子图"></a> 子图<a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/agentic_concepts.1.html#subgraphs">¶</a></h4>
+<p><a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/subgraphs.1.html">子图</a>对于管理复杂的代理架构至关重要，特别是在<a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/multi_agent.1.html">多代理系统</a>中。它们允许：</p>
+<ul>
+<li><strong>对单个代理进行隔离的状态管理</strong></li>
+<li>代理团队的分层组织</li>
+<li>代理与主系统之间的受控通信</li>
+</ul>
+<p>子图通过状态模式中的重叠键与父图进行通信。这使得灵活的模块化代理设计成为可能。有关实现细节，请参阅我们的<a target="_blank" rel="noopener" href="https://langgraph.com.cn/how-tos/subgraph/index.html">子图操作指南</a>。</p>
+<h4 id="反思"><a class="markdownIt-Anchor" href="#反思"></a> 反思<a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/agentic_concepts.1.html#reflection">¶</a></h4>
+<p>反思机制可以通过以下方式显著提高代理的可靠性：</p>
+<ol>
+<li>评估任务完成情况和正确性</li>
+<li>提供反馈以进行迭代改进</li>
+<li>实现自我纠正和学习</li>
+</ol>
+<p>虽然反思通常基于 LLM，但也可以使用确定性方法。例如，在编码任务中，编译错误可以作为反馈。这种方法在<a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=MvNdgmM7uyc">这个使用 LangGraph 进行自我纠正代码生成的视频</a>中得到了演示。</p>
+<p>通过利用这些功能，LangGraph 能够创建复杂的、特定于任务的代理架构，这些架构可以处理复杂的工作流，有效协作，并持续提高其性能。</p>
+<h2 id="2-例子工作流与智能体"><a class="markdownIt-Anchor" href="#2-例子工作流与智能体"></a> 2 (例子)工作流与智能体<a target="_blank" rel="noopener" href="https://langgraph.com.cn/tutorials/workflows/index.html#workflows-and-agents">¶</a></h2>
+<p><img src="/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6LangGraph/image-20260202152908141.png" alt="image-20260202152908141"></p>
+<h3 id="21-增强型rag"><a class="markdownIt-Anchor" href="#21-增强型rag"></a> 2.1 增强型RAG</h3>
+<img src="/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6LangGraph/image-20260202153345375.png" alt="image-20260202153345375" style="zoom:50%;">
+<h3 id="22-提示链"><a class="markdownIt-Anchor" href="#22-提示链"></a> 2.2 提示链</h3>
+<img src="/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6LangGraph/image-20260202153358812.png" alt="image-20260202153358812" style="zoom:67%;">
+<blockquote>
+<p>提示链将任务分解为一系列步骤，其中每个 LLM 调用都会处理前一个调用的输出。</p>
+</blockquote>
+<h3 id="23-并行化"><a class="markdownIt-Anchor" href="#23-并行化"></a> 2.3 并行化</h3>
+<p>通过并行化，LLM 可以同时处理任务</p>
+<blockquote>
+<p>LLM 有时可以同时处理一个任务，并通过编程方式聚合其输出。这种工作流，即并行化，体现在两种关键变体中：<strong>分段</strong>：将任务分解为并行运行的独立子任务。<strong>投票</strong>：多次运行同一任务以获取多样化输出。</p>
+</blockquote>
+<img src="/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6LangGraph/image-20260202155547181.png" alt="image-20260202155547181" style="zoom:50%;">
+<h3 id="24-路由"><a class="markdownIt-Anchor" href="#24-路由"></a> 2.4 路由</h3>
+<p>路由对输入进行分类，并将其导向后续任务</p>
+<blockquote>
+<p>路由对输入进行分类，并将其导向专门的后续任务。此工作流允许关注点分离，并构建更专业的提示。</p>
+</blockquote>
+<img src="/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6LangGraph/image-20260202161758081.png" alt="image-20260202161758081" style="zoom:50%;">
+<h3 id="25-编排器-工作器"><a class="markdownIt-Anchor" href="#25-编排器-工作器"></a> 2.5 编排器-工作器</h3>
+<p>在编排器-工作器模式下，编排器将任务分解并委托给工作器。</p>
+<img src="/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6LangGraph/image-20260202162737982.png" alt="image-20260202162737982" style="zoom:50%;">
+<h3 id="26-评估器-优化器"><a class="markdownIt-Anchor" href="#26-评估器-优化器"></a> 2.6 评估器-优化器</h3>
+<p>在评估器-优化器工作流中，一个 LLM 调用生成响应，而另一个在循环中提供评估和反馈</p>
+<img src="/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6LangGraph/image-20260202163054457.png" alt="image-20260202163054457" style="zoom:50%;">
+<h3 id="27-智能体"><a class="markdownIt-Anchor" href="#27-智能体"></a> 2.7 智能体</h3>
+<p>智能体通常被实现为 LLM，它在循环中根据环境反馈执行操作（通过工具调用）。</p>
+<p><img src="/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6LangGraph/image-20260202163420622.png" alt="image-20260202163420622"></p>
+<h1 id="二-核心概念"><a class="markdownIt-Anchor" href="#二-核心概念"></a> 二 核心概念</h1>
+<h2 id="1-图"><a class="markdownIt-Anchor" href="#1-图"></a> 1 图</h2>
+<p>LangGraph 的核心是将代理工作流建模为图。您可以使用三个关键组件来定义代理的行为：</p>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/low_level.1.html#state"><code>State</code></a>：一个共享数据结构，表示应用程序的当前快照。它可以是任何 Python 类型，但通常是 <code>TypedDict</code> 或 Pydantic <code>BaseModel</code>。</li>
+<li><a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/low_level.1.html#nodes"><code>Nodes</code></a>：编码代理逻辑的 Python 函数。它们接收当前的 <code>State</code> 作为输入，执行一些计算或副作用，并返回一个更新的 <code>State</code>。</li>
+<li><a target="_blank" rel="noopener" href="https://langgraph.com.cn/concepts/low_level.1.html#edges"><code>Edges</code></a>：Python 函数，根据当前的 <code>State</code> 决定接下来执行哪个 <code>Node</code>。它们可以是条件分支或固定转换。</li>
+</ol>
+<p><strong><code>StateGraph</code></strong> : 类是主要的图类。它通过用户定义的 <code>State</code> 对象进行参数化。</p>
+<p><strong>compile</strong>: 进行一些基本检查（例如，没有孤立节点）。</p>
+<h3 id="11-state"><a class="markdownIt-Anchor" href="#11-state"></a> 1.1 State</h3>
+<p>State 包含图的模式以及指定如何应用状态更新的reducer 函数。</p>
+<p>State 的模式将是<strong>图中所有 Nodes 和 Edges 的输入模式</strong>，可以是 TypedDict 或 Pydantic 模型。所有 Nodes 都将发出对 State 的更新，然后使用指定的 reducer 函数应用这些更新。</p>
+<h3 id="图graph"><a class="markdownIt-Anchor" href="#图graph"></a> 图（Graph）</h3>
+<p>LangGraph的核心是基于有向图的工作流模型。图由节点（Nodes）和边（Edges）组成，定义了工作流的结构和执行路径。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langgraph.graph <span class="keyword">import</span> StateGraph</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建一个状态图</span></span><br><span class="line">graph = StateGraph()</span><br></pre></td></tr></table></figure>
+<h3 id="节点nodes"><a class="markdownIt-Anchor" href="#节点nodes"></a> 节点（Nodes）</h3>
+<p>节点代表工作流中的处理单元，可以是函数、LangChain组件或其他可调用对象。每个节点接收状态作为输入，并返回更新后的状态。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">process_input</span>(<span class="params">state</span>):</span><br><span class="line">    <span class="comment"># 处理输入并更新状态</span></span><br><span class="line">    <span class="keyword">return</span> &#123;<span class="string">&quot;messages&quot;</span>: state[<span class="string">&quot;messages&quot;</span>] + [<span class="string">&quot;处理后的消息&quot;</span>]&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加节点到图中</span></span><br><span class="line">graph.add_node(<span class="string">&quot;process_input&quot;</span>, process_input)</span><br></pre></td></tr></table></figure>
+<h3 id="边edges"><a class="markdownIt-Anchor" href="#边edges"></a> 边（Edges）</h3>
+<p>边定义了节点之间的连接和数据流向。LangGraph支持条件边，使工作流能够根据状态动态选择执行路径。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 添加简单边</span></span><br><span class="line">graph.add_edge(<span class="string">&quot;start&quot;</span>, <span class="string">&quot;process_input&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加条件边</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">router</span>(<span class="params">state</span>):</span><br><span class="line">    <span class="keyword">if</span> <span class="string">&quot;error&quot;</span> <span class="keyword">in</span> state:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;error_handler&quot;</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;normal_process&quot;</span></span><br><span class="line"></span><br><span class="line">graph.add_conditional_edges(<span class="string">&quot;process_input&quot;</span>, router, &#123;<span class="string">&quot;error_handler&quot;</span>: error_handler, <span class="string">&quot;normal_process&quot;</span>: normal_process&#125;)</span><br></pre></td></tr></table></figure>
+<h3 id="状态state"><a class="markdownIt-Anchor" href="#状态state"></a> 状态（State）</h3>
+<p>状态是工作流执行过程中的数据容器，包含了节点间传递的所有信息。LangGraph提供了多种状态类型，支持不同的数据管理需求。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> langgraph.graph <span class="keyword">import</span> StateGraph, State</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义状态类型</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ChatState</span>(<span class="title class_ inherited__">State</span>):</span><br><span class="line">    messages: <span class="built_in">list</span></span><br><span class="line">    context: <span class="built_in">dict</span> = &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用类型化状态创建图</span></span><br><span class="line">graph = StateGraph(ChatState)</span><br></pre></td></tr></table></figure>
+<h3 id="基本工作流构建"><a class="markdownIt-Anchor" href="#基本工作流构建"></a> 基本工作流构建</h3>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6LangGraph/" data-id="cml62702g00064kv48qwe1jyi" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/agent/" rel="tag">agent</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2026/02/03/2026%E5%B9%B42%E6%9C%883%E6%97%A5-All-in-RAG/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          2026年2月3日 All in RAG
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6dify/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2025年2月2日 agent框架dify</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>134</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>38</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2025 - 2026 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

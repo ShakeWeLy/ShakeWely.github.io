@@ -43,9 +43,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>122</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>134</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>36</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>38</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -71,11 +71,792 @@
 
         <section id="main">
   
-    <article id="post-2023年12月4日-PCA" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2024年3月3日-面试更新——代码模型" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2023/12/04/2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/" class="article-date">
-  <time class="post-time" datetime="2023-12-04T13:06:58.000Z" itemprop="datePublished">
-    <span class="post-month">12月</span><br/>
+    <a href="/2024/03/03/2024%E5%B9%B43%E6%9C%883%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%9B%B4%E6%96%B0%E2%80%94%E2%80%94%E4%BB%A3%E7%A0%81%E6%A8%A1%E5%9E%8B/" class="article-date">
+  <time class="post-time" datetime="2024-03-03T06:16:37.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">03</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2024/03/03/2024%E5%B9%B43%E6%9C%883%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%9B%B4%E6%96%B0%E2%80%94%E2%80%94%E4%BB%A3%E7%A0%81%E6%A8%A1%E5%9E%8B/">2024年3月3日 面试更新——代码模型</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="代码模型"><a class="markdownIt-Anchor" href="#代码模型"></a> 代码模型</h1>
+<h2 id="模型加密"><a class="markdownIt-Anchor" href="#模型加密"></a> 模型加密</h2>
+<p>模型加密的几个方式：</p>
+<ul>
+<li>模型文件直接加密，把模型的二进制文件直接加密，一般都会有加密算法，对模型的前xx字节进行加密，解密的时候对前xx字节进行解密即可，这种加密只在load时候做，会影响模型加载速度，但是不影响运行速度</li>
+<li>模型结构不加密，模型权重加密，有的可以采用类似于模型压缩的方法把权重压缩了，推理时以自定义协议读取加载推理</li>
+<li>也需要对解密模型的代码进行加密，代码混淆要做，不过这样会影响解密代码也就是load模型过程，会变慢，就看你代码混淆做到什么程度</li>
+</ul>
+<h2 id="模型转换"><a class="markdownIt-Anchor" href="#模型转换"></a> 模型转换</h2>
+<p>模型可能是各种格式的：</p>
+<ul>
+<li>Caffe</li>
+<li>ONNX</li>
+<li>Pytorch</li>
+<li>TFLITE</li>
+<li>NCNN、MNN</li>
+</ul>
+<h4 id="模型转换后一般要做"><a class="markdownIt-Anchor" href="#模型转换后一般要做"></a> 模型转换后一般要做</h4>
+<ul>
+<li>转换后看一下模型的输入输出类型、维度、名称、数量啥的是否和之前一致</li>
+<li>转换后首先跑一张训练时的图（或者一批图），看下新模型的输出和旧模型差多少，一定要保证最终输入到模型的tensor一致（也可以使用random输入或者ones输入测试，不过对于模型权重分布特殊的模型来说，对于这种输入可能评测不是很准确）</li>
+<li>批量跑测试集测一下精度是否一致</li>
+<li>benchmark转换后模型的速度是否符合预期</li>
+</ul>
+<h4 id="常见的问题"><a class="markdownIt-Anchor" href="#常见的问题"></a> 常见的问题</h4>
+<ul>
+<li>转换后模型精度问题，输出为nan、精度完全错乱</li>
+<li>转换后模型batch=1正常，多batch结果错乱</li>
+<li>转换后输入/输出类型维度啥的错误</li>
+<li>转换后模型速度未达到预期</li>
+<li>未完待续</li>
+</ul>
+<h2 id="模型优化"><a class="markdownIt-Anchor" href="#模型优化"></a> 模型优化</h2>
+<p>小到优化一个<a target="_blank" rel="noopener" href="https://blog.csdn.net/agq358/article/details/125095432"><strong>op</strong></a>（Op就是Kernel的集合，一个Op代表的是有一定共性的多个Kernel便于在<a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2306404">计算图和图优化</a>中进行表示），大概优化整个推理pipeline，可以干的事情很多。</p>
+<h3 id="合并-替换op算子"><a class="markdownIt-Anchor" href="#合并-替换op算子"></a> 合并、替换op算子</h3>
+<p>很多框架在导出的时候就会<strong>自动合并一些操作</strong>，比如torch.onnx在导出<strong>conv+bn</strong>的时候会将bn吸到前面的conv中，比较常见了。<br>
+但也有一些<strong>可以合并的操作，<strong>假如框架代码还没有实现该pattern则不会合并，不过我们也可以自己合并，这里需要经验了，需要我们熟知各种op的合并方式。<br>
+可以自己合并一些操作，比如下图中的</strong>convTranspose+Add+BN</strong>，是不常见的Squence(序列)的pattern，如果自己愿意的话，可以直接在ONNX中进行合并，把权重关系搞对就行</p>
+<p><img src="/2024/03/03/2024%E5%B9%B43%E6%9C%883%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%9B%B4%E6%96%B0%E2%80%94%E2%80%94%E4%BB%A3%E7%A0%81%E6%A8%A1%E5%9E%8B/image-20240303145240993.png" alt="image-20240303145240993"></p>
+<p>列举一些合并的例子，总之就是将多个op合成大op，节省计算量以及数据搬运的时间：</p>
+<ul>
+<li>conv/transposeConv+bn</li>
+<li>多个支路的conv合并为group conv</li>
+<li>gemm + bias -&gt; conv</li>
+</ul>
+<p><img src="/2024/03/03/2024%E5%B9%B43%E6%9C%883%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%9B%B4%E6%96%B0%E2%80%94%E2%80%94%E4%BB%A3%E7%A0%81%E6%A8%A1%E5%9E%8B/image-20240303145305875.png" alt="image-20240303145305875"></p>
+<p>多路合并</p>
+<p><img src="/2024/03/03/2024%E5%B9%B43%E6%9C%883%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%9B%B4%E6%96%B0%E2%80%94%E2%80%94%E4%BB%A3%E7%A0%81%E6%A8%A1%E5%9E%8B/image-20240303145254628.png" alt="image-20240303145254628"></p>
+<p>既可以融合一些算子，当然也可以替换一些算子：</p>
+<ul>
+<li>relu6替换为max(0,6)</li>
+</ul>
+<h3 id="蒸馏-剪枝"><a class="markdownIt-Anchor" href="#蒸馏-剪枝"></a> 蒸馏、剪枝</h3>
+<p>剪枝后的模型比未剪枝的同等size大小精度更高。<br>
+具体的可以参考这篇：<a target="_blank" rel="noopener" href="https://arxiv.org/abs/1710.01878">https://arxiv.org/abs/1710.01878</a></p>
+<p>剪枝的方法可以看zomi总结的ppt(来自 <a target="_blank" rel="noopener" href="https://github.com/chenzomi12/DeepLearningSystem">https://github.com/chenzomi12/DeepLearningSystem</a>)：</p>
+<p><img src="/2024/03/03/2024%E5%B9%B43%E6%9C%883%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%9B%B4%E6%96%B0%E2%80%94%E2%80%94%E4%BB%A3%E7%A0%81%E6%A8%A1%E5%9E%8B/image-20240303145428861.png" alt="image-20240303145428861"></p>
+<p>​</p>
+<p>蒸馏可以使同结构的小模型精度提升接近大模型的精度。</p>
+<h4 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h4>
+<p>剪枝类似于模型搜索，如果直接<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/127194745">NAS</a>的话，就没有必要剪枝了。</p>
+<h4 id="参考"><a class="markdownIt-Anchor" href="#参考"></a> 参考</h4>
+<ul>
+<li>to prune or not to prune exploring the efficacy of pruning for model compression</li>
+<li>DAMO-YOLO</li>
+</ul>
+<h3 id="量化"><a class="markdownIt-Anchor" href="#量化"></a> 量化</h3>
+<p>量化目前比较成熟，也有很好的教程（PPQ），很成熟的库（PPQ）</p>
+<ul>
+<li>量化基本概念，与硬件的关系</li>
+<li>PTQ量化和QAT量化，两种量化还有很多方法。PTQ有  EasyQuant（EQ）、；QAT有LSQ(Learned Step Size Quantization)、DSQ(Differentiable Soft Quantization)</li>
+</ul>
+<p>不是所有模型、所有op都适合量化：</p>
+<ul>
+<li>重参数量化 <a target="_blank" rel="noopener" href="https://tech.meituan.com/2022/09/22/yolov6-quantization-in-meituan.html">https://tech.meituan.com/2022/09/22/yolov6-quantization-in-meituan.html</a></li>
+<li>量化模型直接输入int8 进行测试</li>
+</ul>
+<p>注意点：</p>
+<ul>
+<li>有些模型量化后，虽然整体指标没有变化（某个评价标准，比如coco的mAP），但是实际使用中，发现之前的一些效果变差了，这种情况大多是调用模型的策略效果与这个模型的耦合度比较高了。举个例子，比如之前这个模型对小目标检测效果好，但是量化后，小目标检测效果差了（然而中目标效果好了）所以导致与小目标耦合度比较高的策略兼容度不高，导致算法的整体精度下降。这种情况就比较尴尬，你可以调整策略，或者重新量化模型，加上一些约束使其在某些场景下尽可能和原始模型表现一致，但这个需要时间去优化了，有较高的时间成本。</li>
+</ul>
+<h4 id="参考-2"><a class="markdownIt-Anchor" href="#参考-2"></a> 参考</h4>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=Mzg3ODU2MzY5MA==&amp;mid=2247488318&amp;idx=1&amp;sn=048c1b78f3b2cb25c05abb115f20d6c6&amp;chksm=cf108b3bf867022d1b214928102d65ed691c81955b59ca02bccdee92584ad9aa8e390e1d2978&amp;token=1097456929&amp;lang=zh_CN&amp;scene=21#wechat_redirect">必看部署系列~懂你的神经网络量化教程：第一讲！</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=Mzg3ODU2MzY5MA==&amp;mid=2247488838&amp;idx=1&amp;sn=56107c468d5b683a574e6046af3a541f&amp;chksm=cf108d43f8670455736a83546eb5ed81abc9194d7d4c2359af393f26e3bddd1379f777e35f35&amp;token=1097456929&amp;lang=zh_CN&amp;scene=21#wechat_redirect">量化番外篇——TensorRT-8的量化细节</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=Mzg3ODU2MzY5MA==&amp;mid=2247489317&amp;idx=1&amp;sn=797e32276bd4f55948d992f455415943&amp;chksm=cf108f20f8670636b27be2431d5a4fdef1689eaa672e59ffc7d6181d2afb13a9a050d9b6b4a5&amp;token=1097456929&amp;lang=zh_CN&amp;scene=21#wechat_redirect">实践torch.fx第二篇——基于FX的PTQ量化实操</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/openppl-public/ppq">https://github.com/openppl-public/ppq</a></li>
+</ul>
+<h3 id="算子op优化"><a class="markdownIt-Anchor" href="#算子op优化"></a> 算子op优化</h3>
+<p>性能计算的一些入门问题，可以看下这个的回答：</p>
+<ul>
+<li>想进大厂的高性能计算岗位需要做哪些准备？</li>
+</ul>
+<p>大部分优化op的场景，很多原因是<strong>原生op的实现可能不是最优</strong>的，有很大的优化空间。<br>
+比如LayerNorm这个操作，Pytorch原生的实现比较慢，于是就有了优化空间：</p>
+<ul>
+<li>CUDA优化之LayerNorm性能优化实践</li>
+</ul>
+<p>同理，很多CUDA实现的OP可能不是最优的，只有你有精力，就可以进行优化。也要考虑是这个优化值不值，在整个模型中的占比大不大，投入产出比怎么样blabla。</p>
+<p>对于CUDA还好些，资料很多，很多op网上都有开源的不错的实现（尤其是gemm），抄抄改改就可以了。</p>
+<p>不过对于一些没有CUDA那么火的平台或者语言，比如arm平台的neon或者npu，这些开源的算子实现少一些，大部分需要自己手写。分析模型哪些op慢之后，手动优化一下。</p>
+<p>知乎上也有很多优化系列的教程，跟着一步一步来吧：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/478846788">cuda 入门的正确姿势：how-to-optimize-gemm</a></li>
+<li>深入浅出GPU优化系列：elementwise优化及CUDA工具链介绍</li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/441146275">[施工中] CUDA GEMM 理论性能分析与 kernel 优化</a></li>
+<li>深入浅出GPU优化系列：reduce优化</li>
+</ul>
+<p>有几种可以自动生成op的框架：</p>
+<ul>
+<li>TVM</li>
+<li>triton（此triton非彼triton）</li>
+</ul>
+<h3 id="调优可视化工具"><a class="markdownIt-Anchor" href="#调优可视化工具"></a> 调优可视化工具</h3>
+<p>可视化工具</p>
+<ul>
+<li>画模型图的工具，graphvis</li>
+<li>NVIDIA的nsight system和nsight compute</li>
+<li>pytorch的profiler</li>
+</ul>
+<h2 id="更多推理框架ai编译器"><a class="markdownIt-Anchor" href="#更多推理框架ai编译器"></a> 更多推理框架/AI编译器</h2>
+<p><a target="_blank" rel="noopener" href="https://github.com/merrymercy/awesome-tensor-compilers">https://github.com/merrymercy/awesome-tensor-compilers</a></p>
+<h3 id="onnx"><a class="markdownIt-Anchor" href="#onnx"></a> ONNX</h3>
+<h4 id="相关文章"><a class="markdownIt-Anchor" href="#相关文章"></a> 相关文章：</h4>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/daquexian/onnx-simplifier">https://github.com/daquexian/onnx-simplifier</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/ZhangGe6/onnx-modifier">https://github.com/ZhangGe6/onnx-modifier</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT/tree/master/tools/onnx-graphsurgeon">https://github.com/NVIDIA/TensorRT/tree/master/tools/onnx-graphsurgeon</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/onnx/onnx">https://github.com/onnx/onnx</a></li>
+<li>模型部署入门教程（五）：ONNX 模型的修改与调试</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/onnx/onnx/blob/main/docs/Operators.md">https://github.com/onnx/onnx/blob/main/docs/Operators.md</a></li>
+</ul>
+<h3 id="tvm"><a class="markdownIt-Anchor" href="#tvm"></a> TVM</h3>
+<ul>
+<li>如何评测模型的速度</li>
+<li>如何benchmark模型各层的错误</li>
+<li>解析trtexec中的benchmark</li>
+<li>解析TVM中的graph和VM</li>
+</ul>
+<h3 id="tensorrt"><a class="markdownIt-Anchor" href="#tensorrt"></a> TensorRT</h3>
+<ul>
+<li>python端口调用</li>
+<li>C++端口调用</li>
+<li>多线程调用</li>
+<li>各种模型转换TensorRT（ONNX、Pytorch、TensorFLow）</li>
+<li>各种和TensorRT相关的转换库</li>
+</ul>
+<h4 id="自定义插件"><a class="markdownIt-Anchor" href="#自定义插件"></a> 自定义插件</h4>
+<p>如果模型中保存TensorRT不支持的算子，就需要自己实现cuda操作并且集成到TensorRT中。<br>
+现在也有很多可以生成插件的工具：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/NVIDIA-AI-IOT/tensorrt_plugin_generator">https://github.com/NVIDIA-AI-IOT/tensorrt_plugin_generator</a></li>
+</ul>
+<p>相关资料：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/NVIDIA/trt-samples-for-hackathon-cn">https://github.com/NVIDIA/trt-samples-for-hackathon-cn</a></li>
+</ul>
+<h3 id="libtorch"><a class="markdownIt-Anchor" href="#libtorch"></a> libtorch</h3>
+<p>简单好用的对Pytorch模型友好的C++推理库。</p>
+<ul>
+<li>torch.jit.trace</li>
+<li>torch.jit.script</li>
+<li>python导出libtorch模型，C++加载libtorch模型</li>
+</ul>
+<h3 id="aitemplate"><a class="markdownIt-Anchor" href="#aitemplate"></a> AITemplate</h3>
+<p>AITemplate 加速Stable Diffusion的效果比TensorRT要好不少。<br>
+测试了一个res50的模型，利用<code>TensorRT-8.5.1.7</code>和<code>AITemplate-0.1dev</code>转化后简单测试了下速度，精度都是FP16，显卡是A4000。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th style="text-align:left">4x3x224x224</th>
+<th style="text-align:left">8x3x224x224</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">TensorRT</td>
+<td style="text-align:left">2.07885 ms</td>
+<td style="text-align:left">3.49877 ms</td>
+</tr>
+<tr>
+<td style="text-align:left">AITemplate</td>
+<td style="text-align:left">1.36401 ms</td>
+<td style="text-align:left">2.38946 ms</td>
+</tr>
+</tbody>
+</table>
+<h2 id="高性能计算"><a class="markdownIt-Anchor" href="#高性能计算"></a> 高性能计算</h2>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2024/03/03/2024%E5%B9%B43%E6%9C%883%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%9B%B4%E6%96%B0%E2%80%94%E2%80%94%E4%BB%A3%E7%A0%81%E6%A8%A1%E5%9E%8B/" data-id="cltgreey5000rw8v4e1zv3zw6" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9D%A2%E8%AF%95/" rel="tag">面试</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2024年3月3日-面试更新" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2024/03/03/2024%E5%B9%B43%E6%9C%883%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%9B%B4%E6%96%B0/" class="article-date">
+  <time class="post-time" datetime="2024-03-03T04:42:53.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">03</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2024/03/03/2024%E5%B9%B43%E6%9C%883%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%9B%B4%E6%96%B0/">2024年3月3日 面试更新——大模型</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="大模型面试总结"><a class="markdownIt-Anchor" href="#大模型面试总结"></a> 大模型面试总结</h1>
+<h2 id="大模型"><a class="markdownIt-Anchor" href="#大模型"></a> 大模型</h2>
+<h3 id="项目"><a class="markdownIt-Anchor" href="#项目"></a> 项目</h3>
+<p>现在简历上搞一些什么使用unet训练一个分割网络实现某个任务，或者说使用yolov7检测某个目标已经不是什么亮点了。不过这种也不是不行，但你需要<strong>更多的深度</strong>我才会感兴趣：</p>
+<ul>
+<li>网络结构有无值得说明的改进</li>
+<li>为什么这样做可以明确说出原因和数据证明</li>
+<li>对使用这个方法以及和其他方法做过比较详细的对比，选择这个模型是有理由的</li>
+</ul>
+<h3 id="推理相关"><a class="markdownIt-Anchor" href="#推理相关"></a> 推理相关</h3>
+<p>要求：</p>
+<ul>
+<li>搞上层编译器的（类似于torch-tensorrt的利用pytorch生态和TensorRT生态的在nvidia显卡加速的编译器，不需要自己写codegen），会针对不同的后端（比如onnx和torchscript）写parser，针对计算图写一些pass；也有搞基于MLIR的编译器的，在自己的公司硬件上跑，前端中端后端需要都搞</li>
+<li>搞推理框架的，就是优化训练和部署中的一些性能问题、精度溢出问题；有些公司喜欢搞统一的框架（训练和部署都解决了），不喜欢用现有的轮子，要自己造；对于加速类的推理框架，会实现比如模拟量化功能、精度对比功能等等</li>
+<li>搞加速的，就是对任务中各种瓶颈的算子进行加速，C<ins>转cuda，python转c</ins>等等，使用C++封装一些项目blabla</li>
+<li>项目优化op的细节</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2024/03/03/2024%E5%B9%B43%E6%9C%883%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%9B%B4%E6%96%B0/" data-id="cltgreey3000lw8v49zyk0xav" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9D%A2%E8%AF%95/" rel="tag">面试</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2024年2月12日-转载文章" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2024/02/12/2024%E5%B9%B42%E6%9C%8812%E6%97%A5-%E8%BD%AC%E8%BD%BD%E6%96%87%E7%AB%A0/" class="article-date">
+  <time class="post-time" datetime="2024-02-12T14:16:29.000Z" itemprop="datePublished">
+    <span class="post-month">2月</span><br/>
+    <span class="post-day">12</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2024/02/12/2024%E5%B9%B42%E6%9C%8812%E6%97%A5-%E8%BD%AC%E8%BD%BD%E6%96%87%E7%AB%A0/">2024年2月12日 转载文章</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="转载ai文章"><a class="markdownIt-Anchor" href="#转载ai文章"></a> 转载AI文章</h1>
+<h2 id="python"><a class="markdownIt-Anchor" href="#python"></a> python</h2>
+<h3 id="100-个-python-练手项目"><a class="markdownIt-Anchor" href="#100-个-python-练手项目"></a> <strong>100 个 Python 练手项目</strong></h3>
+<p>1、【Python 图片转字符画】</p>
+<p>2、【200行Python代码实现2048】</p>
+<p>3、【Python3 实现火车票查询工具】</p>
+<p>4、【高德API+Python解决租房问题】</p>
+<p>5、【Python3色情图片识别】</p>
+<p>6、【Python 破解验证码】</p>
+<p>7、【Python实现简单的Web服务器】</p>
+<p>8、【pygame开发打飞机游戏】</p>
+<p>9、【Django 搭建简易博客】</p>
+<p>10、【Python基于共现提取《釜山行》人物关系】</p>
+<p>11、【基于scrapy爬虫的天气数据采集（python）】</p>
+<p>12、【Flask 开发轻博客】</p>
+<p>13、【Python3图片隐写术】</p>
+<p>14、【Python 实现简易Shell】</p>
+<p>15、【使用Python解数学方程】</p>
+<p>16、【PyQt 实现简易浏览器】</p>
+<p>17、【神经网络实现手写字符识别系统】</p>
+<p>18、【Python 实现简单画板】</p>
+<p>19、【Python实现3D建模工具】</p>
+<p>20、【NBA常规寒结果预测——利用Python进行比赛数据分析】</p>
+<p>21、【神经网络实现人脸识别任务】</p>
+<p>22、【Python文本解析器】</p>
+<p>23、【Python3&amp;；amp；OpenCV 视频转字符动画】</p>
+<p>24、【Python3 实现淘女郎照片爬虫】</p>
+<p>25、【Python3实现简单的FTP认证服务器】</p>
+<p>26、【基于Flask 与MySQL 实现番剧推荐系统】</p>
+<p>27、【Python 实现端口扫描器】</p>
+<p>28、【使用Python3编写系列实用脚本】</p>
+<p>29、【Python 实现康威生命游戏】</p>
+<p>30、【川普撞脸希拉里（基于OpenCV的面部特征交换）】</p>
+<p>31、【Python 3实现Markdown 解析器】</p>
+<p>32、【Python气象数据分析–《Python 数据分析实战》】</p>
+<p>33、【Python实现键值数据库】</p>
+<p>34、【k-近邻算法实现手写数字识别系统】</p>
+<p>35、【ebay在线拍卖数据分析】</p>
+<p>36、【Python 实现英文新闻摘要自动提取】</p>
+<p>37、【Python实现简易局域网视频聊天工具】</p>
+<p>38、【基于Flask及爬虫实现微信娱乐机器人】</p>
+<p>39、【Python实现Python解释器】</p>
+<p>40、【Python3基于Scapy实现DDos】</p>
+<p>41、【Python 实现密码强度检测器】</p>
+<p>42、【使用Python 实现深度神经网络】</p>
+<p>43、【Python实现从excel读取数据并绘制成精美图像】</p>
+<p>44、【人机对战初体验：Python基于Pygame实现四子棋游戏】</p>
+<p>45、【Python3实现可控制肉鸡的反向Shell】</p>
+<p>46、【Python打造漏洞扫描器】</p>
+<p>47、【Python应用马尔可夫链算法实现随机文本生成】</p>
+<p>48、【数独游戏的Python实现与破解】</p>
+<p>49、【使用Python定制词云】</p>
+<p>50、【Python开发简单计算器】</p>
+<p>50、【Python开发简单计算器】</p>
+<p>51、【Python 实现FTP弱口令扫描器】</p>
+<p>52、【Python实现Huffman编码解压缩文件】</p>
+<p>53、【Python实现Zip文件的暴力破解】</p>
+<p>54、【Python3智能裁切图片】</p>
+<p>55、【Python实现网站模拟登陆】</p>
+<p>56、【给Python3爬虫做一个界面.妹子图网实战】</p>
+<p>57、【Python3实现图片转彩色字符】</p>
+<p>58、【自联想器的Python 实现】</p>
+<p>59、【Python 实现简单流镜】</p>
+<p>60、【Flask实现简单聊天室】</p>
+<p>61、【基于PyQt5实现地图中定位相片拍摄位置】</p>
+<p>62、【Python实现模板引擎】</p>
+<p>63、【Python实现遗传算法求解n-queens问题】</p>
+<p>64、【Python3实现命令行动态进度条】</p>
+<p>65、【Python获取挂号信息并邮件通知】</p>
+<p>66、【Python实现java web项目远端自动化更新部署】</p>
+<p>67、【使用Python3编写Github 自动周报生成器】</p>
+<p>68、【使用Python生成分形图片】</p>
+<p>69、【Python 实现Redis 异步客户端】</p>
+<p>70、【Python 实现中文错别字高亮系统】</p>
+<p>71、【Python自动获取小说工具】</p>
+<p>72、【python自动获取酷狗音乐工具】</p>
+<p>73、【python自动获取海量IP工具】</p>
+<p>74、【Python自动化开发-制作名片卡】</p>
+<p>75、【Python自动化开发-微信统计】</p>
+<p>76、【Python自动化开发-批量发邮件通知】</p>
+<p>77、【Python自动化开发-考勒处理】</p>
+<p>78、【Python双色球系统】</p>
+<p>79、【Python批量获取王者荣耀皮肤】</p>
+<p>80、【Python获取阴阳师壁纸】</p>
+<p>81、【Python获取小说数据并分析】</p>
+<p>82、【python获取拉钩工具】</p>
+<p>83、【Python获取房天下数据】</p>
+<p>84、【Python获取彩票信息】</p>
+<p>85、【Python获取NBA数据】</p>
+<p>86、【Python合成女神图片】</p>
+<p>87、【Python法拍网数据】</p>
+<p>88、【Python操作Excel自动化开发】</p>
+<p>89、【python百行制作登录系统】</p>
+<p>90、【python百行制作查询工具】</p>
+<p>91、【Python百行代码实现点赞系统】</p>
+<p>92、【Python百行代码实现抽奖系统】</p>
+<p>93、【python自动工资条】</p>
+<p>94、【python抓取相亲网数据</p>
+<p>95、【python抓取百合网数据</p>
+<p>96、【python制作12306查票工具</p>
+<p>97、【python游戏开发公开课</p>
+<p>98、【python协程详解公开课</p>
+<p>99、【python吧中30行拿LOL皮肤</p>
+<p>100、【python快速获取斗图表情</p>
+<h3 id="数据分析"><a class="markdownIt-Anchor" href="#数据分析"></a> <a target="_blank" rel="noopener" href="https://blog.csdn.net/qazwsxpy/article/details/128192090?spm=1001.2100.3001.7377&amp;utm_medium=distribute.pc_feed_blog_category.none-task-blog-classify_tag-6-128192090-null-null.nonecase&amp;depth_1-utm_source=distribute.pc_feed_blog_category.none-task-blog-classify_tag-6-128192090-null-null.nonecase">数据分析</a></h3>
+<h2 id="机器学习"><a class="markdownIt-Anchor" href="#机器学习"></a> 机器学习</h2>
+<h3 id="机器学习-梯度下降"><a class="markdownIt-Anchor" href="#机器学习-梯度下降"></a> <a target="_blank" rel="noopener" href="https://techlead.blog.csdn.net/article/details/133819132?spm=1001.2014.3001.5502">机器学习-梯度下降</a></h3>
+<p>目录<br>
+一、简介<br>
+什么是梯度下降？<br>
+为什么梯度下降重要？<br>
+二、梯度下降的数学原理<br>
+代价函数（Cost Function）<br>
+梯度（Gradient）<br>
+更新规则<br>
+代码示例：基础的梯度下降更新规则<br>
+三、批量梯度下降（Batch Gradient Descent）<br>
+基础算法<br>
+代码示例<br>
+四、随机梯度下降（Stochastic Gradient Descent）<br>
+基础算法<br>
+代码示例<br>
+优缺点<br>
+五、小批量梯度下降（Mini-batch Gradient Descent）<br>
+基础算法<br>
+代码示例<br>
+优缺点<br>
+————————————————</p>
+<p>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/magicyangjay111/article/details/133819132">https://blog.csdn.net/magicyangjay111/article/details/133819132</a></p>
+<h3 id><a class="markdownIt-Anchor" href="#"></a> </h3>
+<h3 id="遗传算法可选"><a class="markdownIt-Anchor" href="#遗传算法可选"></a> 遗传算法（可选）</h3>
+<h2 id="深度学习"><a class="markdownIt-Anchor" href="#深度学习"></a> <a target="_blank" rel="noopener" href="https://blog.csdn.net/chenlycly/article/details/134043297?spm=1001.2100.3001.7377&amp;utm_medium=distribute.pc_feed_blog_category.none-task-blog-classify_tag-3-134043297-null-null.nonecase&amp;depth_1-utm_source=distribute.pc_feed_blog_category.none-task-blog-classify_tag-3-134043297-null-null.nonecase">深度学习</a></h2>
+<h3 id="前馈神经网络"><a class="markdownIt-Anchor" href="#前馈神经网络"></a> <a target="_blank" rel="noopener" href="https://techlead.blog.csdn.net/article/details/132421817?spm=1001.2014.3001.5502">前馈神经网络</a></h3>
+<p>目录<br>
+一、前馈神经网络概述<br>
+什么是前馈神经网络<br>
+前馈神经网络的工作原理<br>
+应用场景及优缺点<br>
+二、前馈神经网络的基本结构<br>
+输入层、隐藏层和输出层<br>
+激活函数的选择与作用<br>
+网络权重和偏置<br>
+三、前馈神经网络的训练方法<br>
+损失函数与优化算法<br>
+反向传播算法详解<br>
+避免过拟合的策略<br>
+四、使用Python和PyTorch实现FNN<br>
+4.1 准备数据集<br>
+选择合适的数据集<br>
+数据预处理<br>
+PyTorch数据加载器<br>
+4.2 构建模型结构<br>
+定义网络架构<br>
+选择激活函数<br>
+权重初始化<br>
+构建与任务相匹配的损失函数<br>
+4.3 训练模型<br>
+选择优化器<br>
+训练循环<br>
+模型验证<br>
+调整学习率<br>
+保存和加载模型<br>
+可视化训练过程<br>
+4.4 模型评估与可视化<br>
+评估指标<br>
+模型验证<br>
+混淆矩阵<br>
+ROC和AUC<br>
+特征重要性和模型解释<br>
+可视化隐藏层<br>
+五、前馈神经网络的先进变体与应用<br>
+多层感知器（MLP）<br>
+卷积神经网络（CNN）<br>
+循环神经网络（RNN）<br>
+Transformer结构<br>
+强化学习中的FNN<br>
+生成对抗网络（GAN）<br>
+FNN在医学图像分析中的应用<br>
+六、总结与未来展望<br>
+总结<br>
+未来展望<br>
+结语<br>
+————————————————</p>
+<p>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/magicyangjay111/article/details/132421817">https://blog.csdn.net/magicyangjay111/article/details/132421817</a></p>
+<p>损失函数和优化算法是神经网络训练的基石，决定了网络如何学习和调整其权重。</p>
+<ul>
+<li><strong>损失函数：</strong> 用于衡量网络预测与实际目标之间的差异，常见的损失函数包括均方误差（MSE）、交叉熵损失等。</li>
+<li><strong>优化算法：</strong> 通过最小化损失函数来更新网络权重，常见的优化算法包括随机梯度下降（SGD）、Adam、RMSProp等。</li>
+</ul>
+<h3 id="长短时记忆网络lstm"><a class="markdownIt-Anchor" href="#长短时记忆网络lstm"></a> <a target="_blank" rel="noopener" href="https://techlead.blog.csdn.net/article/details/132480035">长短时记忆网络（LSTM）</a></h3>
+<p>目录</p>
+<ol>
+<li>LSTM的背景<br>
+人工神经网络的进化<br>
+循环神经网络（RNN）的局限性<br>
+LSTM的提出背景</li>
+<li>LSTM的基础理论<br>
+2.1 LSTM的数学原理<br>
+遗忘门（Forget Gate）<br>
+输入门（Input Gate）<br>
+记忆单元（Cell State）<br>
+输出门（Output Gate）<br>
+2.2 LSTM的结构逻辑<br>
+遗忘门：决定丢弃的信息<br>
+输入门：选择性更新记忆单元<br>
+更新单元状态<br>
+输出门：决定输出的隐藏状态<br>
+门的相互作用<br>
+逻辑结构的实际应用<br>
+总结<br>
+2.3 LSTM与GRU的对比</li>
+<li>结构<br>
+LSTM<br>
+GRU</li>
+<li>数学表达<br>
+LSTM<br>
+GRU</li>
+<li>性能和应用<br>
+小结</li>
+<li>LSTM在实际应用中的优势<br>
+处理长期依赖问题<br>
+遗忘门机制<br>
+梯度消失问题的缓解<br>
+广泛的应用领域<br>
+灵活的架构选项<br>
+成熟的开源实现<br>
+小结</li>
+<li>LSTM的实战演示<br>
+4.1 使用PyTorch构建LSTM模型<br>
+定义LSTM模型<br>
+训练模型<br>
+评估和预测</li>
+<li>LSTM总结<br>
+<strong>解决长期依赖问题</strong><br>
+<strong>广泛的应用领域</strong><br>
+<strong>灵活与强大</strong><br>
+<strong>开源支持</strong><br>
+<strong>持战与展望</strong><br>
+总结反思<br>
+————————————————</li>
+</ol>
+<p>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/magicyangjay111/article/details/132480035">https://blog.csdn.net/magicyangjay111/article/details/132480035</a></p>
+<h4 id="lstm的提出背景"><a class="markdownIt-Anchor" href="#lstm的提出背景"></a> LSTM的提出背景</h4>
+<p>长短时记忆网络（LSTM）是一种特殊类型的RNN，由Hochreiter和Schmidhuber于1997年提出，目的是解决传统RNN的问题。</p>
+<ul>
+<li><strong>解决梯度消失问题</strong>: 通过引入“记忆单元”，LSTM能够在长序列中保持信息的流动。</li>
+<li><strong>捕捉长依赖性</strong>: LSTM结构允许网络捕捉和理解长序列中的复杂依赖关系。</li>
+<li><strong>广泛应用</strong>: 由于其强大的性能和灵活性，LSTM已经被广泛应用于许多序列学习任务，如语音识别、机器翻译和时间序列分析等。</li>
+</ul>
+<h4 id="记忆单元的结构"><a class="markdownIt-Anchor" href="#记忆单元的结构"></a> “记忆单元”的结构</h4>
+<h3 id="深度信念网络dbn"><a class="markdownIt-Anchor" href="#深度信念网络dbn"></a> <a target="_blank" rel="noopener" href="https://techlead.blog.csdn.net/article/details/132531255?spm=1001.2014.3001.5502">深度信念网络（DBN）</a></h3>
+<p>一、概述<br>
+1.1 深度信念网络的概述<br>
+1.2 深度信念网络与其他深度学习模型的比较<br>
+结构层次<br>
+学习方式<br>
+训练和优化<br>
+应用领域<br>
+1.3 应用领域<br>
+图像识别与处理<br>
+自然语言处理<br>
+推荐系统<br>
+语音识别<br>
+无监督学习与异常检测<br>
+药物发现与生物信息学<br>
+二、结构<br>
+2.1 受限玻尔兹曼机（RBM）<br>
+结构与组成<br>
+工作原理<br>
+学习算法<br>
+应用<br>
+2.2 DBN的结构和组成<br>
+层次结构<br>
+网络连接<br>
+训练过程<br>
+应用领域<br>
+2.3 训练和学习算法<br>
+预训练<br>
+微调<br>
+优化方法<br>
+评估和验证<br>
+三、实战<br>
+3.1 DBN模型的构建<br>
+定义RBM层<br>
+构建DBN模型<br>
+定义DBN的超参数<br>
+3.2 预训练<br>
+RBM的逐层训练<br>
+对比散度（CD）算法<br>
+3.3 微调<br>
+监督训练<br>
+微调训练<br>
+模型验证和测试<br>
+3.4 应用<br>
+分类或回归任务<br>
+特征学习<br>
+转移学习<br>
+在线应用<br>
+四、总结<br>
+————————————————</p>
+<p>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/magicyangjay111/article/details/132531255">https://blog.csdn.net/magicyangjay111/article/details/132531255</a></p>
+<h2 id="项目实战"><a class="markdownIt-Anchor" href="#项目实战"></a> 项目实战</h2>
+<h3 id="图像分类发展历史-技术全解与实战"><a class="markdownIt-Anchor" href="#图像分类发展历史-技术全解与实战"></a> <a target="_blank" rel="noopener" href="https://blog.csdn.net/magicyangjay111/article/details/134698103">图像分类：发展历史、技术全解与实战</a></h3>
+<ul>
+<li>自动化的神经网络架构搜索（NAS）技术</li>
+<li>轻量级模型和少样本学习也成为研究的热点</li>
+<li>图像分类有望实现更复杂的应用，如情感分析、自动化标注等</li>
+</ul>
+<p><img src="/2024/02/12/2024%E5%B9%B42%E6%9C%8812%E6%97%A5-%E8%BD%AC%E8%BD%BD%E6%96%87%E7%AB%A0/image-20240212222002730.png" alt="image-20240212222002730"></p>
+<h3 id="计算机视觉五大核心研究任务分类识别-检测分割-人体分析-三维视觉-视频分析"><a class="markdownIt-Anchor" href="#计算机视觉五大核心研究任务分类识别-检测分割-人体分析-三维视觉-视频分析"></a> <a target="_blank" rel="noopener" href="https://techlead.blog.csdn.net/article/details/132321843?spm=1001.2014.3001.5502">计算机视觉五大核心研究任务：分类识别、检测分割、人体分析、三维视觉、视频分析</a></h3>
+<p>目录<br>
+一、引言<br>
+1.1 计算机视觉的定义<br>
+1.1.1 核心技术<br>
+1.1.2 应用场景<br>
+1.2 历史背景及发展<br>
+1.2.1 1960s-1980s: 初期阶段<br>
+1.2.2 1990s-2000s: 机器学习时代<br>
+1.2.3 2010s-现在: 深度学习的革命<br>
+1.3 应用领域概览<br>
+1.3.1 工业自动化<br>
+1.3.2 医疗图像分析<br>
+1.3.3 自动驾驶<br>
+1.3.4 虚拟现实与增强现实<br>
+二、计算机视觉五大核心任务<br>
+2.1 图像分类与识别<br>
+2.1.1 图像分类与识别的基本概念<br>
+2.1.2 早期方法与技术演进<br>
+2.1.3 深度学习的引入与革新<br>
+卷积神经网络在图像分类中的应用<br>
+总结<br>
+2.2 物体检测与分割<br>
+2.2.1 物体检测<br>
+早期方法<br>
+深度学习方法<br>
+2.2.2 物体分割<br>
+语义分割<br>
+实例分割<br>
+总结<br>
+2.3 人体分析<br>
+2.3.1 人脸识别<br>
+2.3.2 人体姿态估计<br>
+2.3.3 动作识别<br>
+2.3.4 人体分割<br>
+2.4 三维计算机视觉<br>
+2.4.1 三维重建<br>
+立体视觉<br>
+多视图几何<br>
+点云生成和融合<br>
+2.4.2 3D物体检测和识别<br>
+基于2D图像的方法<br>
+基于点云的方法<br>
+2.4.3 三维语义分割<br>
+基于体素的方法<br>
+基于点云的方法<br>
+2.4.4 三维姿态估计<br>
+单视图方法<br>
+多视图方法<br>
+总结<br>
+2.5 视频理解与分析<br>
+2.5.1 视频分类<br>
+2.5.2 动作识别<br>
+2.5.3 视频物体检测与分割<br>
+2.5.4 视频摘要与高亮检测<br>
+2.5.5 视频生成和编辑<br>
+总结<br>
+三、无监督学习与自监督学习在计算机视觉中的应用<br>
+3.1 无监督学习<br>
+聚类<br>
+降维与表示学习<br>
+3.2 自监督学习<br>
+对比学习<br>
+预训练任务设计<br>
+3.3 跨模态学习</p>
+<ol start="4">
+<li>总结</li>
+</ol>
+<p>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/magicyangjay111/article/details/132321843">https://blog.csdn.net/magicyangjay111/article/details/132321843</a></p>
+<p><img src="/2024/02/12/2024%E5%B9%B42%E6%9C%8812%E6%97%A5-%E8%BD%AC%E8%BD%BD%E6%96%87%E7%AB%A0/image-20240212224535849.png" alt="image-20240212224535849"></p>
+<h3 id="人脸识别"><a class="markdownIt-Anchor" href="#人脸识别"></a> <a target="_blank" rel="noopener" href="https://techlead.blog.csdn.net/article/details/134762161">人脸识别</a>：</h3>
+<p>目录<br>
+一、人脸识别技术的发展历程<br>
+早期探索：20世纪60至80年代<br>
+技术价值点：<br>
+自动化与算法化：20世纪90年代<br>
+技术价值点：<br>
+深度学习的革命：21世纪初至今<br>
+技术价值点：<br>
+二、几何特征方法详解与实战<br>
+几何特征方法的原理<br>
+几何特征方法的局限性<br>
+实战案例：简单的几何特征人脸识别<br>
+环境配置<br>
+代码实现<br>
+代码说明<br>
+三、自动化与算法化详解与实战<br>
+自动化与算法化的进展<br>
+技术创新点：<br>
+实战案例：基于特征匹配的人脸识别<br>
+环境配置<br>
+代码实现<br>
+代码说明<br>
+四、深度学习方法<br>
+深度学习方法的核心概念<br>
+技术创新点<br>
+实战案例：使用深度学习进行人脸识别<br>
+环境配置<br>
+代码实现<br>
+代码说明<br>
+总结<br>
+————————————————</p>
+<p>原文链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/magicyangjay111/article/details/134762161">https://blog.csdn.net/magicyangjay111/article/details/134762161</a></p>
+<p><img src="/2024/02/12/2024%E5%B9%B42%E6%9C%8812%E6%97%A5-%E8%BD%AC%E8%BD%BD%E6%96%87%E7%AB%A0/image-20240212232302240.png" alt="image-20240212232302240"></p>
+<p><img src="/2024/02/12/2024%E5%B9%B42%E6%9C%8812%E6%97%A5-%E8%BD%AC%E8%BD%BD%E6%96%87%E7%AB%A0/image-20240212232432194.png" alt="image-20240212232432194"></p>
+<h3 id="时间序列预测"><a class="markdownIt-Anchor" href="#时间序列预测"></a> <a target="_blank" rel="noopener" href="https://snu77.blog.csdn.net/article/details/133272874?spm=1001.2014.3001.5502">时间序列预测：</a></h3>
+<h2 id="深度学习-前沿"><a class="markdownIt-Anchor" href="#深度学习-前沿"></a> 深度学习 前沿</h2>
+<h3 id="可变形卷积deformable-conv"><a class="markdownIt-Anchor" href="#可变形卷积deformable-conv"></a> <a target="_blank" rel="noopener" href="https://blog.csdn.net/panghuzhenbang/article/details/129816869?spm=1001.2100.3001.7377&amp;utm_medium=distribute.pc_feed_blog_category.none-task-blog-classify_tag-13-129816869-null-null.nonecase&amp;depth_1-utm_source=distribute.pc_feed_blog_category.none-task-blog-classify_tag-13-129816869-null-null.nonecase">可变形卷积(Deformable Conv)</a></h3>
+<p><img src="/2024/02/12/2024%E5%B9%B42%E6%9C%8812%E6%97%A5-%E8%BD%AC%E8%BD%BD%E6%96%87%E7%AB%A0/image-20240212235532908.png" alt="image-20240212235532908"></p>
+<h3 id="llm"><a class="markdownIt-Anchor" href="#llm"></a> LLM</h3>
+<h3 id="sd"><a class="markdownIt-Anchor" href="#sd"></a> SD</h3>
+<h2 id="深度学习-项目优化"><a class="markdownIt-Anchor" href="#深度学习-项目优化"></a> 深度学习 项目优化</h2>
+<h3 id="量化"><a class="markdownIt-Anchor" href="#量化"></a> 量化</h3>
+<h3 id="cuda"><a class="markdownIt-Anchor" href="#cuda"></a> CUDA</h3>
+<h4 id="c-cuda手搓一个简单的神经网络推理"><a class="markdownIt-Anchor" href="#c-cuda手搓一个简单的神经网络推理"></a> <a target="_blank" rel="noopener" href="https://blog.csdn.net/Bartender_VA11/article/details/135999169">C++ CUDA手搓一个简单的神经网络推理</a></h4>
+<h3 id="trt"><a class="markdownIt-Anchor" href="#trt"></a> TRT</h3>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2024/02/12/2024%E5%B9%B42%E6%9C%8812%E6%97%A5-%E8%BD%AC%E8%BD%BD%E6%96%87%E7%AB%A0/" data-id="cltgreey1000aw8v4ahty4aie" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9D%82/" rel="tag">杂</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2024年2月4日-Transformer" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/" class="article-date">
+  <time class="post-time" datetime="2024-02-04T07:45:25.000Z" itemprop="datePublished">
+    <span class="post-month">2月</span><br/>
     <span class="post-day">04</span>
   </time>
 </a>
@@ -88,7 +869,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2023/12/04/2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/">2023年12月4日 PCA</a>
+      <a class="article-title" href="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/">2024年2月4日 Transformer</a>
     </h1>
   
 
@@ -103,363 +884,36 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="pca"><a class="markdownIt-Anchor" href="#pca"></a> PCA</h1>
-<h2 id="1-pca原理"><a class="markdownIt-Anchor" href="#1-pca原理"></a> 1、PCA原理</h2>
-<p>参考：<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1E5411E71z/?spm_id_from=333.337.search-card.all.click&amp;vd_source=d3c0d5e026e5b0637b219503cea5513e">https://www.bilibili.com/video/BV1E5411E71z/?spm_id_from=333.337.search-card.all.click&amp;vd_source=d3c0d5e026e5b0637b219503cea5513e</a></p>
-<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204211124849.png" alt="image-20231204211124849" /></p>
-<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204211048339.png" alt="image-20231204211048339" /></p>
-<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204211113027.png" alt="image-20231204211113027" /></p>
-<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204211258728.png" alt="image-20231204211258728" /></p>
-<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204211356758.png" alt="image-20231204211356758" /></p>
-<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204211402550.png" alt="image-20231204211402550" /></p>
-<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204211416402.png" alt="image-20231204211416402" /><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204211427283.png" alt="image-20231204211427283" /></p>
-<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204211423299.png" alt="image-20231204211423299" /></p>
-<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204211505125.png" alt="image-20231204211505125" /><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204211617375.png" alt="image-20231204211617375" /></p>
-<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204211650063.png" alt="image-20231204211650063" /></p>
-<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204211739123.png" alt="image-20231204211739123" /></p>
-<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204211747417.png" alt="image-20231204211747417" /></p>
-<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204211757163.png" alt="image-20231204211757163" /></p>
-<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204212108183.png" alt="image-20231204212108183" /></p>
-<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204212313493.png" alt="image-20231204212313493" /></p>
-<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204212518333.png" alt="image-20231204212518333" /></p>
-<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204212506525.png" alt="image-20231204212506525" /></p>
-<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204212512462.png" alt="image-20231204212512462" /></p>
-<p><img src="./2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/image-20231204212542766.png" alt="image-20231204212542766" /></p>
+        <h1 id="11"><a class="markdownIt-Anchor" href="#11"></a> 11</h1>
+<p>Transformer</p>
+<p>类似</p>
+<img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204154832886.png" alt="image-20240204154832886" style="zoom: 33%;">
+<p>编码器内部结构</p>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204154915719.png" alt="image-20240204154915719"></p>
+<p>解码器</p>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204154933875.png" alt="image-20240204154933875"></p>
+<p>计算注意力</p>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204155008356.png" alt="image-20240204155008356"></p>
+<p>a embedding 转换成向量</p>
+<p>乘wq wk wv 成为 QKV</p>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204155229925.png" alt="image-20240204155229925"></p>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204155321645.png" alt="image-20240204155321645"></p>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204155426496.png" alt="image-20240204155426496"></p>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204155505816.png" alt="image-20240204155505816"></p>
+<h3 id="多头注意力"><a class="markdownIt-Anchor" href="#多头注意力"></a> 多头注意力</h3>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204155513230.png" alt="image-20240204155513230"></p>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204155611126.png" alt="image-20240204155611126"></p>
+<p>z相加之后乘w 等到 Z</p>
+<h2 id="词向量编码"><a class="markdownIt-Anchor" href="#词向量编码"></a> 词向量编码</h2>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204155845984.png" alt="image-20240204155845984"></p>
+<h3 id="位置编码"><a class="markdownIt-Anchor" href="#位置编码"></a> 位置编码</h3>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204160027009.png" alt="image-20240204160027009"></p>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/image-20240204160316504.png" alt="image-20240204160316504"></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2023/12/04/2023%E5%B9%B412%E6%9C%884%E6%97%A5-PCA/" data-id="clrwazlr3000y7ov4a2g29mne" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2023年11月20日-面试总结2" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2023/11/20/2023%E5%B9%B411%E6%9C%8820%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%932/" class="article-date">
-  <time class="post-time" datetime="2023-11-19T16:49:22.000Z" itemprop="datePublished">
-    <span class="post-month">11月</span><br/>
-    <span class="post-day">20</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/11/20/2023%E5%B9%B411%E6%9C%8820%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%932/">2023年11月20日 面试总结2</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><strong>概况</strong>：</p>
-<ul>
-<li>面试时间：早上十点</li>
-<li>面试岗位：</li>
-<li>面试内容：自我介绍、专业领域、大创项目、Stable Diffusion项目、解释Diffusion模型、解释gam模型、计算机网络提问、深度学习提问、问答环节</li>
-</ul>
-<p><strong>面试内容总结</strong>：</p>
-<ol>
-<li><strong>自我介绍和专业领域</strong>：
-<ul>
-<li>面试官询问了你的专业和为何选择该岗位，但我似乎没有清晰地表达出你的专业优势和学院背景。</li>
-</ul>
-</li>
-<li><strong>大创项目</strong>：
-<ul>
-<li>数据怎么处理</li>
-<li>模型用了什么alexnet  似乎太过于简单</li>
-<li>判断输出用的什么方式  概率sofmax</li>
-<li></li>
-</ul>
-</li>
-<li><strong>Stable Diffusion项目</strong>：
-<ul>
-<li>lora模型介绍  回答不好</li>
-<li>项目使用经验 自我感觉还行</li>
-</ul>
-</li>
-<li><strong>深度学习提问</strong>：
-<ul>
-<li>diffusion模型解释  临时抱佛脚的</li>
-<li>过拟合和欠拟合解释——回答的思路很乱</li>
-<li>解释gam模型——回答不好，</li>
-</ul>
-</li>
-<li><strong>计算机网络提问</strong>：
-<ul>
-<li>问了计算机单线程和多线程组成原理下的实现？——没学过</li>
-</ul>
-</li>
-<li>python<strong>提问：</strong>
-<ol>
-<li>python中可变数据类型有哪些——没背，没准备，</li>
-</ol>
-</li>
-<li><strong>工作安排</strong>：
-<ul>
-<li>模型训练和脚本编写，方便美工作图</li>
-</ul>
-</li>
-<li><strong>问答环节</strong>：
-<ul>
-<li>忘了——但是降维打击了已经</li>
-</ul>
-</li>
-</ol>
-<p><strong>总结</strong>：</p>
-<p>​	学习不充分——还有很大没涉及的地方</p>
-<p>​	准备不充分——很多没有按格式作答、思路很乱</p>
-<p>​	心态爆炸——在专业人士面前简直是降维打击！</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2023/11/20/2023%E5%B9%B411%E6%9C%8820%E6%97%A5-%E9%9D%A2%E8%AF%95%E6%80%BB%E7%BB%932/" data-id="clrwazlqy000i7ov4aofx9c7i" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9D%A2%E8%AF%95/" rel="tag">面试</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2023年11月17日-面试1总结" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2023/11/17/2023%E5%B9%B411%E6%9C%8817%E6%97%A5-%E9%9D%A2%E8%AF%951%E6%80%BB%E7%BB%93/" class="article-date">
-  <time class="post-time" datetime="2023-11-17T10:06:15.000Z" itemprop="datePublished">
-    <span class="post-month">11月</span><br/>
-    <span class="post-day">17</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/11/17/2023%E5%B9%B411%E6%9C%8817%E6%97%A5-%E9%9D%A2%E8%AF%951%E6%80%BB%E7%BB%93/">2023年11月17日 面试1总结</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><strong>概况</strong>：</p>
-<ul>
-<li>面试时间：15:38</li>
-<li>面试岗位：工程项目与人工智能领域相关</li>
-<li>面试内容：自我介绍、专业领域、大创项目、插件印象、开发插件想法、Stable Diffusion项目、工作要求和任务、问答环节</li>
-</ul>
-<p><strong>面试内容总结</strong>：</p>
-<ol>
-<li><strong>自我介绍和专业领域</strong>：
-<ul>
-<li>面试官询问了你的专业和为何选择该岗位，但我似乎没有清晰地表达出你的专业优势和学院背景。</li>
-</ul>
-</li>
-<li><strong>大创项目</strong>：
-<ul>
-<li>提及了大创项目的流程和任务，但忽略了项目目的和实现方法，可能需要更注重解释项目的目标和你在项目中的角色。</li>
-</ul>
-</li>
-<li><strong>插件印象和开发想法</strong>：
-<ul>
-<li>我提到了一个能阅读文献的插件，但在回答开发自己的插件时，没有明确表达插件的功能和目的。</li>
-</ul>
-</li>
-<li><strong>Stable Diffusion项目</strong>：
-<ul>
-<li>解释了Stable Diffusion是一个与AI相关的热门产品，并且提到了你尝试使用该产品的功能制作了人脸和衣服模型。</li>
-</ul>
-</li>
-<li><strong>工作要求和任务</strong>：
-<ul>
-<li>面试官没有明确说明具体的工作任务，只是模糊地提到了要对Chat GPT的最新资讯进行咨询并给公司做总结，涉及到AI产品的探索。</li>
-</ul>
-</li>
-<li><strong>工作安排</strong>：
-<ul>
-<li>面试官询问你一天能到岗多少天，但工资是按日结算，似乎有所限制，需要确定到岗时间并考虑工资结算方式。</li>
-</ul>
-</li>
-<li><strong>问答环节</strong>：
-<ul>
-<li>你问了关于具体工作任务能否线上完成的问题，但面试官似乎未给出明确答复。</li>
-</ul>
-</li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2023/11/17/2023%E5%B9%B411%E6%9C%8817%E6%97%A5-%E9%9D%A2%E8%AF%951%E6%80%BB%E7%BB%93/" data-id="clrwazlqx000g7ov48eub457k" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%9D%A2%E8%AF%95/" rel="tag">面试</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2023年11月7日-量化3-Question" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2023/11/07/2023%E5%B9%B411%E6%9C%887%E6%97%A5-%E9%87%8F%E5%8C%963-Question/" class="article-date">
-  <time class="post-time" datetime="2023-11-07T12:25:22.000Z" itemprop="datePublished">
-    <span class="post-month">11月</span><br/>
-    <span class="post-day">07</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/11/07/2023%E5%B9%B411%E6%9C%887%E6%97%A5-%E9%87%8F%E5%8C%963-Question/">2023年11月7日 量化3 Question</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="1-cuda"><a class="markdownIt-Anchor" href="#1-cuda"></a> 1 cuda</h2>
-<p>NotImplementedError: Could not run ‘quantized::linear_prepack_fp16’ with arguments from the ‘CUDA’ backend.</p>
-<p><strong>量化过程中使用到了一个不支持CUDA的操作。</strong></p>
-<h3 id="1-为什么量化层少了acc却降低了"><a class="markdownIt-Anchor" href="#1-为什么量化层少了acc却降低了"></a> 1 为什么量化层少了，acc却降低了？</h3>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">quantized_model = torch.quantization.quantize_dynamic(model, &#123;nn.Linear&#125;, dtype=torch.qint8)</span><br></pre></td></tr></table></figure>
-<p><img src="/2023/11/07/2023%E5%B9%B411%E6%9C%887%E6%97%A5-%E9%87%8F%E5%8C%963-Question/image-20231107202610901.png" alt="image-20231107202610901"></p>
-<p><img src="/2023/11/07/2023%E5%B9%B411%E6%9C%887%E6%97%A5-%E9%87%8F%E5%8C%963-Question/image-20231107202922407.png" alt="image-20231107202922407"></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">quantized_model = torch.quantization.quantize_dynamic(model, &#123;nn.Linear, nn.Conv2d&#125;, dtype=torch.qint8)</span><br></pre></td></tr></table></figure>
-<p><img src="/2023/11/07/2023%E5%B9%B411%E6%9C%887%E6%97%A5-%E9%87%8F%E5%8C%963-Question/image-20231107202605391.png" alt="image-20231107202605391"></p>
-<p><img src="/2023/11/07/2023%E5%B9%B411%E6%9C%887%E6%97%A5-%E9%87%8F%E5%8C%963-Question/image-20231107202821307.png" alt="image-20231107202821307"></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2023/11/07/2023%E5%B9%B411%E6%9C%887%E6%97%A5-%E9%87%8F%E5%8C%963-Question/" data-id="clrwazlr0000o7ov4d56p813a" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%87%8F%E5%8C%96/" rel="tag">量化</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2023年11月7日-深度学习报错日记" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2023/11/07/2023%E5%B9%B411%E6%9C%887%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%A5%E9%94%99%E6%97%A5%E8%AE%B0/" class="article-date">
-  <time class="post-time" datetime="2023-11-07T12:02:19.000Z" itemprop="datePublished">
-    <span class="post-month">11月</span><br/>
-    <span class="post-day">07</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/11/07/2023%E5%B9%B411%E6%9C%887%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%A5%E9%94%99%E6%97%A5%E8%AE%B0/">2023年11月7日 深度学习报错日记</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li>2</li>
-</ul>
-<p>RuntimeError: Input type (torch.cuda.FloatTensor) and weight type (torch.FloatTensor) should be the same</p>
-<p><strong>没有明确指定模型应该在GPU上运行。你可以使用<code>model.to(device)</code>将模型移动到GPU上</strong></p>
-<ul>
-<li>
-<p>3</p>
-<p>PIL.UnidentifiedImageError: cannot identify image file ‘F:\Dataset\PetImages\Cat\666.jpg’</p>
-</li>
-</ul>
-<p><strong>图片损坏</strong></p>
-<ul>
-<li>继承Conv基类错误了</li>
-</ul>
-<p><img src="/2023/11/07/2023%E5%B9%B411%E6%9C%887%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%A5%E9%94%99%E6%97%A5%E8%AE%B0/a1fc621421e9142e2c9efb319447d81.png" alt="a1fc621421e9142e2c9efb319447d81"></p>
-<p><img src="/2023/11/07/2023%E5%B9%B411%E6%9C%887%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%A5%E9%94%99%E6%97%A5%E8%AE%B0/8906c28d1e2f7e77d19994f0a920f62.png" alt="8906c28d1e2f7e77d19994f0a920f62"></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2023/11/07/2023%E5%B9%B411%E6%9C%887%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%A5%E9%94%99%E6%97%A5%E8%AE%B0/" data-id="clrwazlr1000q7ov430ep5euf" class="article-share-link">分享</a>
+      <a data-url="https://shakewely.github.io/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-Transformer/" data-id="cltgreey3000hw8v46fth0d3s" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl/" rel="tag">dl</a></li></ul>
@@ -473,12 +927,12 @@
 
 
   
-    <article id="post-2023年10月24日-TensorRT1介绍" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2024年2月4日-VAEmodel" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2023/10/24/2023%E5%B9%B410%E6%9C%8824%E6%97%A5-TensorRT1%E4%BB%8B%E7%BB%8D/" class="article-date">
-  <time class="post-time" datetime="2023-10-24T11:51:56.000Z" itemprop="datePublished">
-    <span class="post-month">10月</span><br/>
-    <span class="post-day">24</span>
+    <a href="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-VAEmodel/" class="article-date">
+  <time class="post-time" datetime="2024-02-04T07:38:05.000Z" itemprop="datePublished">
+    <span class="post-month">2月</span><br/>
+    <span class="post-day">04</span>
   </time>
 </a>
    
@@ -490,7 +944,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2023/10/24/2023%E5%B9%B410%E6%9C%8824%E6%97%A5-TensorRT1%E4%BB%8B%E7%BB%8D/">2023年10月24日 TensorRT1介绍</a>
+      <a class="article-title" href="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-VAEmodel/">2024年2月4日 AE.VAEmodel</a>
     </h1>
   
 
@@ -505,172 +959,26 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="1-什么是tensorrt"><a class="markdownIt-Anchor" href="#1-什么是tensorrt"></a> 1 什么是TensorRT</h2>
-<h3 id="11-tensorrt介绍"><a class="markdownIt-Anchor" href="#11-tensorrt介绍"></a> 1.1 <strong>TensorRT介绍</strong></h3>
-<p>TensorRT是可以在<strong>NVIDIA</strong>各种<strong>GPU硬件平台</strong>下运行的一个<strong>C++推理框架</strong>。</p>
-<p>我们利用Pytorch训练好的模型，可以转化为TensorRT的格式，然后利用TensorRT推理引擎去运行我们这个模型，从而提升这个模型在英伟达GPU上运行的速度。<strong>速度提升</strong>的比例是<strong>比较可观</strong>的。</p>
-<h3 id="12-tensorrt-工作流程"><a class="markdownIt-Anchor" href="#12-tensorrt-工作流程"></a> 1.2 TensorRT 工作流程</h3>
-<img src="/2023/10/24/2023%E5%B9%B410%E6%9C%8824%E6%97%A5-TensorRT1%E4%BB%8B%E7%BB%8D/.Hexo/MyBlog/source/_posts/2023年10月12日-TensorRT介绍/image-20250314191334384.png" alt="image-20250314191334384" style="zoom: 25%;">
-<h3 id="13-为什么能加速"><a class="markdownIt-Anchor" href="#13-为什么能加速"></a> 1.3 为什么能加速？</h3>
-<ul>
-<li>
-<p><strong>算子融合(层与张量融合)</strong>：简单来说就是通过融合一些计算op或者去掉一些多余op来<strong>减少数据流通次数以及显存的频繁使用来提速</strong>，使用更少的cuda核心</p>
-<img src="/2023/10/24/2023%E5%B9%B410%E6%9C%8824%E6%97%A5-TensorRT1%E4%BB%8B%E7%BB%8D/.Hexo\MyBlog\source\_posts\2023年10月12日-TensorRT介绍\image-20250314190650887.png" alt="image-20250314190650887" style="zoom: 50%;">
-</li>
-<li>
-<p><strong>量化</strong>：量化即IN8量化或者FP16以及TF32等不同于常规FP32精度的使用，这些精度可以显著提升模型执行速度并且不会保持原先模型的精度</p>
-</li>
-<li>
-<p><strong>内核自动调整</strong>：根据不同的显卡构架、SM数量、内核频率等(例如1080TI和2080TI)，选择不同的优化策略以及计算方式，寻找最合适当前构架的计算方式<code>对特定显卡进行特定优化</code>为模型的每一层选择最优化的GPU 内核。这种自适应方法可确保模型充分利用 GPU 的计算能力。</p>
-<img src="/2023/10/24/2023%E5%B9%B410%E6%9C%8824%E6%97%A5-TensorRT1%E4%BB%8B%E7%BB%8D/.Hexo/MyBlog/source/_posts/2023年10月12日-TensorRT介绍/image-20231012202620295.png" alt="image-20231012202620295" style="zoom: 33%;">
-</li>
-<li>
-<p><strong>动态张量显存</strong>/<strong>动态Tensor 内存管理</strong>：TensorRT 在推理过程中有效管理tensor 内存使用情况，减少内存开销并优化内存分配。这使得GPU 的内存使用效率更高。</p>
-</li>
-<li>
-<p><strong>多流执行</strong>：使用CUDA中的stream技术，最大化实现并行操作</p>
-</li>
-</ul>
-<h3 id="14-tensorrt的加速效果怎么样"><a class="markdownIt-Anchor" href="#14-tensorrt的加速效果怎么样"></a> 1.<strong>4 TensorRT的加速效果怎么样</strong></h3>
-<p>加速效果取决于模型的类型和大小，也取决于我们所使用的显卡类型。</p>
-<p>TensorRT所做的优化也是<strong>基于GPU</strong>进行优化，当然也是更喜欢那种一大块一大块的矩阵运算，尽量直通到底。因此对于通道数比较多的卷积层和反卷积层，优化力度是比较大的；</p>
-<p>如果是比较繁多复杂的各种细小op操作**(例如reshape、gather、split等)，那么TensorRT的优化力度就没有那么夸张了。**</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">所以在转onnx的时候需要对模型进行修改，减少reshape等</span><br></pre></td></tr></table></figure>
-<h3 id="15概念和使用方式"><a class="markdownIt-Anchor" href="#15概念和使用方式"></a> 1.5概念和使用方式</h3>
-<ul>
-<li>
-<p>支持模型、数据类型、支持的IO、支持的功能</p>
-</li>
-<li>
-<p>TensorRT中context、engine、builder概念</p>
-</li>
-<li>
-<p>环境搭建、运行环境</p>
-<p><strong>1.5 什么是算子</strong></p>
-<p>有时候自己会设计一些layer来满足任务需求，但是这些layer在使用Tensorrt优化时，TensorRT可能并不支持。</p>
-<p>这时候就需要自己写一个算子/<strong>Plugin</strong> 来实现</p>
-<img src="/2023/10/24/2023%E5%B9%B410%E6%9C%8824%E6%97%A5-TensorRT1%E4%BB%8B%E7%BB%8D/.Hexo/MyBlog/source/_posts/2023年10月12日-TensorRT介绍/image-20250314191142137.png" alt="image-20250314191142137" style="zoom: 25%;">
-</li>
-</ul>
-<h3 id="16-工作流程"><a class="markdownIt-Anchor" href="#16-工作流程"></a> 1.6 工作流程</h3>
-<ul>
-<li>python端API</li>
-<li>C++端API</li>
-<li>简单的demo</li>
-</ul>
-<h2 id="2-tensorrt完整流程"><a class="markdownIt-Anchor" href="#2-tensorrt完整流程"></a> 2 TensorRT完整流程</h2>
-<h3 id="21-onnx转tensorrt"><a class="markdownIt-Anchor" href="#21-onnx转tensorrt"></a> 2.1 ONNX转TensorRT</h3>
-<ul>
-<li>parser方式转换模型</li>
-<li>onnx2trt简单分析</li>
-<li>graphsurgeon修改onnx网络</li>
-<li>一些注意点</li>
-</ul>
-<h3 id="22-框架内使用tensorrt"><a class="markdownIt-Anchor" href="#22-框架内使用tensorrt"></a> 2.2 框架内使用tensorrt</h3>
-<ul>
-<li>torch_tensorrt介绍、使用</li>
-<li>torch_tensorrt源码解析</li>
-</ul>
-<h2 id="3-tensorrt进阶操作"><a class="markdownIt-Anchor" href="#3-tensorrt进阶操作"></a> 3 TensorRT进阶操作</h2>
-<h3 id="31-如何debug"><a class="markdownIt-Anchor" href="#31-如何debug"></a> 3.1 如何debug</h3>
-<ul>
-<li>精度问题debug（nan、精度不匹配）</li>
-<li>网络可视化（netron、trt-explorer）</li>
-<li>polygraphy（TensorRT官方提供的非常好的工具）</li>
-</ul>
-<h3 id="32-api搭建网络"><a class="markdownIt-Anchor" href="#32-api搭建网络"></a> 3.2 API搭建网络</h3>
-<ul>
-<li>API搭建网络基本方式、权重提取，这部分强烈建议看TensorRTx</li>
-<li>explicit batch vs implicit batch</li>
-</ul>
-<h3 id="33-自定义插件plugin"><a class="markdownIt-Anchor" href="#33-自定义插件plugin"></a> 3.3 自定义插件plugin</h3>
-<ul>
-<li>如何写自定义plugin、Plugin中关键的API与注意点</li>
-<li>自定义插件示例、集成plugin到trt中、参与trt序列化</li>
-<li>plugin的生命周期、资源管理</li>
-<li>dynamic-shape-plugin</li>
-<li>Plugin的FP16和INT8</li>
-</ul>
-<h3 id="34-常见疑难杂症"><a class="markdownIt-Anchor" href="#34-常见疑难杂症"></a> 3.4 常见疑难杂症</h3>
-<ul>
-<li>各种log中的报错</li>
-</ul>
-<h2 id="4-tensorrt最佳使用指南"><a class="markdownIt-Anchor" href="#4-tensorrt最佳使用指南"></a> 4 TensorRT最佳使用指南</h2>
-<h3 id="41-如何正确使用trtexec"><a class="markdownIt-Anchor" href="#41-如何正确使用trtexec"></a> 4.1 如何正确使用trtexec</h3>
-<ul>
-<li>trtexec基本用法</li>
-<li>动态尺度、设置optimization profile以及注意点（min-opt-max）</li>
-<li>trtexec源码解析</li>
-</ul>
-<h3 id="42-提升性能"><a class="markdownIt-Anchor" href="#42-提升性能"></a> 4.2 提升性能</h3>
-<ul>
-<li>多steam（重叠计算和数据拷贝的时间，增加GPU利用率）</li>
-<li>多context（多线程推理）</li>
-<li>多optimization profile</li>
-<li>CUDA Graph（减少kernel launch时间）</li>
-<li>Timing Cache（减少build时间）</li>
-<li>Algorithm Selector</li>
-</ul>
-<h3 id="43-tensorrt转换相关"><a class="markdownIt-Anchor" href="#43-tensorrt转换相关"></a> 4.3 TensorRT转换相关</h3>
-<ul>
-<li>某些Layer选择的算法导致误差大，屏蔽掉该选择 tactic Source</li>
-<li>更新权重refit功能（强化学习用的多）</li>
-<li>构建期/运行期显存占用大（调整参数以及策略）</li>
-</ul>
-<h2 id="5-tensorrt量化"><a class="markdownIt-Anchor" href="#5-tensorrt量化"></a> 5 TensorRT量化</h2>
-<h3 id="ptq"><a class="markdownIt-Anchor" href="#ptq"></a> PTQ</h3>
-<h3 id="qat"><a class="markdownIt-Anchor" href="#qat"></a> QAT</h3>
-<ul>
-<li>fake_</li>
-<li>QDQ 节点</li>
-</ul>
-<h3 id="tensorrt-fp16"><a class="markdownIt-Anchor" href="#tensorrt-fp16"></a> TensorRT-FP16</h3>
-<ul>
-<li>fp16精度设置与使用</li>
-<li>fp16常见问题</li>
-</ul>
-<h3 id="tensorrt-int8"><a class="markdownIt-Anchor" href="#tensorrt-int8"></a> TensorRT-INT8</h3>
-<ul>
-<li>int8使用</li>
-<li>PTQ校准集</li>
-<li>QAT量化</li>
-</ul>
-<h3 id="混合精度"><a class="markdownIt-Anchor" href="#混合精度"></a> 混合精度</h3>
-<ul>
-<li>fp32和fp16</li>
-<li>fp16和int8</li>
-</ul>
-<h2 id="6-tensorrt拓展"><a class="markdownIt-Anchor" href="#6-tensorrt拓展"></a> 6 TensorRT拓展</h2>
-<h3 id="61-tensorrt转换的几种方式"><a class="markdownIt-Anchor" href="#61-tensorrt转换的几种方式"></a> 6.1 TensorRT转换的几种方式</h3>
-<ul>
-<li>torch2trt</li>
-<li>torchscript2trt</li>
-<li>fx2trt</li>
-</ul>
-<h2 id="7-tensorrt实战"><a class="markdownIt-Anchor" href="#7-tensorrt实战"></a> 7 TensorRT实战</h2>
-<h3 id="61-检测模型转换"><a class="markdownIt-Anchor" href="#61-检测模型转换"></a> 6.1 检测模型转换</h3>
-<ul>
-<li>SSD模型转TensorRT dynamic-shape</li>
-<li>带有自定义DCN-OP的CenterNet转TensorRT</li>
-</ul>
-<h3 id="62-识别-分割-nlp类模型"><a class="markdownIt-Anchor" href="#62-识别-分割-nlp类模型"></a> 6.2 识别、分割、nlp类模型</h3>
-<ul>
-<li>stable diffusion</li>
-<li>GPT</li>
-</ul>
-<h3 id="63-tensorrttriton-inference-server线上线下部署"><a class="markdownIt-Anchor" href="#63-tensorrttriton-inference-server线上线下部署"></a> 6.3 TensorRT+triton-inference-server线上/线下部署</h3>
-<ul>
-<li>基本部署教程</li>
-<li>大规模TensorRT模型部署、多卡、模型调度</li>
-</ul>
+        <h1 id="1-ae"><a class="markdownIt-Anchor" href="#1-ae"></a> 1 AE</h1>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-VAEmodel/image-20240205131208025.png" alt="image-20240205131208025"></p>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-VAEmodel/image-20240205131307904.png" alt="image-20240205131307904"></p>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-VAEmodel/image-20240205131344755.png" alt="image-20240205131344755"></p>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-VAEmodel/image-20240205131436686.png" alt="image-20240205131436686"></p>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-VAEmodel/image-20240205131442988.png" alt="image-20240205131442988"></p>
+<h1 id="2-vae"><a class="markdownIt-Anchor" href="#2-vae"></a> 2 vae</h1>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-VAEmodel/image-20240205131914693.png" alt="image-20240205131914693"></p>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-VAEmodel/image-20240205131929419.png" alt="image-20240205131929419"></p>
+<h3 id="正态分布"><a class="markdownIt-Anchor" href="#正态分布"></a> 正态分布</h3>
+<p>Wgan</p>
+<p><img src="/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-VAEmodel/image-20240205163221816.png" alt="image-20240205163221816"></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2023/10/24/2023%E5%B9%B410%E6%9C%8824%E6%97%A5-TensorRT1%E4%BB%8B%E7%BB%8D/" data-id="cmanj8o1q0001lcv4fsd382ib" class="article-share-link">分享</a>
+      <a data-url="https://shakewely.github.io/2024/02/04/2024%E5%B9%B42%E6%9C%884%E6%97%A5-VAEmodel/" data-id="cltgreey3000jw8v43huzdi8u" class="article-share-link">分享</a>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/TensorRT/" rel="tag">TensorRT</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/llm-dl/" rel="tag">llm;dl</a></li></ul>
 
     </footer>
   </div>
@@ -681,12 +989,12 @@
 
 
   
-    <article id="post-2023年10月19日-量化2代码实现" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2024年2月3日-difussion模型" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%962%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0/" class="article-date">
-  <time class="post-time" datetime="2023-10-19T08:49:29.000Z" itemprop="datePublished">
-    <span class="post-month">10月</span><br/>
-    <span class="post-day">19</span>
+    <a href="/2024/02/03/2024%E5%B9%B42%E6%9C%883%E6%97%A5-difussion%E6%A8%A1%E5%9E%8B/" class="article-date">
+  <time class="post-time" datetime="2024-02-03T12:02:30.000Z" itemprop="datePublished">
+    <span class="post-month">2月</span><br/>
+    <span class="post-day">03</span>
   </time>
 </a>
    
@@ -698,7 +1006,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%962%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0/">2023年10月19日 量化2代码实现</a>
+      <a class="article-title" href="/2024/02/03/2024%E5%B9%B42%E6%9C%883%E6%97%A5-difussion%E6%A8%A1%E5%9E%8B/">2024年2月3日 difussion模型</a>
     </h1>
   
 
@@ -713,49 +1021,34 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/kuan__/article/details/109539007">https://blog.csdn.net/kuan__/article/details/109539007</a></p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_42506418/article/details/131234818">https://blog.csdn.net/weixin_42506418/article/details/131234818</a></p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/ljp1919/article/details/126231261">https://blog.csdn.net/ljp1919/article/details/126231261</a></p>
-<h2 id="3-训练后动态量化技术dynamic-quantization"><a class="markdownIt-Anchor" href="#3-训练后动态量化技术dynamic-quantization"></a> 3 **训练后动态量化技术（dynamic quantization）</h2>
-<p>将模型的权重从浮点精度（例如32位浮点数）转换为低精度整数类型（例如8位整数）</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">quantized_model = torch.quantization.quantize_dynamic(model, &#123;nn.Linear, nn.Conv2d&#125;, dtype=torch.qint8)</span><br></pre></td></tr></table></figure>
-<ol>
-<li><code>model</code>: 这个变量应该是你想要进行量化的原始PyTorch模型，它可能是使用<code>torch.nn.Module</code>类定义的神经网络模型。</li>
-<li><code>&#123;nn.Linear, nn.Conv2d&#125;</code>: 这个参数指定了你希望量化的模型层类型。在这个例子中，<code>nn.Linear</code>和<code>nn.Conv2d</code>表示对模型中的线性层和二维卷积层进行量化。
-<ol>
-<li><strong>线性层（Linear Layers）</strong>：<code>nn.Linear</code></li>
-<li><strong>卷积层（Convolutional Layers）</strong>：<code>nn.Conv1d</code>, <code>nn.Conv2d</code>, <code>nn.Conv3d</code></li>
-<li><strong>循环神经网络层（Recurrent Layers）</strong>：<code>nn.RNN</code>, <code>nn.LSTM</code>, <code>nn.GRU</code></li>
-<li><strong>批归一化层（Batch Normalization Layers）</strong>：<code>nn.BatchNorm1d</code>, <code>nn.BatchNorm2d</code>, <code>nn.BatchNorm3d</code></li>
-<li><strong>激活函数（Activation Functions）</strong>：<code>nn.ReLU</code>, <code>nn.LeakyReLU</code>, <code>nn.PReLU</code>, <code>nn.ReLU6</code>, 等等。</li>
-<li><strong>池化层（Pooling Layers）</strong>：<code>nn.MaxPool1d</code>, <code>nn.MaxPool2d</code>, <code>nn.AvgPool1d</code>, <code>nn.AvgPool2d</code>, 等等。</li>
-</ol>
-</li>
-<li><code>dtype=torch.qint8</code>: 这个参数指定了量化后的数据类型，这里是8位整数（qint8）。在推断时，量化模型将使用这种低精度整数类型进行计算。
-<ol>
-<li><strong><code>torch.qint8</code></strong>: 8位有符号整数。通常用于量化权重和激活值。</li>
-<li><strong><code>torch.quint8</code></strong>: 8位无符号整数。通常用于量化正数的权重和激活值。</li>
-<li><strong><code>torch.qint32</code></strong>: 32位有符号整数。通常用于量化权重和激活值。</li>
-<li><strong><code>torch.float16</code></strong>: 16位浮点数。通常用于量化权重和激活值。不是整数量化，但比32位浮点数（<code>torch.float32</code>）占用更少内存。</li>
-<li><strong><code>torch.bfloat16</code></strong>: 16位浮点数（Brain Floating Point）</li>
-</ol>
-</li>
-</ol>
-<h2 id="4-量化感知训练"><a class="markdownIt-Anchor" href="#4-量化感知训练"></a> 4 <strong>量化感知训练</strong></h2>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">torch.quantization.FakeQuantize QAT</span><br></pre></td></tr></table></figure>
-<p><strong>get_default_qconfig</strong></p>
-<p>​	在使用量化（quantization）技术时，PyTorch会改变模型的结构，并为每个权重参数添加量化相关的信息。因此需要重新写一个量化model</p>
-<p>量化后的模型（quantized model）的state_dict的键（keys）与原始模型的state_dict的键不匹配。</p>
-<p>使用<code>torch.quantization.quantize_dynamic()</code>对模型进行量化时，它会在state_dict中添加与量化参数相关的额外键（比如scale、zero_point、dtype和_packed_params）。</p>
-<p>为了解决这个问题，需要修改加载量化模型的代码。在加载量化模型的state_dict时，应该指定<code>map_location</code>参数，将量化模型的参数映射到适当的设备（GPU或CPU）（设备不匹配的错误）。此外，你需要传递<code>strict=False</code>参数给<code>load_state_dict()</code>，忽略量化模型state_dict中存在的额外键。</p>
+        <h1 id="difussion模型"><a class="markdownIt-Anchor" href="#difussion模型"></a> difussion模型</h1>
+<h2 id="1-引言"><a class="markdownIt-Anchor" href="#1-引言"></a> 1 引言</h2>
+<h3 id="11目前大模型"><a class="markdownIt-Anchor" href="#11目前大模型"></a> 1.1<a target="_blank" rel="noopener" href="https://runwayml.com/">目前大模型</a></h3>
+<p><img src="/2024/02/03/2024%E5%B9%B42%E6%9C%883%E6%97%A5-difussion%E6%A8%A1%E5%9E%8B/image-20240203200335403.png" alt="image-20240203200335403"></p>
+<h3 id="12-生成式模型"><a class="markdownIt-Anchor" href="#12-生成式模型"></a> 1.2 生成式模型</h3>
+<p>目前有多个生成式model</p>
+<img src="/2024/02/03/2024%E5%B9%B42%E6%9C%883%E6%97%A5-difussion%E6%A8%A1%E5%9E%8B/image-20240203200754458.png" alt="image-20240203200754458" style="zoom:50%;">
+<img src="/2024/02/03/2024%E5%B9%B42%E6%9C%883%E6%97%A5-difussion%E6%A8%A1%E5%9E%8B/image-20240203200902564.png" alt="image-20240203200902564" style="zoom:50%;">
+<h3 id="13-论文复现"><a class="markdownIt-Anchor" href="#13-论文复现"></a> 1.3 论文复现</h3>
+<p><img src="/2024/02/03/2024%E5%B9%B42%E6%9C%883%E6%97%A5-difussion%E6%A8%A1%E5%9E%8B/image-20240203201001759.png" alt="image-20240203201001759"></p>
+<h2 id="2-diffusion介绍"><a class="markdownIt-Anchor" href="#2-diffusion介绍"></a> 2 diffusion介绍</h2>
+<h3 id="21-流程"><a class="markdownIt-Anchor" href="#21-流程"></a> 2.1 流程</h3>
+<p><img src="/2024/02/03/2024%E5%B9%B42%E6%9C%883%E6%97%A5-difussion%E6%A8%A1%E5%9E%8B/image-20240204153923712.png" alt="image-20240204153923712"></p>
+<img src="/2024/02/03/2024%E5%B9%B42%E6%9C%883%E6%97%A5-difussion%E6%A8%A1%E5%9E%8B/image-20240203201210242.png" alt="image-20240203201210242" style="zoom:50%;">
+<img src="/2024/02/03/2024%E5%B9%B42%E6%9C%883%E6%97%A5-difussion%E6%A8%A1%E5%9E%8B/image-20240203201215066.png" alt="image-20240203201215066" style="zoom:50%;">
+<p>引入了model去测这些噪声</p>
+<p><img src="/2024/02/03/2024%E5%B9%B42%E6%9C%883%E6%97%A5-difussion%E6%A8%A1%E5%9E%8B/image-20240203201253109.png" alt="image-20240203201253109"></p>
+<p><img src="/2024/02/03/2024%E5%B9%B42%E6%9C%883%E6%97%A5-difussion%E6%A8%A1%E5%9E%8B/image-20240203201504985.png" alt="image-20240203201504985"><img src="/2024/02/03/2024%E5%B9%B42%E6%9C%883%E6%97%A5-difussion%E6%A8%A1%E5%9E%8B/image-20240203201542674.png" alt="image-20240203201542674"><img src="/2024/02/03/2024%E5%B9%B42%E6%9C%883%E6%97%A5-difussion%E6%A8%A1%E5%9E%8B/image-20240203201511112.png" alt="image-20240203201511112"></p>
+<p>训练方式改变</p>
+<img src="/2024/02/03/2024%E5%B9%B42%E6%9C%883%E6%97%A5-difussion%E6%A8%A1%E5%9E%8B/image-20240203201934285.png" alt="image-20240203201934285" style="zoom:50%;">
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%962%E4%BB%A3%E7%A0%81%E5%AE%9E%E7%8E%B0/" data-id="clrwazlqu00057ov4bn1tbi46" class="article-share-link">分享</a>
+      <a data-url="https://shakewely.github.io/2024/02/03/2024%E5%B9%B42%E6%9C%883%E6%97%A5-difussion%E6%A8%A1%E5%9E%8B/" data-id="cltgreey2000ew8v4ee2s2w7j" class="article-share-link">分享</a>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%87%8F%E5%8C%96/" rel="tag">量化</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/model/" rel="tag">model</a></li></ul>
 
     </footer>
   </div>
@@ -766,12 +1059,12 @@
 
 
   
-    <article id="post-2023年10月19日-量化1介绍" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2024年1月29日-python项目总结" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/" class="article-date">
-  <time class="post-time" datetime="2023-10-19T07:37:02.000Z" itemprop="datePublished">
-    <span class="post-month">10月</span><br/>
-    <span class="post-day">19</span>
+    <a href="/2024/01/29/2024%E5%B9%B41%E6%9C%8829%E6%97%A5-python%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/" class="article-date">
+  <time class="post-time" datetime="2024-01-29T15:12:02.000Z" itemprop="datePublished">
+    <span class="post-month">1月</span><br/>
+    <span class="post-day">29</span>
   </time>
 </a>
    
@@ -783,7 +1076,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/">2023年10月19日 量化1</a>
+      <a class="article-title" href="/2024/01/29/2024%E5%B9%B41%E6%9C%8829%E6%97%A5-python%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/">2024年1月29日 python项目总结</a>
     </h1>
   
 
@@ -798,174 +1091,131 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/purple_love/article/details/127254449">https://blog.csdn.net/purple_love/article/details/127254449</a></p>
-<h2 id="1-模型量化是什么"><a class="markdownIt-Anchor" href="#1-模型量化是什么"></a> 1、<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96&amp;spm=1001.2101.3001.7020">模型量化</a>是什么？</h2>
-<p>简而言之，所谓的模型量化就是将浮点存储（运算）转换为整型存储（运算）的一种<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E6%A8%A1%E5%9E%8B%E5%8E%8B%E7%BC%A9&amp;spm=1001.2101.3001.7020">模型压缩</a>技术。<strong>简单直白点讲，即原来表示一个权重需要使用float32表示，量化后只需要使用int8来表示就可以啦，仅仅这一个操作，我们就可以获得接近4倍的网络加速</strong>！</p>
-<h2 id="2-为什么需要做模型量化模型量化动机是什么"><a class="markdownIt-Anchor" href="#2-为什么需要做模型量化模型量化动机是什么"></a> 2、为什么需要做模型量化？模型量化动机是什么？</h2>
+        <h1 id="python之项目总结"><a class="markdownIt-Anchor" href="#python之项目总结"></a> python之项目总结</h1>
+<h1 id="semversemantic-versioning"><a class="markdownIt-Anchor" href="#semversemantic-versioning"></a> <strong>SemVer（Semantic Versioning）</strong></h1>
+<h2 id="语法格式"><a class="markdownIt-Anchor" href="#语法格式"></a> 🧩 语法格式</h2>
+<p>标准格式是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">复制编辑</span><br><span class="line">MAJOR.MINOR.PATCH</span><br></pre></td></tr></table></figure>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">复制编辑</span><br><span class="line">1.4.2</span><br></pre></td></tr></table></figure>
+<p>表示：</p>
 <ul>
-<li><strong>更少的存储开销和带宽需求</strong>。即使用更少的比特数存储数据，有效减少应用对存储资源的依赖，但现代系统往往拥有相对丰富的存储资源，这一点已经不算是采用量化的主要动机；</li>
-<li><strong>更快的计算速度</strong>。即对大多数处理器而言，整型运算的速度一般（但不总是）</li>
+<li><strong>MAJOR（主版本号）</strong>: 有破坏性更新（不向后兼容）</li>
+<li><strong>MINOR（次版本号）</strong>: 添加了新功能，但向后兼容</li>
+<li><strong>PATCH（修订号）</strong>: 修复了 bug，完全向后兼容</li>
 </ul>
-<p><img src="/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/image-20231019161721639.png" alt="image-20231019161721639"></p>
-<pre><code>**FP32乘法运算的能耗是INT8乘法运算能耗的18.5倍，芯片占用面积则是int8的27.3倍**，
-
-**尚可接受的精度损失**。**即量化相当于对模型权重引入噪声，所幸CNN本身对噪声不敏感（在模型训练过程中，模拟量化所引入的权重加噪还有利于防止过拟合），在合适的比特数下量化后的模型并不会带来很严重的精度损失**。
-</code></pre>
-<h2 id="3-模型量化的方案"><a class="markdownIt-Anchor" href="#3-模型量化的方案"></a> 3、模型量化的方案</h2>
-<ol>
-<li><code>data free</code>：不使用校准集，传统的方法直接将浮点参数转化成量化数，使用上非常简单，但是一般会带来很大的精度损失，但是高通最新的论文 <code>DFQ</code> 不使用校准集也得到了很高的精度。</li>
-<li><code>calibration</code>：基于校准集方案，通过输入少量真实数据进行统计分析。很多芯片厂商都提供这样的功能，如 <code>tensorRT</code>、高通、海思、地平线、寒武纪</li>
-<li><code>finetune</code>：基于训练 <code>finetune</code> 的方案，将量化误差在训练时仿真建模，调整权重使其更适合量化。好处是能带来更大的精度提升，缺点是要修改模型训练代码，开发周期较长。</li>
-</ol>
-<h2 id="4-模型量化分类"><a class="markdownIt-Anchor" href="#4-模型量化分类"></a> 4、模型量化分类</h2>
-<h3 id="41-线性量化"><a class="markdownIt-Anchor" href="#41-线性量化"></a> 4.1 线性量化</h3>
-<p><img src="/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/image-20231019161927584.png" alt="image-20231019161927584"></p>
-<p>​	<strong>q 表示的是原始的float32数值；</strong><br>
-​	<strong>Z表示的是float32数值的偏移量，在很多地方又叫Zero Point；</strong><img src="/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/image-20231019162041599.png" alt="image-20231019162041599"></p>
-<p>**	S表示的是float32的缩放因子，在很多地方又叫Scale；**</p>
-<p><img src="/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/image-20231019162119689.png" alt="image-20231019162119689">	<strong>Round(⋅) 表示的是四舍五入近似取整的数学函数，除了四舍五入，使用向上或者向下取整也是可以的；</strong><br>
-<strong>r表示的是量化后的一个整数值。</strong></p>
-<p><strong>根据参数 Z 是否为零可以将线性量化分为两类—即对称量化和非对称量化</strong>。</p>
-<h4 id="411-对称量化"><a class="markdownIt-Anchor" href="#411-对称量化"></a> 4.1.1 对称量化</h4>
-<p><img src="/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/image-20231019162306723.png" alt="image-20231019162306723"></p>
-<p>​	使用一个映射公式将输入数据映射到[-128,127]的范围内</p>
-<p>在对称量化中，r 是用有符号的整型数值(int8)来表示的，此时 Z=0，且 q=0时恰好有r=0。在对称量化中，我们可以取Z=0，S的取值可以使用如下的公式，也可以采用其它的公式。其中，n 是用来表示该数值的位宽，x 是数据集的总体样本。</p>
-<p><img src="/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/image-20231019162300497.png" alt="image-20231019162300497"></p>
-<h4 id="412-非对称量化"><a class="markdownIt-Anchor" href="#412-非对称量化"></a> 4.1.2 非对称量化</h4>
-<p><img src="/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/image-20231019162349206.png" alt="image-20231019162349206"></p>
-<p>​	使用一个映射公式将输入数据映射到[0,255]的范围内</p>
-<p><img src="/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/image-20231019162416109.png" alt="image-20231019162416109"></p>
-<h3 id="43-在线量化和离线量化"><a class="markdownIt-Anchor" href="#43-在线量化和离线量化"></a> 4.3 在线量化和离线量化</h3>
-<p><strong>根据激活值的量化方式，可以分为在线（online）量化和离线（offline）量化。</strong></p>
-<ul>
-<li><strong>在线量化</strong>，即指激活值的S和Z<strong>在实际推断过程中根据实际的激活值动态计算</strong>；Z表示Zero Point的数值，S表示Scale的数值</li>
-<li><strong>离线量化</strong>，即指<strong>提前确定好</strong>激活值的S和Z；</li>
-</ul>
-<p>​	由于不需要动态计算量化参数，通常离线量化的推断速度更快些，通常通过以下的三种方法来确定相关的量化参数。</p>
+<h1 id="env"><a class="markdownIt-Anchor" href="#env"></a> .env</h1>
+<blockquote>
+<p>python-dotenv</p>
+</blockquote>
+<p><strong>没有类型！</strong><br>
+环境变量 <strong>本质上都是字符串</strong>，不管你写的是数字、布尔值、URL，读取出来都是字符串。</p>
+<h1 id="uv"><a class="markdownIt-Anchor" href="#uv"></a> UV</h1>
+<h3 id="uvlock"><a class="markdownIt-Anchor" href="#uvlock"></a> uv.lock</h3>
+<blockquote>
+<p>uv.lock 是 UV 包管理器的锁定文件，它的作用是：</p>
 <ol>
 <li>
-<pre class="highlight"><code class>1. **指数平滑法**。即将校准数据集送入模型，收集每个量化层的输出特征图，计算每个batch的S和Z值，并**通过指数平滑法来更新S和Z值**。
-2. **直方图截断法**。即在计算量化参数Z和S的过程中，由于**有的特征图**会出现偏离较远的奇异值，导致max非常大，所以可以通过直方图截取的形式，比如**抛弃最大的前1%数据，以前1%分界点的数值作为max计算量化参数**。
-3. **KL散度校准法**。-即通过计算KL散度（也称为**相对熵**，用以描述两个分布之间的差异）来评估量化前后的两个分布之间存在的差异，**搜索并选取KL散度最小的量化参数Z和S作为最终的结果**。
-
-
-</code></pre>
+<p>锁定依赖版本：记录项目所有依赖包的确切版本号，确保在不同环境下安装相同的依赖版本</p>
+</li>
+<li>
+<p>确保一致性：防止因为依赖版本变化导致的兼容性问题</p>
+</li>
+<li>
+<p>加速安装：UV 可以直接从锁定文件安装，无需重新解析依赖关系</p>
 </li>
 </ol>
-<h3 id="44-比特量化"><a class="markdownIt-Anchor" href="#44-比特量化"></a> 4.4 比特量化</h3>
-<p><strong>根据存储一个权重元素所需的位数，可以将其分为8bit量化、4bit量化、2bit量化和1bit量化等。</strong></p>
+<p>为什么需要更改：</p>
+<p>当我们添加了新的依赖包（如 python-jose、passlib、aiomysql 等）到 pyproject.toml 时，UV 会自动更新 uv.lock 文件来记录这些新依赖的确切版本信息，确保项目依赖的完整性和一致性。</p>
+</blockquote>
+<h1 id="pylint"><a class="markdownIt-Anchor" href="#pylint"></a> Pylint</h1>
+<h3 id="warning"><a class="markdownIt-Anchor" href="#warning"></a> Warning</h3>
+<p><code>C0116: Missing function or method docstring (missing-function-docstring)</code></p>
+<p><img src="/2024/01/29/2024%E5%B9%B41%E6%9C%8829%E6%97%A5-python%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/image-20250618092430851.png" alt="image-20250618092430851"></p>
+<p><code>C0103: Method name &quot;test_SqlModelResponse&quot; doesn't conform to snake_case naming style (invalid-name)</code></p>
+<blockquote>
+<p>原因：Python的命名约定要求：</p>
 <ul>
-<li><strong>二进制神经网络</strong>。即在运行时具有二进制权重和激活的神经网络，以及在训练时计算参数的梯度。</li>
-<li><strong>三元权重网络</strong>。即权重约束为+1,0和-1的神经网络。</li>
-<li><strong>XNOR网络</strong>。即过滤器和卷积层的输入是二进制的。XNOR 网络主要使用二进制运算来近似卷积。</li>
+<li>
+<p>函数和方法名使用小写字母和下划线（snake_case）</p>
+</li>
+<li>
+<p>类名使用驼峰命名法（CamelCase）</p>
+</li>
+<li>
+<p>常量使用大写字母和下划线（UPPER_SNAKE_CASE）</p>
+</li>
 </ul>
-<h3 id="45-权重量化和权重激活量化"><a class="markdownIt-Anchor" href="#45-权重量化和权重激活量化"></a> 4.5 权重量化和权重激活量化</h3>
-<p><strong>根据需要量化的参数可以分类两类-权重量化和权重激活量化</strong>。</p>
+</blockquote>
+<p>``</p>
+<p><img src="/2024/01/29/2024%E5%B9%B41%E6%9C%8829%E6%97%A5-python%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/image-20250618092853677.png" alt="image-20250618092853677"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Settings</span>(<span class="title class_ inherited__">BaseSettings</span>):</span><br><span class="line">    app_name: <span class="built_in">str</span> = os.getenv(<span class="string">&quot;APP_NAME&quot;</span>, <span class="string">&quot;FastAPI App&quot;</span>)</span><br><span class="line">    model_name: <span class="built_in">str</span> = os.getenv(<span class="string">&quot;MODEL_NAME&quot;</span>, <span class="string">&quot;qwen-latest&quot;</span>)</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, **data</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__(**data)</span><br><span class="line">settings = Settings()</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/01/29/2024%E5%B9%B41%E6%9C%8829%E6%97%A5-python%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/image-20250618093034205.png" alt="image-20250618093034205"></p>
+<p><code>W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)</code></p>
+<p>这是性能优化建议，使用%格式化可以提高日志记录的性能。</p>
+<p><img src="/2024/01/29/2024%E5%B9%B41%E6%9C%8829%E6%97%A5-python%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/image-20250618093248160.png" alt="image-20250618093248160"></p>
+<p><a target="_blank" rel="noopener" href="https://mermaid-live.nodejs.cn/edit#pako:eNpVkU1PwkAQhv_KZk6YIFCkLfRgIh9yMprISeuhsQs00pYs20QlHLwYPxASIxKjqImaGA9owsEDMfwZW_BfuLuI0T3N7PvMO7szddh2TQwalIhRLaNCVncQWtrUIRg8-4dNFFpbXS-gKMElq0YxmdNhC83PL6I0Q8ZXQ_-jM0Oou4MdrnOHtIAyDJq03v32pRB_tIzQslzrj766fb_d_Rz1gpPHoPXktx9QKJ9jdhbFdi0688uKmhxvOhiOh3dfL83J68Ff1xwjUHBzHHSOBLvM_UcX_vVt0HkLzvr_sO79DMvzr56ej4e96WNQKBGTeFcIs5FYJmiUeDgMNia2wVOocxsdaBnbWAeNhSYuGl6F6qA7DVZWNZwN17VnlcT1SmXQikalxjKvahoUZy2Dzdv-vSXYMTHJuJ5DQZMU4QFaHXZZJskRWVWTKVlioaLEEmHYA02VI6kkOwmFKXE52QjDvmgai6jygiTFFXVBlVMJwWPToi5ZmS5a7LvxDTsutSo"><img src="https://mermaid.ink/img/pako:eNpVkU1PwkAQhv_KZk6YIFCkLfRgIh9yMprISeuhsQs00pYs20QlHLwYPxASIxKjqImaGA9owsEDMfwZW_BfuLuI0T3N7PvMO7szddh2TQwalIhRLaNCVncQWtrUIRg8-4dNFFpbXS-gKMElq0YxmdNhC83PL6I0Q8ZXQ_-jM0Oou4MdrnOHtIAyDJq03v32pRB_tIzQslzrj766fb_d_Rz1gpPHoPXktx9QKJ9jdhbFdi0688uKmhxvOhiOh3dfL83J68Ff1xwjUHBzHHSOBLvM_UcX_vVt0HkLzvr_sO79DMvzr56ej4e96WNQKBGTeFcIs5FYJmiUeDgMNia2wVOocxsdaBnbWAeNhSYuGl6F6qA7DVZWNZwN17VnlcT1SmXQikalxjKvahoUZy2Dzdv-vSXYMTHJuJ5DQZMU4QFaHXZZJskRWVWTKVlioaLEEmHYA02VI6kkOwmFKXE52QjDvmgai6jygiTFFXVBlVMJwWPToi5ZmS5a7LvxDTsutSo?type=png" alt></a></p>
+<h1 id="打包"><a class="markdownIt-Anchor" href="#打包"></a> 打包</h1>
+<h2 id="0-源码包与二进制包什么区别"><a class="markdownIt-Anchor" href="#0-源码包与二进制包什么区别"></a> 0 源码包与二进制包什么区别？</h2>
+<p>Python 包的分发可以分为两种：</p>
+<p>1、以源码包的方式发布</p>
+<p>源码包安装的过程，是先解压，再编译，最后才安装，所以它是跨平台的，由于每次安装都要进行编译，相对二进包安装方式来说安装速度较慢。<img src="https://pic1.zhimg.com/80/v2-dffd77a245997a841eb426d9c0ce5184_1440w.webp" alt="img"></p>
+<p>2、以二进制包形式发布</p>
+<p>二进制包的安装过程省去了编译的过程，直接进行解压安装，所以安装速度较源码包来说更快。</p>
+<p>由于不同平台的编译出来的包无法通用，所以在发布时，需事先编译好多个平台的包。<img src="https://pic4.zhimg.com/v2-b0a22d8b82eac1f25bc6a1b95f6e0c2f_r.jpg" alt="img"></p>
+<h2 id="1-python-中的-requirementstxt-与-setuppy区别"><a class="markdownIt-Anchor" href="#1-python-中的-requirementstxt-与-setuppy区别"></a> 1 Python 中的 requirements.txt 与 setup.py区别</h2>
+<ol>
+<li>
+<p><strong>requirements.txt</strong>:</p>
 <ul>
-<li><strong>权重量化</strong>，即仅仅需要对网络中的权重执行量化操作。由于网络的权重一般都保存下来了，因而我们可以提前根据权重获得相应的量化参数S和Z。由于仅仅对权重执行了量化，这种量化方法的压缩力度不是很大</li>
-<li><strong>权重激活量化</strong>，即不仅对网络中的权重进行量化，还对激活值进行量化。由于激活层的范围通常不容易提前获得，因而需要在网络推理的过程中进行计算或者根据模型进行大致的预测</li>
+<li>
+<p><strong>作用</strong>: <code>requirements.txt</code>文件通常用于列出项目所依赖的第三方库及其版本信息。</p>
+</li>
+<li>
+<dl>
+<dt>格式</dt>
+<dd>每行一个依赖项，通常包括库的名称和版本号，例如：</dd>
+</dl>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">requests==2.26.0</span><br><span class="line">numpy==1.21.5</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>安装依赖</strong>: 通过运行<code>pip install -r requirements.txt</code>命令，可以一次性安装所有列出的依赖项。</p>
+</li>
 </ul>
-<h3 id="46-对数量化一种比较特殊的量化方法"><a class="markdownIt-Anchor" href="#46-对数量化一种比较特殊的量化方法"></a> 4.6 **对数量化，**一种比较特殊的量化方法。</h3>
-<p>​	两个同底的幂指数进行相乘，那么等价于其指数相加，降低了计算强度。同时加法也被转变为索引计算。目前 nvdia gpu，x86、arm 三大平台上没有实现对数量化的加速库，但是目前已知海思 351X 系列芯片上使用了对数量化</p>
-<h2 id="5-模型量化原理"><a class="markdownIt-Anchor" href="#5-模型量化原理"></a> 5、模型量化原理</h2>
-<h3 id="51-原理详解"><a class="markdownIt-Anchor" href="#51-原理详解"></a> 5.1 原理详解</h3>
-<p><strong>模型量化桥接了定点与浮点，建立了一种有效的数据映射关系，使得以较小的精度损失代价获得了较好的收益</strong>，要弄懂模型量化的原理就是要弄懂这种数据映射关系。<br>
-浮点转换为定点的公式如下所示：</p>
-<p><img src="/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/image-20231019163959165.png" alt="image-20231019163959165"></p>
-<p><strong>其中R表示输入的浮点数据，Q表示量化之后的定点数据，Z表示Zero Point的数值，S表示Scale的数值，我们可以根据S和Z这两个参数来确定这个映射关系</strong>。</p>
-<p>求解S和Z有很多种方法，这里列举中其中的一种求解方式如下：</p>
-<p><img src="/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/image-20231019164222886.png" alt="image-20231019164222886"></p>
-<h3 id="52-具体案例"><a class="markdownIt-Anchor" href="#52-具体案例"></a> 5.2 具体案例</h3>
-<p><img src="/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/image-20231019164247159.png" alt="image-20231019164247159"></p>
-<h2 id="6-量化功能"><a class="markdownIt-Anchor" href="#6-量化功能"></a> 6、量化功能</h2>
-<p>具体包括训练后动态量化、训练后静态量化和训练时量化。</p>
-<h3 id="训练后动态量化"><a class="markdownIt-Anchor" href="#训练后动态量化"></a> 训练后动态量化。</h3>
-<p>这是最简单的量化形式，其中权重被提前量化，而激活在推理过程中被动态量化。这种方法用于模型执行时间由从内存加载权重而不是计算矩阵乘法所支配的情况，这适用于批量较小的LSTM和Transformer类型。对整个模型应用动态量化只需要调用一次torch.quantization.quantize_dynamic()函数即可完成具体的细节请参考该量化教程。</p>
-<p><strong>实现对某些层进行量化，量化后的模型只能用于推理验证，不能用作训练</strong></p>
-<h3 id="训练后静态量化"><a class="markdownIt-Anchor" href="#训练后静态量化"></a> <strong>训练后静态量化。</strong></h3>
-<p>这是最常用的量化形式，其中权重是提前量化的，并且基于在校准过程中观察模型的行为来预先计算激活张量的比例因子和偏差。CNN是一个典型的用例，训练后量化通常是在内存带宽和计算节省都很重要的情况下进行的。进<strong>行训练后量化的一般过程如下所示：</strong><br>
-步骤1-准备模型：通过添加QuantStub和DeQuantStub模块，指定在何处显式量化和反量化激活值；确保不重复使用模块；将需要重新量化的任何操作转换为模块的模式；<br>
-步骤2-将诸如conv + relu或conv + batchnorm + relu之类的组合操作融合在一起，以提高模型的准确性和性能；<br>
-步骤3-指定量化方法的配置，例如选择对称或非对称量化以及MinMax或L2Norm校准技术；<br>
-步骤4- 插入torch.quantization.prepare()模块来在校准期间观察激活张量；<br>
-步骤5-使用校准数据集对模型执行校准操作；<br>
-步骤6-使用torch.quantization.convert() 模块来转化模型，具体包括计算并存储每个激活张量要使用的比例和偏差值，并替换关键算子的量化实现等。</p>
-<h3 id="训练时量化"><a class="markdownIt-Anchor" href="#训练时量化"></a> 训练时量化。</h3>
-<p>在极少数情况下，训练后量化不能提供足够的准确性，可以插入torch.quantization.FakeQuantize()模块执行训练时量化。计算将在FP32中进行，但将值取整并四舍五入以模拟INT8的量化效果。具体的量化步骤如下所示：<br>
-步骤1-准备模型：通过添加QuantStub和DeQuantStub模块，指定在何处显式量化和反量化激活值；确保不重复使用模块；将需要重新量化的任何操作转换为模块的模式；<br>
-步骤2-将诸如conv + relu或conv + batchnorm + relu之类的组合操作融合在一起，以提高模型的准确性和性能；<br>
-步骤3-指定伪量化方法的配置，例如选择对称或非对称量化以及MinMax或L2Norm校准技术；<br>
-步骤4-插入torch.quantization.prepare_qat() 模块，该模块用来在训练过程中的模拟量化；<br>
-步骤5-训练或者微调模型；<br>
-步骤6-使用torch.quantization.convert() 模块来转化模型，具体包括计算并存储每个激活张量要使用的比例和偏差值，并替换关键算子的量化实现等。</p>
-<p>量化步骤</p>
-<p>![image-20231019153830100](./2023年10月19日-量化1/image-20231019153830100.png</p>
-<p><img src="/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/image-20231019161437726.png" alt="image-20231019161437726"></p>
+</li>
+<li>
+<p><strong><a target="_blank" rel="noopener" href="http://setup.py">setup.py</a></strong>:</p>
+<hr>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">待解决</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p><strong>我们常见的运行命令</strong>，“pip install  模块名”或者“python <a target="_blank" rel="noopener" href="http://setup.py">setup.py</a> install”，前者是在线安装，会安装该包的相关依赖包；后者是下载源码包然后在本地安装，不会安装该包的相关依赖包。</p>
+</li>
+<li>
+<p><strong>在编写相关系统时，如何实现连同依赖包一起打包发布</strong>？</p>
+</li>
+</ul>
+<p>假如我在本机开发一个程序，需要用到python的redis、mysql模块以及自己编写的redis_run.py模块。我怎么实现在<strong>服务器</strong>上去发布该系统，如何实现依赖模块和自己编写的模块redis_run.py一起打包，实现一键安装呢？同时将自己编写的redis_run.py模块以exe文件格式安装到python的全局执行路径~/Python27/Scripts下呢？</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python setup.py install</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p><strong>作用</strong>: <code>setup.py</code>文件是一个 Python 脚本，用于定义项目的元数据和其他相关配置，例如项目名称、版本、作者信息、依赖关系等。</p>
+</li>
+<li>
+<p><strong>如何编写</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">from setuptools import setup, find_packages</span><br><span class="line"></span><br><span class="line">setup(</span><br><span class="line">    name=&quot;example&quot;,</span><br><span class="line">    version=&quot;0.1&quot;,</span><br><span class="line">    packages=find_packages(),</span><br><span class="line">    install_requires=[</span><br><span class="line">        &#x27;requests&gt;=2.26.0&#x27;,</span><br><span class="line">        &#x27;numpy&gt;=1.21.5&#x27;</span><br><span class="line">    ],</span><br><span class="line">    author=&quot;Your Name&quot;,</span><br><span class="line">    author_email=&quot;your@email.com&quot;,</span><br><span class="line">    description=&quot;Description of your project&quot;,</span><br><span class="line">    ...</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>安装依赖</strong>: 通过在<code>install_requires</code>参数中指定依赖项，可以告诉 <code>setuptools</code> 安装项目所需的依赖项。当用户运行<code>python setup.py install</code>时，<code>setuptools</code>会自动处理依赖项的安装。</p>
+</li>
+</ul>
+</li>
+</ol>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2023/10/19/2023%E5%B9%B410%E6%9C%8819%E6%97%A5-%E9%87%8F%E5%8C%961%E4%BB%8B%E7%BB%8D/" data-id="cm8q1tfhd0008pcv45prr2jai" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E9%87%8F%E5%8C%96/" rel="tag">量化</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2023年10月12日-numpy总结" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2023/10/12/2023%E5%B9%B410%E6%9C%8812%E6%97%A5-numpy%E6%80%BB%E7%BB%93/" class="article-date">
-  <time class="post-time" datetime="2023-10-12T03:31:14.000Z" itemprop="datePublished">
-    <span class="post-month">10月</span><br/>
-    <span class="post-day">12</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/10/12/2023%E5%B9%B410%E6%9C%8812%E6%97%A5-numpy%E6%80%BB%E7%BB%93/">2023年10月12日 numpy总结</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="1"><a class="markdownIt-Anchor" href="#1"></a> 1</h2>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">查看数组结构</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">查看数组类型</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">查看数组元素个数</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">查看数组每个元素大小</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">重新设置shape</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">linspace函数</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">logspace函数</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zeros函数</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eye函数</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2023/10/12/2023%E5%B9%B410%E6%9C%8812%E6%97%A5-numpy%E6%80%BB%E7%BB%93/" data-id="clrwazlqs00037ov48l257joo" class="article-share-link">分享</a>
+      <a data-url="https://shakewely.github.io/2024/01/29/2024%E5%B9%B41%E6%9C%8829%E6%97%A5-python%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/" data-id="cmcabapwh00026wv4crq9ee4v" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
@@ -979,12 +1229,12 @@
 
 
   
-    <article id="post-2023年9月27日-cuda编程1" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2024年1月28日-Git连接出错" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/" class="article-date">
-  <time class="post-time" datetime="2023-09-26T17:26:45.000Z" itemprop="datePublished">
-    <span class="post-month">9月</span><br/>
-    <span class="post-day">27</span>
+    <a href="/2024/01/28/2024%E5%B9%B41%E6%9C%8828%E6%97%A5-Git%E8%BF%9E%E6%8E%A5%E5%87%BA%E9%94%99/" class="article-date">
+  <time class="post-time" datetime="2024-01-27T16:55:09.000Z" itemprop="datePublished">
+    <span class="post-month">1月</span><br/>
+    <span class="post-day">28</span>
   </time>
 </a>
    
@@ -996,7 +1246,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/">cuda编程1</a>
+      <a class="article-title" href="/2024/01/28/2024%E5%B9%B41%E6%9C%8828%E6%97%A5-Git%E8%BF%9E%E6%8E%A5%E5%87%BA%E9%94%99/">2024年1月28日 Git连接出错</a>
     </h1>
   
 
@@ -1011,40 +1261,528 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>1</p>
-<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/62996995/answer/3369541594">总结</a></p>
-<p>打印核函数的helloword</p>
-<img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927013114531.png" alt="image-20230927013114531" style="zoom:25%;"> 
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927014405611.png" alt="image-20230927014405611"></p>
-<img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927014434932.png" alt="image-20230927014434932" style="zoom:33%;">
-<img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927014417233.png" alt="image-20230927014417233" style="zoom:33%;">  
-<img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927014503416.png" alt="image-20230927014503416" style="zoom:33%;"> 
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927014754011.png" alt="image-20230927014754011"></p>
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927014804867.png" alt="image-20230927014804867"></p>
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927015027916.png" alt="image-20230927015027916"></p>
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927015059462.png" alt="image-20230927015059462"></p>
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927015218279.png" alt="image-20230927015218279"></p>
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927015258301.png" alt="image-20230927015258301"></p>
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927015307806.png" alt="image-20230927015307806"></p>
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927020206228.png" alt="image-20230927020206228"></p>
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927020351307.png" alt="image-20230927020351307"></p>
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927020513187.png" alt="image-20230927020513187"></p>
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927020754977.png" alt="image-20230927020754977"></p>
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927021106475.png" alt="image-20230927021106475"></p>
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927021212837.png" alt="image-20230927021212837"></p>
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927021546123.png" alt="image-20230927021546123"></p>
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927021555549.png" alt="image-20230927021555549"></p>
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927154421445.png" alt="image-20230927154421445"></p>
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927154702719.png" alt="image-20230927154702719"></p>
-<p><img src="/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/image-20230927154740546.png" alt="image-20230927154740546"></p>
+        <h1 id="git连接出错-hexo-d出错"><a class="markdownIt-Anchor" href="#git连接出错-hexo-d出错"></a> Git<strong>连接出错</strong> + hexo d出错</h1>
+<h2 id="问题前置"><a class="markdownIt-Anchor" href="#问题前置"></a> 问题前置：</h2>
+<ul>
+<li>github 被盗， 选重新登录</li>
+<li>更改google账号密码 同时重新登录github</li>
+</ul>
+<h2 id="问题描述"><a class="markdownIt-Anchor" href="#问题描述"></a> 问题描述：</h2>
+<ul>
+<li>发现 <code>Hexo d</code>命令运行失败</li>
+<li>报错发现是github 连接失败</li>
+<li>排查后是<strong>git连接失败</strong></li>
+<li>之后之git出错，无法正常连接github</li>
+</ul>
+<h2 id="解决过程"><a class="markdownIt-Anchor" href="#解决过程"></a> 解决过程：</h2>
+<h2 id="参考hexo官方代码发现一样地问题"><a class="markdownIt-Anchor" href="#参考hexo官方代码发现一样地问题"></a> 参考hexo官方代码发现一样地问题</h2>
+<p>参考：<a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues/2767">https://github.com/hexojs/hexo/issues/2767</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com</span><br></pre></td></tr></table></figure>
+<h3 id="11中途报错ssh-t-gitgithubcom命令运行失败"><a class="markdownIt-Anchor" href="#11中途报错ssh-t-gitgithubcom命令运行失败"></a> 1.1中途报错ssh -T git@github.com`·命令运行失败</h3>
+<p>解决办法：</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/the__future/article/details/130038818">https://blog.csdn.net/the__future/article/details/130038818</a></p>
+<h4 id="111-途出现报错"><a class="markdownIt-Anchor" href="#111-途出现报错"></a> 1.1.1 途出现报错：</h4>
+<p>$ git clone <a href="mailto:git@github.com">git@github.com</a>:ShakeWeLy/ShakeWely.github.io.git<br>
+Cloning into ‘<a href="http://ShakeWely.github.io">ShakeWely.github.io</a>’…<br>
+ssh: Could not resolve hostname <a target="_blank" rel="noopener" href="http://github.com">github.com</a>: Name or service not known<br>
+fatal: Could not read from remote repository.</p>
+<p>Please make sure you have the correct access rights<br>
+and the repository exists.<br>
+(base)</p>
+<p>$ ssh-add ~/.ssh/id_rsa</p>
+<p>Could not open a connection to your authentication agent.</p>
+<p><strong>分析问题发现：</strong></p>
+<p>git 无法连接 GitHub</p>
+<p><strong>解决办法：</strong></p>
+<p>运行如下命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">eval &quot;$(ssh-agent -s)&quot;</span><br><span class="line">ssh-add ~/.ssh/id_rsa</span><br></pre></td></tr></table></figure>
+<h4 id="112-问题2成功解决"><a class="markdownIt-Anchor" href="#112-问题2成功解决"></a> 1.1.2 问题2成功解决</h4>
+<p>同时能够git GitHub上的文件</p>
+<p><img src="/2024/01/28/2024%E5%B9%B41%E6%9C%8828%E6%97%A5-Git%E8%BF%9E%E6%8E%A5%E5%87%BA%E9%94%99/image-20240128013153361.png" alt="image-20240128013153361"></p>
+<h3 id="12-又出现新的报错"><a class="markdownIt-Anchor" href="#12-又出现新的报错"></a> 1.2 又出现新的报错</h3>
+<p>ssh: Could not resolve hostname <a target="_blank" rel="noopener" href="http://ssh.github.com">ssh.github.com</a>: Name or service not known<br>
+fatal: Could not read from remote repository.</p>
+<p>Please make sure you have the correct access rights<br>
+and the repository exists.</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">ssh: <span class="title">Could</span> <span class="title">not</span> <span class="title">resolve</span> <span class="title">hostname</span> <span class="title">ssh.github.com</span>: <span class="title">Name</span> <span class="title">or</span> <span class="title">service</span> <span class="title">not</span> <span class="title">known</span></span></span><br><span class="line"><span class="function"><span class="title">fatal</span>: <span class="title">Could</span> <span class="title">not</span> <span class="title">read</span> <span class="title">from</span> <span class="title">remote</span> <span class="title">repository</span>.</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">Please</span> <span class="title">make</span> <span class="title">sure</span> <span class="title">you</span> <span class="title">have</span> <span class="title">the</span> <span class="title">correct</span> <span class="title">access</span> <span class="title">rights</span></span></span><br><span class="line"><span class="function"><span class="title">and</span> <span class="title">the</span> <span class="title">repository</span> <span class="title">exists</span>.</span></span><br><span class="line"><span class="function">[41<span class="title">mFATAL</span>[49<span class="title">m</span> <span class="title">Something</span>&#x27;<span class="title">s</span> <span class="title">wrong</span>. <span class="title">Maybe</span> <span class="title">you</span> <span class="title">can</span> <span class="title">find</span> <span class="title">the</span> <span class="title">solution</span> <span class="title">here</span>: [4<span class="title">mhttps</span>://<span class="title">hexo.io</span>/<span class="title">docs</span>/<span class="title">troubleshooting.html</span>[24<span class="title">m</span></span></span><br><span class="line"><span class="function">[33<span class="title">mError</span>: <span class="title">Spawn</span> <span class="title">failed</span></span></span><br><span class="line"><span class="function">    <span class="title">at</span> <span class="title">ChildProcess</span>.&lt;<span class="title">anonymous</span>&gt; (<span class="title">F</span>:\.<span class="title">Hexo</span>\<span class="title">MyBlog</span>\<span class="title">node_modules</span>\<span class="title">hexo</span>-<span class="title">util</span>\<span class="title">lib</span>\<span class="title">spawn.js</span>:51:21)</span></span><br><span class="line"><span class="function">    <span class="title">at</span> <span class="title">ChildProcess.emit</span> (<span class="title">node:events</span>:514:28)</span></span><br><span class="line"><span class="function">    <span class="title">at</span> <span class="title">cp.emit</span> (<span class="title">F</span>:\.<span class="title">Hexo</span>\<span class="title">MyBlog</span>\<span class="title">node_modules</span>\<span class="title">cross</span>-<span class="title">spawn</span>\<span class="title">lib</span>\<span class="title">enoent.js</span>:34:29)</span></span><br><span class="line"><span class="function">    <span class="title">at</span> <span class="title">ChildProcess._handle.onexit</span> (<span class="title">node:internal</span>/<span class="title">child_process</span>:291:12)</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2024/01/28/2024%E5%B9%B41%E6%9C%8828%E6%97%A5-Git%E8%BF%9E%E6%8E%A5%E5%87%BA%E9%94%99/image-20240128014016280.png" alt="image-20240128014016280"></p>
+<h4 id="121-尝试解决"><a class="markdownIt-Anchor" href="#121-尝试解决"></a> 1.2.1 尝试解决</h4>
+<p><strong>失败！</strong></p>
+<p><img src="/2024/01/28/2024%E5%B9%B41%E6%9C%8828%E6%97%A5-Git%E8%BF%9E%E6%8E%A5%E5%87%BA%E9%94%99/image-20240128014544122.png" alt="image-20240128014544122"></p>
+<p><img src="/2024/01/28/2024%E5%B9%B41%E6%9C%8828%E6%97%A5-Git%E8%BF%9E%E6%8E%A5%E5%87%BA%E9%94%99/image-20240128014525556.png" alt="image-20240128014525556"></p>
+<p>换回来</p>
+<p>检查发现</p>
+<p>ssh: Could not resolve hostname <a target="_blank" rel="noopener" href="http://ssh.github.com">ssh.github.com</a>: Name or service not known<br>
+<strong>fatal: Could not read from remote repository.不一样</strong></p>
+<h4 id="122-成功解决"><a class="markdownIt-Anchor" href="#122-成功解决"></a> 1.2.2 成功解决</h4>
+<p><img src="/2024/01/28/2024%E5%B9%B41%E6%9C%8828%E6%97%A5-Git%E8%BF%9E%E6%8E%A5%E5%87%BA%E9%94%99/image-20240128015804141.png" alt="image-20240128015804141"></p>
+<h3 id="13-运行hexo-d-仍然报错"><a class="markdownIt-Anchor" href="#13-运行hexo-d-仍然报错"></a> 1.3 运行hexo d 仍然报错</h3>
+<p>permission denied</p>
+<p><img src="/2024/01/28/2024%E5%B9%B41%E6%9C%8828%E6%97%A5-Git%E8%BF%9E%E6%8E%A5%E5%87%BA%E9%94%99/image-20240128015729455.png" alt="image-20240128015729455"></p>
+<h4 id="131-解决办法"><a class="markdownIt-Anchor" href="#131-解决办法"></a> 1.3.1 解决办法</h4>
+<p>重现配置<strong>git 连接密钥</strong></p>
+<p><img src="/2024/01/28/2024%E5%B9%B41%E6%9C%8828%E6%97%A5-Git%E8%BF%9E%E6%8E%A5%E5%87%BA%E9%94%99/image-20240128015713513.png" alt="image-20240128015713513"></p>
+<h3 id="14-成功运行"><a class="markdownIt-Anchor" href="#14-成功运行"></a> 1.4 成功运行</h3>
+<p>重新运行hexo d</p>
+<p><img src="/2024/01/28/2024%E5%B9%B41%E6%9C%8828%E6%97%A5-Git%E8%BF%9E%E6%8E%A5%E5%87%BA%E9%94%99/image-20240128015706261.png" alt="image-20240128015706261"></p>
+<p><img src="/2024/01/28/2024%E5%B9%B41%E6%9C%8828%E6%97%A5-Git%E8%BF%9E%E6%8E%A5%E5%87%BA%E9%94%99/image-20240128020330252.png" alt="image-20240128020330252"></p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2023/09/27/2023%E5%B9%B49%E6%9C%8827%E6%97%A5-cuda%E7%BC%96%E7%A8%8B1/" data-id="cmbhxnxay0003gov4dnhfgmy8" class="article-share-link">分享</a>
+      <a data-url="https://shakewely.github.io/2024/01/28/2024%E5%B9%B41%E6%9C%8828%E6%97%A5-Git%E8%BF%9E%E6%8E%A5%E5%87%BA%E9%94%99/" data-id="clrwbbrv80000rsv483mkbnhr" class="article-share-link">分享</a>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cuda/" rel="tag">cuda</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%8A%A5%E9%94%99%E8%AE%B0%E5%BD%95/" rel="tag">报错记录</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2024年1月27日-gradio实践" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/" class="article-date">
+  <time class="post-time" datetime="2024-01-27T14:28:32.000Z" itemprop="datePublished">
+    <span class="post-month">1月</span><br/>
+    <span class="post-day">27</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/">2024年1月27日 gradio实践</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="gradio-实践"><a class="markdownIt-Anchor" href="#gradio-实践"></a> Gradio 实践</h1>
+<h2 id="demo1"><a class="markdownIt-Anchor" href="#demo1"></a> demo1</h2>
+<h3 id="1测试运行"><a class="markdownIt-Anchor" href="#1测试运行"></a> <strong>1.测试运行</strong></h3>
+<p>gradio的核心是它的<code>gr.Interface</code>函数，用来构建可视化界面。</p>
+<ul>
+<li>
+<p>fn：放你用来处理的函数</p>
+</li>
+<li>
+<p>inputs：写你的输入类型，这里输入的是图像，所以是&quot;image&quot;</p>
+</li>
+<li>
+<p>outputs：写你的输出类型，这里输出的是图像，所以是&quot;image&quot;</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># 作者：Weakliy</span><br><span class="line"># 创建日期：2024/1/27 0027 下午 22:42</span><br><span class="line"># 描述：测试运行</span><br><span class="line"></span><br><span class="line">import gradio as gr</span><br><span class="line">import cv2</span><br><span class="line"></span><br><span class="line">def to_black(image):</span><br><span class="line">    output = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)</span><br><span class="line">    return output</span><br><span class="line">interface = gr.Interface(fn=to_black, inputs=&quot;image&quot;, outputs=&quot;image&quot;)</span><br><span class="line">interface.launch()</span><br></pre></td></tr></table></figure>
+<img src="/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/image-20240127224425399.png" alt="image-20240127224425399" style="zoom: 50%;">
+<img src="/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/image-20240127224627553.png" alt="image-20240127224627553" style="zoom:50%;">
+<h3 id="2增加example"><a class="markdownIt-Anchor" href="#2增加example"></a> <strong>2.增加example</strong></h3>
+<p>我们可以在页面下方添加供用户选择的测试样例。</p>
+<p>在<code>gr.Interface</code>里的<code>examples</code>中放入图片路径</p>
+<p><code>examples=[[&quot;test.png&quot;] </code>or 1examples=&quot;path&quot;1</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">import gradio as gr</span><br><span class="line">import cv2</span><br><span class="line">​</span><br><span class="line">def to_black(image):</span><br><span class="line">    output = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)</span><br><span class="line">    return output</span><br><span class="line">​</span><br><span class="line">interface = gr.Interface(fn=to_black, inputs=&quot;image&quot;, outputs=&quot;image&quot;,</span><br><span class="line">                        examples=[[&quot;test.png&quot;]])</span><br><span class="line">interface.launch()</span><br></pre></td></tr></table></figure>
+<h3 id="3创建一个外部访问链接"><a class="markdownIt-Anchor" href="#3创建一个外部访问链接"></a> <strong>3.创建一个外部访问链接</strong></h3>
+<p>创建外部访问链接非常简单，只需要<code>launch(share=True)</code>即可，在打印信息中会看到你的外部访问链接。</p>
+<p><strong>免费用户的链接可以使用24小时，想要长期的话需要在gradio官方购买云服务</strong></p>
+<h2 id="demo2-文本输入"><a class="markdownIt-Anchor" href="#demo2-文本输入"></a> demo2 文本输入</h2>
+<h3 id="1-同理"><a class="markdownIt-Anchor" href="#1-同理"></a> 1 同理</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">import gradio as gr</span><br><span class="line">#输入文本处理程序</span><br><span class="line">def greet(name):</span><br><span class="line">    return &quot;Hello &quot; + name + &quot;!&quot;</span><br><span class="line">demo = gr.Interface(fn=greet, inputs=&quot;text&quot;, outputs=&quot;text&quot;)</span><br><span class="line">demo.launch()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="demo3-interface类"><a class="markdownIt-Anchor" href="#demo3-interface类"></a> demo3 Interface类</h2>
+<h3 id="1基础入门"><a class="markdownIt-Anchor" href="#1基础入门"></a> 1.基础入门</h3>
+<h4 id="11-interface需要通过以下三个参数进行初始化"><a class="markdownIt-Anchor" href="#11-interface需要通过以下三个参数进行初始化"></a> 1.1 <strong>interface需要通过以下三个参数进行初始化：</strong></h4>
+<ul>
+<li>fn：包装的函数</li>
+<li>inputs：输入组件类型，（例如：“text”、&quot;image）</li>
+<li>ouputs：输出组件类型，（例如：“text”、&quot;image）</li>
+</ul>
+<h4 id="12-控件列表"><a class="markdownIt-Anchor" href="#12-控件列表"></a> 1.2 控件列表</h4>
+<ul>
+<li>
+<p><strong>输入输出</strong>：gr.Image(图像), gr.Textbox(文本框), gr.DataFrame(数据框), gr.Dropdown(下拉选项), gr.Number(数字), gr.Markdown, gr.Files</p>
+</li>
+<li>
+<p><strong>控制组件</strong>：gr.Button(按钮)</p>
+</li>
+<li>
+<p><strong>布局组件</strong>：gr.Tab(标签页), gr.Row(行布局), gr.Column(列布局)</p>
+</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">__all__ = [</span><br><span class="line">    &quot;Audio&quot;,</span><br><span class="line">    &quot;BarPlot&quot;,</span><br><span class="line">    &quot;Button&quot;,</span><br><span class="line">    &quot;Chatbot&quot;,</span><br><span class="line">    &quot;ClearButton&quot;,</span><br><span class="line">    &quot;Component&quot;,</span><br><span class="line">    &quot;component&quot;,</span><br><span class="line">    &quot;get_component_instance&quot;,</span><br><span class="line">    &quot;_Keywords&quot;,</span><br><span class="line">    &quot;Checkbox&quot;,</span><br><span class="line">    &quot;CheckboxGroup&quot;,</span><br><span class="line">    &quot;Code&quot;,</span><br><span class="line">    &quot;ColorPicker&quot;,</span><br><span class="line">    &quot;Dataframe&quot;,</span><br><span class="line">    &quot;DataFrame&quot;,</span><br><span class="line">    &quot;Dataset&quot;,</span><br><span class="line">    &quot;DuplicateButton&quot;,</span><br><span class="line">    &quot;Fallback&quot;,</span><br><span class="line">    &quot;Form&quot;,</span><br><span class="line">    &quot;FormComponent&quot;,</span><br><span class="line">    &quot;Gallery&quot;,</span><br><span class="line">    &quot;HTML&quot;,</span><br><span class="line">    &quot;FileExplorer&quot;,</span><br><span class="line">    &quot;Image&quot;,</span><br><span class="line">    &quot;JSON&quot;,</span><br><span class="line">    &quot;Json&quot;,</span><br><span class="line">    &quot;Label&quot;,</span><br><span class="line">    &quot;LinePlot&quot;,</span><br><span class="line">    &quot;LoginButton&quot;,</span><br><span class="line">    &quot;LogoutButton&quot;,</span><br><span class="line">    &quot;Markdown&quot;,</span><br><span class="line">    &quot;Textbox&quot;,</span><br><span class="line">    &quot;Dropdown&quot;,</span><br><span class="line">    &quot;Model3D&quot;,</span><br><span class="line">    &quot;File&quot;,</span><br><span class="line">    &quot;HighlightedText&quot;,</span><br><span class="line">    &quot;AnnotatedImage&quot;,</span><br><span class="line">    &quot;CheckboxGroup&quot;,</span><br><span class="line">    &quot;Text&quot;,</span><br><span class="line">    &quot;Highlightedtext&quot;,</span><br><span class="line">    &quot;Annotatedimage&quot;,</span><br><span class="line">    &quot;Highlight&quot;,</span><br><span class="line">    &quot;Checkboxgroup&quot;,</span><br><span class="line">    &quot;Number&quot;,</span><br><span class="line">    &quot;Plot&quot;,</span><br><span class="line">    &quot;Radio&quot;,</span><br><span class="line">    &quot;ScatterPlot&quot;,</span><br><span class="line">    &quot;Slider&quot;,</span><br><span class="line">    &quot;State&quot;,</span><br><span class="line">    &quot;UploadButton&quot;,</span><br><span class="line">    &quot;Video&quot;,</span><br><span class="line">    &quot;StreamingInput&quot;,</span><br><span class="line">    &quot;StreamingOutput&quot;,</span><br><span class="line">    &quot;ImageEditor&quot;,</span><br><span class="line">    &quot;ParamViewer&quot;,</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<h5 id="121-控件参数"><a class="markdownIt-Anchor" href="#121-控件参数"></a> 1.2.1 控件参数</h5>
+<p>​	Todo</p>
+<h5 id="122-控件效果展示"><a class="markdownIt-Anchor" href="#122-控件效果展示"></a> 1.2.2 控件效果展示</h5>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> gradio <span class="keyword">as</span> gr</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建控件</span></span><br><span class="line">textbox = gr.Textbox(label=<span class="string">&quot;输入文本&quot;</span>)</span><br><span class="line">slider = gr.Slider(minimum=<span class="number">0</span>, maximum=<span class="number">100</span>, label=<span class="string">&quot;滑动条&quot;</span>)</span><br><span class="line">checkbox = gr.Checkbox(label=<span class="string">&quot;复选框&quot;</span>)</span><br><span class="line">radio = gr.Radio([<span class="string">&quot;选项1&quot;</span>, <span class="string">&quot;选项2&quot;</span>, <span class="string">&quot;选项3&quot;</span>], label=<span class="string">&quot;单选按钮&quot;</span>)</span><br><span class="line">button = gr.Button(label=<span class="string">&quot;提交&quot;</span>)</span><br><span class="line">dropdown = gr.Dropdown([<span class="string">&quot;选项A&quot;</span>, <span class="string">&quot;选项B&quot;</span>, <span class="string">&quot;选项C&quot;</span>], label=<span class="string">&quot;下拉菜单&quot;</span>)</span><br><span class="line">file = gr.File(label=<span class="string">&quot;文件上传&quot;</span>)</span><br><span class="line">upload_button = gr.UploadButton(label=<span class="string">&quot;上传按钮&quot;</span>)</span><br><span class="line">image = gr.Image(label=<span class="string">&quot;图像上传&quot;</span>)</span><br><span class="line">video = gr.Video(label=<span class="string">&quot;视频上传&quot;</span>)</span><br><span class="line">audio = gr.Audio(label=<span class="string">&quot;音频上传&quot;</span>)</span><br><span class="line">number = gr.Number(label=<span class="string">&quot;数字输入&quot;</span>)</span><br><span class="line">checkboxgroup = gr.CheckboxGroup([<span class="string">&quot;选项1&quot;</span>, <span class="string">&quot;选项2&quot;</span>, <span class="string">&quot;选项3&quot;</span>], label=<span class="string">&quot;复选框组&quot;</span>)</span><br><span class="line">highlightedtext = gr.HighlightedText(label=<span class="string">&quot;高亮文本&quot;</span>)</span><br><span class="line">annotatedimage = gr.AnnotatedImage(label=<span class="string">&quot;标注图像&quot;</span>)</span><br><span class="line">timeseries = gr.Timeseries(label=<span class="string">&quot;时间序列&quot;</span>)</span><br><span class="line">dataframe = gr.Dataframe(label=<span class="string">&quot;数据框&quot;</span>)</span><br><span class="line">json = gr.JSON(label=<span class="string">&quot;JSON输入&quot;</span>)</span><br><span class="line">code = gr.Code(label=<span class="string">&quot;代码输入&quot;</span>)</span><br><span class="line">colorpicker = gr.ColorPicker(label=<span class="string">&quot;颜色选择器&quot;</span>)</span><br><span class="line">markdown = gr.Markdown(label=<span class="string">&quot;Markdown文本&quot;</span>)</span><br><span class="line">html = gr.HTML(label=<span class="string">&quot;HTML文本&quot;</span>)</span><br><span class="line">label = gr.Label(<span class="string">&quot;标签文本&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 定义回调函数</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">submit_values</span>(<span class="params">text, slider_val, checkbox_val, radio_val, dropdown_val, file_val, image_val, video_val, audio_val, number_val, checkboxgroup_val, highlightedtext_val, annotatedimage_val, timeseries_val, dataframe_val, json_val, code_val, colorpicker_val, markdown_val, html_val</span>):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;文本:&quot;</span>, text)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;滑动条值:&quot;</span>, slider_val)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;复选框选中:&quot;</span>, checkbox_val)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;单选按钮选择:&quot;</span>, radio_val)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;下拉菜单选择:&quot;</span>, dropdown_val)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;上传的文件:&quot;</span>, file_val.name <span class="keyword">if</span> file_val <span class="keyword">else</span> <span class="literal">None</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;上传的图像:&quot;</span>, image_val.name <span class="keyword">if</span> image_val <span class="keyword">else</span> <span class="literal">None</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;上传的视频:&quot;</span>, video_val.name <span class="keyword">if</span> video_val <span class="keyword">else</span> <span class="literal">None</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;上传的音频:&quot;</span>, audio_val.name <span class="keyword">if</span> audio_val <span class="keyword">else</span> <span class="literal">None</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;数字输入:&quot;</span>, number_val)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;复选框组选中:&quot;</span>, checkboxgroup_val)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;高亮文本:&quot;</span>, highlightedtext_val)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;标注图像:&quot;</span>, annotatedimage_val)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;时间序列:&quot;</span>, timeseries_val)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;数据框:&quot;</span>, dataframe_val)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;JSON输入:&quot;</span>, json_val)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;代码输入:&quot;</span>, code_val)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;颜色选择器选择:&quot;</span>, colorpicker_val)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Markdown文本:&quot;</span>, markdown_val)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;HTML文本:&quot;</span>, html_val)</span><br><span class="line"><span class="comment"># 创建界面</span></span><br><span class="line">interface = gr.Interface(</span><br><span class="line">    fn=submit_values,</span><br><span class="line">    inputs=[textbox, slider, checkbox, radio, dropdown, file, upload_button, image, video, audio, number, checkboxgroup, highlightedtext, annotatedimage, timeseries, dataframe, json, code, colorpicker, markdown, html, label, button],</span><br><span class="line">    outputs=<span class="string">&quot;text&quot;</span>,</span><br><span class="line">    title=<span class="string">&quot;包含所有控件的交互式界面示例&quot;</span>,</span><br><span class="line">)</span><br><span class="line"><span class="comment"># 启动应用</span></span><br><span class="line">interface.launch()</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/image-20240131004239219.png" alt="image-20240131004239219" style="zoom:50%;"><img src="/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/image-20240131004301148.png" alt="image-20240131004301148"></p>
+<h4 id="13-interfacelaunch方法返回三个值"><a class="markdownIt-Anchor" href="#13-interfacelaunch方法返回三个值"></a> 1.3 <strong>Interface.launch()方法返回三个值</strong></h4>
+<ul>
+<li>app，为 Gradio 演示提供支持的 FastAPI 应用程序</li>
+<li>local_url，本地地址</li>
+<li>share_url，公共地址，当share=True时生成</li>
+</ul>
+<h4 id="14-多输入输出"><a class="markdownIt-Anchor" href="#14-多输入输出"></a> 1.4 多输入输出</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import gradio as gr</span><br><span class="line">#该函数有3个输入参数和2个输出参数</span><br><span class="line">def greet(name, is_morning, temperature):</span><br><span class="line">    salutation = &quot;Good morning&quot; if is_morning else &quot;Good evening&quot;</span><br><span class="line">    greeting = f&quot;&#123;salutation&#125; &#123;name&#125;. It is &#123;temperature&#125; degrees today&quot;</span><br><span class="line">    celsius = (temperature - 32) * 5 / 9</span><br><span class="line">    return greeting, round(celsius, 2)</span><br><span class="line">demo = gr.Interface(</span><br><span class="line">    fn=greet,</span><br><span class="line">    #按照处理程序设置输入组件</span><br><span class="line">    inputs=[gr.Textbox(lines=3, placeholder=&quot;preName Here...&quot;,label=&quot;your name&quot;),</span><br><span class="line">            gr.Checkbox(min_width=100), gr.Slider(0, 100)],</span><br><span class="line">    #按照处理程序设置输出组件</span><br><span class="line">    outputs=[&quot;text&quot;, &quot;number&quot;],</span><br><span class="line">)</span><br><span class="line">demo.launch()</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/image-20240127231747733.png" alt="image-20240127231747733"></p>
+<h3 id="2-进阶"><a class="markdownIt-Anchor" href="#2-进阶"></a> 2 进阶</h3>
+<h4 id="21-interface状态"><a class="markdownIt-Anchor" href="#21-interface状态"></a> 2.1 interface状态</h4>
+<h5 id="全局变量"><a class="markdownIt-Anchor" href="#全局变量"></a> 全局变量</h5>
+<p>pass</p>
+<h5 id="state状态保留"><a class="markdownIt-Anchor" href="#state状态保留"></a> state状态保留</h5>
+<p>Gradio支持的另一种数据持久性是会话状态，数据在一个页面会话中的多次提交中持久存在</p>
+<h4 id="22-interface交互"><a class="markdownIt-Anchor" href="#22-interface交互"></a> 2.2 interface交互</h4>
+<h5 id="实时变化"><a class="markdownIt-Anchor" href="#实时变化"></a> 实时变化</h5>
+<p>在Interface中设置live=True，则输出会跟随输入实时变化。这个时候界面不会有submit按钮，因为不需要手动提交输入。</p>
+<h5 id="流模式"><a class="markdownIt-Anchor" href="#流模式"></a> 流模式</h5>
+<p>在许多情形下，我们的输入是实时视频流或者音频流，那么意味这数据不停地发送到后端，这是可以采用streaming模式处理数据。</p>
+<p>添加<code>(streaming=True)</code>and <code> live=True</code>即可</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># import gradio as gr</span><br><span class="line"># import numpy as np</span><br><span class="line"># def flip(im):</span><br><span class="line">#     return np.flipud(im)</span><br><span class="line"># demo = gr.Interface(</span><br><span class="line">#     flip,</span><br><span class="line">#     gr.Image(streaming=True),</span><br><span class="line">#     &quot;image&quot;,</span><br><span class="line">#     live=True</span><br><span class="line"># )</span><br><span class="line"># demo.launch()</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/image-20240127233945848.png" alt="image-20240127233945848"></p>
+<h3 id="3-flagging标记"><a class="markdownIt-Anchor" href="#3-flagging标记"></a> 3 Flagging标记</h3>
+<p>输出框下有个Flag按钮。</p>
+<p>当测试您的模型的用户看到某个输入导致输出错误或意外的模型行为，他们可以标记这个输入让开发者知道。这个文件夹由Interface的flagging_dir参数指定，默认为’flagged’</p>
+<p><img src="/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/image-20240127234521491.png" alt="image-20240127234521491"></p>
+<h3 id="4-样式-队列-生成器"><a class="markdownIt-Anchor" href="#4-样式-队列-生成器"></a> 4 样式、队列、生成器</h3>
+<ul>
+<li>样式</li>
+</ul>
+<p>在Gradio官方文档，搜索不同的组件加.style（如image.style），可以获取该组件的样式参数设置样例。例如image组件的设置如下：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">img = gr.Image(&quot;lion.jpg&quot;).style(height=&#x27;24&#x27;, rounded=False)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>队列 如果函数推理时间较长，比如目标检测；或者应用程序处理流量过大，则需要使用queue方法进行排队。queue方法使用websockets，可以防止网络超时。使用方式如下：</li>
+</ul>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">demo = gr.Interface(...).queue()</span><br><span class="line">demo.launch()</span><br><span class="line">#或</span><br><span class="line">with gr.Blocks() as demo:</span><br><span class="line">    #...</span><br><span class="line">demo.queue()</span><br><span class="line">demo.launch()</span><br></pre></td></tr></table></figure>
+<ul>
+<li>生成器</li>
+</ul>
+<p>在某些情况下，你可能想显示一连串的输出，而不是单一的输出。例如，你可能有一个图像生成模型，如果你想显示在每个步骤中生成的图像，从而得到最终的图像。在这种情况下，你可以向Gradio提供一个生成器函数，而不是一个常规函数。下面是一个生成器的例子，每隔1秒返回1张图片。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">import gradio as gr</span><br><span class="line">import numpy as np</span><br><span class="line">import time</span><br><span class="line">#生成steps张图片，每隔1秒钟返回</span><br><span class="line">def fake_diffusion(steps):</span><br><span class="line">    for _ in range(steps):</span><br><span class="line">        time.sleep(1)</span><br><span class="line">        image = np.random.randint(255, size=(300, 600, 3))</span><br><span class="line">        yield image</span><br><span class="line">demo = gr.Interface(fake_diffusion,</span><br><span class="line">                    #设置滑窗，最小值为1，最大值为10，初始值为3，每次改动增减1位</span><br><span class="line">                    inputs=gr.Slider(1, 10, value=3, step=1),</span><br><span class="line">                    outputs=&quot;image&quot;)</span><br><span class="line">#生成器必须要queue函数</span><br><span class="line">demo.queue()</span><br><span class="line">demo.launch()</span><br></pre></td></tr></table></figure>
+<h2 id="demo4-自定义blocks使用"><a class="markdownIt-Anchor" href="#demo4-自定义blocks使用"></a> demo4 自定义Blocks使用</h2>
+<h2 id="11-基础入门"><a class="markdownIt-Anchor" href="#11-基础入门"></a> 1.1 基础入门</h2>
+<p>Blocks提供了一个低级别的API，用于设计具有更灵活布局和数据流的网络应用。Blocks允许控制组件在页面上出现的位置，处理复杂的数据流（例如，输出可以作为其他函数的输入），并根据用户交互更新组件的属性可见性。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">import gradio as gr</span><br><span class="line">def greet(name):</span><br><span class="line">    return &quot;Hello &quot; + name + &quot;!&quot;</span><br><span class="line">with gr.Blocks() as demo:</span><br><span class="line">    #设置输入组件</span><br><span class="line">    name = gr.Textbox(label=&quot;Name&quot;)</span><br><span class="line">    # 设置输出组件</span><br><span class="line">    output = gr.Textbox(label=&quot;Output Box&quot;)</span><br><span class="line">    #设置按钮</span><br><span class="line">    greet_btn = gr.Button(&quot;Greet&quot;)</span><br><span class="line">    #设置按钮点击事件</span><br><span class="line">    greet_btn.click(fn=greet, inputs=name, outputs=output)</span><br><span class="line">demo.launch()</span><br></pre></td></tr></table></figure>
+<h2 id="12-tab"><a class="markdownIt-Anchor" href="#12-tab"></a> 1.2 tab</h2>
+<p>通过自定义实现不同的标签页内容</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line">import gradio as gr</span><br><span class="line">def flip_text(x):</span><br><span class="line">    return x[::-1]</span><br><span class="line">def flip_image(x):</span><br><span class="line">    return np.fliplr(x)</span><br><span class="line">with gr.Blocks() as demo:</span><br><span class="line">    #用markdown语法编辑输出一段话</span><br><span class="line">    gr.Markdown(&quot;Flip text or image files using this demo.&quot;)</span><br><span class="line">    # 设置tab选项卡</span><br><span class="line">    with gr.Tab(&quot;Flip Text&quot;):</span><br><span class="line">        #Blocks特有组件，设置所有子组件按垂直排列</span><br><span class="line">        #垂直排列是默认情况，不加也没关系</span><br><span class="line">        with gr.Column():</span><br><span class="line">            text_input = gr.Textbox()</span><br><span class="line">            text_output = gr.Textbox()</span><br><span class="line">            text_button = gr.Button(&quot;Flip&quot;)</span><br><span class="line">    with gr.Tab(&quot;Flip Image&quot;):</span><br><span class="line">        #Blocks特有组件，设置所有子组件按水平排列</span><br><span class="line">        with gr.Row():</span><br><span class="line">            image_input = gr.Image()</span><br><span class="line">            image_output = gr.Image()</span><br><span class="line">        image_button = gr.Button(&quot;Flip&quot;)</span><br><span class="line">    #设置折叠内容</span><br><span class="line">    with gr.Accordion(&quot;Open for More!&quot;):</span><br><span class="line">        gr.Markdown(&quot;Look at me...&quot;)</span><br><span class="line">    text_button.click(flip_text, inputs=text_input, outputs=text_output)</span><br><span class="line">    image_button.click(flip_image, inputs=image_input, outputs=image_output)</span><br><span class="line">demo.launch()</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/image-20240127234217252.png" alt="image-20240127234217252"></p>
+<h2 id="13-进阶"><a class="markdownIt-Anchor" href="#13-进阶"></a> 1.3 进阶</h2>
+<h3 id="可交互设置"><a class="markdownIt-Anchor" href="#可交互设置"></a> 可交互设置</h3>
+<p>任何输入的组件内容都是可编辑的，而输出组件默认是不能编辑的。如果想要使得输出组件内容可编辑，设置interactive=True即可。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">import gradio as gr</span><br><span class="line">def greet(name):</span><br><span class="line">    return &quot;Hello &quot; + name + &quot;!&quot;</span><br><span class="line">with gr.Blocks() as demo:</span><br><span class="line">    name = gr.Textbox(label=&quot;Name&quot;)</span><br><span class="line">    # 不可交互</span><br><span class="line">    # output = gr.Textbox(label=&quot;Output Box&quot;)</span><br><span class="line">    # 可交互</span><br><span class="line">    output = gr.Textbox(label=&quot;Output&quot;, interactive=True)</span><br><span class="line">    greet_btn = gr.Button(&quot;Greet&quot;)</span><br><span class="line">    greet_btn.click(fn=greet, inputs=name, outputs=output)</span><br><span class="line">demo.launch()</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2024/01/27/2024%E5%B9%B41%E6%9C%8827%E6%97%A5-gradio%E5%AE%9E%E8%B7%B5/" data-id="clrwazlri003g7ov48i2dd58c" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2024年1月23日-python基础总结" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-python%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/" class="article-date">
+  <time class="post-time" datetime="2024-01-23T06:00:53.000Z" itemprop="datePublished">
+    <span class="post-month">1月</span><br/>
+    <span class="post-day">23</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-python%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/">2024年1月23日 python语法总结</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="items"><a class="markdownIt-Anchor" href="#items"></a> <code>items()</code></h2>
+<p>是 Python 字典中的一个方法，用于返回字典的键值对。</p>
+<h2 id="装饰器"><a class="markdownIt-Anchor" href="#装饰器"></a> 装饰器@</h2>
+<h4 id="普通方法不使用装饰器"><a class="markdownIt-Anchor" href="#普通方法不使用装饰器"></a> <code>普通方法（不使用装饰器）</code></h4>
+<p>需要一个实例（<code>self</code>）作为第一个参数。普通方法通常用于操作类的<strong>实例</strong>属性和方法。</p>
+<blockquote>
+<h4 id="特点"><a class="markdownIt-Anchor" href="#特点"></a> 特点</h4>
+<ul>
+<li><strong>必须通过实例调用</strong>：普通方法需要先创建类的实例，然后通过实例调用方法。</li>
+<li><strong>访问实例属性和方法</strong>：普通方法可以访问和修改实例的属性和其他方法。</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">obj = MyClass(10)</span><br><span class="line">obj.normal_method()  # 输出：The value is 10</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h4 id="classmethod"><a class="markdownIt-Anchor" href="#classmethod"></a> <code>@classmethod</code></h4>
+<p>用于定义<strong>类</strong>方法。类方法的第一个参数是<strong>类本身</strong>（通常命名为 <code>cls</code>），而不是实例（<code>self</code>）</p>
+<blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MyClass.class_method()  <span class="comment"># 输出：The class value is 100</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<h4 id="staticmethod"><a class="markdownIt-Anchor" href="#staticmethod"></a> <code>@staticmethod</code></h4>
+<p>用于定义静态方法。静态方法既不接收实例参数（<code>self</code>），也不接收类参数（<code>cls</code>），它就是一个普通的函数，<strong>只是恰好定义在类中</strong></p>
+<blockquote>
+<p><strong>独立于类和实例</strong></p>
+<p>静态方法通常用于与类相关的工具函数或辅助函数</p>
+</blockquote>
+<img src="/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-python%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20250623212618377.png" alt="image-20250623212618377" style="zoom: 80%;">
+<h3 id="类是否需要实例化"><a class="markdownIt-Anchor" href="#类是否需要实例化"></a> 类是否需要实例化</h3>
+<h4 id="看属性"><a class="markdownIt-Anchor" href="#看属性"></a> 看属性</h4>
+<table>
+<thead>
+<tr>
+<th>用法</th>
+<th>什么时候用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Functool.tools</code></td>
+<td>如果 <code>tools</code> 是 <strong>类属性</strong> 或 <strong>类方法</strong>，用类来访问</td>
+</tr>
+<tr>
+<td><code>functool_instance.tools</code></td>
+<td>如果 <code>tools</code> 是 <strong>实例属性</strong> 或 <strong>实例方法</strong>，用对象来访问</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>如果你想要</th>
+<th>推荐做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>所有地方都用同一个配置（如 <code>tools</code>）</td>
+<td>定义为 <strong>类属性</strong>，直接用 <code>Functool.tools</code></td>
+</tr>
+<tr>
+<td>每个实例配置不同</td>
+<td>定义为 <strong>实例属性</strong>，每次 <code>Functool()</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="python语法总结"><a class="markdownIt-Anchor" href="#python语法总结"></a> python语法总结</h2>
+<h3 id="or"><a class="markdownIt-Anchor" href="#or"></a> or</h3>
+<blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">name = &quot;&quot;  # 空字符串</span><br><span class="line">result1 = name or &quot;默认值&quot;          # =&gt; &quot;默认值&quot;</span><br><span class="line">result2 = name if name is not None else &quot;默认值&quot;  # =&gt; &quot;&quot; （保留空字符串）</span><br><span class="line"></span><br><span class="line">print(result1)  # &quot;默认值&quot;</span><br><span class="line">print(result2)  # &quot;&quot;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</blockquote>
+<h2 id="__init__py实用示例"><a class="markdownIt-Anchor" href="#__init__py实用示例"></a> <code>__init__.py</code>实用示例</h2>
+<p>一个比较标准的 <code>__init__.py</code>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑# 包元信息</span><br><span class="line">__version__ = &quot;1.0.0&quot;</span><br><span class="line">__author__ = &quot;OpenAI Learner&quot;</span><br><span class="line"></span><br><span class="line"># 导入核心功能</span><br><span class="line">from .core import CoreClass, helper_function</span><br><span class="line">from . import utils</span><br><span class="line"></span><br><span class="line"># 定义公开 API</span><br><span class="line">__all__ = [&quot;CoreClass&quot;, &quot;helper_function&quot;, &quot;utils&quot;]</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>如果init是空的</p>
+<p>from mypackage import Core  # ❌ 报错：找不到 Core<br>
+from mypackage import utils  # ✅ OK，因为 utils 是个模块</p>
+</blockquote>
+<h2 id="class"><a class="markdownIt-Anchor" href="#class"></a> class</h2>
+<h3 id="1-成员函数的变量-和成员变量"><a class="markdownIt-Anchor" href="#1-成员函数的变量-和成员变量"></a> 1 成员函数的变量 和成员变量</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">run_asr</span>(<span class="params">self, video_file_path, segment_duration=<span class="number">30</span></span>):</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>只有方法用到 那就作为参数</p>
+<p>如果是全局变量可以用self成员变量/属性</p>
+</blockquote>
+<h4 id="类参数"><a class="markdownIt-Anchor" href="#类参数"></a> 类参数</h4>
+<p><img src="/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-python%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20250630224249641.png" alt="image-20250630224249641"></p>
+<h3 id="2-类属性-vs-实例属性"><a class="markdownIt-Anchor" href="#2-类属性-vs-实例属性"></a> 2 类属性 vs 实例属性</h3>
+<h4 id="1-类属性无需-self"><a class="markdownIt-Anchor" href="#1-类属性无需-self"></a> 1. <strong>类属性</strong>（无需 <code>self</code>）</h4>
+<ul>
+<li><strong>定义位置</strong>：直接在类内部定义，不在任何方法中。</li>
+<li><strong>归属</strong>：属于类本身，所有实例共享同一个值。</li>
+<li><strong>访问方式</strong>：通过类名或实例名访问（但不通过 <code>self</code>）。</li>
+</ul>
+<h4 id="2-实例属性必须用-self"><a class="markdownIt-Anchor" href="#2-实例属性必须用-self"></a> 2. <strong>实例属性</strong>（必须用 <code>self</code>）</h4>
+<ul>
+<li><strong>定义位置</strong>：通常在 <code>__init__</code> 方法或其他实例方法中通过 <code>self.属性名</code> 定义。</li>
+<li><strong>归属</strong>：每个实例单独拥有，值可以不同。</li>
+<li><strong>访问方式</strong>：只能通过实例对象（<code>self</code>）访问。</li>
+</ul>
+<h1 id="异步"><a class="markdownIt-Anchor" href="#异步"></a> 异步</h1>
+<blockquote>
+<img src="https://pic1.zhimg.com/70/v2-226c020e54407d7067a2abe194f444d8_1440w.image?source=172ae18b&biz_tag=Post" alt="什么是同步、异步，并发、并行、串行？" style="zoom:33%;"> 
+<p>参考:<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/546752847">https://zhuanlan.zhihu.com/p/546752847</a></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>对比项</th>
+<th>同步 (Synchronous)</th>
+<th>异步 (Asynchronous)</th>
+<th>并发 (Concurrency)</th>
+<th>并行 (Parallelism)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>概念</strong></td>
+<td>按顺序执行，一个任务结束才做下一个</td>
+<td>发起任务后可继续做别的，不等待结果</td>
+<td>逻辑上同时做多事，快速切换</td>
+<td>物理上同时做多事，需多核</td>
+</tr>
+<tr>
+<td><strong>是否阻塞</strong></td>
+<td>阻塞</td>
+<td>非阻塞</td>
+<td>通常非阻塞（依赖调度）</td>
+<td>非阻塞</td>
+</tr>
+<tr>
+<td><strong>是否真正同时运行</strong></td>
+<td>否</td>
+<td>否</td>
+<td>否（单核快速切换）</td>
+<td>是（多核同时跑）</td>
+</tr>
+<tr>
+<td><strong>适合场景</strong></td>
+<td>简单串行流程</td>
+<td>高 IO 场景</td>
+<td>IO 密集型任务</td>
+<td>CPU 密集型任务</td>
+</tr>
+<tr>
+<td><strong>Python常用方案</strong></td>
+<td>普通函数</td>
+<td><code>asyncio</code> / <code>await</code></td>
+<td><code>threading</code></td>
+<td><code>multiprocessing</code></td>
+</tr>
+<tr>
+<td><strong>简单例子</strong></td>
+<td><code>task(&quot;A&quot;); task(&quot;B&quot;)</code> 顺序</td>
+<td><code>await task(&quot;A&quot;); await task(&quot;B&quot;)</code> 同时等</td>
+<td>线程同时执行 <code>task(&quot;A&quot;)</code> 和 <code>task(&quot;B&quot;)</code></td>
+<td>多进程同时执行 <code>task(&quot;A&quot;)</code> 和 <code>task(&quot;B&quot;)</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="or-2"><a class="markdownIt-Anchor" href="#or-2"></a> OR</h2>
+<img src="/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-python%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20250630224506782.png" alt="image-20250630224506782" style="zoom:50%;"> 
+<h1 id="报错"><a class="markdownIt-Anchor" href="#报错"></a> 报错</h1>
+<h3 id="assert"><a class="markdownIt-Anchor" href="#assert"></a> assert</h3>
+<p><code>assert</code> 是 Python 的断言关键字，用于验证 “必须成立” 的条件，失败则抛 <code>AssertionError</code>。</p>
+<h1 id="类型"><a class="markdownIt-Anchor" href="#类型"></a> 类型</h1>
+<h2 id="ellipsis"><a class="markdownIt-Anchor" href="#ellipsis"></a> <code>ellipsis</code></h2>
+<blockquote>
+<h4 id="1-本质与特性"><a class="markdownIt-Anchor" href="#1-本质与特性"></a> 1. 本质与特性</h4>
+<ul>
+<li><code>ellipsis</code> 是 Python 的<strong>单例对象</strong>（全局唯一），类型为 <code>ellipsis</code>，可以通过 <code>...</code> 或 <code>Ellipsis</code>（首字母大写）访问；</li>
+<li>它不支持任何属性和方法（这也是你之前访问 <code>.terminated</code> 报错的原因）；</li>
+<li>它是不可变对象，不能被修改。</li>
+</ul>
+<p>python</p>
+<p>运行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 基础特性验证</span><br><span class="line">print(...)  # 输出: Ellipsis</span><br><span class="line">print(Ellipsis)  # 输出: Ellipsis</span><br><span class="line">print(type(...))  # 输出: &lt;class &#x27;ellipsis&#x27;&gt;</span><br><span class="line">print(... is Ellipsis)  # 输出: True（单例特性）</span><br><span class="line"></span><br><span class="line"># 尝试访问属性会报错（对应你之前的问题）</span><br><span class="line">try:</span><br><span class="line">    print(....__dict__)</span><br><span class="line">except AttributeError as e:</span><br><span class="line">    print(f&quot;报错：&#123;e&#125;&quot;)  # 输出：&#x27;ellipsis&#x27; object has no attribute &#x27;__dict__&#x27;</span><br></pre></td></tr></table></figure>
+<h4 id="2-与其他空值-占位符的区别"><a class="markdownIt-Anchor" href="#2-与其他空值-占位符的区别"></a> 2. 与其他空值 / 占位符的区别</h4>
+<p>很多新手会把 <code>...</code> 和 <code>None</code> 混淆，两者核心差异如下：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">特性</th>
+<th style="text-align:center">ellipsis (<code>...</code>)</th>
+<th style="text-align:center">None</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">用途</td>
+<td style="text-align:center">语法占位、多维切片、类型提示</td>
+<td style="text-align:center">空值标记、默认参数</td>
+</tr>
+<tr>
+<td style="text-align:center">类型</td>
+<td style="text-align:center"><code>ellipsis</code></td>
+<td style="text-align:center"><code>NoneType</code></td>
+</tr>
+<tr>
+<td style="text-align:center">可调用属性</td>
+<td style="text-align:center">无</td>
+<td style="text-align:center">无（但不会被误用作对象）</td>
+</tr>
+<tr>
+<td style="text-align:center">典型场景</td>
+<td style="text-align:center">未完成代码、NumPy 切片</td>
+<td style="text-align:center">变量初始化、函数返回值</td>
+</tr>
+</tbody>
+</table>
+<h3 id="二-ellipsis-的核心使用场景"><a class="markdownIt-Anchor" href="#二-ellipsis-的核心使用场景"></a> 二、ellipsis 的核心使用场景</h3>
+<h4 id="1-语法占位符最常用"><a class="markdownIt-Anchor" href="#1-语法占位符最常用"></a> 1. 语法占位符（最常用）</h4>
+<p>当你需要写代码框架但暂未实现具体逻辑时，用 <code>...</code> 作为 “占位符”，替代空代码块（比 <code>pass</code> 更直观，尤其在函数 / 类中）：</p>
+<p>python</p>
+<p>运行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># 场景1：未实现的函数</span><br><span class="line">def todo_function():</span><br><span class="line">    ...  # 等价于 pass，但语义更清晰（表示“待实现”）</span><br><span class="line"></span><br><span class="line"># 场景2：未完成的类方法</span><br><span class="line">class MyClass:</span><br><span class="line">    def unimplemented_method(self):</span><br><span class="line">        ...  # 明确表示该方法暂未实现</span><br><span class="line"></span><br><span class="line"># 场景3：条件分支占位</span><br><span class="line">if some_condition:</span><br><span class="line">    ...  # 后续补充逻辑</span><br><span class="line">else:</span><br><span class="line">    print(&quot;执行已有逻辑&quot;)</span><br></pre></td></tr></table></figure>
+<h4 id="2-多维数组-切片numpypandas-核心用法"><a class="markdownIt-Anchor" href="#2-多维数组-切片numpypandas-核心用法"></a> 2. 多维数组 / 切片（NumPy/Pandas 核心用法）</h4>
+<p><code>...</code> 是 Python 切片语法的扩展，用于表示 “剩余所有维度”，在处理多维数组时特别实用（原生 Python 列表不支持，主要用于第三方库）：</p>
+<p>python</p>
+<p>运行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line"></span><br><span class="line"># 创建 3 维数组</span><br><span class="line">arr = np.random.rand(2, 3, 4)</span><br><span class="line"></span><br><span class="line"># 取第一个维度的所有元素，等价于 arr[0, :, :]</span><br><span class="line">print(arr[0, ...].shape)  # 输出: (3, 4)</span><br><span class="line"></span><br><span class="line"># 取最后一个维度的所有元素，等价于 arr[:, :, 2]</span><br><span class="line">print(arr[..., 2].shape)  # 输出: (2, 3)</span><br></pre></td></tr></table></figure>
+<h4 id="3-类型提示python-310"><a class="markdownIt-Anchor" href="#3-类型提示python-310"></a> 3. 类型提示（Python 3.10+）</h4>
+<p>在类型注解中，<code>...</code> 可用于表示 “任意类型” 或 “未指定的细节”，常与 <code>Annotated</code>、<code>TypeVar</code> 等配合：</p>
+<p>python</p>
+<p>运行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">from typing import Annotated, Any</span><br><span class="line"></span><br><span class="line"># 场景1：表示“任意返回值”</span><br><span class="line">def func() -&gt; Any:</span><br><span class="line">    return ...  # 函数返回 ellipsis 对象</span><br><span class="line"></span><br><span class="line"># 场景2：类型提示中占位</span><br><span class="line">Config = Annotated[dict, ...]  # 元数据暂未指定，用 ... 占位</span><br></pre></td></tr></table></figure>
+<h4 id="4-模式匹配python-310-matchcase"><a class="markdownIt-Anchor" href="#4-模式匹配python-310-matchcase"></a> 4. 模式匹配（Python 3.10+ match/case）</h4>
+<p>在 <code>match</code> 语句中，<code>...</code> 作为通配符，匹配任意值（类似正则的 <code>.</code>）：</p>
+<p>python</p>
+<p>运行</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">data = [1, 2, 3]</span><br><span class="line"></span><br><span class="line">match data:</span><br><span class="line">    case [1, ...]:  # 匹配以 1 开头的任意列表</span><br><span class="line">        print(&quot;匹配到以 1 开头的列表&quot;)</span><br><span class="line">    case _:</span><br><span class="line">        print(&quot;未匹配&quot;)</span><br><span class="line"># 输出：匹配到以 1 开头的列表</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h2 id="event-loop"><a class="markdownIt-Anchor" href="#event-loop"></a> Event Loop</h2>
+<blockquote>
+<h3 id="二-event-loop-核心操作新手必掌握"><a class="markdownIt-Anchor" href="#二-event-loop-核心操作新手必掌握"></a> 二、Event Loop 核心操作（新手必掌握）</h3>
+<h4 id="1-启动-event-looppython-37-最简方式"><a class="markdownIt-Anchor" href="#1-启动-event-looppython-37-最简方式"></a> 1. 启动 Event Loop（Python 3.7+ 最简方式）</h4>
+<p><code>asyncio.run()</code> 是封装好的高层 API，会自动创建、运行、关闭 Event Loop，是新手首选：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">import asyncio</span><br><span class="line"></span><br><span class="line">async def simple_task():</span><br><span class="line">    await asyncio.sleep(1)</span><br><span class="line">    print(&quot;任务执行完成&quot;)</span><br><span class="line"></span><br><span class="line"># asyncio.run() 内部流程：</span><br><span class="line"># 1. 创建新的 Event Loop</span><br><span class="line"># 2. 将 simple_task 加入 Loop 并运行</span><br><span class="line"># 3. 任务完成后自动关闭 Loop</span><br><span class="line">asyncio.run(simple_task())</span><br></pre></td></tr></table></figure>
+<h4 id="2-手动操作-event-loop理解底层逻辑"><a class="markdownIt-Anchor" href="#2-手动操作-event-loop理解底层逻辑"></a> 2. 手动操作 Event Loop（理解底层逻辑）</h4>
+<p>对于 Python 3.6- 或需要自定义 Loop 行为的场景，可手动管理 Loop（帮助理解核心原理）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">import asyncio</span><br><span class="line"></span><br><span class="line">async def simple_task():</span><br><span class="line">    await asyncio.sleep(1)</span><br><span class="line">    print(&quot;任务执行完成&quot;)</span><br><span class="line"></span><br><span class="line"># 1. 获取/创建 Event Loop（当前线程的默认 Loop）</span><br><span class="line">loop = asyncio.get_event_loop()</span><br><span class="line"></span><br><span class="line">try:</span><br><span class="line">    # 2. 将协程任务加入 Loop 并运行，直到任务完成</span><br><span class="line">    loop.run_until_complete(simple_task())</span><br><span class="line">finally:</span><br><span class="line">    # 3. 关闭 Loop，释放资源（必须手动执行）</span><br><span class="line">    loop.close()</span><br></pre></td></tr></table></figure>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-python%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/" data-id="cmbhxnxb00005gov4cy1zeep7" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
 
     </footer>
   </div>
@@ -1058,7 +1796,7 @@
 
 
   <nav id="page-nav">
-    <a class="extend prev" rel="prev" href="/page/9/">&amp;laquo; pre</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><a class="page-number" href="/page/13/">13</a><a class="extend next" rel="next" href="/page/11/">next &amp;raquo;</a>
+    <a class="extend prev" rel="prev" href="/page/9/">&amp;laquo; pre</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/14/">14</a><a class="extend next" rel="next" href="/page/11/">next &amp;raquo;</a>
   </nav>
 </section>
         
@@ -1099,9 +1837,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>122</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>134</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>36</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>38</strong><br>标签</div></a>
     </div>
 
 
@@ -1133,7 +1871,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy;2024 - 2025 Weakliy<br>
+      &copy;2025 - 2026 Weakliy<br>
       由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
       主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
       

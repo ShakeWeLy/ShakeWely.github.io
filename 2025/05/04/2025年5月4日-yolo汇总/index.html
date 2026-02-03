@@ -74,7 +74,7 @@
 <meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250508182738579.png">
 <meta property="og:image" content="https://shakewely.github.io/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/F1_curve.png">
 <meta property="article:published_time" content="2025-05-04T07:42:49.000Z">
-<meta property="article:modified_time" content="2025-10-04T15:42:25.399Z">
+<meta property="article:modified_time" content="2026-01-22T07:14:14.972Z">
 <meta property="article:author" content="Weakliy">
 <meta property="article:tag" content="YOLO">
 <meta name="twitter:card" content="summary">
@@ -110,9 +110,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>122</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>134</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>36</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>38</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -883,15 +883,29 @@
 </ul>
 </blockquote>
 <h3 id="2-hyperace"><a class="markdownIt-Anchor" href="#2-hyperace"></a> 2 HyperACE</h3>
-<h2 id="yolov26"><a class="markdownIt-Anchor" href="#yolov26"></a> YOLOv26</h2>
+<h2 id="yolo26"><a class="markdownIt-Anchor" href="#yolo26"></a> YOLO26</h2>
 <blockquote>
 <p>（端到端版本, 对标yolov10, 无nms等后处理操作）</p>
+<p><a target="_blank" rel="noopener" href="https://docs.ultralytics.com/models/yolo26/">https://docs.ultralytics.com/models/yolo26/</a></p>
 </blockquote>
-<p>YOLO26 的架构遵循三个核心原则：</p>
+<h3 id="1-关键技术改进-2"><a class="markdownIt-Anchor" href="#1-关键技术改进-2"></a> 1 关键技术改进</h3>
 <ul>
-<li><strong>简洁性：</strong> YOLO26 是一个<strong>原生端到端模型</strong>，直接生成预测，而无需非极大值抑制 (NMS)。通过消除此后处理步骤，推理变得更快、更轻，并且更易于在实际系统中部署。清华大学的 Ao Wang 在 <a target="_blank" rel="noopener" href="https://docs.ultralytics.com/zh/models/yolov10/">YOLOv10</a> 中首次开创了这种突破性方法，并在 YOLO26 中得到了进一步发展。</li>
-<li><strong>部署效率：</strong> 端到端设计消除了管道的整个阶段，从而大大简化了集成，减少了延迟，并使部署在各种环境中更加稳健。</li>
-<li><strong>训练创新：</strong> YOLO26 引入了 <strong>MuSGD 优化器</strong>，它是 <a target="_blank" rel="noopener" href="https://docs.pytorch.org/docs/stable/generated/torch.optim.SGD.html">SGD</a> 和 <a target="_blank" rel="noopener" href="https://arxiv.org/abs/2502.16982">Muon</a> 的混合体 — 受 Moonshot AI 的 <a target="_blank" rel="noopener" href="https://kimi.moonshot.cn/">Kimi K2</a> 在 LLM 训练方面的突破启发。该优化器带来了增强的稳定性和更快的收敛速度，从而将语言模型的优化进展转移到计算机视觉中。</li>
+<li><strong>DFL 移除</strong><br>
+分布式焦点损失（DFL）模块虽然有效，但常常使导出复杂化并限制了硬件兼容性。YOLO26 完全移除了 DFL，简化了推理过程，并拓宽了对<strong>边缘和低功耗设备</strong>的支持。</li>
+<li><strong>端到端无NMS推理</strong><br>
+与依赖NMS作为独立后处理步骤的传统检测器不同，YOLO26是<strong>原生端到端</strong>的。</li>
+<li><strong>ProgLoss + STAL</strong><br>
+改进的损失函数提高了检测精度，在<strong>小目标识别</strong>方面有显著改进</li>
+<li><strong>MuSGD Optimizer</strong><br>
+一种新型混合优化器，结合了<a target="_blank" rel="noopener" href="https://docs.pytorch.org/docs/stable/generated/torch.optim.SGD.html">SGD</a>和<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2502.16982">Muon</a>。MuSGD 将 LLM 训练中的先进优化方法引入计算机视觉，从而实现更稳定的训练和更快的收敛。</li>
+<li><strong>CPU推理速度提升高达43%</strong><br>
+YOLO26专为边缘计算优化，提供显著更快的CPU推理，确保在没有GPU的设备上实现实时性能。</li>
+<li><strong>实例分割增强</strong><br>
+引入语义分割损失以改善模型收敛，以及升级的原型模块，该模块利用多尺度信息以获得卓越的掩膜质量。</li>
+<li><strong>精确姿势估计</strong><br>
+集成<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2107.11291">残差对数似然估计</a> (RLE)，以实现更精确的关键点定位，并优化解码过程以提高推理速度。</li>
+<li><strong>优化旋转框检测解码</strong><br>
+引入专门的角度损失以提高方形物体的检测精度，并优化旋转框检测解码以解决边界不连续性问题。</li>
 </ul>
 <h2 id="yolo-world"><a class="markdownIt-Anchor" href="#yolo-world"></a> YOLO-World</h2>
 <blockquote>
@@ -912,12 +926,15 @@
 <img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250814150028346.png" alt="image-20250814150028346" style="zoom:67%;">
 <p>通过多尺度图像特征{C3, C4, C5}建立特征金字塔{P3, P4, P5}。此外，我们提出了文本引导CSPLayer (T-CSPLayer)和图像池注意(I-Pooling Attention)，进一步增强图像特征和文本特征之间的交互，从而提高开放词汇的视觉语义表示能力。在推理过程中，离线词汇嵌入可以重新参数化为卷积层或线性层的权重，以便部署。</p>
 <h4 id="22-区域-文本对比损失"><a class="markdownIt-Anchor" href="#22-区域-文本对比损失"></a> 2.2 区域-文本对比损失</h4>
+<ul>
+<li></li>
+</ul>
 <h2 id="yoloe"><a class="markdownIt-Anchor" href="#yoloe"></a> YOLOE</h2>
 <blockquote>
 <p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/29944215233">https://zhuanlan.zhihu.com/p/29944215233</a></p>
 </blockquote>
 <p><img src="/2025/05/04/2025%E5%B9%B45%E6%9C%884%E6%97%A5-yolo%E6%B1%87%E6%80%BB/image-20250814143715287.png" alt="image-20250814143715287"></p>
-<h3 id="1-关键技术改进-2"><a class="markdownIt-Anchor" href="#1-关键技术改进-2"></a> 1 关键技术改进</h3>
+<h3 id="1-关键技术改进-3"><a class="markdownIt-Anchor" href="#1-关键技术改进-3"></a> 1 关键技术改进</h3>
 <p>传统模型YOLO系列虽以高效著称，却受限于预定义类别. YOLOE支持文本、视觉、无提示全场景的实时视觉全能模型。</p>
 <ul>
 <li>YOLOE的架构基于经典的YOLO系列模型，主要由以下几个部分组成：
@@ -1694,9 +1711,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>122</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>134</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>36</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>38</strong><br>标签</div></a>
     </div>
 
 
@@ -1728,7 +1745,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy;2024 - 2025 Weakliy<br>
+      &copy;2025 - 2026 Weakliy<br>
       由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
       主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
       

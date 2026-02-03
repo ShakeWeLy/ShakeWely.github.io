@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2026年1月27日 torch实战3 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1. 模型部署与生产化 (TorchScript &amp; LibTorch) 在实际工业界，模型通常不会运行在 Python 环境下（因为 Python 太重且慢）。你需要学会如何把 PyTorch 模型“脱离” Python。  TorchScript： 学习使用 torch.jit.trace（追踪）和 torch.jit.script（脚本化）。这会将你的 Python 代码转换成一">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2026年1月27日 torch实战3">
+<meta property="og:url" content="https://shakewely.github.io/2026/01/27/2026%E5%B9%B41%E6%9C%8827%E6%97%A5-torch%E5%AE%9E%E6%88%983/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="1. 模型部署与生产化 (TorchScript &amp; LibTorch) 在实际工业界，模型通常不会运行在 Python 环境下（因为 Python 太重且慢）。你需要学会如何把 PyTorch 模型“脱离” Python。  TorchScript： 学习使用 torch.jit.trace（追踪）和 torch.jit.script（脚本化）。这会将你的 Python 代码转换成一">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-01-27T07:17:56.000Z">
+<meta property="article:modified_time" content="2026-01-27T08:52:09.055Z">
+<meta property="article:author" content="Weakliy">
+<meta property="article:tag" content="dl, python">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>134</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>38</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2026年1月27日-torch实战3" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/01/27/2026%E5%B9%B41%E6%9C%8827%E6%97%A5-torch%E5%AE%9E%E6%88%983/" class="article-date">
+  <time class="post-time" datetime="2026-01-27T07:17:56.000Z" itemprop="datePublished">
+    <span class="post-month">1月</span><br/>
+    <span class="post-day">27</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2026年1月27日 torch实战3
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<h3 id="1-模型部署与生产化-torchscript-libtorch"><a class="markdownIt-Anchor" href="#1-模型部署与生产化-torchscript-libtorch"></a> 1. 模型部署与生产化 (TorchScript &amp; LibTorch)</h3>
+<p>在实际工业界，模型通常不会运行在 Python 环境下（因为 Python 太重且慢）。你需要学会如何把 PyTorch 模型“脱离” Python。</p>
+<ul>
+<li><strong>TorchScript：</strong> 学习使用 <code>torch.jit.trace</code>（追踪）和 <code>torch.jit.script</code>（脚本化）。这会将你的 Python 代码转换成一种中间表示（IR），它可以被 C++ 直接读取。</li>
+<li><strong>LibTorch：</strong> 这是一个纯 C++ 库。进阶目标是：<strong>在 C++ 环境中加载导出的 .pt 模型，并完成前向推理。</strong></li>
+</ul>
+<h3 id="2-分布式训练与大规模计算-distributed"><a class="markdownIt-Anchor" href="#2-分布式训练与大规模计算-distributed"></a> 2. 分布式训练与大规模计算 (Distributed)</h3>
+<p>当你处理的数据量达到 TB 级别时，单张 GPU 就力不从心了。</p>
+<ul>
+<li><strong>DDP (Distributed Data Parallel)：</strong> 这是 PyTorch 官方推荐的分布式模式。你需要理解它如何利用 C++ 层的 <strong>NCCL 库</strong> 在多张显卡之间同步梯度。</li>
+<li><strong>混合精度训练 (AMP)：</strong> 学习 <code>torch.cuda.amp</code>，利用 Tensor Cores 加速计算，同时减少显存占用。</li>
+<li><strong>性能调优 (Profiler)：</strong> 使用 <code>torch.profiler</code> 寻找代码瓶颈，看看是 CPU 预处理太慢，还是 GPU 计算太满。</li>
+</ul>
+<h3 id="3-底层自定义算子-ccuda-extensions"><a class="markdownIt-Anchor" href="#3-底层自定义算子-ccuda-extensions"></a> 3. 底层自定义算子 (C++/CUDA Extensions)</h3>
+<p>如果你发现 PyTorch 官方提供的函数（如 <code>conv2d</code>）无法满足你的特殊数学需求，或者 Python 实现的速度太慢，你就需要自己写底层代码。</p>
+<ul>
+<li><strong>编写 C++ 扩展：</strong> 利用 <code>pybind11</code> 将 C++ 函数映射到 Python。</li>
+<li><strong>CUDA 编程：</strong> 学习编写 <code>.cu</code> 文件，直接操作 GPU 核函数（Kernel）。这是最硬核的技能，能让你的自定义运算速度提升几十甚至上百倍。</li>
+</ul>
+<h3 id="4-源码级阅读-internal-mechanism"><a class="markdownIt-Anchor" href="#4-源码级阅读-internal-mechanism"></a> 4. 源码级阅读 (Internal Mechanism)</h3>
+<p>既然你对 C++ 感兴趣，可以尝试克隆 PyTorch 的 GitHub 仓库，重点阅读以下模块：</p>
+<ul>
+<li><strong>ATen 库：</strong> 这是 PyTorch 的基础张量库，几乎所有的 C++ 运算都在这里。</li>
+<li><strong>Autograd 引擎：</strong> 查看 <code>torch/csrc/autograd</code>，理解它是如何通过动态链表记录梯度路径的。</li>
+</ul>
+</blockquote>
+<h2 id="模型准备与优化"><a class="markdownIt-Anchor" href="#模型准备与优化"></a> 模型准备与优化</h2>
+<h3 id="模型导出格式"><a class="markdownIt-Anchor" href="#模型导出格式"></a> 模型导出格式</h3>
+<p>PyTorch 主要支持以下导出格式：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">格式</th>
+<th style="text-align:left">特点</th>
+<th style="text-align:left">适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">TorchScript</td>
+<td style="text-align:left">PyTorch原生格式，保持动态图特性</td>
+<td style="text-align:left">PyTorch生态内部使用</td>
+</tr>
+<tr>
+<td style="text-align:left">ONNX</td>
+<td style="text-align:left">开放标准，跨框架兼容</td>
+<td style="text-align:left">多框架协作环境</td>
+</tr>
+<tr>
+<td style="text-align:left">Torch-TensorRT</td>
+<td style="text-align:left">NVIDIA优化格式</td>
+<td style="text-align:left">GPU推理加速</td>
+</tr>
+</tbody>
+</table>
+<h3 id="导出为torchscript"><a class="markdownIt-Anchor" href="#导出为torchscript"></a> 导出为TorchScript</h3>
+<p># 方法1: 通过追踪(tracing)导出<br>
+traced_script = torch.jit.trace(model, example_input)<br>
+traced_script.save(“resnet18_traced.pt”)</p>
+<p># 方法2: 通过脚本(scripting)导出<br>
+scripted_model = torch.jit.script(model)<br>
+scripted_model.save(“resnet18_scripted.pt”)</p>
+<p><strong>注意事项</strong>：</p>
+<ol>
+<li><code>torch.jit.trace</code> 更适合没有控制流的模型</li>
+<li><code>torch.jit.script</code> 能处理包含条件判断等复杂逻辑的模型</li>
+<li>导出前务必调用 <code>model.eval()</code></li>
+</ol>
+<hr>
+<h3 id="部署方案选择"><a class="markdownIt-Anchor" href="#部署方案选择"></a> 部署方案选择</h3>
+<h4 id="libtorch-c-api"><a class="markdownIt-Anchor" href="#libtorch-c-api"></a> LibTorch (C++ API)</h4>
+<p>#include &lt;torch/script.h&gt;</p>
+<p>int main() {<br>
+// 加载模型<br>
+torch::jit::script::Module module;<br>
+module = torch::jit::load(“<a target="_blank" rel="noopener" href="http://resnet18.pt">resnet18.pt</a>”);</p>
+<p>// 准备输入<br>
+std::vector<a href="torch::jit::IValue">torch::jit::IValue</a> inputs;<br>
+inputs.push_back(torch::ones({1, 3, 224, 224}));</p>
+<p>// 执行推理<br>
+auto output = module.forward(inputs).toTensor();<br>
+std::cout &lt;&lt; output.slice(*/*dim=*/*1, */*start=*/*0, */*end=*/*5) &lt;&lt; ‘<strong>\n</strong>’;<br>
+}</p>
+<h4 id="onnx-runtime"><a class="markdownIt-Anchor" href="#onnx-runtime"></a> ONNX Runtime</h4>
+<p><strong>import</strong> onnxruntime <strong>as</strong> ort</p>
+<p># 创建推理会话<br>
+sess = ort.InferenceSession(“model.onnx”)</p>
+<p># 准备输入<br>
+input_name = sess.get_inputs()[0].name<br>
+input_data = np.random.rand(1, 3, 224, 224).astype(np.float32)</p>
+<p># 执行推理<br>
+outputs = sess.run(None, {input_name: input_data})</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/01/27/2026%E5%B9%B41%E6%9C%8827%E6%97%A5-torch%E5%AE%9E%E6%88%983/" data-id="cml627032000j4kv4cmlo7szb" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl-python/" rel="tag">dl, python</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2026/01/31/2026%E5%B9%B41%E6%9C%8830%E6%97%A5-agent%E6%A1%86%E6%9E%B6crewAI/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          2026年1月30日 agent框架crewAI
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2026/01/27/2026%E5%B9%B41%E6%9C%8827%E6%97%A5-torch%E4%BB%8B%E7%BB%8D0/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2026年1月27日 torch介绍0</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>134</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>38</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2025 - 2026 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
