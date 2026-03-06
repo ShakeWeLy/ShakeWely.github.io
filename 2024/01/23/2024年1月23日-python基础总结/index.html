@@ -5,19 +5,19 @@
   
   <title>2024年1月23日 python语法总结 | Weakliy_Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="items() 是 Python 字典中的一个方法，用于返回字典的键值对。  装饰器@  普通方法（不使用装饰器） 需要一个实例（self）作为第一个参数。普通方法通常用于操作类的实例属性和方法。   特点  必须通过实例调用：普通方法需要先创建类的实例，然后通过实例调用方法。 访问实例属性和方法：普通方法可以访问和修改实例的属性和其他方法。  12obj &#x3D; MyClass(10)obj.no">
+  <meta name="description" content="可变对象 （如列表）  原因：直接赋值可变对象（如列表）会导致所有实例共享同一个对象，修改一个实例会影响其他实例：  1234567891011121314151617# 如果直接赋值class BadExample:    items: List[str] &#x3D; [&quot;default&quot;]  # 所有实例共享同一个列表！obj1 &#x3D; BadExample()obj2 &#x3D; BadE">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2024年1月23日 python语法总结">
 <meta property="og:url" content="https://shakewely.github.io/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-python%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/index.html">
 <meta property="og:site_name" content="Weakliy_Blog">
-<meta property="og:description" content="items() 是 Python 字典中的一个方法，用于返回字典的键值对。  装饰器@  普通方法（不使用装饰器） 需要一个实例（self）作为第一个参数。普通方法通常用于操作类的实例属性和方法。   特点  必须通过实例调用：普通方法需要先创建类的实例，然后通过实例调用方法。 访问实例属性和方法：普通方法可以访问和修改实例的属性和其他方法。  12obj &#x3D; MyClass(10)obj.no">
+<meta property="og:description" content="可变对象 （如列表）  原因：直接赋值可变对象（如列表）会导致所有实例共享同一个对象，修改一个实例会影响其他实例：  1234567891011121314151617# 如果直接赋值class BadExample:    items: List[str] &#x3D; [&quot;default&quot;]  # 所有实例共享同一个列表！obj1 &#x3D; BadExample()obj2 &#x3D; BadE">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://shakewely.github.io/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-python%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20250623212618377.png">
 <meta property="og:image" content="https://shakewely.github.io/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-python%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20250630224249641.png">
-<meta property="og:image" content="https://pic1.zhimg.com/70/v2-226c020e54407d7067a2abe194f444d8_1440w.image?source=172ae18b&biz_tag=Post">
 <meta property="og:image" content="https://shakewely.github.io/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-python%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20250630224506782.png">
+<meta property="og:image" content="https://pic1.zhimg.com/70/v2-226c020e54407d7067a2abe194f444d8_1440w.image?source=172ae18b&biz_tag=Post">
 <meta property="article:published_time" content="2024-01-23T06:00:53.000Z">
-<meta property="article:modified_time" content="2026-01-31T08:43:05.218Z">
+<meta property="article:modified_time" content="2026-03-02T01:29:21.263Z">
 <meta property="article:author" content="Weakliy">
 <meta property="article:tag" content="python">
 <meta name="twitter:card" content="summary">
@@ -53,9 +53,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>134</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>146</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>38</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>41</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -111,7 +111,42 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="items"><a class="markdownIt-Anchor" href="#items"></a> <code>items()</code></h2>
+        <h2 id="可变对象"><a class="markdownIt-Anchor" href="#可变对象"></a> 可变对象</h2>
+<p>（如列表）</p>
+<ul>
+<li>原因：直接赋值可变对象（如列表）会导致所有实例共享同一个对象，修改一个实例会影响其他实例：</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 如果直接赋值</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">BadExample</span>:</span><br><span class="line">    items: <span class="type">List</span>[<span class="built_in">str</span>] = [<span class="string">&quot;default&quot;</span>]  <span class="comment"># 所有实例共享同一个列表！</span></span><br><span class="line"></span><br><span class="line">obj1 = BadExample()</span><br><span class="line">obj2 = BadExample()</span><br><span class="line">obj1.items.append(<span class="string">&quot;new&quot;</span>)  <span class="comment"># 修改 obj1</span></span><br><span class="line"><span class="built_in">print</span>(obj2.items)  <span class="comment"># [&#x27;default&#x27;, &#x27;new&#x27;]  # obj2 也被影响了！</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 default_factory</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GoodExample</span>:</span><br><span class="line">    items: <span class="type">List</span>[<span class="built_in">str</span>] = Field(default_factory=<span class="keyword">lambda</span>: [<span class="string">&quot;default&quot;</span>])</span><br><span class="line"></span><br><span class="line">obj1 = GoodExample()</span><br><span class="line">obj2 = GoodExample()</span><br><span class="line">obj1.items.append(<span class="string">&quot;new&quot;</span>)  <span class="comment"># 修改 obj1</span></span><br><span class="line"><span class="built_in">print</span>(obj2.items)  <span class="comment"># [&#x27;default&#x27;]  # obj2 不受影响</span></span><br></pre></td></tr></table></figure>
+<h4 id="类属性和实例属性的区别"><a class="markdownIt-Anchor" href="#类属性和实例属性的区别"></a> 「类属性」和「实例属性」的区别。</h4>
+<table>
+<thead>
+<tr>
+<th>写法</th>
+<th>属性类型</th>
+<th>是否共享</th>
+<th>核心原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>items = [&quot;default&quot;]</code>（类级别）</td>
+<td>类属性</td>
+<td>所有实例共享</td>
+<td>属于类，不是某个实例</td>
+</tr>
+<tr>
+<td><code>self.items = [&quot;default&quot;]</code>（<strong>init</strong> 里）</td>
+<td>实例属性</td>
+<td>不共享</td>
+<td>每个实例创建时都新建列表</td>
+</tr>
+</tbody>
+</table>
+<h2 id="isinstance"><a class="markdownIt-Anchor" href="#isinstance"></a> isinstance</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">isinstance(int, type)        # True - int 是一个类型</span><br><span class="line">isinstance(str, type)        # True - str 是一个类型</span><br><span class="line">isinstance(list, type)       # True - list 是一个类型</span><br><span class="line"></span><br><span class="line">isinstance(123, type)        # False - 123 是整数实例，不是类型</span><br><span class="line">isinstance(&quot;hello&quot;, type)    # False - &quot;hello&quot; 是字符串实例，不是类型</span><br><span class="line"></span><br><span class="line">class MyClass:</span><br><span class="line">    pass</span><br><span class="line">isinstance(MyClass, type)    # True - MyClass 是一个类型（类）</span><br><span class="line">isinstance(MyClass(), type) # False - MyClass() 是实例，不是类型</span><br></pre></td></tr></table></figure>
+<h2 id="issubclass类-父类"><a class="markdownIt-Anchor" href="#issubclass类-父类"></a> issubclass(类, 父类)：</h2>
+<p>判断类是否为指定父类的子类</p>
+<h2 id="items"><a class="markdownIt-Anchor" href="#items"></a> <code>items()</code></h2>
 <p>是 Python 字典中的一个方法，用于返回字典的键值对。</p>
 <h2 id="装饰器"><a class="markdownIt-Anchor" href="#装饰器"></a> 装饰器@</h2>
 <h4 id="普通方法不使用装饰器"><a class="markdownIt-Anchor" href="#普通方法不使用装饰器"></a> <code>普通方法（不使用装饰器）</code></h4>
@@ -174,11 +209,8 @@
 </tr>
 </tbody>
 </table>
-<h2 id="python语法总结"><a class="markdownIt-Anchor" href="#python语法总结"></a> python语法总结</h2>
-<h3 id="or"><a class="markdownIt-Anchor" href="#or"></a> or</h3>
-<blockquote>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">name = &quot;&quot;  # 空字符串</span><br><span class="line">result1 = name or &quot;默认值&quot;          # =&gt; &quot;默认值&quot;</span><br><span class="line">result2 = name if name is not None else &quot;默认值&quot;  # =&gt; &quot;&quot; （保留空字符串）</span><br><span class="line"></span><br><span class="line">print(result1)  # &quot;默认值&quot;</span><br><span class="line">print(result2)  # &quot;&quot;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-</blockquote>
+<h1 id="python语法总结"><a class="markdownIt-Anchor" href="#python语法总结"></a> python语法总结</h1>
+<blockquote></blockquote>
 <h2 id="__init__py实用示例"><a class="markdownIt-Anchor" href="#__init__py实用示例"></a> <code>__init__.py</code>实用示例</h2>
 <p>一个比较标准的 <code>__init__.py</code>：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑# 包元信息</span><br><span class="line">__version__ = &quot;1.0.0&quot;</span><br><span class="line">__author__ = &quot;OpenAI Learner&quot;</span><br><span class="line"></span><br><span class="line"># 导入核心功能</span><br><span class="line">from .core import CoreClass, helper_function</span><br><span class="line">from . import utils</span><br><span class="line"></span><br><span class="line"># 定义公开 API</span><br><span class="line">__all__ = [&quot;CoreClass&quot;, &quot;helper_function&quot;, &quot;utils&quot;]</span><br></pre></td></tr></table></figure>
@@ -209,6 +241,145 @@ from mypackage import utils  # ✅ OK，因为 utils 是个模块</p>
 <li><strong>归属</strong>：每个实例单独拥有，值可以不同。</li>
 <li><strong>访问方式</strong>：只能通过实例对象（<code>self</code>）访问。</li>
 </ul>
+<h1 id="语法"><a class="markdownIt-Anchor" href="#语法"></a> 语法</h1>
+<h2 id="or"><a class="markdownIt-Anchor" href="#or"></a> or</h2>
+<blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">name = &quot;&quot;  # 空字符串</span><br><span class="line">result1 = name or &quot;默认值&quot;          # =&gt; &quot;默认值&quot;</span><br><span class="line">result2 = name if name is not None else &quot;默认值&quot;  # =&gt; &quot;&quot; （保留空字符串）</span><br><span class="line"></span><br><span class="line">print(result1)  # &quot;默认值&quot;</span><br><span class="line">print(result2)  # &quot;&quot;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</blockquote>
+<img src="/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-python%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20250630224506782.png" alt="image-20250630224506782" style="zoom:50%;"> 
+<h2 id="b"><a class="markdownIt-Anchor" href="#b"></a> <strong><code>b''</code>：</strong></h2>
+<p><strong>是 Python 中表示字节串（bytes）</strong></p>
+<p>的前缀区别于普通的字符串（str）</p>
+<h2 id="海象运算符"><a class="markdownIt-Anchor" href="#海象运算符"></a> 海象运算符 <code>:=</code></h2>
+<p><code>a := b</code> 等价于「先执行 <code>a = b</code> 完成赋值，再把 <code>b</code> 作为整个 <code>a := b</code> 表达式的返回值，参与后续的运算 / 判断 / 传参」。</p>
+<blockquote>
+<p>普通赋值 <code>=</code>：只做赋值，无返回值</p>
+<p>海象运算符 <code>:=</code>：赋值 + 返回值，二合一</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 传统写法：取值 → 赋值 → 判断（分步做）</span></span><br><span class="line">messages = inputs.get(<span class="string">&quot;messages&quot;</span>, [])  <span class="comment"># 取值+赋值</span></span><br><span class="line"><span class="keyword">if</span> messages:  <span class="comment"># 判断是否非空</span></span><br><span class="line">    <span class="comment"># 执行后续逻辑</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 海象运算符：一行完成取值+赋值+判断</span></span><br><span class="line"><span class="keyword">if</span> messages := inputs.get(<span class="string">&quot;messages&quot;</span>, []):</span><br><span class="line">    <span class="comment"># 执行后续逻辑</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 错误</span></span><br><span class="line"><span class="comment"># 普通赋值：把[]赋值给msg，整个表达式没有返回值（Python中赋值语句返回None）</span></span><br><span class="line">msg = []</span><br><span class="line"><span class="comment"># 尝试直接判断赋值语句，会报错（因为None不能参与布尔判断）</span></span><br><span class="line"><span class="keyword">if</span> msg = []:  <span class="comment"># SyntaxError: invalid syntax</span></span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+<h1 id="内置方法"><a class="markdownIt-Anchor" href="#内置方法"></a> 内置方法</h1>
+<h2 id="getattr"><a class="markdownIt-Anchor" href="#getattr"></a> <code>getattr()</code></h2>
+<p>是 Python 内置函数，作用是<strong>动态获取对象的属性值</strong>。</p>
+<ul>
+<li>
+<p>语法：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">getattr(object, name[, default])</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>object</code>：要获取属性的对象（比如你的 <code>self</code>，即类的实例）</li>
+<li><code>name</code>：字符串类型的属性名（比如你的 <code>field</code>，是 <code>__fields__</code> 里的字段名字符串）</li>
+<li><code>default</code>（可选）：如果属性不存在时要返回的默认值，不指定的话属性不存在会抛 <code>AttributeError</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="1"><a class="markdownIt-Anchor" href="#1"></a> 1</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">retry_delay = (</span><br><span class="line">            getattr(config.search_config, &quot;retry_delay&quot;, 60)</span><br><span class="line">            if config.search_config</span><br><span class="line">            else 60</span><br><span class="line">        )</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>这是一个三元表达式：值 if 条件 else 默认值</p>
+<h3 id="执行逻辑"><a class="markdownIt-Anchor" href="#执行逻辑"></a> 执行逻辑</h3>
+<ol>
+<li>
+<p>先判断 config.search_config 是否存在（truthy）</p>
+</li>
+<li>
+<p>如果存在：</p>
+</li>
+</ol>
+<ul>
+<li>
+<p>执行 getattr(config.search_config, “retry_delay”, 60)</p>
+</li>
+<li>
+<p>尝试获取 retry_delay 属性，不存在则返回 60</p>
+</li>
+</ul>
+<ol>
+<li>如果不存在（None/False/空等）：</li>
+</ol>
+<ul>
+<li>直接返回 60</li>
+</ul>
+<h3 id="为什么需要这样写"><a class="markdownIt-Anchor" href="#为什么需要这样写"></a> 为什么需要这样写？</h3>
+<ul>
+<li>
+<p>getattr 需要对象存在才能调用</p>
+</li>
+<li>
+<p>如果 config.search_config 为 None，直接调用 getattr 会报 AttributeError</p>
+</li>
+<li>
+<p>因此先检查对象是否存在，再决定是否调用 getattr</p>
+</li>
+</ul>
+</blockquote>
+<h2 id="解包"><a class="markdownIt-Anchor" href="#解包"></a> 解包</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">replace</span>(<span class="params">self, **kwargs</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Returns a new ToolResult with the given fields replaced.&quot;&quot;&quot;</span></span><br><span class="line">    <span class="comment"># return self.copy(update=kwargs)</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">type</span>(self)(**&#123;**self.<span class="built_in">dict</span>(), **kwargs&#125;)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>**kwargs：接受任意关键字参数，例如 replace(error=“…”)。</p>
+</li>
+<li>
+<p>self.dict()：Pydantic 方法，返回当前对象的 dict。</p>
+</li>
+<li>
+<p>{**self.dict(), **kwargs}：</p>
+<ul>
+<li>
+<p>使用字典解包语法，把原来的字段和要修改的字段合并。</p>
+</li>
+<li>
+<p><strong>后面的 kwargs 会覆盖前面的同名字段。</strong></p>
+</li>
+</ul>
+</li>
+<li>
+<p>type(self)(…)：等价于 ToolResult(…)，但用 type(self) 支持子类调用时返回子类实例。</p>
+</li>
+</ul>
+<h2 id="__call__-是什么"><a class="markdownIt-Anchor" href="#__call__-是什么"></a> <code>__call__ </code>是什么？</h2>
+<ul>
+<li>
+<p>在 Python 里，<strong>call</strong> 是一个魔术方法，定义在类里后，这个类的实例就可以像函数一样被“调用”。</p>
+</li>
+<li>
+<p>语法形式：</p>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyClass</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__call__</span>(<span class="params">self, *args, **kwargs</span>):</span><br><span class="line">        ...</span><br></pre></td></tr></table></figure>
+<p>然后：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">obj = MyClass()</span><br><span class="line">obj(<span class="number">1</span>, <span class="number">2</span>, x=<span class="number">3</span>)  <span class="comment"># 实际调用的是 obj.__call__(1, 2, x=3)</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<h3 id="什么时候用-call"><a class="markdownIt-Anchor" href="#什么时候用-call"></a> 什么时候用 <strong>call</strong>？</h3>
+<ul>
+<li>
+<p>想让“对象本身”看起来像一个函数：</p>
+</li>
+<li>
+<p>工具类 / 模型类 / 预测器：result = model(x)</p>
+</li>
+<li>
+<p>你的场景：await tool(…) 调用一个工具实例，比 await tool.execute(…) 写起来更自然。</p>
+</li>
+<li>
+<p>用于封装状态 + 行为：对象里可以保存配置、依赖等，调用时只关心“像函数一样用”。</p>
+</li>
+</ul>
+</blockquote>
+<h2 id="__class____name__"><a class="markdownIt-Anchor" href="#__class____name__"></a> <code>__class__.__name__</code></h2>
+<ul>
+<li>
+<p>{self.<strong>class</strong>.<strong>name</strong>}：</p>
+</li>
+<li>
+<p>self.<strong>class</strong>：当前实例所属的类，例如 MyTool。</p>
+</li>
+<li>
+<p>self.<strong>class</strong>.<strong>name</strong>：类名的字符串，例如 “MyTool”。</p>
+</li>
+</ul>
+<p>所以这行的实际效果是输出类似：</p>
+<blockquote>
+<p>Created success response for MyTool</p>
+</blockquote>
 <h1 id="异步"><a class="markdownIt-Anchor" href="#异步"></a> 异步</h1>
 <blockquote>
 <img src="https://pic1.zhimg.com/70/v2-226c020e54407d7067a2abe194f444d8_1440w.image?source=172ae18b&biz_tag=Post" alt="什么是同步、异步，并发、并行、串行？" style="zoom:33%;"> 
@@ -269,8 +440,93 @@ from mypackage import utils  # ✅ OK，因为 utils 是个模块</p>
 </tr>
 </tbody>
 </table>
-<h2 id="or-2"><a class="markdownIt-Anchor" href="#or-2"></a> OR</h2>
-<img src="/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-python%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20250630224506782.png" alt="image-20250630224506782" style="zoom:50%;"> 
+<h2 id="async"><a class="markdownIt-Anchor" href="#async"></a> async</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">run_command</span>(<span class="params"></span></span><br><span class="line"><span class="params">    self, cmd: <span class="built_in">str</span>, timeout: <span class="type">Optional</span>[<span class="built_in">float</span>] = <span class="number">120.0</span></span></span><br><span class="line"><span class="params"></span>) -&gt; <span class="type">Tuple</span>[<span class="built_in">int</span>, <span class="built_in">str</span>, <span class="built_in">str</span>]:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Run a shell command locally.&quot;&quot;&quot;</span></span><br><span class="line">    process = <span class="keyword">await</span> asyncio.create_subprocess_shell(</span><br><span class="line">        cmd, stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE</span><br><span class="line">    )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        stdout, stderr = <span class="keyword">await</span> asyncio.wait_for(</span><br><span class="line">            process.communicate(), timeout=timeout</span><br><span class="line">        )</span><br><span class="line">        <span class="keyword">return</span> (</span><br><span class="line">            process.returncode <span class="keyword">or</span> <span class="number">0</span>,</span><br><span class="line">            stdout.decode(),</span><br><span class="line">            stderr.decode(),</span><br><span class="line">        )</span><br><span class="line">    <span class="keyword">except</span> asyncio.TimeoutError <span class="keyword">as</span> exc:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            process.kill()</span><br><span class="line">        <span class="keyword">except</span> ProcessLookupError:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line">        <span class="keyword">raise</span> TimeoutError(</span><br><span class="line">            <span class="string">f&quot;Command &#x27;<span class="subst">&#123;cmd&#125;</span>&#x27; timed out after <span class="subst">&#123;timeout&#125;</span> seconds&quot;</span></span><br><span class="line">        ) <span class="keyword">from</span> exc</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="线程"><a class="markdownIt-Anchor" href="#线程"></a> 线程</h2>
+<p>🎯 <strong>核心区别</strong></p>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th><code>run_in_executor</code></th>
+<th><code>threading</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>使用场景</strong></td>
+<td>在异步代码中执行同步阻塞函数</td>
+<td>创建和管理独立线程</td>
+</tr>
+<tr>
+<td><strong>与 asyncio 集成</strong></td>
+<td>✅ 完美集成，返回 awaitable</td>
+<td>❌ 需要手动桥接</td>
+</tr>
+<tr>
+<td><strong>代码风格</strong></td>
+<td>异步风格（async/await）</td>
+<td>同步风格（回调/锁）</td>
+</tr>
+<tr>
+<td><strong>线程管理</strong></td>
+<td>自动管理线程池</td>
+<td>手动管理线程生命周期</td>
+</tr>
+<tr>
+<td><strong>返回值获取</strong></td>
+<td>直接 await 获取</td>
+<td>需要 Queue/Event 等机制</td>
+</tr>
+<tr>
+<td><strong>异常处理</strong></td>
+<td>自动传播到 await 处</td>
+<td>需要手动捕获和处理</td>
+</tr>
+</tbody>
+</table>
+<h2 id="核心区别"><a class="markdownIt-Anchor" href="#核心区别"></a> 核心区别</h2>
+<h3 id="run_in_executor推荐用于异步代码"><a class="markdownIt-Anchor" href="#run_in_executor推荐用于异步代码"></a> run_in_executor（推荐用于异步代码）</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 在异步函数中使用</span><br><span class="line">async def fetch():</span><br><span class="line">    response = await asyncio.get_event_loop().run_in_executor(</span><br><span class="line">        None,</span><br><span class="line">        lambda: requests.get(url)</span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+<p>优点：</p>
+<ul>
+<li>与异步代码集成好，使用 await 即可</li>
+</ul>
+<h3 id="threading传统方式"><a class="markdownIt-Anchor" href="#threading传统方式"></a> threading（传统方式）</h3>
+<p># 在同步代码中使用</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># 在同步代码中使用</span><br><span class="line">def fetch():</span><br><span class="line">    result_queue = Queue()</span><br><span class="line">    thread = threading.Thread(</span><br><span class="line">        target=lambda: requests.get(url),</span><br><span class="line">        args=(result_queue,)</span><br><span class="line">    )</span><br><span class="line">    thread.start()</span><br><span class="line">    thread.join()</span><br><span class="line">    return result_queue.get()</span><br></pre></td></tr></table></figure>
+<p>特点：</p>
+<ul>
+<li>需要手动管理线程</li>
+</ul>
+<h2 id="选择指南"><a class="markdownIt-Anchor" href="#选择指南"></a> 选择指南</h2>
+<h3 id="使用-run_in_executor-当"><a class="markdownIt-Anchor" href="#使用-run_in_executor-当"></a> 使用 run_in_executor 当：</h3>
+<ol>
+<li>
+<p>你在写异步代码（async/await）</p>
+</li>
+<li>
+<p>需要与异步代码集成</p>
+</li>
+<li>
+<p>需要并发执行多个阻塞操作</p>
+</li>
+<li>
+<p>想要简洁的代码</p>
+</li>
+</ol>
+<h3 id="使用-threading-当"><a class="markdownIt-Anchor" href="#使用-threading-当"></a> 使用 threading 当：</h3>
+<ol>
+<li>
+<p>纯同步代码环境（没有 async/await）</p>
+</li>
+<li>
+<p>需要长期运行的后台任务</p>
+</li>
+<li>
+<p>需要精细的线程控制（锁、信号量等）</p>
+</li>
+</ol>
 <h1 id="报错"><a class="markdownIt-Anchor" href="#报错"></a> 报错</h1>
 <h3 id="assert"><a class="markdownIt-Anchor" href="#assert"></a> assert</h3>
 <p><code>assert</code> 是 Python 的断言关键字，用于验证 “必须成立” 的条件，失败则抛 <code>AssertionError</code>。</p>
@@ -351,6 +607,228 @@ from mypackage import utils  # ✅ OK，因为 utils 是个模块</p>
 <p>对于 Python 3.6- 或需要自定义 Loop 行为的场景，可手动管理 Loop（帮助理解核心原理）：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">import asyncio</span><br><span class="line"></span><br><span class="line">async def simple_task():</span><br><span class="line">    await asyncio.sleep(1)</span><br><span class="line">    print(&quot;任务执行完成&quot;)</span><br><span class="line"></span><br><span class="line"># 1. 获取/创建 Event Loop（当前线程的默认 Loop）</span><br><span class="line">loop = asyncio.get_event_loop()</span><br><span class="line"></span><br><span class="line">try:</span><br><span class="line">    # 2. 将协程任务加入 Loop 并运行，直到任务完成</span><br><span class="line">    loop.run_until_complete(simple_task())</span><br><span class="line">finally:</span><br><span class="line">    # 3. 关闭 Loop，释放资源（必须手动执行）</span><br><span class="line">    loop.close()</span><br></pre></td></tr></table></figure>
 </blockquote>
+<p><code>Pydantic</code></p>
+<p><strong>最终形态一致</strong>：不管是 Pydantic 声明的 <code>name</code>，还是手动赋值的 <code>self.name</code>，最终在实例中都是以 <code>self.name</code> 的形式存在 —— 你在 <code>BaseAgent</code> 的子类方法中，依然需要用 <code>self.name</code> 来访问这个属性。</p>
+<p><strong>区别在「声明 / 初始化方式」</strong>：</p>
+<ul>
+<li>原生 Agent：你需要手动写 <code>__init__</code>，手动把参数赋值给 <code>self.name</code>，无校验；</li>
+<li>BaseAgent：Pydantic 基于你声明的 <code>name: str = Field(...)</code>，自动生成 <code>__init__</code>，自动把传入的 <code>name</code> 绑定到 <code>self.name</code>，且会先校验 <code>name</code> 是否为字符串、是否非空。</li>
+</ul>
+<h1 id="库"><a class="markdownIt-Anchor" href="#库"></a> 库</h1>
+<h2 id="traceback"><a class="markdownIt-Anchor" href="#traceback"></a> traceback</h2>
+<h2 id="pydanic"><a class="markdownIt-Anchor" href="#pydanic"></a> pydanic</h2>
+<h3 id="dataclass和pydanic区别"><a class="markdownIt-Anchor" href="#dataclass和pydanic区别"></a> @dataclass和pydanic区别</h3>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th><code>@dataclass</code></th>
+<th>Pydantic</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>类型校验</td>
+<td>仅静态提示（无运行时校验）</td>
+<td>强运行时类型校验（如 <code>int</code> 传入字符串会报错 / 自动转换）</td>
+</tr>
+<tr>
+<td>数据转换</td>
+<td>无</td>
+<td>自动类型转换（如 <code>&quot;123&quot;</code> → <code>123</code>）</td>
+</tr>
+<tr>
+<td>默认值处理</td>
+<td>支持简单默认值</td>
+<td>支持动态默认值（如 <code>default_factory</code>）、可选字段</td>
+</tr>
+<tr>
+<td>嵌套数据类</td>
+<td>支持，但无校验</td>
+<td>完美支持嵌套模型，且递归校验</td>
+</tr>
+<tr>
+<td>序列化 / 反序列化</td>
+<td>无原生支持（需手动实现）</td>
+<td>原生支持 <code>dict</code>/<code>JSON</code> 互转（<code>model_dump()</code>/<code>model_validate()</code>）</td>
+</tr>
+<tr>
+<td>错误提示</td>
+<td>无</td>
+<td>详细的错误信息（指出错误字段、原因）</td>
+</tr>
+<tr>
+<td>依赖</td>
+<td>内置（无额外安装）</td>
+<td>需安装第三方库</td>
+</tr>
+<tr>
+<td>适用场景</td>
+<td>内部数据存储、简单数据容器</td>
+<td>外部数据校验（API、配置、爬虫）、接口交互</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>你的需求 / 场景</th>
+<th>推荐选择</th>
+<th>核心原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>仅需要<strong>存储内部数据</strong>（如函数返回值、临时数据容器）</td>
+<td><code>@dataclass</code></td>
+<td>内置无依赖、轻量，能省掉 <code>__init__</code>/<code>__repr__</code> 等样板代码，足够满足需求</td>
+</tr>
+<tr>
+<td>需要<strong>处理外部输入数据</strong>（如 API 请求、JSON / 配置解析、爬虫数据）</td>
+<td>Pydantic</td>
+<td>强制运行时类型校验，能发现数据错误，还能自动转换类型（如字符串转数字）</td>
+</tr>
+<tr>
+<td>开发 API 接口（如 FastAPI/Flask 项目）</td>
+<td>Pydantic</td>
+<td>与 FastAPI 无缝集成，自动生成接口文档 + 校验请求参数，是行业标配</td>
+</tr>
+<tr>
+<td>对<strong>性能要求极高</strong>且无校验需求</td>
+<td><code>@dataclass</code></td>
+<td>内置实现更轻量化，Pydantic 因校验逻辑会有轻微性能开销（可忽略，除非高频调用）</td>
+</tr>
+<tr>
+<td>需要<strong>字段约束 / 自定义校验</strong>（如年龄≥18、手机号格式）</td>
+<td>Pydantic</td>
+<td>支持 <code>Field</code> 约束、自定义校验函数，<code>@dataclass</code> 无此能力</td>
+</tr>
+<tr>
+<td>需要<strong>序列化 / 反序列化</strong>（转字典 / JSON）</td>
+<td>Pydantic</td>
+<td>原生支持 <code>model_dump()</code>/<code>model_validate()</code>，<code>@dataclass</code> 需手动写逻辑</td>
+</tr>
+</tbody>
+</table>
+<h3 id="basemodel"><a class="markdownIt-Anchor" href="#basemodel"></a> BaseModel</h3>
+<blockquote>
+<ol>
+<li></li>
+</ol>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">ToolResult</span>(<span class="title class_ inherited__">BaseModel</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Represents the result of a tool execution.&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    output: <span class="type">Any</span> = Field(default=<span class="literal">None</span>)</span><br><span class="line">    error: <span class="type">Optional</span>[<span class="built_in">str</span>] = Field(default=<span class="literal">None</span>)</span><br><span class="line">    base64_image: <span class="type">Optional</span>[<span class="built_in">str</span>] = Field(default=<span class="literal">None</span>)</span><br><span class="line">    system: <span class="type">Optional</span>[<span class="built_in">str</span>] = Field(default=<span class="literal">None</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">class</span> <span class="title class_">Config</span>:</span><br><span class="line">        arbitrary_types_allowed = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__bool__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">any</span>(<span class="built_in">getattr</span>(self, field) <span class="keyword">for</span> field <span class="keyword">in</span> self.__fields__)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__add__</span>(<span class="params">self, other: <span class="string">&quot;ToolResult&quot;</span></span>):</span><br><span class="line">        <span class="keyword">def</span> <span class="title function_">combine_fields</span>(<span class="params"></span></span><br><span class="line"><span class="params">            field: <span class="type">Optional</span>[<span class="built_in">str</span>], other_field: <span class="type">Optional</span>[<span class="built_in">str</span>], concatenate: <span class="built_in">bool</span> = <span class="literal">True</span></span></span><br><span class="line"><span class="params">        </span>):</span><br><span class="line">            <span class="keyword">if</span> field <span class="keyword">and</span> other_field:</span><br><span class="line">                <span class="keyword">if</span> concatenate:</span><br><span class="line">                    <span class="keyword">return</span> field + other_field</span><br><span class="line">                <span class="keyword">raise</span> ValueError(<span class="string">&quot;Cannot combine tool results&quot;</span>)</span><br><span class="line">            <span class="keyword">return</span> field <span class="keyword">or</span> other_field</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> ToolResult(</span><br><span class="line">            output=combine_fields(self.output, other.output),</span><br><span class="line">            error=combine_fields(self.error, other.error),</span><br><span class="line">            base64_image=combine_fields(self.base64_image, other.base64_image, <span class="literal">False</span>),</span><br><span class="line">            system=combine_fields(self.system, other.system),</span><br><span class="line">        )</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__str__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> <span class="string">f&quot;Error: <span class="subst">&#123;self.error&#125;</span>&quot;</span> <span class="keyword">if</span> self.error <span class="keyword">else</span> self.output</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">replace</span>(<span class="params">self, **kwargs</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Returns a new ToolResult with the given fields replaced.&quot;&quot;&quot;</span></span><br><span class="line">        <span class="comment"># return self.copy(update=kwargs)</span></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">type</span>(self)(**&#123;**self.<span class="built_in">dict</span>(), **kwargs&#125;)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>class Config:</p>
+<p>​    arbitrary_types_allowed = True</p>
+<ul>
+<li>内部类 Config：Pydantic 的配置类，这里允许字段中出现任意 Python 类型。</li>
+</ul>
+</blockquote>
+<h4 id="pydantic-配置确认是否允许额外字段"><a class="markdownIt-Anchor" href="#pydantic-配置确认是否允许额外字段"></a> Pydantic 配置，确认是否允许额外字段</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">class Config:</span><br><span class="line">    arbitrary_types_allowed = True</span><br></pre></td></tr></table></figure>
+<p>没有设置 extra，所以默认是 extra=‘ignore’，不会报错。</p>
+<blockquote>
+<ol>
+<li>Pydantic 默认行为是 extra=‘ignore’（忽略多余字段）</li>
+<li>多余的字段会被静默丢弃，不会抛出异常</li>
+</ol>
+</blockquote>
+<h2 id="rapidfuzz文本相似度计算"><a class="markdownIt-Anchor" href="#rapidfuzz文本相似度计算"></a> <code>rapidfuzz</code>(文本<strong>相似度计算</strong>)</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> rapidfuzz <span class="keyword">import</span> fuzz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 简单比率（Simple Ratio）：直接对比两个字符串的整体相似度</span></span><br><span class="line"><span class="comment"># 适用场景：字符串长度相近、无明显语序差异</span></span><br><span class="line">str1 = <span class="string">&quot;apple pie&quot;</span></span><br><span class="line">str2 = <span class="string">&quot;apple pies&quot;</span></span><br><span class="line">simple_ratio = fuzz.ratio(str1, str2)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;简单比率: <span class="subst">&#123;simple_ratio&#125;</span>&quot;</span>)  <span class="comment"># 输出约 94.12（满分100）</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 部分比率（Partial Ratio）：对比较短字符串与较长字符串的最佳匹配子串</span></span><br><span class="line"><span class="comment"># 适用场景：一个字符串是另一个的子集（比如关键词匹配）</span></span><br><span class="line">str3 = <span class="string">&quot;apple pie with cinnamon&quot;</span></span><br><span class="line">partial_ratio = fuzz.partial_ratio(str1, str3)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;部分比率: <span class="subst">&#123;partial_ratio&#125;</span>&quot;</span>)  <span class="comment"># 输出 100.0（完全匹配子串）</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 令牌排序比率（Token Sort Ratio）：忽略单词顺序的相似度</span></span><br><span class="line"><span class="comment"># 适用场景：单词顺序不同但内容相同的文本（比如 &quot;apple pie&quot; vs &quot;pie apple&quot;）</span></span><br><span class="line">str4 = <span class="string">&quot;pie apple&quot;</span></span><br><span class="line">token_sort_ratio = fuzz.token_sort_ratio(str1, str4)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;令牌排序比率: <span class="subst">&#123;token_sort_ratio&#125;</span>&quot;</span>)  <span class="comment"># 输出 100.0</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 令牌集比率（Token Set Ratio）：忽略重复单词，只关注唯一单词的匹配</span></span><br><span class="line"><span class="comment"># 适用场景：包含重复单词的文本（比如 &quot;apple apple pie&quot; vs &quot;apple pie&quot;）</span></span><br><span class="line">str5 = <span class="string">&quot;apple apple pie&quot;</span></span><br><span class="line">token_set_ratio = fuzz.token_set_ratio(str1, str5)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;令牌集比率: <span class="subst">&#123;token_set_ratio&#125;</span>&quot;</span>)  <span class="comment"># 输出 100.0</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 5. WRatio（加权比率）：综合以上多种算法，适应性最强的通用方法</span></span><br><span class="line"><span class="comment"># 推荐优先使用：自动处理大小写、空格、语序等问题</span></span><br><span class="line">str6 = <span class="string">&quot;Apple Pie!!!&quot;</span></span><br><span class="line">str7 = <span class="string">&quot;  apple pie  &quot;</span></span><br><span class="line">w_ratio = fuzz.WRatio(str6, str7)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;加权比率: <span class="subst">&#123;w_ratio&#125;</span>&quot;</span>)  <span class="comment"># 输出 100.0</span></span><br></pre></td></tr></table></figure>
+<h2 id="urllib"><a class="markdownIt-Anchor" href="#urllib"></a> <code>urllib</code></h2>
+<p>主要包含以下几个子模块，最常用的是 <code>urllib.request</code>（发送请求）和 <code>urllib.parse</code>（解析 URL）：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">模块</th>
+<th style="text-align:center">功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">urllib.request</td>
+<td style="text-align:center">发送 HTTP/HTTPS 请求、获取响应</td>
+</tr>
+<tr>
+<td style="text-align:center">urllib.parse</td>
+<td style="text-align:center">解析、拼接、编码 URL 参数</td>
+</tr>
+<tr>
+<td style="text-align:center">urllib.error</td>
+<td style="text-align:center">处理请求过程中的异常</td>
+</tr>
+<tr>
+<td style="text-align:center">urllib.robotparser</td>
+<td style="text-align:center">解析网站的 robots.txt 文件</td>
+</tr>
+</tbody>
+</table>
+<h2 id="httpx"><a class="markdownIt-Anchor" href="#httpx"></a> httpx</h2>
+<table>
+<thead>
+<tr>
+<th>特性 / 维度</th>
+<th>requests</th>
+<th>httpx</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>协议支持</td>
+<td>仅 HTTP/1.1</td>
+<td>支持 HTTP/1.1 + HTTP/2（需安装完整版）</td>
+</tr>
+<tr>
+<td>异步请求</td>
+<td>不原生支持（需结合 aiohttp）</td>
+<td>原生支持同步 + 异步请求</td>
+</tr>
+<tr>
+<td>安装</td>
+<td><code>pip install requests</code></td>
+<td><code>pip install httpx</code>（基础版）/ <code>pip install httpx[http2]</code>（完整版）</td>
+</tr>
+<tr>
+<td>API 兼容性</td>
+<td>自身为标准，语法简洁</td>
+<td>完全兼容 requests 的核心 API（几乎无缝切换）</td>
+</tr>
+<tr>
+<td>性能</td>
+<td>同步场景性能稳定</td>
+<td>异步场景高并发性能优势明显</td>
+</tr>
+<tr>
+<td>功能丰富度</td>
+<td>基础功能完善（表单、JSON、Cookie）</td>
+<td>包含 requests 所有功能 + HTTP/2、WebSocket（实验性）、超时精细化控制等</td>
+</tr>
+<tr>
+<td>维护状态</td>
+<td>维护缓慢（近年更新少）</td>
+<td>活跃维护（持续迭代）</td>
+</tr>
+<tr>
+<td>生态</td>
+<td>极其丰富（大量第三方工具基于它）</td>
+<td>生态较新，但兼容 requests 生态</td>
+</tr>
+</tbody>
+</table>
+<p><strong>异步请求支持</strong>（最大差异）</p>
+<ul>
+<li>
+<p><strong>requests</strong>：仅支持同步请求，如果需要异步，必须结合 <code>aiohttp</code> 库（API 完全不同，学习成本高）；</p>
+</li>
+<li>
+<p>httpx：原生支持异步，无需额外依赖，代码简洁：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># httpx 异步示例</span><br><span class="line">import asyncio</span><br><span class="line">import httpx</span><br><span class="line"></span><br><span class="line">async def fetch_urls():</span><br><span class="line">    async with httpx.AsyncClient() as client:</span><br><span class="line">        # 并发发送3个请求</span><br><span class="line">        resp1 = await client.get(&quot;https://httpbin.org/get?n=1&quot;)</span><br><span class="line">        resp2 = await client.get(&quot;https://httpbin.org/get?n=2&quot;)</span><br><span class="line">        resp3 = await client.get(&quot;https://httpbin.org/get?n=3&quot;)</span><br><span class="line">        print(resp1.json()[&quot;url&quot;], resp2.json()[&quot;url&quot;], resp3.json()[&quot;url&quot;])</span><br><span class="line"></span><br><span class="line">asyncio.run(fetch_urls())</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h1 id="手法"><a class="markdownIt-Anchor" href="#手法"></a> 手法</h1>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="built_in">hasattr</span>(sys, <span class="string">&#x27;javsp_debug_mode&#x27;</span>):</span><br><span class="line">        lxml.html.open_in_browser(html, encoding=encoding)  <span class="comment"># for develop and debug</span></span><br></pre></td></tr></table></figure>
+<p># 1. 开启调试模式：给sys添加 javsp_debug_mode 属性</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sys.javsp_debug_mode = <span class="literal">True</span>  <span class="comment"># 值可以是任意（True/False/1/&#x27;debug&#x27;都可以）</span></span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -427,9 +905,9 @@ from mypackage import utils  # ✅ OK，因为 utils 是个模块</p>
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>134</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>146</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>38</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>41</strong><br>标签</div></a>
     </div>
 
 

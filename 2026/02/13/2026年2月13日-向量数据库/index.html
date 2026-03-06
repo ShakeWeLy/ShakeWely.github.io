@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2026年2月13日 向量数据库 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="s   为什么要专门的向量数据库 如果用 MySQL 这类传统数据库存储向量（比如把向量存成字符串 &#x2F; 数组），会遇到两个无法解决的痛点：   1. 检索速度极慢（暴力计算，无法扩展） 要找相似向量，传统数据库只能做 “暴力遍历”：  对每一个存储的向量，计算它和查询向量的 “距离”（比如余弦相似度）； 如果有 100 万个 768 维向量，就要做 100 万次高维距离计算，单查询可能要几秒甚至">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2026年2月13日 向量数据库">
+<meta property="og:url" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="s   为什么要专门的向量数据库 如果用 MySQL 这类传统数据库存储向量（比如把向量存成字符串 &#x2F; 数组），会遇到两个无法解决的痛点：   1. 检索速度极慢（暴力计算，无法扩展） 要找相似向量，传统数据库只能做 “暴力遍历”：  对每一个存储的向量，计算它和查询向量的 “距离”（比如余弦相似度）； 如果有 100 万个 768 维向量，就要做 100 万次高维距离计算，单查询可能要几秒甚至">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260224161908950.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260224163056074.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260224163828349.png">
+<meta property="article:published_time" content="2026-02-13T02:59:23.000Z">
+<meta property="article:modified_time" content="2026-02-24T08:54:35.198Z">
+<meta property="article:author" content="Weakliy">
+<meta property="article:tag" content="agent">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260224161908950.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>146</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>41</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2026年2月13日-向量数据库" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/" class="article-date">
+  <time class="post-time" datetime="2026-02-13T02:59:23.000Z" itemprop="datePublished">
+    <span class="post-month">2月</span><br/>
+    <span class="post-day">13</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2026年2月13日 向量数据库
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>s</p>
+</blockquote>
+<h2 id="为什么要专门的向量数据库"><a class="markdownIt-Anchor" href="#为什么要专门的向量数据库"></a> 为什么要专门的向量数据库</h2>
+<p>如果用 MySQL 这类<strong>传统数据库存储向量</strong>（比如把向量存成字符串 / 数组），会遇到两个无法解决的痛点：</p>
+<blockquote>
+<h4 id="1-检索速度极慢暴力计算无法扩展"><a class="markdownIt-Anchor" href="#1-检索速度极慢暴力计算无法扩展"></a> 1. 检索速度极慢（暴力计算，无法扩展）</h4>
+<p>要找相似向量，传统数据库只能做 “暴力遍历”：</p>
+<ul>
+<li>对每一个存储的向量，计算它和查询向量的 “距离”（比如余弦相似度）；</li>
+<li>如果有 100 万个 768 维向量，就要做 100 万次高维距离计算，单查询可能要几秒甚至几十秒，完全无法满足实时需求（比如用户输入后要快速返回结果）。</li>
+</ul>
+<h4 id="2-无法处理高维数据的-维度灾难"><a class="markdownIt-Anchor" href="#2-无法处理高维数据的-维度灾难"></a> 2. 无法处理高维数据的 “维度灾难”</h4>
+<p>向量的维度越高（比如 1000 维以上），传统的索引方式（B + 树、哈希等）完全失效：</p>
+<ul>
+<li>高维空间中，“距离” 的意义会变得模糊（所有向量之间的距离都差不多）；</li>
+<li>传统数据库没有针对高维向量的优化，存储和计算效率会断崖式下降。</li>
+</ul>
+<h4 id="3-功能缺失"><a class="markdownIt-Anchor" href="#3-功能缺失"></a> 3. 功能缺失</h4>
+<p>传统数据库没有针对向量的专用功能：比如动态添加 / 删除向量、按相似度排序、批量嵌入、数据持久化优化等，需要自己手写大量代码实现，且效率极低。</p>
+</blockquote>
+<p><strong>向量数据库的核心价值就是 “高效处理相似性检索”，主要体现在：</strong></p>
+<blockquote>
+<h4 id="1-优化的索引算法核心"><a class="markdownIt-Anchor" href="#1-优化的索引算法核心"></a> 1. 优化的索引算法（核心）</h4>
+<p>向量数据库内置了专门的<strong>近似最近邻（ANN）算法</strong>（比如 HNSW、FAISS、IVF 等），能把 “暴力遍历” 的时间复杂度从 <code>O(n)</code> 降到 <code>O(log n)</code>：</p>
+<ul>
+<li>比如 100 万个向量的检索，从几秒缩短到<strong>毫秒级</strong>；</li>
+<li>牺牲极少量的精度（可配置），换取极致的速度，完全满足实时场景。</li>
+</ul>
+<h4 id="2-针对高维向量的存储优化"><a class="markdownIt-Anchor" href="#2-针对高维向量的存储优化"></a> 2. 针对高维向量的存储优化</h4>
+<ul>
+<li>对向量进行压缩、量化（比如把 32 位浮点数转成 8 位整数），大幅减少存储空间；</li>
+<li>优化内存布局，让向量计算更贴合 CPU/GPU 的缓存机制，提升计算效率。</li>
+</ul>
+<h4 id="3-专为向量场景设计的功能"><a class="markdownIt-Anchor" href="#3-专为向量场景设计的功能"></a> 3. 专为向量场景设计的功能</h4>
+<ul>
+<li>支持批量嵌入（自动把文本转向量并存入）；</li>
+<li>支持元数据过滤（比如检索 “水果相关” 且相似度高的向量）；</li>
+<li>支持增量更新（动态添加 / 删除向量，无需重建整个索引）；</li>
+<li>支持分布式部署（处理亿级向量的大规模场景）。</li>
+</ul>
+</blockquote>
+<h3 id="常见向量数据库"><a class="markdownIt-Anchor" href="#常见向量数据库"></a> <strong>常见向量数据库</strong></h3>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>数据库</th>
+<th>类型</th>
+<th>开源</th>
+<th>性能</th>
+<th>运维</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Milvus</strong></td>
+<td>分布式向量库</td>
+<td>✅</td>
+<td>极高</td>
+<td>中</td>
+<td>大规模生产、企业级</td>
+</tr>
+<tr>
+<td><strong>Qdrant</strong></td>
+<td>轻量向量库</td>
+<td>✅</td>
+<td>高</td>
+<td>低</td>
+<td>中小型、边缘、快速开发</td>
+</tr>
+<tr>
+<td><strong>Weaviate</strong></td>
+<td>向量 + 图</td>
+<td>✅</td>
+<td>中高</td>
+<td>中</td>
+<td>语义搜索、知识图谱</td>
+</tr>
+<tr>
+<td><strong>Chroma</strong></td>
+<td>轻量嵌入式</td>
+<td>✅</td>
+<td>中</td>
+<td>极低</td>
+<td>原型、学习、小项目</td>
+</tr>
+<tr>
+<td><strong>Pinecone</strong></td>
+<td>云托管</td>
+<td>❌</td>
+<td>高</td>
+<td>极低</td>
+<td>零运维、快速上线</td>
+</tr>
+<tr>
+<td><strong>Pgvector</strong></td>
+<td>PostgreSQL 扩展</td>
+<td>✅</td>
+<td>中</td>
+<td>低</td>
+<td>复用 PG 栈、混合查询</td>
+</tr>
+<tr>
+<td><strong>RedisVL</strong></td>
+<td>Redis 扩展</td>
+<td>✅</td>
+<td>极高</td>
+<td>低</td>
+<td>实时、低延迟、缓存</td>
+</tr>
+<tr>
+<td><strong>FAISS</strong></td>
+<td>算法库</td>
+<td>✅</td>
+<td>极高</td>
+<td>高</td>
+<td>科研、离线、底层优化</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<h1 id="milvus"><a class="markdownIt-Anchor" href="#milvus"></a> Milvus</h1>
+<h1 id="chroma"><a class="markdownIt-Anchor" href="#chroma"></a> Chroma</h1>
+<h2 id="介绍"><a class="markdownIt-Anchor" href="#介绍"></a> 介绍</h2>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/665715823">https://zhuanlan.zhihu.com/p/665715823</a></p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">import chromadb</span><br><span class="line">chroma_client = chromadb.Client()</span><br><span class="line"></span><br><span class="line">collection = chroma_client.create_collection(name=&quot;my_collection&quot;)</span><br><span class="line"></span><br><span class="line">collection.add(</span><br><span class="line">    documents=[&quot;This is a document about engineer&quot;, &quot;This is a document about steak&quot;],</span><br><span class="line">    metadatas=[&#123;&quot;source&quot;: &quot;doc1&quot;&#125;, &#123;&quot;source&quot;: &quot;doc2&quot;&#125;],</span><br><span class="line">    ids=[&quot;id1&quot;, &quot;id2&quot;]</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">results = collection.query(</span><br><span class="line">    query_texts=[&quot;Which food is the best?&quot;],</span><br><span class="line">    n_results=2</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">print(results)</span><br></pre></td></tr></table></figure>
+<p><img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260224161908950.png" alt="image-20260224161908950"></p>
+<p>我们向Chroma提交了两个文档（简单起见，是两个字符串），一个是This is a document about engineer，一个是This is a document about steak。若在add方法没有传入embedding参数，则会使用<strong>Chroma默认的all-MiniLM-L6-v2方式进行embedding</strong>。</p>
+<p>随后，我们对数据集进行query，要求返回两个最相关的结果。</p>
+<p>提问内容为：Which food is the best?</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line"> &#x27;ids&#x27;<span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">  <span class="punctuation">[</span>&#x27;id2&#x27;<span class="punctuation">,</span> &#x27;id1&#x27;<span class="punctuation">]</span></span><br><span class="line"> <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line"> &#x27;distances&#x27;<span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">  <span class="punctuation">[</span><span class="number">1.5835548639297485</span><span class="punctuation">,</span> <span class="number">2.1740970611572266</span><span class="punctuation">]</span></span><br><span class="line"> <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line"> &#x27;metadatas&#x27;<span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">  <span class="punctuation">[</span><span class="punctuation">&#123;</span></span><br><span class="line">   &#x27;source&#x27;<span class="punctuation">:</span> &#x27;doc2&#x27;</span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span> <span class="punctuation">&#123;</span></span><br><span class="line">   &#x27;source&#x27;<span class="punctuation">:</span> &#x27;doc1&#x27;</span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br><span class="line"> <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line"> &#x27;embeddings&#x27;<span class="punctuation">:</span> None<span class="punctuation">,</span></span><br><span class="line"> &#x27;documents&#x27;<span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">  <span class="punctuation">[</span>&#x27;This is a document about steak&#x27;<span class="punctuation">,</span> &#x27;This is a document about engineer&#x27;<span class="punctuation">]</span></span><br><span class="line"> <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p><strong>解析</strong></p>
+<p><code>distances</code> : 数值越小表示文档和查询文本的相似度越高，结果按相似度从高到低排序</p>
+<h3 id="数据持久化"><a class="markdownIt-Anchor" href="#数据持久化"></a> <strong>数据持久化</strong></h3>
+<p>Chroma一般是直接作为内存数据库使用，但是也可以进行持久化存储。</p>
+<p>在初始化Chroma Client时，使用PersistentClient：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">client = chromadb.PersistentClient(path=&quot;/Users/yourname/xxxx&quot;)</span><br></pre></td></tr></table></figure>
+<p>这样在运行代码后，在你指定的位置会新建一个</p>
+<h4 id="sqlite3解析"><a class="markdownIt-Anchor" href="#sqlite3解析"></a> <strong>sqlite3解析</strong></h4>
+<h3 id="数据集collection"><a class="markdownIt-Anchor" href="#数据集collection"></a> <strong>数据集（Collection）</strong></h3>
+<p>collection是Chroma中一个重要的概念，下面的代码和注释简单介绍了<strong>collection的主要功能和使用方法。</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">collection = client.get_collection(name=<span class="string">&quot;test&quot;</span>) <span class="comment"># Get a collection object from an existing collection, by name. Will raise an exception if it&#x27;s not found.</span></span><br><span class="line">collection = client.get_or_create_collection(name=<span class="string">&quot;test&quot;</span>) <span class="comment"># Get a collection object from an existing collection, by name. If it doesn&#x27;t exist, create it.</span></span><br><span class="line">client.delete_collection(name=<span class="string">&quot;my_collection&quot;</span>) <span class="comment"># Delete a collection and all associated embeddings, documents, and metadata. ⚠️ This is destructive and not reversible</span></span><br><span class="line">collection.peek() <span class="comment"># returns a list of the first 10 items in the collection</span></span><br><span class="line">collection.count() <span class="comment"># returns the number of items in the collection</span></span><br><span class="line">collection.modify(name=<span class="string">&quot;new_name&quot;</span>) <span class="comment"># Rename the collection</span></span><br></pre></td></tr></table></figure>
+<p>collection支持传入一些<strong>自身的元数据</strong>metadata：</p>
+<p>collection允许用户自行<strong>切换距离计算函数</strong>，方法是通过设置cellection的metadata中的“hnsw:space”：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">collection = client.create_collection(</span><br><span class="line">    name=<span class="string">&quot;collection_name&quot;</span>,</span><br><span class="line">    metadata=&#123;<span class="string">&quot;hnsw:space&quot;</span>: <span class="string">&quot;cosine&quot;</span>&#125; <span class="comment"># l2 is the default</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p><img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260224163056074.png" alt="image-20260224163056074"></p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>参数名 (parameter)</th>
+<th>中文全称</th>
+<th>英文全称</th>
+<th>核心含义</th>
+<th>计算公式</th>
+<th>数值解读</th>
+<th>典型适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>l2</code></td>
+<td>平方欧几里得距离</td>
+<td>Squared L2</td>
+<td>计算两个向量在多维空间中的直线距离（平方形式），关注数值绝对差异</td>
+<td>d=∑(Ai−Bi)2</td>
+<td>值越小，向量越相似范围：0→+∞</td>
+<td>数值特征匹配（价格 / 销量）、通用检索</td>
+</tr>
+<tr>
+<td><code>ip</code></td>
+<td>内积（点积）</td>
+<td>Inner Product</td>
+<td>计算向量投影重叠程度，未归一化，受向量长度影响显著</td>
+<td>d=1.0−∑(Ai×Bi)</td>
+<td>值越小，向量越相似范围：−∞→+∞（转换后）</td>
+<td>特定推荐系统、向量未归一化场景</td>
+</tr>
+<tr>
+<td><code>cosine</code></td>
+<td>余弦相似度</td>
+<td>Cosine Similarity</td>
+<td>计算向量夹角余弦值，归一化后仅关注方向，忽略长度差异</td>
+<td>d=1.0−∑(Ai2)⋅∑(Bi2)∑(Ai×Bi)</td>
+<td>原始余弦值：值越大越相似（−1→1）ChromaDB 返回值：值越小越相似</td>
+<td>文本语义相似度、NLP 问答、通用检索</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>l2</code>：像在地图上测量两个点的直线距离，距离越近越像；</li>
+<li><code>cosine</code>：像判断两个箭头的指向是否一致，方向越一致越像（不管箭头长短）。</li>
+</ul>
+</blockquote>
+<h3 id="文档document"><a class="markdownIt-Anchor" href="#文档document"></a> <strong>文档（Document）</strong></h3>
+<h3 id="简单查询"><a class="markdownIt-Anchor" href="#简单查询"></a> <strong>简单查询</strong></h3>
+<p><code>collection.query</code></p>
+<p>输入文档内的文本进行相似性查询，可以使用query方法</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">collection.query(</span><br><span class="line">    query_embeddings=[[11.1, 12.1, 13.1],[1.1, 2.3, 3.2], ...],</span><br><span class="line">    n_results=10,</span><br><span class="line">    where=&#123;&quot;metadata_field&quot;: &quot;is_equal_to_this&quot;&#125;,</span><br><span class="line">    where_document=&#123;&quot;$contains&quot;:&quot;search_string&quot;&#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>若想要通过<strong>id查找</strong>，可以使用get方法</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">collection.get(</span><br><span class="line">    ids=[&quot;id1&quot;, &quot;id2&quot;, &quot;id3&quot;, ...],</span><br><span class="line">    where=&#123;&quot;style&quot;: &quot;style1&quot;&#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>与此同时，你可以<strong>定制<code>include</code>返回结果包含的数据</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># Only get documents and ids</span><br><span class="line">collection.get(&#123;</span><br><span class="line">    include: [ &quot;documents&quot; ]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p><img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260224163828349.png" alt="image-20260224163828349"></p>
+<h3 id="条件查询"><a class="markdownIt-Anchor" href="#条件查询"></a> 条件查询</h3>
+<p><code>where = &#123;&quot;source&quot;: &quot;doc2&quot;&#125;</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">where = &#123;&quot;source&quot;: &quot;doc2&quot;&#125;</span><br><span class="line">results_l2_where = collection_l2.query(</span><br><span class="line">    query_texts=[&quot;Which food is the best?&quot;],</span><br><span class="line">    n_results=2,</span><br><span class="line">    include=[&quot;distances&quot;, &quot;documents&quot;, &quot;metadatas&quot;],</span><br><span class="line">    where=where</span><br><span class="line">)</span><br><span class="line">print(results_l2_where)</span><br><span class="line">print(&quot;================================================&quot;)</span><br></pre></td></tr></table></figure>
+<h3 id="其他"><a class="markdownIt-Anchor" href="#其他"></a> 其他</h3>
+<p><code>collection.update</code></p>
+<p><code>collection.delete</code></p>
+<h2 id="实战"><a class="markdownIt-Anchor" href="#实战"></a> 实战</h2>
+<p><a target="_blank" rel="noopener" href="https://docs.langchain.com/oss/python/langchain/overview?highlight=chroma">https://docs.langchain.com/oss/python/langchain/overview?highlight=chroma</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/" data-id="cmme79ecc00038wv4ccr90ov6" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/agent/" rel="tag">agent</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2026/02/24/2026%E5%B9%B42%E6%9C%8824%E6%97%A5-rag-project/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          2026年2月24日 rag_project
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2026/02/12/2026%E5%B9%B42%E6%9C%8812%E6%97%A5-agent%E6%A1%86%E6%9E%B6langchain2-%E8%BF%9B%E9%98%B6/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2026年2月12日 agent框架langchain2_进阶</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>146</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>41</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2025 - 2026 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

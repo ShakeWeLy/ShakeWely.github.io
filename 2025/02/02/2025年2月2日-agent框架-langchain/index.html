@@ -19,7 +19,7 @@
 <meta property="og:image" content="https://shakewely.github.io/2025/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6-langchain/v2-c968b15405a4c1d773fdc43d69e205a9_1440w.jpg">
 <meta property="og:image" content="https://shakewely.github.io/2025/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6-langchain/image-20260202110040308.png">
 <meta property="article:published_time" content="2025-02-02T01:28:02.000Z">
-<meta property="article:modified_time" content="2026-02-02T03:20:13.790Z">
+<meta property="article:modified_time" content="2026-02-05T07:46:15.369Z">
 <meta property="article:author" content="Weakliy">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://shakewely.github.io/2025/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6-langchain/image-20260202093124649.png">
@@ -54,9 +54,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>134</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>146</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>38</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>41</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -165,10 +165,10 @@
 </table>
 <h2 id="13-langchain架构设计宏观"><a class="markdownIt-Anchor" href="#13-langchain架构设计宏观"></a> 1.3 LangChain架构设计（宏观）</h2>
 <p><img src="/2025/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6-langchain/image-20260202093350460.png" alt="image-20260202093350460"></p>
-<h2 id="二-langchain使用"><a class="markdownIt-Anchor" href="#二-langchain使用"></a> 二、LangChain使用</h2>
+<h1 id="二-langchain使用"><a class="markdownIt-Anchor" href="#二-langchain使用"></a> 二、LangChain使用</h1>
 <h3 id="21-简单demo"><a class="markdownIt-Anchor" href="#21-简单demo"></a> 2.1 简单demo</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="三-langchain核心组件之model-io"><a class="markdownIt-Anchor" href="#三-langchain核心组件之model-io"></a> 三、LangChain核心组件之Model I/O</h2>
+<h1 id="三-langchain核心组件之model-io"><a class="markdownIt-Anchor" href="#三-langchain核心组件之model-io"></a> 三、LangChain核心组件之Model I/O</h1>
 <h2 id="31-model-io"><a class="markdownIt-Anchor" href="#31-model-io"></a> 3.1 Model I/O</h2>
 <p>Model I/O 是应用程序与大模型进行交互的组件，<strong>它与大模型的关系类似于JDBC与数据库的关系</strong>，本质上都是<strong>为了解耦应用逻辑与底层实现，提供标准化的交互接口</strong>，使应用程序无需关注大模型底层的实现，可与各种大模型进行交互。Model I/O 包括输入<strong>提示(Format)、调用模型(Predict)、输出解析(Parse)</strong>。分别对应着Prompt Template（提示词模版），Model （大模型）和Output Parser（输出解析器）。</p>
 <p><img src="/2025/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6-langchain/v2-1a9371d4a94f4fbca2e0e1f7119060cc_1440w.jpg" alt="img"></p>
@@ -186,7 +186,7 @@
 <figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># 我这里使用的嵌入模型是自己本地部署的，OpenAI的类为OpenAIEmbeddings</span><br><span class="line">embeddings_model = OllamaEmbeddings(</span><br><span class="line">    model=&quot;nomic-embed-text&quot;,</span><br><span class="line">    base_url=&quot;http://xxx&quot;,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">vector = embeddings_model.embed_query(&quot;hello world&quot;)</span><br><span class="line">print(f&quot;嵌入向量长度: &#123;len(vector)&#125;&quot;)</span><br><span class="line">print(f&quot;前20个值: &#123;vector[:20]&#125;&quot;)</span><br></pre></td></tr></table></figure>
 <h2 id="33-message消息"><a class="markdownIt-Anchor" href="#33-message消息"></a> 3.3 Message（消息）</h2>
 <h2 id="34-prompt-template提示词模版"><a class="markdownIt-Anchor" href="#34-prompt-template提示词模版"></a> 3.4 Prompt Template（提示词模版）</h2>
-<h2 id="四-langchain核心组件之chains"><a class="markdownIt-Anchor" href="#四-langchain核心组件之chains"></a> 四、LangChain核心组件之Chains</h2>
+<h1 id="四-langchain核心组件之chains"><a class="markdownIt-Anchor" href="#四-langchain核心组件之chains"></a> 四、LangChain核心组件之Chains</h1>
 <p>**3、LCEL（LangChain Expression Language）：**是 LangChain 框架中用于构建和组合Chain的一种声明式、模块化且高效的语言。类似于Linux中的管道符 | ，将提示模板、语言模型、输出解析器等组件灵活地组合成可执行的工作流。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">json_parser = JsonOutputParser()</span><br><span class="line">prompt_template = PromptTemplate(</span><br><span class="line">    template=<span class="string">&quot;用简单的一句话描述一下什么是&#123;name&#125;？请按照以下格式输出：&#123;format_instructions&#125;&quot;</span>,</span><br><span class="line">    input_variables=[<span class="string">&quot;name&quot;</span>],</span><br><span class="line">    <span class="comment"># 告诉大模型，按照json格式输出</span></span><br><span class="line">    partial_variables=&#123;<span class="string">&quot;format_instructions&quot;</span>: json_parser.get_format_instructions()&#125;</span><br><span class="line">)</span><br><span class="line"><span class="comment"># 使用管道符构建chain</span></span><br><span class="line">chain = prompt_template | chat_model | json_parser</span><br><span class="line">response = chain.invoke(&#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;反洗钱&quot;</span>&#125;)</span><br><span class="line"><span class="built_in">print</span>(response)</span><br></pre></td></tr></table></figure>
 <p>除了上述的chain之外，LangChain还提供了以下类型的chain，大家感兴趣可以参考：<a href="https://link.zhihu.com/?target=https%3A//python.langchain.com.cn/docs/modules/chains/">Chains</a></p>
@@ -195,7 +195,7 @@
 <li><strong>RouterChain（路由链）</strong>：根据输入内容分析并决定调用哪个专用的子链处理。可以自动分析用户的需求，然后路由到最适合的链中执行，并返回最终结果。</li>
 <li><strong>StuffDocumentsChain（文档链）</strong>：将多个文档内容合并 （“填充”或“塞入”）到单个提示词中，然后调用大模型进行处理。</li>
 </ol>
-<h2 id="五-langchain核心组件之memory"><a class="markdownIt-Anchor" href="#五-langchain核心组件之memory"></a> 五、LangChain核心组件之Memory</h2>
+<h1 id="五-langchain核心组件之memory"><a class="markdownIt-Anchor" href="#五-langchain核心组件之memory"></a> 五、LangChain核心组件之Memory</h1>
 <h2 id="51-memory记忆概述"><a class="markdownIt-Anchor" href="#51-memory记忆概述"></a> 5.1 Memory（记忆）概述</h2>
 <p>我们知道，<strong>大模型本身都不会记忆任何上下文信息</strong>，那为什么我们常用的大模型应用能够清楚的知道我们之前的对话内容（与AI应用可以进行多轮对话）？并且有一定的记忆能力，这就需要额外的模块去保存我们和大模型进行对话的上下文信息，然后在下一次对话前将历史的记录全部发送给大模型，提供给大模型参考以便能够更准确的回答当前的提问。<br>
 在LangChain中，这个用于存储用户和模型交互的历史信息的组件叫Memory，它能够让应用记住用户之前说了什么，从而实现对话的上下文感知能力，为构建真正智能和上下文感知的链式对话系统提供了基础。</p>
@@ -218,11 +218,11 @@ STEP6：将历史对话和当前对话一起保存在Memory中，以便下一次
 <p>**6、ConversationEntityMemory：**一种基于实体的对话记忆机制，它能够智能地识别、存储和利用对话中出现的实体信息（如人名、地点、产品等）及其属性/关系，并结构化存储，使 AI 具备更强的上下文理解和记忆能力，能够解决信息过载问题。<br>
 <strong>7、ConversationKGMemory：</strong> 一种基于知识图谱的先进记忆组件，它将对话内容组织成结构化的知识图谱，实现更加语义化和关联性的记忆管理。<br>
 **8、VectorStoreRetrieverMemory：**一种基于向量数据库的先进记忆组件，它利用语义相似度检索技术，从大量历史对话中智能召回与当前对话最相关的记忆片段。</p>
-<h2 id="六-langchain核心组件之tools"><a class="markdownIt-Anchor" href="#六-langchain核心组件之tools"></a> 六、LangChain核心组件之Tools</h2>
+<h1 id="六-langchain核心组件之tools"><a class="markdownIt-Anchor" href="#六-langchain核心组件之tools"></a> 六、LangChain核心组件之Tools</h1>
 <h2 id="61-tools概述"><a class="markdownIt-Anchor" href="#61-tools概述"></a> 6.1 Tools概述</h2>
-<h2 id="七-langchain核心组件之agent"><a class="markdownIt-Anchor" href="#七-langchain核心组件之agent"></a> 七、LangChain核心组件之Agent</h2>
+<h1 id="七-langchain核心组件之agent"><a class="markdownIt-Anchor" href="#七-langchain核心组件之agent"></a> 七、LangChain核心组件之Agent</h1>
 <h2 id="71-agent智能体"><a class="markdownIt-Anchor" href="#71-agent智能体"></a> 7.1 Agent（智能体）</h2>
-<h2 id="八-langchain核心组件之retrieval"><a class="markdownIt-Anchor" href="#八-langchain核心组件之retrieval"></a> 八、LangChain核心组件之Retrieval</h2>
+<h1 id="八-langchain核心组件之retrieval"><a class="markdownIt-Anchor" href="#八-langchain核心组件之retrieval"></a> 八、LangChain核心组件之Retrieval</h1>
 <h2 id="81-retrieval检索"><a class="markdownIt-Anchor" href="#81-retrieval检索"></a> 8.1 Retrieval（检索）</h2>
 
       
@@ -298,9 +298,9 @@ STEP6：将历史对话和当前对话一起保存在Memory中，以便下一次
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>134</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>146</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>38</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>41</strong><br>标签</div></a>
     </div>
 
 

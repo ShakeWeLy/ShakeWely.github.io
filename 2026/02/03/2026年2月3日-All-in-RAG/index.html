@@ -20,8 +20,9 @@
 <meta property="og:image" content="https://shakewely.github.io/2026/02/03/2026%E5%B9%B42%E6%9C%883%E6%97%A5-All-in-RAG/image-20260203110048526.png">
 <meta property="og:image" content="https://shakewely.github.io/2026/02/03/2026%E5%B9%B42%E6%9C%883%E6%97%A5-All-in-RAG/image-20260203110917396.png">
 <meta property="og:image" content="https://shakewely.github.io/2026/02/03/2026%E5%B9%B42%E6%9C%883%E6%97%A5-All-in-RAG/image-20260203112641110.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/03/2026%E5%B9%B42%E6%9C%883%E6%97%A5-All-in-RAG/image-20260203160800027.png">
 <meta property="article:published_time" content="2026-02-03T01:14:13.000Z">
-<meta property="article:modified_time" content="2026-02-03T03:48:24.928Z">
+<meta property="article:modified_time" content="2026-02-05T07:44:46.706Z">
 <meta property="article:author" content="Weakliy">
 <meta property="article:tag" content="agent">
 <meta name="twitter:card" content="summary">
@@ -57,9 +58,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>134</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>146</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>38</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>41</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -261,8 +262,7 @@
 <h2 id="1-向量空间的语义表示"><a class="markdownIt-Anchor" href="#1-向量空间的语义表示"></a> 1 向量空间的语义表示</h2>
 <ul>
 <li>
-<p>关键度量</p>
-<p>：我们通常使用以下数学方法来衡量向量间的“距离”或“相似度”：</p>
+<p>关键度量：我们通常使用以下数学方法来衡量向量间的“距离”或“相似度”：</p>
 <ul>
 <li><strong>余弦相似度 (Cosine Similarity)</strong> ：计算两个向量夹角的余弦值。值越接近 1，代表方向越一致，语义越相似。这是最常用的度量方式。</li>
 <li><strong>点积 (Dot Product)</strong> ：计算两个向量的乘积和。在向量归一化后，点积等价于余弦相似度。</li>
@@ -478,8 +478,7 @@
 <p><strong>定义元数据结构</strong>：首先，需要向LLM清晰地描述文档内容和每个元数据字段的含义及类型。</p>
 </li>
 <li>
-<p>查询解析</p>
-<p>：当用户输入一个自然语言查询时，自查询检索器会调用LLM，将查询分解为两部分：</p>
+<p>查询解析：当用户输入一个自然语言查询时，自查询检索器会调用LLM，将查询分解为两部分：</p>
 <ul>
 <li><strong>查询字符串（Query String）</strong>：用于进行语义搜索的部分。</li>
 <li><strong>元数据过滤器（Metadata Filter）</strong>：从查询中提取出的结构化过滤条件。</li>
@@ -567,6 +566,70 @@
 </ol>
 <h3 id="22-实现方法"><a class="markdownIt-Anchor" href="#22-实现方法"></a> <a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#/chapter4/14_query_rewriting?id=_22-%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%B3%95">2.2 实现方法</a>📋</h3>
 <h2 id="5-其他-pass"><a class="markdownIt-Anchor" href="#5-其他-pass"></a> 5 其他❌ pass</h2>
+<h1 id="五-格式化输出-pass"><a class="markdownIt-Anchor" href="#五-格式化输出-pass"></a> 五 格式化输出❌ pass</h1>
+<h1 id="六-rag评估"><a class="markdownIt-Anchor" href="#六-rag评估"></a> 六 RAG评估</h1>
+<h2 id="1-rag评估三元组"><a class="markdownIt-Anchor" href="#1-rag评估三元组"></a> <a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#/chapter6/18_system_evaluation?id=%E4%B8%80%E3%80%81rag%E8%AF%84%E4%BC%B0%E4%B8%89%E5%85%83%E7%BB%84">1、RAG评估三元组</a></h2>
+<p>该架构包含以下三个维度，并在 <strong>TruLens</strong> <a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#fn-1">1</a>等工具中有深入的应用：</p>
+<p>（1）<strong>上下文相关性 (Context Relevance)</strong></p>
+<ul>
+<li><strong>评估目标：</strong> <strong>检索器（Retriever）的性能。</strong></li>
+<li><strong>核心问题：</strong> 检索到的上下文内容，是否与用户的查询（Query）高度相关？</li>
+<li><strong>重要性：</strong> 检索是RAG应用在响应用户查询时的第一步。如果检索回来的上下文充满了噪声或无关信息，那么无论后续的生成模型多么强大，都没法做出正确答案。</li>
+</ul>
+<p>（2）<strong>忠实度 / 可信度 (Faithfulness / Groundedness)</strong></p>
+<ul>
+<li><strong>评估目标：</strong> 生成器的可靠性。</li>
+<li><strong>核心问题：</strong> 生成的<strong>答案是否完全基于所提供的上下文信息</strong>？</li>
+<li><strong>重要性：</strong> 这个维度主要在于量化LLM的“幻觉”程度。一个高忠实度的回答意味着模型严格遵守了上下文，没有捏造或歪曲事实。如果忠实度得分低，说明LLM在回答时“自由发挥”过度，引入了外部知识或不实信息。</li>
+</ul>
+<p>（3）<strong>答案相关性 (Answer Relevance)</strong></p>
+<ul>
+<li><strong>评估目标：</strong> 系统的端到端（End-to-End）表现。</li>
+<li><strong>核心问题：</strong> <strong>最终生成的答案是否直接、完整且有效地回答了用户的原始问题？</strong></li>
+<li><strong>重要性：</strong> 这是用户最直观的感受。一个答案可能完全基于上下文（高忠实度），但如果它答非所问，或者只回答了问题的一部分，那么这个答案的相关性就很低。例如，当用户问“法国在哪里，首都是哪里？”，如果答案只是“法国在西欧”，那么虽然忠实度高，但答案相关性很低。</li>
+</ul>
+<h2 id="2-检索评估指标"><a class="markdownIt-Anchor" href="#2-检索评估指标"></a> <a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#/chapter6/18_system_evaluation?id=_21-%E6%A3%80%E7%B4%A2%E8%AF%84%E4%BC%B0">2 检索评估指标</a></h2>
+<p>这项评估借鉴了信息检索领域的多个经典指标：</p>
+<h2 id="3-响应评估"><a class="markdownIt-Anchor" href="#3-响应评估"></a> 3 <a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#/chapter6/18_system_evaluation?id=_22-%E5%93%8D%E5%BA%94%E8%AF%84%E4%BC%B0">响应评估</a></h2>
+<h2 id="4-核心评估指标"><a class="markdownIt-Anchor" href="#4-核心评估指标"></a> 4 <a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#/chapter7/20_kg_rag?id=_41-%E6%A0%B8%E5%BF%83%E8%AF%84%E4%BC%B0%E6%8C%87%E6%A0%87">核心评估指标</a></h2>
+<p>GraphRAG 的评估体系是多维度的，主要涵盖三个方面。</p>
+<p><strong>检索质量</strong>：</p>
+<ul>
+<li>传统：精确率（Precision）、召回率（Recall）、F1、命中率（Hit Rate@K）。</li>
+<li>RAG特有：
+<ul>
+<li>上下文精确率（Context Precision）= 检索到的上下文中“真正相关”的比例；</li>
+<li>上下文召回率（Context Recall）= 所有应当支持答案的“金标准证据”被检回的比例；</li>
+<li>引用/归因准确率（Citation/Attribution）= 生成答案中的关键断言是否被检索证据正确支撑。</li>
+</ul>
+</li>
+</ul>
+<p><strong>生成质量</strong>：</p>
+<ul>
+<li>问答：精确匹配（EM）、F1；</li>
+<li>摘要：ROUGE；</li>
+<li>事实一致性/忠实度（Faithfulness）：断言与证据的一致性，可配合“逐句打标+归因检查”。</li>
+</ul>
+<p><strong>系统性能</strong>：</p>
+<p>推理延迟（Latency）是从接收查询到返回最终答案所需的总时间，是衡量系统响应速度的核心指标。吞吐量（Throughput）指系统在单位时间内能处理的查询数量（QPS）。成本（Cost）包括API调用次数、计算资源（GPU/CPU）和内存消耗等。</p>
+<h1 id="七-基于知识图谱的rag-pass"><a class="markdownIt-Anchor" href="#七-基于知识图谱的rag-pass"></a> 七 <a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#/chapter7/20_kg_rag?id=%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E5%9F%BA%E4%BA%8E%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E7%9A%84rag">基于知识图谱的RAG</a>❌ pass</h1>
+<p>将非结构化文本转化为包含实体、关系的知识图谱，以图结构组织知识，实现多跳推理与全局语义理解，核心创新如下：</p>
+<ol>
+<li><strong>知识表示革新</strong>：从传统 RAG 的文本块向量检索，升级为实体 - 关系的图结构表示，显式捕捉知识关联与领域层级。</li>
+<li><strong>检索机制升级</strong>：融合图遍历、图神经网络（GNNs）等技术，支持多跳推理，能挖掘文本间深层关联，而非仅依赖语义相似度。</li>
+<li><strong>结构引导搜索</strong>：通过图结构优化检索路径，提升大规模语料下的检索效率与准确性，同时增强答案可解释性。</li>
+</ol>
+<h1 id="八-基于howtocook项目的菜谱数据构建一个智能的食谱问答系统"><a class="markdownIt-Anchor" href="#八-基于howtocook项目的菜谱数据构建一个智能的食谱问答系统"></a> 八 基于HowToCook项目的菜谱数据，构建一个智能的食谱问答系统</h1>
+<p>用户可以：</p>
+<ul>
+<li>询问具体菜品的制作方法：“宫保鸡丁怎么做？”</li>
+<li>寻求菜品推荐：“推荐几个简单的素菜”</li>
+<li>获取食材信息：“红烧肉需要什么食材？”</li>
+</ul>
+<h2 id="整体框架"><a class="markdownIt-Anchor" href="#整体框架"></a> 整体框架</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">%% 流程图示例：判断条件分支执行</span><br><span class="line">flowchart LR</span><br><span class="line">    A[开始] --&gt; B&#123;判断条件&#125;</span><br><span class="line">    B --&gt;|条件成立| C[执行操作1]</span><br><span class="line">    B --&gt;|条件不成立| D[执行操作2]</span><br><span class="line">    C --&gt; E[结束]</span><br><span class="line">    D --&gt; E</span><br><span class="line">    </span><br><span class="line">    </span><br></pre></td></tr></table></figure>
+<p><img src="/2026/02/03/2026%E5%B9%B42%E6%9C%883%E6%97%A5-All-in-RAG/image-20260203160800027.png" alt="image-20260203160800027"></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">code/C8/</span><br><span class="line">├── config.py                   # 配置管理</span><br><span class="line">├── main.py                     # 主程序入口</span><br><span class="line">├── requirements.txt            # 依赖列表</span><br><span class="line">├── rag_modules/               # 核心模块</span><br><span class="line">│   ├── __init__.py</span><br><span class="line">│   ├── data_preparation.py    # 数据准备模块</span><br><span class="line">│   ├── index_construction.py  # 索引构建模块</span><br><span class="line">│   ├── retrieval_optimization.py # 检索优化模块</span><br><span class="line">│   └── generation_integration.py # 生成集成模块</span><br><span class="line">└── vector_index/              # 向量索引缓存（自动生成）</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -581,6 +644,15 @@
   
     
 <nav id="article-nav">
+  
+    <a href="/2026/02/03/2026%E5%B9%B42%E6%9C%883%E6%97%A5-agent-%E5%B7%A5%E4%BD%9C%E6%B5%81/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          2026年2月3日 工作流
+        
+      </div>
+    </a>
   
   
     <a href="/2026/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6LangGraph/" id="article-nav-older" class="article-nav-link-wrap">
@@ -634,9 +706,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>134</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>146</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>38</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>41</strong><br>标签</div></a>
     </div>
 
 
