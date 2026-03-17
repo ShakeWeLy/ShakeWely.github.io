@@ -5,19 +5,19 @@
   
   <title>2024年1月23日 python语法总结 | Weakliy_Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="可变对象 （如列表）  原因：直接赋值可变对象（如列表）会导致所有实例共享同一个对象，修改一个实例会影响其他实例：  1234567891011121314151617# 如果直接赋值class BadExample:    items: List[str] &#x3D; [&quot;default&quot;]  # 所有实例共享同一个列表！obj1 &#x3D; BadExample()obj2 &#x3D; BadE">
+  <meta name="description" content="属性  列表  空列表获取[0] 会怎么样, 能返回 ‘’ 空字符串吗   可变对象 （如列表）  原因：直接赋值可变对象（如列表）会导致所有实例共享同一个对象，修改一个实例会影响其他实例：  1234567891011121314151617# 如果直接赋值class BadExample:    items: List[str] &#x3D; [&quot;default&quot;]  # 所有实例">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2024年1月23日 python语法总结">
 <meta property="og:url" content="https://shakewely.github.io/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-python%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/index.html">
 <meta property="og:site_name" content="Weakliy_Blog">
-<meta property="og:description" content="可变对象 （如列表）  原因：直接赋值可变对象（如列表）会导致所有实例共享同一个对象，修改一个实例会影响其他实例：  1234567891011121314151617# 如果直接赋值class BadExample:    items: List[str] &#x3D; [&quot;default&quot;]  # 所有实例共享同一个列表！obj1 &#x3D; BadExample()obj2 &#x3D; BadE">
+<meta property="og:description" content="属性  列表  空列表获取[0] 会怎么样, 能返回 ‘’ 空字符串吗   可变对象 （如列表）  原因：直接赋值可变对象（如列表）会导致所有实例共享同一个对象，修改一个实例会影响其他实例：  1234567891011121314151617# 如果直接赋值class BadExample:    items: List[str] &#x3D; [&quot;default&quot;]  # 所有实例">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://shakewely.github.io/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-python%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20250623212618377.png">
 <meta property="og:image" content="https://shakewely.github.io/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-python%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20250630224249641.png">
 <meta property="og:image" content="https://shakewely.github.io/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-python%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20250630224506782.png">
 <meta property="og:image" content="https://pic1.zhimg.com/70/v2-226c020e54407d7067a2abe194f444d8_1440w.image?source=172ae18b&biz_tag=Post">
 <meta property="article:published_time" content="2024-01-23T06:00:53.000Z">
-<meta property="article:modified_time" content="2026-03-02T01:29:21.263Z">
+<meta property="article:modified_time" content="2026-03-12T03:04:59.559Z">
 <meta property="article:author" content="Weakliy">
 <meta property="article:tag" content="python">
 <meta name="twitter:card" content="summary">
@@ -53,7 +53,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>146</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>148</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>41</strong><br>标签</div></a>
     </div>
@@ -111,7 +111,12 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="可变对象"><a class="markdownIt-Anchor" href="#可变对象"></a> 可变对象</h2>
+        <h1 id="属性"><a class="markdownIt-Anchor" href="#属性"></a> 属性</h1>
+<h2 id="列表"><a class="markdownIt-Anchor" href="#列表"></a> 列表</h2>
+<ol>
+<li>空列表获取[0] 会怎么样, 能返回 ‘’ 空字符串吗</li>
+</ol>
+<h2 id="可变对象"><a class="markdownIt-Anchor" href="#可变对象"></a> 可变对象</h2>
 <p>（如列表）</p>
 <ul>
 <li>原因：直接赋值可变对象（如列表）会导致所有实例共享同一个对象，修改一个实例会影响其他实例：</li>
@@ -829,6 +834,361 @@ from mypackage import utils  # ✅ OK，因为 utils 是个模块</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="built_in">hasattr</span>(sys, <span class="string">&#x27;javsp_debug_mode&#x27;</span>):</span><br><span class="line">        lxml.html.open_in_browser(html, encoding=encoding)  <span class="comment"># for develop and debug</span></span><br></pre></td></tr></table></figure>
 <p># 1. 开启调试模式：给sys添加 javsp_debug_mode 属性</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sys.javsp_debug_mode = <span class="literal">True</span>  <span class="comment"># 值可以是任意（True/False/1/&#x27;debug&#x27;都可以）</span></span><br></pre></td></tr></table></figure>
+<h1 id="python特征"><a class="markdownIt-Anchor" href="#python特征"></a> python特征</h1>
+<h3 id="模块级全局变量"><a class="markdownIt-Anchor" href="#模块级全局变量"></a> 模块级全局变量</h3>
+<p><strong>为什么 <code>base.py</code> 里 <code>_pools</code> / <code>_db_ensured</code> 是“全局变量”？算不算“真的全局”？</strong></p>
+<p>是的，它们是 <strong>模块级全局变量</strong>（module-level globals）：</p>
+<ul>
+<li><strong>为什么是全局</strong>：它们<strong>定义在 <code>app/core/database/base.py</code> 的最外层作用域</strong>，不在任何函数/类里面：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 多数据库连接池字典：&#123;db_name: pool&#125;</span><br><span class="line">_pools: Dict[str, aiomysql.Pool] = &#123;&#125;</span><br><span class="line">_db_ensured: Dict[str, bool] = &#123;&#125;  # 记录已确保存在的数据库</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>“全局”的范围</strong>：它们对 <strong>同一个 Python 进程</strong> 来说是全局且单例的（<code>import app.core.database.base</code> 的所有地方都会共享同一份 <code>_pools</code> / <code>_db_ensured</code>）。
+<ul>
+<li>但它们<strong>不是跨进程全局</strong>：如果你开了多个 worker/进程（例如 gunicorn/uvicorn 多进程），<strong>每个进程都会有自己的一份 <code>_pools</code></strong>。</li>
+</ul>
+</li>
+<li><strong>为什么要这么设计</strong>：为了实现 <code>get_pool(db_name)</code> 的缓存复用——同进程同库名只创建一次连接池，避免每个业务模块各自 <code>create_pool()</code> 把连接数叠加。</li>
+</ul>
+<blockquote>
+<p>真正会“消失/销毁”的典型场景只有：</p>
+<ul>
+<li><strong>进程退出/重启</strong>：内存整体释放。</li>
+<li><strong>你主动 <code>close_pool/close_all_pools</code> 并从 dict 里 <code>del</code> 掉</strong>：引用断开，才可能被回收。</li>
+<li><strong>热重载/重复启动</strong>：旧进程退出，新进程重新 import，新的一份全局变量重新创建。</li>
+</ul>
+</blockquote>
+<h2 id="垃圾回收"><a class="markdownIt-Anchor" href="#垃圾回收"></a> 垃圾回收</h2>
+<h4 id="python-垃圾回收机制和这里的关系"><a class="markdownIt-Anchor" href="#python-垃圾回收机制和这里的关系"></a> Python 垃圾回收机制（和这里的关系）</h4>
+<p>Python（CPython）主要是两套机制一起工作：</p>
+<ul>
+<li>
+<p><strong>引用计数（立即释放为主）</strong></p>
+<ul>
+<li>每个对象都有引用计数 <code>refcount</code>。</li>
+<li>当 <code>refcount == 0</code> 时，对象会<strong>立刻</strong>被释放（调用 <code>__del__</code>/资源释放逻辑如果有）。</li>
+<li>你这里：<code>_pools[db_name] = pool</code> 让 <code>pool</code> 的引用计数至少为 1，所以<strong>不会到 0</strong>，不会释放。</li>
+</ul>
+</li>
+<li>
+<p><strong>循环垃圾回收（处理“互相引用但外部不可达”的对象）</strong></p>
+<ul>
+<li>解决：A 引用 B、B 引用 A，导致引用计数都不为 0，但外部已经访问不到。</li>
+<li>GC 会定期扫描，发现“不可达的循环引用”就回收。</li>
+<li>你这里：不是循环引用问题，而是<strong>仍然可达</strong>（从模块全局 dict 可达），所以 GC 也不会动。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>把池放在模块全局，本质上是“进程级单例资源”，应当在应用 shutdown 时显式关闭。</p>
+</blockquote>
+<h2 id="内存管理"><a class="markdownIt-Anchor" href="#内存管理"></a> 内存管理</h2>
+<h3 id="载入内存"><a class="markdownIt-Anchor" href="#载入内存"></a> 载入内存</h3>
+<ul>
+<li>
+<p>只有<strong>被 import 的模块</strong>，才会被载入内存。目录里那些 template/*.py，如果从来没被 import，就只是硬盘上的文件，不占进程内存。</p>
+</li>
+<li>
+<p>一旦某个模块被 import，模块顶层的东西（变量、函数、类、常量字符串等）都会立即创建到内存里，不管你写没写类。</p>
+</li>
+</ul>
+<h3 id="懒加载"><a class="markdownIt-Anchor" href="#懒加载"></a> 懒加载</h3>
+<h4 id="1-懒加载对内存的优势"><a class="markdownIt-Anchor" href="#1-懒加载对内存的优势"></a> 1. 懒加载对内存的优势</h4>
+<p><strong>前提：资源“够大 + 不一定会用到”时，懒加载才有意义。</strong></p>
+<ul>
+<li><strong>减少“永远没用上的占用”</strong><br>
+某些大对象（长 prompt、大配置 dict、大模型权重）如果只在少数请求场景下用到，懒加载可以让：
+<ul>
+<li>没触发那个场景的进程，<strong>完全不为它分配内存</strong>。</li>
+</ul>
+</li>
+<li><strong>降低启动时内存峰值 &amp; 加快启动</strong>
+<ul>
+<li>进程启动只加载必要东西，其他按需创建，可以让服务：
+<ul>
+<li>启动更快</li>
+<li>刚启动时的内存占用更小</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>易于“加载后再释放”</strong>
+<ul>
+<li>有的懒加载实现会加“过期/清理”策略，用完一段时间又释放，进一步控制长期占用。</li>
+</ul>
+</li>
+</ul>
+<p>如果只是几 KB 的字符串模板，收益很有限；如果是几十 MB 的大表/大模型，就很值。</p>
+<hr>
+<h4 id="2-懒加载怎么实现的核心思想"><a class="markdownIt-Anchor" href="#2-懒加载怎么实现的核心思想"></a> 2. 懒加载“怎么实现”的核心思想</h4>
+<p>关键不是“写不写成类变量”，而是：</p>
+<blockquote>
+<p><strong>不要在模块 import 时就创建大对象，而是在“第一次真正需要时”才创建。</strong></p>
+</blockquote>
+<p>常见几种写法：</p>
+<ul>
+<li><strong>函数懒加载（最简单）</strong></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">get_react_template</span>() -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="comment"># 每次调用都返回字符串（小对象可以直接这样）</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    ... 很长的 prompt ...</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+<p>如果你希望“大对象只创建一次、后面复用”，可以加缓存：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> lru_cache</span><br><span class="line"></span><br><span class="line"><span class="meta">@lru_cache(<span class="params">maxsize=<span class="number">1</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_big_config</span>() -&gt; <span class="built_in">dict</span>:</span><br><span class="line">    <span class="comment"># 第一次调用时构建/读取</span></span><br><span class="line">    cfg = load_from_file_or_db()</span><br><span class="line">    <span class="keyword">return</span> cfg</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>属性/属性方法懒加载</strong></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">PromptStore</span>:</span><br><span class="line">    _template: <span class="type">Optional</span>[<span class="built_in">str</span>] = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">template</span>(<span class="params">self</span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        <span class="keyword">if</span> self._template <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="comment"># 第一次访问时加载</span></span><br><span class="line">            self._template = load_template_from_file()</span><br><span class="line">        <span class="keyword">return</span> self._template</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>模块级懒加载（和上面类似）</strong></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">_template: <span class="type">Optional</span>[<span class="built_in">str</span>] = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_template</span>() -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="keyword">global</span> _template</span><br><span class="line">    <span class="keyword">if</span> _template <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        _template = load_template_from_file()</span><br><span class="line">    <span class="keyword">return</span> _template</span><br></pre></td></tr></table></figure>
+<hr>
+<h4 id="3-类变量-vs-懒加载的区别"><a class="markdownIt-Anchor" href="#3-类变量-vs-懒加载的区别"></a> 3. 类变量 vs 懒加载的区别</h4>
+<ul>
+<li><strong>类变量 / 模块常量</strong></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">X</span>:</span><br><span class="line">    TEMPLATE = <span class="string">&quot;...&quot;</span>  <span class="comment"># 模块 import 时就创建</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>懒加载</strong></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">get_template</span>():</span><br><span class="line">    <span class="comment"># 第一次调用才真正创建/读取</span></span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+<p><strong>所以：不是“写在类里就会懒加载”，而是“是否在 import 时就直接赋值”决定了是不是懒加载。</strong><br>
+如果你的 prompt 模板不大（几 KB～几十 KB），直接用模块常量/类变量即可，简单又清晰；只有明显大的东西、或不常用的才值得懒加载。</p>
+<h2 id="生命周期"><a class="markdownIt-Anchor" href="#生命周期"></a> 生命周期</h2>
+<h3 id="快速介绍"><a class="markdownIt-Anchor" href="#快速介绍"></a> 快速介绍</h3>
+<h4 id="1-selfprompt_template-的生命周期"><a class="markdownIt-Anchor" href="#1-selfprompt_template-的生命周期"></a> 1. <code>self.prompt_template</code> 的生命周期</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># chat_react_agent.py 第50行</span></span><br><span class="line">self.prompt_template = GeneralPromptTemplate()</span><br></pre></td></tr></table></figure>
+<ul>
+<li>这是实例属性，在 <code>ChatReactAgent.__init__()</code> 中创建。</li>
+<li>生命周期：只要 <code>ChatReactAgent</code> 实例存在，<code>self.prompt_template</code> 就一直存在。</li>
+<li>因为 <code>agent_manager</code> 是全局单例（第178行），它持有的 <code>self.agents[&quot;ChatAgent&quot;]</code> 会一直存在，所以 <code>self.prompt_template</code> 会一直存在，直到进程退出。</li>
+</ul>
+<h4 id="2-system_prompt-的生命周期"><a class="markdownIt-Anchor" href="#2-system_prompt-的生命周期"></a> 2. <code>system_prompt</code> 的生命周期</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># chat_react_agent.py 第127行</span></span><br><span class="line">system_prompt = self.prompt_template.with_system_prompt(...).<span class="built_in">format</span>()</span><br></pre></td></tr></table></figure>
+<ul>
+<li>这是 <code>think()</code> 方法中的局部变量。</li>
+<li>生命周期：
+<ul>
+<li>在 <code>think()</code> 执行期间存在。</li>
+<li>函数结束后，如果没有其他引用，可能被 GC 回收。</li>
+<li>但这里 <code>system_prompt</code> 会被传给 <code>self.service.get_functool_response()</code>（第132-136行），如果 <code>service</code> 内部保存了引用，可能不会立即回收。</li>
+</ul>
+</li>
+</ul>
+<h5 id="内存占用对比"><a class="markdownIt-Anchor" href="#内存占用对比"></a> 内存占用对比</h5>
+<table>
+<thead>
+<tr>
+<th>对象</th>
+<th>类型</th>
+<th>生命周期</th>
+<th>内存占用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>self.prompt_template</code></td>
+<td>实例属性</td>
+<td>进程级持久</td>
+<td><code>GeneralPromptTemplate</code> 对象（包含模板字符串引用）</td>
+</tr>
+<tr>
+<td><code>system_prompt</code></td>
+<td>局部变量</td>
+<td>函数执行期间</td>
+<td>格式化后的字符串（可能很大，包含完整 prompt）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<h4 id="关键点"><a class="markdownIt-Anchor" href="#关键点"></a> 关键点</h4>
+<ol>
+<li><code>self.prompt_template</code> 是模板对象，不是最终字符串，它持有模板字符串的引用（<code>GENERAL_PROMPT_TEMPLATE</code>）。</li>
+<li><code>system_prompt</code> 是每次调用 <code>think()</code> 时动态生成的最终字符串，可能包含大量内容（用户问题、记忆、用户画像等）。</li>
+<li>如果 <code>system_prompt</code> 很大且频繁生成，即使它是局部变量，在函数执行期间也会占用内存；函数结束后如果没有其他引用，才会被回收。</li>
+</ol>
+<h4 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h4>
+<ul>
+<li><code>self.prompt_template</code>：持久存在（只要 agent 实例存在）。</li>
+<li><code>system_prompt</code>：函数结束后可能被回收，但每次调用都会创建新的字符串对象。</li>
+</ul>
+<p>你的理解方向是对的</p>
+</blockquote>
+<h3 id="生命周期汇总"><a class="markdownIt-Anchor" href="#生命周期汇总"></a> 生命周期汇总</h3>
+<p>汇总 Python 对象生命周期，并结合项目代码示例说明：</p>
+<blockquote>
+<h3 id="1-模块级全局变量module-level-globals"><a class="markdownIt-Anchor" href="#1-模块级全局变量module-level-globals"></a> 1. 模块级全局变量（Module-level Globals）</h3>
+<p>生命周期：进程级持久（从模块首次 import 到进程退出）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app/core/database/base.py</span></span><br><span class="line">_pools: <span class="type">Dict</span>[<span class="built_in">str</span>, aiomysql.Pool] = &#123;&#125;  <span class="comment"># ← 模块级全局变量</span></span><br><span class="line">_db_ensured: <span class="type">Dict</span>[<span class="built_in">str</span>, <span class="built_in">bool</span>] = &#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>特点：</p>
+<ul>
+<li>模块首次被 import 时创建</li>
+<li>只要模块在 <code>sys.modules</code> 中，就一直存在</li>
+<li>进程退出时才会被销毁</li>
+</ul>
+<p>项目示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app/core/agents/prompt/template/general.py</span></span><br><span class="line">GENERAL_PROMPT_TEMPLATE = <span class="string">&quot;&quot;&quot;...&quot;&quot;&quot;</span>  <span class="comment"># ← 模块级常量，进程级持久</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># app/core/agents/service/intent_service.py</span></span><br><span class="line">INTENT_SELECTION_SYSTEM_PROMPT_TEMPLATE = <span class="string">&quot;&quot;&quot;...&quot;&quot;&quot;</span>  <span class="comment"># ← 模块级常量</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="2-全局单例实例global-singleton-instance"><a class="markdownIt-Anchor" href="#2-全局单例实例global-singleton-instance"></a> 2. 全局单例实例（Global Singleton Instance）</h3>
+<p>生命周期：进程级持久（从模块 import 到进程退出）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app/core/agents/agent_manager.py</span></span><br><span class="line">agent_manager = AgentManager()  <span class="comment"># ← 全局单例，进程级持久</span></span><br></pre></td></tr></table></figure>
+<p>特点：</p>
+<ul>
+<li>模块 import 时创建</li>
+<li>被模块级变量持有引用，不会自动回收</li>
+<li>进程退出时销毁</li>
+</ul>
+<p>项目示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app/core/database/base.py</span></span><br><span class="line"><span class="comment"># _pools 字典持有连接池引用，连接池不会自动回收</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># app/core/agents/agent_manager.py</span></span><br><span class="line">agent_manager = AgentManager()  <span class="comment"># 全局单例，持有所有 agent 实例</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="3-类属性class-attributes"><a class="markdownIt-Anchor" href="#3-类属性class-attributes"></a> 3. 类属性（Class Attributes）</h3>
+<p>生命周期：类定义时创建，进程级持久</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app/core/agents/prompt/template/general.py</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GeneralPromptTemplate</span>(<span class="title class_ inherited__">PromptTemplate</span>):</span><br><span class="line">    template = GENERAL_PROMPT_TEMPLATE  <span class="comment"># ← 类属性，类定义时创建</span></span><br></pre></td></tr></table></figure>
+<p>特点：</p>
+<ul>
+<li>类定义时创建（类对象本身也是模块级对象）</li>
+<li>所有实例共享</li>
+<li>进程退出时销毁</li>
+</ul>
+<p>项目示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app/core/agents/prompt/base_prompt.py</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">DB_BaseModel</span>(metaclass=BaseModelMeta):</span><br><span class="line">    fields: <span class="type">Dict</span>[<span class="built_in">str</span>, Field] = &#123;&#125;  <span class="comment"># ← 类属性</span></span><br><span class="line">    table_name: <span class="type">Optional</span>[<span class="built_in">str</span>] = <span class="literal">None</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="4-实例属性instance-attributes"><a class="markdownIt-Anchor" href="#4-实例属性instance-attributes"></a> 4. 实例属性（Instance Attributes）</h3>
+<p>生命周期：实例创建时创建，实例被回收时销毁</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app/core/agents/chat_react_agent.py</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ChatReactAgent</span>(<span class="title class_ inherited__">ReactAgent</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        self.prompt_template = GeneralPromptTemplate()  <span class="comment"># ← 实例属性</span></span><br><span class="line">        self.service: FunctoolService | <span class="literal">None</span> = <span class="literal">None</span></span><br><span class="line">        self._stream: <span class="type">Optional</span>[Stream] = <span class="literal">None</span></span><br></pre></td></tr></table></figure>
+<p>特点：</p>
+<ul>
+<li><code>__init__</code> 时创建</li>
+<li>只要实例被引用，就一直存在</li>
+<li>实例引用计数为 0 时，可能被 GC 回收</li>
+</ul>
+<p>项目示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app/core/agents/agent_manager.py</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">AgentManager</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        self.agents: <span class="type">Dict</span>[<span class="built_in">str</span>, Agent] = &#123;&#125;  <span class="comment"># ← 实例属性</span></span><br><span class="line">        self.intent_service = IntentService()  <span class="comment"># ← 实例属性</span></span><br><span class="line">        </span><br><span class="line"><span class="comment"># 因为 agent_manager 是全局单例，这些实例属性会一直存在</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="5-函数局部变量function-local-variables"><a class="markdownIt-Anchor" href="#5-函数局部变量function-local-variables"></a> 5. 函数局部变量（Function Local Variables）</h3>
+<p>生命周期：函数执行期间</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app/core/agents/chat_react_agent.py</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">think</span>(<span class="params">self</span>) -&gt; <span class="built_in">bool</span>:</span><br><span class="line">    user_query = self.user_query  <span class="comment"># ← 局部变量</span></span><br><span class="line">    chat_prompt = self.chat_prompt_template.with_history(...).<span class="built_in">format</span>()  <span class="comment"># ← 局部变量</span></span><br><span class="line">    system_prompt = self.prompt_template.with_system_prompt(...).<span class="built_in">format</span>()  <span class="comment"># ← 局部变量</span></span><br><span class="line">    <span class="comment"># 函数结束后，如果没有其他引用，这些变量可能被回收</span></span><br></pre></td></tr></table></figure>
+<p>特点：</p>
+<ul>
+<li>函数调用时创建</li>
+<li>函数返回后，如果没有外部引用，可能被 GC 回收</li>
+<li>如果被外部引用（如传给其他函数），生命周期会延长</li>
+</ul>
+<p>项目示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app/core/agents/service/intent_service.py</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_agent_selection_prompt</span>(<span class="params">self, ...</span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="keyword">return</span> INTENT_SELECTION_SYSTEM_PROMPT_TEMPLATE.<span class="built_in">format</span>(...)  <span class="comment"># ← 返回的字符串是局部变量</span></span><br><span class="line">    <span class="comment"># 但返回后，调用方会持有引用，所以不会立即回收</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="6-懒加载对象lazy-loaded-objects"><a class="markdownIt-Anchor" href="#6-懒加载对象lazy-loaded-objects"></a> 6. 懒加载对象（Lazy-loaded Objects）</h3>
+<p>生命周期：首次访问时创建，之后持久存在</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app/core/agents/chat_react_agent.py</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">_ensure_service_initialized</span>(<span class="params">self</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;按需初始化函数工具服务，避免在应用启动阶段就创建昂贵的 LLM 客户端。&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> self.service <span class="keyword">is</span> <span class="literal">None</span>:  <span class="comment"># ← 懒加载检查</span></span><br><span class="line">        self.service = FunctoolService(...)  <span class="comment"># ← 首次访问时创建</span></span><br></pre></td></tr></table></figure>
+<p>特点：</p>
+<ul>
+<li>首次访问时创建</li>
+<li>创建后作为实例属性持久存在</li>
+<li>实例被回收时销毁</li>
+</ul>
+<p>项目示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app/core/database/base.py</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">get_pool</span>(<span class="params">db_name: <span class="type">Optional</span>[<span class="built_in">str</span>] = <span class="literal">None</span></span>) -&gt; <span class="type">Optional</span>[aiomysql.Pool]:</span><br><span class="line">    <span class="keyword">if</span> db_name <span class="keyword">in</span> _pools <span class="keyword">and</span> <span class="keyword">not</span> _pools[db_name].closed:</span><br><span class="line">        <span class="keyword">return</span> _pools[db_name]  <span class="comment"># ← 复用已存在的连接池（懒加载复用）</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 首次调用时创建连接池</span></span><br><span class="line">    pool = <span class="keyword">await</span> aiomysql.create_pool(...)</span><br><span class="line">    _pools[db_name] = pool  <span class="comment"># ← 存入全局字典，持久存在</span></span><br><span class="line">    <span class="keyword">return</span> pool</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="7-上下文管理器对象context-manager-objects"><a class="markdownIt-Anchor" href="#7-上下文管理器对象context-manager-objects"></a> 7. 上下文管理器对象（Context Manager Objects）</h3>
+<p>生命周期：<code>with</code> 语句块执行期间</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app/core/database/base.py</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">ensure_database_exists</span>(<span class="params">db_name: <span class="built_in">str</span></span>) -&gt; <span class="built_in">bool</span>:</span><br><span class="line">    temp_pool = <span class="keyword">await</span> aiomysql.create_pool(...)  <span class="comment"># ← 临时连接池</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> temp_pool.acquire() <span class="keyword">as</span> conn:  <span class="comment"># ← 上下文管理器</span></span><br><span class="line">        <span class="keyword">async</span> <span class="keyword">with</span> conn.cursor() <span class="keyword">as</span> cursor:  <span class="comment"># ← 上下文管理器</span></span><br><span class="line">            <span class="keyword">await</span> cursor.execute(...)</span><br><span class="line">    </span><br><span class="line">    temp_pool.close()  <span class="comment"># ← 显式关闭</span></span><br><span class="line">    <span class="keyword">await</span> temp_pool.wait_closed()</span><br><span class="line">    <span class="comment"># temp_pool 引用计数归零，可能被回收</span></span><br></pre></td></tr></table></figure>
+<p>特点：</p>
+<ul>
+<li><code>with</code> 进入时创建/获取</li>
+<li><code>with</code> 退出时自动调用 <code>__exit__</code> / <code>__aexit__</code></li>
+<li>退出后如果没有其他引用，可能被回收</li>
+</ul>
+<p>项目示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app/core/database/work_database.py</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">execute_sql</span>(<span class="params">self, ...</span>):</span><br><span class="line">    pool = <span class="keyword">await</span> self.get_pool(db_name)</span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> pool.acquire() <span class="keyword">as</span> conn:  <span class="comment"># ← 连接在 with 块内有效</span></span><br><span class="line">        <span class="keyword">async</span> <span class="keyword">with</span> conn.cursor() <span class="keyword">as</span> cursor:  <span class="comment"># ← 游标在 with 块内有效</span></span><br><span class="line">            <span class="keyword">await</span> cursor.execute(sql, params)</span><br><span class="line">    <span class="comment"># with 块结束后，conn 和 cursor 自动释放回连接池</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="8-循环引用对象circular-references"><a class="markdownIt-Anchor" href="#8-循环引用对象circular-references"></a> 8. 循环引用对象（Circular References）</h3>
+<p>生命周期：需要 GC 处理，可能延迟回收</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 示例：如果存在循环引用</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Agent</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        self.manager = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">AgentManager</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        self.agents = &#123;&#125;</span><br><span class="line">        </span><br><span class="line"><span class="comment"># 如果创建循环引用：</span></span><br><span class="line">agent = Agent()</span><br><span class="line">manager = AgentManager()</span><br><span class="line">agent.manager = manager  <span class="comment"># ← 循环引用</span></span><br><span class="line">manager.agents[<span class="string">&quot;agent&quot;</span>] = agent  <span class="comment"># ← 循环引用</span></span><br></pre></td></tr></table></figure>
+<p>特点：</p>
+<ul>
+<li>引用计数无法归零（互相引用）</li>
+<li>需要循环垃圾回收器（GC）处理</li>
+<li>GC 定期扫描，发现不可达的循环引用才回收</li>
+</ul>
+<p>项目示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app/core/agents/agent_manager.py</span></span><br><span class="line"><span class="comment"># agent_manager 持有 agents 字典</span></span><br><span class="line"><span class="comment"># 如果某个 agent 也持有对 agent_manager 的引用，就会形成循环引用</span></span><br><span class="line"><span class="comment"># 但通常不会，因为 agent 只需要被 manager 管理，不需要反向引用</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="生命周期对比表"><a class="markdownIt-Anchor" href="#生命周期对比表"></a> 生命周期对比表</h2>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>创建时机</th>
+<th>销毁时机</th>
+<th>项目示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>模块级全局变量</strong></td>
+<td>模块首次 import</td>
+<td>进程退出</td>
+<td><code>_pools</code>, <code>INTENT_SELECTION_SYSTEM_PROMPT_TEMPLATE</code></td>
+</tr>
+<tr>
+<td><strong>全局单例实例</strong></td>
+<td>模块 import</td>
+<td>进程退出</td>
+<td><code>agent_manager</code></td>
+</tr>
+<tr>
+<td><strong>类属性</strong></td>
+<td>类定义时</td>
+<td>进程退出</td>
+<td><code>GeneralPromptTemplate.template</code></td>
+</tr>
+<tr>
+<td><strong>实例属性</strong></td>
+<td><code>__init__</code></td>
+<td>实例引用计数为 0</td>
+<td><code>self.prompt_template</code>, <code>self.service</code></td>
+</tr>
+<tr>
+<td><strong>函数局部变量</strong></td>
+<td>函数调用时</td>
+<td>函数返回后（无外部引用时）</td>
+<td><code>system_prompt</code>, <code>user_query</code></td>
+</tr>
+<tr>
+<td><strong>懒加载对象</strong></td>
+<td>首次访问时</td>
+<td>实例被回收时</td>
+<td><code>self.service</code>（首次调用 <code>_ensure_service_initialized</code>）</td>
+</tr>
+<tr>
+<td><strong>上下文管理器</strong></td>
+<td><code>with</code> 进入</td>
+<td><code>with</code> 退出</td>
+<td><code>conn</code>, <code>cursor</code>（在 <code>async with</code> 块内）</td>
+</tr>
+<tr>
+<td><strong>循环引用对象</strong></td>
+<td>创建时</td>
+<td>GC 扫描发现不可达时</td>
+<td>通常避免，但可能出现在复杂对象图中</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="关键要点总结"><a class="markdownIt-Anchor" href="#关键要点总结"></a> 关键要点总结</h2>
+<ol>
+<li>模块级和全局单例：进程级持久，进程退出时销毁</li>
+<li>实例属性：随实例生命周期，实例被回收时销毁</li>
+<li>局部变量：函数执行期间，函数返回后可能被回收</li>
+<li>懒加载：首次访问时创建，之后作为实例属性持久存在</li>
+<li>上下文管理器：<code>with</code> 块内有效，退出时自动清理</li>
+<li>循环引用：需要 GC 处理，可能延迟回收</li>
+</ol>
+<p>在你的项目中：</p>
+<ul>
+<li><code>_pools</code>、<code>agent_manager</code>、模板常量：进程级持久</li>
+<li><code>self.prompt_template</code>、<code>self.service</code>：随 agent 实例生命周期</li>
+<li><code>system_prompt</code>：函数执行期间，返回后可能被回收（如果没被外部引用</li>
+</ul>
+</blockquote>
 
       
     </div>
@@ -905,7 +1265,7 @@ from mypackage import utils  # ✅ OK，因为 utils 是个模块</p>
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>146</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>148</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>41</strong><br>标签</div></a>
     </div>

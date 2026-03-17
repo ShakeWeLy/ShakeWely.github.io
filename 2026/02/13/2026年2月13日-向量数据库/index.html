@@ -5,22 +5,57 @@
   
   <title>2026年2月13日 向量数据库 | Weakliy_Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="s   为什么要专门的向量数据库 如果用 MySQL 这类传统数据库存储向量（比如把向量存成字符串 &#x2F; 数组），会遇到两个无法解决的痛点：   1. 检索速度极慢（暴力计算，无法扩展） 要找相似向量，传统数据库只能做 “暴力遍历”：  对每一个存储的向量，计算它和查询向量的 “距离”（比如余弦相似度）； 如果有 100 万个 768 维向量，就要做 100 万次高维距离计算，单查询可能要几秒甚至">
+  <meta name="description" content="s   向量数据库   1 向量    embedding  高维向量&#x3D; 多个特征  2 数据库      作用  相似搜索 提升性能    评价指标    3 应用场景   4 搜索(相似性搜索)  距离   点几   余弦相似度   高维空间里，*方向差异明显 → 余弦距离特别好用  语义 embedding 的特点：  向量长度不代表语义，只代表 “强度” 真正决定意思相不相近的是方向">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2026年2月13日 向量数据库">
 <meta property="og:url" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/index.html">
 <meta property="og:site_name" content="Weakliy_Blog">
-<meta property="og:description" content="s   为什么要专门的向量数据库 如果用 MySQL 这类传统数据库存储向量（比如把向量存成字符串 &#x2F; 数组），会遇到两个无法解决的痛点：   1. 检索速度极慢（暴力计算，无法扩展） 要找相似向量，传统数据库只能做 “暴力遍历”：  对每一个存储的向量，计算它和查询向量的 “距离”（比如余弦相似度）； 如果有 100 万个 768 维向量，就要做 100 万次高维距离计算，单查询可能要几秒甚至">
+<meta property="og:description" content="s   向量数据库   1 向量    embedding  高维向量&#x3D; 多个特征  2 数据库      作用  相似搜索 提升性能    评价指标    3 应用场景   4 搜索(相似性搜索)  距离   点几   余弦相似度   高维空间里，*方向差异明显 → 余弦距离特别好用  语义 embedding 的特点：  向量长度不代表语义，只代表 “强度” 真正决定意思相不相近的是方向">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316165521138.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171119459.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316170656040.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316170723044.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171255175.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171400647.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171413125.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171554078.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171620706.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171746844.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171805928.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171902680.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316172005023.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316214728894.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316165813058.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316165843605.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316215411466.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316215614803.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316215754506.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316215845687.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316215926225.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316220135026.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316220202732.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316220313347.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316220938618.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316221052822.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316221552246.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316221743877.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316222110529.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316222134561.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316222246240.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316222315384.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316222334037.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316223859404.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316223912290.png">
 <meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260224161908950.png">
 <meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260224163056074.png">
 <meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260224163828349.png">
 <meta property="article:published_time" content="2026-02-13T02:59:23.000Z">
-<meta property="article:modified_time" content="2026-02-24T08:54:35.198Z">
+<meta property="article:modified_time" content="2026-03-17T05:44:36.659Z">
 <meta property="article:author" content="Weakliy">
 <meta property="article:tag" content="agent">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260224161908950.png">
+<meta name="twitter:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316165521138.png">
   
     <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
   
@@ -52,7 +87,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>146</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>148</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>41</strong><br>标签</div></a>
     </div>
@@ -113,6 +148,167 @@
         <blockquote>
 <p>s</p>
 </blockquote>
+<h1 id="向量数据库"><a class="markdownIt-Anchor" href="#向量数据库"></a> 向量数据库</h1>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316165521138.png" alt="image-20260316165521138" style="zoom: 67%;">
+<h2 id="1-向量"><a class="markdownIt-Anchor" href="#1-向量"></a> 1 向量</h2>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171119459.png" alt="image-20260316171119459" style="zoom:67%;">
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316170656040.png" alt="image-20260316170656040" style="zoom: 67%;">
+<h3 id="embedding"><a class="markdownIt-Anchor" href="#embedding"></a> embedding</h3>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316170723044.png" alt="image-20260316170723044" style="zoom: 67%;">
+<p>高维向量= 多个特征</p>
+<h2 id="2-数据库"><a class="markdownIt-Anchor" href="#2-数据库"></a> 2 数据库</h2>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171255175.png" alt="image-20260316171255175" style="zoom:50%;">
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171400647.png" alt="image-20260316171400647" style="zoom:50%;">
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171413125.png" alt="image-20260316171413125" style="zoom:50%;">
+<p><img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171554078.png" alt="image-20260316171554078" style="zoom:50%;"><img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171620706.png" alt="image-20260316171620706" style="zoom:50%;"></p>
+<h3 id="作用"><a class="markdownIt-Anchor" href="#作用"></a> 作用</h3>
+<ol>
+<li>相似搜索</li>
+<li>提升性能</li>
+</ol>
+<p><img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171746844.png" alt="image-20260316171746844"><img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171805928.png" alt="image-20260316171805928" style="zoom:50%;"></p>
+<h3 id="评价指标"><a class="markdownIt-Anchor" href="#评价指标"></a> 评价指标</h3>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171902680.png" alt="image-20260316171902680" style="zoom: 50%;">
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316172005023.png" alt="image-20260316172005023" style="zoom:50%;">
+<h2 id="3-应用场景"><a class="markdownIt-Anchor" href="#3-应用场景"></a> 3 应用场景</h2>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316214728894.png" alt="image-20260316214728894" style="zoom:50%;">
+<h2 id="4-搜索相似性搜索"><a class="markdownIt-Anchor" href="#4-搜索相似性搜索"></a> 4 搜索(相似性搜索)</h2>
+<h3 id="距离"><a class="markdownIt-Anchor" href="#距离"></a> 距离</h3>
+<ol>
+<li>
+<p>点几</p>
+</li>
+<li>
+<p>余弦相似度</p>
+<ol>
+<li>
+<p>高维空间里，*<em>方向差异明显 → 余弦距离特别好用</em></p>
+<blockquote>
+<p>语义 embedding 的特点：</p>
+<ul>
+<li>向量<strong>长度不代表语义</strong>，只代表 “强度”</li>
+<li>真正决定意思相不相近的是<strong>方向</strong></li>
+</ul>
+<p>比如：</p>
+<ul>
+<li>“我喜欢苹果”</li>
+<li>“我真的超级超级喜欢苹果”</li>
+</ul>
+<p>两句语义几乎一样，但向量<strong>长度可能差很多</strong>：</p>
+<ul>
+<li>余弦距离：<strong>很小（相似）</strong></li>
+<li>欧氏距离：<strong>很大（不相似）</strong></li>
+</ul>
+<p>👉 <strong>余弦会忽略长度，只看语义方向，更符合人的判断。</strong></p>
+</blockquote>
+</li>
+<li>
+<p>地球表面积有限，但你能画出<strong>无限多不同的点</strong>。</p>
+<blockquote>
+<h5 id="1-数学上方向确实无限"><a class="markdownIt-Anchor" href="#1-数学上方向确实无限"></a> 1. 数学上：方向确实无限</h5>
+<p>在 <strong>d 维实数空间</strong>（比如 768 维）：</p>
+<ul>
+<li>方向由单位向量决定</li>
+<li>单位向量有 无限多个→ 所以方向无限多</li>
+</ul>
+<p>你随便转一点点角度，就是一个新方向。</p>
+<hr>
+<h5 id="2-但模型的语义空间不是真无限"><a class="markdownIt-Anchor" href="#2-但模型的语义空间不是真无限"></a> 2. 但模型的语义空间：不是真・无限</h5>
+<p>模型 embedding 是<strong>浮点数</strong>，有精度限制：</p>
+<ul>
+<li>float32 只有 2^32 种可能的数值</li>
+<li>768 维向量的<strong>不同方向数量是巨大、有限、但远超你能用的</strong></li>
+</ul>
+<p>可以理解成：</p>
+<p><strong>不是数学无限，但对人类工程来说 = 无限够用。</strong></p>
+</blockquote>
+</li>
+</ol>
+</li>
+</ol>
+<blockquote>
+<h3 id="余弦距离-vs-欧氏距离点积距离"><a class="markdownIt-Anchor" href="#余弦距离-vs-欧氏距离点积距离"></a> 余弦距离 vs 欧氏距离（点积距离）</h3>
+<h4 id="1-欧氏距离你说的-点几距离"><a class="markdownIt-Anchor" href="#1-欧氏距离你说的-点几距离"></a> 1. 欧氏距离（你说的 “点几距离”）</h4>
+<p>衡量<strong>两个点在空间里的直线远近</strong>。</p>
+<ul>
+<li>关心：<strong>绝对位置、长度大小</strong></li>
+<li>公式：两点直线距离</li>
+<li>特点：<strong>数值大小很重要</strong>，模长不一样，距离就会差很多</li>
+</ul>
+<h4 id="2-余弦距离"><a class="markdownIt-Anchor" href="#2-余弦距离"></a> 2. 余弦距离</h4>
+<p>衡量<strong>两个向量方向的差异</strong>，不管长度。</p>
+<ul>
+<li>关心：<strong>方向、趋势、相似度</strong></li>
+<li>公式：1 - 余弦相似度</li>
+<li>特点：<strong>只看方向，不看长度</strong>，模长不影响结果</li>
+</ul>
+<hr>
+<h3 id="一句话区别"><a class="markdownIt-Anchor" href="#一句话区别"></a> 一句话区别</h3>
+<ul>
+<li><strong>欧氏距离：看你离我多远。</strong></li>
+<li><strong>余弦距离：看咱俩方向一不一样。</strong></li>
+</ul>
+<hr>
+<h3 id="举个最直观的例子"><a class="markdownIt-Anchor" href="#举个最直观的例子"></a> 举个最直观的例子</h3>
+<p>用户 A：[1, 2]</p>
+<p>用户 B：[2, 4]</p>
+<p>用户 C：[3, 1]</p>
+<ul>
+<li><strong>欧氏距离</strong>：A 和 B 很远，因为数值差一倍。</li>
+<li><strong>余弦距离</strong>：A 和 B <strong>完全一样</strong>，因为方向完全相同。</li>
+</ul>
+</blockquote>
+<h4 id="什么时候用哪个"><a class="markdownIt-Anchor" href="#什么时候用哪个"></a> 什么时候用哪个？</h4>
+<ul>
+<li><strong>文本、embedding、推荐、相似度</strong> → 用 <strong>余弦距离</strong></li>
+<li><strong>坐标、位置、聚类、物理距离</strong> → 用 <strong>欧氏距离</strong></li>
+</ul>
+<h3 id="混合搜索"><a class="markdownIt-Anchor" href="#混合搜索"></a> 混合搜索</h3>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316165813058.png" alt="image-20260316165813058" style="zoom: 67%;">
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316165843605.png" alt="image-20260316165843605" style="zoom:80%;">
+<h3 id="索引"><a class="markdownIt-Anchor" href="#索引"></a> 索引</h3>
+<p>给点进行索引(产生数据结构:图表…)</p>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316215411466.png" alt="image-20260316215411466" style="zoom:50%;">
+<h4 id="1-哈希"><a class="markdownIt-Anchor" href="#1-哈希"></a> 1 哈希</h4>
+<p>尽量产生冲突的哈希</p>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316215614803.png" alt="image-20260316215614803" style="zoom:50%;">
+<h4 id="2-树"><a class="markdownIt-Anchor" href="#2-树"></a> 2 树</h4>
+<p>建树</p>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316215754506.png" alt="image-20260316215754506" style="zoom:50%;">
+<h4 id="3-图主要"><a class="markdownIt-Anchor" href="#3-图主要"></a> 3 图(主要)</h4>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316215845687.png" alt="image-20260316215845687" style="zoom:50%;">
+<h4 id="4-倒排文件ivf"><a class="markdownIt-Anchor" href="#4-倒排文件ivf"></a> 4 倒排文件IVF</h4>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316215926225.png" alt="image-20260316215926225" style="zoom:50%;">
+<h3 id="量化压缩"><a class="markdownIt-Anchor" href="#量化压缩"></a> 量化压缩</h3>
+<h4 id="1-flat"><a class="markdownIt-Anchor" href="#1-flat"></a> 1 Flat</h4>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316220135026.png" alt="image-20260316220135026" style="zoom:50%;">
+<h4 id="2-quantized"><a class="markdownIt-Anchor" href="#2-quantized"></a> 2 Quantized</h4>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316220202732.png" alt="image-20260316220202732" style="zoom:50%;">
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316220313347.png" alt="image-20260316220313347" style="zoom:50%;">
+<h3 id="算法"><a class="markdownIt-Anchor" href="#算法"></a> 算法</h3>
+<h4 id="ann"><a class="markdownIt-Anchor" href="#ann"></a> ANN</h4>
+<h4 id="ivf"><a class="markdownIt-Anchor" href="#ivf"></a> IVF</h4>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316220938618.png" alt="image-20260316220938618" style="zoom:50%;">
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316221052822.png" alt="image-20260316221052822" style="zoom:67%;">
+<h4 id="hnsw图"><a class="markdownIt-Anchor" href="#hnsw图"></a> HNSW图</h4>
+<p>小世界</p>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316221552246.png" alt="image-20260316221552246" style="zoom:50%;">
+<h4 id="lsh哈希"><a class="markdownIt-Anchor" href="#lsh哈希"></a> LSH哈希</h4>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316221743877.png" alt="image-20260316221743877" style="zoom:67%;">
+<h4 id="pq压缩"><a class="markdownIt-Anchor" href="#pq压缩"></a> PQ压缩</h4>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316222110529.png" alt="image-20260316222110529" style="zoom: 80%;">
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316222134561.png" alt="image-20260316222134561" style="zoom:80%;">
+<h4 id="ivfpq"><a class="markdownIt-Anchor" href="#ivfpq"></a> IVF+PQ</h4>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316222246240.png" alt="image-20260316222246240" style="zoom:50%;">
+<h3 id="算法问题"><a class="markdownIt-Anchor" href="#算法问题"></a> 算法问题</h3>
+<p><img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316222315384.png" alt="image-20260316222315384"></p>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316222334037.png" alt="image-20260316222334037" style="zoom:80%;">
+<h3 id="相似性度量"><a class="markdownIt-Anchor" href="#相似性度量"></a> 相似性度量</h3>
+<p>两两对比</p>
+<h4 id="过滤"><a class="markdownIt-Anchor" href="#过滤"></a> 过滤</h4>
+<p><img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316223859404.png" alt="image-20260316223859404"></p>
+<p><img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316223912290.png" alt="image-20260316223912290"></p>
+<h2 id><a class="markdownIt-Anchor" href="#"></a> </h2>
 <h2 id="为什么要专门的向量数据库"><a class="markdownIt-Anchor" href="#为什么要专门的向量数据库"></a> 为什么要专门的向量数据库</h2>
 <p>如果用 MySQL 这类<strong>传统数据库存储向量</strong>（比如把向量存成字符串 / 数组），会遇到两个无法解决的痛点：</p>
 <blockquote>
@@ -351,9 +547,9 @@
     </a>
   
   
-    <a href="/2026/02/12/2026%E5%B9%B42%E6%9C%8812%E6%97%A5-agent%E6%A1%86%E6%9E%B6langchain2-%E8%BF%9B%E9%98%B6/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2026/02/12/2026%E5%B9%B42%E6%9C%8812%E6%97%A5-SSE%E6%B1%87%E6%80%BB%E5%AD%A6%E4%B9%A0/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">下一篇</strong>
-      <div class="article-nav-title">2026年2月12日 agent框架langchain2_进阶</div>
+      <div class="article-nav-title">2026年2月12日 SSE汇总学习</div>
     </a>
   
 </nav>
@@ -402,7 +598,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>146</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>148</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>41</strong><br>标签</div></a>
     </div>

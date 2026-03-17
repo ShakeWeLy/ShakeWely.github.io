@@ -43,7 +43,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>146</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>148</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>41</strong><br>标签</div></a>
     </div>
@@ -70,6 +70,582 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-2025年10月14日-python环境打包构建" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/" class="article-date">
+  <time class="post-time" datetime="2025-10-15T15:13:52.000Z" itemprop="datePublished">
+    <span class="post-month">10月</span><br/>
+    <span class="post-day">15</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/">2025年10月14日 python环境打包构建</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="python环境打包构建"><a class="markdownIt-Anchor" href="#python环境打包构建"></a> python环境打包构建</h1>
+<p>在 Electron + Python 项目中，为了在无 Python 环境的客户端运行，需要实现 <strong>Python 环境自包含打包</strong>。<br>
+实践过程中共尝试三种方案：</p>
+<ol>
+<li><strong>方式 A</strong>：复制本地 Python + venv</li>
+<li><strong>方式 B</strong>：PyInstaller 打包成独立 EXE</li>
+<li><strong>方式 C</strong>：Embeddable Python（嵌入式解释器）</li>
+</ol>
+<p>最终发现仅方案 B 可行，A、C 在兼容性和安装层面存在根本性限制。</p>
+<h2 id="方式-acopy环境-electron-启动独立-python-进程"><a class="markdownIt-Anchor" href="#方式-acopy环境-electron-启动独立-python-进程"></a> 方式 A：copy环境: Electron 启动独立 Python 进程</h2>
+<h3 id="1-venv-的原理"><a class="markdownIt-Anchor" href="#1-venv-的原理"></a> 1. venv 的原理</h3>
+<p><code>venv</code> 并不是完全<strong>自包含</strong>的 Python，它依赖创建时 <strong>系统 Python</strong> 的文件来构建：</p>
+<ul>
+<li><code>Scripts/python.exe</code> → 指向 venv 内的可执行文件（<strong>拷贝或软链接</strong>）</li>
+<li><code>Lib/</code> → 包含标准库</li>
+<li><code>pyvenv.cfg</code> → 记录 <code>home</code>（原系统 Python 位置）和 <code>executable</code></li>
+</ul>
+<p>关键是：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">home = &lt;创建 venv 时的系统 Python 安装路径&gt;</span><br><span class="line">executable = &lt;创建 venv 时的 python.exe&gt;</span><br></pre></td></tr></table></figure>
+<p>当你在其他机器运行 venv：</p>
+<ul>
+<li><strong>只要 venv 内的 python.exe 和 Lib 完整</strong>，路径不同一般不会报错。</li>
+<li><strong>如果 venv 内缺少标准库或 DLL</strong>，就会报错 <code>ModuleNotFoundError: encodings</code> 或启动失败。</li>
+</ul>
+<h4 id="vеnv-依赖系统-python-的路径pyvenvcfg-指向打包路径"><a class="markdownIt-Anchor" href="#vеnv-依赖系统-python-的路径pyvenvcfg-指向打包路径"></a> vеnv 依赖系统 Python 的路径（pyvenv.cfg 指向打包路径）</h4>
+<ul>
+<li><code>home</code> 指向你本地的系统 打包的Python路径</li>
+<li>客户机上路径不同 → venv 找不到标准库 → 报错 <code>ModuleNotFoundError: encodings</code></li>
+<li>⚠️ 这是之前遇到的错误的根本原因 → 安装新环境并修改对应的path文件</li>
+</ul>
+<h3 id="2问题分析"><a class="markdownIt-Anchor" href="#2问题分析"></a> 2.问题分析:</h3>
+<blockquote>
+<p>原因: cursor 给我错的步骤, 以为做了形象工程: <strong>copy和pip了新的环境, 但是运行的确实本地的环境的</strong>python, 导致后续一直在错的分支上修改(不了解本质, 一直以为是python copy的错误, 见下面分析).</p>
+</blockquote>
+<h4 id="21-自包含方式python错误"><a class="markdownIt-Anchor" href="#21-自包含方式python错误"></a> 2.1 自包含方式python错误</h4>
+<blockquote>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">execSync</span>(<span class="string">`<span class="subst">$&#123;pythonCmd&#125;</span> -m venv &quot;<span class="subst">$&#123;pythonDir&#125;</span>&quot;`</span>, &#123; </span><br><span class="line">  <span class="attr">stdio</span>: <span class="string">&#x27;inherit&#x27;</span>,</span><br><span class="line">  <span class="attr">cwd</span>: path.<span class="title function_">join</span>(__dirname, <span class="string">&#x27;..&#x27;</span>)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+<p>这样运行会依赖创建venv的python</p>
+<p><strong>本质上依赖于系统 Python</strong>，因为 venv 只是拷贝/软链接系统 Python 的部分文件（可执行文件 + 标准库）。所以：</p>
+<ol>
+<li>如果用户机器没有 Python，或者版本不对，Electron 打包后的程序 <strong>无法独立运行</strong>。</li>
+<li>同时, 打包的pyvenv.cfg 指向了本地机的python导致客户机的python找不到,</li>
+</ol>
+</blockquote>
+<p>**核心问题 : **</p>
+<ul>
+<li><strong>venv 本身不是自包含的</strong>，它只是一个「隔离的环境」，依赖底层 Python。</li>
+<li><strong>要想 Electron 完全自包含</strong>，你必须用 <strong>Embedded Python</strong> 或 <strong>完整 Python 安装 + Lib</strong>，而不是 venv。之前手动 copy python.exe + DLL + venv，这本质就是想绕开系统 Python，但做法容易出错（缺标准库，导致 <code>encodings</code> 不存在）</li>
+</ul>
+<p><strong>尝试解决1:</strong></p>
+<p>​	手动 copy python.exe + DLL + venv，这本质就是想绕开系统 Python，但做法容易出错（缺标准库，导致 <code>encodings</code> 不存在）。</p>
+<blockquote>
+<p>真正的解决办法是在客户机安装python并修改路径和使用打包的环境</p>
+</blockquote>
+<p><strong>尝试解决2</strong></p>
+<p>​	方案 C：Embedded Python（推荐）</p>
+<h4 id="22-环境迁移出错-自包含的-python-runtime人为地融合了解释器-库-虚拟环境-手动-copy-pythonexe-dll-venv"><a class="markdownIt-Anchor" href="#22-环境迁移出错-自包含的-python-runtime人为地融合了解释器-库-虚拟环境-手动-copy-pythonexe-dll-venv"></a> 2.2 环境迁移出错: <strong>自包含的 Python runtime</strong>，人为地「融合」了解释器 + 库 + 虚拟环境, 手动 copy python.exe + DLL + venv</h4>
+<blockquote>
+<p>本质就是意识到其实venv是python的软连接, 而不是真正的python解释器</p>
+</blockquote>
+<p>1:python的pyvenv.cfg路径错误(修改build的配置为相对路径),</p>
+<blockquote>
+<p>一直以为是venv的<code>Scripts/python.exe</code> 就是python</p>
+</blockquote>
+<p>2: 构建脚本没有复制Python核心DLL文件</p>
+<blockquote>
+<p>copy了一个python运行exe</p>
+</blockquote>
+<p>3: copy python 不完整, 无法完全copy–&gt;embed</p>
+<blockquote>
+<p>copy了半个python环境</p>
+</blockquote>
+<p><s>4: pip 安装慢</s></p>
+<p><s>5: pip似乎一直安装失败了…=&gt;重构放弃了</s></p>
+<h2 id="方式-b-pyinstaller-打包成独立-exe推荐"><a class="markdownIt-Anchor" href="#方式-b-pyinstaller-打包成独立-exe推荐"></a> 方式 B： PyInstaller 打包成独立 EXE✅（推荐）</h2>
+<blockquote>
+<p>创建新环境并打包成exe</p>
+</blockquote>
+<h3 id="1-备选方案"><a class="markdownIt-Anchor" href="#1-备选方案"></a> 1. 备选方案</h3>
+<p>之前尝试遇到很多问题, 有点主动规避了, 所以作为备选</p>
+<h3 id="2-问题分析"><a class="markdownIt-Anchor" href="#2-问题分析"></a> 2. 问题分析</h3>
+<p><strong>0:config绝对路径 加载失败</strong></p>
+<blockquote>
+<p>需修改代码路径引用</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ProjectConfig 在打包态用的是 exe 目录作为基准：base_path = Path(sys.executable).parent，然后拼 app/config/&lt;PROJECT_NAME&gt;</span><br></pre></td></tr></table></figure>
+<p>因此需要修改为相对于exe的运行路径 +app/config/</p>
+<p><strong>1:numpy包版本报错, 运行失败,</strong></p>
+<blockquote>
+<p>经典版本不对</p>
+</blockquote>
+<p><img src="/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/559be49c692108c9f627895ec0597657.png" alt="559be49c692108c9f627895ec0597657"></p>
+<p><strong>2:运行时动态导入问题</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># app/main.py 第120行（你的项目）</span><br><span class="line">if project_name.lower() == &quot;biyi&quot;:</span><br><span class="line">    from app.api.v1 import biyi  # ← 运行时才导入</span><br><span class="line">    app.include_router(biyi.router, tags=[&quot;biyi&quot;])</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>OpenCV (cv2)：依赖大量 .so/.dll 和子模块，静态分析可能漏掉</p>
+<p>Ultralytics (YOLO)：内部动态加载模型、后端引擎（如 TensorRT、ONNX），需要手动收集</p>
+</blockquote>
+<p><strong>3: torch 库版本问题,</strong></p>
+<blockquote>
+<p>没装上torch -&gt;改用cpu版本</p>
+</blockquote>
+<p><img src="/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/b79fe447ce392f07779af6faed4b573a.png" alt="b79fe447ce392f07779af6faed4b573a"></p>
+<h3 id="3-实现可热更新的"><a class="markdownIt-Anchor" href="#3-实现可热更新的"></a> 3. 实现可热更新的</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">extra_trees = []</span><br><span class="line">if os.path.exists(&#x27;app/companies/biyi&#x27;):</span><br><span class="line">    extra_trees.append(Tree(&#x27;app/companies/biyi&#x27;, prefix=&#x27;app/companies/biyi&#x27;))</span><br><span class="line">if os.path.exists(&#x27;app/config/Biyi&#x27;):</span><br><span class="line">    extra_trees.append(Tree(&#x27;app/config/Biyi&#x27;, prefix=&#x27;app/config/Biyi&#x27;))</span><br></pre></td></tr></table></figure>
+<p>通过extra_tree递归查找+ COLLECT</p>
+<img src="/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/d9f4b09992f0773c7e8cdc6ee79117b1.png" alt="d9f4b09992f0773c7e8cdc6ee79117b1" style="zoom: 50%;">
+<h3 id="4-成功运行exe-功能待测试"><a class="markdownIt-Anchor" href="#4-成功运行exe-功能待测试"></a> 4. 成功运行exe 功能待测试…</h3>
+<p>测试注意事项</p>
+<h4 id="41路径问题"><a class="markdownIt-Anchor" href="#41路径问题"></a> 4.1路径问题</h4>
+<blockquote>
+<p>相对路径问题</p>
+</blockquote>
+<blockquote>
+<p>原本是写在<code>opencv-detection-embodiedrobot\_internal/app</code>; 但是读取不到</p>
+<p>后修改cd到后端路径 <code>opencv-detection-embodiedrobot</code>再启动<code>opencv-detection-embodiedrobot\app\config</code></p>
+</blockquote>
+<h4 id="42-大小写问题"><a class="markdownIt-Anchor" href="#42-大小写问题"></a> 4.2 大小写问题</h4>
+<blockquote>
+<p>导致一直读取不到config</p>
+</blockquote>
+<blockquote>
+<p>全部改为小写</p>
+</blockquote>
+<h4 id="43-c盘内存不足"><a class="markdownIt-Anchor" href="#43-c盘内存不足"></a> 4.3  C盘内存不足</h4>
+<img src="/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/2792c7754ce5fba8cb8ba4e6a876313b.png" alt="2792c7754ce5fba8cb8ba4e6a876313b" style="zoom: 25%;">
+<h4 id="44-模型路径问题"><a class="markdownIt-Anchor" href="#44-模型路径问题"></a> 4.4 模型路径问题</h4>
+<img src="/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/ea40f78d3410bcecc36d5e3bfaa2c48c.png" alt="ea40f78d3410bcecc36d5e3bfaa2c48c" style="zoom:33%;">
+<blockquote>
+<p>继承model 重写代码 <a target="_blank" rel="noopener" href="http://xn--model-bi1hx0gxz5jstci4a021y.pt">使用项目下的model.pt</a></p>
+</blockquote>
+<h4 id="45-env问题"><a class="markdownIt-Anchor" href="#45-env问题"></a> 4.5 .env问题</h4>
+<blockquote>
+<p>添加 .env.sample和手动添加.env</p>
+</blockquote>
+<h4 id="46-导入问题"><a class="markdownIt-Anchor" href="#46-导入问题"></a> 4.6 导入问题</h4>
+<img src="/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/image-20251022134718481.png" alt="image-20251022134718481" style="zoom:50%;">
+<blockquote>
+<p>Python Backend Error: ModuleNotFoundError: No module named 'app.companies.gaotiePYI-13836:ERRORl Failed to execute script’main’due to unhandled exception!</p>
+</blockquote>
+<p>代码错误导入<code>from app.companies.gaotie.detector import GaotieVideoDetector</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">\# Before:</span><br><span class="line"></span><br><span class="line">from app.companies.gaotie.detector import GaotieVideoDetector</span><br><span class="line"></span><br><span class="line">\# After:</span><br><span class="line"></span><br><span class="line">from app.companies.embodiedrobot.detector import EmbodiedVideoDetector</span><br></pre></td></tr></table></figure>
+<h4 id="47成功"><a class="markdownIt-Anchor" href="#47成功"></a> 4.7成功</h4>
+<img src="/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/image-20251022150309599.png" alt="image-20251022150309599" style="zoom: 50%;">
+<blockquote>
+<h1 id="pyinstaller打包biyi项目准备工作计划"><a class="markdownIt-Anchor" href="#pyinstaller打包biyi项目准备工作计划"></a> PyInstaller打包Biyi项目准备工作计划</h1>
+<h2 id="1-清理和准备项目文件"><a class="markdownIt-Anchor" href="#1-清理和准备项目文件"></a> 1. 清理和准备项目文件</h2>
+<h3 id="11-创建打包配置文件"><a class="markdownIt-Anchor" href="#11-创建打包配置文件"></a> 1.1 创建打包配置文件</h3>
+<ul>
+<li>创建 <code>.spec</code> 文件配置PyInstaller打包参数</li>
+<li>配置包含Biyi项目相关的数据文件（模型、配置、模板）</li>
+<li>排除其他公司项目的文件以减小体积</li>
+</ul>
+<h3 id="12-整理依赖项"><a class="markdownIt-Anchor" href="#12-整理依赖项"></a> 1.2 整理依赖项</h3>
+<ul>
+<li>修改 <code>requirements.txt</code> 创建CPU版本依赖清单</li>
+<li>移除GPU相关依赖：<code>tensorrt</code></li>
+<li>确保使用CPU版本的torch/ultralytics</li>
+</ul>
+<h3 id="13-清理不必要文件"><a class="markdownIt-Anchor" href="#13-清理不必要文件"></a> 1.3 清理不必要文件</h3>
+<ul>
+<li>排除其他公司项目文件夹（保留biyi）</li>
+<li>排除测试文件、文档、日志</li>
+<li>排除开发环境配置文件</li>
+</ul>
+<h2 id="2-处理动态加载和资源文件"><a class="markdownIt-Anchor" href="#2-处理动态加载和资源文件"></a> 2. 处理动态加载和资源文件</h2>
+<h3 id="21-模型文件处理"><a class="markdownIt-Anchor" href="#21-模型文件处理"></a> 2.1 模型文件处理</h3>
+<ul>
+<li>确认 <code>app/companies/biyi/</code> 下的 <code>.pt</code> 模型文件</li>
+<li>确认 <code>app/core/angle/</code>, <code>app/core/object/</code> 等核心模块的模型文件</li>
+<li>在.spec中配置为数据文件</li>
+</ul>
+<h3 id="22-配置文件处理"><a class="markdownIt-Anchor" href="#22-配置文件处理"></a> 2.2 配置文件处理</h3>
+<ul>
+<li>包含 <code>app/config/Biyi/</code> 下所有JSON配置文件</li>
+<li>处理 <code>.env</code> 文件（创建示例配置）</li>
+</ul>
+<h3 id="23-模板文件处理"><a class="markdownIt-Anchor" href="#23-模板文件处理"></a> 2.3 模板文件处理</h3>
+<ul>
+<li>包含 <code>app/templates/Biyi/</code> HTML模板</li>
+<li>包含 <code>app/templates/shared/</code> 共享模板</li>
+<li>包含 <code>app/templates/js/</code> JavaScript文件</li>
+</ul>
+<h3 id="24-修复动态导入"><a class="markdownIt-Anchor" href="#24-修复动态导入"></a> 2.4 修复动态导入</h3>
+<ul>
+<li>检查 <code>app/main.py</code> 中的项目名称动态导入逻辑</li>
+<li>确保PyInstaller能正确打包Biyi相关模块</li>
+</ul>
+<h2 id="3-创建pyinstaller-spec文件"><a class="markdownIt-Anchor" href="#3-创建pyinstaller-spec文件"></a> 3. 创建PyInstaller spec文件</h2>
+<h3 id="31-核心配置"><a class="markdownIt-Anchor" href="#31-核心配置"></a> 3.1 核心配置</h3>
+<ul>
+<li>入口点：<code>app/main.py</code></li>
+<li>单文件/单目录模式选择</li>
+<li>隐藏导入配置（ultralytics、cv2等）</li>
+</ul>
+<h3 id="32-数据文件配置"><a class="markdownIt-Anchor" href="#32-数据文件配置"></a> 3.2 数据文件配置</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">datas = [    (&#x27;app/companies/biyi&#x27;, &#x27;app/companies/biyi&#x27;),    (&#x27;app/config/Biyi&#x27;, &#x27;app/config/Biyi&#x27;),    (&#x27;app/templates&#x27;, &#x27;app/templates&#x27;),    (&#x27;.env.example&#x27;, &#x27;.&#x27;),]</span><br></pre></td></tr></table></figure>
+<h3 id="33-排除项配置"><a class="markdownIt-Anchor" href="#33-排除项配置"></a> 3.3 排除项配置</h3>
+<ul>
+<li>排除其他公司项目模块</li>
+<li>排除测试、文档相关包</li>
+</ul>
+<h2 id="4-环境配置文件"><a class="markdownIt-Anchor" href="#4-环境配置文件"></a> 4. 环境配置文件</h2>
+<h3 id="41-创建环境配置模板"><a class="markdownIt-Anchor" href="#41-创建环境配置模板"></a> 4.1 创建环境配置模板</h3>
+<ul>
+<li>创建 <code>.env.example</code> 包含必要配置项</li>
+<li>创建 <code>config_template.txt</code> 说明配置方法</li>
+</ul>
+<h3 id="42-创建启动脚本"><a class="markdownIt-Anchor" href="#42-创建启动脚本"></a> 4.2 创建启动脚本</h3>
+<ul>
+<li>Windows批处理文件 <code>start_biyi.bat</code></li>
+<li>包含环境变量设置和启动逻辑</li>
+</ul>
+<h2 id="5-打包测试准备"><a class="markdownIt-Anchor" href="#5-打包测试准备"></a> 5. 打包测试准备</h2>
+<h3 id="51-创建打包脚本"><a class="markdownIt-Anchor" href="#51-创建打包脚本"></a> 5.1 创建打包脚本</h3>
+<ul>
+<li><code>build_biyi.bat</code> - Windows打包脚本</li>
+<li>包含清理旧构建、执行打包、验证输出</li>
+</ul>
+<h3 id="52-创建部署文档"><a class="markdownIt-Anchor" href="#52-创建部署文档"></a> 5.2 创建部署文档</h3>
+<ul>
+<li><code>DEPLOYMENT.md</code> - 部署说明文档</li>
+<li>包含：系统要求、安装步骤、配置说明、故障排除</li>
+</ul>
+<h2 id="6-验证检查清单"><a class="markdownIt-Anchor" href="#6-验证检查清单"></a> 6. 验证检查清单</h2>
+<ul>
+<li>[ ] 确认requirements.txt无GPU依赖</li>
+<li>[ ] 确认.spec文件包含所有必要资源</li>
+<li>[ ] 确认只包含Biyi相关代码和配置</li>
+<li>[ ] 确认动态导入已处理</li>
+<li>[ ] 准备好.env配置示例</li>
+<li>[ ] 准备好部署文档</li>
+</ul>
+<h2 id="关键文件说明"><a class="markdownIt-Anchor" href="#关键文件说明"></a> 关键文件说明</h2>
+<ul>
+<li><code>opencv_detection_biyi.spec</code> - PyInstaller配置文件</li>
+<li><code>requirements_cpu.txt</code> - CPU版本依赖清单</li>
+<li><code>build_biyi.bat</code> - 打包执行脚本</li>
+<li><code>.env.example</code> - 环境配置示例</li>
+<li><code>DEPLOYMENT_BIYI.md</code> - 部署说明文档</li>
+</ul>
+</blockquote>
+<h2 id="方式-cembeddable-python嵌入式"><a class="markdownIt-Anchor" href="#方式-cembeddable-python嵌入式"></a> 方式 C：<strong>Embeddable Python（嵌入式） ❌</strong></h2>
+<blockquote>
+<p>❌❌很多库都安装不了</p>
+</blockquote>
+<blockquote>
+<p>Cursor 分步安装的原因 跳过了包的安装导致缺少库, 运行不了</p>
+</blockquote>
+<h3 id="1-pip-安装问题"><a class="markdownIt-Anchor" href="#1-pip-安装问题"></a> 1. pip 安装问题</h3>
+<blockquote>
+<p>embeddable python不带pip需要手动下载和修改</p>
+</blockquote>
+<p>需要删除import site在python312._pth文件中</p>
+<h3 id="2-embeddable-python特性"><a class="markdownIt-Anchor" href="#2-embeddable-python特性"></a> 2. embeddable python特性:</h3>
+<h4 id="21-库编译问题"><a class="markdownIt-Anchor" href="#21-库编译问题"></a> 2.1 库编译问题</h4>
+<ol>
+<li><strong>依赖</strong>
+<ul>
+<li><code>opencv-python</code> 本身提供了预编译 wheel，但有些依赖（如 matplotlib）可能需要 <strong>源代码编译</strong>，尤其在缺少 wheel 或版本不匹配的情况下</li>
+<li><code>matplotlib</code> 依赖 <code>cycler</code>、<code>kiwisolver</code>、<code>pillow</code> 等，某些组件可能需要 <strong>C/C++ 编译工具</strong></li>
+<li><code>mesonpy</code> 是最近 matplotlib 构建系统的一部分，用于编译扩展</li>
+</ul>
+</li>
+<li><strong>嵌入式 Python 不包含编译环境</strong>
+<ul>
+<li>没有 Visual Studio C++ Build Tools</li>
+<li>没有 <code>python-config</code>、<code>make</code>、<code>ninja</code> 等工具</li>
+</ul>
+</li>
+</ol>
+<p>所以在 <strong>嵌入式 Python 下 pip install opencv-python 或 matplotlib</strong> 就会失败，因为它需要编译环境，嵌入式 Python 只能提供一个纯净的解释器和标准库。</p>
+<hr>
+<h4 id="22可行解决方案"><a class="markdownIt-Anchor" href="#22可行解决方案"></a> <strong>2.2可行解决方案</strong></h4>
+<ol>
+<li>
+<p><strong>使用预编译 wheel</strong>（</p>
+<ul>
+<li>
+<p>下载适合你 Python 版本和架构的 <code>.whl</code> 文件，直接安装：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python\python.exe -m pip install opencv_python‑4.9.0‑cp312‑cp312‑win_amd64.whl</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>这样就不用本地编译了。</p>
+</li>
+<li>
+<p>你可以在 <a target="_blank" rel="noopener" href="https://pypi.org/project/opencv-python/#files">PyPI opencv-python</a> 找到对应 wheel。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>下载相关编译工具集</strong></p>
+</li>
+</ol>
+<hr>
+<h3 id="3-问题分析"><a class="markdownIt-Anchor" href="#3-问题分析"></a> 3. 问题分析：</h3>
+<h4 id="31-matplotlib-编译失败"><a class="markdownIt-Anchor" href="#31-matplotlib-编译失败"></a> 3.1 matplotlib 编译失败</h4>
+<ol>
+<li>
+<p>matplotlib 编译失败：matplotlib==3.10.1 需要从源码编译，但缺少 mesonpy 构建工具</p>
+</li>
+<li>
+<p>mesonpy 后端不可用：Cannot import ‘mesonpy’ - 构建工具链不完整</p>
+</li>
+<li>
+<p>依赖解析失败：pip 无法找到兼容的包版本</p>
+</li>
+</ol>
+<p><strong>解决方案：</strong></p>
+<ol>
+<li>特殊处理 matplotlib：</li>
+</ol>
+<ul>
+<li>
+<p>优先使用预编译的 wheel 包：–only-binary=:all: --prefer-binary</p>
+</li>
+<li>
+<p>如果指定版本失败，尝试不指定版本的最新版本</p>
+</li>
+</ul>
+<h4 id="32-工具链安装失败"><a class="markdownIt-Anchor" href="#32-工具链安装失败"></a> 3.2 工具链安装失败</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ERROR: Could not find a version that satisfies the requirement mesonpy (from versions: none)</span><br><span class="line">ERROR: No matching distribution found for mesonpy</span><br><span class="line">⚠️  Warning: some build tools failed: Command failed: &quot;F:\_Work\cve\electron\python\python.exe&quot; -m pip install setuptools&gt;&gt;=65.0.0 wheel&gt;=0.38.0 Cython&gt;=3.0.0 meson&gt;=1.0.0 ninja&gt;=1.10.0 mesonpy&gt;=0.15.0 pyproject-hooks&gt;=1.0.0 build&gt;=0.10.0 packaging&gt;=21.0 tomli&gt;=2.0.0 pyparsing&gt;=3.0.0 installer&gt;=0.7.0 -i https://pypi.tuna.tsinghua.edu.cn/simple --trusted-host pypi.tuna.tsinghua.edu.cn</span><br></pre></td></tr></table></figure>
+<h4 id="33-torch-安装失败"><a class="markdownIt-Anchor" href="#33-torch-安装失败"></a> 3.3 torch 安装失败</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ERROR: Could not find a version that satisfies the requirement torch (from versions: none)ERROR: No matching distribution found for torch</span><br></pre></td></tr></table></figure>
+<p>这是因为<strong>嵌入式Python环境可能缺少某些系统库，导致torch无法安装。</strong></p>
+<ul>
+<li>需要手动编译!!</li>
+<li></li>
+</ul>
+<h4 id="32-依赖matplotlib的opencv-ultralytics安装失败"><a class="markdownIt-Anchor" href="#32-依赖matplotlib的opencv-ultralytics安装失败"></a> 3.2. 依赖matplotlib的opencv, ultralytics安装失败</h4>
+<ol>
+<li>下载相关编译工具</li>
+<li>ultralytics 8.0.2 depends on matplotlib&gt;=3.2.2</li>
+</ol>
+<h4 id="3-ultralytics版本高要求新版本的matplotlib"><a class="markdownIt-Anchor" href="#3-ultralytics版本高要求新版本的matplotlib"></a> 3. ultralytics版本高要求新版本的matplotlib</h4>
+<p>内部库依赖版本冲突无交集</p>
+<ol>
+<li>不指定版本</li>
+<li>使用更宽松的安装策略</li>
+<li>torch要求</li>
+</ol>
+<h4 id="3av库版本问题webrtc"><a class="markdownIt-Anchor" href="#3av库版本问题webrtc"></a> 3.av库版本问题(webrtc)</h4>
+<p>无法找到合适版本</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ERROR: Could not find a version that satisfies the requirement av==16.8.8 (from versions: none)ERROR: No matching distribution found for av==16.0.00 Warning: some dependencies failed to install: command failed: &quot;F:\_Work\cvelelectron\python\python.exe&quot;&quot;-m pip install -r &quot;F:\ Work\cvelopencv-detection\requirements.txt&quot; -i https://pypi.tuna.tsinghua.edu.cn/simple --trusted-host pypi.tuna.tsinghua.edu.cn --prefer-binary --only-binary=:all: --no-build-isolation</span><br></pre></td></tr></table></figure>
+<ol>
+<li>修改版本</li>
+<li>不指定版本</li>
+<li>暂时不安装了</li>
+</ol>
+<h3 id="4总结"><a class="markdownIt-Anchor" href="#4总结"></a> 4.总结</h3>
+<p>嵌入式 Python 自带python, 但是很多包和库基本上pipy都不支持, 导致无法安装完整的环境, 这反而失去了python的优势, 所以放弃改方案</p>
+<h2 id="electron打包阶段-部分完成-️"><a class="markdownIt-Anchor" href="#electron打包阶段-部分完成-️"></a> Electron打包阶段 - 部分完成 ⚠️</h2>
+<ol>
+<li>NSIS安装程序生成阶段 ❌</li>
+</ol>
+<ul>
+<li>
+<p>错误：failed creating mmap of “cve-electron-1.0.0-x64.nsis.7z”</p>
+</li>
+<li>
+<p>问题：NSIS无法创建内存映射文件来处理7z压缩包</p>
+</li>
+</ul>
+<p>后端逻辑未修改, 还是用的python</p>
+<h2 id="打包总结"><a class="markdownIt-Anchor" href="#打包总结"></a> 打包总结</h2>
+<h3 id="1-venv-并非独立环境"><a class="markdownIt-Anchor" href="#1-venv-并非独立环境"></a> 1. venv 并非独立环境</h3>
+<ul>
+<li><code>venv</code> 本质上是系统 Python 的隔离副本；</li>
+<li><code>pyvenv.cfg</code> 中的 <code>home</code> 和 <code>executable</code> 会绑定本地 Python；</li>
+<li>换机后路径失效导致运行错误；</li>
+<li><strong>结论</strong>：venv 不适合打包分发。</li>
+</ul>
+<h2 id="后续计划"><a class="markdownIt-Anchor" href="#后续计划"></a> 后续计划</h2>
+<ul>
+<li>完善 <code>.spec</code> 文件模板</li>
+<li>使用了单文件的pyinstaller 生产<code>_internal</code>文件夹</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/" data-id="cmgs67i4000004gv4bfd09pcl" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/chore/" rel="tag">chore</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2025年9月3日-认知" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/09/03/2025%E5%B9%B49%E6%9C%883%E6%97%A5-%E8%AE%A4%E7%9F%A5/" class="article-date">
+  <time class="post-time" datetime="2025-09-03T01:19:30.000Z" itemprop="datePublished">
+    <span class="post-month">9月</span><br/>
+    <span class="post-day">03</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/09/03/2025%E5%B9%B49%E6%9C%883%E6%97%A5-%E8%AE%A4%E7%9F%A5/">2025年9月3日 认知</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>对我们来说，什么是最宝贵的？它是否值得我们用一生去坚守?</p>
+<p>你认为，对你来说什么是有价值的，是值得坚持的，什么又是最宝贵的呢？</p>
+<h2 id="价值观探索的多维度方法"><a class="markdownIt-Anchor" href="#价值观探索的多维度方法"></a> 🌟 价值观探索的多维度方法</h2>
+<h3 id="1️⃣-回溯反思法"><a class="markdownIt-Anchor" href="#1️⃣-回溯反思法"></a> 1️⃣ 回溯反思法</h3>
+<p>通过回顾过去的经历，我们可以发现那些指引我们的隐形价值观：</p>
+<ul>
+<li><strong>列出你感到最自豪的3个人生时刻</strong>：详细写下为什么这些时刻让你感到满足，其中体现了你看重什么</li>
+<li><strong>回忆5次最难的决定</strong>：分析什么因素最终让你做出了选择，背后是什么价值观在权衡</li>
+<li><strong>思考什么让你愤怒或不平</strong>：我们强烈的负面情绪往往源于价值观被侵犯</li>
+</ul>
+<h3 id="2️⃣-情境测试法"><a class="markdownIt-Anchor" href="#2️⃣-情境测试法"></a> 2️⃣ 情境测试法</h3>
+<p>当面临假设情境时，我们的价值排序会清晰显现：</p>
+<ul>
+<li>“如果只剩下一年生命，你会如何度过？”——这会暴露你最深层的优先项</li>
+<li>“如果你有无限资源，你会解决什么世界问题？”——这反映你的理想和关怀</li>
+<li>“你希望别人在你的葬礼上如何纪念你？”——这揭示你希望活出的生命品质</li>
+</ul>
+<h3 id="3️⃣-日常观察法"><a class="markdownIt-Anchor" href="#3️⃣-日常观察法"></a> 3️⃣ 日常观察法</h3>
+<p>价值观渗透在我们最平凡的选择中：</p>
+<ul>
+<li>检查你的银行账单和时间支出：<strong>你的资源流向哪里，你的价值就住在哪里</strong></li>
+<li>注意什么新闻让你感动或愤怒：这些强烈情绪指向你关心的价值议题</li>
+<li>观察你羡慕什么样的人：羡慕是价值观的镜子，映照出我们内心渴望的品质</li>
+</ul>
+<h2 id="价值观分类与排序工具"><a class="markdownIt-Anchor" href="#价值观分类与排序工具"></a> 📊 价值观分类与排序工具</h2>
+<p>这里有一个实用的价值观清单，可以帮助你更好地识别和排序自己的核心价值观：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">个人成长类价值观</th>
+<th style="text-align:left">人际关系类价值观</th>
+<th style="text-align:left">社会贡献类价值观</th>
+<th style="text-align:left">生活品质类价值观</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">知识与智慧</td>
+<td style="text-align:left">真诚与诚实</td>
+<td style="text-align:left">公平与正义</td>
+<td style="text-align:left">健康与活力</td>
+</tr>
+<tr>
+<td style="text-align:left">创造力</td>
+<td style="text-align:left">爱与亲密</td>
+<td style="text-align:left">帮助他人</td>
+<td style="text-align:left">安全感</td>
+</tr>
+<tr>
+<td style="text-align:left">成就感</td>
+<td style="text-align:left">忠诚</td>
+<td style="text-align:left">环境保护</td>
+<td style="text-align:left">自由与独立</td>
+</tr>
+<tr>
+<td style="text-align:left">勇气</td>
+<td style="text-align:left">尊重</td>
+<td style="text-align:left">社会责任</td>
+<td style="text-align:left">平静与和谐</td>
+</tr>
+</tbody>
+</table>
+<p><strong>实践建议</strong>：从每个类别中选择1-2个对你最重要的价值观，然后尝试将所有选择排序，找出你的top 5核心价值观</p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">个人成长类价值观</th>
+<th style="text-align:left">人际关系类价值观</th>
+<th style="text-align:left">社会贡献类价值观</th>
+<th style="text-align:left">生活品质类价值观</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">知识与智慧</td>
+<td style="text-align:left">真诚与诚实</td>
+<td style="text-align:left">公平</td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left">爱与亲密</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td style="text-align:left">自由与独立</td>
+</tr>
+<tr>
+<td style="text-align:left">勇气</td>
+<td style="text-align:left"></td>
+<td style="text-align:left"></td>
+<td style="text-align:left">平静与和谐</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/09/03/2025%E5%B9%B49%E6%9C%883%E6%97%A5-%E8%AE%A4%E7%9F%A5/" data-id="cmg5tcxzf0001k0v4h8gianju" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-2025年8月8日-vlm" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -690,240 +1266,6 @@
 
 
   
-    <article id="post-2025年7月11日-agent2" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/" class="article-date">
-  <time class="post-time" datetime="2025-07-11T01:44:22.000Z" itemprop="datePublished">
-    <span class="post-month">7月</span><br/>
-    <span class="post-day">11</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/">2025年7月11日 agent2</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id><a class="markdownIt-Anchor" href="#"></a> </h1>
-<blockquote>
-<p>主要介绍AI的实现策略</p>
-</blockquote>
-<h1 id="1-agent设计模式"><a class="markdownIt-Anchor" href="#1-agent设计模式"></a> 1 Agent设计模式</h1>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/692971105">https://zhuanlan.zhihu.com/p/692971105</a></p>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_57081622/article/details/147892638">https://blog.csdn.net/m0_57081622/article/details/147892638</a></p>
-</blockquote>
-<h2 id="1-react-模式"><a class="markdownIt-Anchor" href="#1-react-模式"></a> <strong>1 ReAct</strong> <strong>模式</strong></h2>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://github.com/samwit/langchain-tutorials/blob/main/agents/YT_Exploring_ReAct_on_Langchain.ipynb">https://github.com/samwit/langchain-tutorials/blob/main/agents/YT_Exploring_ReAct_on_Langchain.ipynb</a></p>
-</blockquote>
-<p><strong>原理</strong></p>
-<ol>
-<li>接收任务：Agent获取来自用户或系统的任务指令。</li>
-<li>推理（Thought）：Agent依据当前任务和已有知识展开推理，形成初步的行动计划。</li>
-<li>行动（Action）：Agent执行经推理得出的行动。</li>
-<li>观察（Observation）：Agent对行动产生的结果进行观察，获取反馈信息。</li>
-<li>循环迭代：将观察结果反馈至推理过程，Agent依据新信息重新推理，生成新的行动计划，并持续执行行动与观察，直至任务完成</li>
-</ol>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">think</span>(<span class="params">self, task</span>):</span><br><span class="line">    <span class="comment"># 推理：根据任务生成行动计划</span></span><br><span class="line">    <span class="keyword">for</span> location <span class="keyword">in</span> self.knowledge_base[<span class="string">&quot;locations&quot;</span>]:</span><br><span class="line">        <span class="keyword">yield</span><span class="string">f&quot;检查 <span class="subst">&#123;location&#125;</span> 是否有胡椒粉&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">act</span>(<span class="params">self, action</span>):</span><br><span class="line">    <span class="comment"># 行动：执行具体的行动</span></span><br><span class="line">    <span class="keyword">if</span> action == <span class="string">&quot;检查 台面上 是否有胡椒粉&quot;</span>:</span><br><span class="line">        <span class="keyword">return</span><span class="string">&quot;台面上没有胡椒粉&quot;</span></span><br><span class="line">    <span class="keyword">elif</span> action == <span class="string">&quot;检查 灶台底下抽屉 是否有胡椒粉&quot;</span>:</span><br><span class="line">        <span class="keyword">return</span><span class="string">&quot;灶台底下抽屉有胡椒粉&quot;</span></span><br><span class="line">    <span class="keyword">elif</span> action == <span class="string">&quot;检查 油烟机左边吊柜 是否有胡椒粉&quot;</span>:</span><br><span class="line">        <span class="keyword">return</span><span class="string">&quot;油烟机左边吊柜没有胡椒粉&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">observe</span>(<span class="params">self, action_result</span>):</span><br><span class="line">    <span class="comment"># 观察：记录行动的结果</span></span><br><span class="line">    <span class="keyword">return</span> action_result</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h2 id="2-plan-and-solve-模式"><a class="markdownIt-Anchor" href="#2-plan-and-solve-模式"></a> 2 <strong>Plan</strong> <strong>and</strong> <strong>solve</strong> <strong>模式</strong></h2>
-<blockquote>
-<p>《Plan-and-Solve Prompting: Improving Zero-Shot Chain-of-Thought Reasoning by Large Language Models》</p>
-<p><a target="_blank" rel="noopener" href="https://github.com/Fosowl/agenticSeek">https://github.com/Fosowl/agenticSeek</a></p>
-</blockquote>
-<p>原理</p>
-<ol>
-<li>
-<p>接收任务：Agent接收来自用户或系统下达的任务指令。</p>
-</li>
-<li>
-<p>规划（Plan）：Agent基于任务目标生成一个多步骤的详细计划，清晰界定每个步骤的具体内容与执行顺序。</p>
-</li>
-<li>
-<p>执行（Solve）：Agent依照既定计划，依次执行每个步骤。</p>
-</li>
-<li>
-<p>观察（Observation）：Agent对执行结果展开观察，判断是否有必要启动重新规划流程。</p>
-</li>
-<li>
-<p>重新规划（Replan）：若发现计划无法实施，或需要根据实际情况调整，Agent将结合当前状态重新生成计划，并继续执行。</p>
-</li>
-</ol>
-<h2 id="3-reason-without-observation"><a class="markdownIt-Anchor" href="#3-reason-without-observation"></a> <strong>3. Reason</strong> <strong>without</strong> <strong>Observation</strong></h2>
-<ol>
-<li>Planner：负责生成一个相互依赖的“链式计划”，定义每一步所依赖的上一步的输出。</li>
-<li>Worker：循环遍历每个任务，并将任务输出分配给相应的变量。当调用后续调用时，它还会用变量的结果替换变量。</li>
-<li>Solver：求解器将所有这些输出整合为最终答案。</li>
-</ol>
-<h2 id="4-llmcompiler"><a class="markdownIt-Anchor" href="#4-llmcompiler"></a> <strong>4. LLMCompiler</strong></h2>
-<p><strong>原理</strong></p>
-<p>变成并行执行</p>
-<ol>
-<li>
-<p>接收任务：Agent 接收到用户或系统的任务指令，任务可能包含多个子任务。</p>
-</li>
-<li>
-<p>任务分解（Task Decomposition）：Agent 将复杂任务分解为多个子任务，并确定这些子任务之间的依赖关系。</p>
-</li>
-<li>
-<p>并行执行（Parallel Execution）：Agent 根据子任务之间的依赖关系，将可以并行处理的子任务同时发送给多个执行器进行处理。</p>
-</li>
-<li>
-<p>结果合并（Result Merging）：各个执行器完成子任务后，Agent 将结果合并，形成最终的输出。</p>
-</li>
-<li>
-<p>循环迭代（Iteration）：如果任务需要进一步处理或调整，Agent 会根据当前结果重新分解任务，并继续并行执行和结果合并，直到任务完成。</p>
-</li>
-</ol>
-<img src="/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250728164505011.png" alt="image-20250728164505011" style="zoom:33%;">
-<h2 id="5-生成智能体generative-agent"><a class="markdownIt-Anchor" href="#5-生成智能体generative-agent"></a> 5 <strong>生成智能体（Generative Agent）</strong></h2>
-<blockquote>
-<p>斯坦福小镇 <a target="_blank" rel="noopener" href="https://github.com/joonspk-research/generative_agents?tab=readme-ov-file">https://github.com/joonspk-research/generative_agents?tab=readme-ov-file</a></p>
-</blockquote>
-<h1 id="2-设计策略"><a class="markdownIt-Anchor" href="#2-设计策略"></a> 2 设计策略</h1>
-<h2 id="21-提示词工程"><a class="markdownIt-Anchor" href="#21-提示词工程"></a> 2.1 提示词工程</h2>
-<h3 id="21-cot"><a class="markdownIt-Anchor" href="#21-cot"></a> 2.1 Cot</h3>
-<p><strong>定义</strong></p>
-<blockquote>
-<p>让模型一步一步来<img src="/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250806085752423.png" alt="image-20250806085752423" style="zoom:67%;"></p>
-</blockquote>
-<p>除了model本身的cot还可以是prompt的cot</p>
-<p><img src="/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250711095328828.png" alt="image-20250711095328828"></p>
-<h3 id="tottree-of-thought"><a class="markdownIt-Anchor" href="#tottree-of-thought"></a> ToT（Tree of Thought）</h3>
-<p>一种推理策略，它通过构建多条思维路径（像树一样分叉）并探索、评估每条路径，从而更系统地解决复杂问题。</p>
-<h2 id="22few-shot-1357error"><a class="markdownIt-Anchor" href="#22few-shot-1357error"></a> 2.2few-shot-{1,3,5,7,error}</h2>
-<img src="/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250711094439528.png" alt="image-20250711094439528" style="zoom:50%;">
-<h2 id="23-多-prompt-template-路由机制"><a class="markdownIt-Anchor" href="#23-多-prompt-template-路由机制"></a> 2.3 多 prompt-template 路由机制</h2>
-<p>你提到 <strong>“垂类资源路由到不同的 prompt 模板”</strong>，这是非常前沿的技术，通常涉及：</p>
-<ul>
-<li>使用一个 <strong>Query Router / Prompt Router</strong></li>
-<li>对用户输入先进行分类（如：情感分析 / 法律判断 / 财经摘要）</li>
-<li>然后调用对应 prompt 模板 + 指定模型</li>
-</ul>
-<h2 id="24sequential-prompting"><a class="markdownIt-Anchor" href="#24sequential-prompting"></a> 2.4sequential prompting</h2>
-<h2 id="function-call"><a class="markdownIt-Anchor" href="#function-call"></a> function call</h2>
-<p><img src="/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250729213840616.png" alt="image-20250729213840616"></p>
-<p><img src="/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250729214326614.png" alt="image-20250729214326614"></p>
-<h1 id="3-workflow工作流"><a class="markdownIt-Anchor" href="#3-workflow工作流"></a> 3 workflow工作流</h1>
-<p>什么是workflow</p>
-<blockquote>
-<p>接</p>
-</blockquote>
-<blockquote>
-<p>参考:<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/1913932324036379153">https://www.zhihu.com/question/1913932324036379153</a></p>
-</blockquote>
-<h2 id="31-准确率ai-agent的生命线"><a class="markdownIt-Anchor" href="#31-准确率ai-agent的生命线"></a> 3.1 准确率：AI Agent的生命线</h2>
-<p><img src="/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250804185241403.png" alt="image-20250804185241403"></p>
-<h2 id="32-长尾问题-28原则聚焦核心场景"><a class="markdownIt-Anchor" href="#32-长尾问题-28原则聚焦核心场景"></a> 3.2 长尾问题: 28原则：聚焦核心场景</h2>
-<p><img src="/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250804185258449.png" alt="image-20250804185258449"></p>
-<h2 id="33-100防幻觉沙盒化策略"><a class="markdownIt-Anchor" href="#33-100防幻觉沙盒化策略"></a> 3.3 100%防幻觉：沙盒化策略</h2>
-<p><img src="/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250804185309119.png" alt="image-20250804185309119"></p>
-<h2 id="34-提示工程从玩具到生产的跨越"><a class="markdownIt-Anchor" href="#34-提示工程从玩具到生产的跨越"></a> 3.4 提示工程：从玩具到生产的跨越</h2>
-<img src="/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/v2-6972ee535aa270b97356fbc29bde2105_720w.webp" alt="img" style="zoom:67%;">
-<h2 id="35-框架选择要不要用ai框架"><a class="markdownIt-Anchor" href="#35-框架选择要不要用ai框架"></a> 3.5 框架选择：要不要用AI框架</h2>
-<h1 id="4-prompt处理-上下文工程"><a class="markdownIt-Anchor" href="#4-prompt处理-上下文工程"></a> 4 Prompt处理 上下文工程</h1>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://www.youware.com/project/7529x70z4p">https://www.youware.com/project/7529x70z4p</a></p>
-</blockquote>
-<p><img src="/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/image-20250806224118390.png" alt="image-20250806224118390"></p>
-<h2 id="41-写入"><a class="markdownIt-Anchor" href="#41-写入"></a> 4.1 写入</h2>
-<blockquote>
-<p>持久化</p>
-</blockquote>
-<h4 id="选择"><a class="markdownIt-Anchor" href="#选择"></a> 选择</h4>
-<blockquote>
-<p>选择有用信息 concat</p>
-</blockquote>
-<h4 id="压缩"><a class="markdownIt-Anchor" href="#压缩"></a> 压缩</h4>
-<blockquote>
-<p>压缩总结</p>
-</blockquote>
-<h4 id="隔离"><a class="markdownIt-Anchor" href="#隔离"></a> 隔离</h4>
-<h3 id="上下文压缩"><a class="markdownIt-Anchor" href="#上下文压缩"></a> 上下文压缩</h3>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/07/11/2025%E5%B9%B47%E6%9C%8811%E6%97%A5-agent2/" data-id="cmdahfjal0003l4v475ah4uo2" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/agent/" rel="tag">agent</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2024年2月8日-循环神经网络" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/07/08/2024%E5%B9%B42%E6%9C%888%E6%97%A5-%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" class="article-date">
-  <time class="post-time" datetime="2025-07-08T01:08:13.000Z" itemprop="datePublished">
-    <span class="post-month">7月</span><br/>
-    <span class="post-day">08</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/07/08/2024%E5%B9%B42%E6%9C%888%E6%97%A5-%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/">2024年2月8日 循环神经网络</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/07/08/2024%E5%B9%B42%E6%9C%888%E6%97%A5-%E5%BE%AA%E7%8E%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" data-id="cmdahfjae0000l4v4gwam2a5y" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -968,7 +1310,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>146</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>148</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>41</strong><br>标签</div></a>
     </div>

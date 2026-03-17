@@ -43,7 +43,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>146</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>148</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>41</strong><br>标签</div></a>
     </div>
@@ -70,6 +70,291 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-2024年1月29日-python项目总结" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2024/01/29/2024%E5%B9%B41%E6%9C%8829%E6%97%A5-python%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/" class="article-date">
+  <time class="post-time" datetime="2024-01-29T15:12:02.000Z" itemprop="datePublished">
+    <span class="post-month">1月</span><br/>
+    <span class="post-day">29</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2024/01/29/2024%E5%B9%B41%E6%9C%8829%E6%97%A5-python%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/">2024年1月29日 python项目总结</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="python之项目总结"><a class="markdownIt-Anchor" href="#python之项目总结"></a> python之项目总结</h1>
+<h1 id="semversemantic-versioning"><a class="markdownIt-Anchor" href="#semversemantic-versioning"></a> <strong>SemVer（Semantic Versioning）</strong></h1>
+<h2 id="语法格式"><a class="markdownIt-Anchor" href="#语法格式"></a> 🧩 语法格式</h2>
+<p>标准格式是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">复制编辑</span><br><span class="line">MAJOR.MINOR.PATCH</span><br></pre></td></tr></table></figure>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">复制编辑</span><br><span class="line">1.4.2</span><br></pre></td></tr></table></figure>
+<p>表示：</p>
+<ul>
+<li><strong>MAJOR（主版本号）</strong>: 有破坏性更新（不向后兼容）</li>
+<li><strong>MINOR（次版本号）</strong>: 添加了新功能，但向后兼容</li>
+<li><strong>PATCH（修订号）</strong>: 修复了 bug，完全向后兼容</li>
+</ul>
+<h1 id="env"><a class="markdownIt-Anchor" href="#env"></a> .env</h1>
+<blockquote>
+<p>python-dotenv</p>
+</blockquote>
+<p><strong>没有类型！</strong><br>
+环境变量 <strong>本质上都是字符串</strong>，不管你写的是数字、布尔值、URL，读取出来都是字符串。</p>
+<h1 id="uv"><a class="markdownIt-Anchor" href="#uv"></a> UV</h1>
+<h3 id="uvlock"><a class="markdownIt-Anchor" href="#uvlock"></a> uv.lock</h3>
+<blockquote>
+<p>uv.lock 是 UV 包管理器的锁定文件，它的作用是：</p>
+<ol>
+<li>
+<p>锁定依赖版本：记录项目所有依赖包的确切版本号，确保在不同环境下安装相同的依赖版本</p>
+</li>
+<li>
+<p>确保一致性：防止因为依赖版本变化导致的兼容性问题</p>
+</li>
+<li>
+<p>加速安装：UV 可以直接从锁定文件安装，无需重新解析依赖关系</p>
+</li>
+</ol>
+<p>为什么需要更改：</p>
+<p>当我们添加了新的依赖包（如 python-jose、passlib、aiomysql 等）到 pyproject.toml 时，UV 会自动更新 uv.lock 文件来记录这些新依赖的确切版本信息，确保项目依赖的完整性和一致性。</p>
+</blockquote>
+<h1 id="pylint"><a class="markdownIt-Anchor" href="#pylint"></a> Pylint</h1>
+<h3 id="warning"><a class="markdownIt-Anchor" href="#warning"></a> Warning</h3>
+<p><code>C0116: Missing function or method docstring (missing-function-docstring)</code></p>
+<p><img src="/2024/01/29/2024%E5%B9%B41%E6%9C%8829%E6%97%A5-python%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/image-20250618092430851.png" alt="image-20250618092430851"></p>
+<p><code>C0103: Method name &quot;test_SqlModelResponse&quot; doesn't conform to snake_case naming style (invalid-name)</code></p>
+<blockquote>
+<p>原因：Python的命名约定要求：</p>
+<ul>
+<li>
+<p>函数和方法名使用小写字母和下划线（snake_case）</p>
+</li>
+<li>
+<p>类名使用驼峰命名法（CamelCase）</p>
+</li>
+<li>
+<p>常量使用大写字母和下划线（UPPER_SNAKE_CASE）</p>
+</li>
+</ul>
+</blockquote>
+<p>``</p>
+<p><img src="/2024/01/29/2024%E5%B9%B41%E6%9C%8829%E6%97%A5-python%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/image-20250618092853677.png" alt="image-20250618092853677"></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Settings</span>(<span class="title class_ inherited__">BaseSettings</span>):</span><br><span class="line">    app_name: <span class="built_in">str</span> = os.getenv(<span class="string">&quot;APP_NAME&quot;</span>, <span class="string">&quot;FastAPI App&quot;</span>)</span><br><span class="line">    model_name: <span class="built_in">str</span> = os.getenv(<span class="string">&quot;MODEL_NAME&quot;</span>, <span class="string">&quot;qwen-latest&quot;</span>)</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, **data</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__(**data)</span><br><span class="line">settings = Settings()</span><br></pre></td></tr></table></figure>
+<p><img src="/2024/01/29/2024%E5%B9%B41%E6%9C%8829%E6%97%A5-python%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/image-20250618093034205.png" alt="image-20250618093034205"></p>
+<p><code>W1203: Use lazy % formatting in logging functions (logging-fstring-interpolation)</code></p>
+<p>这是性能优化建议，使用%格式化可以提高日志记录的性能。</p>
+<p><img src="/2024/01/29/2024%E5%B9%B41%E6%9C%8829%E6%97%A5-python%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/image-20250618093248160.png" alt="image-20250618093248160"></p>
+<p><a target="_blank" rel="noopener" href="https://mermaid-live.nodejs.cn/edit#pako:eNpVkU1PwkAQhv_KZk6YIFCkLfRgIh9yMprISeuhsQs00pYs20QlHLwYPxASIxKjqImaGA9owsEDMfwZW_BfuLuI0T3N7PvMO7szddh2TQwalIhRLaNCVncQWtrUIRg8-4dNFFpbXS-gKMElq0YxmdNhC83PL6I0Q8ZXQ_-jM0Oou4MdrnOHtIAyDJq03v32pRB_tIzQslzrj766fb_d_Rz1gpPHoPXktx9QKJ9jdhbFdi0688uKmhxvOhiOh3dfL83J68Ff1xwjUHBzHHSOBLvM_UcX_vVt0HkLzvr_sO79DMvzr56ej4e96WNQKBGTeFcIs5FYJmiUeDgMNia2wVOocxsdaBnbWAeNhSYuGl6F6qA7DVZWNZwN17VnlcT1SmXQikalxjKvahoUZy2Dzdv-vSXYMTHJuJ5DQZMU4QFaHXZZJskRWVWTKVlioaLEEmHYA02VI6kkOwmFKXE52QjDvmgai6jygiTFFXVBlVMJwWPToi5ZmS5a7LvxDTsutSo"><img src="https://mermaid.ink/img/pako:eNpVkU1PwkAQhv_KZk6YIFCkLfRgIh9yMprISeuhsQs00pYs20QlHLwYPxASIxKjqImaGA9owsEDMfwZW_BfuLuI0T3N7PvMO7szddh2TQwalIhRLaNCVncQWtrUIRg8-4dNFFpbXS-gKMElq0YxmdNhC83PL6I0Q8ZXQ_-jM0Oou4MdrnOHtIAyDJq03v32pRB_tIzQslzrj766fb_d_Rz1gpPHoPXktx9QKJ9jdhbFdi0688uKmhxvOhiOh3dfL83J68Ff1xwjUHBzHHSOBLvM_UcX_vVt0HkLzvr_sO79DMvzr56ej4e96WNQKBGTeFcIs5FYJmiUeDgMNia2wVOocxsdaBnbWAeNhSYuGl6F6qA7DVZWNZwN17VnlcT1SmXQikalxjKvahoUZy2Dzdv-vSXYMTHJuJ5DQZMU4QFaHXZZJskRWVWTKVlioaLEEmHYA02VI6kkOwmFKXE52QjDvmgai6jygiTFFXVBlVMJwWPToi5ZmS5a7LvxDTsutSo?type=png" alt></a></p>
+<h1 id="打包"><a class="markdownIt-Anchor" href="#打包"></a> 打包</h1>
+<h2 id="0-源码包与二进制包什么区别"><a class="markdownIt-Anchor" href="#0-源码包与二进制包什么区别"></a> 0 源码包与二进制包什么区别？</h2>
+<p>Python 包的分发可以分为两种：</p>
+<p>1、以源码包的方式发布</p>
+<p>源码包安装的过程，是先解压，再编译，最后才安装，所以它是跨平台的，由于每次安装都要进行编译，相对二进包安装方式来说安装速度较慢。<img src="https://pic1.zhimg.com/80/v2-dffd77a245997a841eb426d9c0ce5184_1440w.webp" alt="img"></p>
+<p>2、以二进制包形式发布</p>
+<p>二进制包的安装过程省去了编译的过程，直接进行解压安装，所以安装速度较源码包来说更快。</p>
+<p>由于不同平台的编译出来的包无法通用，所以在发布时，需事先编译好多个平台的包。<img src="https://pic4.zhimg.com/v2-b0a22d8b82eac1f25bc6a1b95f6e0c2f_r.jpg" alt="img"></p>
+<h2 id="1-python-中的-requirementstxt-与-setuppy区别"><a class="markdownIt-Anchor" href="#1-python-中的-requirementstxt-与-setuppy区别"></a> 1 Python 中的 requirements.txt 与 setup.py区别</h2>
+<ol>
+<li>
+<p><strong>requirements.txt</strong>:</p>
+<ul>
+<li>
+<p><strong>作用</strong>: <code>requirements.txt</code>文件通常用于列出项目所依赖的第三方库及其版本信息。</p>
+</li>
+<li>
+<dl>
+<dt>格式</dt>
+<dd>每行一个依赖项，通常包括库的名称和版本号，例如：</dd>
+</dl>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">requests==2.26.0</span><br><span class="line">numpy==1.21.5</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>安装依赖</strong>: 通过运行<code>pip install -r requirements.txt</code>命令，可以一次性安装所有列出的依赖项。</p>
+</li>
+</ul>
+</li>
+<li>
+<p><strong><a target="_blank" rel="noopener" href="http://setup.py">setup.py</a></strong>:</p>
+<hr>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">待解决</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p><strong>我们常见的运行命令</strong>，“pip install  模块名”或者“python <a target="_blank" rel="noopener" href="http://setup.py">setup.py</a> install”，前者是在线安装，会安装该包的相关依赖包；后者是下载源码包然后在本地安装，不会安装该包的相关依赖包。</p>
+</li>
+<li>
+<p><strong>在编写相关系统时，如何实现连同依赖包一起打包发布</strong>？</p>
+</li>
+</ul>
+<p>假如我在本机开发一个程序，需要用到python的redis、mysql模块以及自己编写的redis_run.py模块。我怎么实现在<strong>服务器</strong>上去发布该系统，如何实现依赖模块和自己编写的模块redis_run.py一起打包，实现一键安装呢？同时将自己编写的redis_run.py模块以exe文件格式安装到python的全局执行路径~/Python27/Scripts下呢？</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python setup.py install</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p><strong>作用</strong>: <code>setup.py</code>文件是一个 Python 脚本，用于定义项目的元数据和其他相关配置，例如项目名称、版本、作者信息、依赖关系等。</p>
+</li>
+<li>
+<p><strong>如何编写</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">from setuptools import setup, find_packages</span><br><span class="line"></span><br><span class="line">setup(</span><br><span class="line">    name=&quot;example&quot;,</span><br><span class="line">    version=&quot;0.1&quot;,</span><br><span class="line">    packages=find_packages(),</span><br><span class="line">    install_requires=[</span><br><span class="line">        &#x27;requests&gt;=2.26.0&#x27;,</span><br><span class="line">        &#x27;numpy&gt;=1.21.5&#x27;</span><br><span class="line">    ],</span><br><span class="line">    author=&quot;Your Name&quot;,</span><br><span class="line">    author_email=&quot;your@email.com&quot;,</span><br><span class="line">    description=&quot;Description of your project&quot;,</span><br><span class="line">    ...</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>安装依赖</strong>: 通过在<code>install_requires</code>参数中指定依赖项，可以告诉 <code>setuptools</code> 安装项目所需的依赖项。当用户运行<code>python setup.py install</code>时，<code>setuptools</code>会自动处理依赖项的安装。</p>
+</li>
+</ul>
+</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2024/01/29/2024%E5%B9%B41%E6%9C%8829%E6%97%A5-python%E9%A1%B9%E7%9B%AE%E6%80%BB%E7%BB%93/" data-id="cmcabapwh00026wv4crq9ee4v" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2024年1月28日-Git连接出错" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2024/01/28/2024%E5%B9%B41%E6%9C%8828%E6%97%A5-Git%E8%BF%9E%E6%8E%A5%E5%87%BA%E9%94%99/" class="article-date">
+  <time class="post-time" datetime="2024-01-27T16:55:09.000Z" itemprop="datePublished">
+    <span class="post-month">1月</span><br/>
+    <span class="post-day">28</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2024/01/28/2024%E5%B9%B41%E6%9C%8828%E6%97%A5-Git%E8%BF%9E%E6%8E%A5%E5%87%BA%E9%94%99/">2024年1月28日 Git连接出错</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="git连接出错-hexo-d出错"><a class="markdownIt-Anchor" href="#git连接出错-hexo-d出错"></a> Git<strong>连接出错</strong> + hexo d出错</h1>
+<h2 id="问题前置"><a class="markdownIt-Anchor" href="#问题前置"></a> 问题前置：</h2>
+<ul>
+<li>github 被盗， 选重新登录</li>
+<li>更改google账号密码 同时重新登录github</li>
+</ul>
+<h2 id="问题描述"><a class="markdownIt-Anchor" href="#问题描述"></a> 问题描述：</h2>
+<ul>
+<li>发现 <code>Hexo d</code>命令运行失败</li>
+<li>报错发现是github 连接失败</li>
+<li>排查后是<strong>git连接失败</strong></li>
+<li>之后之git出错，无法正常连接github</li>
+</ul>
+<h2 id="解决过程"><a class="markdownIt-Anchor" href="#解决过程"></a> 解决过程：</h2>
+<h2 id="参考hexo官方代码发现一样地问题"><a class="markdownIt-Anchor" href="#参考hexo官方代码发现一样地问题"></a> 参考hexo官方代码发现一样地问题</h2>
+<p>参考：<a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues/2767">https://github.com/hexojs/hexo/issues/2767</a></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh -T git@github.com</span><br></pre></td></tr></table></figure>
+<h3 id="11中途报错ssh-t-gitgithubcom命令运行失败"><a class="markdownIt-Anchor" href="#11中途报错ssh-t-gitgithubcom命令运行失败"></a> 1.1中途报错ssh -T git@github.com`·命令运行失败</h3>
+<p>解决办法：</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/the__future/article/details/130038818">https://blog.csdn.net/the__future/article/details/130038818</a></p>
+<h4 id="111-途出现报错"><a class="markdownIt-Anchor" href="#111-途出现报错"></a> 1.1.1 途出现报错：</h4>
+<p>$ git clone <a href="mailto:git@github.com">git@github.com</a>:ShakeWeLy/ShakeWely.github.io.git<br>
+Cloning into ‘<a href="http://ShakeWely.github.io">ShakeWely.github.io</a>’…<br>
+ssh: Could not resolve hostname <a target="_blank" rel="noopener" href="http://github.com">github.com</a>: Name or service not known<br>
+fatal: Could not read from remote repository.</p>
+<p>Please make sure you have the correct access rights<br>
+and the repository exists.<br>
+(base)</p>
+<p>$ ssh-add ~/.ssh/id_rsa</p>
+<p>Could not open a connection to your authentication agent.</p>
+<p><strong>分析问题发现：</strong></p>
+<p>git 无法连接 GitHub</p>
+<p><strong>解决办法：</strong></p>
+<p>运行如下命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">eval &quot;$(ssh-agent -s)&quot;</span><br><span class="line">ssh-add ~/.ssh/id_rsa</span><br></pre></td></tr></table></figure>
+<h4 id="112-问题2成功解决"><a class="markdownIt-Anchor" href="#112-问题2成功解决"></a> 1.1.2 问题2成功解决</h4>
+<p>同时能够git GitHub上的文件</p>
+<p><img src="/2024/01/28/2024%E5%B9%B41%E6%9C%8828%E6%97%A5-Git%E8%BF%9E%E6%8E%A5%E5%87%BA%E9%94%99/image-20240128013153361.png" alt="image-20240128013153361"></p>
+<h3 id="12-又出现新的报错"><a class="markdownIt-Anchor" href="#12-又出现新的报错"></a> 1.2 又出现新的报错</h3>
+<p>ssh: Could not resolve hostname <a target="_blank" rel="noopener" href="http://ssh.github.com">ssh.github.com</a>: Name or service not known<br>
+fatal: Could not read from remote repository.</p>
+<p>Please make sure you have the correct access rights<br>
+and the repository exists.</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">ssh: <span class="title">Could</span> <span class="title">not</span> <span class="title">resolve</span> <span class="title">hostname</span> <span class="title">ssh.github.com</span>: <span class="title">Name</span> <span class="title">or</span> <span class="title">service</span> <span class="title">not</span> <span class="title">known</span></span></span><br><span class="line"><span class="function"><span class="title">fatal</span>: <span class="title">Could</span> <span class="title">not</span> <span class="title">read</span> <span class="title">from</span> <span class="title">remote</span> <span class="title">repository</span>.</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="title">Please</span> <span class="title">make</span> <span class="title">sure</span> <span class="title">you</span> <span class="title">have</span> <span class="title">the</span> <span class="title">correct</span> <span class="title">access</span> <span class="title">rights</span></span></span><br><span class="line"><span class="function"><span class="title">and</span> <span class="title">the</span> <span class="title">repository</span> <span class="title">exists</span>.</span></span><br><span class="line"><span class="function">[41<span class="title">mFATAL</span>[49<span class="title">m</span> <span class="title">Something</span>&#x27;<span class="title">s</span> <span class="title">wrong</span>. <span class="title">Maybe</span> <span class="title">you</span> <span class="title">can</span> <span class="title">find</span> <span class="title">the</span> <span class="title">solution</span> <span class="title">here</span>: [4<span class="title">mhttps</span>://<span class="title">hexo.io</span>/<span class="title">docs</span>/<span class="title">troubleshooting.html</span>[24<span class="title">m</span></span></span><br><span class="line"><span class="function">[33<span class="title">mError</span>: <span class="title">Spawn</span> <span class="title">failed</span></span></span><br><span class="line"><span class="function">    <span class="title">at</span> <span class="title">ChildProcess</span>.&lt;<span class="title">anonymous</span>&gt; (<span class="title">F</span>:\.<span class="title">Hexo</span>\<span class="title">MyBlog</span>\<span class="title">node_modules</span>\<span class="title">hexo</span>-<span class="title">util</span>\<span class="title">lib</span>\<span class="title">spawn.js</span>:51:21)</span></span><br><span class="line"><span class="function">    <span class="title">at</span> <span class="title">ChildProcess.emit</span> (<span class="title">node:events</span>:514:28)</span></span><br><span class="line"><span class="function">    <span class="title">at</span> <span class="title">cp.emit</span> (<span class="title">F</span>:\.<span class="title">Hexo</span>\<span class="title">MyBlog</span>\<span class="title">node_modules</span>\<span class="title">cross</span>-<span class="title">spawn</span>\<span class="title">lib</span>\<span class="title">enoent.js</span>:34:29)</span></span><br><span class="line"><span class="function">    <span class="title">at</span> <span class="title">ChildProcess._handle.onexit</span> (<span class="title">node:internal</span>/<span class="title">child_process</span>:291:12)</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2024/01/28/2024%E5%B9%B41%E6%9C%8828%E6%97%A5-Git%E8%BF%9E%E6%8E%A5%E5%87%BA%E9%94%99/image-20240128014016280.png" alt="image-20240128014016280"></p>
+<h4 id="121-尝试解决"><a class="markdownIt-Anchor" href="#121-尝试解决"></a> 1.2.1 尝试解决</h4>
+<p><strong>失败！</strong></p>
+<p><img src="/2024/01/28/2024%E5%B9%B41%E6%9C%8828%E6%97%A5-Git%E8%BF%9E%E6%8E%A5%E5%87%BA%E9%94%99/image-20240128014544122.png" alt="image-20240128014544122"></p>
+<p><img src="/2024/01/28/2024%E5%B9%B41%E6%9C%8828%E6%97%A5-Git%E8%BF%9E%E6%8E%A5%E5%87%BA%E9%94%99/image-20240128014525556.png" alt="image-20240128014525556"></p>
+<p>换回来</p>
+<p>检查发现</p>
+<p>ssh: Could not resolve hostname <a target="_blank" rel="noopener" href="http://ssh.github.com">ssh.github.com</a>: Name or service not known<br>
+<strong>fatal: Could not read from remote repository.不一样</strong></p>
+<h4 id="122-成功解决"><a class="markdownIt-Anchor" href="#122-成功解决"></a> 1.2.2 成功解决</h4>
+<p><img src="/2024/01/28/2024%E5%B9%B41%E6%9C%8828%E6%97%A5-Git%E8%BF%9E%E6%8E%A5%E5%87%BA%E9%94%99/image-20240128015804141.png" alt="image-20240128015804141"></p>
+<h3 id="13-运行hexo-d-仍然报错"><a class="markdownIt-Anchor" href="#13-运行hexo-d-仍然报错"></a> 1.3 运行hexo d 仍然报错</h3>
+<p>permission denied</p>
+<p><img src="/2024/01/28/2024%E5%B9%B41%E6%9C%8828%E6%97%A5-Git%E8%BF%9E%E6%8E%A5%E5%87%BA%E9%94%99/image-20240128015729455.png" alt="image-20240128015729455"></p>
+<h4 id="131-解决办法"><a class="markdownIt-Anchor" href="#131-解决办法"></a> 1.3.1 解决办法</h4>
+<p>重现配置<strong>git 连接密钥</strong></p>
+<p><img src="/2024/01/28/2024%E5%B9%B41%E6%9C%8828%E6%97%A5-Git%E8%BF%9E%E6%8E%A5%E5%87%BA%E9%94%99/image-20240128015713513.png" alt="image-20240128015713513"></p>
+<h3 id="14-成功运行"><a class="markdownIt-Anchor" href="#14-成功运行"></a> 1.4 成功运行</h3>
+<p>重新运行hexo d</p>
+<p><img src="/2024/01/28/2024%E5%B9%B41%E6%9C%8828%E6%97%A5-Git%E8%BF%9E%E6%8E%A5%E5%87%BA%E9%94%99/image-20240128015706261.png" alt="image-20240128015706261"></p>
+<p><img src="/2024/01/28/2024%E5%B9%B41%E6%9C%8828%E6%97%A5-Git%E8%BF%9E%E6%8E%A5%E5%87%BA%E9%94%99/image-20240128020330252.png" alt="image-20240128020330252"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2024/01/28/2024%E5%B9%B41%E6%9C%8828%E6%97%A5-Git%E8%BF%9E%E6%8E%A5%E5%87%BA%E9%94%99/" data-id="clrwbbrv80000rsv483mkbnhr" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%8A%A5%E9%94%99%E8%AE%B0%E5%BD%95/" rel="tag">报错记录</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-2024年1月27日-gradio实践" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -262,7 +547,12 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="可变对象"><a class="markdownIt-Anchor" href="#可变对象"></a> 可变对象</h2>
+        <h1 id="属性"><a class="markdownIt-Anchor" href="#属性"></a> 属性</h1>
+<h2 id="列表"><a class="markdownIt-Anchor" href="#列表"></a> 列表</h2>
+<ol>
+<li>空列表获取[0] 会怎么样, 能返回 ‘’ 空字符串吗</li>
+</ol>
+<h2 id="可变对象"><a class="markdownIt-Anchor" href="#可变对象"></a> 可变对象</h2>
 <p>（如列表）</p>
 <ul>
 <li>原因：直接赋值可变对象（如列表）会导致所有实例共享同一个对象，修改一个实例会影响其他实例：</li>
@@ -980,6 +1270,361 @@ from mypackage import utils  # ✅ OK，因为 utils 是个模块</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="built_in">hasattr</span>(sys, <span class="string">&#x27;javsp_debug_mode&#x27;</span>):</span><br><span class="line">        lxml.html.open_in_browser(html, encoding=encoding)  <span class="comment"># for develop and debug</span></span><br></pre></td></tr></table></figure>
 <p># 1. 开启调试模式：给sys添加 javsp_debug_mode 属性</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sys.javsp_debug_mode = <span class="literal">True</span>  <span class="comment"># 值可以是任意（True/False/1/&#x27;debug&#x27;都可以）</span></span><br></pre></td></tr></table></figure>
+<h1 id="python特征"><a class="markdownIt-Anchor" href="#python特征"></a> python特征</h1>
+<h3 id="模块级全局变量"><a class="markdownIt-Anchor" href="#模块级全局变量"></a> 模块级全局变量</h3>
+<p><strong>为什么 <code>base.py</code> 里 <code>_pools</code> / <code>_db_ensured</code> 是“全局变量”？算不算“真的全局”？</strong></p>
+<p>是的，它们是 <strong>模块级全局变量</strong>（module-level globals）：</p>
+<ul>
+<li><strong>为什么是全局</strong>：它们<strong>定义在 <code>app/core/database/base.py</code> 的最外层作用域</strong>，不在任何函数/类里面：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># 多数据库连接池字典：&#123;db_name: pool&#125;</span><br><span class="line">_pools: Dict[str, aiomysql.Pool] = &#123;&#125;</span><br><span class="line">_db_ensured: Dict[str, bool] = &#123;&#125;  # 记录已确保存在的数据库</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>“全局”的范围</strong>：它们对 <strong>同一个 Python 进程</strong> 来说是全局且单例的（<code>import app.core.database.base</code> 的所有地方都会共享同一份 <code>_pools</code> / <code>_db_ensured</code>）。
+<ul>
+<li>但它们<strong>不是跨进程全局</strong>：如果你开了多个 worker/进程（例如 gunicorn/uvicorn 多进程），<strong>每个进程都会有自己的一份 <code>_pools</code></strong>。</li>
+</ul>
+</li>
+<li><strong>为什么要这么设计</strong>：为了实现 <code>get_pool(db_name)</code> 的缓存复用——同进程同库名只创建一次连接池，避免每个业务模块各自 <code>create_pool()</code> 把连接数叠加。</li>
+</ul>
+<blockquote>
+<p>真正会“消失/销毁”的典型场景只有：</p>
+<ul>
+<li><strong>进程退出/重启</strong>：内存整体释放。</li>
+<li><strong>你主动 <code>close_pool/close_all_pools</code> 并从 dict 里 <code>del</code> 掉</strong>：引用断开，才可能被回收。</li>
+<li><strong>热重载/重复启动</strong>：旧进程退出，新进程重新 import，新的一份全局变量重新创建。</li>
+</ul>
+</blockquote>
+<h2 id="垃圾回收"><a class="markdownIt-Anchor" href="#垃圾回收"></a> 垃圾回收</h2>
+<h4 id="python-垃圾回收机制和这里的关系"><a class="markdownIt-Anchor" href="#python-垃圾回收机制和这里的关系"></a> Python 垃圾回收机制（和这里的关系）</h4>
+<p>Python（CPython）主要是两套机制一起工作：</p>
+<ul>
+<li>
+<p><strong>引用计数（立即释放为主）</strong></p>
+<ul>
+<li>每个对象都有引用计数 <code>refcount</code>。</li>
+<li>当 <code>refcount == 0</code> 时，对象会<strong>立刻</strong>被释放（调用 <code>__del__</code>/资源释放逻辑如果有）。</li>
+<li>你这里：<code>_pools[db_name] = pool</code> 让 <code>pool</code> 的引用计数至少为 1，所以<strong>不会到 0</strong>，不会释放。</li>
+</ul>
+</li>
+<li>
+<p><strong>循环垃圾回收（处理“互相引用但外部不可达”的对象）</strong></p>
+<ul>
+<li>解决：A 引用 B、B 引用 A，导致引用计数都不为 0，但外部已经访问不到。</li>
+<li>GC 会定期扫描，发现“不可达的循环引用”就回收。</li>
+<li>你这里：不是循环引用问题，而是<strong>仍然可达</strong>（从模块全局 dict 可达），所以 GC 也不会动。</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>把池放在模块全局，本质上是“进程级单例资源”，应当在应用 shutdown 时显式关闭。</p>
+</blockquote>
+<h2 id="内存管理"><a class="markdownIt-Anchor" href="#内存管理"></a> 内存管理</h2>
+<h3 id="载入内存"><a class="markdownIt-Anchor" href="#载入内存"></a> 载入内存</h3>
+<ul>
+<li>
+<p>只有<strong>被 import 的模块</strong>，才会被载入内存。目录里那些 template/*.py，如果从来没被 import，就只是硬盘上的文件，不占进程内存。</p>
+</li>
+<li>
+<p>一旦某个模块被 import，模块顶层的东西（变量、函数、类、常量字符串等）都会立即创建到内存里，不管你写没写类。</p>
+</li>
+</ul>
+<h3 id="懒加载"><a class="markdownIt-Anchor" href="#懒加载"></a> 懒加载</h3>
+<h4 id="1-懒加载对内存的优势"><a class="markdownIt-Anchor" href="#1-懒加载对内存的优势"></a> 1. 懒加载对内存的优势</h4>
+<p><strong>前提：资源“够大 + 不一定会用到”时，懒加载才有意义。</strong></p>
+<ul>
+<li><strong>减少“永远没用上的占用”</strong><br>
+某些大对象（长 prompt、大配置 dict、大模型权重）如果只在少数请求场景下用到，懒加载可以让：
+<ul>
+<li>没触发那个场景的进程，<strong>完全不为它分配内存</strong>。</li>
+</ul>
+</li>
+<li><strong>降低启动时内存峰值 &amp; 加快启动</strong>
+<ul>
+<li>进程启动只加载必要东西，其他按需创建，可以让服务：
+<ul>
+<li>启动更快</li>
+<li>刚启动时的内存占用更小</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>易于“加载后再释放”</strong>
+<ul>
+<li>有的懒加载实现会加“过期/清理”策略，用完一段时间又释放，进一步控制长期占用。</li>
+</ul>
+</li>
+</ul>
+<p>如果只是几 KB 的字符串模板，收益很有限；如果是几十 MB 的大表/大模型，就很值。</p>
+<hr>
+<h4 id="2-懒加载怎么实现的核心思想"><a class="markdownIt-Anchor" href="#2-懒加载怎么实现的核心思想"></a> 2. 懒加载“怎么实现”的核心思想</h4>
+<p>关键不是“写不写成类变量”，而是：</p>
+<blockquote>
+<p><strong>不要在模块 import 时就创建大对象，而是在“第一次真正需要时”才创建。</strong></p>
+</blockquote>
+<p>常见几种写法：</p>
+<ul>
+<li><strong>函数懒加载（最简单）</strong></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">get_react_template</span>() -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="comment"># 每次调用都返回字符串（小对象可以直接这样）</span></span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    ... 很长的 prompt ...</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+<p>如果你希望“大对象只创建一次、后面复用”，可以加缓存：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> lru_cache</span><br><span class="line"></span><br><span class="line"><span class="meta">@lru_cache(<span class="params">maxsize=<span class="number">1</span></span>)</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_big_config</span>() -&gt; <span class="built_in">dict</span>:</span><br><span class="line">    <span class="comment"># 第一次调用时构建/读取</span></span><br><span class="line">    cfg = load_from_file_or_db()</span><br><span class="line">    <span class="keyword">return</span> cfg</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>属性/属性方法懒加载</strong></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">PromptStore</span>:</span><br><span class="line">    _template: <span class="type">Optional</span>[<span class="built_in">str</span>] = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">template</span>(<span class="params">self</span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">        <span class="keyword">if</span> self._template <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="comment"># 第一次访问时加载</span></span><br><span class="line">            self._template = load_template_from_file()</span><br><span class="line">        <span class="keyword">return</span> self._template</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>模块级懒加载（和上面类似）</strong></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">_template: <span class="type">Optional</span>[<span class="built_in">str</span>] = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_template</span>() -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="keyword">global</span> _template</span><br><span class="line">    <span class="keyword">if</span> _template <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        _template = load_template_from_file()</span><br><span class="line">    <span class="keyword">return</span> _template</span><br></pre></td></tr></table></figure>
+<hr>
+<h4 id="3-类变量-vs-懒加载的区别"><a class="markdownIt-Anchor" href="#3-类变量-vs-懒加载的区别"></a> 3. 类变量 vs 懒加载的区别</h4>
+<ul>
+<li><strong>类变量 / 模块常量</strong></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">X</span>:</span><br><span class="line">    TEMPLATE = <span class="string">&quot;...&quot;</span>  <span class="comment"># 模块 import 时就创建</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>懒加载</strong></li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">get_template</span>():</span><br><span class="line">    <span class="comment"># 第一次调用才真正创建/读取</span></span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+<p><strong>所以：不是“写在类里就会懒加载”，而是“是否在 import 时就直接赋值”决定了是不是懒加载。</strong><br>
+如果你的 prompt 模板不大（几 KB～几十 KB），直接用模块常量/类变量即可，简单又清晰；只有明显大的东西、或不常用的才值得懒加载。</p>
+<h2 id="生命周期"><a class="markdownIt-Anchor" href="#生命周期"></a> 生命周期</h2>
+<h3 id="快速介绍"><a class="markdownIt-Anchor" href="#快速介绍"></a> 快速介绍</h3>
+<h4 id="1-selfprompt_template-的生命周期"><a class="markdownIt-Anchor" href="#1-selfprompt_template-的生命周期"></a> 1. <code>self.prompt_template</code> 的生命周期</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># chat_react_agent.py 第50行</span></span><br><span class="line">self.prompt_template = GeneralPromptTemplate()</span><br></pre></td></tr></table></figure>
+<ul>
+<li>这是实例属性，在 <code>ChatReactAgent.__init__()</code> 中创建。</li>
+<li>生命周期：只要 <code>ChatReactAgent</code> 实例存在，<code>self.prompt_template</code> 就一直存在。</li>
+<li>因为 <code>agent_manager</code> 是全局单例（第178行），它持有的 <code>self.agents[&quot;ChatAgent&quot;]</code> 会一直存在，所以 <code>self.prompt_template</code> 会一直存在，直到进程退出。</li>
+</ul>
+<h4 id="2-system_prompt-的生命周期"><a class="markdownIt-Anchor" href="#2-system_prompt-的生命周期"></a> 2. <code>system_prompt</code> 的生命周期</h4>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># chat_react_agent.py 第127行</span></span><br><span class="line">system_prompt = self.prompt_template.with_system_prompt(...).<span class="built_in">format</span>()</span><br></pre></td></tr></table></figure>
+<ul>
+<li>这是 <code>think()</code> 方法中的局部变量。</li>
+<li>生命周期：
+<ul>
+<li>在 <code>think()</code> 执行期间存在。</li>
+<li>函数结束后，如果没有其他引用，可能被 GC 回收。</li>
+<li>但这里 <code>system_prompt</code> 会被传给 <code>self.service.get_functool_response()</code>（第132-136行），如果 <code>service</code> 内部保存了引用，可能不会立即回收。</li>
+</ul>
+</li>
+</ul>
+<h5 id="内存占用对比"><a class="markdownIt-Anchor" href="#内存占用对比"></a> 内存占用对比</h5>
+<table>
+<thead>
+<tr>
+<th>对象</th>
+<th>类型</th>
+<th>生命周期</th>
+<th>内存占用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>self.prompt_template</code></td>
+<td>实例属性</td>
+<td>进程级持久</td>
+<td><code>GeneralPromptTemplate</code> 对象（包含模板字符串引用）</td>
+</tr>
+<tr>
+<td><code>system_prompt</code></td>
+<td>局部变量</td>
+<td>函数执行期间</td>
+<td>格式化后的字符串（可能很大，包含完整 prompt）</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<h4 id="关键点"><a class="markdownIt-Anchor" href="#关键点"></a> 关键点</h4>
+<ol>
+<li><code>self.prompt_template</code> 是模板对象，不是最终字符串，它持有模板字符串的引用（<code>GENERAL_PROMPT_TEMPLATE</code>）。</li>
+<li><code>system_prompt</code> 是每次调用 <code>think()</code> 时动态生成的最终字符串，可能包含大量内容（用户问题、记忆、用户画像等）。</li>
+<li>如果 <code>system_prompt</code> 很大且频繁生成，即使它是局部变量，在函数执行期间也会占用内存；函数结束后如果没有其他引用，才会被回收。</li>
+</ol>
+<h4 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h4>
+<ul>
+<li><code>self.prompt_template</code>：持久存在（只要 agent 实例存在）。</li>
+<li><code>system_prompt</code>：函数结束后可能被回收，但每次调用都会创建新的字符串对象。</li>
+</ul>
+<p>你的理解方向是对的</p>
+</blockquote>
+<h3 id="生命周期汇总"><a class="markdownIt-Anchor" href="#生命周期汇总"></a> 生命周期汇总</h3>
+<p>汇总 Python 对象生命周期，并结合项目代码示例说明：</p>
+<blockquote>
+<h3 id="1-模块级全局变量module-level-globals"><a class="markdownIt-Anchor" href="#1-模块级全局变量module-level-globals"></a> 1. 模块级全局变量（Module-level Globals）</h3>
+<p>生命周期：进程级持久（从模块首次 import 到进程退出）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app/core/database/base.py</span></span><br><span class="line">_pools: <span class="type">Dict</span>[<span class="built_in">str</span>, aiomysql.Pool] = &#123;&#125;  <span class="comment"># ← 模块级全局变量</span></span><br><span class="line">_db_ensured: <span class="type">Dict</span>[<span class="built_in">str</span>, <span class="built_in">bool</span>] = &#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>特点：</p>
+<ul>
+<li>模块首次被 import 时创建</li>
+<li>只要模块在 <code>sys.modules</code> 中，就一直存在</li>
+<li>进程退出时才会被销毁</li>
+</ul>
+<p>项目示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app/core/agents/prompt/template/general.py</span></span><br><span class="line">GENERAL_PROMPT_TEMPLATE = <span class="string">&quot;&quot;&quot;...&quot;&quot;&quot;</span>  <span class="comment"># ← 模块级常量，进程级持久</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># app/core/agents/service/intent_service.py</span></span><br><span class="line">INTENT_SELECTION_SYSTEM_PROMPT_TEMPLATE = <span class="string">&quot;&quot;&quot;...&quot;&quot;&quot;</span>  <span class="comment"># ← 模块级常量</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="2-全局单例实例global-singleton-instance"><a class="markdownIt-Anchor" href="#2-全局单例实例global-singleton-instance"></a> 2. 全局单例实例（Global Singleton Instance）</h3>
+<p>生命周期：进程级持久（从模块 import 到进程退出）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app/core/agents/agent_manager.py</span></span><br><span class="line">agent_manager = AgentManager()  <span class="comment"># ← 全局单例，进程级持久</span></span><br></pre></td></tr></table></figure>
+<p>特点：</p>
+<ul>
+<li>模块 import 时创建</li>
+<li>被模块级变量持有引用，不会自动回收</li>
+<li>进程退出时销毁</li>
+</ul>
+<p>项目示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app/core/database/base.py</span></span><br><span class="line"><span class="comment"># _pools 字典持有连接池引用，连接池不会自动回收</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># app/core/agents/agent_manager.py</span></span><br><span class="line">agent_manager = AgentManager()  <span class="comment"># 全局单例，持有所有 agent 实例</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="3-类属性class-attributes"><a class="markdownIt-Anchor" href="#3-类属性class-attributes"></a> 3. 类属性（Class Attributes）</h3>
+<p>生命周期：类定义时创建，进程级持久</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app/core/agents/prompt/template/general.py</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GeneralPromptTemplate</span>(<span class="title class_ inherited__">PromptTemplate</span>):</span><br><span class="line">    template = GENERAL_PROMPT_TEMPLATE  <span class="comment"># ← 类属性，类定义时创建</span></span><br></pre></td></tr></table></figure>
+<p>特点：</p>
+<ul>
+<li>类定义时创建（类对象本身也是模块级对象）</li>
+<li>所有实例共享</li>
+<li>进程退出时销毁</li>
+</ul>
+<p>项目示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app/core/agents/prompt/base_prompt.py</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">DB_BaseModel</span>(metaclass=BaseModelMeta):</span><br><span class="line">    fields: <span class="type">Dict</span>[<span class="built_in">str</span>, Field] = &#123;&#125;  <span class="comment"># ← 类属性</span></span><br><span class="line">    table_name: <span class="type">Optional</span>[<span class="built_in">str</span>] = <span class="literal">None</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="4-实例属性instance-attributes"><a class="markdownIt-Anchor" href="#4-实例属性instance-attributes"></a> 4. 实例属性（Instance Attributes）</h3>
+<p>生命周期：实例创建时创建，实例被回收时销毁</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app/core/agents/chat_react_agent.py</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ChatReactAgent</span>(<span class="title class_ inherited__">ReactAgent</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        self.prompt_template = GeneralPromptTemplate()  <span class="comment"># ← 实例属性</span></span><br><span class="line">        self.service: FunctoolService | <span class="literal">None</span> = <span class="literal">None</span></span><br><span class="line">        self._stream: <span class="type">Optional</span>[Stream] = <span class="literal">None</span></span><br></pre></td></tr></table></figure>
+<p>特点：</p>
+<ul>
+<li><code>__init__</code> 时创建</li>
+<li>只要实例被引用，就一直存在</li>
+<li>实例引用计数为 0 时，可能被 GC 回收</li>
+</ul>
+<p>项目示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app/core/agents/agent_manager.py</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">AgentManager</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        self.agents: <span class="type">Dict</span>[<span class="built_in">str</span>, Agent] = &#123;&#125;  <span class="comment"># ← 实例属性</span></span><br><span class="line">        self.intent_service = IntentService()  <span class="comment"># ← 实例属性</span></span><br><span class="line">        </span><br><span class="line"><span class="comment"># 因为 agent_manager 是全局单例，这些实例属性会一直存在</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="5-函数局部变量function-local-variables"><a class="markdownIt-Anchor" href="#5-函数局部变量function-local-variables"></a> 5. 函数局部变量（Function Local Variables）</h3>
+<p>生命周期：函数执行期间</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app/core/agents/chat_react_agent.py</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">think</span>(<span class="params">self</span>) -&gt; <span class="built_in">bool</span>:</span><br><span class="line">    user_query = self.user_query  <span class="comment"># ← 局部变量</span></span><br><span class="line">    chat_prompt = self.chat_prompt_template.with_history(...).<span class="built_in">format</span>()  <span class="comment"># ← 局部变量</span></span><br><span class="line">    system_prompt = self.prompt_template.with_system_prompt(...).<span class="built_in">format</span>()  <span class="comment"># ← 局部变量</span></span><br><span class="line">    <span class="comment"># 函数结束后，如果没有其他引用，这些变量可能被回收</span></span><br></pre></td></tr></table></figure>
+<p>特点：</p>
+<ul>
+<li>函数调用时创建</li>
+<li>函数返回后，如果没有外部引用，可能被 GC 回收</li>
+<li>如果被外部引用（如传给其他函数），生命周期会延长</li>
+</ul>
+<p>项目示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app/core/agents/service/intent_service.py</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_agent_selection_prompt</span>(<span class="params">self, ...</span>) -&gt; <span class="built_in">str</span>:</span><br><span class="line">    <span class="keyword">return</span> INTENT_SELECTION_SYSTEM_PROMPT_TEMPLATE.<span class="built_in">format</span>(...)  <span class="comment"># ← 返回的字符串是局部变量</span></span><br><span class="line">    <span class="comment"># 但返回后，调用方会持有引用，所以不会立即回收</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="6-懒加载对象lazy-loaded-objects"><a class="markdownIt-Anchor" href="#6-懒加载对象lazy-loaded-objects"></a> 6. 懒加载对象（Lazy-loaded Objects）</h3>
+<p>生命周期：首次访问时创建，之后持久存在</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app/core/agents/chat_react_agent.py</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">_ensure_service_initialized</span>(<span class="params">self</span>) -&gt; <span class="literal">None</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;按需初始化函数工具服务，避免在应用启动阶段就创建昂贵的 LLM 客户端。&quot;&quot;&quot;</span></span><br><span class="line">    <span class="keyword">if</span> self.service <span class="keyword">is</span> <span class="literal">None</span>:  <span class="comment"># ← 懒加载检查</span></span><br><span class="line">        self.service = FunctoolService(...)  <span class="comment"># ← 首次访问时创建</span></span><br></pre></td></tr></table></figure>
+<p>特点：</p>
+<ul>
+<li>首次访问时创建</li>
+<li>创建后作为实例属性持久存在</li>
+<li>实例被回收时销毁</li>
+</ul>
+<p>项目示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app/core/database/base.py</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">get_pool</span>(<span class="params">db_name: <span class="type">Optional</span>[<span class="built_in">str</span>] = <span class="literal">None</span></span>) -&gt; <span class="type">Optional</span>[aiomysql.Pool]:</span><br><span class="line">    <span class="keyword">if</span> db_name <span class="keyword">in</span> _pools <span class="keyword">and</span> <span class="keyword">not</span> _pools[db_name].closed:</span><br><span class="line">        <span class="keyword">return</span> _pools[db_name]  <span class="comment"># ← 复用已存在的连接池（懒加载复用）</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 首次调用时创建连接池</span></span><br><span class="line">    pool = <span class="keyword">await</span> aiomysql.create_pool(...)</span><br><span class="line">    _pools[db_name] = pool  <span class="comment"># ← 存入全局字典，持久存在</span></span><br><span class="line">    <span class="keyword">return</span> pool</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="7-上下文管理器对象context-manager-objects"><a class="markdownIt-Anchor" href="#7-上下文管理器对象context-manager-objects"></a> 7. 上下文管理器对象（Context Manager Objects）</h3>
+<p>生命周期：<code>with</code> 语句块执行期间</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app/core/database/base.py</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">ensure_database_exists</span>(<span class="params">db_name: <span class="built_in">str</span></span>) -&gt; <span class="built_in">bool</span>:</span><br><span class="line">    temp_pool = <span class="keyword">await</span> aiomysql.create_pool(...)  <span class="comment"># ← 临时连接池</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> temp_pool.acquire() <span class="keyword">as</span> conn:  <span class="comment"># ← 上下文管理器</span></span><br><span class="line">        <span class="keyword">async</span> <span class="keyword">with</span> conn.cursor() <span class="keyword">as</span> cursor:  <span class="comment"># ← 上下文管理器</span></span><br><span class="line">            <span class="keyword">await</span> cursor.execute(...)</span><br><span class="line">    </span><br><span class="line">    temp_pool.close()  <span class="comment"># ← 显式关闭</span></span><br><span class="line">    <span class="keyword">await</span> temp_pool.wait_closed()</span><br><span class="line">    <span class="comment"># temp_pool 引用计数归零，可能被回收</span></span><br></pre></td></tr></table></figure>
+<p>特点：</p>
+<ul>
+<li><code>with</code> 进入时创建/获取</li>
+<li><code>with</code> 退出时自动调用 <code>__exit__</code> / <code>__aexit__</code></li>
+<li>退出后如果没有其他引用，可能被回收</li>
+</ul>
+<p>项目示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app/core/database/work_database.py</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">execute_sql</span>(<span class="params">self, ...</span>):</span><br><span class="line">    pool = <span class="keyword">await</span> self.get_pool(db_name)</span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> pool.acquire() <span class="keyword">as</span> conn:  <span class="comment"># ← 连接在 with 块内有效</span></span><br><span class="line">        <span class="keyword">async</span> <span class="keyword">with</span> conn.cursor() <span class="keyword">as</span> cursor:  <span class="comment"># ← 游标在 with 块内有效</span></span><br><span class="line">            <span class="keyword">await</span> cursor.execute(sql, params)</span><br><span class="line">    <span class="comment"># with 块结束后，conn 和 cursor 自动释放回连接池</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="8-循环引用对象circular-references"><a class="markdownIt-Anchor" href="#8-循环引用对象circular-references"></a> 8. 循环引用对象（Circular References）</h3>
+<p>生命周期：需要 GC 处理，可能延迟回收</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 示例：如果存在循环引用</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Agent</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        self.manager = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">AgentManager</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        self.agents = &#123;&#125;</span><br><span class="line">        </span><br><span class="line"><span class="comment"># 如果创建循环引用：</span></span><br><span class="line">agent = Agent()</span><br><span class="line">manager = AgentManager()</span><br><span class="line">agent.manager = manager  <span class="comment"># ← 循环引用</span></span><br><span class="line">manager.agents[<span class="string">&quot;agent&quot;</span>] = agent  <span class="comment"># ← 循环引用</span></span><br></pre></td></tr></table></figure>
+<p>特点：</p>
+<ul>
+<li>引用计数无法归零（互相引用）</li>
+<li>需要循环垃圾回收器（GC）处理</li>
+<li>GC 定期扫描，发现不可达的循环引用才回收</li>
+</ul>
+<p>项目示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># app/core/agents/agent_manager.py</span></span><br><span class="line"><span class="comment"># agent_manager 持有 agents 字典</span></span><br><span class="line"><span class="comment"># 如果某个 agent 也持有对 agent_manager 的引用，就会形成循环引用</span></span><br><span class="line"><span class="comment"># 但通常不会，因为 agent 只需要被 manager 管理，不需要反向引用</span></span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="生命周期对比表"><a class="markdownIt-Anchor" href="#生命周期对比表"></a> 生命周期对比表</h2>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>创建时机</th>
+<th>销毁时机</th>
+<th>项目示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>模块级全局变量</strong></td>
+<td>模块首次 import</td>
+<td>进程退出</td>
+<td><code>_pools</code>, <code>INTENT_SELECTION_SYSTEM_PROMPT_TEMPLATE</code></td>
+</tr>
+<tr>
+<td><strong>全局单例实例</strong></td>
+<td>模块 import</td>
+<td>进程退出</td>
+<td><code>agent_manager</code></td>
+</tr>
+<tr>
+<td><strong>类属性</strong></td>
+<td>类定义时</td>
+<td>进程退出</td>
+<td><code>GeneralPromptTemplate.template</code></td>
+</tr>
+<tr>
+<td><strong>实例属性</strong></td>
+<td><code>__init__</code></td>
+<td>实例引用计数为 0</td>
+<td><code>self.prompt_template</code>, <code>self.service</code></td>
+</tr>
+<tr>
+<td><strong>函数局部变量</strong></td>
+<td>函数调用时</td>
+<td>函数返回后（无外部引用时）</td>
+<td><code>system_prompt</code>, <code>user_query</code></td>
+</tr>
+<tr>
+<td><strong>懒加载对象</strong></td>
+<td>首次访问时</td>
+<td>实例被回收时</td>
+<td><code>self.service</code>（首次调用 <code>_ensure_service_initialized</code>）</td>
+</tr>
+<tr>
+<td><strong>上下文管理器</strong></td>
+<td><code>with</code> 进入</td>
+<td><code>with</code> 退出</td>
+<td><code>conn</code>, <code>cursor</code>（在 <code>async with</code> 块内）</td>
+</tr>
+<tr>
+<td><strong>循环引用对象</strong></td>
+<td>创建时</td>
+<td>GC 扫描发现不可达时</td>
+<td>通常避免，但可能出现在复杂对象图中</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="关键要点总结"><a class="markdownIt-Anchor" href="#关键要点总结"></a> 关键要点总结</h2>
+<ol>
+<li>模块级和全局单例：进程级持久，进程退出时销毁</li>
+<li>实例属性：随实例生命周期，实例被回收时销毁</li>
+<li>局部变量：函数执行期间，函数返回后可能被回收</li>
+<li>懒加载：首次访问时创建，之后作为实例属性持久存在</li>
+<li>上下文管理器：<code>with</code> 块内有效，退出时自动清理</li>
+<li>循环引用：需要 GC 处理，可能延迟回收</li>
+</ol>
+<p>在你的项目中：</p>
+<ul>
+<li><code>_pools</code>、<code>agent_manager</code>、模板常量：进程级持久</li>
+<li><code>self.prompt_template</code>、<code>self.service</code>：随 agent 实例生命周期</li>
+<li><code>system_prompt</code>：函数执行期间，返回后可能被回收（如果没被外部引用</li>
+</ul>
+</blockquote>
 
       
     </div>
@@ -1632,281 +2277,6 @@ from mypackage import utils  # ✅ OK，因为 utils 是个模块</p>
 
 
   
-    <article id="post-2023年11月7日-深度学习报错日记" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2023/11/07/2023%E5%B9%B411%E6%9C%887%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%A5%E9%94%99%E6%97%A5%E8%AE%B0/" class="article-date">
-  <time class="post-time" datetime="2023-11-07T12:02:19.000Z" itemprop="datePublished">
-    <span class="post-month">11月</span><br/>
-    <span class="post-day">07</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/11/07/2023%E5%B9%B411%E6%9C%887%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%A5%E9%94%99%E6%97%A5%E8%AE%B0/">2023年11月7日 深度学习报错日记</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <ul>
-<li>2</li>
-</ul>
-<p>RuntimeError: Input type (torch.cuda.FloatTensor) and weight type (torch.FloatTensor) should be the same</p>
-<p><strong>没有明确指定模型应该在GPU上运行。你可以使用<code>model.to(device)</code>将模型移动到GPU上</strong></p>
-<ul>
-<li>
-<p>3</p>
-<p>PIL.UnidentifiedImageError: cannot identify image file ‘F:\Dataset\PetImages\Cat\666.jpg’</p>
-</li>
-</ul>
-<p><strong>图片损坏</strong></p>
-<ul>
-<li>继承Conv基类错误了</li>
-</ul>
-<p><img src="/2023/11/07/2023%E5%B9%B411%E6%9C%887%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%A5%E9%94%99%E6%97%A5%E8%AE%B0/a1fc621421e9142e2c9efb319447d81.png" alt="a1fc621421e9142e2c9efb319447d81"></p>
-<p><img src="/2023/11/07/2023%E5%B9%B411%E6%9C%887%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%A5%E9%94%99%E6%97%A5%E8%AE%B0/8906c28d1e2f7e77d19994f0a920f62.png" alt="8906c28d1e2f7e77d19994f0a920f62"></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2023/11/07/2023%E5%B9%B411%E6%9C%887%E6%97%A5-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E6%8A%A5%E9%94%99%E6%97%A5%E8%AE%B0/" data-id="clrwazlr1000q7ov430ep5euf" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl/" rel="tag">dl</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2023年10月24日-TensorRT1介绍" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2023/10/24/2023%E5%B9%B410%E6%9C%8824%E6%97%A5-TensorRT1%E4%BB%8B%E7%BB%8D/" class="article-date">
-  <time class="post-time" datetime="2023-10-24T11:51:56.000Z" itemprop="datePublished">
-    <span class="post-month">10月</span><br/>
-    <span class="post-day">24</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2023/10/24/2023%E5%B9%B410%E6%9C%8824%E6%97%A5-TensorRT1%E4%BB%8B%E7%BB%8D/">2023年10月24日 TensorRT1介绍</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="1-什么是tensorrt"><a class="markdownIt-Anchor" href="#1-什么是tensorrt"></a> 1 什么是TensorRT</h2>
-<h3 id="11-tensorrt介绍"><a class="markdownIt-Anchor" href="#11-tensorrt介绍"></a> 1.1 <strong>TensorRT介绍</strong></h3>
-<p>TensorRT是可以在<strong>NVIDIA</strong>各种<strong>GPU硬件平台</strong>下运行的一个<strong>C++推理框架</strong>。</p>
-<p>我们利用Pytorch训练好的模型，可以转化为TensorRT的格式，然后利用TensorRT推理引擎去运行我们这个模型，从而提升这个模型在英伟达GPU上运行的速度。<strong>速度提升</strong>的比例是<strong>比较可观</strong>的。</p>
-<h3 id="12-tensorrt-工作流程"><a class="markdownIt-Anchor" href="#12-tensorrt-工作流程"></a> 1.2 TensorRT 工作流程</h3>
-<img src="/2023/10/24/2023%E5%B9%B410%E6%9C%8824%E6%97%A5-TensorRT1%E4%BB%8B%E7%BB%8D/.Hexo/MyBlog/source/_posts/2023年10月12日-TensorRT介绍/image-20250314191334384.png" alt="image-20250314191334384" style="zoom: 25%;">
-<h3 id="13-为什么能加速"><a class="markdownIt-Anchor" href="#13-为什么能加速"></a> 1.3 为什么能加速？</h3>
-<ul>
-<li>
-<p><strong>算子融合(层与张量融合)</strong>：简单来说就是通过融合一些计算op或者去掉一些多余op来<strong>减少数据流通次数以及显存的频繁使用来提速</strong>，使用更少的cuda核心</p>
-<img src="/2023/10/24/2023%E5%B9%B410%E6%9C%8824%E6%97%A5-TensorRT1%E4%BB%8B%E7%BB%8D/.Hexo\MyBlog\source\_posts\2023年10月12日-TensorRT介绍\image-20250314190650887.png" alt="image-20250314190650887" style="zoom: 50%;">
-</li>
-<li>
-<p><strong>量化</strong>：量化即IN8量化或者FP16以及TF32等不同于常规FP32精度的使用，这些精度可以显著提升模型执行速度并且不会保持原先模型的精度</p>
-</li>
-<li>
-<p><strong>内核自动调整</strong>：根据不同的显卡构架、SM数量、内核频率等(例如1080TI和2080TI)，选择不同的优化策略以及计算方式，寻找最合适当前构架的计算方式<code>对特定显卡进行特定优化</code>为模型的每一层选择最优化的GPU 内核。这种自适应方法可确保模型充分利用 GPU 的计算能力。</p>
-<img src="/2023/10/24/2023%E5%B9%B410%E6%9C%8824%E6%97%A5-TensorRT1%E4%BB%8B%E7%BB%8D/.Hexo/MyBlog/source/_posts/2023年10月12日-TensorRT介绍/image-20231012202620295.png" alt="image-20231012202620295" style="zoom: 33%;">
-</li>
-<li>
-<p><strong>动态张量显存</strong>/<strong>动态Tensor 内存管理</strong>：TensorRT 在推理过程中有效管理tensor 内存使用情况，减少内存开销并优化内存分配。这使得GPU 的内存使用效率更高。</p>
-</li>
-<li>
-<p><strong>多流执行</strong>：使用CUDA中的stream技术，最大化实现并行操作</p>
-</li>
-</ul>
-<h3 id="14-tensorrt的加速效果怎么样"><a class="markdownIt-Anchor" href="#14-tensorrt的加速效果怎么样"></a> 1.<strong>4 TensorRT的加速效果怎么样</strong></h3>
-<p>加速效果取决于模型的类型和大小，也取决于我们所使用的显卡类型。</p>
-<p>TensorRT所做的优化也是<strong>基于GPU</strong>进行优化，当然也是更喜欢那种一大块一大块的矩阵运算，尽量直通到底。因此对于通道数比较多的卷积层和反卷积层，优化力度是比较大的；</p>
-<p>如果是比较繁多复杂的各种细小op操作**(例如reshape、gather、split等)，那么TensorRT的优化力度就没有那么夸张了。**</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">所以在转onnx的时候需要对模型进行修改，减少reshape等</span><br></pre></td></tr></table></figure>
-<h3 id="15概念和使用方式"><a class="markdownIt-Anchor" href="#15概念和使用方式"></a> 1.5概念和使用方式</h3>
-<ul>
-<li>
-<p>支持模型、数据类型、支持的IO、支持的功能</p>
-</li>
-<li>
-<p>TensorRT中context、engine、builder概念</p>
-</li>
-<li>
-<p>环境搭建、运行环境</p>
-<p><strong>1.5 什么是算子</strong></p>
-<p>有时候自己会设计一些layer来满足任务需求，但是这些layer在使用Tensorrt优化时，TensorRT可能并不支持。</p>
-<p>这时候就需要自己写一个算子/<strong>Plugin</strong> 来实现</p>
-<img src="/2023/10/24/2023%E5%B9%B410%E6%9C%8824%E6%97%A5-TensorRT1%E4%BB%8B%E7%BB%8D/.Hexo/MyBlog/source/_posts/2023年10月12日-TensorRT介绍/image-20250314191142137.png" alt="image-20250314191142137" style="zoom: 25%;">
-</li>
-</ul>
-<h3 id="16-工作流程"><a class="markdownIt-Anchor" href="#16-工作流程"></a> 1.6 工作流程</h3>
-<ul>
-<li>python端API</li>
-<li>C++端API</li>
-<li>简单的demo</li>
-</ul>
-<h2 id="2-tensorrt完整流程"><a class="markdownIt-Anchor" href="#2-tensorrt完整流程"></a> 2 TensorRT完整流程</h2>
-<h3 id="21-onnx转tensorrt"><a class="markdownIt-Anchor" href="#21-onnx转tensorrt"></a> 2.1 ONNX转TensorRT</h3>
-<ul>
-<li>parser方式转换模型</li>
-<li>onnx2trt简单分析</li>
-<li>graphsurgeon修改onnx网络</li>
-<li>一些注意点</li>
-</ul>
-<h3 id="22-框架内使用tensorrt"><a class="markdownIt-Anchor" href="#22-框架内使用tensorrt"></a> 2.2 框架内使用tensorrt</h3>
-<ul>
-<li>torch_tensorrt介绍、使用</li>
-<li>torch_tensorrt源码解析</li>
-</ul>
-<h2 id="3-tensorrt进阶操作"><a class="markdownIt-Anchor" href="#3-tensorrt进阶操作"></a> 3 TensorRT进阶操作</h2>
-<h3 id="31-如何debug"><a class="markdownIt-Anchor" href="#31-如何debug"></a> 3.1 如何debug</h3>
-<ul>
-<li>精度问题debug（nan、精度不匹配）</li>
-<li>网络可视化（netron、trt-explorer）</li>
-<li>polygraphy（TensorRT官方提供的非常好的工具）</li>
-</ul>
-<h3 id="32-api搭建网络"><a class="markdownIt-Anchor" href="#32-api搭建网络"></a> 3.2 API搭建网络</h3>
-<ul>
-<li>API搭建网络基本方式、权重提取，这部分强烈建议看TensorRTx</li>
-<li>explicit batch vs implicit batch</li>
-</ul>
-<h3 id="33-自定义插件plugin"><a class="markdownIt-Anchor" href="#33-自定义插件plugin"></a> 3.3 自定义插件plugin</h3>
-<ul>
-<li>如何写自定义plugin、Plugin中关键的API与注意点</li>
-<li>自定义插件示例、集成plugin到trt中、参与trt序列化</li>
-<li>plugin的生命周期、资源管理</li>
-<li>dynamic-shape-plugin</li>
-<li>Plugin的FP16和INT8</li>
-</ul>
-<h3 id="34-常见疑难杂症"><a class="markdownIt-Anchor" href="#34-常见疑难杂症"></a> 3.4 常见疑难杂症</h3>
-<ul>
-<li>各种log中的报错</li>
-</ul>
-<h2 id="4-tensorrt最佳使用指南"><a class="markdownIt-Anchor" href="#4-tensorrt最佳使用指南"></a> 4 TensorRT最佳使用指南</h2>
-<h3 id="41-如何正确使用trtexec"><a class="markdownIt-Anchor" href="#41-如何正确使用trtexec"></a> 4.1 如何正确使用trtexec</h3>
-<ul>
-<li>trtexec基本用法</li>
-<li>动态尺度、设置optimization profile以及注意点（min-opt-max）</li>
-<li>trtexec源码解析</li>
-</ul>
-<h3 id="42-提升性能"><a class="markdownIt-Anchor" href="#42-提升性能"></a> 4.2 提升性能</h3>
-<ul>
-<li>多steam（重叠计算和数据拷贝的时间，增加GPU利用率）</li>
-<li>多context（多线程推理）</li>
-<li>多optimization profile</li>
-<li>CUDA Graph（减少kernel launch时间）</li>
-<li>Timing Cache（减少build时间）</li>
-<li>Algorithm Selector</li>
-</ul>
-<h3 id="43-tensorrt转换相关"><a class="markdownIt-Anchor" href="#43-tensorrt转换相关"></a> 4.3 TensorRT转换相关</h3>
-<ul>
-<li>某些Layer选择的算法导致误差大，屏蔽掉该选择 tactic Source</li>
-<li>更新权重refit功能（强化学习用的多）</li>
-<li>构建期/运行期显存占用大（调整参数以及策略）</li>
-</ul>
-<h2 id="5-tensorrt量化"><a class="markdownIt-Anchor" href="#5-tensorrt量化"></a> 5 TensorRT量化</h2>
-<h3 id="ptq"><a class="markdownIt-Anchor" href="#ptq"></a> PTQ</h3>
-<h3 id="qat"><a class="markdownIt-Anchor" href="#qat"></a> QAT</h3>
-<ul>
-<li>fake_</li>
-<li>QDQ 节点</li>
-</ul>
-<h3 id="tensorrt-fp16"><a class="markdownIt-Anchor" href="#tensorrt-fp16"></a> TensorRT-FP16</h3>
-<ul>
-<li>fp16精度设置与使用</li>
-<li>fp16常见问题</li>
-</ul>
-<h3 id="tensorrt-int8"><a class="markdownIt-Anchor" href="#tensorrt-int8"></a> TensorRT-INT8</h3>
-<ul>
-<li>int8使用</li>
-<li>PTQ校准集</li>
-<li>QAT量化</li>
-</ul>
-<h3 id="混合精度"><a class="markdownIt-Anchor" href="#混合精度"></a> 混合精度</h3>
-<ul>
-<li>fp32和fp16</li>
-<li>fp16和int8</li>
-</ul>
-<h2 id="6-tensorrt拓展"><a class="markdownIt-Anchor" href="#6-tensorrt拓展"></a> 6 TensorRT拓展</h2>
-<h3 id="61-tensorrt转换的几种方式"><a class="markdownIt-Anchor" href="#61-tensorrt转换的几种方式"></a> 6.1 TensorRT转换的几种方式</h3>
-<ul>
-<li>torch2trt</li>
-<li>torchscript2trt</li>
-<li>fx2trt</li>
-</ul>
-<h2 id="7-tensorrt实战"><a class="markdownIt-Anchor" href="#7-tensorrt实战"></a> 7 TensorRT实战</h2>
-<h3 id="61-检测模型转换"><a class="markdownIt-Anchor" href="#61-检测模型转换"></a> 6.1 检测模型转换</h3>
-<ul>
-<li>SSD模型转TensorRT dynamic-shape</li>
-<li>带有自定义DCN-OP的CenterNet转TensorRT</li>
-</ul>
-<h3 id="62-识别-分割-nlp类模型"><a class="markdownIt-Anchor" href="#62-识别-分割-nlp类模型"></a> 6.2 识别、分割、nlp类模型</h3>
-<ul>
-<li>stable diffusion</li>
-<li>GPT</li>
-</ul>
-<h3 id="63-tensorrttriton-inference-server线上线下部署"><a class="markdownIt-Anchor" href="#63-tensorrttriton-inference-server线上线下部署"></a> 6.3 TensorRT+triton-inference-server线上/线下部署</h3>
-<ul>
-<li>基本部署教程</li>
-<li>大规模TensorRT模型部署、多卡、模型调度</li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2023/10/24/2023%E5%B9%B410%E6%9C%8824%E6%97%A5-TensorRT1%E4%BB%8B%E7%BB%8D/" data-id="cmanj8o1q0001lcv4fsd382ib" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/TensorRT/" rel="tag">TensorRT</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -1951,7 +2321,7 @@ from mypackage import utils  # ✅ OK，因为 utils 是个模块</p>
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>146</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>148</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>41</strong><br>标签</div></a>
     </div>

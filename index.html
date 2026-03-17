@@ -43,7 +43,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>146</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>148</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>41</strong><br>标签</div></a>
     </div>
@@ -70,6 +70,528 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-2026年3月16日-embed模型" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/03/16/2026%E5%B9%B43%E6%9C%8816%E6%97%A5-embed%E6%A8%A1%E5%9E%8B/" class="article-date">
+  <time class="post-time" datetime="2026-03-16T05:43:51.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">16</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2026/03/16/2026%E5%B9%B43%E6%9C%8816%E6%97%A5-embed%E6%A8%A1%E5%9E%8B/">2026年3月16日 embed模型</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>1</p>
+</blockquote>
+<h3 id="tokenizer-在这里干了什么事"><a class="markdownIt-Anchor" href="#tokenizer-在这里干了什么事"></a> tokenizer 在这里干了什么事？</h3>
+<p>针对这段代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">encoded_input = tokenizer(sentences, padding=<span class="literal">True</span>, truncation=<span class="literal">True</span>, return_tensors=<span class="string">&#x27;pt&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;encoded_input:&quot;</span>,encoded_input)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;encoded_input[&#x27;attention_mask&#x27;]:&quot;</span>,encoded_input[<span class="string">&#x27;attention_mask&#x27;</span>])</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;encoded_input[&#x27;input_ids&#x27;]:&quot;</span>,encoded_input[<span class="string">&#x27;input_ids&#x27;</span>])</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;encoded_input[&#x27;token_type_ids&#x27;]:&quot;</span>,encoded_input[<span class="string">&#x27;token_type_ids&#x27;</span>])</span><br></pre></td></tr></table></figure>
+<p><strong>tokenizer 的工作可以分成 4 步：</strong></p>
+<ul>
+<li>
+<p><strong>1. 文本 → token（分词+子词切分）</strong></p>
+<ul>
+<li>把原始句子：
+<ul>
+<li><code>&quot;我想看弗蘭克·達拉邦特的电影&quot;</code></li>
+<li><code>&quot;推荐弗蘭克·達拉邦特导演的作品&quot;</code></li>
+</ul>
+</li>
+<li>按模型的词表规则拆成一串 token（子词），比如类似：<code>[CLS] 我 想 看 弗 蘭 克 · … [SEP]</code>。</li>
+</ul>
+</li>
+<li>
+<p><strong>2. token → id（映射到词表索引）</strong></p>
+<ul>
+<li>每个 token 对应词表中的一个整数编号，形成 <code>input_ids</code>：
+<ul>
+<li><code>encoded_input[&quot;input_ids&quot;]</code> 是一个二维张量：<code>[batch_size, seq_len]</code>。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>3. 生成 attention_mask（哪些位置是真实内容，哪些是 padding）</strong></p>
+<ul>
+<li>由于你设置了 <code>padding=True</code>，不同长度的句子会填充到同样的 <code>seq_len</code>。</li>
+<li><code>attention_mask</code> 用 1/0 标记：
+<ul>
+<li>1：真实 token 位置</li>
+<li>0：补上的 padding 位置</li>
+</ul>
+</li>
+<li>后面在 <code>mean_pooling</code> 里就是用这个 mask 来“只对真实 token 求平均”。</li>
+</ul>
+</li>
+<li>
+<p><strong>4. 生成 token_type_ids（区分句子 A/B，用于部分模型）</strong></p>
+<ul>
+<li>对于单句输入，通常全 0；</li>
+<li>对于句对任务（如句子对分类），可以用 0/1 区分哪部分是第一句、哪部分是第二句。</li>
+<li>你这里只是单句列表，所以主要是兼容模型接口，实际不会特别用到它。</li>
+</ul>
+</li>
+</ul>
+<p>总结一句话：<br>
+<strong>tokenizer 把原始中文句子变成模型能吃的“数字化输入”（<code>input_ids</code> + <code>attention_mask</code> + <code>token_type_ids</code>），然后模型再基于这些数字算出每个 token 的向量，最后你用 <code>mean_pooling</code> 把它们汇成句向量。</strong></p>
+<h4 id="结果分析"><a class="markdownIt-Anchor" href="#结果分析"></a> 结果分析</h4>
+<blockquote>
+<h3 id="结论这个结果有点问题但不一定是代码错了"><a class="markdownIt-Anchor" href="#结论这个结果有点问题但不一定是代码错了"></a> 结论：<strong>这个结果“有点问题”，但不一定是代码错了</strong></h3>
+<p>按直觉你期望：同一导演的两句话更相似，即 <code>sim(0,1)</code> 应该最大。<br>
+但你跑出来是：</p>
+<ul>
+<li><code>sim(0,1)=0.6989</code></li>
+<li><code>sim(0,2)=0.7166</code>（反而更高）</li>
+<li><code>sim(1,2)=0.3476</code></li>
+</ul>
+<p>这说明：<strong>句子0（“我想看X的电影”）对“我想看周星驰的电影”也很像</strong>，因为它们的句式几乎相同，模型把“我想看…的电影”这个意图/模板当成了主要语义；人名差异被弱化了。</p>
+<p>所以问题更像是：<strong>测试样例不够“区分模板 vs 实体”</strong>，而不是 embedding 流程错误。</p>
+<hr>
+<h3 id="为什么会这样关键原因"><a class="markdownIt-Anchor" href="#为什么会这样关键原因"></a> 为什么会这样（关键原因）</h3>
+<ul>
+<li>句子0 和 句子2 的结构完全一致：<code>我想看 + [人名] + 的电影</code><br>
+对很多通用句向量模型来说，“我想看…电影”这个意图信号很强。</li>
+<li><code>paraphrase-multilingual-MiniLM-L12-v2</code> 这类通用模型，未必把“人名实体”当成最强特征（尤其在短句里）。</li>
+</ul>
+<hr>
+<h3 id="接下来怎么验证才更靠谱你该测试什么"><a class="markdownIt-Anchor" href="#接下来怎么验证才更靠谱你该测试什么"></a> 接下来怎么验证才更靠谱（你该测试什么）</h3>
+<p>把句子改成<strong>只保留实体对比</strong>或<strong>减少模板重复</strong>，比如：</p>
+<ul>
+<li>A：<code>&quot;导演：弗蘭克·達拉邦特&quot;</code></li>
+<li>B：<code>&quot;弗蘭克·達拉邦特 导演&quot;</code></li>
+<li>C：<code>&quot;导演：周星驰&quot;</code></li>
+</ul>
+<p>或者：</p>
+<ul>
+<li>A：<code>&quot;弗蘭克·達拉邦特 导演的电影有哪些&quot;</code></li>
+<li>B：<code>&quot;推荐一些达拉邦特导演作品&quot;</code></li>
+<li>C：<code>&quot;周星驰 导演的电影有哪些&quot;</code></li>
+</ul>
+<p>这类句子会让“导演名”成为更主要的信号，通常就会看到 <code>sim(A,B) &gt; sim(A,C)</code>。</p>
+<hr>
+<h3 id="对你的-rag-设计意味着什么"><a class="markdownIt-Anchor" href="#对你的-rag-设计意味着什么"></a> 对你的 RAG 设计意味着什么</h3>
+<p>这也解释了为什么我前面建议你把电影 chunk 组织成中文标签文本（如“导演：xxx”）——<br>
+当 query 写“导演：弗蘭克·達拉邦特”或“弗蘭克·達拉邦特 导演”，和 chunk 中的“导演：xxx”匹配会更稳定；同时你也可以在应用层做一点轻量 query 规范化（比如把“导演”关键词显式加进去），进一步提高导演类检索准确率。****</p>
+</blockquote>
+<h4 id="测试样例不够区分模板-vs-实体"><a class="markdownIt-Anchor" href="#测试样例不够区分模板-vs-实体"></a> 测试样例不够“区分模板 vs 实体”</h4>
+<h4 id="句子0-和-句子2-的结构完全一致我想看-人名-的电影"><a class="markdownIt-Anchor" href="#句子0-和-句子2-的结构完全一致我想看-人名-的电影"></a> 句子0 和 句子2 的结构完全一致：<code>我想看 + [人名] + 的电影</code></h4>
+<h4 id="在短句里"><a class="markdownIt-Anchor" href="#在短句里"></a> 在短句里</h4>
+<p><code>paraphrase-multilingual-MiniLM-L12-v2</code> 这类通用模型，未必把“人名实体”当成最强特征（尤其在短句里）</p>
+<blockquote>
+<h3 id="不是模型坏了更像是测试方式在考它不擅长的东西"><a class="markdownIt-Anchor" href="#不是模型坏了更像是测试方式在考它不擅长的东西"></a> 不是“模型坏了”，更像是<strong>测试方式在考它不擅长的东西</strong></h3>
+<p>你这组测试里，<code>sentenceC = &quot;周星驰&quot;</code> <strong>太短、信息太少</strong>，对句向量模型来说往往会变成一个很“模糊/泛化”的点；而 <code>sentenceA/B</code> 带了“导演”这种职业词，模型可能把它们都拉到“人物/影视相关”的语义区域里，导致 <strong>不同名字之间也可能很近</strong>，出现 <code>sim(A,C)</code> 反而更高的情况。</p>
+<p>这类 <strong>通用 paraphrase 句向量模型</strong>（<code>paraphrase-multilingual-MiniLM-L12-v2</code>）通常更擅长：</p>
+<ul>
+<li>句子意图、语义改写相似（paraphrase）<br>
+而不擅长：</li>
+<li>仅靠<strong>人名实体</strong>做“同名更近、不同名更远”的严格聚类（这更像实体检索/字面匹配任务）。</li>
+</ul>
+<p>所以：<strong>这个结果不足以证明模型有问题</strong>，只能说明“用它做纯人名相似度判断不稳定”。</p>
+<hr>
+<h3 id="你该怎么测才更合理建议你立刻换这两类测试"><a class="markdownIt-Anchor" href="#你该怎么测才更合理建议你立刻换这两类测试"></a> 你该怎么测才更合理（建议你立刻换这两类测试）</h3>
+<h4 id="a-控制变量两边都用同样模板-只换导演名"><a class="markdownIt-Anchor" href="#a-控制变量两边都用同样模板-只换导演名"></a> A. 控制变量：两边都用同样模板、只换导演名</h4>
+<p>这样能避免“短句太模糊”的问题：</p>
+<ul>
+<li>A：<code>&quot;导演：弗蘭克·達拉邦特&quot;</code></li>
+<li>B：<code>&quot;导演：周星驰&quot;</code></li>
+<li>C：<code>&quot;导演：克里斯托弗·诺兰&quot;</code></li>
+</ul>
+<p>你希望看到的是：A 跟 B/C <strong>不要都很高</strong>（至少不要出现反直觉的极端高相似）。</p>
+<h4 id="b-贴近你真实-rag让-query文档都包含导演标签-电影语境"><a class="markdownIt-Anchor" href="#b-贴近你真实-rag让-query文档都包含导演标签-电影语境"></a> B. 贴近你真实 RAG：让 query/文档都包含“导演标签 + 电影语境”</h4>
+<p>比如：</p>
+<ul>
+<li>Query：<code>&quot;我想看 导演：弗蘭克·達拉邦特 的电影&quot;</code></li>
+<li>Doc1：<code>&quot;标题：…\n导演：弗蘭克·達拉邦特\n剧情：…&quot;</code></li>
+<li>Doc2：<code>&quot;标题：…\n导演：周星驰\n剧情：…&quot;</code></li>
+</ul>
+<p>这才是你系统真正会发生的匹配形态。</p>
+<hr>
+<h3 id="实战建议很重要"><a class="markdownIt-Anchor" href="#实战建议很重要"></a> 实战建议（很重要）</h3>
+<p>如果你的需求是“按导演找电影”，<strong>最佳实践不是完全依赖向量相似度</strong>，而是：</p>
+<ul>
+<li><strong>把 <code>director</code> 存为 metadata</strong>（你已经有这个字段）</li>
+<li>查询时：
+<ul>
+<li>先做一个<strong>简单的导演名抽取/匹配</strong>（甚至就是字符串包含）</li>
+<li>用 metadata 过滤候选集（director == X）</li>
+<li>再用向量检索对剧情/类型做排序</li>
+</ul>
+</li>
+</ul>
+<p>这样“导演类查询”会稳定得多，也更符合用户预期。</p>
+<p>如果你愿意，我可以下一步直接帮你在检索逻辑里加一个小的“导演过滤”分支：当 query 里出现“导演/导演：”时，优先走 metadata 过滤 + 向量排序的混合检索。</p>
+</blockquote>
+<h5 id="我进行了长自然语言的测试"><a class="markdownIt-Anchor" href="#我进行了长自然语言的测试"></a> 我进行了长自然语言的测试，</h5>
+<p>这样相似度也高很多， 似乎就是和你说的结构一样的原因吗？所以是不是 这个模型其实不适合我这个系统（因为我的数据都是json转出的）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">SENTENCE_A = <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">作品编号：HUNTC-001影片标题：肖申克的救赎！经典纪念版！希望与自由的故事！只要坚持信念，即使身处监狱也能找到属于自己的救赎！系列名称：肖申克的救赎！导演：弗兰克・达拉邦特片长：220 分钟制作公司：Castle Rock Entertainment发行公司：华纳兄弟发行日期：2023-11-10类型标签：励志、经典电影、监狱题材、友情、希望、逃狱、高画质</span></span><br><span class="line"><span class="string">剧情简介：1947 年，银行家安迪・杜弗伦因涉嫌谋杀妻子及其情人被判无期徒刑，进入肖申克州立监狱服刑。他在狱中结识了资深囚犯瑞德，两人逐渐成为挚友。安迪利用自己的金融才能帮助监狱人员，同时默默坚持内心的希望与自由梦想，面对残酷的监狱环境与腐败制度，他一步步策划属于自己的救赎之路。最终，这部经典作品传达出『希望是件好事，也许是人间至善』的深刻主题。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">SENTENCE_B = <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">作品编号：FRANK-002影片标题：绿里奇迹！弗兰克・达拉邦特经典之作！关于人性、慈悲与奇迹的深刻寓言！系列名称：绿里奇迹导演：弗兰克・达拉邦特片长：185 分钟制作公司：Castle Rock Entertainment发行公司：华纳兄弟发行日期：2023-12-05类型标签：剧情、奇幻、人性、救赎、经典、监狱</span></span><br><span class="line"><span class="string">剧情简介：1932 年，冷山监狱死囚区的狱长保罗，遇到了拥有神秘治愈能力的大块头黑人约翰・科菲。他虽被指控犯下残忍罪行，内心却善良纯净。在死囚区的日子里，约翰用奇迹般的力量温暖了身边的人，也让保罗开始重新思考生命、罪恶与救赎。影片以温柔又沉重的方式，探讨人性善恶与世间的无奈与慈悲。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">SENTENCE_C = <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">作品编号：STEPHEN-001影片标题：功夫！周星驰巅峰之作！无厘头与武侠的完美结合！笑中带泪的经典传奇！系列名称：功夫导演：周星驰片长：100 分钟制作公司：星辉海外有限公司发行公司：华纳兄弟发行日期：2024-01-15类型标签：喜剧、动作、武侠、无厘头、经典、励志</span></span><br><span class="line"><span class="string">剧情简介：街头小混混星仔一心想加入斧头帮，却阴差阳错闯入了藏龙卧虎的猪龙城寨。这里看似平凡的居民，个个都是隐世高手。星仔在一次次闹剧与危机中，逐渐认清善恶，找回内心的正义，最终领悟武学真谛，成为真正的绝世高手，用功夫守护身边的人。影片将无厘头喜剧与武侠精神完美融合，成为经典。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2026/03/16/2026%E5%B9%B43%E6%9C%8816%E6%97%A5-embed%E6%A8%A1%E5%9E%8B/image-20260316140726691.png" alt="image-20260316140726691"></p>
+<blockquote>
+<h3 id="是的主要就是结构相似在主导相似度"><a class="markdownIt-Anchor" href="#是的主要就是结构相似在主导相似度"></a> 是的，主要就是“结构相似”在主导相似度</h3>
+<p>你这三段长文本（A/B/C）都有大量相同结构与共同词汇，比如：</p>
+<ul>
+<li>固定模板字段：<code>作品编号/影片标题/系列名称/导演/片长/制作公司/发行公司/发行日期/类型标签/剧情简介</code></li>
+<li>大量共有概念词：<code>经典、监狱、救赎、剧情简介…</code></li>
+<li>甚至 A/B/C 都出现了“华纳兄弟”等一致信息</li>
+</ul>
+<p>在句向量模型里，这会让三段文本的整体语义非常接近，所以：</p>
+<ul>
+<li><code>sim(A,B)</code> 很高（同导演 + 同题材更高）</li>
+<li>但 <code>sim(A,C)</code> 也会很高（模板 + 电影领域词汇大量重叠），<strong>导演不同并不会把它们拉开太多</strong></li>
+</ul>
+<p>这不是你代码的问题，而是“把一条电影记录变成一大段模板化文本”时的典型现象。</p>
+<hr>
+<h3 id="这是否说明模型不适合你的系统"><a class="markdownIt-Anchor" href="#这是否说明模型不适合你的系统"></a> 这是否说明模型不适合你的系统？</h3>
+<p><strong>不等于不适合。</strong><br>
+它更准确地说明：你需要把“相似度要表达的重点”设计出来，而不是让模板噪音占主导。</p>
+<p>你的数据来自 JSON 并不天然有问题，问题在于你把 JSON 转成 text 时：</p>
+<ul>
+<li>如果把太多<strong>结构化字段</strong>（发行公司、编号、时长、日期、模板标签）都塞进 embedding text<br>
+→ 会让向量主要表达“这是一段电影条目信息”，而不是“这部电影的独特内容”。</li>
+</ul>
+<hr>
+<h3 id="对你这种电影-rag推荐怎么做最关键的改法"><a class="markdownIt-Anchor" href="#对你这种电影-rag推荐怎么做最关键的改法"></a> 对你这种电影 RAG，推荐怎么做（最关键的改法）</h3>
+<ul>
+<li><strong>embedding text 只放“能区分电影内容”的字段</strong>：
+<ul>
+<li><code>title</code></li>
+<li><code>plot</code>（核心）</li>
+<li><code>genre</code>（适量）</li>
+<li>可选：<code>director</code> / <code>serial</code>（如果你确实要靠语义检索导演/系列）</li>
+</ul>
+</li>
+<li><strong>其它字段做 metadata，不进 embedding</strong>：
+<ul>
+<li><code>publish_date、duration、producer、publisher、url、cover、编号…</code></li>
+</ul>
+</li>
+</ul>
+<p>这样向量会更“内容化”，不同电影之间相似度会拉开。</p>
+<hr>
+<h3 id="导演检索的最佳实践补一刀很实用"><a class="markdownIt-Anchor" href="#导演检索的最佳实践补一刀很实用"></a> 导演检索的最佳实践（补一刀很实用）</h3>
+<p>如果你的 query 经常是“我想看某某导演的电影”，<strong>不要只靠向量相似度</strong>，而是：</p>
+<ul>
+<li><code>director</code> 存 metadata</li>
+<li>query 里识别出导演名后：
+<ul>
+<li><strong>先 metadata 过滤 director==X</strong></li>
+<li>再用向量对 <code>plot/title/genre</code> 做排序</li>
+</ul>
+</li>
+</ul>
+<p>这样导演查询会非常稳，而且不受“模板相似度”干扰。</p>
+<hr>
+<p>如果你愿意，我可以下一步直接帮你改一处关键代码：在索引时构造 embedding 文本时<strong>只使用 title/plot/genre/director</strong>（其余进 metadata），并给你一组“导演查询”和“剧情查询”的对比测试。</p>
+</blockquote>
+<h6 id="需要把相似度要表达的重点设计"><a class="markdownIt-Anchor" href="#需要把相似度要表达的重点设计"></a> <strong>需要把“相似度要表达的重点”设计</strong></h6>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">SENTENCE_A = <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">肖申克的救贖！經典紀念版！希望與自由的故事！只要堅持信念，即使身處監獄也能找到屬於自己的救贖！1947 年，銀行家安迪被冤入獄，在肖申克監獄中憑藉智慧與堅韌，堅守希望，最終完成自我救贖，詮釋「希望是人間至善」。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">SENTENCE_B = <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">绿里奇迹！弗蘭克・達拉邦特經典之作！關於人性、慈悲與奇蹟的深刻寓言！1932 年死囚監獄中，擁有神奇治癒能力的黑人科菲，用善良與奇蹟感化眾人，探討生命、罪惡與慈悲。&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">SENTENCE_C = <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">功夫！周星馳巔峰之作！無厘頭與武俠的完美結合！笑中帶淚的經典傳奇！小混混星仔陰差陽錯闖入臥虎藏龍的豬籠城寨，在經歷成長後找回正義，成為絕世高手守護身邊之人。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><img src="/2026/03/16/2026%E5%B9%B43%E6%9C%8816%E6%97%A5-embed%E6%A8%A1%E5%9E%8B/image-20260316140736376.png" alt="image-20260316140736376"></p>
+<blockquote></blockquote>
+<h3 id="结构数据写成metadata"><a class="markdownIt-Anchor" href="#结构数据写成metadata"></a> 结构数据写成metadata</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">doc = &#123;</span><br><span class="line">  &quot;id&quot;: &quot;HUNTC-001&quot;,</span><br><span class="line">  &quot;text&quot;: &quot;标题：...\n导演：...\n类型：...\n剧情：...&quot;,</span><br><span class="line">  &quot;metadata&quot;: &#123;</span><br><span class="line">    &quot;dvdid&quot;: &quot;HUNTC-001&quot;,</span><br><span class="line">    &quot;director&quot;: &quot;弗蘭克·達拉邦特&quot;,</span><br><span class="line">    &quot;genre&quot;: [&quot;励志&quot;,&quot;经典电影&quot;,&quot;监狱题材&quot;],</span><br><span class="line">    &quot;publish_date&quot;: &quot;2023-11-10&quot;,</span><br><span class="line">    &quot;duration&quot;: 220,</span><br><span class="line">    &quot;serial&quot;: &quot;肖申克的救赎&quot;,</span><br><span class="line">    &quot;site&quot;: &quot;__merged__&quot;,</span><br><span class="line">    &quot;url&quot;: None,</span><br><span class="line">    &quot;cover&quot;: &quot;https://...&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="milvus"><a class="markdownIt-Anchor" href="#milvus"></a> Milvus</h1>
+<blockquote>
+<h3 id="建议在-milvusipynb-顶部加一个环境初始化cell"><a class="markdownIt-Anchor" href="#建议在-milvusipynb-顶部加一个环境初始化cell"></a> 建议在 milvus.ipynb 顶部加一个“环境初始化”cell</h3>
+<p>放在所有 from src… 导入之前，内容类似：</p>
+<p>import sys</p>
+<p>from pathlib import Path</p>
+<p># 项目根目录（按你的实际路径修改）</p>
+<p>PROJECT_ROOT = Path(r&quot;F:\myproject\java_rag&quot;)</p>
+<p># 切到项目根目录（可选，但推荐）</p>
+<p>%cd $PROJECT_ROOT</p>
+<p># 把项目根目录加入 sys.path，确保可以 import src.*</p>
+<p>if str(PROJECT_ROOT) not in sys.path:</p>
+<p>sys.path.insert(0, str(PROJECT_ROOT))</p>
+<p>print(“cwd:”, Path.cwd())</p>
+<p>print(“sys.path[0]:”, sys.path[0])</p>
+</blockquote>
+<h3 id="为什么会报-collection-not-loaded"><a class="markdownIt-Anchor" href="#为什么会报-collection-not-loaded"></a> 为什么会报 collection not loaded？</h3>
+<p>Milvus（尤其是连接到服务模式时）集合创建/插入 ≠ 集合已加载到内存。</p>
+<p>如果集合没 load，直接 search 就会报你看到的错误：</p>
+<ul>
+<li>failed to search: collection not loaded</li>
+</ul>
+<blockquote>
+<h3 id="为什么会报-index-not-found导致-load-失败"><a class="markdownIt-Anchor" href="#为什么会报-index-not-found导致-load-失败"></a> 为什么会报 index not found，导致 load 失败？</h3>
+<p>你现在连的是 Milvus 服务端（Docker 里的 2.6.12）。在这种模式下，load_collection 通常要求集合的向量字段已经有索引；但我们创建 collection 时只是建了 schema，没有创建向量索引，所以服务端直接报：</p>
+<ul>
+<li>MilvusException (code=700): index not found[collection=movies]</li>
+</ul>
+<p>这不是连接失败，是 集合没 index → 不能 load → 后续 search 也会失败。</p>
+<hr>
+<h3 id="我已经在项目里修复自动创建向量索引再-load"><a class="markdownIt-Anchor" href="#我已经在项目里修复自动创建向量索引再-load"></a> 我已经在项目里修复：自动创建向量索引再 load</h3>
+<p>我在 src/utils/milvus_store.py 增加了 _ensure_index()，并在：</p>
+<ul>
+<li>
+<p>创建集合后 load 前</p>
+</li>
+<li>
+<p>已存在集合 load 前</p>
+</li>
+<li>
+<p>insert 后 load 前</p>
+</li>
+<li>
+<p>search 前兜底 load 前</p>
+</li>
+</ul>
+<p>都会先调用 _ensure_index()，确保至少对 vector 字段建了 AUTOINDEX + COSINE 索引。</p>
+<p>你现在重新跑 notebook 时，流程会变成：</p>
+<ol>
+<li>
+<p>create_collection(schema)</p>
+</li>
+<li>
+<p>create_index(field=“vector”)</p>
+</li>
+<li>
+<p>load_collection()</p>
+</li>
+<li>
+<p>insert / search 就能正常跑</p>
+</li>
+</ol>
+</blockquote>
+<h3 id="query-文本里肖申克的救贖是繁体"><a class="markdownIt-Anchor" href="#query-文本里肖申克的救贖是繁体"></a> query 文本里“肖申克的救贖”是繁体</h3>
+<p>你 query 明确提到“肖申克的救赎”，所以 HUNTC-001 更应该靠前。出现 FRANK-002 更靠前的原因常见有两种：</p>
+<ol>
+<li>query 文本里“肖申克的救贖”是繁体，而 HUNTC-001 标题里也是繁体，但 BERT 类模型对“特定片名”的区分不一定强；</li>
+<li>两部片都有“经典/达拉邦特/监狱/救赎”等强特征，且你的 query 还带了“经典纪念版电影”这种泛化词，可能把检索偏向“达拉邦特经典作品”而不是“精确片名”。</li>
+</ol>
+<h4 id="milvus-打印出来的相似度-1"><a class="markdownIt-Anchor" href="#milvus-打印出来的相似度-1"></a> Milvus 打印出来的“相似度 &gt; 1”</h4>
+<ul>
+<li>
+<p>这其实是 distance（距离） 的典型范围（COSINE distance 通常在 0~2），所以出现 1.1294 并不奇怪。</p>
+</li>
+<li>
+<p>越小越相近，不是越大越相近。</p>
+</li>
+</ul>
+<h1 id="rag-测试"><a class="markdownIt-Anchor" href="#rag-测试"></a> RAG 测试</h1>
+<h2 id="查询方式"><a class="markdownIt-Anchor" href="#查询方式"></a> 查询方式</h2>
+<h3 id="1-titleplot-向量化直接查询"><a class="markdownIt-Anchor" href="#1-titleplot-向量化直接查询"></a> 1 title+plot 向量化直接查询</h3>
+<p>queries = [</p>
+<p>“监狱逃脱的经典电影”,</p>
+<p>“弗兰克·达拉邦特 拍的电影”,</p>
+<p>“无厘头喜剧 功夫打斗”,</p>
+<p>“看完很感动 想哭的电影”,</p>
+<p>]</p>
+<p><strong>结果分析:</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">查询结果</span><br><span class="line"></span><br><span class="line">Query: 监狱逃脱的经典电影</span><br><span class="line">  score=0.647, title=越狱协议！真实事件改编！从华尔街精英到监狱囚徒的救赎！, director=马库斯·高勒</span><br><span class="line">  score=0.644, title=肖申克的救贖！經典紀念版！希望與自由的故事！只要堅持信念，即使身處監獄也能找到屬於自己的救贖！, director=弗蘭克·達拉邦特</span><br><span class="line">  score=0.624, title=绿里奇迹！弗兰克·达拉邦特经典之作！关于人性、慈悲与奇迹的深刻寓言！, director=弗蘭克·達拉邦特</span><br><span class="line">  score=0.591, title=记忆碎片！诺兰封神之作！全程反转不停的烧脑悬疑神片！, director=克里斯托弗·诺兰</span><br><span class="line">  score=0.577, title=未知死亡！全程反转动作神作！燃到炸裂的复仇与救赎！, director=A.R.目虏古多斯</span><br><span class="line">------------------------------------------------------------</span><br><span class="line">Query: 弗兰克·达拉邦特 拍的电影</span><br><span class="line">  score=0.573, title=前目的地！极致烧脑神作！反转到最后一秒的时空悬疑大片！, director=迈克尔·斯派瑞</span><br><span class="line">  score=0.511, title=乌云背后的幸福线！治愈系爱情！在破碎人生中彼此照亮！, director=大卫·O·拉塞尔</span><br><span class="line">  score=0.503, title=拯救大兵瑞恩！影史最强战争片！真实残酷战场与人性光辉！, director=史蒂文·斯皮尔伯格</span><br><span class="line">  score=0.502, title=巴比伦！好莱坞黄金时代史诗！极致浪漫与疯狂的追梦故事！, director=达米恩·查泽雷</span><br><span class="line">  score=0.485, title=黑客帝国！科幻片里程碑！影响一个时代的神级大作！, director=沃卓斯基姐妹</span><br><span class="line">------------------------------------------------------------</span><br><span class="line">Query: 无厘头喜剧 功夫打斗</span><br><span class="line">  score=0.619, title=小丑！封神级神作！深刻揭露社会与人性的黑暗神片！, director=托德·菲利普斯</span><br><span class="line">  score=0.528, title=赌圣！周星驰成名之作！无厘头喜剧开山之作！爆笑又经典！, director=周星馳、劉鎮偉</span><br><span class="line">  score=0.500, title=夏洛特的网！治愈所有人的童话！友谊与生命的最美赞歌！, director=盖瑞·温尼克</span><br><span class="line">  score=0.495, title=V字仇杀队！震撼灵魂的科幻神作！为自由与人性而战！, director=詹姆斯·麥提格</span><br><span class="line">  score=0.491, title=阿甘正传！影史第一神作！人生就像一盒巧克力，永远充满希望！, director=羅伯特·澤米吉斯</span><br><span class="line">------------------------------------------------------------</span><br><span class="line">Query: 看完很感动 想哭的电影</span><br><span class="line">  score=0.535, title=机器人总动员！零台词却看哭无数人！最治愈的科幻动画神作！, director=安德鲁·斯坦顿</span><br><span class="line">  score=0.519, title=美丽人生！奥斯卡经典！父爱与勇气的最美赞歌！笑着流泪的神作！, director=羅貝托·貝尼尼</span><br><span class="line">  score=0.499, title=心灵捕手！治愈无数人的励志经典！天才与自我救赎的成长之路！, director=格斯·范·桑特</span><br><span class="line">  score=0.493, title=V字仇杀队！震撼灵魂的科幻神作！为自由与人性而战！, director=詹姆斯·麥提格</span><br><span class="line">  score=0.479, title=未知死亡！全程反转动作神作！燃到炸裂的复仇与救赎！, director=A.R.目虏古多斯</span><br><span class="line">------------------------------------------------------------</span><br></pre></td></tr></table></figure>
+<blockquote>
+<h1 id="逐-query-分析"><a class="markdownIt-Anchor" href="#逐-query-分析"></a> 逐 Query 分析</h1>
+<h2 id="1query监狱逃脱的经典电影"><a class="markdownIt-Anchor" href="#1query监狱逃脱的经典电影"></a> 1）Query：监狱逃脱的经典电影</h2>
+<p><strong>结果：</strong></p>
+<ul>
+<li>
+<p>✅ 正确：</p>
+<ul>
+<li>肖申克的救赎（监狱、逃脱、经典）</li>
+<li>越狱协议（监狱、救赎）</li>
+<li>绿里奇迹（监狱、人性，但<strong>无逃脱</strong>）</li>
+</ul>
+</li>
+<li>
+<p>❌ 错误：</p>
+<ul>
+<li>记忆碎片、未知死亡：<strong>完全不沾边</strong></li>
+</ul>
+</li>
+</ul>
+<p><strong>问题：</strong></p>
+<ul>
+<li>把「救赎」和「逃脱」绑定太死</li>
+<li>没有过滤<strong>监狱 / 逃脱</strong>强意图</li>
+<li>绿里奇迹分数偏高，不合理</li>
+</ul>
+<hr>
+<h2 id="2query弗兰克达拉邦特-拍的电影"><a class="markdownIt-Anchor" href="#2query弗兰克达拉邦特-拍的电影"></a> 2）Query：弗兰克・达拉邦特 拍的电影</h2>
+<p><strong>结果：全错</strong></p>
+<p>一条他的电影都没返回。</p>
+<p><strong>问题（非常严重）：</strong></p>
+<ul>
+<li><strong>导演字段完全没参与检索 / 过滤</strong></li>
+<li>系统只做语义泛化，不做实体匹配</li>
+<li>直接导致该意图<strong>100% 失效</strong></li>
+</ul>
+<hr>
+<h2 id="3query无厘头喜剧-功夫打斗"><a class="markdownIt-Anchor" href="#3query无厘头喜剧-功夫打斗"></a> 3）Query：无厘头喜剧 功夫打斗</h2>
+<p><strong>结果：</strong></p>
+<ul>
+<li>✅ 正确：
+<ul>
+<li>赌圣（周星驰无厘头）</li>
+</ul>
+</li>
+<li>❌ 严重错误：
+<ul>
+<li>小丑排第一（完全不是喜剧、无功夫）</li>
+<li>夏洛特的网、V 字仇杀队、阿甘正传：<strong>全不匹配</strong></li>
+</ul>
+</li>
+</ul>
+<p><strong>问题：</strong></p>
+<ul>
+<li>「无厘头」「功夫」<strong>语义理解极弱</strong></li>
+<li>把情绪、主题、动作混在一起算分</li>
+<li>没有对「周星驰 + 无厘头 + 功夫」做强化</li>
+</ul>
+<hr>
+<h2 id="4query看完很感动-想哭的电影"><a class="markdownIt-Anchor" href="#4query看完很感动-想哭的电影"></a> 4）Query：看完很感动 想哭的电影</h2>
+<p><strong>结果：整体最准</strong></p>
+<ul>
+<li>✅ 正确：
+<ul>
+<li>机器人总动员</li>
+<li>美丽人生</li>
+<li>心灵捕手</li>
+</ul>
+</li>
+<li>⚠️ 勉强：V 字仇杀队、未知死亡（偏燃 / 震撼，不算催泪）</li>
+</ul>
+<p><strong>问题：</strong></p>
+<ul>
+<li>「感动想哭」这种<strong>情感意图</strong>识别最好</li>
+<li>但仍混入偏动作 / 悬疑的片</li>
+</ul>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/03/16/2026%E5%B9%B43%E6%9C%8816%E6%97%A5-embed%E6%A8%A1%E5%9E%8B/" data-id="cmmuaf4q2000158v4api4asmo" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2026年3月11日-知识图谱" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/03/11/2026%E5%B9%B43%E6%9C%8811%E6%97%A5-%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/" class="article-date">
+  <time class="post-time" datetime="2026-03-11T02:36:11.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">11</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2026/03/11/2026%E5%B9%B43%E6%9C%8811%E6%97%A5-%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/">2026年3月11日 知识图谱</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/03/11/2026%E5%B9%B43%E6%9C%8811%E6%97%A5-%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/" data-id="cmmuaf4q3000258v477f87p8c" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2026年3月11日-agent项目" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/03/11/2026%E5%B9%B43%E6%9C%8811%E6%97%A5-agent%E9%A1%B9%E7%9B%AE/" class="article-date">
+  <time class="post-time" datetime="2026-03-11T01:18:51.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">11</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2026/03/11/2026%E5%B9%B43%E6%9C%8811%E6%97%A5-agent%E9%A1%B9%E7%9B%AE/">2026年3月11日 agent项目</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>tips</p>
+<p><img src="/2026/03/11/2026%E5%B9%B43%E6%9C%8811%E6%97%A5-agent%E9%A1%B9%E7%9B%AE/image-20260311091914839.png" alt="image-20260311091914839"></p>
+<h3 id="cot"><a class="markdownIt-Anchor" href="#cot"></a> cot</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"># 豆包内置的完整 CoT (思维链) 思考流程</span><br><span class="line"># 执行时机：回答任意用户问题时自动触发</span><br><span class="line">def internal_cot_process(user_question):</span><br><span class="line">    # 步骤1：核心目标识别</span><br><span class="line">    step1 = &#123;</span><br><span class="line">        &quot;action&quot;: &quot;理解用户真实需求&quot;,</span><br><span class="line">        &quot;sub_steps&quot;: [</span><br><span class="line">            &quot;判断需求类型：知识/推理/创作/代码/情绪支持等&quot;,</span><br><span class="line">            &quot;提取显性约束：格式/语言/长度/禁忌要求&quot;,</span><br><span class="line">            &quot;挖掘隐性需求：用户未明说但潜在需要的（如新手需通俗解释）&quot;</span><br><span class="line">        ],</span><br><span class="line">        &quot;output&quot;: &quot;明确核心目标：xxx&quot;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    # 步骤2：问题拆解与信息校验</span><br><span class="line">    step2 = &#123;</span><br><span class="line">        &quot;action&quot;: &quot;拆解问题并校验信息&quot;,</span><br><span class="line">        &quot;sub_steps&quot;: [</span><br><span class="line">            &quot;复杂问题拆分为可执行的子问题（如编程问题拆为：环境→逻辑→代码→测试）&quot;,</span><br><span class="line">            &quot;标记关键信息：用户提供的已知条件/数据&quot;,</span><br><span class="line">            &quot;标记缺失信息：需要追问或说明的模糊点&quot;,</span><br><span class="line">            &quot;标记歧义点：可能产生误解的表述并统一口径&quot;</span><br><span class="line">        ],</span><br><span class="line">        &quot;output&quot;: &quot;拆解结果：[子问题1, 子问题2, ...]；信息校验：[关键/缺失/歧义]&quot;)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    # 步骤3：知识检索与可信度验证</span><br><span class="line">    step3 = &#123;</span><br><span class="line">        &quot;action&quot;: &quot;调用知识库并验证准确性&quot;,</span><br><span class="line">        &quot;sub_steps&quot;: [</span><br><span class="line">            &quot;检索匹配的专业知识/通用常识&quot;,</span><br><span class="line">            &quot;对不确定的信息标记「待验证」，不编造&quot;,</span><br><span class="line">            &quot;优先使用行业通用结论/官方文档内容&quot;</span><br><span class="line">        ],</span><br><span class="line">        &quot;output&quot;: &quot;检索结果：[准确内容/不确定/无相关知识]&quot;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    # 步骤4：分步推理（CoT 核心）</span><br><span class="line">    step4 = &#123;</span><br><span class="line">        &quot;action&quot;: &quot;逐步骤逻辑推导&quot;,</span><br><span class="line">        &quot;sub_steps&quot;: [</span><br><span class="line">            &quot;先输出结论框架（如：先给代码→再解释→最后总结）&quot;,</span><br><span class="line">            &quot;单步只执行一个逻辑动作：定义→分析→计算→推导→验证&quot;,</span><br><span class="line">            &quot;推理过程可追溯，不跳步（如数学题分步列公式，编程题分步写逻辑）&quot;,</span><br><span class="line">            &quot;对中间结果自查：是否矛盾/是否符合常识&quot;</span><br><span class="line">        ],</span><br><span class="line">        &quot;output&quot;: &quot;分步推理结果：[步骤1结论, 步骤2结论, ..., 最终结论]&quot;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    # 步骤5：安全合规校验</span><br><span class="line">    step5 = &#123;</span><br><span class="line">        &quot;action&quot;: &quot;内容安全与合规检查&quot;,</span><br><span class="line">        &quot;sub_steps&quot;: [</span><br><span class="line">            &quot;校验是否含违规/敏感/误导性内容&quot;,</span><br><span class="line">            &quot;校验是否存在事实错误/编造信息&quot;,</span><br><span class="line">            &quot;校验是否符合用户场景的适配性（如新手避免专业术语堆砌）&quot;</span><br><span class="line">        ],</span><br><span class="line">        &quot;output&quot;: &quot;合规结果：通过/需调整（调整点：xxx）&quot;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    # 步骤6：输出组织与优化</span><br><span class="line">    step6 = &#123;</span><br><span class="line">        &quot;action&quot;: &quot;结构化输出最终回答&quot;,</span><br><span class="line">        &quot;sub_steps&quot;: [</span><br><span class="line">            &quot;按「核心答案→详细解释→总结」的逻辑组织语言&quot;,</span><br><span class="line">            &quot;优先提供可直接复用的内容（如代码/模板）&quot;,</span><br><span class="line">            &quot;语言适配用户水平：新手通俗化，专业用户精准化&quot;,</span><br><span class="line">            &quot;格式适配要求：代码块/列表/分段等&quot;</span><br><span class="line">        ],</span><br><span class="line">        &quot;output&quot;: &quot;最终面向用户的回答内容&quot;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    # 执行全流程</span><br><span class="line">    execute_steps = [step1, step2, step3, step4, step5, step6]</span><br><span class="line">    return execute_steps</span><br><span class="line"></span><br><span class="line"># 极简版 Cot 执行口诀（内置快捷调用）</span><br><span class="line">simple_cot = &quot;先理解 → 再拆解 → 分步推理 → 验证 → 安全检查 → 清晰输出&quot;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/03/11/2026%E5%B9%B43%E6%9C%8811%E6%97%A5-agent%E9%A1%B9%E7%9B%AE/" data-id="cmmuaf4pt000058v48h8oesfq" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-2026年3月6日-agent协议a2a" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -118,6 +640,7 @@
 <p>四种不同通讯方式</p>
 <h1 id="example"><a class="markdownIt-Anchor" href="#example"></a> example</h1>
 <h2 id="医疗agent"><a class="markdownIt-Anchor" href="#医疗agent"></a> 医疗agent</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">    %% 用户层</span><br><span class="line">    User[用户/客户端]</span><br><span class="line">    </span><br><span class="line">    %% 主协调器层</span><br><span class="line">    subgraph OrchestratorLayer [主协调器层 - BeeAI Framework]</span><br><span class="line">        Concierge[&quot;&lt;b&gt;Healthcare Concierge Agent&lt;/b&gt;&lt;br/&gt;医疗健康协调Agent&lt;br/&gt;&lt;br/&gt;框架: BeeAI RequirementAgent&lt;br/&gt;模型: Gemini 2.5 Flash&lt;br/&gt;端口: 9996&lt;br/&gt;&lt;br/&gt;功能: 路由和协调其他Agent&lt;br/&gt;工具: HandoffTool&quot;]</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">    %% A2A Agent服务器层</span><br><span class="line">    subgraph A2AAgents [A2A Agent服务器层]</span><br><span class="line">        direction TB</span><br><span class="line">        </span><br><span class="line">        PolicyAgent[&quot;&lt;b&gt;Policy Agent&lt;/b&gt;&lt;br/&gt;保险政策Agent&lt;br/&gt;&lt;br/&gt;框架: A2A SDK&lt;br/&gt;模型: Anthropic Claude Haiku&lt;br/&gt;端口: 9999&lt;br/&gt;&lt;br/&gt;功能: 回答保险覆盖问题&lt;br/&gt;数据源: PDF文档RAG&quot;]</span><br><span class="line">        </span><br><span class="line">        ResearchAgent[&quot;&lt;b&gt;Research Agent&lt;/b&gt;&lt;br/&gt;健康研究Agent&lt;br/&gt;&lt;br/&gt;框架: Google ADK&lt;br/&gt;模型: Gemini 3 Pro Preview&lt;br/&gt;端口: 9998&lt;br/&gt;&lt;br/&gt;功能: 提供健康信息研究&lt;br/&gt;工具: Google Search&quot;]</span><br><span class="line">        </span><br><span class="line">        ProviderAgent[&quot;&lt;b&gt;Provider Agent&lt;/b&gt;&lt;br/&gt;医疗提供者Agent&lt;br/&gt;&lt;br/&gt;框架: LangChain + LangGraph&lt;br/&gt;模型: GPT-OSS-20B&lt;br/&gt;端口: 9997&lt;br/&gt;&lt;br/&gt;功能: 查找医疗提供者&lt;br/&gt;数据源: MCP Server&quot;]</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">    %% 数据源和工具层</span><br><span class="line">    subgraph DataLayer [数据源和工具层]</span><br><span class="line">        direction LR</span><br><span class="line">        </span><br><span class="line">        PDF[&quot;&lt;b&gt;Policy PDF&lt;/b&gt;&lt;br/&gt;2026AnthemgHIPSBC.pdf&lt;br/&gt;&lt;br/&gt;保险政策文档&quot;]</span><br><span class="line">        </span><br><span class="line">        GoogleSearch[&quot;&lt;b&gt;Google Search Tool&lt;/b&gt;&lt;br/&gt;网络搜索工具&lt;br/&gt;&lt;br/&gt;实时健康信息&quot;]</span><br><span class="line">        </span><br><span class="line">        MCPServer[&quot;&lt;b&gt;FastMCP Server&lt;/b&gt;&lt;br/&gt;MCP协议服务器&lt;br/&gt;&lt;br/&gt;数据: doctors.json&lt;br/&gt;协议: stdio&quot;]</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">    %% 连接关系</span><br><span class="line">    User --&gt;|&quot;A2A协议&lt;br/&gt;JSON-RPC&quot;| Concierge</span><br><span class="line">    </span><br><span class="line">    Concierge --&gt;|&quot;HandoffTool&lt;br/&gt;A2A协议&quot;| PolicyAgent</span><br><span class="line">    Concierge --&gt;|&quot;HandoffTool&lt;br/&gt;A2A协议&quot;| ResearchAgent</span><br><span class="line">    Concierge --&gt;|&quot;HandoffTool&lt;br/&gt;A2A协议&quot;| ProviderAgent</span><br><span class="line">    </span><br><span class="line">    PolicyAgent --&gt;|&quot;读取&quot;| PDF</span><br><span class="line">    ResearchAgent --&gt;|&quot;调用&quot;| GoogleSearch</span><br><span class="line">    </span><br><span class="line">    ProviderAgent --&gt;|&quot;MCP协议&lt;br/&gt;stdio传输&quot;| MCPServer</span><br><span class="line"></span><br><span class="line">    %% 样式定义</span><br><span class="line">    classDef orchestrator fill:#e1bee7,stroke:#4a148c,stroke-width:3px;</span><br><span class="line">    classDef agent fill:#bbdefb,stroke:#01579b,stroke-width:2px;</span><br><span class="line">    classDef datasource fill:#fff9c4,stroke:#f57f17,stroke-width:2px;</span><br><span class="line">    classDef user fill:#c8e6c9,stroke:#1b5e20,stroke-width:2px;</span><br><span class="line">    </span><br><span class="line">    class Concierge orchestrator;</span><br><span class="line">    class PolicyAgent,ResearchAgent,ProviderAgent agent;</span><br><span class="line">    class PDF,GoogleSearch,MCPServer datasource;</span><br><span class="line">    class User user;</span><br></pre></td></tr></table></figure>
 <p><img src="/2026/03/05/2026%E5%B9%B43%E6%9C%886%E6%97%A5-agent%E5%8D%8F%E8%AE%AEa2a/image-20260305170140704.png" alt></p>
 <h1 id="project"><a class="markdownIt-Anchor" href="#project"></a> project</h1>
 <p>多智能体协调,</p>
@@ -473,6 +996,87 @@
 <p>逻辑上属于 LLM 的一部分</p>
 <h2 id="动态更新"><a class="markdownIt-Anchor" href="#动态更新"></a> 动态更新</h2>
 <p>可以用<code>self.system</code> 来保存模板, 然后 <code>system= </code> 来进行动态更新和传入</p>
+<h2 id="单例模式"><a class="markdownIt-Anchor" href="#单例模式"></a> 单例模式</h2>
+<h4 id="原因主要有以下几点"><a class="markdownIt-Anchor" href="#原因主要有以下几点"></a> 原因主要有以下几点：</h4>
+<blockquote>
+<h4 id="1-节省系统资源"><a class="markdownIt-Anchor" href="#1-节省系统资源"></a> 1. 节省系统资源</h4>
+<p>有些类的实例化过程会消耗大量资源（比如数据库连接池、线程池、配置文件管理器、日志管理器）：</p>
+<ul>
+<li>例如：一个<strong>数据库连接池</strong>的创建需要初始化连接数、配置超时时间、建立底层网络连接，若每次操作数据库都新建一个连接池实例，会导致内存溢出、数据库连接数耗尽。</li>
+<li>单例模式通过复用唯一实例，避免了重复创建 / 销毁实例的资源开销，提升程序运行效率。</li>
+</ul>
+<h4 id="2-保证数据一致性"><a class="markdownIt-Anchor" href="#2-保证数据一致性"></a> 2. 保证数据一致性</h4>
+<p>当多个地方操作同一个 “全局状态” 的对象时，多个实例可能导致数据冲突或不一致：</p>
+<ul>
+<li>例如：一个应用的配置管理器，若存在多个实例，当其中一个实例修改了配置项（如切换环境），其他实例可能仍使用旧配置，导致程序行为异常；</li>
+</ul>
+<h4 id="3-提供全局统一的访问入口"><a class="markdownIt-Anchor" href="#3-提供全局统一的访问入口"></a> 3. 提供全局统一的访问入口</h4>
+<p>单例模式既避免了全局变量的安全性问题（全局变量易被随意修改），又能像全局变量一样让程序任意位置便捷访问该实例：</p>
+<ul>
+<li>例如：日志工具类，整个应用的日志输出都通过同一个单例实例完成，能保证日志的输出顺序、格式统一，且无需在每个类中都初始化日志对象。</li>
+</ul>
+<h4 id="4-控制实例的创建时机懒加载"><a class="markdownIt-Anchor" href="#4-控制实例的创建时机懒加载"></a> 4. 控制实例的创建时机（懒加载）</h4>
+<p>单例模式支持 “懒汉式” 实现（用到时才创建实例），而非程序启动时就初始化所有重量级对象，进一步优化程序启动速度和内存占用。</p>
+</blockquote>
+<h4 id="什么情况下不适用"><a class="markdownIt-Anchor" href="#什么情况下不适用"></a> 什么情况下不适用</h4>
+<blockquote>
+<h4 id="1-需要多实例的场景最核心的不适用场景"><a class="markdownIt-Anchor" href="#1-需要多实例的场景最核心的不适用场景"></a> 1. 需要多实例的场景（最核心的不适用场景）</h4>
+<p>如果业务逻辑本身就要求一个类能创建<strong>多个独立的实例</strong>，使用单例会直接破坏业务逻辑：</p>
+<ul>
+<li>示例 1：数据库连接（注意不是 “连接池”）—— 一个应用可能需要同时连接多个不同的数据库（如 MySQL、Redis、Oracle），每个连接都是独立的，若用单例只能创建一个连接，无法满足多数据库操作；</li>
+<li>示例 2：用户<strong>会话（Session）</strong>—— 每个登录用户都需要一个独立的会话对象存储个人信息，若用单例，所有用户会共享同一个会话，导致数据混乱；</li>
+<li>示例 3：<strong>文件操作</strong>对象 —— 同时读写多个文件时，每个文件需要一个独立的文件流实例，单例会导致文件操作互相干扰。</li>
+</ul>
+<h4 id="2-高并发-分布式场景单例的-唯一性-失效或引发问题"><a class="markdownIt-Anchor" href="#2-高并发-分布式场景单例的-唯一性-失效或引发问题"></a> 2. 高并发 / 分布式场景（单例的 “唯一性” 失效或引发问题）</h4>
+<ul>
+<li>分布式系统：单例的 “唯一” 仅局限于<strong>单个 JVM 进程</strong>，在集群 / 分布式环境中，每个节点都会创建一个单例实例，此时 “全局唯一” 的特性完全失效；</li>
+<li>高并发写操作：单例的唯一实例若被多线程频繁修改状态，需要加锁保证线程安全，而锁会导致并发性能下降（甚至出现死锁），此时不如创建多实例避免锁竞争。</li>
+</ul>
+<h4 id="3-不利于测试-扩展的场景"><a class="markdownIt-Anchor" href="#3-不利于测试-扩展的场景"></a> 3. 不利于测试 / 扩展的场景</h4>
+<p>单例模式的 “全局唯一” 和 “静态绑定” 特性，会让代码耦合度升高，大幅增加测试和扩展的难度：</p>
+<ul>
+<li>单元测试：单例的状态会在测试用例之间共享（比如前一个测试修改了实例的属性，后一个测试会读到脏数据），无法实现 “隔离测试”；</li>
+<li>代码扩展：单例模式本质上是 “硬编码” 的唯一实例，若后续业务需要改为多实例，需大幅修改代码（违背 “开闭原则”）；</li>
+<li>依赖注入（DI）：现代框架（如 Spring）提倡依赖注入解耦，而单例的全局访问（<code>getInstance()</code>）会让代码紧耦合，无法通过 DI 灵活替换实现类。</li>
+</ul>
+<h4 id="4-无状态-轻量级的类"><a class="markdownIt-Anchor" href="#4-无状态-轻量级的类"></a> 4. 无状态 / 轻量级的类</h4>
+<p>如果一个类是<strong>无状态</strong>的（仅包含静态方法，没有实例属性），或实例化成本极低 比如简单的<strong>工具类</strong></p>
+</blockquote>
+<p>嵌套太深了, 看晕了</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Function</span>(<span class="title class_ inherited__">BaseModel</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;OpenAI 函数调用结构&quot;&quot;&quot;</span></span><br><span class="line">    name: <span class="built_in">str</span></span><br><span class="line">    arguments: <span class="built_in">str</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ToolCall</span>(<span class="title class_ inherited__">BaseModel</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;OpenAI 工具调用结构&quot;&quot;&quot;</span></span><br><span class="line">    <span class="built_in">id</span>: <span class="built_in">str</span></span><br><span class="line">    <span class="built_in">type</span>: <span class="built_in">str</span> = <span class="string">&quot;function&quot;</span></span><br><span class="line">    function: Function</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">ToolExecution</span>(<span class="title class_ inherited__">BaseModel</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;一次工具调用及其对应的执行结果&quot;&quot;&quot;</span></span><br><span class="line">    tool_call: ToolCall</span><br><span class="line">    result: <span class="type">Optional</span>[<span class="built_in">str</span>] = <span class="literal">None</span></span><br><span class="line">    error_message: <span class="type">Optional</span>[<span class="built_in">str</span>] = <span class="literal">None</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">FunctionExecutionResult</span>(<span class="title class_ inherited__">BaseModel</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;函数执行结果结构&quot;&quot;&quot;</span></span><br><span class="line">    success: <span class="built_in">bool</span> = <span class="literal">True</span> <span class="comment"># 是否成功</span></span><br><span class="line">    content: <span class="type">Optional</span>[<span class="built_in">str</span>] = <span class="literal">None</span>  <span class="comment"># LLM 的回复内容</span></span><br><span class="line">    executions: <span class="type">Optional</span>[<span class="type">List</span>[ToolExecution]] = <span class="literal">None</span>  <span class="comment"># 推荐字段：工具调用与其结果的绑定列表</span></span><br><span class="line">    error_message: <span class="type">Optional</span>[<span class="built_in">str</span>] = <span class="literal">None</span> <span class="comment"># 错误信息</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h1 id="开发杂谈"><a class="markdownIt-Anchor" href="#开发杂谈"></a> 开发杂谈</h1>
+<h4 id="重构template-是对的吧"><a class="markdownIt-Anchor" href="#重构template-是对的吧"></a> 重构template 是对的吧?</h4>
+<blockquote>
+<p>为什么要重构,<br>
+一开始使用self 和 变量确实可以动态实现因为我需要动态替换<br>
+但是history需要时使用用占位符比较容易出错也不好写</p>
+<p>所以重构了<br>
+使用变量方法进行替换, 不用原本的format, 这样既可以一开始就不forma全, 又可以动态替换, 加上字段清晰和有初始值</p>
+</blockquote>
+<h4 id="计划-杂谈-2026年3月12日"><a class="markdownIt-Anchor" href="#计划-杂谈-2026年3月12日"></a> 计划. 杂谈 2026年3月12日</h4>
+<p>1 写代码的步骤</p>
+<blockquote>
+<p>写那么久代码了. 虽然一开始就是ai帮忙写的, 所以跳过了很多coding的坑</p>
+<p>最近开始自己+tab补全进行手写, 只有重复工作的时候交给agent<br>
+写了只有发现有时候会出很多问题. 就比如:</p>
+<ol>
+<li>经常写着写着就举步维艰了, 不知道如何写下去, 因为按照自己一开始的想法写, 发现效果不是很好. 然后就乱改了, 改到后面手忙脚乱了…</li>
+</ol>
+<blockquote>
+<p>我想的解决办法就是: 1. 其实这是正常的, 需要改进的地方就是一开始的plan需要推敲, 不要有小想法,模糊想法就开始coding. 2. 先参考其他人的, 然后分析和改进(但是这样好想就不需要自己写了, 需求明确, 好像完全可以给ai完成, 比如:PlanAgent)</p>
+</blockquote>
+<ol start="2">
+<li>经常写了之后又有新的想法, 然后重构重构再重构, 比如: ReacRuleAgent</li>
+<li>很多地方还是很纠结的, 比如Finish位置</li>
+</ol>
+<blockquote>
+<p>所以我进行了调研, 虽然正常是在action里, 但是在thought会少一步 LLM</p>
+</blockquote>
+<ol start="4">
+<li>其次就是经常写着写着就逃避了, 搞chore去了, 写无关紧要的东西</li>
+<li>另外就是不同模型搞得+对输出message不熟悉. 虽然这是必踩的坑</li>
+</ol>
+</blockquote>
 
       
     </div>
@@ -583,6 +1187,167 @@
         <blockquote>
 <p>s</p>
 </blockquote>
+<h1 id="向量数据库"><a class="markdownIt-Anchor" href="#向量数据库"></a> 向量数据库</h1>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316165521138.png" alt="image-20260316165521138" style="zoom: 67%;">
+<h2 id="1-向量"><a class="markdownIt-Anchor" href="#1-向量"></a> 1 向量</h2>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171119459.png" alt="image-20260316171119459" style="zoom:67%;">
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316170656040.png" alt="image-20260316170656040" style="zoom: 67%;">
+<h3 id="embedding"><a class="markdownIt-Anchor" href="#embedding"></a> embedding</h3>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316170723044.png" alt="image-20260316170723044" style="zoom: 67%;">
+<p>高维向量= 多个特征</p>
+<h2 id="2-数据库"><a class="markdownIt-Anchor" href="#2-数据库"></a> 2 数据库</h2>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171255175.png" alt="image-20260316171255175" style="zoom:50%;">
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171400647.png" alt="image-20260316171400647" style="zoom:50%;">
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171413125.png" alt="image-20260316171413125" style="zoom:50%;">
+<p><img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171554078.png" alt="image-20260316171554078" style="zoom:50%;"><img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171620706.png" alt="image-20260316171620706" style="zoom:50%;"></p>
+<h3 id="作用"><a class="markdownIt-Anchor" href="#作用"></a> 作用</h3>
+<ol>
+<li>相似搜索</li>
+<li>提升性能</li>
+</ol>
+<p><img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171746844.png" alt="image-20260316171746844"><img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171805928.png" alt="image-20260316171805928" style="zoom:50%;"></p>
+<h3 id="评价指标"><a class="markdownIt-Anchor" href="#评价指标"></a> 评价指标</h3>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171902680.png" alt="image-20260316171902680" style="zoom: 50%;">
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316172005023.png" alt="image-20260316172005023" style="zoom:50%;">
+<h2 id="3-应用场景"><a class="markdownIt-Anchor" href="#3-应用场景"></a> 3 应用场景</h2>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316214728894.png" alt="image-20260316214728894" style="zoom:50%;">
+<h2 id="4-搜索相似性搜索"><a class="markdownIt-Anchor" href="#4-搜索相似性搜索"></a> 4 搜索(相似性搜索)</h2>
+<h3 id="距离"><a class="markdownIt-Anchor" href="#距离"></a> 距离</h3>
+<ol>
+<li>
+<p>点几</p>
+</li>
+<li>
+<p>余弦相似度</p>
+<ol>
+<li>
+<p>高维空间里，*<em>方向差异明显 → 余弦距离特别好用</em></p>
+<blockquote>
+<p>语义 embedding 的特点：</p>
+<ul>
+<li>向量<strong>长度不代表语义</strong>，只代表 “强度”</li>
+<li>真正决定意思相不相近的是<strong>方向</strong></li>
+</ul>
+<p>比如：</p>
+<ul>
+<li>“我喜欢苹果”</li>
+<li>“我真的超级超级喜欢苹果”</li>
+</ul>
+<p>两句语义几乎一样，但向量<strong>长度可能差很多</strong>：</p>
+<ul>
+<li>余弦距离：<strong>很小（相似）</strong></li>
+<li>欧氏距离：<strong>很大（不相似）</strong></li>
+</ul>
+<p>👉 <strong>余弦会忽略长度，只看语义方向，更符合人的判断。</strong></p>
+</blockquote>
+</li>
+<li>
+<p>地球表面积有限，但你能画出<strong>无限多不同的点</strong>。</p>
+<blockquote>
+<h5 id="1-数学上方向确实无限"><a class="markdownIt-Anchor" href="#1-数学上方向确实无限"></a> 1. 数学上：方向确实无限</h5>
+<p>在 <strong>d 维实数空间</strong>（比如 768 维）：</p>
+<ul>
+<li>方向由单位向量决定</li>
+<li>单位向量有 无限多个→ 所以方向无限多</li>
+</ul>
+<p>你随便转一点点角度，就是一个新方向。</p>
+<hr>
+<h5 id="2-但模型的语义空间不是真无限"><a class="markdownIt-Anchor" href="#2-但模型的语义空间不是真无限"></a> 2. 但模型的语义空间：不是真・无限</h5>
+<p>模型 embedding 是<strong>浮点数</strong>，有精度限制：</p>
+<ul>
+<li>float32 只有 2^32 种可能的数值</li>
+<li>768 维向量的<strong>不同方向数量是巨大、有限、但远超你能用的</strong></li>
+</ul>
+<p>可以理解成：</p>
+<p><strong>不是数学无限，但对人类工程来说 = 无限够用。</strong></p>
+</blockquote>
+</li>
+</ol>
+</li>
+</ol>
+<blockquote>
+<h3 id="余弦距离-vs-欧氏距离点积距离"><a class="markdownIt-Anchor" href="#余弦距离-vs-欧氏距离点积距离"></a> 余弦距离 vs 欧氏距离（点积距离）</h3>
+<h4 id="1-欧氏距离你说的-点几距离"><a class="markdownIt-Anchor" href="#1-欧氏距离你说的-点几距离"></a> 1. 欧氏距离（你说的 “点几距离”）</h4>
+<p>衡量<strong>两个点在空间里的直线远近</strong>。</p>
+<ul>
+<li>关心：<strong>绝对位置、长度大小</strong></li>
+<li>公式：两点直线距离</li>
+<li>特点：<strong>数值大小很重要</strong>，模长不一样，距离就会差很多</li>
+</ul>
+<h4 id="2-余弦距离"><a class="markdownIt-Anchor" href="#2-余弦距离"></a> 2. 余弦距离</h4>
+<p>衡量<strong>两个向量方向的差异</strong>，不管长度。</p>
+<ul>
+<li>关心：<strong>方向、趋势、相似度</strong></li>
+<li>公式：1 - 余弦相似度</li>
+<li>特点：<strong>只看方向，不看长度</strong>，模长不影响结果</li>
+</ul>
+<hr>
+<h3 id="一句话区别"><a class="markdownIt-Anchor" href="#一句话区别"></a> 一句话区别</h3>
+<ul>
+<li><strong>欧氏距离：看你离我多远。</strong></li>
+<li><strong>余弦距离：看咱俩方向一不一样。</strong></li>
+</ul>
+<hr>
+<h3 id="举个最直观的例子"><a class="markdownIt-Anchor" href="#举个最直观的例子"></a> 举个最直观的例子</h3>
+<p>用户 A：[1, 2]</p>
+<p>用户 B：[2, 4]</p>
+<p>用户 C：[3, 1]</p>
+<ul>
+<li><strong>欧氏距离</strong>：A 和 B 很远，因为数值差一倍。</li>
+<li><strong>余弦距离</strong>：A 和 B <strong>完全一样</strong>，因为方向完全相同。</li>
+</ul>
+</blockquote>
+<h4 id="什么时候用哪个"><a class="markdownIt-Anchor" href="#什么时候用哪个"></a> 什么时候用哪个？</h4>
+<ul>
+<li><strong>文本、embedding、推荐、相似度</strong> → 用 <strong>余弦距离</strong></li>
+<li><strong>坐标、位置、聚类、物理距离</strong> → 用 <strong>欧氏距离</strong></li>
+</ul>
+<h3 id="混合搜索"><a class="markdownIt-Anchor" href="#混合搜索"></a> 混合搜索</h3>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316165813058.png" alt="image-20260316165813058" style="zoom: 67%;">
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316165843605.png" alt="image-20260316165843605" style="zoom:80%;">
+<h3 id="索引"><a class="markdownIt-Anchor" href="#索引"></a> 索引</h3>
+<p>给点进行索引(产生数据结构:图表…)</p>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316215411466.png" alt="image-20260316215411466" style="zoom:50%;">
+<h4 id="1-哈希"><a class="markdownIt-Anchor" href="#1-哈希"></a> 1 哈希</h4>
+<p>尽量产生冲突的哈希</p>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316215614803.png" alt="image-20260316215614803" style="zoom:50%;">
+<h4 id="2-树"><a class="markdownIt-Anchor" href="#2-树"></a> 2 树</h4>
+<p>建树</p>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316215754506.png" alt="image-20260316215754506" style="zoom:50%;">
+<h4 id="3-图主要"><a class="markdownIt-Anchor" href="#3-图主要"></a> 3 图(主要)</h4>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316215845687.png" alt="image-20260316215845687" style="zoom:50%;">
+<h4 id="4-倒排文件ivf"><a class="markdownIt-Anchor" href="#4-倒排文件ivf"></a> 4 倒排文件IVF</h4>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316215926225.png" alt="image-20260316215926225" style="zoom:50%;">
+<h3 id="量化压缩"><a class="markdownIt-Anchor" href="#量化压缩"></a> 量化压缩</h3>
+<h4 id="1-flat"><a class="markdownIt-Anchor" href="#1-flat"></a> 1 Flat</h4>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316220135026.png" alt="image-20260316220135026" style="zoom:50%;">
+<h4 id="2-quantized"><a class="markdownIt-Anchor" href="#2-quantized"></a> 2 Quantized</h4>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316220202732.png" alt="image-20260316220202732" style="zoom:50%;">
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316220313347.png" alt="image-20260316220313347" style="zoom:50%;">
+<h3 id="算法"><a class="markdownIt-Anchor" href="#算法"></a> 算法</h3>
+<h4 id="ann"><a class="markdownIt-Anchor" href="#ann"></a> ANN</h4>
+<h4 id="ivf"><a class="markdownIt-Anchor" href="#ivf"></a> IVF</h4>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316220938618.png" alt="image-20260316220938618" style="zoom:50%;">
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316221052822.png" alt="image-20260316221052822" style="zoom:67%;">
+<h4 id="hnsw图"><a class="markdownIt-Anchor" href="#hnsw图"></a> HNSW图</h4>
+<p>小世界</p>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316221552246.png" alt="image-20260316221552246" style="zoom:50%;">
+<h4 id="lsh哈希"><a class="markdownIt-Anchor" href="#lsh哈希"></a> LSH哈希</h4>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316221743877.png" alt="image-20260316221743877" style="zoom:67%;">
+<h4 id="pq压缩"><a class="markdownIt-Anchor" href="#pq压缩"></a> PQ压缩</h4>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316222110529.png" alt="image-20260316222110529" style="zoom: 80%;">
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316222134561.png" alt="image-20260316222134561" style="zoom:80%;">
+<h4 id="ivfpq"><a class="markdownIt-Anchor" href="#ivfpq"></a> IVF+PQ</h4>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316222246240.png" alt="image-20260316222246240" style="zoom:50%;">
+<h3 id="算法问题"><a class="markdownIt-Anchor" href="#算法问题"></a> 算法问题</h3>
+<p><img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316222315384.png" alt="image-20260316222315384"></p>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316222334037.png" alt="image-20260316222334037" style="zoom:80%;">
+<h3 id="相似性度量"><a class="markdownIt-Anchor" href="#相似性度量"></a> 相似性度量</h3>
+<p>两两对比</p>
+<h4 id="过滤"><a class="markdownIt-Anchor" href="#过滤"></a> 过滤</h4>
+<p><img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316223859404.png" alt="image-20260316223859404"></p>
+<p><img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316223912290.png" alt="image-20260316223912290"></p>
+<h2 id><a class="markdownIt-Anchor" href="#"></a> </h2>
 <h2 id="为什么要专门的向量数据库"><a class="markdownIt-Anchor" href="#为什么要专门的向量数据库"></a> 为什么要专门的向量数据库</h2>
 <p>如果用 MySQL 这类<strong>传统数据库存储向量</strong>（比如把向量存成字符串 / 数组），会遇到两个无法解决的痛点：</p>
 <blockquote>
@@ -801,90 +1566,6 @@
     </div>
     <footer class="article-footer">
       <a data-url="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/" data-id="cmme79ecc00038wv4ccr90ov6" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/agent/" rel="tag">agent</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2026年2月12日-agent框架langchain2-进阶" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2026/02/12/2026%E5%B9%B42%E6%9C%8812%E6%97%A5-agent%E6%A1%86%E6%9E%B6langchain2-%E8%BF%9B%E9%98%B6/" class="article-date">
-  <time class="post-time" datetime="2026-02-12T05:26:50.000Z" itemprop="datePublished">
-    <span class="post-month">2月</span><br/>
-    <span class="post-day">12</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2026/02/12/2026%E5%B9%B42%E6%9C%8812%E6%97%A5-agent%E6%A1%86%E6%9E%B6langchain2-%E8%BF%9B%E9%98%B6/">2026年2月12日 agent框架langchain2_进阶</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>s</p>
-</blockquote>
-<h2 id="提问"><a class="markdownIt-Anchor" href="#提问"></a> 提问</h2>
-<h3 id="为什么使用管道操作符"><a class="markdownIt-Anchor" href="#为什么使用管道操作符"></a> 为什么使用管道操作符？</h3>
-<ol>
-<li>
-<p>代码更简洁：链式调用，易读</p>
-</li>
-<li>
-<p>自动处理数据传递：组件间自动传递数据</p>
-</li>
-<li>
-<p>支持异步和流式处理：可统一处理异步调用</p>
-</li>
-<li>
-<p>易于组合：可灵活组合不同组件</p>
-</li>
-</ol>
-<h2 id="函数"><a class="markdownIt-Anchor" href="#函数"></a> 函数</h2>
-<p><code>create_agent</code></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">docs_agent = create_agent(</span><br><span class="line">    model=configurable_model,</span><br><span class="line">    tools=[</span><br><span class="line">        SearchDocsByLangChain,</span><br><span class="line">        search_support_articles,</span><br><span class="line">        get_article_content,</span><br><span class="line">        check_links,</span><br><span class="line">    ],</span><br><span class="line">    system_prompt=docs_agent_prompt,</span><br><span class="line">    middleware=[</span><br><span class="line">        guardrails_middleware,</span><br><span class="line">        model_fallback_middleware,</span><br><span class="line">    ],</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<ul>
-<li><code>middleware</code>：为智能体的运行流程添加 “拦截 / 处理逻辑”，是这段代码的核心关注点。</li>
-</ul>
-<p><strong>middleware</strong>:</p>
-<ol>
-<li></li>
-</ol>
-<p><code>init_chat_model</code></p>
-<p><code>AgentState</code></p>
-<p><code>@tool</code></p>
-<h4 id="messagesplaceholder"><a class="markdownIt-Anchor" href="#messagesplaceholder"></a> MessagesPlaceholder</h4>
-<p>是 LangChain 中的占位符，用于在提示词模板中动态插入消息历史（对话历史）。它允许在运行时将消息列表插入到提示词中。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2026/02/12/2026%E5%B9%B42%E6%9C%8812%E6%97%A5-agent%E6%A1%86%E6%9E%B6langchain2-%E8%BF%9B%E9%98%B6/" data-id="cmme79eca00008wv4d0nz9a6t" class="article-share-link">分享</a>
       
       
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/agent/" rel="tag">agent</a></li></ul>
@@ -1197,134 +1878,6 @@
 
 
   
-    <article id="post-2026年2月12日-fastapi系统学习" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2026/02/12/2026%E5%B9%B42%E6%9C%8812%E6%97%A5-fastapi%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/" class="article-date">
-  <time class="post-time" datetime="2026-02-12T02:33:22.000Z" itemprop="datePublished">
-    <span class="post-month">2月</span><br/>
-    <span class="post-day">12</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2026/02/12/2026%E5%B9%B42%E6%9C%8812%E6%97%A5-fastapi%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/">2026年2月12日 fastapi系统学习</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="路径参数"><a class="markdownIt-Anchor" href="#路径参数"></a> 路径参数</h3>
-<img src="/2026/02/12/2026%E5%B9%B42%E6%9C%8812%E6%97%A5-fastapi%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/image-20260212103654700.png" alt="image-20260212103654700" style="zoom:67%;">
-<h3 id="返回-pydantic-模型"><a class="markdownIt-Anchor" href="#返回-pydantic-模型"></a> 返回 Pydantic 模型</h3>
-<p>路由处理函数返回一个 Pydantic 模型实例，FastAPI 将自动将其转换为 JSON 格式，并作为响应发送给客户端：</p>
-<h3 id="请求头和-cookie"><a class="markdownIt-Anchor" href="#请求头和-cookie"></a> 请求头和 Cookie</h3>
-<p>使用 Header 和 Cookie 类型注解获取请求头和 Cookie 数据。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">from fastapi import Header, Cookie</span><br><span class="line">from fastapi import FastAPI</span><br><span class="line"></span><br><span class="line">app = FastAPI()</span><br><span class="line"></span><br><span class="line">@app.get(&quot;/items/&quot;)</span><br><span class="line">def read_item(user_agent: str = Header(None), session_token: str = Cookie(None)):</span><br><span class="line">    return &#123;&quot;User-Agent&quot;: user_agent, &quot;Session-Token&quot;: session_token&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="重定向和状态码"><a class="markdownIt-Anchor" href="#重定向和状态码"></a> 重定向和状态码</h3>
-<p>使用 <strong>RedirectResponse</strong> 实现重定向，将客户端重定向到 <strong>/items/</strong> 路由。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">from fastapi import Header, Cookie</span><br><span class="line">from fastapi import FastAPI</span><br><span class="line">from fastapi.responses import RedirectResponse</span><br><span class="line"></span><br><span class="line">app = FastAPI()</span><br><span class="line"></span><br><span class="line">@app.get(&quot;/items/&quot;)</span><br><span class="line">def read_item(user_agent: str = Header(None), session_token: str = Cookie(None)):</span><br><span class="line">    return &#123;&quot;User-Agent&quot;: user_agent, &quot;Session-Token&quot;: session_token&#125;</span><br><span class="line"></span><br><span class="line">@app.get(&quot;/redirect&quot;)</span><br><span class="line">def redirect():</span><br><span class="line">    return RedirectResponse(url=&quot;/items/&quot;)</span><br></pre></td></tr></table></figure>
-<p><img src="/2026/02/12/2026%E5%B9%B42%E6%9C%8812%E6%97%A5-fastapi%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/image-20260212104037223.png" alt="image-20260212104037223"></p>
-<p><strong>状态码</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">from fastapi import HTTPException</span><br><span class="line"></span><br><span class="line">app = FastAPI()</span><br><span class="line"></span><br><span class="line">@app.get(&quot;/items/&#123;item_id&#125;&quot;)</span><br><span class="line">def read_item(item_id: int):</span><br><span class="line">    if item_id == 42:</span><br><span class="line">        raise HTTPException(status_code=404, detail=&quot;Item not found&quot;)</span><br><span class="line">    return &#123;&quot;item_id&quot;: item_id&#125;</span><br></pre></td></tr></table></figure>
-<p><img src="/2026/02/12/2026%E5%B9%B42%E6%9C%8812%E6%97%A5-fastapi%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/image-20260212104059144.png" alt="image-20260212104059144"></p>
-<h2 id="1-依赖项dependencies"><a class="markdownIt-Anchor" href="#1-依赖项dependencies"></a> 1、依赖项（Dependencies）/</h2>
-<h3 id="depends"><a class="markdownIt-Anchor" href="#depends"></a> Depends</h3>
-<ul>
-<li><strong>预处理（Before）依赖项：</strong> 在路由操作函数执行前运行，用于预处理输入数据，验证请求等。</li>
-<li><strong>后处理（After）依赖项：</strong> 在路由操作函数执行后运行，用于执行一些后处理逻辑，如日志记录、清理等。</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> fastapi <span class="keyword">import</span> Depends</span><br><span class="line"></span><br><span class="line"><span class="comment"># 路由操作函数</span></span><br><span class="line"><span class="meta">@app.get(<span class="params"><span class="string">&quot;/items/&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">read_items</span>(<span class="params">commons: <span class="built_in">dict</span> = Depends(<span class="params">common_parameters</span>)</span>):</span><br><span class="line">    <span class="keyword">return</span> commons</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">om fastapi <span class="keyword">import</span> Depends, FastAPI, HTTPException</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">Optional</span></span><br><span class="line"><span class="keyword">import</span> asyncio</span><br><span class="line"></span><br><span class="line">app = FastAPI()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 异步依赖项函数</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">get_token</span>():</span><br><span class="line">    <span class="comment"># 模拟异步操作</span></span><br><span class="line">    <span class="keyword">await</span> asyncio.sleep(<span class="number">2</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;fake-token&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 异步路由操作函数</span></span><br><span class="line"><span class="meta">@app.get(<span class="params"><span class="string">&quot;/items/&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">read_items</span>(<span class="params">token: <span class="type">Optional</span>[<span class="built_in">str</span>] = Depends(<span class="params">get_token</span>)</span>):</span><br><span class="line">    <span class="keyword">return</span> &#123;<span class="string">&quot;token&quot;</span>: token&#125; 后处理（After）</span><br></pre></td></tr></table></figure>
-<h2 id="安全认证jwt-与-oauth2-集成"><a class="markdownIt-Anchor" href="#安全认证jwt-与-oauth2-集成"></a> 安全认证：<a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=268061528&amp;content_type=Article&amp;match_order=1&amp;q=JWT&amp;zhida_source=entity">JWT</a> 与 <a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=268061528&amp;content_type=Article&amp;match_order=1&amp;q=OAuth2&amp;zhida_source=entity">OAuth2</a> 集成</h2>
-<h2 id="高级特性后台任务与-websocket"><a class="markdownIt-Anchor" href="#高级特性后台任务与-websocket"></a> 高级特性：后台任务与 WebSocket</h2>
-<p><strong>异步后台任务</strong>：在 Web 应用中，有些任务可能比较耗时，如发送邮件、记录日志、处理文件等，如果在请求处理过程中同步执行这些任务，会导致响应延迟，影响用户体验。FastAPI 提供了<code>BackgroundTasks</code>来处理这类异步后台任务，让请求能够快速响应，同时在后台执行这些非阻塞任务。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">send_email</span>(<span class="params">to: <span class="built_in">str</span>, subject: <span class="built_in">str</span>, message: <span class="built_in">str</span></span>):</span><br><span class="line">    <span class="comment"># 这里实现发送邮件的逻辑，例如使用smtplib库</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;Sending email to <span class="subst">&#123;to&#125;</span> with subject: <span class="subst">&#123;subject&#125;</span> and message: <span class="subst">&#123;message&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@app.post(<span class="params"><span class="string">&quot;/send-email&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">send_email_endpoint</span>(<span class="params">request: EmailRequest, background_tasks: BackgroundTasks</span>):</span><br><span class="line">    background_tasks.add_task(send_email, request.to, request.subject, request.message)</span><br><span class="line">    <span class="keyword">return</span> &#123;<span class="string">&quot;status&quot;</span>: <span class="string">&quot;Email sending task added to background&quot;</span>, <span class="string">&quot;details&quot;</span>: request.<span class="built_in">dict</span>()&#125;</span><br></pre></td></tr></table></figure>
-<p><strong>WebSocket 实时通信</strong>：WebSocket 是一种在单个 TCP 连接上进行全双工通信的协议，它允许服务器和客户端之间进行实时双向通信。FastAPI 对 WebSocket 提供了良好的支持，使得我们可以方便地开发实时应用，如实时聊天、监控数据推送等。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@app.websocket(<span class="params"><span class="string">&quot;/ws/&#123;client_id&#125;&quot;</span></span>)</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">websocket_endpoint</span>(<span class="params">websocket: WebSocket, client_id: <span class="built_in">int</span></span>):</span><br><span class="line">    <span class="keyword">await</span> manager.connect(websocket)</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">            data = <span class="keyword">await</span> websocket.receive_text()</span><br><span class="line">            <span class="keyword">await</span> manager.send_message(<span class="string">f&quot;Client <span class="subst">&#123;client_id&#125;</span> sent: <span class="subst">&#123;data&#125;</span>&quot;</span>, websocket)</span><br><span class="line">            <span class="keyword">await</span> manager.broadcast(<span class="string">f&quot;Client <span class="subst">&#123;client_id&#125;</span> says: <span class="subst">&#123;data&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="keyword">except</span> WebSocketDisconnect:</span><br><span class="line">        manager.disconnect(websocket)</span><br><span class="line">        <span class="keyword">await</span> manager.broadcast(<span class="string">f&quot;Client <span class="subst">&#123;client_id&#125;</span> disconnected&quot;</span>)			</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2026/02/12/2026%E5%B9%B42%E6%9C%8812%E6%97%A5-fastapi%E7%B3%BB%E7%BB%9F%E5%AD%A6%E4%B9%A0/" data-id="cmme79ecb00018wv49d1abp29" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/fastapi/" rel="tag">fastapi</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2026年2月9日-C-计划" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2026/02/09/2026%E5%B9%B42%E6%9C%889%E6%97%A5-C-%E8%AE%A1%E5%88%92/" class="article-date">
-  <time class="post-time" datetime="2026-02-09T10:23:14.000Z" itemprop="datePublished">
-    <span class="post-month">2月</span><br/>
-    <span class="post-day">09</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2026/02/09/2026%E5%B9%B42%E6%9C%889%E6%97%A5-C-%E8%AE%A1%E5%88%92/">2026年2月9日 C++计划</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="/2026/02/09/2026%E5%B9%B42%E6%9C%889%E6%97%A5-C-%E8%AE%A1%E5%88%92/image-20260209182323917.png" alt="image-20260209182323917"></p>
-<p><img src="/2026/02/09/2026%E5%B9%B42%E6%9C%889%E6%97%A5-C-%E8%AE%A1%E5%88%92/image-20260209182332037.png" alt="image-20260209182332037"></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2026/02/09/2026%E5%B9%B42%E6%9C%889%E6%97%A5-C-%E8%AE%A1%E5%88%92/" data-id="cmme79ecp000f8wv45blgfzoz" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -1369,7 +1922,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>146</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>148</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>41</strong><br>标签</div></a>
     </div>

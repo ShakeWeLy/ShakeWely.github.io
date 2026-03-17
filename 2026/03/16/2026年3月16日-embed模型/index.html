@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2026年3月16日 embed模型 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1   tokenizer 在这里干了什么事？ 针对这段代码： 12345encoded_input &#x3D; tokenizer(sentences, padding&#x3D;True, truncation&#x3D;True, return_tensors&#x3D;&amp;#x27;pt&amp;#x27;)print(&quot;encoded_input:&quot;,encoded_input)print(&quot;encod">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2026年3月16日 embed模型">
+<meta property="og:url" content="https://shakewely.github.io/2026/03/16/2026%E5%B9%B43%E6%9C%8816%E6%97%A5-embed%E6%A8%A1%E5%9E%8B/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="1   tokenizer 在这里干了什么事？ 针对这段代码： 12345encoded_input &#x3D; tokenizer(sentences, padding&#x3D;True, truncation&#x3D;True, return_tensors&#x3D;&amp;#x27;pt&amp;#x27;)print(&quot;encoded_input:&quot;,encoded_input)print(&quot;encod">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2026/03/16/2026%E5%B9%B43%E6%9C%8816%E6%97%A5-embed%E6%A8%A1%E5%9E%8B/image-20260316140726691.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/03/16/2026%E5%B9%B43%E6%9C%8816%E6%97%A5-embed%E6%A8%A1%E5%9E%8B/image-20260316140736376.png">
+<meta property="article:published_time" content="2026-03-16T05:43:51.000Z">
+<meta property="article:modified_time" content="2026-03-17T05:36:46.869Z">
+<meta property="article:author" content="Weakliy">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shakewely.github.io/2026/03/16/2026%E5%B9%B43%E6%9C%8816%E6%97%A5-embed%E6%A8%A1%E5%9E%8B/image-20260316140726691.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>148</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>41</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2026年3月16日-embed模型" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/03/16/2026%E5%B9%B43%E6%9C%8816%E6%97%A5-embed%E6%A8%A1%E5%9E%8B/" class="article-date">
+  <time class="post-time" datetime="2026-03-16T05:43:51.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">16</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2026年3月16日 embed模型
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>1</p>
+</blockquote>
+<h3 id="tokenizer-在这里干了什么事"><a class="markdownIt-Anchor" href="#tokenizer-在这里干了什么事"></a> tokenizer 在这里干了什么事？</h3>
+<p>针对这段代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">encoded_input = tokenizer(sentences, padding=<span class="literal">True</span>, truncation=<span class="literal">True</span>, return_tensors=<span class="string">&#x27;pt&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;encoded_input:&quot;</span>,encoded_input)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;encoded_input[&#x27;attention_mask&#x27;]:&quot;</span>,encoded_input[<span class="string">&#x27;attention_mask&#x27;</span>])</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;encoded_input[&#x27;input_ids&#x27;]:&quot;</span>,encoded_input[<span class="string">&#x27;input_ids&#x27;</span>])</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;encoded_input[&#x27;token_type_ids&#x27;]:&quot;</span>,encoded_input[<span class="string">&#x27;token_type_ids&#x27;</span>])</span><br></pre></td></tr></table></figure>
+<p><strong>tokenizer 的工作可以分成 4 步：</strong></p>
+<ul>
+<li>
+<p><strong>1. 文本 → token（分词+子词切分）</strong></p>
+<ul>
+<li>把原始句子：
+<ul>
+<li><code>&quot;我想看弗蘭克·達拉邦特的电影&quot;</code></li>
+<li><code>&quot;推荐弗蘭克·達拉邦特导演的作品&quot;</code></li>
+</ul>
+</li>
+<li>按模型的词表规则拆成一串 token（子词），比如类似：<code>[CLS] 我 想 看 弗 蘭 克 · … [SEP]</code>。</li>
+</ul>
+</li>
+<li>
+<p><strong>2. token → id（映射到词表索引）</strong></p>
+<ul>
+<li>每个 token 对应词表中的一个整数编号，形成 <code>input_ids</code>：
+<ul>
+<li><code>encoded_input[&quot;input_ids&quot;]</code> 是一个二维张量：<code>[batch_size, seq_len]</code>。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>3. 生成 attention_mask（哪些位置是真实内容，哪些是 padding）</strong></p>
+<ul>
+<li>由于你设置了 <code>padding=True</code>，不同长度的句子会填充到同样的 <code>seq_len</code>。</li>
+<li><code>attention_mask</code> 用 1/0 标记：
+<ul>
+<li>1：真实 token 位置</li>
+<li>0：补上的 padding 位置</li>
+</ul>
+</li>
+<li>后面在 <code>mean_pooling</code> 里就是用这个 mask 来“只对真实 token 求平均”。</li>
+</ul>
+</li>
+<li>
+<p><strong>4. 生成 token_type_ids（区分句子 A/B，用于部分模型）</strong></p>
+<ul>
+<li>对于单句输入，通常全 0；</li>
+<li>对于句对任务（如句子对分类），可以用 0/1 区分哪部分是第一句、哪部分是第二句。</li>
+<li>你这里只是单句列表，所以主要是兼容模型接口，实际不会特别用到它。</li>
+</ul>
+</li>
+</ul>
+<p>总结一句话：<br>
+<strong>tokenizer 把原始中文句子变成模型能吃的“数字化输入”（<code>input_ids</code> + <code>attention_mask</code> + <code>token_type_ids</code>），然后模型再基于这些数字算出每个 token 的向量，最后你用 <code>mean_pooling</code> 把它们汇成句向量。</strong></p>
+<h4 id="结果分析"><a class="markdownIt-Anchor" href="#结果分析"></a> 结果分析</h4>
+<blockquote>
+<h3 id="结论这个结果有点问题但不一定是代码错了"><a class="markdownIt-Anchor" href="#结论这个结果有点问题但不一定是代码错了"></a> 结论：<strong>这个结果“有点问题”，但不一定是代码错了</strong></h3>
+<p>按直觉你期望：同一导演的两句话更相似，即 <code>sim(0,1)</code> 应该最大。<br>
+但你跑出来是：</p>
+<ul>
+<li><code>sim(0,1)=0.6989</code></li>
+<li><code>sim(0,2)=0.7166</code>（反而更高）</li>
+<li><code>sim(1,2)=0.3476</code></li>
+</ul>
+<p>这说明：<strong>句子0（“我想看X的电影”）对“我想看周星驰的电影”也很像</strong>，因为它们的句式几乎相同，模型把“我想看…的电影”这个意图/模板当成了主要语义；人名差异被弱化了。</p>
+<p>所以问题更像是：<strong>测试样例不够“区分模板 vs 实体”</strong>，而不是 embedding 流程错误。</p>
+<hr>
+<h3 id="为什么会这样关键原因"><a class="markdownIt-Anchor" href="#为什么会这样关键原因"></a> 为什么会这样（关键原因）</h3>
+<ul>
+<li>句子0 和 句子2 的结构完全一致：<code>我想看 + [人名] + 的电影</code><br>
+对很多通用句向量模型来说，“我想看…电影”这个意图信号很强。</li>
+<li><code>paraphrase-multilingual-MiniLM-L12-v2</code> 这类通用模型，未必把“人名实体”当成最强特征（尤其在短句里）。</li>
+</ul>
+<hr>
+<h3 id="接下来怎么验证才更靠谱你该测试什么"><a class="markdownIt-Anchor" href="#接下来怎么验证才更靠谱你该测试什么"></a> 接下来怎么验证才更靠谱（你该测试什么）</h3>
+<p>把句子改成<strong>只保留实体对比</strong>或<strong>减少模板重复</strong>，比如：</p>
+<ul>
+<li>A：<code>&quot;导演：弗蘭克·達拉邦特&quot;</code></li>
+<li>B：<code>&quot;弗蘭克·達拉邦特 导演&quot;</code></li>
+<li>C：<code>&quot;导演：周星驰&quot;</code></li>
+</ul>
+<p>或者：</p>
+<ul>
+<li>A：<code>&quot;弗蘭克·達拉邦特 导演的电影有哪些&quot;</code></li>
+<li>B：<code>&quot;推荐一些达拉邦特导演作品&quot;</code></li>
+<li>C：<code>&quot;周星驰 导演的电影有哪些&quot;</code></li>
+</ul>
+<p>这类句子会让“导演名”成为更主要的信号，通常就会看到 <code>sim(A,B) &gt; sim(A,C)</code>。</p>
+<hr>
+<h3 id="对你的-rag-设计意味着什么"><a class="markdownIt-Anchor" href="#对你的-rag-设计意味着什么"></a> 对你的 RAG 设计意味着什么</h3>
+<p>这也解释了为什么我前面建议你把电影 chunk 组织成中文标签文本（如“导演：xxx”）——<br>
+当 query 写“导演：弗蘭克·達拉邦特”或“弗蘭克·達拉邦特 导演”，和 chunk 中的“导演：xxx”匹配会更稳定；同时你也可以在应用层做一点轻量 query 规范化（比如把“导演”关键词显式加进去），进一步提高导演类检索准确率。****</p>
+</blockquote>
+<h4 id="测试样例不够区分模板-vs-实体"><a class="markdownIt-Anchor" href="#测试样例不够区分模板-vs-实体"></a> 测试样例不够“区分模板 vs 实体”</h4>
+<h4 id="句子0-和-句子2-的结构完全一致我想看-人名-的电影"><a class="markdownIt-Anchor" href="#句子0-和-句子2-的结构完全一致我想看-人名-的电影"></a> 句子0 和 句子2 的结构完全一致：<code>我想看 + [人名] + 的电影</code></h4>
+<h4 id="在短句里"><a class="markdownIt-Anchor" href="#在短句里"></a> 在短句里</h4>
+<p><code>paraphrase-multilingual-MiniLM-L12-v2</code> 这类通用模型，未必把“人名实体”当成最强特征（尤其在短句里）</p>
+<blockquote>
+<h3 id="不是模型坏了更像是测试方式在考它不擅长的东西"><a class="markdownIt-Anchor" href="#不是模型坏了更像是测试方式在考它不擅长的东西"></a> 不是“模型坏了”，更像是<strong>测试方式在考它不擅长的东西</strong></h3>
+<p>你这组测试里，<code>sentenceC = &quot;周星驰&quot;</code> <strong>太短、信息太少</strong>，对句向量模型来说往往会变成一个很“模糊/泛化”的点；而 <code>sentenceA/B</code> 带了“导演”这种职业词，模型可能把它们都拉到“人物/影视相关”的语义区域里，导致 <strong>不同名字之间也可能很近</strong>，出现 <code>sim(A,C)</code> 反而更高的情况。</p>
+<p>这类 <strong>通用 paraphrase 句向量模型</strong>（<code>paraphrase-multilingual-MiniLM-L12-v2</code>）通常更擅长：</p>
+<ul>
+<li>句子意图、语义改写相似（paraphrase）<br>
+而不擅长：</li>
+<li>仅靠<strong>人名实体</strong>做“同名更近、不同名更远”的严格聚类（这更像实体检索/字面匹配任务）。</li>
+</ul>
+<p>所以：<strong>这个结果不足以证明模型有问题</strong>，只能说明“用它做纯人名相似度判断不稳定”。</p>
+<hr>
+<h3 id="你该怎么测才更合理建议你立刻换这两类测试"><a class="markdownIt-Anchor" href="#你该怎么测才更合理建议你立刻换这两类测试"></a> 你该怎么测才更合理（建议你立刻换这两类测试）</h3>
+<h4 id="a-控制变量两边都用同样模板-只换导演名"><a class="markdownIt-Anchor" href="#a-控制变量两边都用同样模板-只换导演名"></a> A. 控制变量：两边都用同样模板、只换导演名</h4>
+<p>这样能避免“短句太模糊”的问题：</p>
+<ul>
+<li>A：<code>&quot;导演：弗蘭克·達拉邦特&quot;</code></li>
+<li>B：<code>&quot;导演：周星驰&quot;</code></li>
+<li>C：<code>&quot;导演：克里斯托弗·诺兰&quot;</code></li>
+</ul>
+<p>你希望看到的是：A 跟 B/C <strong>不要都很高</strong>（至少不要出现反直觉的极端高相似）。</p>
+<h4 id="b-贴近你真实-rag让-query文档都包含导演标签-电影语境"><a class="markdownIt-Anchor" href="#b-贴近你真实-rag让-query文档都包含导演标签-电影语境"></a> B. 贴近你真实 RAG：让 query/文档都包含“导演标签 + 电影语境”</h4>
+<p>比如：</p>
+<ul>
+<li>Query：<code>&quot;我想看 导演：弗蘭克·達拉邦特 的电影&quot;</code></li>
+<li>Doc1：<code>&quot;标题：…\n导演：弗蘭克·達拉邦特\n剧情：…&quot;</code></li>
+<li>Doc2：<code>&quot;标题：…\n导演：周星驰\n剧情：…&quot;</code></li>
+</ul>
+<p>这才是你系统真正会发生的匹配形态。</p>
+<hr>
+<h3 id="实战建议很重要"><a class="markdownIt-Anchor" href="#实战建议很重要"></a> 实战建议（很重要）</h3>
+<p>如果你的需求是“按导演找电影”，<strong>最佳实践不是完全依赖向量相似度</strong>，而是：</p>
+<ul>
+<li><strong>把 <code>director</code> 存为 metadata</strong>（你已经有这个字段）</li>
+<li>查询时：
+<ul>
+<li>先做一个<strong>简单的导演名抽取/匹配</strong>（甚至就是字符串包含）</li>
+<li>用 metadata 过滤候选集（director == X）</li>
+<li>再用向量检索对剧情/类型做排序</li>
+</ul>
+</li>
+</ul>
+<p>这样“导演类查询”会稳定得多，也更符合用户预期。</p>
+<p>如果你愿意，我可以下一步直接帮你在检索逻辑里加一个小的“导演过滤”分支：当 query 里出现“导演/导演：”时，优先走 metadata 过滤 + 向量排序的混合检索。</p>
+</blockquote>
+<h5 id="我进行了长自然语言的测试"><a class="markdownIt-Anchor" href="#我进行了长自然语言的测试"></a> 我进行了长自然语言的测试，</h5>
+<p>这样相似度也高很多， 似乎就是和你说的结构一样的原因吗？所以是不是 这个模型其实不适合我这个系统（因为我的数据都是json转出的）</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">SENTENCE_A = <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">作品编号：HUNTC-001影片标题：肖申克的救赎！经典纪念版！希望与自由的故事！只要坚持信念，即使身处监狱也能找到属于自己的救赎！系列名称：肖申克的救赎！导演：弗兰克・达拉邦特片长：220 分钟制作公司：Castle Rock Entertainment发行公司：华纳兄弟发行日期：2023-11-10类型标签：励志、经典电影、监狱题材、友情、希望、逃狱、高画质</span></span><br><span class="line"><span class="string">剧情简介：1947 年，银行家安迪・杜弗伦因涉嫌谋杀妻子及其情人被判无期徒刑，进入肖申克州立监狱服刑。他在狱中结识了资深囚犯瑞德，两人逐渐成为挚友。安迪利用自己的金融才能帮助监狱人员，同时默默坚持内心的希望与自由梦想，面对残酷的监狱环境与腐败制度，他一步步策划属于自己的救赎之路。最终，这部经典作品传达出『希望是件好事，也许是人间至善』的深刻主题。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">SENTENCE_B = <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">作品编号：FRANK-002影片标题：绿里奇迹！弗兰克・达拉邦特经典之作！关于人性、慈悲与奇迹的深刻寓言！系列名称：绿里奇迹导演：弗兰克・达拉邦特片长：185 分钟制作公司：Castle Rock Entertainment发行公司：华纳兄弟发行日期：2023-12-05类型标签：剧情、奇幻、人性、救赎、经典、监狱</span></span><br><span class="line"><span class="string">剧情简介：1932 年，冷山监狱死囚区的狱长保罗，遇到了拥有神秘治愈能力的大块头黑人约翰・科菲。他虽被指控犯下残忍罪行，内心却善良纯净。在死囚区的日子里，约翰用奇迹般的力量温暖了身边的人，也让保罗开始重新思考生命、罪恶与救赎。影片以温柔又沉重的方式，探讨人性善恶与世间的无奈与慈悲。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">SENTENCE_C = <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">作品编号：STEPHEN-001影片标题：功夫！周星驰巅峰之作！无厘头与武侠的完美结合！笑中带泪的经典传奇！系列名称：功夫导演：周星驰片长：100 分钟制作公司：星辉海外有限公司发行公司：华纳兄弟发行日期：2024-01-15类型标签：喜剧、动作、武侠、无厘头、经典、励志</span></span><br><span class="line"><span class="string">剧情简介：街头小混混星仔一心想加入斧头帮，却阴差阳错闯入了藏龙卧虎的猪龙城寨。这里看似平凡的居民，个个都是隐世高手。星仔在一次次闹剧与危机中，逐渐认清善恶，找回内心的正义，最终领悟武学真谛，成为真正的绝世高手，用功夫守护身边的人。影片将无厘头喜剧与武侠精神完美融合，成为经典。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
+<p><img src="/2026/03/16/2026%E5%B9%B43%E6%9C%8816%E6%97%A5-embed%E6%A8%A1%E5%9E%8B/image-20260316140726691.png" alt="image-20260316140726691"></p>
+<blockquote>
+<h3 id="是的主要就是结构相似在主导相似度"><a class="markdownIt-Anchor" href="#是的主要就是结构相似在主导相似度"></a> 是的，主要就是“结构相似”在主导相似度</h3>
+<p>你这三段长文本（A/B/C）都有大量相同结构与共同词汇，比如：</p>
+<ul>
+<li>固定模板字段：<code>作品编号/影片标题/系列名称/导演/片长/制作公司/发行公司/发行日期/类型标签/剧情简介</code></li>
+<li>大量共有概念词：<code>经典、监狱、救赎、剧情简介…</code></li>
+<li>甚至 A/B/C 都出现了“华纳兄弟”等一致信息</li>
+</ul>
+<p>在句向量模型里，这会让三段文本的整体语义非常接近，所以：</p>
+<ul>
+<li><code>sim(A,B)</code> 很高（同导演 + 同题材更高）</li>
+<li>但 <code>sim(A,C)</code> 也会很高（模板 + 电影领域词汇大量重叠），<strong>导演不同并不会把它们拉开太多</strong></li>
+</ul>
+<p>这不是你代码的问题，而是“把一条电影记录变成一大段模板化文本”时的典型现象。</p>
+<hr>
+<h3 id="这是否说明模型不适合你的系统"><a class="markdownIt-Anchor" href="#这是否说明模型不适合你的系统"></a> 这是否说明模型不适合你的系统？</h3>
+<p><strong>不等于不适合。</strong><br>
+它更准确地说明：你需要把“相似度要表达的重点”设计出来，而不是让模板噪音占主导。</p>
+<p>你的数据来自 JSON 并不天然有问题，问题在于你把 JSON 转成 text 时：</p>
+<ul>
+<li>如果把太多<strong>结构化字段</strong>（发行公司、编号、时长、日期、模板标签）都塞进 embedding text<br>
+→ 会让向量主要表达“这是一段电影条目信息”，而不是“这部电影的独特内容”。</li>
+</ul>
+<hr>
+<h3 id="对你这种电影-rag推荐怎么做最关键的改法"><a class="markdownIt-Anchor" href="#对你这种电影-rag推荐怎么做最关键的改法"></a> 对你这种电影 RAG，推荐怎么做（最关键的改法）</h3>
+<ul>
+<li><strong>embedding text 只放“能区分电影内容”的字段</strong>：
+<ul>
+<li><code>title</code></li>
+<li><code>plot</code>（核心）</li>
+<li><code>genre</code>（适量）</li>
+<li>可选：<code>director</code> / <code>serial</code>（如果你确实要靠语义检索导演/系列）</li>
+</ul>
+</li>
+<li><strong>其它字段做 metadata，不进 embedding</strong>：
+<ul>
+<li><code>publish_date、duration、producer、publisher、url、cover、编号…</code></li>
+</ul>
+</li>
+</ul>
+<p>这样向量会更“内容化”，不同电影之间相似度会拉开。</p>
+<hr>
+<h3 id="导演检索的最佳实践补一刀很实用"><a class="markdownIt-Anchor" href="#导演检索的最佳实践补一刀很实用"></a> 导演检索的最佳实践（补一刀很实用）</h3>
+<p>如果你的 query 经常是“我想看某某导演的电影”，<strong>不要只靠向量相似度</strong>，而是：</p>
+<ul>
+<li><code>director</code> 存 metadata</li>
+<li>query 里识别出导演名后：
+<ul>
+<li><strong>先 metadata 过滤 director==X</strong></li>
+<li>再用向量对 <code>plot/title/genre</code> 做排序</li>
+</ul>
+</li>
+</ul>
+<p>这样导演查询会非常稳，而且不受“模板相似度”干扰。</p>
+<hr>
+<p>如果你愿意，我可以下一步直接帮你改一处关键代码：在索引时构造 embedding 文本时<strong>只使用 title/plot/genre/director</strong>（其余进 metadata），并给你一组“导演查询”和“剧情查询”的对比测试。</p>
+</blockquote>
+<h6 id="需要把相似度要表达的重点设计"><a class="markdownIt-Anchor" href="#需要把相似度要表达的重点设计"></a> <strong>需要把“相似度要表达的重点”设计</strong></h6>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">SENTENCE_A = <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">肖申克的救贖！經典紀念版！希望與自由的故事！只要堅持信念，即使身處監獄也能找到屬於自己的救贖！1947 年，銀行家安迪被冤入獄，在肖申克監獄中憑藉智慧與堅韌，堅守希望，最終完成自我救贖，詮釋「希望是人間至善」。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">SENTENCE_B = <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">绿里奇迹！弗蘭克・達拉邦特經典之作！關於人性、慈悲與奇蹟的深刻寓言！1932 年死囚監獄中，擁有神奇治癒能力的黑人科菲，用善良與奇蹟感化眾人，探討生命、罪惡與慈悲。&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">SENTENCE_C = <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">功夫！周星馳巔峰之作！無厘頭與武俠的完美結合！笑中帶淚的經典傳奇！小混混星仔陰差陽錯闖入臥虎藏龍的豬籠城寨，在經歷成長後找回正義，成為絕世高手守護身邊之人。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><img src="/2026/03/16/2026%E5%B9%B43%E6%9C%8816%E6%97%A5-embed%E6%A8%A1%E5%9E%8B/image-20260316140736376.png" alt="image-20260316140736376"></p>
+<blockquote></blockquote>
+<h3 id="结构数据写成metadata"><a class="markdownIt-Anchor" href="#结构数据写成metadata"></a> 结构数据写成metadata</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">doc = &#123;</span><br><span class="line">  &quot;id&quot;: &quot;HUNTC-001&quot;,</span><br><span class="line">  &quot;text&quot;: &quot;标题：...\n导演：...\n类型：...\n剧情：...&quot;,</span><br><span class="line">  &quot;metadata&quot;: &#123;</span><br><span class="line">    &quot;dvdid&quot;: &quot;HUNTC-001&quot;,</span><br><span class="line">    &quot;director&quot;: &quot;弗蘭克·達拉邦特&quot;,</span><br><span class="line">    &quot;genre&quot;: [&quot;励志&quot;,&quot;经典电影&quot;,&quot;监狱题材&quot;],</span><br><span class="line">    &quot;publish_date&quot;: &quot;2023-11-10&quot;,</span><br><span class="line">    &quot;duration&quot;: 220,</span><br><span class="line">    &quot;serial&quot;: &quot;肖申克的救赎&quot;,</span><br><span class="line">    &quot;site&quot;: &quot;__merged__&quot;,</span><br><span class="line">    &quot;url&quot;: None,</span><br><span class="line">    &quot;cover&quot;: &quot;https://...&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="milvus"><a class="markdownIt-Anchor" href="#milvus"></a> Milvus</h1>
+<blockquote>
+<h3 id="建议在-milvusipynb-顶部加一个环境初始化cell"><a class="markdownIt-Anchor" href="#建议在-milvusipynb-顶部加一个环境初始化cell"></a> 建议在 milvus.ipynb 顶部加一个“环境初始化”cell</h3>
+<p>放在所有 from src… 导入之前，内容类似：</p>
+<p>import sys</p>
+<p>from pathlib import Path</p>
+<p># 项目根目录（按你的实际路径修改）</p>
+<p>PROJECT_ROOT = Path(r&quot;F:\myproject\java_rag&quot;)</p>
+<p># 切到项目根目录（可选，但推荐）</p>
+<p>%cd $PROJECT_ROOT</p>
+<p># 把项目根目录加入 sys.path，确保可以 import src.*</p>
+<p>if str(PROJECT_ROOT) not in sys.path:</p>
+<p>sys.path.insert(0, str(PROJECT_ROOT))</p>
+<p>print(“cwd:”, Path.cwd())</p>
+<p>print(“sys.path[0]:”, sys.path[0])</p>
+</blockquote>
+<h3 id="为什么会报-collection-not-loaded"><a class="markdownIt-Anchor" href="#为什么会报-collection-not-loaded"></a> 为什么会报 collection not loaded？</h3>
+<p>Milvus（尤其是连接到服务模式时）集合创建/插入 ≠ 集合已加载到内存。</p>
+<p>如果集合没 load，直接 search 就会报你看到的错误：</p>
+<ul>
+<li>failed to search: collection not loaded</li>
+</ul>
+<blockquote>
+<h3 id="为什么会报-index-not-found导致-load-失败"><a class="markdownIt-Anchor" href="#为什么会报-index-not-found导致-load-失败"></a> 为什么会报 index not found，导致 load 失败？</h3>
+<p>你现在连的是 Milvus 服务端（Docker 里的 2.6.12）。在这种模式下，load_collection 通常要求集合的向量字段已经有索引；但我们创建 collection 时只是建了 schema，没有创建向量索引，所以服务端直接报：</p>
+<ul>
+<li>MilvusException (code=700): index not found[collection=movies]</li>
+</ul>
+<p>这不是连接失败，是 集合没 index → 不能 load → 后续 search 也会失败。</p>
+<hr>
+<h3 id="我已经在项目里修复自动创建向量索引再-load"><a class="markdownIt-Anchor" href="#我已经在项目里修复自动创建向量索引再-load"></a> 我已经在项目里修复：自动创建向量索引再 load</h3>
+<p>我在 src/utils/milvus_store.py 增加了 _ensure_index()，并在：</p>
+<ul>
+<li>
+<p>创建集合后 load 前</p>
+</li>
+<li>
+<p>已存在集合 load 前</p>
+</li>
+<li>
+<p>insert 后 load 前</p>
+</li>
+<li>
+<p>search 前兜底 load 前</p>
+</li>
+</ul>
+<p>都会先调用 _ensure_index()，确保至少对 vector 字段建了 AUTOINDEX + COSINE 索引。</p>
+<p>你现在重新跑 notebook 时，流程会变成：</p>
+<ol>
+<li>
+<p>create_collection(schema)</p>
+</li>
+<li>
+<p>create_index(field=“vector”)</p>
+</li>
+<li>
+<p>load_collection()</p>
+</li>
+<li>
+<p>insert / search 就能正常跑</p>
+</li>
+</ol>
+</blockquote>
+<h3 id="query-文本里肖申克的救贖是繁体"><a class="markdownIt-Anchor" href="#query-文本里肖申克的救贖是繁体"></a> query 文本里“肖申克的救贖”是繁体</h3>
+<p>你 query 明确提到“肖申克的救赎”，所以 HUNTC-001 更应该靠前。出现 FRANK-002 更靠前的原因常见有两种：</p>
+<ol>
+<li>query 文本里“肖申克的救贖”是繁体，而 HUNTC-001 标题里也是繁体，但 BERT 类模型对“特定片名”的区分不一定强；</li>
+<li>两部片都有“经典/达拉邦特/监狱/救赎”等强特征，且你的 query 还带了“经典纪念版电影”这种泛化词，可能把检索偏向“达拉邦特经典作品”而不是“精确片名”。</li>
+</ol>
+<h4 id="milvus-打印出来的相似度-1"><a class="markdownIt-Anchor" href="#milvus-打印出来的相似度-1"></a> Milvus 打印出来的“相似度 &gt; 1”</h4>
+<ul>
+<li>
+<p>这其实是 distance（距离） 的典型范围（COSINE distance 通常在 0~2），所以出现 1.1294 并不奇怪。</p>
+</li>
+<li>
+<p>越小越相近，不是越大越相近。</p>
+</li>
+</ul>
+<h1 id="rag-测试"><a class="markdownIt-Anchor" href="#rag-测试"></a> RAG 测试</h1>
+<h2 id="查询方式"><a class="markdownIt-Anchor" href="#查询方式"></a> 查询方式</h2>
+<h3 id="1-titleplot-向量化直接查询"><a class="markdownIt-Anchor" href="#1-titleplot-向量化直接查询"></a> 1 title+plot 向量化直接查询</h3>
+<p>queries = [</p>
+<p>“监狱逃脱的经典电影”,</p>
+<p>“弗兰克·达拉邦特 拍的电影”,</p>
+<p>“无厘头喜剧 功夫打斗”,</p>
+<p>“看完很感动 想哭的电影”,</p>
+<p>]</p>
+<p><strong>结果分析:</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">查询结果</span><br><span class="line"></span><br><span class="line">Query: 监狱逃脱的经典电影</span><br><span class="line">  score=0.647, title=越狱协议！真实事件改编！从华尔街精英到监狱囚徒的救赎！, director=马库斯·高勒</span><br><span class="line">  score=0.644, title=肖申克的救贖！經典紀念版！希望與自由的故事！只要堅持信念，即使身處監獄也能找到屬於自己的救贖！, director=弗蘭克·達拉邦特</span><br><span class="line">  score=0.624, title=绿里奇迹！弗兰克·达拉邦特经典之作！关于人性、慈悲与奇迹的深刻寓言！, director=弗蘭克·達拉邦特</span><br><span class="line">  score=0.591, title=记忆碎片！诺兰封神之作！全程反转不停的烧脑悬疑神片！, director=克里斯托弗·诺兰</span><br><span class="line">  score=0.577, title=未知死亡！全程反转动作神作！燃到炸裂的复仇与救赎！, director=A.R.目虏古多斯</span><br><span class="line">------------------------------------------------------------</span><br><span class="line">Query: 弗兰克·达拉邦特 拍的电影</span><br><span class="line">  score=0.573, title=前目的地！极致烧脑神作！反转到最后一秒的时空悬疑大片！, director=迈克尔·斯派瑞</span><br><span class="line">  score=0.511, title=乌云背后的幸福线！治愈系爱情！在破碎人生中彼此照亮！, director=大卫·O·拉塞尔</span><br><span class="line">  score=0.503, title=拯救大兵瑞恩！影史最强战争片！真实残酷战场与人性光辉！, director=史蒂文·斯皮尔伯格</span><br><span class="line">  score=0.502, title=巴比伦！好莱坞黄金时代史诗！极致浪漫与疯狂的追梦故事！, director=达米恩·查泽雷</span><br><span class="line">  score=0.485, title=黑客帝国！科幻片里程碑！影响一个时代的神级大作！, director=沃卓斯基姐妹</span><br><span class="line">------------------------------------------------------------</span><br><span class="line">Query: 无厘头喜剧 功夫打斗</span><br><span class="line">  score=0.619, title=小丑！封神级神作！深刻揭露社会与人性的黑暗神片！, director=托德·菲利普斯</span><br><span class="line">  score=0.528, title=赌圣！周星驰成名之作！无厘头喜剧开山之作！爆笑又经典！, director=周星馳、劉鎮偉</span><br><span class="line">  score=0.500, title=夏洛特的网！治愈所有人的童话！友谊与生命的最美赞歌！, director=盖瑞·温尼克</span><br><span class="line">  score=0.495, title=V字仇杀队！震撼灵魂的科幻神作！为自由与人性而战！, director=詹姆斯·麥提格</span><br><span class="line">  score=0.491, title=阿甘正传！影史第一神作！人生就像一盒巧克力，永远充满希望！, director=羅伯特·澤米吉斯</span><br><span class="line">------------------------------------------------------------</span><br><span class="line">Query: 看完很感动 想哭的电影</span><br><span class="line">  score=0.535, title=机器人总动员！零台词却看哭无数人！最治愈的科幻动画神作！, director=安德鲁·斯坦顿</span><br><span class="line">  score=0.519, title=美丽人生！奥斯卡经典！父爱与勇气的最美赞歌！笑着流泪的神作！, director=羅貝托·貝尼尼</span><br><span class="line">  score=0.499, title=心灵捕手！治愈无数人的励志经典！天才与自我救赎的成长之路！, director=格斯·范·桑特</span><br><span class="line">  score=0.493, title=V字仇杀队！震撼灵魂的科幻神作！为自由与人性而战！, director=詹姆斯·麥提格</span><br><span class="line">  score=0.479, title=未知死亡！全程反转动作神作！燃到炸裂的复仇与救赎！, director=A.R.目虏古多斯</span><br><span class="line">------------------------------------------------------------</span><br></pre></td></tr></table></figure>
+<blockquote>
+<h1 id="逐-query-分析"><a class="markdownIt-Anchor" href="#逐-query-分析"></a> 逐 Query 分析</h1>
+<h2 id="1query监狱逃脱的经典电影"><a class="markdownIt-Anchor" href="#1query监狱逃脱的经典电影"></a> 1）Query：监狱逃脱的经典电影</h2>
+<p><strong>结果：</strong></p>
+<ul>
+<li>
+<p>✅ 正确：</p>
+<ul>
+<li>肖申克的救赎（监狱、逃脱、经典）</li>
+<li>越狱协议（监狱、救赎）</li>
+<li>绿里奇迹（监狱、人性，但<strong>无逃脱</strong>）</li>
+</ul>
+</li>
+<li>
+<p>❌ 错误：</p>
+<ul>
+<li>记忆碎片、未知死亡：<strong>完全不沾边</strong></li>
+</ul>
+</li>
+</ul>
+<p><strong>问题：</strong></p>
+<ul>
+<li>把「救赎」和「逃脱」绑定太死</li>
+<li>没有过滤<strong>监狱 / 逃脱</strong>强意图</li>
+<li>绿里奇迹分数偏高，不合理</li>
+</ul>
+<hr>
+<h2 id="2query弗兰克达拉邦特-拍的电影"><a class="markdownIt-Anchor" href="#2query弗兰克达拉邦特-拍的电影"></a> 2）Query：弗兰克・达拉邦特 拍的电影</h2>
+<p><strong>结果：全错</strong></p>
+<p>一条他的电影都没返回。</p>
+<p><strong>问题（非常严重）：</strong></p>
+<ul>
+<li><strong>导演字段完全没参与检索 / 过滤</strong></li>
+<li>系统只做语义泛化，不做实体匹配</li>
+<li>直接导致该意图<strong>100% 失效</strong></li>
+</ul>
+<hr>
+<h2 id="3query无厘头喜剧-功夫打斗"><a class="markdownIt-Anchor" href="#3query无厘头喜剧-功夫打斗"></a> 3）Query：无厘头喜剧 功夫打斗</h2>
+<p><strong>结果：</strong></p>
+<ul>
+<li>✅ 正确：
+<ul>
+<li>赌圣（周星驰无厘头）</li>
+</ul>
+</li>
+<li>❌ 严重错误：
+<ul>
+<li>小丑排第一（完全不是喜剧、无功夫）</li>
+<li>夏洛特的网、V 字仇杀队、阿甘正传：<strong>全不匹配</strong></li>
+</ul>
+</li>
+</ul>
+<p><strong>问题：</strong></p>
+<ul>
+<li>「无厘头」「功夫」<strong>语义理解极弱</strong></li>
+<li>把情绪、主题、动作混在一起算分</li>
+<li>没有对「周星驰 + 无厘头 + 功夫」做强化</li>
+</ul>
+<hr>
+<h2 id="4query看完很感动-想哭的电影"><a class="markdownIt-Anchor" href="#4query看完很感动-想哭的电影"></a> 4）Query：看完很感动 想哭的电影</h2>
+<p><strong>结果：整体最准</strong></p>
+<ul>
+<li>✅ 正确：
+<ul>
+<li>机器人总动员</li>
+<li>美丽人生</li>
+<li>心灵捕手</li>
+</ul>
+</li>
+<li>⚠️ 勉强：V 字仇杀队、未知死亡（偏燃 / 震撼，不算催泪）</li>
+</ul>
+<p><strong>问题：</strong></p>
+<ul>
+<li>「感动想哭」这种<strong>情感意图</strong>识别最好</li>
+<li>但仍混入偏动作 / 悬疑的片</li>
+</ul>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/03/16/2026%E5%B9%B43%E6%9C%8816%E6%97%A5-embed%E6%A8%A1%E5%9E%8B/" data-id="cmmuaf4q2000158v4api4asmo" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2026/03/11/2026%E5%B9%B43%E6%9C%8811%E6%97%A5-%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2026年3月11日 知识图谱</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>148</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>41</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2025 - 2026 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

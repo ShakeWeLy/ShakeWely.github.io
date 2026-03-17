@@ -43,7 +43,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>146</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>148</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>41</strong><br>标签</div></a>
     </div>
@@ -70,6 +70,282 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-2026年1月27日-torch实战3" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/01/27/2026%E5%B9%B41%E6%9C%8827%E6%97%A5-torch%E5%AE%9E%E6%88%983/" class="article-date">
+  <time class="post-time" datetime="2026-01-27T07:17:56.000Z" itemprop="datePublished">
+    <span class="post-month">1月</span><br/>
+    <span class="post-day">27</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2026/01/27/2026%E5%B9%B41%E6%9C%8827%E6%97%A5-torch%E5%AE%9E%E6%88%983/">2026年1月27日 torch实战3</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<h3 id="1-模型部署与生产化-torchscript-libtorch"><a class="markdownIt-Anchor" href="#1-模型部署与生产化-torchscript-libtorch"></a> 1. 模型部署与生产化 (TorchScript &amp; LibTorch)</h3>
+<p>在实际工业界，模型通常不会运行在 Python 环境下（因为 Python 太重且慢）。你需要学会如何把 PyTorch 模型“脱离” Python。</p>
+<ul>
+<li><strong>TorchScript：</strong> 学习使用 <code>torch.jit.trace</code>（追踪）和 <code>torch.jit.script</code>（脚本化）。这会将你的 Python 代码转换成一种中间表示（IR），它可以被 C++ 直接读取。</li>
+<li><strong>LibTorch：</strong> 这是一个纯 C++ 库。进阶目标是：<strong>在 C++ 环境中加载导出的 .pt 模型，并完成前向推理。</strong></li>
+</ul>
+<h3 id="2-分布式训练与大规模计算-distributed"><a class="markdownIt-Anchor" href="#2-分布式训练与大规模计算-distributed"></a> 2. 分布式训练与大规模计算 (Distributed)</h3>
+<p>当你处理的数据量达到 TB 级别时，单张 GPU 就力不从心了。</p>
+<ul>
+<li><strong>DDP (Distributed Data Parallel)：</strong> 这是 PyTorch 官方推荐的分布式模式。你需要理解它如何利用 C++ 层的 <strong>NCCL 库</strong> 在多张显卡之间同步梯度。</li>
+<li><strong>混合精度训练 (AMP)：</strong> 学习 <code>torch.cuda.amp</code>，利用 Tensor Cores 加速计算，同时减少显存占用。</li>
+<li><strong>性能调优 (Profiler)：</strong> 使用 <code>torch.profiler</code> 寻找代码瓶颈，看看是 CPU 预处理太慢，还是 GPU 计算太满。</li>
+</ul>
+<h3 id="3-底层自定义算子-ccuda-extensions"><a class="markdownIt-Anchor" href="#3-底层自定义算子-ccuda-extensions"></a> 3. 底层自定义算子 (C++/CUDA Extensions)</h3>
+<p>如果你发现 PyTorch 官方提供的函数（如 <code>conv2d</code>）无法满足你的特殊数学需求，或者 Python 实现的速度太慢，你就需要自己写底层代码。</p>
+<ul>
+<li><strong>编写 C++ 扩展：</strong> 利用 <code>pybind11</code> 将 C++ 函数映射到 Python。</li>
+<li><strong>CUDA 编程：</strong> 学习编写 <code>.cu</code> 文件，直接操作 GPU 核函数（Kernel）。这是最硬核的技能，能让你的自定义运算速度提升几十甚至上百倍。</li>
+</ul>
+<h3 id="4-源码级阅读-internal-mechanism"><a class="markdownIt-Anchor" href="#4-源码级阅读-internal-mechanism"></a> 4. 源码级阅读 (Internal Mechanism)</h3>
+<p>既然你对 C++ 感兴趣，可以尝试克隆 PyTorch 的 GitHub 仓库，重点阅读以下模块：</p>
+<ul>
+<li><strong>ATen 库：</strong> 这是 PyTorch 的基础张量库，几乎所有的 C++ 运算都在这里。</li>
+<li><strong>Autograd 引擎：</strong> 查看 <code>torch/csrc/autograd</code>，理解它是如何通过动态链表记录梯度路径的。</li>
+</ul>
+</blockquote>
+<h2 id="模型准备与优化"><a class="markdownIt-Anchor" href="#模型准备与优化"></a> 模型准备与优化</h2>
+<h3 id="模型导出格式"><a class="markdownIt-Anchor" href="#模型导出格式"></a> 模型导出格式</h3>
+<p>PyTorch 主要支持以下导出格式：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">格式</th>
+<th style="text-align:left">特点</th>
+<th style="text-align:left">适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">TorchScript</td>
+<td style="text-align:left">PyTorch原生格式，保持动态图特性</td>
+<td style="text-align:left">PyTorch生态内部使用</td>
+</tr>
+<tr>
+<td style="text-align:left">ONNX</td>
+<td style="text-align:left">开放标准，跨框架兼容</td>
+<td style="text-align:left">多框架协作环境</td>
+</tr>
+<tr>
+<td style="text-align:left">Torch-TensorRT</td>
+<td style="text-align:left">NVIDIA优化格式</td>
+<td style="text-align:left">GPU推理加速</td>
+</tr>
+</tbody>
+</table>
+<h3 id="导出为torchscript"><a class="markdownIt-Anchor" href="#导出为torchscript"></a> 导出为TorchScript</h3>
+<p># 方法1: 通过追踪(tracing)导出<br>
+traced_script = torch.jit.trace(model, example_input)<br>
+traced_script.save(“resnet18_traced.pt”)</p>
+<p># 方法2: 通过脚本(scripting)导出<br>
+scripted_model = torch.jit.script(model)<br>
+scripted_model.save(“resnet18_scripted.pt”)</p>
+<p><strong>注意事项</strong>：</p>
+<ol>
+<li><code>torch.jit.trace</code> 更适合没有控制流的模型</li>
+<li><code>torch.jit.script</code> 能处理包含条件判断等复杂逻辑的模型</li>
+<li>导出前务必调用 <code>model.eval()</code></li>
+</ol>
+<hr>
+<h3 id="部署方案选择"><a class="markdownIt-Anchor" href="#部署方案选择"></a> 部署方案选择</h3>
+<h4 id="libtorch-c-api"><a class="markdownIt-Anchor" href="#libtorch-c-api"></a> LibTorch (C++ API)</h4>
+<p>#include &lt;torch/script.h&gt;</p>
+<p>int main() {<br>
+// 加载模型<br>
+torch::jit::script::Module module;<br>
+module = torch::jit::load(“<a target="_blank" rel="noopener" href="http://resnet18.pt">resnet18.pt</a>”);</p>
+<p>// 准备输入<br>
+std::vector<a href="torch::jit::IValue">torch::jit::IValue</a> inputs;<br>
+inputs.push_back(torch::ones({1, 3, 224, 224}));</p>
+<p>// 执行推理<br>
+auto output = module.forward(inputs).toTensor();<br>
+std::cout &lt;&lt; output.slice(*/*dim=*/*1, */*start=*/*0, */*end=*/*5) &lt;&lt; ‘<strong>\n</strong>’;<br>
+}</p>
+<h4 id="onnx-runtime"><a class="markdownIt-Anchor" href="#onnx-runtime"></a> ONNX Runtime</h4>
+<p><strong>import</strong> onnxruntime <strong>as</strong> ort</p>
+<p># 创建推理会话<br>
+sess = ort.InferenceSession(“model.onnx”)</p>
+<p># 准备输入<br>
+input_name = sess.get_inputs()[0].name<br>
+input_data = np.random.rand(1, 3, 224, 224).astype(np.float32)</p>
+<p># 执行推理<br>
+outputs = sess.run(None, {input_name: input_data})</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/01/27/2026%E5%B9%B41%E6%9C%8827%E6%97%A5-torch%E5%AE%9E%E6%88%983/" data-id="cml627032000j4kv4cmlo7szb" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl-python/" rel="tag">dl, python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2026年1月27日-torch介绍0" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/01/27/2026%E5%B9%B41%E6%9C%8827%E6%97%A5-torch%E4%BB%8B%E7%BB%8D0/" class="article-date">
+  <time class="post-time" datetime="2026-01-27T05:36:46.000Z" itemprop="datePublished">
+    <span class="post-month">1月</span><br/>
+    <span class="post-day">27</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2026/01/27/2026%E5%B9%B41%E6%9C%8827%E6%97%A5-torch%E4%BB%8B%E7%BB%8D0/">2026年1月27日 torch介绍0</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/647001891">https://zhuanlan.zhihu.com/p/647001891</a></li>
+</ol>
+</blockquote>
+<h1 id="pytorch"><a class="markdownIt-Anchor" href="#pytorch"></a> Pytorch</h1>
+<h1 id="1-介绍"><a class="markdownIt-Anchor" href="#1-介绍"></a> 1 介绍</h1>
+<p>PyTorch 是一个开源的深度学习框架，以其灵活性和动态计算图而广受欢迎。</p>
+<p>PyTorch 主要有以下几个基础概念：张量（Tensor）、自动求导（Autograd）、神经网络模块（nn.Module）、优化器（optim）等。</p>
+<ul>
+<li><strong>张量（Tensor）</strong>：PyTorch 的核心数据结构，支持多维数组，并可以在 CPU 或 GPU 上进行加速计算。</li>
+<li><strong>自动求导（Autograd）</strong>：PyTorch 提供了自动求导功能，可以轻松计算模型的梯度，便于进行反向传播和优化。</li>
+<li><strong>神经网络（nn.Module）</strong>：PyTorch 提供了简单且强大的 API 来构建神经网络模型，可以方便地进行前向传播和模型定义。</li>
+<li><strong>优化器（Optimizers）</strong>：使用优化器（如 Adam、SGD 等）来更新模型的参数，使得损失最小化。</li>
+<li><strong>设备（Device）</strong>：可以将模型和张量移动到 GPU 上以加速计算。</li>
+</ul>
+<hr>
+<h2 id="pytorch-架构总览"><a class="markdownIt-Anchor" href="#pytorch-架构总览"></a> PyTorch 架构总览</h2>
+<p>PyTorch 采用模块化设计，由多个相互协作的核心组件构成。理解这些组件的作用和相互关系，是掌握 PyTorch 的关键。</p>
+<h3 id="pytorch-架构图"><a class="markdownIt-Anchor" href="#pytorch-架构图"></a> PyTorch 架构图</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">┌─────────────────────────────────────────────────────────────┐</span><br><span class="line">│                    PyTorch 生态系统                          │</span><br><span class="line">├─────────────────────────────────────────────────────────────┤</span><br><span class="line">│  torchvision  │  torchtext  │  torchaudio  │  其他专业库     │</span><br><span class="line">├─────────────────────────────────────────────────────────────┤</span><br><span class="line">│                     PyTorch 核心                            │</span><br><span class="line">├───────────────┬─────────────────┬───────────────────────────┤</span><br><span class="line">│   torch.nn    │   torch.optim   │      torch.utils          │</span><br><span class="line">│   (神经网络)   │   (优化器)      │      (工具函数)           │</span><br><span class="line">├───────────────┼─────────────────┼───────────────────────────┤</span><br><span class="line">│               │                 │   torch.utils.data        │</span><br><span class="line">│  torch 核心   │  autograd       │   (数据加载)              │</span><br><span class="line">│  (张量计算)   │  (自动微分)     │                           │</span><br><span class="line">└───────────────┴─────────────────┴───────────────────────────┘</span><br></pre></td></tr></table></figure>
+<h2 id="1-分层架构"><a class="markdownIt-Anchor" href="#1-分层架构"></a> 1. 分层架构</h2>
+<p>PyTorch 采用<strong>分层架构</strong>设计，从上层到底层依次为：</p>
+<p><strong>1、Python API（顶层）</strong></p>
+<ul>
+<li><code>torch</code>：核心张量计算（类似NumPy，支持GPU）。</li>
+<li><code>torch.nn</code>：神经网络层、损失函数等。</li>
+<li><code>torch.autograd</code>：自动微分（反向传播）。</li>
+<li>开发者直接调用的接口，简单易用。</li>
+</ul>
+<p><strong>2、C++核心（中层）</strong></p>
+<ul>
+<li><strong>ATen</strong>：张量运算核心库（400+操作）。</li>
+<li><strong>JIT</strong>：即时编译优化模型。</li>
+<li><strong>Autograd引擎</strong>：自动微分的底层实现。</li>
+<li>高性能计算，连接Python与底层硬件。</li>
+</ul>
+<p><strong>3、基础库（底层）</strong></p>
+<ul>
+<li><strong>TH/THNN</strong>：C语言实现的基础张量和神经网络操作。</li>
+<li><strong>THC/THCUNN</strong>：对应的CUDA（GPU）版本。</li>
+<li>直接操作硬件（CPU/GPU），极致优化速度。</li>
+</ul>
+<p><img src="/2026/01/27/2026%E5%B9%B41%E6%9C%8827%E6%97%A5-torch%E4%BB%8B%E7%BB%8D0/image-20260127140243046.png" alt="image-20260127140243046"></p>
+<h3 id="2pytorch-的双层架构"><a class="markdownIt-Anchor" href="#2pytorch-的双层架构"></a> 2.PyTorch 的“双层”架构</h3>
+<p>PyTorch 的设计哲学是：<strong>用 Python 保证易用性，用 C++ 保证高性能。</strong></p>
+<ul>
+<li><strong>Python 层（Frontend）：</strong> 也就是我们直接接触的 API。它负责逻辑组织、用户交互和提供灵活的开发体验。</li>
+<li><strong>C++ 层（Backend）：</strong> 核心库被称为 <strong>LibTorch</strong>。它包含了张量运算（Tensor library）、自动求导引擎（Autograd）以及对硬件（如 CPU、GPU）的底层调用。</li>
+</ul>
+<h3 id="3-python-和-c-是如何通信的"><a class="markdownIt-Anchor" href="#3-python-和-c-是如何通信的"></a> 3. Python 和 C++ 是如何通信的？</h3>
+<p>PyTorch 使用了像 <strong>pybind11</strong> 这样的工具，在 Python 和 C++ 之间架起了一座桥梁。当你执行 <code>a + b</code>（两个张量相加）时：</p>
+<ol>
+<li>Python 调用指令。</li>
+<li>通过桥梁进入底层的 C++ 实现。</li>
+<li>C++ 调度 CUDA 核心或 CPU 指令完成运算。</li>
+<li>结果返回给 Python。</li>
+</ol>
+<h3 id="4-什么时候你会接触到-c-部分"><a class="markdownIt-Anchor" href="#4-什么时候你会接触到-c-部分"></a> 4. 什么时候你会接触到 C++ 部分？</h3>
+<p>普通用户通常不需要碰 C++，但在以下场景中它是必不可少的：</p>
+<ul>
+<li><strong>部署（Deployment）：</strong> 在嵌入式设备或对延迟要求极高的服务器上，开发者会直接使用 <strong>LibTorch</strong>（PyTorch 的 C++ 版本）来加载模型，完全脱离 Python 环境。</li>
+<li><strong>自定义算子：</strong> 如果你发明了一种极其复杂的数学运算，且 Python 实现太慢，你可以用 C++ 编写该算子并将其作为插件引入 PyTorch。</li>
+</ul>
+<h1 id="2-特征"><a class="markdownIt-Anchor" href="#2-特征"></a> 2 特征</h1>
+<h2 id="1-动态计算图"><a class="markdownIt-Anchor" href="#1-动态计算图"></a> 1 动态计算图</h2>
+<blockquote>
+<p>import torch</p>
+<p>def dynamic_model(x):<br>
+# 这里的 Python 逻辑直接决定了计算图的结构<br>
+if x.sum() &gt; 0:<br>
+out = x * 2  # 动态生成分支 A 的路径<br>
+else:<br>
+out = x + 5  # 动态生成分支 B 的路径</p>
+<pre><code># 甚至可以用循环，循环多少次，计算图就自动延伸多少个节点
+for i in range(int(torch.randint(1, 5, (1,)))):
+    out = out + i
+return out
+</code></pre>
+<p>x = torch.randn(2, 2, requires_grad=True)<br>
+y = dynamic_model(x)<br>
+y.backward(torch.ones_like(y)) # 自动求导引擎会沿着刚才“长”出来的路径反向走回去</p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/01/27/2026%E5%B9%B41%E6%9C%8827%E6%97%A5-torch%E4%BB%8B%E7%BB%8D0/" data-id="cml627031000h4kv49ygcaqvd" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl-pyhton/" rel="tag">dl,pyhton</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-2026年1月24日-agent开发杂谈" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -221,16 +497,17 @@
         <blockquote>
 <p><a target="_blank" rel="noopener" href="https://datawhalechina.github.io/hello-agents/#/./README">https://datawhalechina.github.io/hello-agents/#/./README</a></p>
 </blockquote>
-<h1 id="第一章-初识智能体"><a class="markdownIt-Anchor" href="#第一章-初识智能体"></a> <strong>第一章 初识智能体</strong></h1>
+<h1 id="1-hello-agents"><a class="markdownIt-Anchor" href="#1-hello-agents"></a> 1 hello-agents</h1>
+<h2 id="第一章-初识智能体"><a class="markdownIt-Anchor" href="#第一章-初识智能体"></a> <strong>第一章 初识智能体</strong></h2>
 <p>定义为任何能够通过<strong>传感器（Sensors）<strong>感知其所处</strong>环境（Environment）</strong>，并<strong>自主</strong>地通过**执行器（Actuators）<strong>采取</strong>行动（Action）**以达成特定目标的实体。</p>
-<h1 id="第二章-智能体发展史"><a class="markdownIt-Anchor" href="#第二章-智能体发展史"></a> <strong>第二章 智能体发展史</strong></h1>
+<h2 id="第二章-智能体发展史"><a class="markdownIt-Anchor" href="#第二章-智能体发展史"></a> <strong>第二章 智能体发展史</strong></h2>
 <img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260122150603627.png" alt="image-20260122150603627" style="zoom:50%;">
-<h1 id="第三章-大语言模型基础"><a class="markdownIt-Anchor" href="#第三章-大语言模型基础"></a> <strong>第三章 大语言模型基础</strong></h1>
-<h2 id="31-从-n-gram-到-rnn"><a class="markdownIt-Anchor" href="#31-从-n-gram-到-rnn"></a> 3.1 从 N-gram 到 RNN</h2>
+<h2 id="第三章-大语言模型基础"><a class="markdownIt-Anchor" href="#第三章-大语言模型基础"></a> <strong>第三章 大语言模型基础</strong></h2>
+<h3 id="31-从-n-gram-到-rnn"><a class="markdownIt-Anchor" href="#31-从-n-gram-到-rnn"></a> 3.1 从 N-gram 到 RNN</h3>
 <p><strong>马尔科夫</strong></p>
 <p>极大似然估计</p>
 <img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260120114037739.png" alt="image-20260120114037739" style="zoom:50%;">
-<h2 id="32-交互"><a class="markdownIt-Anchor" href="#32-交互"></a> 3.2 交互</h2>
+<h3 id="32-交互"><a class="markdownIt-Anchor" href="#32-交互"></a> 3.2 交互</h3>
 <p>温度 TOP_k TOP_p</p>
 <p><strong>零样本、单样本与少样本提示</strong></p>
 <p><strong>指令调优</strong> <strong>(Instruction Tuning)</strong> 是一种微调技术，它使用大量“指令-回答”格式的数据对预训练模型进行进一步的训</p>
@@ -250,11 +527,11 @@
 <blockquote></blockquote>
 <p>后续的许多算法都是在BPE的基础上进行优化的。其中，Google 开发的 WordPiece 和 SentencePiece 是影响力最大</p>
 <p>的两种</p>
-<h3 id="模型选型的关键考量"><a class="markdownIt-Anchor" href="#模型选型的关键考量"></a> <strong>模型选型的关键考量</strong></h3>
+<h4 id="模型选型的关键考量"><a class="markdownIt-Anchor" href="#模型选型的关键考量"></a> <strong>模型选型的关键考量</strong></h4>
 <p>公开的基准测试排行榜（如 LMSys Chatbot Arena</p>
 <p>Leaderboard）来评估模型的综合能力。</p>
-<h2 id="33-大语言模型的缩放法则与局限性"><a class="markdownIt-Anchor" href="#33-大语言模型的缩放法则与局限性"></a> <strong>3.3</strong> <strong>大语言模型的缩放法则与局限性</strong></h2>
-<h3 id="331-缩放法则"><a class="markdownIt-Anchor" href="#331-缩放法则"></a> <strong>3.3.1</strong> <strong>缩放法则</strong></h3>
+<h3 id="33-大语言模型的缩放法则与局限性"><a class="markdownIt-Anchor" href="#33-大语言模型的缩放法则与局限性"></a> <strong>3.3</strong> <strong>大语言模型的缩放法则与局限性</strong></h3>
+<h4 id="331-缩放法则"><a class="markdownIt-Anchor" href="#331-缩放法则"></a> <strong>3.3.1</strong> <strong>缩放法则</strong></h4>
 <p><strong>缩放法则</strong></p>
 <p>模型的性能（通常用损失 Loss 来衡量）与参数量、数据量和计算量这三个因素都</p>
 <p>呈现出平滑的幂律关系[9]。简单来说，只要我们持续、按比例地增加这三个要素，模型的性能就会可预测地、平滑地</p>
@@ -263,7 +540,7 @@
 <p>指当模型规模达到一定阈值后，会突然展现出在小规</p>
 <p>模模型中完全不存在或表现不佳的全新能力。例如，<strong>链式思考</strong> <strong>(Chain-of-Thought)</strong> 、<strong>指令遵循</strong> <strong>(Instruction</strong></p>
 <p><strong>Following)</strong> 、多步推理、代码生成等能力，都是在模型参数量达到数百亿甚至千亿级别后才显著出现的。</p>
-<h3 id="332-模型幻觉"><a class="markdownIt-Anchor" href="#332-模型幻觉"></a> <strong>3.3.2</strong> <strong>模型幻觉</strong></h3>
+<h4 id="332-模型幻觉"><a class="markdownIt-Anchor" href="#332-模型幻觉"></a> <strong>3.3.2</strong> <strong>模型幻觉</strong></h4>
 <blockquote>
 <p><strong>事实性幻觉</strong> <strong>(Factual Hallucinations)</strong> ： 模型生成与现实世界事实不符的信息。</p>
 <p><strong>忠实性幻觉</strong> <strong>(Faithfulness Hallucinations)</strong> ： 在文本摘要、翻译等任务中，生成的内容未能忠实地反映源文</p>
@@ -308,8 +585,8 @@
 <p>它能引导模型进</p>
 <p>行复杂的逻辑推理，但无法与外部世界交互，容易产生事实幻觉</p>
 </blockquote>
-<h1 id="第四章-智能体经典"><a class="markdownIt-Anchor" href="#第四章-智能体经典"></a> <strong>第四章 智能体经典</strong></h1>
-<h2 id="41-react"><a class="markdownIt-Anchor" href="#41-react"></a> 4.1 React</h2>
+<h2 id="第四章-智能体经典"><a class="markdownIt-Anchor" href="#第四章-智能体经典"></a> <strong>第四章 智能体经典</strong></h2>
+<h3 id="41-react"><a class="markdownIt-Anchor" href="#41-react"></a> 4.1 React</h3>
 <p>ReAct 像一个经验丰富的侦探，根据现场的蛛丝马迹（Observation）一步步推理，随时调整自己的调查方向；</p>
 <p>ReAct范式通过一种特殊的提示工程来引导模型，使其每一步的输出都遵循一个固定的轨迹：</p>
 <ul>
@@ -334,7 +611,7 @@
 <li>整个机制的稳定运行建立在一个精心设计的提示词模板之上。模板中的任何微小变动，甚至是用词的差异，都可能影响 LLM 的行为。</li>
 <li></li>
 </ol>
-<h2 id="42-plan-and-solve"><a class="markdownIt-Anchor" href="#42-plan-and-solve"></a> <strong>4.2 Plan-and-Solve</strong></h2>
+<h3 id="42-plan-and-solve"><a class="markdownIt-Anchor" href="#42-plan-and-solve"></a> <strong>4.2 Plan-and-Solve</strong></h3>
 <p>Plan-and-Solve 则更像一位建筑师，在动工之前必须先绘制出完整的蓝图（Plan），然后严格按照蓝图来施工（Solve）</p>
 <p>Plan-and-Solve 将整个流程解耦为两个核心阶段：</p>
 <ol>
@@ -354,9 +631,9 @@
 <li><strong>代码生成任务</strong>：需要先构思好函数、类和模块的结构，再逐一实现。</li>
 </ul>
 </blockquote>
-<h3 id="432-规划阶段"><a class="markdownIt-Anchor" href="#432-规划阶段"></a> <strong>4.3.2</strong> <strong>规划阶段</strong></h3>
-<h3 id="433-执行器与状态管理"><a class="markdownIt-Anchor" href="#433-执行器与状态管理"></a> <strong>4.3.3</strong> <strong>执行器与状态管理</strong></h3>
-<h2 id="43-reflection"><a class="markdownIt-Anchor" href="#43-reflection"></a> 4.3 <strong>Reflection</strong></h2>
+<h4 id="432-规划阶段"><a class="markdownIt-Anchor" href="#432-规划阶段"></a> <strong>4.3.2</strong> <strong>规划阶段</strong></h4>
+<h4 id="433-执行器与状态管理"><a class="markdownIt-Anchor" href="#433-执行器与状态管理"></a> <strong>4.3.3</strong> <strong>执行器与状态管理</strong></h4>
+<h3 id="43-reflection"><a class="markdownIt-Anchor" href="#43-reflection"></a> 4.3 <strong>Reflection</strong></h3>
 <p>Reflection 机制的核心思想，正是为智能体引入一种<strong>事后（post-hoc）的自我校正循环</strong></p>
 <p>其核心工作流程可以概括为一个简洁的三步循环：<strong>执行 -&gt; 反思 -&gt; 优化</strong>。</p>
 <ol>
@@ -386,12 +663,12 @@
 <li>它为智能体构建了一个临时的**“短期记忆”<strong>。整个“执行-反思-优化”的轨迹形成了一个宝贵的经验记录，智能体不仅知道最终答案，还记得自己是如何从有缺陷的初稿迭代到最终版本的。更进一步，这个记忆系统还可以是</strong>多模态的**，允许智能体反思和修正文本以外的输出（如代码、图像等），为构建更强大的多模态智能体奠定了基础。</li>
 </ul>
 <h4 id="记忆管理机制"><a class="markdownIt-Anchor" href="#记忆管理机制"></a> <strong>记忆管理机制</strong></h4>
-<h1 id="第五章-基于低代码平台的智能体搭建"><a class="markdownIt-Anchor" href="#第五章-基于低代码平台的智能体搭建"></a> 第五章 基于低代码平台的智能体搭建❌</h1>
-<h1 id="第六章-框架开发实践"><a class="markdownIt-Anchor" href="#第六章-框架开发实践"></a> 第六章 框架开发实践❌</h1>
+<h2 id="第五章-基于低代码平台的智能体搭建"><a class="markdownIt-Anchor" href="#第五章-基于低代码平台的智能体搭建"></a> 第五章 基于低代码平台的智能体搭建❌</h2>
+<h2 id="第六章-框架开发实践"><a class="markdownIt-Anchor" href="#第六章-框架开发实践"></a> 第六章 框架开发实践❌</h2>
 <p><img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260121094514872.png" alt="image-20260121094514872"></p>
-<h1 id="第七章-构建你的智能体框架"><a class="markdownIt-Anchor" href="#第七章-构建你的智能体框架"></a> <strong>第七章 构建你的智能体框架</strong> ❌</h1>
-<h1 id="第八章-记忆与检索"><a class="markdownIt-Anchor" href="#第八章-记忆与检索"></a> <strong>第八章 记忆与检索❌</strong></h1>
-<h1 id="第九章-上下文工程"><a class="markdownIt-Anchor" href="#第九章-上下文工程"></a> <strong>第九章 上下文工程</strong></h1>
+<h2 id="第七章-构建你的智能体框架"><a class="markdownIt-Anchor" href="#第七章-构建你的智能体框架"></a> <strong>第七章 构建你的智能体框架</strong> ❌</h2>
+<h2 id="第八章-记忆与检索"><a class="markdownIt-Anchor" href="#第八章-记忆与检索"></a> <strong>第八章 记忆与检索❌</strong></h2>
+<h2 id="第九章-上下文工程"><a class="markdownIt-Anchor" href="#第九章-上下文工程"></a> <strong>第九章 上下文工程</strong></h2>
 <p>我们需要一套工程化方法，持续、系统地为模型构造恰当的“上下文”。</p>
 <blockquote>
 <p>====================================================================</p>
@@ -421,9 +698,9 @@
 <p>请基于以上信息,提供准确、有据的回答。</p>
 <p>====================================================================</p>
 </blockquote>
-<h1 id="第十章-智能体通信协议"><a class="markdownIt-Anchor" href="#第十章-智能体通信协议"></a> 第十章 智能体通信协议</h1>
+<h2 id="第十章-智能体通信协议"><a class="markdownIt-Anchor" href="#第十章-智能体通信协议"></a> 第十章 智能体通信协议</h2>
 <p>如果说 MCP 解决的是&quot;如何访问工具&quot;，A2A 解决的是&quot;如何与其他智能体对话&quot;，那么 ANP 解决的是&quot;如何在大规模网络中发现和连接智能体&quot;。</p>
-<h2 id="mcp"><a class="markdownIt-Anchor" href="#mcp"></a> MCP</h2>
+<h3 id="mcp"><a class="markdownIt-Anchor" href="#mcp"></a> MCP</h3>
 <blockquote>
 <p>主要解决function call调用方式不统一, 本质还是function_call加入到prompt上下文</p>
 </blockquote>
@@ -473,7 +750,7 @@
 <blockquote>
 <p>pass</p>
 </blockquote>
-<h1 id="第十一章-agentic-rl"><a class="markdownIt-Anchor" href="#第十一章-agentic-rl"></a> 第十一章 Agentic-RL</h1>
+<h2 id="第十一章-agentic-rl"><a class="markdownIt-Anchor" href="#第十一章-agentic-rl"></a> 第十一章 Agentic-RL</h2>
 <p><img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260121113215186.png" alt="image-20260121113215186"></p>
 <p>agent 示例</p>
 <p><img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260121114824331.png" alt="image-20260121114824331"></p>
@@ -483,6 +760,146 @@
 <li>**HotelAgent(酒店推荐专家)**专注于搜索酒店信息。它需要理解用户的住宿需求(比如&quot;经济型&quot;、“豪华型”)，然后调用 POI 搜索工具，返回符合要求的酒店列表。</li>
 <li>**PlannerAgent(行程规划专家)**负责整合所有信息。它接收前三个 Agent 的输出，加上用户的原始需求(日期、预算等)，然后生成完整的旅行计划。它不需要调用任何外部工具，只需要专注于信息的整合和行程的安排。</li>
 </ul>
+<h1 id="2-吴"><a class="markdownIt-Anchor" href="#2-吴"></a> 2 吴</h1>
+<h2 id="22-reflection"><a class="markdownIt-Anchor" href="#22-reflection"></a> 2.2 Reflection</h2>
+<p><img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260310161355510.png" alt="image-20260310161355510"></p>
+<h3 id="sql"><a class="markdownIt-Anchor" href="#sql"></a> <strong>SQL</strong></h3>
+<p><img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260310162509546.png" alt="image-20260310162509546"></p>
+<h4 id="测试"><a class="markdownIt-Anchor" href="#测试"></a> <strong>测试</strong></h4>
+<p><img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260310162438383.png" alt="image-20260310162438383"></p>
+<h3 id="plot"><a class="markdownIt-Anchor" href="#plot"></a> plot</h3>
+<p><img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260310162556405.png" alt="image-20260310162556405"></p>
+<h4 id="评估标准"><a class="markdownIt-Anchor" href="#评估标准"></a> <strong>评估标准</strong></h4>
+<p>ask llm 存在问题</p>
+<img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260310162646433.png" alt="image-20260310162646433" style="zoom:33%;">
+<p><img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260310162732647.png" alt="image-20260310162732647"></p>
+<p>评分标准</p>
+<blockquote>
+<p>单图片标准打分, 0或1 而不是0~5</p>
+</blockquote>
+<p><img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260310162807231.png" alt="image-20260310162807231"></p>
+<p><img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260310163002936.png" alt="image-20260310163002936"></p>
+<blockquote>
+<p>修改prompt也要</p>
+</blockquote>
+<h3 id="223-外部反馈"><a class="markdownIt-Anchor" href="#223-外部反馈"></a> 2.2.3 外部反馈</h3>
+<h4 id="提示词边际效用"><a class="markdownIt-Anchor" href="#提示词边际效用"></a> 提示词边际效用</h4>
+<img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260310163315588.png" alt="image-20260310163315588" style="zoom:33%;">
+<ol>
+<li>re匹配</li>
+<li>联网搜索</li>
+<li>切确的输出长度(tool check)</li>
+</ol>
+<h2 id="23-tool"><a class="markdownIt-Anchor" href="#23-tool"></a> 2.3 tool</h2>
+<p><strong>日历助手</strong></p>
+<img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260310164157037.png" alt="image-20260310164157037" style="zoom:33%;">
+<h4 id="sandboxes"><a class="markdownIt-Anchor" href="#sandboxes"></a> sandboxes</h4>
+<p>run in</p>
+<h4 id="mcp-2"><a class="markdownIt-Anchor" href="#mcp-2"></a> MCP</h4>
+<p>github mcp:获取pr</p>
+<h2 id="24-评估"><a class="markdownIt-Anchor" href="#24-评估"></a> 2.4 评估</h2>
+<h3 id="241-多几个样本"><a class="markdownIt-Anchor" href="#241-多几个样本"></a> 2.4.1 多几个样本</h3>
+<p><img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260310170805929.png" alt="image-20260310170805929"></p>
+<blockquote>
+<p>然后得出结论, 是什么问题</p>
+</blockquote>
+<blockquote>
+<p>然后如何修复和验证这个问题(比如写正则表达式匹配日期的识别)</p>
+<img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260310171043585.png" alt="image-20260310171043585" style="zoom:33%;">
+</blockquote>
+<h3 id="242-误差分析-链式反应"><a class="markdownIt-Anchor" href="#242-误差分析-链式反应"></a> 2.4.2  误差分析, 链式反应</h3>
+<ol>
+<li>检查每一步的中间结果; trace and span</li>
+<li>注重难样例</li>
+<li>多种不同的样例进行搜索测试</li>
+<li></li>
+</ol>
+<h3 id="243"><a class="markdownIt-Anchor" href="#243"></a> 2.4.3</h3>
+<img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260310204726578.png" alt="image-20260310204726578" style="zoom:50%;">
+<h3 id="244-如何确认增加组件会带来性能提升"><a class="markdownIt-Anchor" href="#244-如何确认增加组件会带来性能提升"></a> 2.4.4 如何确认增加组件会带来性能提升</h3>
+<h3 id="245-参数调整"><a class="markdownIt-Anchor" href="#245-参数调整"></a> 2.4.5 “参数调整”</h3>
+<p><img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260310205154699.png" alt="image-20260310205154699"></p>
+<p><img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260310205256891.png" alt></p>
+<p>模型和提示词</p>
+<p><img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260310205602574.png" alt="image-20260310205602574"></p>
+<h3 id="246-测评方向"><a class="markdownIt-Anchor" href="#246-测评方向"></a> 2.4.6 测评方向</h3>
+<img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260310210022566.png" alt="image-20260310210022566" style="zoom:33%;">
+<h3 id="257-延迟和成本"><a class="markdownIt-Anchor" href="#257-延迟和成本"></a> 2.5.7 延迟和成本</h3>
+<p>延迟优化</p>
+<ol>
+<li>fetch web</li>
+<li>use small model</li>
+<li></li>
+</ol>
+<p>成本</p>
+<ol>
+<li>steps</li>
+</ol>
+<h3 id="252-example"><a class="markdownIt-Anchor" href="#252-example"></a> 2.5.2 example</h3>
+<p><img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260310205648885.png" alt="image-20260310205648885"></p>
+<blockquote>
+<img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260310205719767.png" alt="image-20260310205719767" style="zoom: 80%;">
+</blockquote>
+<h2 id="知识图谱"><a class="markdownIt-Anchor" href="#知识图谱"></a> 知识图谱</h2>
+<p>将结构化数据和非结构化数据转换为知识图谱</p>
+<p>实体提取</p>
+<p>然后作为上下文</p>
+<p>定下模式</p>
+<blockquote>
+<p><img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260310212915677.png" alt="image-20260310212915677"></p>
+</blockquote>
+<h3 id="261-what"><a class="markdownIt-Anchor" href="#261-what"></a> 2.6.1 what</h3>
+<p><strong>关系型数据库</strong></p>
+<p>Q: abk 买了什么</p>
+<img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260310213218428.png" alt="image-20260310213218428" style="zoom:33%;">
+<p>Q2: 谁和abk买的一样</p>
+<img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260310213320312.png" alt="image-20260310213320312" style="zoom:33%;">
+<p>Q3: 应该给abk推荐什么东西?</p>
+<img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260310213359340.png" alt="image-20260310213359340" style="zoom:33%;">
+<p><strong>转图标模式</strong></p>
+<img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260310213602214.png" alt="image-20260310213602214" style="zoom:33%;">
+<img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260310213609247.png" alt="image-20260310213609247" style="zoom:33%;">
+<img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260310213548813.png" alt="image-20260310213548813" style="zoom:33%;">
+<p><strong>cypher query</strong></p>
+<p><img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260310214038495.png" alt="image-20260310214038495"></p>
+<img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260310214049709.png" alt="image-20260310214049709" style="zoom: 50%;">
+<blockquote>
+<p>把abk买的定义为abkProduct</p>
+</blockquote>
+<p>定义</p>
+<img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260310214311282.png" alt="image-20260310214311282" style="zoom:33%;">
+<h3 id="262-架构"><a class="markdownIt-Anchor" href="#262-架构"></a> 2.6.2 架构</h3>
+<blockquote>
+<p>agent:</p>
+<img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260310220245322.png" alt="image-20260310220245322" style="zoom:50%;">
+<p>multi agent</p>
+<img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260310221110182.png" alt="image-20260310221110182" style="zoom:33%;">
+</blockquote>
+<p><strong>构建</strong></p>
+<p><img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260310222346352.png" alt="image-20260310222346352"></p>
+<img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260310222322385.png" alt="image-20260310222322385" style="zoom:80%;">
+<h3 id="263-理解用户意图"><a class="markdownIt-Anchor" href="#263-理解用户意图"></a> 2.6.3 理解用户意图</h3>
+<ol>
+<li>确定意图</li>
+<li>进行确认</li>
+</ol>
+<blockquote>
+<p>gold</p>
+<p>hint</p>
+<p>output</p>
+<p>cot? :</p>
+<p><img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260311084204993.png" alt="image-20260311084204993"></p>
+</blockquote>
+<h3 id="264-文件读取"><a class="markdownIt-Anchor" href="#264-文件读取"></a> 2.6.4 文件读取</h3>
+<blockquote>
+<p>cot: 就是流程?</p>
+<p><img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260311085526916.png" alt="image-20260311085526916"></p>
+</blockquote>
+<h3 id="265-结构化数据"><a class="markdownIt-Anchor" href="#265-结构化数据"></a> 2.6.5  结构化数据</h3>
+<blockquote>
+<p>feedbac</p>
+<p><img src="/2026/01/20/2026%E5%B9%B41%E6%9C%8820%E6%97%A5-agent%E5%BC%80%E5%8F%91/image-20260311104107111.png" alt="image-20260311104107111"></p>
+</blockquote>
 
       
     </div>
@@ -1083,582 +1500,6 @@
 
 
   
-    <article id="post-2025年10月14日-python环境打包构建" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/" class="article-date">
-  <time class="post-time" datetime="2025-10-15T15:13:52.000Z" itemprop="datePublished">
-    <span class="post-month">10月</span><br/>
-    <span class="post-day">15</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/">2025年10月14日 python环境打包构建</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="python环境打包构建"><a class="markdownIt-Anchor" href="#python环境打包构建"></a> python环境打包构建</h1>
-<p>在 Electron + Python 项目中，为了在无 Python 环境的客户端运行，需要实现 <strong>Python 环境自包含打包</strong>。<br>
-实践过程中共尝试三种方案：</p>
-<ol>
-<li><strong>方式 A</strong>：复制本地 Python + venv</li>
-<li><strong>方式 B</strong>：PyInstaller 打包成独立 EXE</li>
-<li><strong>方式 C</strong>：Embeddable Python（嵌入式解释器）</li>
-</ol>
-<p>最终发现仅方案 B 可行，A、C 在兼容性和安装层面存在根本性限制。</p>
-<h2 id="方式-acopy环境-electron-启动独立-python-进程"><a class="markdownIt-Anchor" href="#方式-acopy环境-electron-启动独立-python-进程"></a> 方式 A：copy环境: Electron 启动独立 Python 进程</h2>
-<h3 id="1-venv-的原理"><a class="markdownIt-Anchor" href="#1-venv-的原理"></a> 1. venv 的原理</h3>
-<p><code>venv</code> 并不是完全<strong>自包含</strong>的 Python，它依赖创建时 <strong>系统 Python</strong> 的文件来构建：</p>
-<ul>
-<li><code>Scripts/python.exe</code> → 指向 venv 内的可执行文件（<strong>拷贝或软链接</strong>）</li>
-<li><code>Lib/</code> → 包含标准库</li>
-<li><code>pyvenv.cfg</code> → 记录 <code>home</code>（原系统 Python 位置）和 <code>executable</code></li>
-</ul>
-<p>关键是：</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">home = &lt;创建 venv 时的系统 Python 安装路径&gt;</span><br><span class="line">executable = &lt;创建 venv 时的 python.exe&gt;</span><br></pre></td></tr></table></figure>
-<p>当你在其他机器运行 venv：</p>
-<ul>
-<li><strong>只要 venv 内的 python.exe 和 Lib 完整</strong>，路径不同一般不会报错。</li>
-<li><strong>如果 venv 内缺少标准库或 DLL</strong>，就会报错 <code>ModuleNotFoundError: encodings</code> 或启动失败。</li>
-</ul>
-<h4 id="vеnv-依赖系统-python-的路径pyvenvcfg-指向打包路径"><a class="markdownIt-Anchor" href="#vеnv-依赖系统-python-的路径pyvenvcfg-指向打包路径"></a> vеnv 依赖系统 Python 的路径（pyvenv.cfg 指向打包路径）</h4>
-<ul>
-<li><code>home</code> 指向你本地的系统 打包的Python路径</li>
-<li>客户机上路径不同 → venv 找不到标准库 → 报错 <code>ModuleNotFoundError: encodings</code></li>
-<li>⚠️ 这是之前遇到的错误的根本原因 → 安装新环境并修改对应的path文件</li>
-</ul>
-<h3 id="2问题分析"><a class="markdownIt-Anchor" href="#2问题分析"></a> 2.问题分析:</h3>
-<blockquote>
-<p>原因: cursor 给我错的步骤, 以为做了形象工程: <strong>copy和pip了新的环境, 但是运行的确实本地的环境的</strong>python, 导致后续一直在错的分支上修改(不了解本质, 一直以为是python copy的错误, 见下面分析).</p>
-</blockquote>
-<h4 id="21-自包含方式python错误"><a class="markdownIt-Anchor" href="#21-自包含方式python错误"></a> 2.1 自包含方式python错误</h4>
-<blockquote>
-<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="title function_">execSync</span>(<span class="string">`<span class="subst">$&#123;pythonCmd&#125;</span> -m venv &quot;<span class="subst">$&#123;pythonDir&#125;</span>&quot;`</span>, &#123; </span><br><span class="line">  <span class="attr">stdio</span>: <span class="string">&#x27;inherit&#x27;</span>,</span><br><span class="line">  <span class="attr">cwd</span>: path.<span class="title function_">join</span>(__dirname, <span class="string">&#x27;..&#x27;</span>)</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
-<p>这样运行会依赖创建venv的python</p>
-<p><strong>本质上依赖于系统 Python</strong>，因为 venv 只是拷贝/软链接系统 Python 的部分文件（可执行文件 + 标准库）。所以：</p>
-<ol>
-<li>如果用户机器没有 Python，或者版本不对，Electron 打包后的程序 <strong>无法独立运行</strong>。</li>
-<li>同时, 打包的pyvenv.cfg 指向了本地机的python导致客户机的python找不到,</li>
-</ol>
-</blockquote>
-<p>**核心问题 : **</p>
-<ul>
-<li><strong>venv 本身不是自包含的</strong>，它只是一个「隔离的环境」，依赖底层 Python。</li>
-<li><strong>要想 Electron 完全自包含</strong>，你必须用 <strong>Embedded Python</strong> 或 <strong>完整 Python 安装 + Lib</strong>，而不是 venv。之前手动 copy python.exe + DLL + venv，这本质就是想绕开系统 Python，但做法容易出错（缺标准库，导致 <code>encodings</code> 不存在）</li>
-</ul>
-<p><strong>尝试解决1:</strong></p>
-<p>​	手动 copy python.exe + DLL + venv，这本质就是想绕开系统 Python，但做法容易出错（缺标准库，导致 <code>encodings</code> 不存在）。</p>
-<blockquote>
-<p>真正的解决办法是在客户机安装python并修改路径和使用打包的环境</p>
-</blockquote>
-<p><strong>尝试解决2</strong></p>
-<p>​	方案 C：Embedded Python（推荐）</p>
-<h4 id="22-环境迁移出错-自包含的-python-runtime人为地融合了解释器-库-虚拟环境-手动-copy-pythonexe-dll-venv"><a class="markdownIt-Anchor" href="#22-环境迁移出错-自包含的-python-runtime人为地融合了解释器-库-虚拟环境-手动-copy-pythonexe-dll-venv"></a> 2.2 环境迁移出错: <strong>自包含的 Python runtime</strong>，人为地「融合」了解释器 + 库 + 虚拟环境, 手动 copy python.exe + DLL + venv</h4>
-<blockquote>
-<p>本质就是意识到其实venv是python的软连接, 而不是真正的python解释器</p>
-</blockquote>
-<p>1:python的pyvenv.cfg路径错误(修改build的配置为相对路径),</p>
-<blockquote>
-<p>一直以为是venv的<code>Scripts/python.exe</code> 就是python</p>
-</blockquote>
-<p>2: 构建脚本没有复制Python核心DLL文件</p>
-<blockquote>
-<p>copy了一个python运行exe</p>
-</blockquote>
-<p>3: copy python 不完整, 无法完全copy–&gt;embed</p>
-<blockquote>
-<p>copy了半个python环境</p>
-</blockquote>
-<p><s>4: pip 安装慢</s></p>
-<p><s>5: pip似乎一直安装失败了…=&gt;重构放弃了</s></p>
-<h2 id="方式-b-pyinstaller-打包成独立-exe推荐"><a class="markdownIt-Anchor" href="#方式-b-pyinstaller-打包成独立-exe推荐"></a> 方式 B： PyInstaller 打包成独立 EXE✅（推荐）</h2>
-<blockquote>
-<p>创建新环境并打包成exe</p>
-</blockquote>
-<h3 id="1-备选方案"><a class="markdownIt-Anchor" href="#1-备选方案"></a> 1. 备选方案</h3>
-<p>之前尝试遇到很多问题, 有点主动规避了, 所以作为备选</p>
-<h3 id="2-问题分析"><a class="markdownIt-Anchor" href="#2-问题分析"></a> 2. 问题分析</h3>
-<p><strong>0:config绝对路径 加载失败</strong></p>
-<blockquote>
-<p>需修改代码路径引用</p>
-</blockquote>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ProjectConfig 在打包态用的是 exe 目录作为基准：base_path = Path(sys.executable).parent，然后拼 app/config/&lt;PROJECT_NAME&gt;</span><br></pre></td></tr></table></figure>
-<p>因此需要修改为相对于exe的运行路径 +app/config/</p>
-<p><strong>1:numpy包版本报错, 运行失败,</strong></p>
-<blockquote>
-<p>经典版本不对</p>
-</blockquote>
-<p><img src="/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/559be49c692108c9f627895ec0597657.png" alt="559be49c692108c9f627895ec0597657"></p>
-<p><strong>2:运行时动态导入问题</strong></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># app/main.py 第120行（你的项目）</span><br><span class="line">if project_name.lower() == &quot;biyi&quot;:</span><br><span class="line">    from app.api.v1 import biyi  # ← 运行时才导入</span><br><span class="line">    app.include_router(biyi.router, tags=[&quot;biyi&quot;])</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>OpenCV (cv2)：依赖大量 .so/.dll 和子模块，静态分析可能漏掉</p>
-<p>Ultralytics (YOLO)：内部动态加载模型、后端引擎（如 TensorRT、ONNX），需要手动收集</p>
-</blockquote>
-<p><strong>3: torch 库版本问题,</strong></p>
-<blockquote>
-<p>没装上torch -&gt;改用cpu版本</p>
-</blockquote>
-<p><img src="/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/b79fe447ce392f07779af6faed4b573a.png" alt="b79fe447ce392f07779af6faed4b573a"></p>
-<h3 id="3-实现可热更新的"><a class="markdownIt-Anchor" href="#3-实现可热更新的"></a> 3. 实现可热更新的</h3>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">extra_trees = []</span><br><span class="line">if os.path.exists(&#x27;app/companies/biyi&#x27;):</span><br><span class="line">    extra_trees.append(Tree(&#x27;app/companies/biyi&#x27;, prefix=&#x27;app/companies/biyi&#x27;))</span><br><span class="line">if os.path.exists(&#x27;app/config/Biyi&#x27;):</span><br><span class="line">    extra_trees.append(Tree(&#x27;app/config/Biyi&#x27;, prefix=&#x27;app/config/Biyi&#x27;))</span><br></pre></td></tr></table></figure>
-<p>通过extra_tree递归查找+ COLLECT</p>
-<img src="/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/d9f4b09992f0773c7e8cdc6ee79117b1.png" alt="d9f4b09992f0773c7e8cdc6ee79117b1" style="zoom: 50%;">
-<h3 id="4-成功运行exe-功能待测试"><a class="markdownIt-Anchor" href="#4-成功运行exe-功能待测试"></a> 4. 成功运行exe 功能待测试…</h3>
-<p>测试注意事项</p>
-<h4 id="41路径问题"><a class="markdownIt-Anchor" href="#41路径问题"></a> 4.1路径问题</h4>
-<blockquote>
-<p>相对路径问题</p>
-</blockquote>
-<blockquote>
-<p>原本是写在<code>opencv-detection-embodiedrobot\_internal/app</code>; 但是读取不到</p>
-<p>后修改cd到后端路径 <code>opencv-detection-embodiedrobot</code>再启动<code>opencv-detection-embodiedrobot\app\config</code></p>
-</blockquote>
-<h4 id="42-大小写问题"><a class="markdownIt-Anchor" href="#42-大小写问题"></a> 4.2 大小写问题</h4>
-<blockquote>
-<p>导致一直读取不到config</p>
-</blockquote>
-<blockquote>
-<p>全部改为小写</p>
-</blockquote>
-<h4 id="43-c盘内存不足"><a class="markdownIt-Anchor" href="#43-c盘内存不足"></a> 4.3  C盘内存不足</h4>
-<img src="/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/2792c7754ce5fba8cb8ba4e6a876313b.png" alt="2792c7754ce5fba8cb8ba4e6a876313b" style="zoom: 25%;">
-<h4 id="44-模型路径问题"><a class="markdownIt-Anchor" href="#44-模型路径问题"></a> 4.4 模型路径问题</h4>
-<img src="/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/ea40f78d3410bcecc36d5e3bfaa2c48c.png" alt="ea40f78d3410bcecc36d5e3bfaa2c48c" style="zoom:33%;">
-<blockquote>
-<p>继承model 重写代码 <a target="_blank" rel="noopener" href="http://xn--model-bi1hx0gxz5jstci4a021y.pt">使用项目下的model.pt</a></p>
-</blockquote>
-<h4 id="45-env问题"><a class="markdownIt-Anchor" href="#45-env问题"></a> 4.5 .env问题</h4>
-<blockquote>
-<p>添加 .env.sample和手动添加.env</p>
-</blockquote>
-<h4 id="46-导入问题"><a class="markdownIt-Anchor" href="#46-导入问题"></a> 4.6 导入问题</h4>
-<img src="/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/image-20251022134718481.png" alt="image-20251022134718481" style="zoom:50%;">
-<blockquote>
-<p>Python Backend Error: ModuleNotFoundError: No module named 'app.companies.gaotiePYI-13836:ERRORl Failed to execute script’main’due to unhandled exception!</p>
-</blockquote>
-<p>代码错误导入<code>from app.companies.gaotie.detector import GaotieVideoDetector</code></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">\# Before:</span><br><span class="line"></span><br><span class="line">from app.companies.gaotie.detector import GaotieVideoDetector</span><br><span class="line"></span><br><span class="line">\# After:</span><br><span class="line"></span><br><span class="line">from app.companies.embodiedrobot.detector import EmbodiedVideoDetector</span><br></pre></td></tr></table></figure>
-<h4 id="47成功"><a class="markdownIt-Anchor" href="#47成功"></a> 4.7成功</h4>
-<img src="/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/image-20251022150309599.png" alt="image-20251022150309599" style="zoom: 50%;">
-<blockquote>
-<h1 id="pyinstaller打包biyi项目准备工作计划"><a class="markdownIt-Anchor" href="#pyinstaller打包biyi项目准备工作计划"></a> PyInstaller打包Biyi项目准备工作计划</h1>
-<h2 id="1-清理和准备项目文件"><a class="markdownIt-Anchor" href="#1-清理和准备项目文件"></a> 1. 清理和准备项目文件</h2>
-<h3 id="11-创建打包配置文件"><a class="markdownIt-Anchor" href="#11-创建打包配置文件"></a> 1.1 创建打包配置文件</h3>
-<ul>
-<li>创建 <code>.spec</code> 文件配置PyInstaller打包参数</li>
-<li>配置包含Biyi项目相关的数据文件（模型、配置、模板）</li>
-<li>排除其他公司项目的文件以减小体积</li>
-</ul>
-<h3 id="12-整理依赖项"><a class="markdownIt-Anchor" href="#12-整理依赖项"></a> 1.2 整理依赖项</h3>
-<ul>
-<li>修改 <code>requirements.txt</code> 创建CPU版本依赖清单</li>
-<li>移除GPU相关依赖：<code>tensorrt</code></li>
-<li>确保使用CPU版本的torch/ultralytics</li>
-</ul>
-<h3 id="13-清理不必要文件"><a class="markdownIt-Anchor" href="#13-清理不必要文件"></a> 1.3 清理不必要文件</h3>
-<ul>
-<li>排除其他公司项目文件夹（保留biyi）</li>
-<li>排除测试文件、文档、日志</li>
-<li>排除开发环境配置文件</li>
-</ul>
-<h2 id="2-处理动态加载和资源文件"><a class="markdownIt-Anchor" href="#2-处理动态加载和资源文件"></a> 2. 处理动态加载和资源文件</h2>
-<h3 id="21-模型文件处理"><a class="markdownIt-Anchor" href="#21-模型文件处理"></a> 2.1 模型文件处理</h3>
-<ul>
-<li>确认 <code>app/companies/biyi/</code> 下的 <code>.pt</code> 模型文件</li>
-<li>确认 <code>app/core/angle/</code>, <code>app/core/object/</code> 等核心模块的模型文件</li>
-<li>在.spec中配置为数据文件</li>
-</ul>
-<h3 id="22-配置文件处理"><a class="markdownIt-Anchor" href="#22-配置文件处理"></a> 2.2 配置文件处理</h3>
-<ul>
-<li>包含 <code>app/config/Biyi/</code> 下所有JSON配置文件</li>
-<li>处理 <code>.env</code> 文件（创建示例配置）</li>
-</ul>
-<h3 id="23-模板文件处理"><a class="markdownIt-Anchor" href="#23-模板文件处理"></a> 2.3 模板文件处理</h3>
-<ul>
-<li>包含 <code>app/templates/Biyi/</code> HTML模板</li>
-<li>包含 <code>app/templates/shared/</code> 共享模板</li>
-<li>包含 <code>app/templates/js/</code> JavaScript文件</li>
-</ul>
-<h3 id="24-修复动态导入"><a class="markdownIt-Anchor" href="#24-修复动态导入"></a> 2.4 修复动态导入</h3>
-<ul>
-<li>检查 <code>app/main.py</code> 中的项目名称动态导入逻辑</li>
-<li>确保PyInstaller能正确打包Biyi相关模块</li>
-</ul>
-<h2 id="3-创建pyinstaller-spec文件"><a class="markdownIt-Anchor" href="#3-创建pyinstaller-spec文件"></a> 3. 创建PyInstaller spec文件</h2>
-<h3 id="31-核心配置"><a class="markdownIt-Anchor" href="#31-核心配置"></a> 3.1 核心配置</h3>
-<ul>
-<li>入口点：<code>app/main.py</code></li>
-<li>单文件/单目录模式选择</li>
-<li>隐藏导入配置（ultralytics、cv2等）</li>
-</ul>
-<h3 id="32-数据文件配置"><a class="markdownIt-Anchor" href="#32-数据文件配置"></a> 3.2 数据文件配置</h3>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">datas = [    (&#x27;app/companies/biyi&#x27;, &#x27;app/companies/biyi&#x27;),    (&#x27;app/config/Biyi&#x27;, &#x27;app/config/Biyi&#x27;),    (&#x27;app/templates&#x27;, &#x27;app/templates&#x27;),    (&#x27;.env.example&#x27;, &#x27;.&#x27;),]</span><br></pre></td></tr></table></figure>
-<h3 id="33-排除项配置"><a class="markdownIt-Anchor" href="#33-排除项配置"></a> 3.3 排除项配置</h3>
-<ul>
-<li>排除其他公司项目模块</li>
-<li>排除测试、文档相关包</li>
-</ul>
-<h2 id="4-环境配置文件"><a class="markdownIt-Anchor" href="#4-环境配置文件"></a> 4. 环境配置文件</h2>
-<h3 id="41-创建环境配置模板"><a class="markdownIt-Anchor" href="#41-创建环境配置模板"></a> 4.1 创建环境配置模板</h3>
-<ul>
-<li>创建 <code>.env.example</code> 包含必要配置项</li>
-<li>创建 <code>config_template.txt</code> 说明配置方法</li>
-</ul>
-<h3 id="42-创建启动脚本"><a class="markdownIt-Anchor" href="#42-创建启动脚本"></a> 4.2 创建启动脚本</h3>
-<ul>
-<li>Windows批处理文件 <code>start_biyi.bat</code></li>
-<li>包含环境变量设置和启动逻辑</li>
-</ul>
-<h2 id="5-打包测试准备"><a class="markdownIt-Anchor" href="#5-打包测试准备"></a> 5. 打包测试准备</h2>
-<h3 id="51-创建打包脚本"><a class="markdownIt-Anchor" href="#51-创建打包脚本"></a> 5.1 创建打包脚本</h3>
-<ul>
-<li><code>build_biyi.bat</code> - Windows打包脚本</li>
-<li>包含清理旧构建、执行打包、验证输出</li>
-</ul>
-<h3 id="52-创建部署文档"><a class="markdownIt-Anchor" href="#52-创建部署文档"></a> 5.2 创建部署文档</h3>
-<ul>
-<li><code>DEPLOYMENT.md</code> - 部署说明文档</li>
-<li>包含：系统要求、安装步骤、配置说明、故障排除</li>
-</ul>
-<h2 id="6-验证检查清单"><a class="markdownIt-Anchor" href="#6-验证检查清单"></a> 6. 验证检查清单</h2>
-<ul>
-<li>[ ] 确认requirements.txt无GPU依赖</li>
-<li>[ ] 确认.spec文件包含所有必要资源</li>
-<li>[ ] 确认只包含Biyi相关代码和配置</li>
-<li>[ ] 确认动态导入已处理</li>
-<li>[ ] 准备好.env配置示例</li>
-<li>[ ] 准备好部署文档</li>
-</ul>
-<h2 id="关键文件说明"><a class="markdownIt-Anchor" href="#关键文件说明"></a> 关键文件说明</h2>
-<ul>
-<li><code>opencv_detection_biyi.spec</code> - PyInstaller配置文件</li>
-<li><code>requirements_cpu.txt</code> - CPU版本依赖清单</li>
-<li><code>build_biyi.bat</code> - 打包执行脚本</li>
-<li><code>.env.example</code> - 环境配置示例</li>
-<li><code>DEPLOYMENT_BIYI.md</code> - 部署说明文档</li>
-</ul>
-</blockquote>
-<h2 id="方式-cembeddable-python嵌入式"><a class="markdownIt-Anchor" href="#方式-cembeddable-python嵌入式"></a> 方式 C：<strong>Embeddable Python（嵌入式） ❌</strong></h2>
-<blockquote>
-<p>❌❌很多库都安装不了</p>
-</blockquote>
-<blockquote>
-<p>Cursor 分步安装的原因 跳过了包的安装导致缺少库, 运行不了</p>
-</blockquote>
-<h3 id="1-pip-安装问题"><a class="markdownIt-Anchor" href="#1-pip-安装问题"></a> 1. pip 安装问题</h3>
-<blockquote>
-<p>embeddable python不带pip需要手动下载和修改</p>
-</blockquote>
-<p>需要删除import site在python312._pth文件中</p>
-<h3 id="2-embeddable-python特性"><a class="markdownIt-Anchor" href="#2-embeddable-python特性"></a> 2. embeddable python特性:</h3>
-<h4 id="21-库编译问题"><a class="markdownIt-Anchor" href="#21-库编译问题"></a> 2.1 库编译问题</h4>
-<ol>
-<li><strong>依赖</strong>
-<ul>
-<li><code>opencv-python</code> 本身提供了预编译 wheel，但有些依赖（如 matplotlib）可能需要 <strong>源代码编译</strong>，尤其在缺少 wheel 或版本不匹配的情况下</li>
-<li><code>matplotlib</code> 依赖 <code>cycler</code>、<code>kiwisolver</code>、<code>pillow</code> 等，某些组件可能需要 <strong>C/C++ 编译工具</strong></li>
-<li><code>mesonpy</code> 是最近 matplotlib 构建系统的一部分，用于编译扩展</li>
-</ul>
-</li>
-<li><strong>嵌入式 Python 不包含编译环境</strong>
-<ul>
-<li>没有 Visual Studio C++ Build Tools</li>
-<li>没有 <code>python-config</code>、<code>make</code>、<code>ninja</code> 等工具</li>
-</ul>
-</li>
-</ol>
-<p>所以在 <strong>嵌入式 Python 下 pip install opencv-python 或 matplotlib</strong> 就会失败，因为它需要编译环境，嵌入式 Python 只能提供一个纯净的解释器和标准库。</p>
-<hr>
-<h4 id="22可行解决方案"><a class="markdownIt-Anchor" href="#22可行解决方案"></a> <strong>2.2可行解决方案</strong></h4>
-<ol>
-<li>
-<p><strong>使用预编译 wheel</strong>（</p>
-<ul>
-<li>
-<p>下载适合你 Python 版本和架构的 <code>.whl</code> 文件，直接安装：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python\python.exe -m pip install opencv_python‑4.9.0‑cp312‑cp312‑win_amd64.whl</span><br></pre></td></tr></table></figure>
-</li>
-<li>
-<p>这样就不用本地编译了。</p>
-</li>
-<li>
-<p>你可以在 <a target="_blank" rel="noopener" href="https://pypi.org/project/opencv-python/#files">PyPI opencv-python</a> 找到对应 wheel。</p>
-</li>
-</ul>
-</li>
-<li>
-<p><strong>下载相关编译工具集</strong></p>
-</li>
-</ol>
-<hr>
-<h3 id="3-问题分析"><a class="markdownIt-Anchor" href="#3-问题分析"></a> 3. 问题分析：</h3>
-<h4 id="31-matplotlib-编译失败"><a class="markdownIt-Anchor" href="#31-matplotlib-编译失败"></a> 3.1 matplotlib 编译失败</h4>
-<ol>
-<li>
-<p>matplotlib 编译失败：matplotlib==3.10.1 需要从源码编译，但缺少 mesonpy 构建工具</p>
-</li>
-<li>
-<p>mesonpy 后端不可用：Cannot import ‘mesonpy’ - 构建工具链不完整</p>
-</li>
-<li>
-<p>依赖解析失败：pip 无法找到兼容的包版本</p>
-</li>
-</ol>
-<p><strong>解决方案：</strong></p>
-<ol>
-<li>特殊处理 matplotlib：</li>
-</ol>
-<ul>
-<li>
-<p>优先使用预编译的 wheel 包：–only-binary=:all: --prefer-binary</p>
-</li>
-<li>
-<p>如果指定版本失败，尝试不指定版本的最新版本</p>
-</li>
-</ul>
-<h4 id="32-工具链安装失败"><a class="markdownIt-Anchor" href="#32-工具链安装失败"></a> 3.2 工具链安装失败</h4>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ERROR: Could not find a version that satisfies the requirement mesonpy (from versions: none)</span><br><span class="line">ERROR: No matching distribution found for mesonpy</span><br><span class="line">⚠️  Warning: some build tools failed: Command failed: &quot;F:\_Work\cve\electron\python\python.exe&quot; -m pip install setuptools&gt;&gt;=65.0.0 wheel&gt;=0.38.0 Cython&gt;=3.0.0 meson&gt;=1.0.0 ninja&gt;=1.10.0 mesonpy&gt;=0.15.0 pyproject-hooks&gt;=1.0.0 build&gt;=0.10.0 packaging&gt;=21.0 tomli&gt;=2.0.0 pyparsing&gt;=3.0.0 installer&gt;=0.7.0 -i https://pypi.tuna.tsinghua.edu.cn/simple --trusted-host pypi.tuna.tsinghua.edu.cn</span><br></pre></td></tr></table></figure>
-<h4 id="33-torch-安装失败"><a class="markdownIt-Anchor" href="#33-torch-安装失败"></a> 3.3 torch 安装失败</h4>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ERROR: Could not find a version that satisfies the requirement torch (from versions: none)ERROR: No matching distribution found for torch</span><br></pre></td></tr></table></figure>
-<p>这是因为<strong>嵌入式Python环境可能缺少某些系统库，导致torch无法安装。</strong></p>
-<ul>
-<li>需要手动编译!!</li>
-<li></li>
-</ul>
-<h4 id="32-依赖matplotlib的opencv-ultralytics安装失败"><a class="markdownIt-Anchor" href="#32-依赖matplotlib的opencv-ultralytics安装失败"></a> 3.2. 依赖matplotlib的opencv, ultralytics安装失败</h4>
-<ol>
-<li>下载相关编译工具</li>
-<li>ultralytics 8.0.2 depends on matplotlib&gt;=3.2.2</li>
-</ol>
-<h4 id="3-ultralytics版本高要求新版本的matplotlib"><a class="markdownIt-Anchor" href="#3-ultralytics版本高要求新版本的matplotlib"></a> 3. ultralytics版本高要求新版本的matplotlib</h4>
-<p>内部库依赖版本冲突无交集</p>
-<ol>
-<li>不指定版本</li>
-<li>使用更宽松的安装策略</li>
-<li>torch要求</li>
-</ol>
-<h4 id="3av库版本问题webrtc"><a class="markdownIt-Anchor" href="#3av库版本问题webrtc"></a> 3.av库版本问题(webrtc)</h4>
-<p>无法找到合适版本</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ERROR: Could not find a version that satisfies the requirement av==16.8.8 (from versions: none)ERROR: No matching distribution found for av==16.0.00 Warning: some dependencies failed to install: command failed: &quot;F:\_Work\cvelelectron\python\python.exe&quot;&quot;-m pip install -r &quot;F:\ Work\cvelopencv-detection\requirements.txt&quot; -i https://pypi.tuna.tsinghua.edu.cn/simple --trusted-host pypi.tuna.tsinghua.edu.cn --prefer-binary --only-binary=:all: --no-build-isolation</span><br></pre></td></tr></table></figure>
-<ol>
-<li>修改版本</li>
-<li>不指定版本</li>
-<li>暂时不安装了</li>
-</ol>
-<h3 id="4总结"><a class="markdownIt-Anchor" href="#4总结"></a> 4.总结</h3>
-<p>嵌入式 Python 自带python, 但是很多包和库基本上pipy都不支持, 导致无法安装完整的环境, 这反而失去了python的优势, 所以放弃改方案</p>
-<h2 id="electron打包阶段-部分完成-️"><a class="markdownIt-Anchor" href="#electron打包阶段-部分完成-️"></a> Electron打包阶段 - 部分完成 ⚠️</h2>
-<ol>
-<li>NSIS安装程序生成阶段 ❌</li>
-</ol>
-<ul>
-<li>
-<p>错误：failed creating mmap of “cve-electron-1.0.0-x64.nsis.7z”</p>
-</li>
-<li>
-<p>问题：NSIS无法创建内存映射文件来处理7z压缩包</p>
-</li>
-</ul>
-<p>后端逻辑未修改, 还是用的python</p>
-<h2 id="打包总结"><a class="markdownIt-Anchor" href="#打包总结"></a> 打包总结</h2>
-<h3 id="1-venv-并非独立环境"><a class="markdownIt-Anchor" href="#1-venv-并非独立环境"></a> 1. venv 并非独立环境</h3>
-<ul>
-<li><code>venv</code> 本质上是系统 Python 的隔离副本；</li>
-<li><code>pyvenv.cfg</code> 中的 <code>home</code> 和 <code>executable</code> 会绑定本地 Python；</li>
-<li>换机后路径失效导致运行错误；</li>
-<li><strong>结论</strong>：venv 不适合打包分发。</li>
-</ul>
-<h2 id="后续计划"><a class="markdownIt-Anchor" href="#后续计划"></a> 后续计划</h2>
-<ul>
-<li>完善 <code>.spec</code> 文件模板</li>
-<li>使用了单文件的pyinstaller 生产<code>_internal</code>文件夹</li>
-</ul>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/10/15/2025%E5%B9%B410%E6%9C%8814%E6%97%A5-python%E7%8E%AF%E5%A2%83%E6%89%93%E5%8C%85%E6%9E%84%E5%BB%BA/" data-id="cmgs67i4000004gv4bfd09pcl" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/chore/" rel="tag">chore</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2025年9月3日-认知" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/09/03/2025%E5%B9%B49%E6%9C%883%E6%97%A5-%E8%AE%A4%E7%9F%A5/" class="article-date">
-  <time class="post-time" datetime="2025-09-03T01:19:30.000Z" itemprop="datePublished">
-    <span class="post-month">9月</span><br/>
-    <span class="post-day">03</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/09/03/2025%E5%B9%B49%E6%9C%883%E6%97%A5-%E8%AE%A4%E7%9F%A5/">2025年9月3日 认知</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>对我们来说，什么是最宝贵的？它是否值得我们用一生去坚守?</p>
-<p>你认为，对你来说什么是有价值的，是值得坚持的，什么又是最宝贵的呢？</p>
-<h2 id="价值观探索的多维度方法"><a class="markdownIt-Anchor" href="#价值观探索的多维度方法"></a> 🌟 价值观探索的多维度方法</h2>
-<h3 id="1️⃣-回溯反思法"><a class="markdownIt-Anchor" href="#1️⃣-回溯反思法"></a> 1️⃣ 回溯反思法</h3>
-<p>通过回顾过去的经历，我们可以发现那些指引我们的隐形价值观：</p>
-<ul>
-<li><strong>列出你感到最自豪的3个人生时刻</strong>：详细写下为什么这些时刻让你感到满足，其中体现了你看重什么</li>
-<li><strong>回忆5次最难的决定</strong>：分析什么因素最终让你做出了选择，背后是什么价值观在权衡</li>
-<li><strong>思考什么让你愤怒或不平</strong>：我们强烈的负面情绪往往源于价值观被侵犯</li>
-</ul>
-<h3 id="2️⃣-情境测试法"><a class="markdownIt-Anchor" href="#2️⃣-情境测试法"></a> 2️⃣ 情境测试法</h3>
-<p>当面临假设情境时，我们的价值排序会清晰显现：</p>
-<ul>
-<li>“如果只剩下一年生命，你会如何度过？”——这会暴露你最深层的优先项</li>
-<li>“如果你有无限资源，你会解决什么世界问题？”——这反映你的理想和关怀</li>
-<li>“你希望别人在你的葬礼上如何纪念你？”——这揭示你希望活出的生命品质</li>
-</ul>
-<h3 id="3️⃣-日常观察法"><a class="markdownIt-Anchor" href="#3️⃣-日常观察法"></a> 3️⃣ 日常观察法</h3>
-<p>价值观渗透在我们最平凡的选择中：</p>
-<ul>
-<li>检查你的银行账单和时间支出：<strong>你的资源流向哪里，你的价值就住在哪里</strong></li>
-<li>注意什么新闻让你感动或愤怒：这些强烈情绪指向你关心的价值议题</li>
-<li>观察你羡慕什么样的人：羡慕是价值观的镜子，映照出我们内心渴望的品质</li>
-</ul>
-<h2 id="价值观分类与排序工具"><a class="markdownIt-Anchor" href="#价值观分类与排序工具"></a> 📊 价值观分类与排序工具</h2>
-<p>这里有一个实用的价值观清单，可以帮助你更好地识别和排序自己的核心价值观：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">个人成长类价值观</th>
-<th style="text-align:left">人际关系类价值观</th>
-<th style="text-align:left">社会贡献类价值观</th>
-<th style="text-align:left">生活品质类价值观</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">知识与智慧</td>
-<td style="text-align:left">真诚与诚实</td>
-<td style="text-align:left">公平与正义</td>
-<td style="text-align:left">健康与活力</td>
-</tr>
-<tr>
-<td style="text-align:left">创造力</td>
-<td style="text-align:left">爱与亲密</td>
-<td style="text-align:left">帮助他人</td>
-<td style="text-align:left">安全感</td>
-</tr>
-<tr>
-<td style="text-align:left">成就感</td>
-<td style="text-align:left">忠诚</td>
-<td style="text-align:left">环境保护</td>
-<td style="text-align:left">自由与独立</td>
-</tr>
-<tr>
-<td style="text-align:left">勇气</td>
-<td style="text-align:left">尊重</td>
-<td style="text-align:left">社会责任</td>
-<td style="text-align:left">平静与和谐</td>
-</tr>
-</tbody>
-</table>
-<p><strong>实践建议</strong>：从每个类别中选择1-2个对你最重要的价值观，然后尝试将所有选择排序，找出你的top 5核心价值观</p>
-<blockquote>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">个人成长类价值观</th>
-<th style="text-align:left">人际关系类价值观</th>
-<th style="text-align:left">社会贡献类价值观</th>
-<th style="text-align:left">生活品质类价值观</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">知识与智慧</td>
-<td style="text-align:left">真诚与诚实</td>
-<td style="text-align:left">公平</td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left">爱与亲密</td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left">自由与独立</td>
-</tr>
-<tr>
-<td style="text-align:left">勇气</td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left">平静与和谐</td>
-</tr>
-</tbody>
-</table>
-</blockquote>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/09/03/2025%E5%B9%B49%E6%9C%883%E6%97%A5-%E8%AE%A4%E7%9F%A5/" data-id="cmg5tcxzf0001k0v4h8gianju" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -1703,7 +1544,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>146</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>148</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>41</strong><br>标签</div></a>
     </div>
