@@ -43,7 +43,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>148</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>151</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>41</strong><br>标签</div></a>
     </div>
@@ -70,6 +70,836 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-2026年2月13日-向量数据库" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/" class="article-date">
+  <time class="post-time" datetime="2026-02-13T02:59:23.000Z" itemprop="datePublished">
+    <span class="post-month">2月</span><br/>
+    <span class="post-day">13</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/">2026年2月13日 向量数据库</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>s</p>
+</blockquote>
+<h1 id="向量数据库"><a class="markdownIt-Anchor" href="#向量数据库"></a> 向量数据库</h1>
+<h2 id="0-为什么要专门的向量数据库"><a class="markdownIt-Anchor" href="#0-为什么要专门的向量数据库"></a> 0 为什么要专门的向量数据库</h2>
+<p>如果用 MySQL 这类<strong>传统数据库存储向量</strong>（比如把向量存成字符串 / 数组），会遇到两个无法解决的痛点：</p>
+<blockquote>
+<h4 id="1-检索速度极慢暴力计算无法扩展"><a class="markdownIt-Anchor" href="#1-检索速度极慢暴力计算无法扩展"></a> 1. 检索速度极慢（暴力计算，无法扩展）</h4>
+<p>要找相似向量，传统数据库只能做 “暴力遍历”：</p>
+<ul>
+<li>对每一个存储的向量，计算它和查询向量的 “距离”（比如余弦相似度）；</li>
+<li>如果有 100 万个 768 维向量，就要做 100 万次高维距离计算，单查询可能要几秒甚至几十秒，完全无法满足实时需求（比如用户输入后要快速返回结果）。</li>
+</ul>
+<h4 id="2-无法处理高维数据的-维度灾难"><a class="markdownIt-Anchor" href="#2-无法处理高维数据的-维度灾难"></a> 2. 无法处理高维数据的 “维度灾难”</h4>
+<p>向量的维度越高（比如 1000 维以上），传统的索引方式（B + 树、哈希等）完全失效：</p>
+<ul>
+<li>高维空间中，“距离” 的意义会变得模糊（所有向量之间的距离都差不多）；</li>
+<li>传统数据库没有针对高维向量的优化，存储和计算效率会断崖式下降。</li>
+</ul>
+<h4 id="3-功能缺失"><a class="markdownIt-Anchor" href="#3-功能缺失"></a> 3. 功能缺失</h4>
+<p>传统数据库没有针对向量的专用功能：比如动态添加 / 删除向量、按相似度排序、批量嵌入、数据持久化优化等，需要自己手写大量代码实现，且效率极低。</p>
+</blockquote>
+<p><strong>向量数据库的核心价值就是 “高效处理相似性检索”，主要体现在：</strong></p>
+<blockquote>
+<h4 id="1-优化的索引算法核心"><a class="markdownIt-Anchor" href="#1-优化的索引算法核心"></a> 1. 优化的索引算法（核心）</h4>
+<p>向量数据库内置了专门的<strong>近似最近邻（ANN）算法</strong>（比如 HNSW、FAISS、IVF 等），能把 “暴力遍历” 的时间复杂度从 <code>O(n)</code> 降到 <code>O(log n)</code>：</p>
+<ul>
+<li>比如 100 万个向量的检索，从几秒缩短到<strong>毫秒级</strong>；</li>
+<li>牺牲极少量的精度（可配置），换取极致的速度，完全满足实时场景。</li>
+</ul>
+<h4 id="2-针对高维向量的存储优化"><a class="markdownIt-Anchor" href="#2-针对高维向量的存储优化"></a> 2. 针对高维向量的存储优化</h4>
+<ul>
+<li>对向量进行压缩、量化（比如把 32 位浮点数转成 8 位整数），大幅减少存储空间；</li>
+<li>优化内存布局，让向量计算更贴合 CPU/GPU 的缓存机制，提升计算效率。</li>
+</ul>
+<h4 id="3-专为向量场景设计的功能"><a class="markdownIt-Anchor" href="#3-专为向量场景设计的功能"></a> 3. 专为向量场景设计的功能</h4>
+<ul>
+<li>支持批量嵌入（自动把文本转向量并存入）；</li>
+<li>支持元数据过滤（比如检索 “水果相关” 且相似度高的向量）；</li>
+<li>支持增量更新（动态添加 / 删除向量，无需重建整个索引）；</li>
+<li>支持分布式部署（处理亿级向量的大规模场景）。</li>
+</ul>
+</blockquote>
+<h3 id="常见向量数据库"><a class="markdownIt-Anchor" href="#常见向量数据库"></a> <strong>常见向量数据库</strong></h3>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>数据库</th>
+<th>类型</th>
+<th>开源</th>
+<th>性能</th>
+<th>运维</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Milvus</strong></td>
+<td>分布式向量库</td>
+<td>✅</td>
+<td>极高</td>
+<td>中</td>
+<td>大规模生产、企业级</td>
+</tr>
+<tr>
+<td><strong>Qdrant</strong></td>
+<td>轻量向量库</td>
+<td>✅</td>
+<td>高</td>
+<td>低</td>
+<td>中小型、边缘、快速开发</td>
+</tr>
+<tr>
+<td><strong>Weaviate</strong></td>
+<td>向量 + 图</td>
+<td>✅</td>
+<td>中高</td>
+<td>中</td>
+<td>语义搜索、知识图谱</td>
+</tr>
+<tr>
+<td><strong>Chroma</strong></td>
+<td>轻量嵌入式</td>
+<td>✅</td>
+<td>中</td>
+<td>极低</td>
+<td>原型、学习、小项目</td>
+</tr>
+<tr>
+<td><strong>Pinecone</strong></td>
+<td>云托管</td>
+<td>❌</td>
+<td>高</td>
+<td>极低</td>
+<td>零运维、快速上线</td>
+</tr>
+<tr>
+<td><strong>Pgvector</strong></td>
+<td>PostgreSQL 扩展</td>
+<td>✅</td>
+<td>中</td>
+<td>低</td>
+<td>复用 PG 栈、混合查询</td>
+</tr>
+<tr>
+<td><strong>RedisVL</strong></td>
+<td>Redis 扩展</td>
+<td>✅</td>
+<td>极高</td>
+<td>低</td>
+<td>实时、低延迟、缓存</td>
+</tr>
+<tr>
+<td><strong>FAISS</strong></td>
+<td>算法库</td>
+<td>✅</td>
+<td>极高</td>
+<td>高</td>
+<td>科研、离线、底层优化</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316165521138.png" alt="image-20260316165521138" style="zoom: 67%;">
+<h2 id="1-向量"><a class="markdownIt-Anchor" href="#1-向量"></a> 1 向量</h2>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171119459.png" alt="image-20260316171119459" style="zoom:67%;">
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316170656040.png" alt="image-20260316170656040" style="zoom: 67%;">
+<h3 id="embedding"><a class="markdownIt-Anchor" href="#embedding"></a> embedding</h3>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316170723044.png" alt="image-20260316170723044" style="zoom: 67%;">
+<p>高维向量= 多个特征</p>
+<h2 id="2-数据库"><a class="markdownIt-Anchor" href="#2-数据库"></a> 2 数据库</h2>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171255175.png" alt="image-20260316171255175" style="zoom:50%;">
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171400647.png" alt="image-20260316171400647" style="zoom:50%;">
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171413125.png" alt="image-20260316171413125" style="zoom:50%;">
+<p><img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171554078.png" alt="image-20260316171554078" style="zoom:50%;"><img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171620706.png" alt="image-20260316171620706" style="zoom:50%;"></p>
+<h3 id="作用"><a class="markdownIt-Anchor" href="#作用"></a> 作用</h3>
+<ol>
+<li>相似搜索</li>
+<li>提升性能</li>
+</ol>
+<p><img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171746844.png" alt="image-20260316171746844"><img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171805928.png" alt="image-20260316171805928" style="zoom:50%;"></p>
+<h3 id="评价指标"><a class="markdownIt-Anchor" href="#评价指标"></a> 评价指标</h3>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171902680.png" alt="image-20260316171902680" style="zoom: 50%;">
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316172005023.png" alt="image-20260316172005023" style="zoom:50%;">
+<h2 id="3-应用场景"><a class="markdownIt-Anchor" href="#3-应用场景"></a> 3 应用场景</h2>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316214728894.png" alt="image-20260316214728894" style="zoom:50%;">
+<h2 id="4-搜索相似性搜索"><a class="markdownIt-Anchor" href="#4-搜索相似性搜索"></a> 4 搜索(相似性搜索)</h2>
+<h3 id="距离"><a class="markdownIt-Anchor" href="#距离"></a> 距离</h3>
+<ol>
+<li>
+<p>点几</p>
+</li>
+<li>
+<p>余弦相似度</p>
+<ol>
+<li>
+<p>高维空间里，*<em>方向差异明显 → 余弦距离特别好用</em></p>
+<blockquote>
+<p>语义 embedding 的特点：</p>
+<ul>
+<li>向量<strong>长度不代表语义</strong>，只代表 “强度”</li>
+<li>真正决定意思相不相近的是<strong>方向</strong></li>
+</ul>
+<p>比如：</p>
+<ul>
+<li>“我喜欢苹果”</li>
+<li>“我真的超级超级喜欢苹果”</li>
+</ul>
+<p>两句语义几乎一样，但向量<strong>长度可能差很多</strong>：</p>
+<ul>
+<li>余弦距离：<strong>很小（相似）</strong></li>
+<li>欧氏距离：<strong>很大（不相似）</strong></li>
+</ul>
+<p>👉 <strong>余弦会忽略长度，只看语义方向，更符合人的判断。</strong></p>
+</blockquote>
+</li>
+<li>
+<p>地球表面积有限，但你能画出<strong>无限多不同的点</strong>。</p>
+<blockquote>
+<h5 id="1-数学上方向确实无限"><a class="markdownIt-Anchor" href="#1-数学上方向确实无限"></a> 1. 数学上：方向确实无限</h5>
+<p>在 <strong>d 维实数空间</strong>（比如 768 维）：</p>
+<ul>
+<li>方向由单位向量决定</li>
+<li>单位向量有 无限多个→ 所以方向无限多</li>
+</ul>
+<p>你随便转一点点角度，就是一个新方向。</p>
+<hr>
+<h5 id="2-但模型的语义空间不是真无限"><a class="markdownIt-Anchor" href="#2-但模型的语义空间不是真无限"></a> 2. 但模型的语义空间：不是真・无限</h5>
+<p>模型 embedding 是<strong>浮点数</strong>，有精度限制：</p>
+<ul>
+<li>float32 只有 2^32 种可能的数值</li>
+<li>768 维向量的<strong>不同方向数量是巨大、有限、但远超你能用的</strong></li>
+</ul>
+<p>可以理解成：</p>
+<p><strong>不是数学无限，但对人类工程来说 = 无限够用。</strong></p>
+</blockquote>
+</li>
+</ol>
+</li>
+</ol>
+<blockquote>
+<h3 id="余弦距离-vs-欧氏距离点积距离"><a class="markdownIt-Anchor" href="#余弦距离-vs-欧氏距离点积距离"></a> 余弦距离 vs 欧氏距离（点积距离）</h3>
+<h4 id="1-欧氏距离你说的-点几距离"><a class="markdownIt-Anchor" href="#1-欧氏距离你说的-点几距离"></a> 1. 欧氏距离（你说的 “点几距离”）</h4>
+<p>衡量<strong>两个点在空间里的直线远近</strong>。</p>
+<ul>
+<li>关心：<strong>绝对位置、长度大小</strong></li>
+<li>公式：两点直线距离</li>
+<li>特点：<strong>数值大小很重要</strong>，模长不一样，距离就会差很多</li>
+</ul>
+<h4 id="2-余弦距离"><a class="markdownIt-Anchor" href="#2-余弦距离"></a> 2. 余弦距离</h4>
+<p>衡量<strong>两个向量方向的差异</strong>，不管长度。</p>
+<ul>
+<li>关心：<strong>方向、趋势、相似度</strong></li>
+<li>公式：1 - 余弦相似度</li>
+<li>特点：<strong>只看方向，不看长度</strong>，模长不影响结果</li>
+</ul>
+<hr>
+<h3 id="一句话区别"><a class="markdownIt-Anchor" href="#一句话区别"></a> 一句话区别</h3>
+<ul>
+<li><strong>欧氏距离：看你离我多远。</strong></li>
+<li><strong>余弦距离：看咱俩方向一不一样。</strong></li>
+</ul>
+<hr>
+<h3 id="举个最直观的例子"><a class="markdownIt-Anchor" href="#举个最直观的例子"></a> 举个最直观的例子</h3>
+<p>用户 A：[1, 2]</p>
+<p>用户 B：[2, 4]</p>
+<p>用户 C：[3, 1]</p>
+<ul>
+<li><strong>欧氏距离</strong>：A 和 B 很远，因为数值差一倍。</li>
+<li><strong>余弦距离</strong>：A 和 B <strong>完全一样</strong>，因为方向完全相同。</li>
+</ul>
+</blockquote>
+<h4 id="什么时候用哪个"><a class="markdownIt-Anchor" href="#什么时候用哪个"></a> 什么时候用哪个？</h4>
+<ul>
+<li><strong>文本、embedding、推荐、相似度</strong> → 用 <strong>余弦距离</strong></li>
+<li><strong>坐标、位置、聚类、物理距离</strong> → 用 <strong>欧氏距离</strong></li>
+</ul>
+<h3 id="混合搜索"><a class="markdownIt-Anchor" href="#混合搜索"></a> 混合搜索</h3>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316165813058.png" alt="image-20260316165813058" style="zoom: 67%;">
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316165843605.png" alt="image-20260316165843605" style="zoom:80%;">
+<h4 id="关键词搜索"><a class="markdownIt-Anchor" href="#关键词搜索"></a> 关键词搜索:</h4>
+<p>做法：</p>
+<ol>
+<li>
+<ul>
+<li>把每条电影的 title/director/plot/genre 等字段写入搜索引擎</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>建倒排索引（分词）</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>query 做分词后跑 BM25，返回 topK</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">queries = [</span><br><span class="line">    <span class="string">&quot;监狱逃脱的经典电影&quot;</span>,</span><br><span class="line">    <span class="string">&quot;弗兰克·达拉邦特 拍的电影&quot;</span>,</span><br><span class="line">    <span class="string">&quot;无厘头喜剧 功夫打斗&quot;</span>,</span><br><span class="line">    <span class="string">&quot;海绵宝宝&quot;</span>,</span><br><span class="line">]</span><br><span class="line">index = BM25Index(fields=&#123;<span class="string">&quot;title&quot;</span>: <span class="number">2.0</span>, <span class="string">&quot;plot&quot;</span>: <span class="number">1.0</span>, <span class="string">&quot;director&quot;</span>: <span class="number">3.0</span>, <span class="string">&quot;genre&quot;</span>: <span class="number">1.0</span>&#125;)</span><br><span class="line"><span class="comment"># print(movies)</span></span><br><span class="line">index.add_documents(movies, id_key=<span class="string">&quot;dvdid&quot;</span>)  <span class="comment"># movies_example.json 里是 dvdid</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 2) 关键词检索：导演意图（等值过滤）</span></span><br><span class="line"><span class="keyword">for</span> q <span class="keyword">in</span> queries:</span><br><span class="line">    hits = index.search(</span><br><span class="line">    query= q,</span><br><span class="line">    top_k=<span class="number">10</span>,</span><br><span class="line">    <span class="comment"># filter_eq=&#123;&quot;director&quot;: &quot;弗蘭克·達拉邦特&quot;&#125;,</span></span><br><span class="line">)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;query:&quot;</span>, q)</span><br><span class="line">    <span class="keyword">for</span> h <span class="keyword">in</span> hits:</span><br><span class="line">        <span class="built_in">print</span>(h.score, h.doc.get(<span class="string">&quot;title&quot;</span>), h.doc.get(<span class="string">&quot;director&quot;</span>))</span><br></pre></td></tr></table></figure>
+<blockquote></blockquote>
+<h4 id="混合检索最实用关键词召回-向量重排或反过来"><a class="markdownIt-Anchor" href="#混合检索最实用关键词召回-向量重排或反过来"></a> 混合检索（最实用）：关键词召回 + 向量重排（或反过来）</h4>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">query: 监狱逃脱的经典电影</span></span><br><span class="line"><span class="function">8.217518413066625 越狱协议！真实事件改编！从华尔街精英到监狱囚徒的救赎！ 马库斯·高勒</span></span><br><span class="line"><span class="function">6.233823286878385 功夫！周星驰巅峰之作！无厘头与武侠的完美结合！笑中带泪的经典传奇！ 周星馳</span></span><br><span class="line"><span class="function">5.785495712647374 绿里奇迹！弗兰克·达拉邦特经典之作！关于人性、慈悲与奇迹的深刻寓言！ 弗蘭克·達拉邦特</span></span><br><span class="line"><span class="function">3.6703058496265872 赌圣！周星驰成名之作！无厘头喜剧开山之作！爆笑又经典！ 周星馳、劉鎮偉</span></span><br><span class="line"><span class="function">1.3657808880264422 海绵宝宝！永恒童年经典！治愈全世界的快乐小海绵！ 史蒂芬·希倫伯格</span></span><br><span class="line"><span class="function">1.3340229817409925 <span class="title">E.T</span>.外星人！最温柔的科幻经典！跨越星际的纯真友情！ 史蒂文·斯皮爾伯格</span></span><br><span class="line"><span class="function">1.0478153318395904 狮子王！迪士尼永恒经典！勇气与成长的史诗童话！ 罗杰·阿勒斯</span></span><br><span class="line"><span class="function">1.0186852729162292 侏罗纪公园！科幻冒险开山之作！恐龙世界的震撼经典！ 史蒂文·斯皮爾伯格</span></span><br><span class="line"><span class="function">0.9670372743711524 美丽人生！奥斯卡经典！父爱与勇气的最美赞歌！笑着流泪的神作！ 羅貝托·貝尼尼</span></span><br><span class="line"><span class="function">0.9670372743711524 心灵捕手！治愈无数人的励志经典！天才与自我救赎的成长之路！ 格斯·范·桑特</span></span><br><span class="line"><span class="function"><span class="title">query</span>: 弗兰克·达拉邦特 拍的电影</span></span><br><span class="line"><span class="function">59.802190761471635 绿里奇迹！弗兰克·达拉邦特经典之作！关于人性、慈悲与奇迹的深刻寓言！ 弗蘭克·達拉邦特</span></span><br><span class="line"><span class="function">21.868479864137754 肖申克的救贖！經典紀念版！希望與自由的故事！只要堅持信念，即使身處監獄也能找到屬於自己的救贖！ 弗蘭克·達拉邦特</span></span><br><span class="line"><span class="function">7.799911547034155 她！未来式爱情神作！写给现代人的孤独治愈诗！ 斯派克·琼斯</span></span><br><span class="line"><span class="function"><span class="title">query</span>: 无厘头喜剧 功夫打斗</span></span><br><span class="line"><span class="function">29.926343267198604 功夫！周星驰巅峰之作！无厘头与武侠的完美结合！笑中带泪的经典传奇！ 周星馳</span></span><br><span class="line"><span class="function">28.292612614974527 赌圣！周星驰成名之作！无厘头喜剧开山之作！爆笑又经典！ 周星馳、劉鎮偉</span></span><br><span class="line"><span class="function">27.776460176092158 少林足球！周星驰经典喜剧！功夫与足球的梦幻结合！坚持梦想终会发光！ 周星馳</span></span><br><span class="line"><span class="function">2.0508644717722775 美食总动员！皮克斯暖心动画！一只小老鼠的顶级厨师梦！ 布拉德·伯德</span></span><br><span class="line"><span class="function">2.0508644717722775 海绵宝宝！永恒童年经典！治愈全世界的快乐小海绵！ 史蒂芬·希倫伯格</span></span><br><span class="line"><span class="function"><span class="title">query</span>: 海绵宝宝</span></span><br><span class="line"><span class="function">33.88108631247046 海绵宝宝！永恒童年经典！治愈全世界的快乐小海绵！ 史蒂芬·希倫伯格</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"></span></span><br></pre></td></tr></table></figure>
+<h3 id="索引"><a class="markdownIt-Anchor" href="#索引"></a> 索引</h3>
+<p>给点进行索引(产生数据结构:图表…)</p>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316215411466.png" alt="image-20260316215411466" style="zoom:50%;">
+<h4 id="1-哈希"><a class="markdownIt-Anchor" href="#1-哈希"></a> 1 哈希</h4>
+<p>尽量产生冲突的哈希</p>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316215614803.png" alt="image-20260316215614803" style="zoom:50%;">
+<h4 id="2-树"><a class="markdownIt-Anchor" href="#2-树"></a> 2 树</h4>
+<p>建树</p>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316215754506.png" alt="image-20260316215754506" style="zoom:50%;">
+<h4 id="3-图主要"><a class="markdownIt-Anchor" href="#3-图主要"></a> 3 图(主要)</h4>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316215845687.png" alt="image-20260316215845687" style="zoom:50%;">
+<h4 id="4-倒排文件ivf"><a class="markdownIt-Anchor" href="#4-倒排文件ivf"></a> 4 倒排文件IVF</h4>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316215926225.png" alt="image-20260316215926225" style="zoom:50%;">
+<h3 id="量化压缩"><a class="markdownIt-Anchor" href="#量化压缩"></a> 量化压缩</h3>
+<h4 id="1-flat"><a class="markdownIt-Anchor" href="#1-flat"></a> 1 Flat</h4>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316220135026.png" alt="image-20260316220135026" style="zoom:50%;">
+<h4 id="2-quantized"><a class="markdownIt-Anchor" href="#2-quantized"></a> 2 Quantized</h4>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316220202732.png" alt="image-20260316220202732" style="zoom:50%;">
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316220313347.png" alt="image-20260316220313347" style="zoom:50%;">
+<h3 id="算法"><a class="markdownIt-Anchor" href="#算法"></a> 算法</h3>
+<h4 id="ann"><a class="markdownIt-Anchor" href="#ann"></a> ANN</h4>
+<h4 id="ivf"><a class="markdownIt-Anchor" href="#ivf"></a> IVF</h4>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316220938618.png" alt="image-20260316220938618" style="zoom:50%;">
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316221052822.png" alt="image-20260316221052822" style="zoom:67%;">
+<h4 id="hnsw图"><a class="markdownIt-Anchor" href="#hnsw图"></a> HNSW图</h4>
+<p>小世界</p>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316221552246.png" alt="image-20260316221552246" style="zoom:50%;">
+<h4 id="lsh哈希"><a class="markdownIt-Anchor" href="#lsh哈希"></a> LSH哈希</h4>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316221743877.png" alt="image-20260316221743877" style="zoom:67%;">
+<h4 id="pq压缩"><a class="markdownIt-Anchor" href="#pq压缩"></a> PQ压缩</h4>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316222110529.png" alt="image-20260316222110529" style="zoom: 80%;">
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316222134561.png" alt="image-20260316222134561" style="zoom:80%;">
+<h4 id="ivfpq"><a class="markdownIt-Anchor" href="#ivfpq"></a> IVF+PQ</h4>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316222246240.png" alt="image-20260316222246240" style="zoom:50%;">
+<h3 id="算法问题"><a class="markdownIt-Anchor" href="#算法问题"></a> 算法问题</h3>
+<p><img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316222315384.png" alt="image-20260316222315384"></p>
+<img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316222334037.png" alt="image-20260316222334037" style="zoom:80%;">
+<h3 id="相似性度量"><a class="markdownIt-Anchor" href="#相似性度量"></a> 相似性度量</h3>
+<p>两两对比</p>
+<h4 id="过滤"><a class="markdownIt-Anchor" href="#过滤"></a> 过滤</h4>
+<p><img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316223859404.png" alt="image-20260316223859404"></p>
+<p><img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316223912290.png" alt="image-20260316223912290"></p>
+<h2 id><a class="markdownIt-Anchor" href="#"></a> </h2>
+<h2 id="-2"><a class="markdownIt-Anchor" href="#-2"></a> </h2>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<h1 id="milvus"><a class="markdownIt-Anchor" href="#milvus"></a> Milvus</h1>
+<h1 id="chroma"><a class="markdownIt-Anchor" href="#chroma"></a> Chroma</h1>
+<h2 id="介绍"><a class="markdownIt-Anchor" href="#介绍"></a> 介绍</h2>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/665715823">https://zhuanlan.zhihu.com/p/665715823</a></p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">import chromadb</span><br><span class="line">chroma_client = chromadb.Client()</span><br><span class="line"></span><br><span class="line">collection = chroma_client.create_collection(name=&quot;my_collection&quot;)</span><br><span class="line"></span><br><span class="line">collection.add(</span><br><span class="line">    documents=[&quot;This is a document about engineer&quot;, &quot;This is a document about steak&quot;],</span><br><span class="line">    metadatas=[&#123;&quot;source&quot;: &quot;doc1&quot;&#125;, &#123;&quot;source&quot;: &quot;doc2&quot;&#125;],</span><br><span class="line">    ids=[&quot;id1&quot;, &quot;id2&quot;]</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">results = collection.query(</span><br><span class="line">    query_texts=[&quot;Which food is the best?&quot;],</span><br><span class="line">    n_results=2</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">print(results)</span><br></pre></td></tr></table></figure>
+<p><img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260224161908950.png" alt="image-20260224161908950"></p>
+<p>我们向Chroma提交了两个文档（简单起见，是两个字符串），一个是This is a document about engineer，一个是This is a document about steak。若在add方法没有传入embedding参数，则会使用<strong>Chroma默认的all-MiniLM-L6-v2方式进行embedding</strong>。</p>
+<p>随后，我们对数据集进行query，要求返回两个最相关的结果。</p>
+<p>提问内容为：Which food is the best?</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line"> &#x27;ids&#x27;<span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">  <span class="punctuation">[</span>&#x27;id2&#x27;<span class="punctuation">,</span> &#x27;id1&#x27;<span class="punctuation">]</span></span><br><span class="line"> <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line"> &#x27;distances&#x27;<span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">  <span class="punctuation">[</span><span class="number">1.5835548639297485</span><span class="punctuation">,</span> <span class="number">2.1740970611572266</span><span class="punctuation">]</span></span><br><span class="line"> <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line"> &#x27;metadatas&#x27;<span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">  <span class="punctuation">[</span><span class="punctuation">&#123;</span></span><br><span class="line">   &#x27;source&#x27;<span class="punctuation">:</span> &#x27;doc2&#x27;</span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span> <span class="punctuation">&#123;</span></span><br><span class="line">   &#x27;source&#x27;<span class="punctuation">:</span> &#x27;doc1&#x27;</span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">]</span></span><br><span class="line"> <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line"> &#x27;embeddings&#x27;<span class="punctuation">:</span> None<span class="punctuation">,</span></span><br><span class="line"> &#x27;documents&#x27;<span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">  <span class="punctuation">[</span>&#x27;This is a document about steak&#x27;<span class="punctuation">,</span> &#x27;This is a document about engineer&#x27;<span class="punctuation">]</span></span><br><span class="line"> <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p><strong>解析</strong></p>
+<p><code>distances</code> : 数值越小表示文档和查询文本的相似度越高，结果按相似度从高到低排序</p>
+<h3 id="数据持久化"><a class="markdownIt-Anchor" href="#数据持久化"></a> <strong>数据持久化</strong></h3>
+<p>Chroma一般是直接作为内存数据库使用，但是也可以进行持久化存储。</p>
+<p>在初始化Chroma Client时，使用PersistentClient：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">client = chromadb.PersistentClient(path=&quot;/Users/yourname/xxxx&quot;)</span><br></pre></td></tr></table></figure>
+<p>这样在运行代码后，在你指定的位置会新建一个</p>
+<h4 id="sqlite3解析"><a class="markdownIt-Anchor" href="#sqlite3解析"></a> <strong>sqlite3解析</strong></h4>
+<h3 id="数据集collection"><a class="markdownIt-Anchor" href="#数据集collection"></a> <strong>数据集（Collection）</strong></h3>
+<p>collection是Chroma中一个重要的概念，下面的代码和注释简单介绍了<strong>collection的主要功能和使用方法。</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">collection = client.get_collection(name=<span class="string">&quot;test&quot;</span>) <span class="comment"># Get a collection object from an existing collection, by name. Will raise an exception if it&#x27;s not found.</span></span><br><span class="line">collection = client.get_or_create_collection(name=<span class="string">&quot;test&quot;</span>) <span class="comment"># Get a collection object from an existing collection, by name. If it doesn&#x27;t exist, create it.</span></span><br><span class="line">client.delete_collection(name=<span class="string">&quot;my_collection&quot;</span>) <span class="comment"># Delete a collection and all associated embeddings, documents, and metadata. ⚠️ This is destructive and not reversible</span></span><br><span class="line">collection.peek() <span class="comment"># returns a list of the first 10 items in the collection</span></span><br><span class="line">collection.count() <span class="comment"># returns the number of items in the collection</span></span><br><span class="line">collection.modify(name=<span class="string">&quot;new_name&quot;</span>) <span class="comment"># Rename the collection</span></span><br></pre></td></tr></table></figure>
+<p>collection支持传入一些<strong>自身的元数据</strong>metadata：</p>
+<p>collection允许用户自行<strong>切换距离计算函数</strong>，方法是通过设置cellection的metadata中的“hnsw:space”：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">collection = client.create_collection(</span><br><span class="line">    name=<span class="string">&quot;collection_name&quot;</span>,</span><br><span class="line">    metadata=&#123;<span class="string">&quot;hnsw:space&quot;</span>: <span class="string">&quot;cosine&quot;</span>&#125; <span class="comment"># l2 is the default</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p><img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260224163056074.png" alt="image-20260224163056074"></p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>参数名 (parameter)</th>
+<th>中文全称</th>
+<th>英文全称</th>
+<th>核心含义</th>
+<th>计算公式</th>
+<th>数值解读</th>
+<th>典型适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>l2</code></td>
+<td>平方欧几里得距离</td>
+<td>Squared L2</td>
+<td>计算两个向量在多维空间中的直线距离（平方形式），关注数值绝对差异</td>
+<td>d=∑(Ai−Bi)2</td>
+<td>值越小，向量越相似范围：0→+∞</td>
+<td>数值特征匹配（价格 / 销量）、通用检索</td>
+</tr>
+<tr>
+<td><code>ip</code></td>
+<td>内积（点积）</td>
+<td>Inner Product</td>
+<td>计算向量投影重叠程度，未归一化，受向量长度影响显著</td>
+<td>d=1.0−∑(Ai×Bi)</td>
+<td>值越小，向量越相似范围：−∞→+∞（转换后）</td>
+<td>特定推荐系统、向量未归一化场景</td>
+</tr>
+<tr>
+<td><code>cosine</code></td>
+<td>余弦相似度</td>
+<td>Cosine Similarity</td>
+<td>计算向量夹角余弦值，归一化后仅关注方向，忽略长度差异</td>
+<td>d=1.0−∑(Ai2)⋅∑(Bi2)∑(Ai×Bi)</td>
+<td>原始余弦值：值越大越相似（−1→1）ChromaDB 返回值：值越小越相似</td>
+<td>文本语义相似度、NLP 问答、通用检索</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><code>l2</code>：像在地图上测量两个点的直线距离，距离越近越像；</li>
+<li><code>cosine</code>：像判断两个箭头的指向是否一致，方向越一致越像（不管箭头长短）。</li>
+</ul>
+</blockquote>
+<h3 id="文档document"><a class="markdownIt-Anchor" href="#文档document"></a> <strong>文档（Document）</strong></h3>
+<h3 id="简单查询"><a class="markdownIt-Anchor" href="#简单查询"></a> <strong>简单查询</strong></h3>
+<p><code>collection.query</code></p>
+<p>输入文档内的文本进行相似性查询，可以使用query方法</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">collection.query(</span><br><span class="line">    query_embeddings=[[11.1, 12.1, 13.1],[1.1, 2.3, 3.2], ...],</span><br><span class="line">    n_results=10,</span><br><span class="line">    where=&#123;&quot;metadata_field&quot;: &quot;is_equal_to_this&quot;&#125;,</span><br><span class="line">    where_document=&#123;&quot;$contains&quot;:&quot;search_string&quot;&#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>若想要通过<strong>id查找</strong>，可以使用get方法</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">collection.get(</span><br><span class="line">    ids=[&quot;id1&quot;, &quot;id2&quot;, &quot;id3&quot;, ...],</span><br><span class="line">    where=&#123;&quot;style&quot;: &quot;style1&quot;&#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>与此同时，你可以<strong>定制<code>include</code>返回结果包含的数据</strong></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"># Only get documents and ids</span><br><span class="line">collection.get(&#123;</span><br><span class="line">    include: [ &quot;documents&quot; ]</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure>
+<p><img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260224163828349.png" alt="image-20260224163828349"></p>
+<h3 id="条件查询"><a class="markdownIt-Anchor" href="#条件查询"></a> 条件查询</h3>
+<p><code>where = &#123;&quot;source&quot;: &quot;doc2&quot;&#125;</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">where = &#123;&quot;source&quot;: &quot;doc2&quot;&#125;</span><br><span class="line">results_l2_where = collection_l2.query(</span><br><span class="line">    query_texts=[&quot;Which food is the best?&quot;],</span><br><span class="line">    n_results=2,</span><br><span class="line">    include=[&quot;distances&quot;, &quot;documents&quot;, &quot;metadatas&quot;],</span><br><span class="line">    where=where</span><br><span class="line">)</span><br><span class="line">print(results_l2_where)</span><br><span class="line">print(&quot;================================================&quot;)</span><br></pre></td></tr></table></figure>
+<h3 id="其他"><a class="markdownIt-Anchor" href="#其他"></a> 其他</h3>
+<p><code>collection.update</code></p>
+<p><code>collection.delete</code></p>
+<h2 id="实战"><a class="markdownIt-Anchor" href="#实战"></a> 实战</h2>
+<p><a target="_blank" rel="noopener" href="https://docs.langchain.com/oss/python/langchain/overview?highlight=chroma">https://docs.langchain.com/oss/python/langchain/overview?highlight=chroma</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/" data-id="cmme79ecc00038wv4ccr90ov6" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/agent/" rel="tag">agent</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2026年2月12日-SSE汇总学习" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/02/12/2026%E5%B9%B42%E6%9C%8812%E6%97%A5-SSE%E6%B1%87%E6%80%BB%E5%AD%A6%E4%B9%A0/" class="article-date">
+  <time class="post-time" datetime="2026-02-12T03:09:33.000Z" itemprop="datePublished">
+    <span class="post-month">2月</span><br/>
+    <span class="post-day">12</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2026/02/12/2026%E5%B9%B42%E6%9C%8812%E6%97%A5-SSE%E6%B1%87%E6%80%BB%E5%AD%A6%E4%B9%A0/">2026年2月12日 SSE汇总学习</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="sse"><a class="markdownIt-Anchor" href="#sse"></a> SSE</h1>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/1903527326400094395">https://zhuanlan.zhihu.com/p/1903527326400094395</a></p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">    A[实时通信] --&gt; B[短轮询：客户端频繁请求服务器]</span><br><span class="line">    A --&gt; C[长轮询：客户端请求后，服务器挂起连接直到有数据返回]</span><br><span class="line">    A --&gt; D[WebSocket：全双工通信，客户端与服务器双向实时交互]</span><br><span class="line">    A --&gt; E[SSE：服务器推送事件，单向从服务器向客户端推送]</span><br><span class="line">    </span><br><span class="line">    style E fill:#f9f,stroke:#333,stroke-width:2px</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>技术</th>
+<th>协议</th>
+<th>方向性</th>
+<th>复杂度</th>
+<th>延迟</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>短轮询</td>
+<td>HTTP</td>
+<td>双向（伪）</td>
+<td>低</td>
+<td>高</td>
+<td>简单状态检测</td>
+</tr>
+<tr>
+<td>长轮询</td>
+<td>HTTP</td>
+<td>双向（伪）</td>
+<td>中</td>
+<td>中</td>
+<td>即时消息</td>
+</tr>
+<tr>
+<td>WebSocket</td>
+<td>WS</td>
+<td>全双工</td>
+<td>高</td>
+<td>低</td>
+<td>游戏/高频交易</td>
+</tr>
+<tr>
+<td>SSE</td>
+<td>HTTP</td>
+<td>单向（服务端→客户端）</td>
+<td>低</td>
+<td>低</td>
+<td>实时通知/日志流</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>技术类型</th>
+<th>是否基于标准 HTTP 协议</th>
+<th>是否需要额外握手</th>
+<th>核心细节</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>短轮询</td>
+<td>✅ 是</td>
+<td>❌</td>
+<td>本质就是普通 HTTP GET/POST 请<strong>求，客户端定时发 HTTP 请求，服务器即时响应</strong>，每次都是独立的 HTTP 握手，无额外步骤。</td>
+</tr>
+<tr>
+<td>长轮询</td>
+<td>✅ 是</td>
+<td>❌</td>
+<td>仍是标准 HTTP 请求，仅服务器会挂起连接（几秒到几十秒），有数据时才响应，全程只有 HTTP 本身的一次握手，无额外协商。</td>
+</tr>
+<tr>
+<td>SSE（服务器推送事件）</td>
+<td>✅ 是（HTTP/1.1+）</td>
+<td>❌</td>
+<td>基于 HTTP 的<code>text/event-stream</code>响应头，客户端发起一次 HTTP GET 请求后，服务器持续推送数据，仅一次 HTTP 握手，无额外升级步骤，完全兼容 HTTP 标准。</td>
+</tr>
+<tr>
+<td>WebSocket</td>
+<td>❌ 否（基于 TCP）</td>
+<td>✅</td>
+<td>先发起 HTTP 请求（携带<code>Upgrade: websocket</code>等头），服务器返回 101 状态码完成 “协议升级”，这是额外的握手步骤；升级后脱离 HTTP，使用自定义的 WebSocket 帧通信。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="12-sse的核心优势"><a class="markdownIt-Anchor" href="#12-sse的核心优势"></a> 1.2 SSE的核心优势</h3>
+<h2 id="二-sse协议深度解析"><a class="markdownIt-Anchor" href="#二-sse协议深度解析"></a> 二、SSE协议深度解析</h2>
+<h3 id="21-协议规范详解"><a class="markdownIt-Anchor" href="#21-协议规范详解"></a> 2.1 协议规范详解</h3>
+<h4 id="211-响应头要求"><a class="markdownIt-Anchor" href="#211-响应头要求"></a> 2.1.1 响应头要求</h4>
+<table>
+<thead>
+<tr>
+<th>响应头字段</th>
+<th>值</th>
+<th>是否强制</th>
+<th>核心作用与要求</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>HTTP/1.1 200 OK</code></td>
+<td>状态码 200</td>
+<td>是</td>
+<td>表示服务器成功处理了 SSE 请求；<strong>不能用 204/3xx/4xx/5xx</strong>，否则客户端会终止连接。</td>
+</tr>
+<tr>
+<td><code>Content-Type</code></td>
+<td><code>text/event-stream</code></td>
+<td>是</td>
+<td>核心标识：告诉客户端这是 SSE 流式响应，**客户端（浏览器）会触发 <code>EventSource</code> 解析逻辑；**⚠️ 必须严格匹配，大小写敏感（如 <code>Text/Event-Stream</code> 会失效）。</td>
+</tr>
+<tr>
+<td><code>Cache-Control</code></td>
+<td><code>no-cache</code>（推荐 <code>no-store</code>）</td>
+<td>是</td>
+<td>禁止客户端 / 代理缓存 SSE 响应内容；如果缺失，代理 / 浏览器可能缓存推送的事件，导致客户端收到旧数据。</td>
+</tr>
+<tr>
+<td><code>Connection</code></td>
+<td><code>keep-alive</code></td>
+<td>是</td>
+<td>强制保持 TCP 连接不关闭，让服务器可以持续推送数据；HTTP/1.1 虽默认长连接，但显式声明可兼容低版本客户端 / 代理。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="212-事件数据格式"><a class="markdownIt-Anchor" href="#212-事件数据格式"></a> 2.1.2 事件数据格式</h3>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">event: status</span><br><span class="line">id: 42</span><br><span class="line">data: &#123;&quot;temperature&quot;: 23.5, &quot;humidity&quot;: 65&#125;</span><br><span class="line"></span><br><span class="line">retry: 3000  # 重连间隔（毫秒）</span><br></pre></td></tr></table></figure>
+<h2 id="三-服务端实现"><a class="markdownIt-Anchor" href="#三-服务端实现"></a> 三 服务端实现</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">StreamingResponse</span>(<span class="title class_ inherited__">Response</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params"></span></span><br><span class="line"><span class="params">        self,</span></span><br><span class="line"><span class="params">        content: ContentStream,</span></span><br><span class="line"><span class="params">        status_code: <span class="built_in">int</span> = <span class="number">200</span>,</span></span><br><span class="line"><span class="params">        headers: typing.Mapping[<span class="built_in">str</span>, <span class="built_in">str</span>] | <span class="literal">None</span> = <span class="literal">None</span>,</span></span><br><span class="line"><span class="params">        media_type: <span class="built_in">str</span> | <span class="literal">None</span> = <span class="literal">None</span>,</span></span><br><span class="line"><span class="params">        background: BackgroundTask | <span class="literal">None</span> = <span class="literal">None</span>,</span></span><br><span class="line"><span class="params">    </span>) -&gt; <span class="literal">None</span>:</span><br></pre></td></tr></table></figure>
+<h2 id="四-客户端实现"><a class="markdownIt-Anchor" href="#四-客户端实现"></a> 四 客户端实现</h2>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> eventSource = <span class="keyword">new</span> <span class="title class_">EventSource</span>(<span class="string">&#x27;/stream&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 通用消息处理</span></span><br><span class="line">eventSource.<span class="property">onmessage</span> = <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">log</span>(<span class="string">&#x27;Message:&#x27;</span>, e.<span class="property">data</span>);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 自定义事件处理</span></span><br><span class="line">eventSource.<span class="title function_">addEventListener</span>(<span class="string">&#x27;alert&#x27;</span>, <span class="function">(<span class="params">e</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="title function_">showNotification</span>(<span class="title class_">JSON</span>.<span class="title function_">parse</span>(e.<span class="property">data</span>));</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 错误处理</span></span><br><span class="line">eventSource.<span class="property">onerror</span> = <span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&#x27;SSE Error:&#x27;</span>, err);</span><br><span class="line">    eventSource.<span class="title function_">close</span>();</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="52-多路复用架构"><a class="markdownIt-Anchor" href="#52-多路复用架构"></a> 5.2 多路复用架构</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">sequenceDiagram</span><br><span class="line">    participant Client as 客户端 (浏览器/APP)</span><br><span class="line">    participant Gateway as 网关 (SSE多路复用层)</span><br><span class="line">    participant ServiceA as 服务A (如温度数据)</span><br><span class="line">    participant ServiceB as 服务B (如湿度数据)</span><br><span class="line"></span><br><span class="line">    Note over Client,Gateway: 客户端仅建立1个SSE长连接</span><br><span class="line">    Client-&gt;&gt;Gateway: 发起SSE连接请求&lt;br/&gt;（携带需订阅的Topic1+Topic2）</span><br><span class="line">    Gateway-&gt;&gt;Client: 返回SSE响应&lt;br/&gt;（Content-Type: text/event-stream）</span><br><span class="line">    </span><br><span class="line">    Note over Gateway,ServiceA: 网关内部异步订阅多服务</span><br><span class="line">    Gateway-&gt;&gt;ServiceA: 订阅Topic1（如内部RPC/消息队列）</span><br><span class="line">    Gateway-&gt;&gt;ServiceB: 订阅Topic2（如内部RPC/消息队列）</span><br><span class="line">    </span><br><span class="line">    Note over ServiceA,ServiceB: 后端服务主动推送数据</span><br><span class="line">    ServiceA-&gt;&gt;Gateway: 推送Topic1消息（温度23.5）</span><br><span class="line">    ServiceB-&gt;&gt;Gateway: 推送Topic2消息（湿度65）</span><br><span class="line">    </span><br><span class="line">    Note over Gateway: 网关合并消息流&lt;br/&gt;（按SSE格式封装）</span><br><span class="line">    Gateway-&gt;&gt;Client: 推送合并后的SSE消息1&lt;br/&gt;（event: temperature, data: 23.5）</span><br><span class="line">    Gateway-&gt;&gt;Client: 推送合并后的SSE消息2&lt;br/&gt;（event: humidity, data: 65）</span><br><span class="line">    </span><br><span class="line">    Note over Client: 客户端按event类型解析不同服务数据</span><br></pre></td></tr></table></figure>
+<h2 id="六-性能优化与安全"><a class="markdownIt-Anchor" href="#六-性能优化与安全"></a> 六 性能优化与安全</h2>
+<table>
+<thead>
+<tr>
+<th>优化方向</th>
+<th>具体措施</th>
+<th>预期效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>连接管理</td>
+<td>心跳保持（25s间隔）</td>
+<td>防止[Nginx]超时断开</td>
+</tr>
+<tr>
+<td>数据压缩</td>
+<td>gzip/brotli压缩</td>
+<td>带宽减少70%</td>
+</tr>
+<tr>
+<td>分片策略</td>
+<td>按业务维度拆分数据流</td>
+<td>提升处理效率</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+<h1 id="websocket"><a class="markdownIt-Anchor" href="#websocket"></a> Websocket</h1>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/690282564">https://zhuanlan.zhihu.com/p/690282564</a></p>
+</blockquote>
+<h3 id="一-简介优化版"><a class="markdownIt-Anchor" href="#一-简介优化版"></a> 一、简介（优化版）</h3>
+<h4 id="11-什么是-websocket"><a class="markdownIt-Anchor" href="#11-什么是-websocket"></a> 1.1 什么是 WebSocket</h4>
+<p>WebSocket 是一种基于 <strong>TCP 协议</strong> 的全双工通信协议（RFC 6455 标准），用于在 Web 应用与服务器之间建立持久化、双向的实时通信连接。</p>
+<ul>
+<li>它先通过 HTTP 协议完成 “协议升级” 握手，成功后脱离 HTTP 协议，在单一 TCP 长连接上实现客户端↔服务器的双向数据传输；</li>
+<li>区别于 HTTP 的 “请求 - 响应” 单向模型，<strong>WebSocket 允许服务器主动推送数据</strong>，无需客户端轮询；</li>
+</ul>
+<h4 id="12-websocket-的优势和劣势补充完整"><a class="markdownIt-Anchor" href="#12-websocket-的优势和劣势补充完整"></a> 1.2 WebSocket 的优势和劣势（补充完整）</h4>
+<h5 id="优势补充落地视角"><a class="markdownIt-Anchor" href="#优势补充落地视角"></a> 优势（补充落地视角）</h5>
+<ol>
+<li><strong>极致实时性</strong>：持久化 TCP 连接无需重复建立 / 断开，数据传输延迟可低至毫秒级，远优于轮询（短轮询 / 长轮询）的秒级延迟；</li>
+<li><strong>全双工通信</strong>：客户端和服务器可同时、独立地发送数据（如聊天场景中双方实时发消息，无需等待对方请求）；</li>
+<li>大幅降低网络开销：
+<ul>
+<li>仅 1 次握手即可建立持久连接，避免 HTTP 轮询的重复请求头（如 Cookie、User-Agent 等）开销；</li>
+<li>数据帧体积小（最小帧仅 2 字节），比 HTTP 文本传输更高效；</li>
+</ul>
+</li>
+<li><strong>兼容 Web 生态</strong>：握手阶段基于 HTTP，可穿透大部分防火墙 / 代理服务器，无需额外配置；</li>
+<li><strong>轻量易用</strong>：浏览器原生提供 <code>WebSocket</code> API，服务端主流框架（Node.js/Java/Python）均有成熟库支持。</li>
+</ol>
+<h5 id="劣势补充实际痛点"><a class="markdownIt-Anchor" href="#劣势补充实际痛点"></a> 劣势（补充实际痛点）</h5>
+<ol>
+<li>兼容性限制：</li>
+<li>服务器资源开销：
+<ul>
+<li>每个客户端需维护一个长连接，高并发场景（如百万级在线）会占用大量服务器文件描述符和内存；</li>
+<li>需额外处理连接保活、断线重连、心跳检测等逻辑，增加服务端开发复杂度；</li>
+</ul>
+</li>
+<li>安全风险：
+<ul>
+<li>无内置身份校验机制，需业务层实现鉴权（如 Token 验证），否则易被伪造连接；</li>
+<li>存在 “WebSocket 劫持” 风险（跨站请求伪造），需通过 Origin 校验、Token 绑定等方式防范；</li>
+</ul>
+</li>
+<li>调试难度高：
+<ul>
+<li>不同于 HTTP 请求可直接在浏览器 Network 面板查看，WebSocket 帧需专用工具（如 Wireshark、浏览器 DevTools 的 WebSocket 面板）调试；</li>
+<li>断线后的数据重传、断点续传需业务层自行实现，无原生机制支持。</li>
+</ul>
+</li>
+</ol>
+<h2 id="二-详解"><a class="markdownIt-Anchor" href="#二-详解"></a> 二 详解</h2>
+<h3 id="22-websocket的生命周期"><a class="markdownIt-Anchor" href="#22-websocket的生命周期"></a> <strong>2.2 WebSocket的[生命周期]</strong></h3>
+<p>WebSocket 生命周期描述了 WebSocket 连接从创建到关闭的过程。一个 WebSocket 连接包含以下四个主要阶段：</p>
+<ul>
+<li><strong>连接建立阶段（Connection Establishment）：</strong> 在这个阶段，客户端和服务器之间的 WebSocket 连接被建立。客户端发送一个 WebSocket 握手请求，服务器响应一个握手响应，然后连接就被建立了。</li>
+<li><strong>连接开放阶段（Connection Open）：</strong> 在这个阶段，WebSocket 连接已经建立并开放，客户端和服务器可以在连接上互相发送数据。</li>
+<li><strong>连接关闭阶段（Connection Closing）：</strong> 在这个阶段，一个 WebSocket 连接即将被关闭。它可以被客户端或服务器发起，通过发送一个关闭帧来关闭连接。</li>
+<li><strong>连接关闭完成阶段（Connection Closed）：</strong> 在这个阶段，WebSocket 连接已经完全关闭。客户端和服务器之间的任何交互都将无效。</li>
+</ul>
+<h3 id="23-websocket的消息格式"><a class="markdownIt-Anchor" href="#23-websocket的消息格式"></a> <strong>2.3 WebSocket的消息格式</strong></h3>
+<p>WebSocket 的消息格式与 HTTP 请求和响应的消息格式有所不同。WebSocket 的<strong>消息格式可以是文本或二进制数据</strong>，并且 WebSocket 消息的传输是在一个已经建立的连接上进行的</p>
+<p>WebSocket 消息格式由两个部分组成：消息头和消息体。</p>
+<p>消息头包含以下信息：</p>
+<ul>
+<li><strong>FIN：</strong> 表示这是一条完整的消息，一般情况下都是1。</li>
+<li><strong>RSV1、RSV2、RSV3：</strong> 暂时没有使用，一般都是0。</li>
+<li><strong>Opcode：</strong> 表示消息的类型，包括文本消息、二进制消息等。</li>
+<li><strong>Mask：</strong> 表示消息是否加密。</li>
+<li><strong>Payload length：</strong> 表示消息体的长度。</li>
+<li><strong>Masking key：</strong> 仅在消息需要加密时出现，用于对消息进行解密。</li>
+</ul>
+<p>消息体就是实际传输的数据，可以是文本或二进制数据。</p>
+<h3 id="24-websocket的api"><a class="markdownIt-Anchor" href="#24-websocket的api"></a> <strong>2.4 WebSocket的[API]</strong></h3>
+<p>WebSocket API 是用于在 Web 应用程序中创建和管理 WebSocket 连接的接口集合。WebSocket API 由浏览器原生支持，无需使用额外的 JavaScript 库或框架，可以直接在 JavaScript 中使用。</p>
+<p>下面是一些常用的 WebSocket API：</p>
+<p><strong>WebSocket 构造函数：</strong> WebSocket 构造函数用于创建 WebSocket 对象。它接受一个 URL 作为参数，表示要连接的 WebSocket 服务器的地址。例如：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">let ws = new WebSocket(&#x27;ws://example.com/ws&#x27;);</span><br></pre></td></tr></table></figure>
+<p><strong>WebSocket.send() 方法：</strong> <code>WebSocket.send()</code> 方法用于向服务器发送数据。它接受一个参数，表示要发送的数据。数据可以是字符串、Blob 对象或 ArrayBuffer 对象。例如：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ws.send(&#x27;Hello, server!&#x27;);</span><br></pre></td></tr></table></figure>
+<p><strong>WebSocket.onopen 事件：</strong> <code>WebSocket.onopen</code> 事件在 WebSocket 连接成功建立时触发。例如：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ws.onopen = function() &#123;</span><br><span class="line">  console.log(&#x27;WebSocket 连接已经建立。&#x27;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><strong>WebSocket.onmessage 事件：</strong> <code>WebSocket.onmessage</code> 事件在<strong>接收到服务器发送的消息时触发</strong>。它的 event 对象包含一个 data 属性，表示接收到的数据。例如：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ws.onmessage = function(event) &#123;</span><br><span class="line">  console.log(&#x27;收到服务器消息：&#x27;, event.data);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><strong>WebSocket.onerror 事件：</strong> <code>WebSocket.onerror</code> 事件在 WebSocket 连接出现错误时触发。例如：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ws.onerror = function(event) &#123;</span><br><span class="line">  console.error(&#x27;WebSocket 连接出现错误：&#x27;, event);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p><strong>WebSocket.onclose 事件：</strong> <code>WebSocket.onclose</code> 事件在 WebSocket 连接<strong>被关闭时触</strong>发。例如：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ws.onclose = function() &#123;</span><br><span class="line">  console.log(&#x27;WebSocket 连接已经关闭。&#x27;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<h2 id="三-服务端实现-2"><a class="markdownIt-Anchor" href="#三-服务端实现-2"></a> 三 服务端实现</h2>
+<h2 id="四-客户端实现-2"><a class="markdownIt-Anchor" href="#四-客户端实现-2"></a> 四 客户端实现</h2>
+<h2 id="五"><a class="markdownIt-Anchor" href="#五"></a> 五</h2>
+<p>二进制消息可以是任意类型的数据，包括图像、音频、视频等。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/02/12/2026%E5%B9%B42%E6%9C%8812%E6%97%A5-SSE%E6%B1%87%E6%80%BB%E5%AD%A6%E4%B9%A0/" data-id="cmme79ecm00058wv4giid471g" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-2026年2月12日-fastapi系统学习" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -867,6 +1697,568 @@
       <a data-url="https://shakewely.github.io/2026/02/03/2026%E5%B9%B42%E6%9C%883%E6%97%A5-All-in-RAG/" data-id="cml627034000t4kv47gp012d1" class="article-share-link">分享</a>
       
       
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2026年2月3日-RAG0_初步认识" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/02/03/2026%E5%B9%B42%E6%9C%883%E6%97%A5-RAG0_%E5%88%9D%E6%AD%A5%E8%AE%A4%E8%AF%86/" class="article-date">
+  <time class="post-time" datetime="2026-02-03T01:14:13.000Z" itemprop="datePublished">
+    <span class="post-month">2月</span><br/>
+    <span class="post-day">03</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2026/02/03/2026%E5%B9%B42%E6%9C%883%E6%97%A5-RAG0_%E5%88%9D%E6%AD%A5%E8%AE%A4%E8%AF%86/">2026年2月3日 All in RAG</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote></blockquote>
+<h1 id="all-in-rag"><a class="markdownIt-Anchor" href="#all-in-rag"></a> All in RAG</h1>
+<p><img src="/2026/02/03/2026%E5%B9%B42%E6%9C%883%E6%97%A5-RAG0_%E5%88%9D%E6%AD%A5%E8%AE%A4%E8%AF%86/1_1_1.svg+xml" alt="RAG 双阶段架构示意图"></p>
+<p><img src="/2026/02/03/2026%E5%B9%B42%E6%9C%883%E6%97%A5-RAG0_%E5%88%9D%E6%AD%A5%E8%AE%A4%E8%AF%86/image-20260203092100302.png" alt="image-20260203092100302"></p>
+<h1 id="一-rag"><a class="markdownIt-Anchor" href="#一-rag"></a> 一、RAG？</h1>
+<h3 id="21-技术选型rag-vs-微调"><a class="markdownIt-Anchor" href="#21-技术选型rag-vs-微调"></a> 2.1 技术选型：RAG vs. 微调</h3>
+<h3 id="31-基础工具链选择"><a class="markdownIt-Anchor" href="#31-基础工具链选择"></a> 3.1 基础工具链选择</h3>
+<p>构建 RAG 系统通常涉及几个关键环节的选型。在<strong>开发模式</strong>上，我们可以利用 <strong>LangChain</strong> 或 <strong>LlamaIndex</strong> 等成熟框架快速集成，<strong>也可以选择不依赖框架的原生开发</strong>，以获得对系统流程更精细的控制力（在 AI 编程辅助下这并非难事）。而在<strong>记忆载体</strong>（向量数据库）方面，既有 <strong>Milvus</strong>、<strong>Pinecone</strong> 等适合大规模数据的方案，也有 <strong>FAISS</strong>、<strong>Chroma</strong> 等轻量级或本地化的选择，需根据具体业务规模灵活决定。后期为了量化效果，还可以引入 <strong>RAGAS</strong> 或 <strong>TruLens</strong> 等自动化<strong>评估工具</strong>。</p>
+<h3 id="评估维度与挑战"><a class="markdownIt-Anchor" href="#评估维度与挑战"></a> <strong>评估维度与挑战</strong></h3>
+<p>业界通常会从几个维度进行量化评估，</p>
+<p>首先是<strong>检索相关性</strong>（找到的内容是否包含答案），</p>
+<p>其次是<strong>生成质量</strong>，这又可以细分为<strong>语义准确性</strong>（回答的意思是否正确）和<strong>词汇匹配度</strong>（专业术语是否使用得当）。</p>
+<h3 id="优化方向与架构演进"><a class="markdownIt-Anchor" href="#优化方向与架构演进"></a> <strong>优化方向与架构演进</strong></h3>
+<p>在<strong>性能层面</strong>，可以通过<strong>索引分层</strong>（对高频数据启用缓存）和<strong>多模态扩展</strong>（支持图像/表格检索）来提升效率和能力边界。而在<strong>架构层面</strong>，简单的线性流程正在被更复杂的<strong>设计模式</strong>所取代。</p>
+<p>例如，系统可以通过<strong>分支模式</strong>并行处理多路检索，或通过<strong>循环模式</strong>进行自我修正，这些灵活的架构是通往更智能 RAG 的必由之路。</p>
+<h1 id="二-数据"><a class="markdownIt-Anchor" href="#二-数据"></a> 二 数据</h1>
+<h2 id="1-文档加载"><a class="markdownIt-Anchor" href="#1-文档加载"></a> 1 文档加载</h2>
+<p>文档加载器负责将各种格式的非结构化文档（如PDF、Word、Markdown、HTML等）转换为程序可以处理的结构化数据。</p>
+<h3 id="11-主流rag文档加载器"><a class="markdownIt-Anchor" href="#11-主流rag文档加载器"></a> 1.1 主流RAG文档加载器</h3>
+<p><img src="/2026/02/03/2026%E5%B9%B42%E6%9C%883%E6%97%A5-RAG0_%E5%88%9D%E6%AD%A5%E8%AE%A4%E8%AF%86/image-20260203093525277.png" alt="image-20260203093525277"></p>
+<h3 id="12-unstructured"><a class="markdownIt-Anchor" href="#12-unstructured"></a> 1.2 <strong>Unstructured</strong></h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">unstructured</span><br></pre></td></tr></table></figure>
+<h2 id="2-文本分块"><a class="markdownIt-Anchor" href="#2-文本分块"></a> 2 文本分块</h2>
+<p>文本分块（Text Chunking)</p>
+<img src="/2026/02/03/2026%E5%B9%B42%E6%9C%883%E6%97%A5-RAG0_%E5%88%9D%E6%AD%A5%E8%AE%A4%E8%AF%86/image-20260203094115462.png" alt="image-20260203094115462" style="zoom:50%;">
+<h3 id="21-满足模型上下文限制"><a class="markdownIt-Anchor" href="#21-满足模型上下文限制"></a> 2.1 满足模型上下文限制</h3>
+<p>将文本<strong>分块的首要原因</strong>，是为了适应 RAG 系统中两个核心组件的硬性限制：</p>
+<ul>
+<li><strong>嵌入模型 (Embedding Model)</strong>: 负责将文本块转换为向量。许多常用的嵌入模型（如 <code>bge-base-zh-v1.5</code>）的上下文窗口为512个token。任何超出此限制的文本块在输入时都会被截断，导致信息丢失，生成的向量也无法完整代表原文的语义。因此，文本块的大小<strong>必须</strong>小于等于嵌入模型的上下文窗口。</li>
+<li><strong>大语言模型 (LLM)</strong>: 负责根据检索到的上下文生成答案。LLM同样有上下文窗口限制（尽管通常比嵌入模型大得多，从几千到上百万token不等）。检索到的所有文本块，连同用户问题和提示词，都必须能被放入这个窗口中。如果单个块过大，可能会导致只能容纳少数几个相关的块，限制了LLM回答问题时可参考的信息广度。</li>
+</ul>
+<h3 id="22-嵌入过程中的信息损失"><a class="markdownIt-Anchor" href="#22-嵌入过程中的信息损失"></a> 2.2 嵌入过程中的信息损失</h3>
+<p>大多数嵌入模型都基于 Transformer 编码器。其工作流程大致如下：</p>
+<ul>
+<li><strong>分词 (Tokenization)</strong>: 将输入的文本块分解成一个个 token。</li>
+<li><strong>向量化 (Vectorization)</strong>: Transformer 为<strong>每个 token</strong> 生成一个高维向量表示。</li>
+<li><strong>池化 (Pooling)</strong>: 通过某种方法（如取 <code>[CLS]</code> 位的向量、对所有token向量求平均 <code>mean pooling</code> 等），将所有 token 的向量<strong>压缩</strong>成一个<strong>单一的向量</strong>，这个向量代表了整个文本块的语义。</li>
+</ul>
+<blockquote>
+<p><code>[CLS]</code> 是BERT等Transformer模型在输入文本开头添加的特殊标记，它通过自注意力机制动态聚合整个序列的上下文信息，其最终向量被训练用作代表全局语义的嵌入。</p>
+</blockquote>
+<p>在这个<code>压缩</code>过程中，信息损失是不可避免的。一个768维的向量需要概括整个文本块的所有信息。<strong>文本块越长，包含的语义点越多，这个单一向量所承载的信息就越稀释</strong>，<strong>导致其表示变得笼统，关键细节被模糊化，从而降低了检索的精度。</strong></p>
+<blockquote>
+<p>假设有一个关于《王者荣耀》英雄鲁班七号的攻略文档。</p>
+<ul>
+<li><strong>糟糕的分块策略</strong>：将“技能介绍”、“推荐出装”和“背景故事”这三个完全不同主题的内容，全部放在一个巨大的文本块里。
+<ul>
+<li>当玩家查询“鲁班七号怎么出装？”时，这个大块虽然包含了出装信息，但由于被技能说明和英雄故事等无关主题严重稀释，其整体的检索相关性得分可能会很低，导致无法被召回。</li>
+</ul>
+</li>
+<li><strong>优秀的分块策略</strong>：将“技能”、“出装”和“故事”分别切分为三个独立的、主题聚焦的块。
+<ul>
+<li>当玩家再次查询时，“推荐出装”这个块会因为与查询高度相关而获得极高的分数，从而被精准地检索出来。</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<h2 id="23-分块策略"><a class="markdownIt-Anchor" href="#23-分块策略"></a> 2.3  分块策略</h2>
+<h3 id="1-固定分块"><a class="markdownIt-Anchor" href="#1-固定分块"></a> 1 固定分块</h3>
+<p>根据LangChain源码，这种方法的工作原理分为两个主要阶段：</p>
+<p>（1）<strong>按段落分割</strong>：<code>CharacterTextSplitter</code> 采用默认<strong>分隔符</strong> <code>&quot;\n\n&quot;</code>，使用正则表达式将文本按段落进行分割，通过 <code>_split_text_with_regex</code> 函数处理。</p>
+<p>（2）<strong>智能合并</strong>：调用继承自父类的 <code>_merge_splits</code> 方法，将分割后的段落依次合并。该方法会监控<strong>累积长度</strong>，当超过 <code>chunk_size</code> 时形成新块，并通过重叠机制（<code>chunk_overlap</code>）保持上下文连续性，同时在必要时发出超长块的警告。</p>
+<blockquote>
+<p>需要注意，<code>CharacterTextSplitter</code> 实际实现的并非严格的固定大小分块。根据 <code>_merge_splits</code> 源码逻辑，这种方法会：</p>
+<ul>
+<li><strong>优先保持段落完整性</strong>：只有当添加新段落会导致总长度超过 <code>chunk_size</code> 时，才会结束当前块</li>
+<li><strong>处理超长段落</strong>：如果单个段落超过 <code>chunk_size</code>，系统会发出警告但仍将其作为完整块保留</li>
+<li><strong>应用重叠机制</strong>：通过 <code>chunk_overlap</code> 参数在块之间保持内容重叠，确保上下文连续性</li>
+</ul>
+</blockquote>
+<h3 id="2-递归字符分块"><a class="markdownIt-Anchor" href="#2-递归字符分块"></a> 2 递归字符分块</h3>
+<p><code>RecursiveCharacterTextSplitter</code> 的实现。这种分块器通过<strong>分隔符层级</strong>递归处理，相对与固定大小分块，改善了超长文本的处理效果。</p>
+<p><strong>算法流程</strong>：</p>
+<p>（1）<strong>寻找有效分隔符</strong>: 从分隔符列表中从前到后遍历，找到第一个在当前文本中<strong>存在</strong>的分隔符。如果都不存在，使用最后一个分隔符（通常是空字符串 <code>&quot;&quot;</code>）。</p>
+<p>（2）<strong>切分与分类处理</strong>: 使用选定的分隔符切分文本，然后遍历所有片段：</p>
+<ul>
+<li><strong>如果片段不超过块大小</strong>: 暂存到 <code>_good_splits</code> 中，准备合并</li>
+<li>如果片段超过块大小:
+<ul>
+<li>首先，将暂存的合格片段通过 <code>_merge_splits</code> 合并成块</li>
+<li>然后，检查是否还有剩余分隔符：
+<ul>
+<li><strong>有剩余分隔符</strong>: 递归调用 <code>_split_text</code> 继续分割</li>
+<li><strong>无剩余分隔符</strong>: 直接保留为超长块</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>（3）<strong>最终处理</strong>: 将剩余的暂存片段合并成最后的块</p>
+<p><strong>实现细节</strong>：</p>
+<ul>
+<li><strong>批处理机制</strong>: 先收集所有合格片段（<code>_good_splits</code>），遇到超长片段时才触发合并操作。</li>
+<li><strong>递归终止条件</strong>: 关键在于 <code>if not new_separators</code> 判断。当分隔符用尽时（<code>new_separators</code> 为空），停止递归，直接保留超长片段。确保算法不会无限递归。</li>
+</ul>
+<p><strong>与固定大小分块的关键差异</strong>：</p>
+<ul>
+<li>固定大小分块遇到超长段落时只能发出警告并保留。</li>
+<li>递归分块会继续使用更细粒度的分隔符（句子→单词→字符）直到满足大小要求。</li>
+</ul>
+<h3 id="3-语义分块"><a class="markdownIt-Anchor" href="#3-语义分块"></a> 3 语义分块</h3>
+<p>据文本的语义内涵来切分。</p>
+<p><strong>实现原理</strong></p>
+<p><code>SemanticChunker</code> 的工作流程可以概括为以下几个步骤：</p>
+<p>（1）<strong>句子分割 (Sentence Splitting)</strong>：首先，使用标准的句子分割规则（例如，基于句号、问号、感叹号）将输入文本拆分成一个句子列表。</p>
+<p>（2）<strong>上下文感知嵌入 (Context-Aware Embedding)</strong>：这是 <code>SemanticChunker</code> 的一个关键设计。该分块器不是对每个句子独立进行嵌入，而是通过 <code>buffer_size</code> 参数（默认为1）来捕捉上下文信息。对于列表中的每一个句子，这种方法会将其与前后各 <code>buffer_size</code> 个句子组合起来，然后对这个临时的、更长的组合文本进行嵌入。这样，每个句子最终得到的嵌入向量就融入了其上下文的语义。</p>
+<p>（3）<strong>计算语义距离 (Distance Calculation)**：计算每对**相邻</strong>句子的嵌入向量之间的余弦距离。这个距离值量化了两个句子之间的语义差异——距离越大，表示语义关联越弱，跳跃越明显。</p>
+<p>（4）<strong>识别断点 (Breakpoint Identification)</strong>：<code>SemanticChunker</code> 会分析所有计算出的距离值，并根据一个统计方法（默认为 <code>percentile</code>）来确定一个动态阈值。例如，它可能会将所有距离中第95百分位的值作为切分阈值。所有距离大于此阈值的点，都被识别为语义上的“断点”。</p>
+<p>（5）<strong>合并成块 (Merging into Chunks)</strong>：最后，根据识别出的所有断点位置，将原始的句子序列进行切分，并将每个切分后的部分内的所有句子合并起来，形成一个最终的、语义连贯的文本块。</p>
+<p><strong>断点识别方法 (<code>breakpoint_threshold_type</code>)</strong></p>
+<p>如何定义“显著的语义跳跃”是语义分块的关键。<code>SemanticChunker</code> 提供了几种基于统计的方法来识别断点：</p>
+<blockquote>
+<ul>
+<li><code>percentile</code> (百分位法 - <strong>默认方法</strong>):
+<ul>
+<li><strong>逻辑</strong>: 计算所有相邻句子的语义差异值，并将这些差异值进行排序。当一个差异值超过某个百分位阈值时，就认为该差异值是一个断点。</li>
+<li><strong>参数</strong>: <code>breakpoint_threshold_amount</code> (默认为 <code>95</code>)，表示使用第95个百分位作为阈值。这意味着，只有最显著的5%的语义差异点会被选为切分点。</li>
+</ul>
+</li>
+<li><code>standard_deviation</code> (标准差法):
+<ul>
+<li><strong>逻辑</strong>: 计算所有差异值的平均值和标准差。当一个差异值超过“平均值 + N * 标准差”时，被视为异常高的跳跃，即断点。</li>
+<li><strong>参数</strong>: <code>breakpoint_threshold_amount</code> (默认为 <code>3</code>)，表示使用3倍标准差作为阈值。</li>
+</ul>
+</li>
+<li><code>interquartile</code> (四分位距法):
+<ul>
+<li><strong>逻辑</strong>: 使用统计学中的四分位距（IQR）来识别异常值。当一个差异值超过 <code>Q3 + N * IQR</code> 时，被视为断点。</li>
+<li><strong>参数</strong>: <code>breakpoint_threshold_amount</code> (默认为 <code>1.5</code>)，表示使用1.5倍的IQR。</li>
+</ul>
+</li>
+<li><code>gradient</code> (梯度法):
+<ul>
+<li><strong>逻辑</strong>: 这是一种更复杂的方法。它首先计算差异值的变化率（梯度），然后对梯度应用百分位法。对于那些句子间语义联系紧密、差异值普遍较低的文本（如法律、医疗文档）特别有效，因为这种方法能更好地捕捉到语义变化的“拐点”。</li>
+<li><strong>参数</strong>: <code>breakpoint_threshold_amount</code> (默认为 <code>95</code>)。</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<h3 id="4-基于文档结构的分块"><a class="markdownIt-Anchor" href="#4-基于文档结构的分块"></a> 4 基于文档结构的分块</h3>
+<p><code>MarkdownHeaderTextSplitter</code></p>
+<h2 id="24chunkviz简易的可视化分块工具"><a class="markdownIt-Anchor" href="#24chunkviz简易的可视化分块工具"></a> 2.4ChunkViz：简易的可视化分块工具</h2>
+<h1 id="三-索引"><a class="markdownIt-Anchor" href="#三-索引"></a> 三 索引</h1>
+<h2 id="1-向量空间的语义表示"><a class="markdownIt-Anchor" href="#1-向量空间的语义表示"></a> 1 向量空间的语义表示</h2>
+<ul>
+<li>
+<p>关键度量：我们通常使用以下数学方法来衡量向量间的“距离”或“相似度”：</p>
+<ul>
+<li><strong>余弦相似度 (Cosine Similarity)</strong> ：计算两个向量夹角的余弦值。值越接近 1，代表方向越一致，语义越相似。这是最常用的度量方式。</li>
+<li><strong>点积 (Dot Product)</strong> ：计算两个向量的乘积和。在向量归一化后，点积等价于余弦相似度。</li>
+<li><strong>欧氏距离 (Euclidean Distance)</strong> ：计算两个向量在空间中的直线距离。距离越小，语义越相似。</li>
+</ul>
+</li>
+</ul>
+<h3 id="12-通用流程如下"><a class="markdownIt-Anchor" href="#12-通用流程如下"></a> 1.2 通用流程如下：</h3>
+<p>（1）<strong>离线索引构建</strong>：将知识库内文档切分后，使用 Embedding 模型将每个文档块（Chunk）转换为向量，存入专门的向量数据库中。</p>
+<p>（2）<strong>在线查询检索</strong>：当用户提出问题时，使用<strong>同一个</strong> Embedding 模型将用户的问题也转换为一个向量。</p>
+<p>（3）<strong>相似度计算</strong>：在向量数据库中，计算“问题向量”与所有“文档块向量”的相似度。</p>
+<p>（4）<strong>召回上下文</strong>：选取相似度最高的 Top-K 个文档块，作为补充的上下文信息，与原始问题一同送给大语言模型（LLM）生成最终答案。</p>
+<h2 id="2-模型"><a class="markdownIt-Anchor" href="#2-模型"></a> 2 模型</h2>
+<h3 id="21-静态词嵌入上下文无关的表示"><a class="markdownIt-Anchor" href="#21-静态词嵌入上下文无关的表示"></a> <a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#/chapter3/06_vector_embedding?id=_21-%E9%9D%99%E6%80%81%E8%AF%8D%E5%B5%8C%E5%85%A5%EF%BC%9A%E4%B8%8A%E4%B8%8B%E6%96%87%E6%97%A0%E5%85%B3%E7%9A%84%E8%A1%A8%E7%A4%BA">2.1 静态词嵌入：上下文无关的表示</a></h3>
+<ul>
+<li><strong>代表模型</strong>：Word2Vec (2013), GloVe (2014)</li>
+<li><strong>主要原理</strong>：为词汇表中的每个单词生成一个固定的、与上下文无关的向量。例如，<code>Word2Vec</code> 通过 Skip-gram 和 CBOW 架构，利用局部上下文窗口学习词向量，并验证了<strong>向量运算</strong>的语义能力（如 <code>国王 - 男人 + 女人 ≈ 王后</code>）。<code>GloVe</code> 则融合了全局词-词共现矩阵的统计信息。</li>
+<li><strong>局限性</strong>：无法处理一词多义问题。在“苹果公司发布了新手机”和“我吃了一个苹果”中，“苹果”的词向量是完全相同的，这限制了其在复杂语境下的语义表达能力。</li>
+</ul>
+<h3 id="22-动态上下文嵌入"><a class="markdownIt-Anchor" href="#22-动态上下文嵌入"></a> <a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#/chapter3/06_vector_embedding?id=_22-%E5%8A%A8%E6%80%81%E4%B8%8A%E4%B8%8B%E6%96%87%E5%B5%8C%E5%85%A5">2.2 动态上下文嵌入</a></h3>
+<ul>
+<li>2017年，<code>Transformer</code> 架构的诞生带来了自注意力机制（Self-Attention），它允许模型在生成一个词的向量时，<strong>动态地考虑句子中所有其他词的影响</strong>。基于此，</li>
+<li>2018年 <code>BERT</code> 模型利用 <code>Transformer</code> 的编码器，通过掩码语言模型（MLM）等自监督任务进行预训练，生成了深度上下文相关的嵌入。同一个词<strong>在不同语境中会生成不同的向量</strong>，这有效解决了静态嵌入的一词多义难题。</li>
+</ul>
+<h3 id="23-rag-对嵌入技术的新要求"><a class="markdownIt-Anchor" href="#23-rag-对嵌入技术的新要求"></a> <a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#/chapter3/06_vector_embedding?id=_23-rag-%E5%AF%B9%E5%B5%8C%E5%85%A5%E6%8A%80%E6%9C%AF%E7%9A%84%E6%96%B0%E8%A6%81%E6%B1%82">2.3 RAG 对嵌入技术的新要求</a></h3>
+<p>RAG 的兴起对嵌入技术提出了更高、更具体的要求：</p>
+<ul>
+<li><strong>领域自适应能力</strong>：通用的嵌入模型在专业领域（如法律、医疗）往往表现不佳，这就要求<strong>嵌入模型具备领域自适应的能力</strong>，能够通过微调或使用指令（如 INSTRUCTOR 模型）来适应特定领域的术语和语义。</li>
+<li><strong>多粒度与多模态支持</strong>：RAG 系统需要处理的不仅仅是短句，还可能包括长文档、代码，甚至是图像和表格。这就要求嵌入模型能够处理不同长度和类型的输入数据。</li>
+<li><strong>检索效率与混合检索</strong>：嵌入<strong>向量的维度和模型大小直接影响存储成本和检索速度</strong>。同时，为了结合语义相似性（密集检索）和关键词匹配（稀疏检索）的优点，支持混合检索的嵌入模型（如 BGE-M3）应运而生，在某些任务中成为提升召回率的关键。</li>
+</ul>
+<h2 id="3-嵌入模型训练原理"><a class="markdownIt-Anchor" href="#3-嵌入模型训练原理"></a> 3、嵌入模型训练原理</h2>
+<p>BERT 的成功很大程度上归功于 <strong>自监督学习</strong> 策略，它允许模型从海量的、无标注的文本数据中学习知识。</p>
+<h3 id="任务一掩码语言模型-masked-language-model-mlm"><a class="markdownIt-Anchor" href="#任务一掩码语言模型-masked-language-model-mlm"></a> <a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#/chapter3/06_vector_embedding?id=%E4%BB%BB%E5%8A%A1%E4%B8%80%EF%BC%9A%E6%8E%A9%E7%A0%81%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B-masked-language-model-mlm">任务一：掩码语言模型 (Masked Language Model, MLM)</a></h3>
+<ul>
+<li>过程：
+<ul>
+<li>随机地将输入句子中 15% 的词元（Token）替换为一个特殊的 <code>[MASK]</code> 标记。</li>
+<li>让模型去预测这些被遮盖住的原始词元是什么。</li>
+</ul>
+</li>
+<li><strong>目标</strong>：通过这个任务，模型被迫学习每个词元与其上下文之间的关系，从而掌握深层次的语境语义。</li>
+</ul>
+<h3 id="任务二下一句预测-next-sentence-prediction-nsp"><a class="markdownIt-Anchor" href="#任务二下一句预测-next-sentence-prediction-nsp"></a> <a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#/chapter3/06_vector_embedding?id=%E4%BB%BB%E5%8A%A1%E4%BA%8C%EF%BC%9A%E4%B8%8B%E4%B8%80%E5%8F%A5%E9%A2%84%E6%B5%8B-next-sentence-prediction-nsp">任务二：下一句预测 (Next Sentence Prediction, NSP)</a></h3>
+<ul>
+<li>过程：
+<ul>
+<li>构造训练样本，每个样本包含两个句子 A 和 B。</li>
+<li>其中 50% 的样本，B 是 A 的真实下一句（IsNext）；另外 50% 的样本，B 是从语料库中随机抽取的句子（NotNext）。</li>
+<li>让模型判断 B 是否是 A 的下一句。</li>
+</ul>
+</li>
+<li><strong>目标</strong>：这个任务让模型学习句子与句子之间的逻辑关系、连贯性和主题相关性。</li>
+<li><strong>重要说明</strong>：后续的研究（如 RoBERTa）发现<a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#fn-2">2</a>，NSP 任务可能过于简单，甚至会损害模型性能。因此，许多现代的预训练模型（如 RoBERTa、SBERT）在预训练阶段移除了 NSP。</li>
+</ul>
+<blockquote>
+<p>更多细节可查看 <a target="_blank" rel="noopener" href="https://github.com/datawhalechina/base-nlp/blob/main/docs/chapter5/13_Bert.md">BERT 架构及应用</a></p>
+</blockquote>
+<p><a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#/chapter3/06_vector_embedding?id=_32-%E6%95%88%E6%9E%9C%E5%A2%9E%E5%BC%BA%E7%AD%96%E7%95%A5">3.2 效果增强策略</a></p>
+<p>虽然 MLM 和 NSP 赋予了模型强大的基础语义理解能力，但为了在检索任务中表现更佳，现代嵌入模型通常会引入更具针对性的训练策略。</p>
+<ul>
+<li><strong>度量学习 (Metric Learning)</strong> ：
+<ul>
+<li><strong>思想</strong>：直接以“相似度”作为优化目标。</li>
+<li><strong>方法</strong>：收集大量相关的文本对（例如，（问题，答案）、（新闻标题，正文））。训练的目标是优化向量空间中的<strong>相对距离</strong>：让“正例对”的向量表示在空间中被“拉近”，而“负例对”的向量表示被“推远”。关键在于优化排序关系，而非追求绝对的相似度值（如 1 或 0），因为过度追求极端值可能导致模型过拟合。</li>
+</ul>
+</li>
+<li><strong>对比学习 (Contrastive Learning)</strong> ：
+<ul>
+<li><strong>思想</strong>：在向量空间中，将相似的样本“拉近”，将不相似的样本“推远”。</li>
+<li><strong>方法</strong>：构建一个三元组（Anchor, Positive, Negative）。其中，Anchor 和 Positive 是相关的（例如，同一个问题的两种不同问法），Anchor 和 Negative 是不相关的。训练的目标是让 <code>distance(Anchor, Positive)</code> 尽可能小，同时让 <code>distance(Anchor, Negative)</code> 尽可能大。</li>
+</ul>
+</li>
+</ul>
+<h2 id="4-多模态"><a class="markdownIt-Anchor" href="#4-多模态"></a> 4 多模态</h2>
+<h3 id="41-clip-模型浅析"><a class="markdownIt-Anchor" href="#41-clip-模型浅析"></a> 4.1 CLIP 模型浅析</h3>
+<h2 id="5-向量数据库"><a class="markdownIt-Anchor" href="#5-向量数据库"></a> 5 向量数据库</h2>
+<p>高效处理海量高维向量的能力。</p>
+<ul>
+<li><strong>高效的相似性搜索</strong>：这是向量数据库最重要的功能。它利用专门的索引技术（如 HNSW, IVF），能够在数十亿级别的向量中实现<strong>毫秒级的近似最近邻（ANN）查询，快速找到与给定查询最相似的数据。</strong></li>
+<li><strong>高维数据存储与管理</strong>：专门为存储高维向量（通常维度成百上千）而<strong>优化</strong>，支持对向量数据进行增、删、改、查等基本操作。</li>
+<li><strong>丰富的查询能力</strong>：除了基本的相似性搜索，还支持按<strong>标量字段过滤查询</strong>（例如，在搜索相似图片的同时，指定<code>年份 &gt; 2023</code>）、范围查询和聚类分析等，满足复杂业务需求。</li>
+<li><strong>可扩展与高可用</strong>：现代向量数据库通常采用分布式架构，具备良好的水平扩展能力和容错性，能够通过增加节点来应对数据量的增长，并确保服务的稳定可靠。</li>
+<li><strong>数据与模型生态集成</strong>：与主流的 AI 框架（如 LangChain, LlamaIndex）和机器学习工作流无缝集成，简化了从模型训练到向量检索的应用开发流程。</li>
+</ul>
+<p>向量数据库与传统数据库的主要差异如下：</p>
+<img src="/2026/02/03/2026%E5%B9%B42%E6%9C%883%E6%97%A5-RAG0_%E5%88%9D%E6%AD%A5%E8%AE%A4%E8%AF%86/image-20260203105943455.png" alt="image-20260203105943455" style="zoom:50%;">
+<h3 id="主流数据库"><a class="markdownIt-Anchor" href="#主流数据库"></a> 主流数据库</h3>
+<img src="/2026/02/03/2026%E5%B9%B42%E6%9C%883%E6%97%A5-RAG0_%E5%88%9D%E6%AD%A5%E8%AE%A4%E8%AF%86/image-20260203110048526.png" alt="image-20260203110048526" style="zoom:50%;">
+<h2 id="6-milvus介绍"><a class="markdownIt-Anchor" href="#6-milvus介绍"></a> 6 Milvus介绍</h2>
+<h2 id="7-索引优化"><a class="markdownIt-Anchor" href="#7-索引优化"></a> 7 索引优化</h2>
+<h3 id="71-上下文扩展"><a class="markdownIt-Anchor" href="#71-上下文扩展"></a> 7.1 上下文扩展</h3>
+<p>：使用小块文本进行检索可以获得更高的精确度，但小块文本缺乏足够的上下文，可能导致大语言模型（LLM）无法生成高质量的答案；而使用大块文本虽然上下文丰富，却容易引入噪音，降低检索的相关性。</p>
+<h4 id="1-主要思路"><a class="markdownIt-Anchor" href="#1-主要思路"></a> 1 主要思路</h4>
+<p>句子窗口检索的思想可以概括为：<strong>为检索精确性而索引小块，为上下文丰富性而检索大块</strong>。</p>
+<p>其工作流程如下：</p>
+<p>（1）<strong>索引阶段</strong>：在构建索引时，文档被分割成<strong>单个句子</strong>。每个句子都作为一个独立的“节点（Node）”存入向量数据库。同时，每个句子节点都会在元数据（metadata）中存储其<strong>上下文窗口</strong>，即该句子原文中的<strong>前N个和后N个句子</strong>。这个窗口内的文本不会被索引，仅仅是作为元数据存储。</p>
+<p>（2）<strong>检索阶段</strong>：当用户发起查询时，系统会在所有<strong>单一句子节点</strong>上执行相似度搜索。因为句子是表达完整语义的最小单位，所以这种方式可以非常精确地定位到与用户问题最相关的核心信息。</p>
+<p>（3）<strong>后处理阶段</strong>：在检索到最相关的句子节点后，系统会使用一个名为 <code>MetadataReplacementPostProcessor</code> 的后处理模块。该模块会读取到检索到的句子节点的元数据，并用元数据中存储的<strong>完整上下文窗口</strong>来替换节点中原来的单一句子内容。</p>
+<p>（4）<strong>生成阶段</strong>：最后，这些被替换了内容的、包含丰富上下文的节点被传递给LLM，用于生成最终的答案。</p>
+<h3 id="72-结构化索引"><a class="markdownIt-Anchor" href="#72-结构化索引"></a> 7.2 结构化索引</h3>
+<p>知识库的规模不断扩大（例如，包含数百个PDF文件），传统的RAG方法（即对所有文本块进行top-k相似度搜索）会遇到瓶颈。</p>
+<p>查询可能只与其中一两个文档相关时，在整个文档库中进行无差别的向量搜索，不仅效率低下，还容易被不相关的文本块干扰，导致检索结果不精确。</p>
+<p>有效的方法是利用<strong>结构化索引</strong>。其原理是在索引文本块的同时，为其<strong>附加结构化的元数据（Metadata）</strong>。这些元数据可以是任何有助于筛选和定位信息的标签，例如：</p>
+<ul>
+<li>文件名</li>
+<li>文档创建日期</li>
+<li>章节标题</li>
+<li>作者</li>
+<li>任何自定义的分类标签</li>
+</ul>
+<img src="/2026/02/03/2026%E5%B9%B42%E6%9C%883%E6%97%A5-RAG0_%E5%88%9D%E6%AD%A5%E8%AE%A4%E8%AF%86/image-20260203110917396.png" alt="image-20260203110917396" style="zoom:50%;">
+<h1 id="四-索引优化"><a class="markdownIt-Anchor" href="#四-索引优化"></a> 四 索引优化</h1>
+<h2 id="1-混合索引"><a class="markdownIt-Anchor" href="#1-混合索引"></a> 1 混合索引</h2>
+<p>混合检索（Hybrid Search）是一种结合了 <strong>稀疏向量（Sparse Vectors）</strong> 和 <strong>密集向量（Dense Vectors）</strong></p>
+<h3 id="11-稀疏向量-和-密集向量"><a class="markdownIt-Anchor" href="#11-稀疏向量-和-密集向量"></a> 1.1 **稀疏向量 和 **密集向量</h3>
+<ul>
+<li>
+<p>稀疏向量，也常被称为“词法向量”，是基于词频统计的传统信息检索方法的数学表示。它通常是一个维度极高（与词汇表大小相当）但绝大多数元素为零的向量。</p>
+<ul>
+<li>优点是可解释性极强（<strong>每个维度都代表一个确切的词</strong>），无需训练，能够实现关键词的精确匹配，对于专业术语和特定名词的检索效果好。</li>
+<li>缺点是<strong>无法理解语义</strong>，例如它无法识别“汽车”和“轿车”是同义词，存在“词汇鸿沟”。</li>
+</ul>
+</li>
+<li>
+<p>密集向量，也常被称为“语义向量”，是通过深度学习模型学习到的数据（如文本、图像）的低维、稠密的浮点数表示。这些向量旨在将原始数据映射到一个连续的、充满意义的“语义空间”中来捕捉“语义”或“概念”。</p>
+<ul>
+<li>
+<p>主要优点是能够<strong>理解同义词、近义词和上下文关系</strong>，泛化能力强，在语义搜索任务中表现卓越。</p>
+</li>
+<li>
+<p>缺点也同样明显：可解释性差（向量中的每个维度通常没有具体的物理意义），需要大量数据和算力进行模型训练，且对于<strong>未登录词（OOV</strong>）的处理相对困难。</p>
+<blockquote>
+<p><strong>OOV（Out-of-Vocabulary）未登录词</strong>：指在模型训练时没有出现在词汇表中，但在实际使用时遇到的新词汇。例如，如果模型训练时词汇表中没有&quot;ChatGPT&quot;这个词，那么在实际应用中遇到它时就是OOV。传统的稀疏向量方法（如BM25）对OOV词汇会完全忽略，而现代的密集向量方法通过子词分割（如BPE、WordPiece）可以更好地处理OOV问题。</p>
+<p>以下是我处理 “不认识” 的词的具体机制：</p>
+<h3 id="1-核心原理基于-子词-而非-整词"><a class="markdownIt-Anchor" href="#1-核心原理基于-子词-而非-整词"></a> 1. 核心原理：基于 “子词” 而非 “整词”</h3>
+<p>我和 GPT、BERT 等现代 Transformer 模型一样，使用 <strong>Byte-level BPE（字节级别的子词分词）</strong> 作为底层编码方式。</p>
+<ul>
+<li><strong>传统模型</strong>：词汇表是固定的几万到几十万个 “整词”。遇到新词（如 “栓 Q”、“绝绝子”），直接标记为 <code>&lt;UNK&gt;</code>（未知），信息丢失。</li>
+<li>我（及同类大模型）：词汇表包含常见的词、词根、词缀，甚至单个字符 / 字节。
+<ul>
+<li>遇到新词时，我会把它<strong>拆分成已知的子词或字符</strong>。</li>
+<li>例如：遇到一个生僻的名字 “𰻞𰻞面”，或者一个新造词 “AI 爆改”，我不会把它当成一个整体扔掉，而是拆分成模型认识的基础单元，然后通过上下文去理解它的语义。</li>
+</ul>
+</li>
+</ul>
+<p><strong>结论</strong>：我<strong>不会</strong>把新词变成 <code>&lt;UNK&gt;</code>，而是通过拆解，保留了绝大部分语义信息。</p>
+<h3 id="2-如何理解-新词-和-专有名词"><a class="markdownIt-Anchor" href="#2-如何理解-新词-和-专有名词"></a> 2. 如何理解 “新词” 和 “专有名词”？</h3>
+<p>虽然我能编码新词，但 “能不能理解” 取决于<strong>上下文学习能力</strong>和<strong>训练数据</strong>：</p>
+<ol>
+<li>
+<p><strong>新词 / 网络热词</strong>：</p>
+<ul>
+<li>如果这个词（如 “YYDS”、“挖呀挖”）在我的训练语料中大量出现，我就像认识 “你好” 一样认识它。</li>
+<li>如果是<strong>2025 年之后</strong>才流行的新词（我的训练数据截止时间之前未普及），我虽然能 “看见” 这个词（不会丢），但可能无法准确理解其网络含义，只能从字面或语境推断。</li>
+</ul>
+</li>
+<li>
+<p><strong>专有名词（人名、地名、品牌）</strong>：</p>
+<ul>
+<li>对于知名实体（如 “马斯克”、“故宫”），训练数据充足，理解准确。</li>
+<li>对于小众实体（如你的名字、一个冷门公司名），我不认识它，但我知道它是一个 “名词 / 实体”，并能根据上下文进行合理的互动（比如复述、询问、围绕它进行创作），而不是直接说 “我不懂”。</li>
+</ul>
+</li>
+</ol>
+<h3 id="3-我的-oov-处理流程"><a class="markdownIt-Anchor" href="#3-我的-oov-处理流程"></a> 3. 我的 “OOV” 处理流程</h3>
+<p>当你输入一个我从未见过的词（比如一个新的网络梗或生僻字）时，我的处理步骤是：</p>
+<ol>
+<li>
+<p><strong>分词</strong>：将新词切分为子词序列（如 “AI 爆改” -&gt; [“AI”, “爆”, “改”]）。</p>
+</li>
+<li>
+<p><strong>编码</strong>：将子词转为向量，输入模型。</p>
+</li>
+<li>
+<p>推理：利用强大的</p>
+<p>上下文语义理解能力</p>
+<p>，结合周围的文字，推断这个新词的含义、词性和作用。</p>
+<ul>
+<li><em>例子</em>：即使我没见过 “挖呀挖”，但在 “在小小的花园里挖呀挖呀挖” 这句话中，我能推断出它是一个表示动作的、有节奏感的语气词。</li>
+</ul>
+</li>
+</ol>
+<h3 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h3>
+<ul>
+<li><strong>传统 OOV 问题</strong>：对我<strong>基本不存在</strong>，因为我用子词编码，不会丢失信息。</li>
+<li><strong>真正的挑战</strong>：不是 “看不见”，而是 “认不出”。对于训练数据中<strong>从未出现过</strong>的全新概念，我只能依赖上下文推理，可能会出现理解偏差。</li>
+</ul>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="12-混合索引实现"><a class="markdownIt-Anchor" href="#12-混合索引实现"></a> 1.2 混合索引实现</h3>
+<h4 id="1-倒排序"><a class="markdownIt-Anchor" href="#1-倒排序"></a> 1 倒排序</h4>
+<p>其思想是：一个文档在<strong>不同检索系统</strong>中的排名越靠前，它的最终得分就越高。</p>
+<h4 id="2-加权线性组合"><a class="markdownIt-Anchor" href="#2-加权线性组合"></a> 2 加权线性组合</h4>
+<p>这种方法需要先将不同检索系统的得分进行归一化（例如，统一到 0-1 区间），然后通过一个权重参数 <code>α</code> 来进行线性组合。</p>
+<h4 id="13-代码实现"><a class="markdownIt-Anchor" href="#13-代码实现"></a> 1.3  代码实现</h4>
+<h2 id="2-查询构建"><a class="markdownIt-Anchor" href="#2-查询构建"></a> 2 查询构建</h2>
+<p>在实际应用中，我们常常需要处理更加复杂和多样化的数据，包括结构化数据（如SQL数据库）、半结构化数据（如带有元数据的文档）以及图数据。</p>
+<p>用户的查询也可能不仅仅是简单的语义匹配，而是包含复杂<strong>的过滤条件、聚合操作或关系查询</strong>。</p>
+<p>将用户的<strong>自然语言查询“翻译”成针对特定数据源的结构化查询语言或带有过滤条件的请求</strong>。这使得RAG系统能够无缝地连接和利用各种类型的数据，从而极大地扩展了其应用场景和能力。</p>
+<img src="/2026/02/03/2026%E5%B9%B42%E6%9C%883%E6%97%A5-RAG0_%E5%88%9D%E6%AD%A5%E8%AE%A4%E8%AF%86/image-20260203112641110.png" alt="image-20260203112641110" style="zoom:33%;">
+<h3 id="21-文本到元数据过滤器"><a class="markdownIt-Anchor" href="#21-文本到元数据过滤器"></a> 2.1 文本到元数据过滤器</h3>
+<h4 id="自查询检索器self-query-retriever"><a class="markdownIt-Anchor" href="#自查询检索器self-query-retriever"></a> <strong>自查询检索器（Self-Query Retriever）</strong></h4>
+<blockquote>
+<p>类似 skills</p>
+</blockquote>
+<p>它的工作流程如下：</p>
+<ol>
+<li>
+<p><strong>定义元数据结构</strong>：首先，需要向LLM清晰地描述文档内容和每个元数据字段的含义及类型。</p>
+</li>
+<li>
+<p>查询解析：当用户输入一个自然语言查询时，自查询检索器会调用LLM，将查询分解为两部分：</p>
+<ul>
+<li><strong>查询字符串（Query String）</strong>：用于进行语义搜索的部分。</li>
+<li><strong>元数据过滤器（Metadata Filter）</strong>：从查询中提取出的结构化过滤条件。</li>
+</ul>
+</li>
+<li>
+<p><strong>执行查询</strong>：检索器将解析出的查询字符串和元数据过滤器发送给向量数据库，执行一次同时包含语义搜索和元数据过滤的查询。</p>
+</li>
+</ol>
+<h3 id="22-文本到cypher"><a class="markdownIt-Anchor" href="#22-文本到cypher"></a> 2.2 文本到Cypher</h3>
+<p>Cypher 是<strong>图数据库</strong>（如 Neo4j）中最常用的查询语言，其地位类似于 SQL 之于关系数据库。</p>
+<p>它采用一种直观的方式来匹配图中的模式和关系，例如 <code>(:Person &#123;name:&quot;Tomaz&quot;&#125;)-[:LIVES_IN]-&gt;(:Country &#123;name:&quot;Slovenia&quot;&#125;)</code> 描述了一个人和一个国家以及他们之间的“居住在”关系。</p>
+<p>与“文本到元数据过滤器”类似，“文本到Cypher”技术利用大语言模型（LLM）将用户的自然语言问题直接翻译成一句精准的 Cypher 查询语句。</p>
+<h4 id="graphcypherqachain"><a class="markdownIt-Anchor" href="#graphcypherqachain"></a> <code>GraphCypherQAChain</code></h4>
+<p>其工作流程通常是：</p>
+<ol>
+<li>接收用户的自然语言问题。</li>
+<li>LLM 根据预先提供的图谱模式（Schema），将问题转换为 Cypher 查询。</li>
+<li>在图数据库上执行该查询，获取精确的结构化数据。</li>
+<li>(可选)将查询结果再次交由 LLM，生成通顺的自然语言答案。</li>
+</ol>
+<h2 id="3-text2sql"><a class="markdownIt-Anchor" href="#3-text2sql"></a> 3 Text2SQL</h2>
+<p>利用大语言模型（LLM）将用户的自然语言问题，直接翻译成可以在数据库上执行的SQL查询语句。</p>
+<h3 id="31-业务挑战"><a class="markdownIt-Anchor" href="#31-业务挑战"></a> 3.1 业务挑战</h3>
+<ul>
+<li><strong>“幻觉”问题✅</strong>：LLM 可能会“想象”出数据库中<strong>不存在的表或字段</strong>，导致生成的SQL语句无效。</li>
+<li><strong>对数据库结构理解不足</strong>✅：LLM 需要准确理解表的结构、字段的含义以及表与表之间的关联关系，才能生成正确的 <code>JOIN</code> 和 <code>WHERE</code> 子句。</li>
+<li><strong>处理用户输入的模糊性✅</strong>：用户的提问可能存在拼写<strong>错误\模糊或不规范的表达</strong>（例如，“上个月的销售冠军是谁？”），模型需要具备一定的容错和推理能力。</li>
+</ul>
+<h3 id="32-优化策略"><a class="markdownIt-Anchor" href="#32-优化策略"></a> 3.2 优化策略</h3>
+<ol>
+<li><strong>提供精确的数据库模式</strong>✅：这是最基础也是最关键的一步。我们需要向LLM提供数据库中相关表的 <code>CREATE TABLE</code> 语句。这就像是给了LLM一张地图，让它了解数据库的结构，包括表名、列名、数据类型和外键关系。</li>
+<li><strong>提供少量高质量的示例</strong>✅：在提示（Prompt）中加入一些**“问题-SQL”的示例**对，可以极大地提升LLM生成查询的准确性。这相当于给了LLM几个范例，让它学习如何根据相似的问题构建查询。</li>
+<li><strong>利用RAG增强上下文</strong>：这是更进一步的策略。我们可以像RAGFlow一样，为数据库构建一个专门的“知识库”, 其中不仅包含表的DDL（数据定义语言），还可以包含：
+<ul>
+<li><strong>表和字段的详细描述</strong>✅：用自然语言解释每个表是做什么的，每个字段代表什么业务含义。</li>
+<li><strong>同义词和业务术语</strong>✅：例如，将用户的**“花费”映射到数据库的 <code>cost</code> 字段**。</li>
+<li><strong>复杂的查询示例</strong>：提供一些包含 <code>JOIN</code>、<code>GROUP BY</code> 或子查询的复杂问答对。 当用户提问时，系统首先从**这个知识库中检索最相关的信息（如相关的表结构、字段描述、相似的Q&amp;A），然后将这些信息和用户的问题一起组合成一个内容更丰富的提示，交给LLM生成最终的SQL查询。**这种方式极大地降低了“幻觉”的风险，提高了查询的准确度。</li>
+</ul>
+</li>
+<li><strong>错误修正与反思 (Error Correction and Reflection)<strong>✅：在生成SQL后，系统会尝试执行它。如果</strong>数据库返回错误，可以将错误信息反馈给LLM，让它“反思”并修正SQL语句，然后重试</strong>。这个迭代过程可以显著提高查询的成功率。</li>
+</ol>
+<h3 id="33-实现一个简单的text2sql框架to-do"><a class="markdownIt-Anchor" href="#33-实现一个简单的text2sql框架to-do"></a> 3.3 <a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#/chapter4/13_text2sql?id=%E4%B8%89%E3%80%81%E5%AE%9E%E7%8E%B0%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84text2sql%E6%A1%86%E6%9E%B6">实现一个简单的Text2SQL框架</a>to-do📋</h3>
+<h2 id="4-重构和分发"><a class="markdownIt-Anchor" href="#4-重构和分发"></a> 4 重构和分发</h2>
+<p>在检索之前对用户的查询进行“预处理”</p>
+<blockquote>
+<p>类似skills?</p>
+</blockquote>
+<h3 id="42-多查询分解-multi-query"><a class="markdownIt-Anchor" href="#42-多查询分解-multi-query"></a> <a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#/chapter4/14_query_rewriting?id=_12-%E5%A4%9A%E6%9F%A5%E8%AF%A2%E5%88%86%E8%A7%A3-multi-query">4.2 多查询分解 (Multi-query)</a></h3>
+<p>当用户提出一个复杂的问题时，直接用整个问题去检索可能效果不佳，因为它可能包含多个子主题或意图。分解技术的核心思想是将这个复杂问题拆分成多个更简单、更具体的子问题。然后，系统分别对每个子问题进行检索，最后将所有检索到的结果合并、去重，形成一个更全面的上下文，再交给 LLM 生成最终答案。</p>
+<h3 id="43-退步提示step-back-prompting"><a class="markdownIt-Anchor" href="#43-退步提示step-back-prompting"></a> <a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#/chapter4/14_query_rewriting?id=_13-%E9%80%80%E6%AD%A5%E6%8F%90%E7%A4%BA%EF%BC%88step-back-prompting%EF%BC%89">4.3 退步提示（Step-Back Prompting）</a></h3>
+<p>退步提示是由 Google DeepMind 团队提出的一种旨在提升大语言模型推理能力的提示工程技巧<a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#fn-2">2</a>。当面对一个细节繁多或过于具体的问题时，模型直接作答（即便是使用思维链）也容易出错。退步提示通过引导模型“退后一步”来解决这个问题。</p>
+<p>其核心流程分为两步：</p>
+<p>（1）<strong>抽象化</strong>：首先，引导 LLM 从用户的原始具体问题中，生成一个更高层次、更概括的“退步问题”（Step-back Question）。这个退步问题旨在探寻原始问题背后的通用原理或核心概念。</p>
+<p>（2）<strong>推理</strong>：接着，系统会先获取“退步问题”的答案（例如，一个物理定律、一段历史背景等），然后将这个通用原理作为上下文，再结合原始的具体问题，进行推理并生成最终答案。</p>
+<h3 id="44-假设性文档嵌入-hyde"><a class="markdownIt-Anchor" href="#44-假设性文档嵌入-hyde"></a> <a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#/chapter4/14_query_rewriting?id=_14-%E5%81%87%E8%AE%BE%E6%80%A7%E6%96%87%E6%A1%A3%E5%B5%8C%E5%85%A5-hyde">4.4 假设性文档嵌入 (HyDE)</a></h3>
+<p>用户的查询（Query）通常简短、关键词有限，而数据库中存储的文档则内容详实、上下文丰富，两者在语义向量空间中可能存在“鸿沟”，导致直接用查询向量进行搜索效果不佳。不直接使用用户的原始查询，而是先利用一个生成式大语言模型（LLM）来生成一个“假设性”的、能够完美回答该查询的文档。</p>
+<p>分为三个步骤：</p>
+<p>（1）<strong>生成</strong>：当接收到用户查询时，首先调用一个生成式 LLM（例如，GPT-3.5）。提示该模型根据查询生成一个详细的、可能是理想答案的文档。这个文档不必完全符合事实，但它必须在语义上与一个好的答案高度相关。</p>
+<p>（2）<strong>编码</strong>：将上一步生成的假设性文档输入到一个对比编码器（如 Contriever）中，将其转换为一个高维向量嵌入。这个向量在语义上代表了一个“理想答案”的位置。</p>
+<p>（3）<strong>检索</strong>：使用这个假设性文档的向量，在向量数据库中执行相似性搜索，找出与这个“理想答案”最接近的真实文档。这些被检索出的文档将作为最终的上下文信息。</p>
+<p>通过这种方式，HyDE 将困难的“查询到文档”的匹配问题，转化为了一个相对容易的“文档到文档”的匹配问题，从而提升检索的准确率。</p>
+<h3 id="45-查询路由"><a class="markdownIt-Anchor" href="#45-查询路由"></a> <a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#/chapter4/14_query_rewriting?id=%E4%BA%8C%E3%80%81%E6%9F%A5%E8%AF%A2%E8%B7%AF%E7%94%B1">4.5 查询路由</a></h3>
+<p><strong>查询路由（Query Routing）</strong> 是用于优化复杂 RAG 系统的一项关键技术。当系统接入了多个不同的数据源或具备多种处理能力时，就需要一个“智能调度中心”来分析用户的查询，并动态选择最合适的处理路径。</p>
+<ol>
+<li><strong>数据源路由</strong>：这是最常见的场景。根据查询意图，将其路由到不同的知识库。例如：
+<ul>
+<li>查询“最新的 iPhone 有什么功能？” -&gt; 路由到<strong>产品文档向量数据库</strong>。</li>
+<li>查询“我上次订购了什么？” -&gt; 路由到<strong>用户历史SQL数据库</strong>（执行Text-to-SQL）。</li>
+<li>查询“A公司和B公司的投资关系是怎样的？” -&gt; 路由到<strong>企业知识图谱数据库</strong>。</li>
+</ul>
+</li>
+<li><strong>组件路由</strong>：根据问题的复杂性，将其分配给不同的处理组件，以平衡成本和效果。
+<ul>
+<li>简单FAQ → 直接进行向量检索，速度快、成本低。</li>
+<li>复杂操作或需要与外部API交互 → 调用 Agent 来执行任务。</li>
+</ul>
+</li>
+<li><strong>提示模板路由</strong>：为不同类型的任务动态选择最优的提示词模板，以优化生成效果。
+<ul>
+<li>数学问题 → 选用包含分步思考（Step-by-Step）逻辑的提示模板。</li>
+<li>代码生成 → 选用专门为代码优化过的提示模板。</li>
+</ul>
+</li>
+</ol>
+<h3 id="22-实现方法"><a class="markdownIt-Anchor" href="#22-实现方法"></a> <a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#/chapter4/14_query_rewriting?id=_22-%E5%AE%9E%E7%8E%B0%E6%96%B9%E6%B3%95">2.2 实现方法</a>📋</h3>
+<h2 id="5-其他-pass"><a class="markdownIt-Anchor" href="#5-其他-pass"></a> 5 其他❌ pass</h2>
+<h1 id="五-格式化输出-pass"><a class="markdownIt-Anchor" href="#五-格式化输出-pass"></a> 五 格式化输出❌ pass</h1>
+<h1 id="六-rag评估"><a class="markdownIt-Anchor" href="#六-rag评估"></a> 六 RAG评估</h1>
+<h2 id="1-rag评估三元组"><a class="markdownIt-Anchor" href="#1-rag评估三元组"></a> <a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#/chapter6/18_system_evaluation?id=%E4%B8%80%E3%80%81rag%E8%AF%84%E4%BC%B0%E4%B8%89%E5%85%83%E7%BB%84">1、RAG评估三元组</a></h2>
+<p>该架构包含以下三个维度，并在 <strong>TruLens</strong> <a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#fn-1">1</a>等工具中有深入的应用：</p>
+<p>（1）<strong>上下文相关性 (Context Relevance)</strong></p>
+<ul>
+<li><strong>评估目标：</strong> <strong>检索器（Retriever）的性能。</strong></li>
+<li><strong>核心问题：</strong> 检索到的上下文内容，是否与用户的查询（Query）高度相关？</li>
+<li><strong>重要性：</strong> 检索是RAG应用在响应用户查询时的第一步。如果检索回来的上下文充满了噪声或无关信息，那么无论后续的生成模型多么强大，都没法做出正确答案。</li>
+</ul>
+<p>（2）<strong>忠实度 / 可信度 (Faithfulness / Groundedness)</strong></p>
+<ul>
+<li><strong>评估目标：</strong> 生成器的可靠性。</li>
+<li><strong>核心问题：</strong> 生成的<strong>答案是否完全基于所提供的上下文信息</strong>？</li>
+<li><strong>重要性：</strong> 这个维度主要在于量化LLM的“幻觉”程度。一个高忠实度的回答意味着模型严格遵守了上下文，没有捏造或歪曲事实。如果忠实度得分低，说明LLM在回答时“自由发挥”过度，引入了外部知识或不实信息。</li>
+</ul>
+<p>（3）<strong>答案相关性 (Answer Relevance)</strong></p>
+<ul>
+<li><strong>评估目标：</strong> 系统的端到端（End-to-End）表现。</li>
+<li><strong>核心问题：</strong> <strong>最终生成的答案是否直接、完整且有效地回答了用户的原始问题？</strong></li>
+<li><strong>重要性：</strong> 这是用户最直观的感受。一个答案可能完全基于上下文（高忠实度），但如果它答非所问，或者只回答了问题的一部分，那么这个答案的相关性就很低。例如，当用户问“法国在哪里，首都是哪里？”，如果答案只是“法国在西欧”，那么虽然忠实度高，但答案相关性很低。</li>
+</ul>
+<h2 id="2-检索评估指标"><a class="markdownIt-Anchor" href="#2-检索评估指标"></a> <a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#/chapter6/18_system_evaluation?id=_21-%E6%A3%80%E7%B4%A2%E8%AF%84%E4%BC%B0">2 检索评估指标</a></h2>
+<p>这项评估借鉴了信息检索领域的多个经典指标：</p>
+<h2 id="3-响应评估"><a class="markdownIt-Anchor" href="#3-响应评估"></a> 3 <a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#/chapter6/18_system_evaluation?id=_22-%E5%93%8D%E5%BA%94%E8%AF%84%E4%BC%B0">响应评估</a></h2>
+<h2 id="4-核心评估指标"><a class="markdownIt-Anchor" href="#4-核心评估指标"></a> 4 <a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#/chapter7/20_kg_rag?id=_41-%E6%A0%B8%E5%BF%83%E8%AF%84%E4%BC%B0%E6%8C%87%E6%A0%87">核心评估指标</a></h2>
+<p>GraphRAG 的评估体系是多维度的，主要涵盖三个方面。</p>
+<p><strong>检索质量</strong>：</p>
+<ul>
+<li>传统：精确率（Precision）、召回率（Recall）、F1、命中率（Hit Rate@K）。</li>
+<li>RAG特有：
+<ul>
+<li>上下文精确率（Context Precision）= 检索到的上下文中“真正相关”的比例；</li>
+<li>上下文召回率（Context Recall）= 所有应当支持答案的“金标准证据”被检回的比例；</li>
+<li>引用/归因准确率（Citation/Attribution）= 生成答案中的关键断言是否被检索证据正确支撑。</li>
+</ul>
+</li>
+</ul>
+<p><strong>生成质量</strong>：</p>
+<ul>
+<li>问答：精确匹配（EM）、F1；</li>
+<li>摘要：ROUGE；</li>
+<li>事实一致性/忠实度（Faithfulness）：断言与证据的一致性，可配合“逐句打标+归因检查”。</li>
+</ul>
+<p><strong>系统性能</strong>：</p>
+<p>推理延迟（Latency）是从接收查询到返回最终答案所需的总时间，是衡量系统响应速度的核心指标。吞吐量（Throughput）指系统在单位时间内能处理的查询数量（QPS）。成本（Cost）包括API调用次数、计算资源（GPU/CPU）和内存消耗等。</p>
+<h1 id="七-基于知识图谱的rag-pass"><a class="markdownIt-Anchor" href="#七-基于知识图谱的rag-pass"></a> 七 <a target="_blank" rel="noopener" href="https://datawhalechina.github.io/all-in-rag/#/chapter7/20_kg_rag?id=%E7%AC%AC%E4%B8%80%E8%8A%82%EF%BC%9A%E5%9F%BA%E4%BA%8E%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1%E7%9A%84rag">基于知识图谱的RAG</a>❌ pass</h1>
+<p>将非结构化文本转化为包含实体、关系的知识图谱，以图结构组织知识，实现多跳推理与全局语义理解，核心创新如下：</p>
+<ol>
+<li><strong>知识表示革新</strong>：从传统 RAG 的文本块向量检索，升级为实体 - 关系的图结构表示，显式捕捉知识关联与领域层级。</li>
+<li><strong>检索机制升级</strong>：融合图遍历、图神经网络（GNNs）等技术，支持多跳推理，能挖掘文本间深层关联，而非仅依赖语义相似度。</li>
+<li><strong>结构引导搜索</strong>：通过图结构优化检索路径，提升大规模语料下的检索效率与准确性，同时增强答案可解释性。</li>
+</ol>
+<h1 id="八-基于howtocook项目的菜谱数据构建一个智能的食谱问答系统"><a class="markdownIt-Anchor" href="#八-基于howtocook项目的菜谱数据构建一个智能的食谱问答系统"></a> 八 基于HowToCook项目的菜谱数据，构建一个智能的食谱问答系统</h1>
+<p>用户可以：</p>
+<ul>
+<li>询问具体菜品的制作方法：“宫保鸡丁怎么做？”</li>
+<li>寻求菜品推荐：“推荐几个简单的素菜”</li>
+<li>获取食材信息：“红烧肉需要什么食材？”</li>
+</ul>
+<h2 id="整体框架"><a class="markdownIt-Anchor" href="#整体框架"></a> 整体框架</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">%% 流程图示例：判断条件分支执行</span><br><span class="line">flowchart LR</span><br><span class="line">    A[开始] --&gt; B&#123;判断条件&#125;</span><br><span class="line">    B --&gt;|条件成立| C[执行操作1]</span><br><span class="line">    B --&gt;|条件不成立| D[执行操作2]</span><br><span class="line">    C --&gt; E[结束]</span><br><span class="line">    D --&gt; E</span><br><span class="line">    </span><br><span class="line">    </span><br></pre></td></tr></table></figure>
+<p><img src="/2026/02/03/2026%E5%B9%B42%E6%9C%883%E6%97%A5-RAG0_%E5%88%9D%E6%AD%A5%E8%AE%A4%E8%AF%86/image-20260203160800027.png" alt="image-20260203160800027"></p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">code/C8/</span><br><span class="line">├── config.py                   # 配置管理</span><br><span class="line">├── main.py                     # 主程序入口</span><br><span class="line">├── requirements.txt            # 依赖列表</span><br><span class="line">├── rag_modules/               # 核心模块</span><br><span class="line">│   ├── __init__.py</span><br><span class="line">│   ├── data_preparation.py    # 数据准备模块</span><br><span class="line">│   ├── index_construction.py  # 索引构建模块</span><br><span class="line">│   ├── retrieval_optimization.py # 检索优化模块</span><br><span class="line">│   └── generation_integration.py # 生成集成模块</span><br><span class="line">└── vector_index/              # 向量索引缓存（自动生成）</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/02/03/2026%E5%B9%B42%E6%9C%883%E6%97%A5-RAG0_%E5%88%9D%E6%AD%A5%E8%AE%A4%E8%AF%86/" data-id="cmnlwuxmt000260v412i2gmu6" class="article-share-link">分享</a>
+      
+      
   <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/agent/" rel="tag">agent</a></li></ul>
 
     </footer>
@@ -1111,401 +2503,10 @@
 
 
   
-    <article id="post-2026年2月2日-agent协议Skills" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2026/02/02/2026%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E5%8D%8F%E8%AE%AESkills/" class="article-date">
-  <time class="post-time" datetime="2026-02-02T01:26:44.000Z" itemprop="datePublished">
-    <span class="post-month">2月</span><br/>
-    <span class="post-day">02</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2026/02/02/2026%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E5%8D%8F%E8%AE%AESkills/">2026年2月2日 agent Skills</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>cjb</p>
-</blockquote>
-<h2 id="skills"><a class="markdownIt-Anchor" href="#skills"></a> skills</h2>
-<p><img src="/2026/02/02/2026%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E5%8D%8F%E8%AE%AESkills/image-20260203154141223.png" alt="image-20260203154141223"></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2026/02/02/2026%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E5%8D%8F%E8%AE%AESkills/" data-id="cmme79ecn00088wv4a7e7g1nj" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/agent/" rel="tag">agent</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2026年1月30日-agent框架AutoGen" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2026/01/31/2026%E5%B9%B41%E6%9C%8830%E6%97%A5-agent%E6%A1%86%E6%9E%B6AutoGen/" class="article-date">
-  <time class="post-time" datetime="2026-01-31T07:49:16.000Z" itemprop="datePublished">
-    <span class="post-month">1月</span><br/>
-    <span class="post-day">31</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2026/01/31/2026%E5%B9%B41%E6%9C%8830%E6%97%A5-agent%E6%A1%86%E6%9E%B6AutoGen/">2026年1月30日 agent框架AutoGen</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="1-初步认识"><a class="markdownIt-Anchor" href="#1-初步认识"></a> 1 初步认识</h1>
-<p>导语</p>
-<p>AutoGen 作为微软研究院开源的编程框架，为构建可扩展、灵活且可调试的<strong>智能体协作</strong>应用提供了完备的工具与最佳实践。</p>
-<ol>
-<li><strong>什么是 AutoGen？</strong></li>
-<li><strong>安装与快速上手</strong></li>
-<li><strong>架构与核心组件</strong></li>
-<li><strong>深度解析：Agent (智能体)</strong></li>
-<li><strong>深度解析：Task (任务)</strong></li>
-<li><strong>深度解析：Tool (工具)</strong></li>
-<li><strong>深度解析：Crew (团队) 与 Process (流程)</strong></li>
-<li><strong>工作流与内部机制</strong></li>
-<li><strong>与其他框架的比较</strong></li>
-<li><strong>结语</strong></li>
-</ol>
-<h2 id="1-什么是-autogen"><a class="markdownIt-Anchor" href="#1-什么是-autogen"></a> <strong>1 什么是 AutoGen？</strong></h2>
-<p>传统的 LLM 应用框架（如 LangChain）主要采用“链式”调用（Chain）模式，适合线性、单一任务流程；但在应对复杂、长流程、需分支、循环及状态管理的场景时便显得捉襟见肘。AutoGen 从多智能体协作的角度出发，通过事件驱动的 <strong>Actor 模型</strong>，实现灵活的流程编排与动态决策</p>
-<p><strong>框架定位</strong>：AutoGen 是一个面向多智能体协作的<strong>事件驱动编程框架</strong>，支持从本地单进程到分布式云端的多语言、多节点部署 (<a href="https://link.zhihu.com/?target=https%3A//github.com/microsoft/autogen">GitHub - microsoft/autogen: A programming framework for agentic AI PyPi: autogen-agentchat Discord: https://aka.ms/autogen-discord Office Hour: https://aka.ms/autogen-officehour</a>, <a href="https://link.zhihu.com/?target=https%3A//microsoft.github.io/autogen/stable//index.html">AutoGen — AutoGen</a>)。</p>
-<p><strong>分层架构</strong>：框架分为三大核心层——Core（事件总线与运行时）、AgentChat（对话式智能体编排）、<strong>[Extensions]</strong>)（模型与工具集成），并配套 AutoGen Studio 与 Bench 等开发者工具 (<a href="https://link.zhihu.com/?target=https%3A//microsoft.github.io/autogen/0.2/blog/2024/10/02/new-autogen-architecture-preview/%3Futm_source%3Dchatgpt.com">New AutoGen Architecture Preview - Microsoft Open Source</a>, <a href="https://link.zhihu.com/?target=https%3A//www.microsoft.com/en-us/research/blog/autogen-v0-4-reimagining-the-foundation-of-agentic-ai-for-scale-extensibility-and-robustness/%3Futm_source%3Dchatgpt.com">AutoGen v0.4: Reimagining the foundation of agentic AI for scale …</a>)。</p>
-<p><strong>关键特性</strong>：支持灵活的多智能体对话、内置丰富工具（如浏览器代理、代码执行沙箱）、人机混合（Human-in-the-loop）、状态持久化与断点续跑，以及强大的可视化调试能力 (<a href="https://link.zhihu.com/?target=https%3A//github.com/AgentOps-AI/autogen-agentops%3Futm_source%3Dchatgpt.com">AgentOps-AI/autogen-agentops: A programming framework … - GitHub</a>, <a href="https://link.zhihu.com/?target=https%3A//microsoft.github.io/autogen/dev//user-guide/core-user-guide/core-concepts/architecture.html%3Futm_source%3Dchatgpt.com">Agent Runtime Environments — AutoGen - Microsoft Open Source</a>)。</p>
-<p><strong>典型应用</strong>：涵盖对话式 AI 代理、复杂业务自动化流水线、大数据 ML 编排、研发生产效率提升等多种场景 (<a href="https://link.zhihu.com/?target=https%3A//www.wired.com/story/chatbot-teamwork-makes-the-ai-dream-work%3Futm_source%3Dchatgpt.com">Chatbot Teamwork Makes the AI Dream Work</a>, <a href="https://link.zhihu.com/?target=https%3A//www.akira.ai/blog/microsoft-autogen-with-multi-agent-system%3Futm_source%3Dchatgpt.com">Microsoft AutoGen: Redefining Multi-Agent System Frameworks</a>)。</p>
-<p><strong>生态与扩展</strong>：社区活跃，拥有丰富的第三方扩展、Weekly Office Hour、Discord 实时支持、GitHub Discussions 与定期 Release 更新，形成繁荣的多智能体生态 (<a href="https://link.zhihu.com/?target=https%3A//github.com/microsoft/autogen">GitHub - microsoft/autogen: A programming framework for agentic AI PyPi: autogen-agentchat Discord: https://aka.ms/autogen-discord Office Hour: https://aka.ms/autogen-officehour</a>, <a href="https://link.zhihu.com/?target=https%3A//github.com/microsoft/Multi-Agent-Custom-Automation-Engine-Solution-Accelerator%3Futm_source%3Dchatgpt.com">The Multi-Agent Custom Automation Engine Solution Accelerator is …</a>)。</p>
-<h2 id="2-安装与快速上手"><a class="markdownIt-Anchor" href="#2-安装与快速上手"></a> 2 安装与快速上手</h2>
-<h2 id="3-架构与核心组件"><a class="markdownIt-Anchor" href="#3-架构与核心组件"></a> 3 架构与核心组件</h2>
-<p>AutoGen 生态共包含三大核心库及两大开发者工具：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">flowchart TD</span><br><span class="line">    subgraph Framework</span><br><span class="line">      A[Core 层] --&gt; B[AgentChat 层]</span><br><span class="line">      B --&gt; C[Extensions 层]</span><br><span class="line">    end</span><br><span class="line">    subgraph Tools</span><br><span class="line">      D[AutoGen Studio] &amp; E[AutoGen Bench]</span><br><span class="line">    end</span><br><span class="line">    A --&gt; D</span><br><span class="line">    C --&gt; E</span><br></pre></td></tr></table></figure>
-<h3 id="21-core-层事件驱动运行时"><a class="markdownIt-Anchor" href="#21-core-层事件驱动运行时"></a> 2.1 Core 层：事件驱动运行时</h3>
-<ul>
-<li><strong>消息总线（Event Bus）</strong>：所有智能体通过消息事件异步通信，支持本地单进程（SingleThreadedAgentRuntime）及分布式多进程（Host Servicer + Worker Gateway）部署模式 (<a href="https://link.zhihu.com/?target=https%3A//microsoft.github.io/autogen/dev//user-guide/core-user-guide/core-concepts/architecture.html%3Futm_source%3Dchatgpt.com">Agent Runtime Environments — AutoGen - Microsoft Open Source</a>)。</li>
-<li><strong>Agent 生命周期</strong>：统一管理代理的启动、停止、心跳与故障恢复，确保系统鲁棒性。</li>
-</ul>
-<h3 id="22-agentchat-层对话式-api"><a class="markdownIt-Anchor" href="#22-agentchat-层对话式-api"></a> 2.2 AgentChat 层：对话式 API</h3>
-<ul>
-<li><strong>AssistantAgent</strong>：面向单体任务的对话智能体，简化对 LLM 的调用与状态管理。</li>
-<li><strong>GroupChat</strong>：支持轮询（RoundRobin）、并发或自定义策略的多智能体群聊模式，灵活组织多角色协作流程。</li>
-<li><strong>UserProxyAgent</strong>：桥接人机交互，实现 Human-in-the-loop 与自动化流程的无缝切换 (<a href="https://link.zhihu.com/?target=https%3A//microsoft.github.io/autogen/stable//index.html">AutoGen — AutoGen</a>, <a href="https://link.zhihu.com/?target=https%3A//www.akira.ai/blog/microsoft-autogen-with-multi-agent-system%3Futm_source%3Dchatgpt.com">Microsoft AutoGen: Redefining Multi-Agent System Frameworks</a>)。</li>
-</ul>
-<h3 id="23-extensions-层工具与模型接入"><a class="markdownIt-Anchor" href="#23-extensions-层工具与模型接入"></a> 2.3 Extensions 层：工具与模型接入</h3>
-<ul>
-<li><strong>模型客户端</strong>：OpenAI、AzureOpenAI、多语言模型等多种实现，方便替换与扩展。</li>
-<li><strong>工具套件</strong>：包括 WebSurfer（浏览器交互）、DockerExecutor（代码运行沙箱）、向量数据库存储等，赋能智能体多模态与长期记忆能力。</li>
-</ul>
-<h3 id="24-开发者工具"><a class="markdownIt-Anchor" href="#24-开发者工具"></a> 2.4 开发者工具</h3>
-<ul>
-<li><strong>AutoGen Studio</strong>：零代码 GUI，用于快速原型、多智能体流程可视化与拖拽式调试 (<a href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/2408.15247%3Futm_source%3Dchatgpt.com">AutoGen Studio: A No-Code Developer Tool for Building and Debugging Multi-Agent Systems</a>)。</li>
-<li><strong>AutoGen Bench</strong>：基准测试套件，评估智能体在不同任务与模型配置下的性能与成本。</li>
-</ul>
-<h2 id="5-典型应用场景"><a class="markdownIt-Anchor" href="#5-典型应用场景"></a> 5、典型应用场景</h2>
-<h3 id="51-对话式-ai-代理"><a class="markdownIt-Anchor" href="#51-对话式-ai-代理"></a> 5.1 对话式 AI 代理</h3>
-<p>利用 GroupChat 与条件分支，可构建具备上下文记忆、多轮交互、动态决策的对话系统，如智能客服、虚拟助理等 (<a href="https://link.zhihu.com/?target=https%3A//www.wired.com/story/chatbot-teamwork-makes-the-ai-dream-work%3Futm_source%3Dchatgpt.com">Chatbot Teamwork Makes the AI Dream Work</a>, <a href="https://link.zhihu.com/?target=https%3A//microsoft.github.io/autogen/0.2/docs/Use-Cases/agent_chat/%3Futm_source%3Dchatgpt.com">Multi-agent Conversation Framework | AutoGen 0.2</a>)。</p>
-<h3 id="52-复杂流程自动化"><a class="markdownIt-Anchor" href="#52-复杂流程自动化"></a> 5.2 复杂流程自动化</h3>
-<p>在电商订单处理、IT 运维、财务报告生成等流程中，可将各子任务抽象为独立智能体，通过有向图编排，支持异常恢复与断点续跑，显著提升自动化鲁棒性 (<a href="https://link.zhihu.com/?target=https%3A//github.com/microsoft/Multi-Agent-Custom-Automation-Engine-Solution-Accelerator%3Futm_source%3Dchatgpt.com">The Multi-Agent Custom Automation Engine Solution Accelerator is …</a>, <a href="https://link.zhihu.com/?target=https%3A//www.akira.ai/blog/microsoft-autogen-with-multi-agent-system%3Futm_source%3Dchatgpt.com">Microsoft AutoGen: Redefining Multi-Agent System Frameworks</a>)。</p>
-<h3 id="53-大数据-ml-流水线"><a class="markdownIt-Anchor" href="#53-大数据-ml-流水线"></a> 5.3 大数据 ML 流水线</h3>
-<p>与 Spark、Dask 等大数据框架结合，可实现可视化、模块化的机器学习流水线设计；智能体承担数据清洗、特征工程、模型训练与评估职责，实现端到端自动化 (<a href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/2309.17288%3Futm_source%3Dchatgpt.com">AutoAgents: A Framework for Automatic Agent Generation</a>)。</p>
-<h3 id="54-研发辅助与自动化"><a class="markdownIt-Anchor" href="#54-研发辅助与自动化"></a> 5.4 研发辅助与自动化</h3>
-<p>如代码审查、PR 生成、技术文档编写等，可通过多智能体分工协作（如“作者”、“审稿人”、“格式校验”智能体），实现高效的研发自动化流程 (<a href="https://link.zhihu.com/?target=https%3A//github.com/victordibia/multiagent-systems-with-autogen%3Futm_source%3Dchatgpt.com">Building LLM-Enabled Multi Agent Applications with AutoGen - GitHub</a>, <a href="https://link.zhihu.com/?target=https%3A//www.reddit.com/r/AutoGenAI/comments/1ds56y2/i_built_a_github_pr_agent_with_autogen_and_4/%3Futm_source%3Dchatgpt.com">I built a Github PR Agent with Autogen and 4 other frameworks, Here …</a>)。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2026/01/31/2026%E5%B9%B41%E6%9C%8830%E6%97%A5-agent%E6%A1%86%E6%9E%B6AutoGen/" data-id="cml627032000l4kv4afje4wlq" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/agent/" rel="tag">agent</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2026年1月30日-agent框架crewAI" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2026/01/31/2026%E5%B9%B41%E6%9C%8830%E6%97%A5-agent%E6%A1%86%E6%9E%B6crewAI/" class="article-date">
-  <time class="post-time" datetime="2026-01-31T05:55:13.000Z" itemprop="datePublished">
-    <span class="post-month">1月</span><br/>
-    <span class="post-day">31</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2026/01/31/2026%E5%B9%B41%E6%9C%8830%E6%97%A5-agent%E6%A1%86%E6%9E%B6crewAI/">2026年1月30日 agent框架crewAI</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/1960361706967536590">https://zhuanlan.zhihu.com/p/1960361706967536590</a></p>
-</blockquote>
-<h2 id="1-初步认识"><a class="markdownIt-Anchor" href="#1-初步认识"></a> 1 初步认识</h2>
-<p><img src="/2026/01/31/2026%E5%B9%B41%E6%9C%8830%E6%97%A5-agent%E6%A1%86%E6%9E%B6crewAI/image-20260131154804874.png" alt="image-20260131154804874"></p>
-<p>导语</p>
-<p>CrewAI 是一个专为简化和协调基于<a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=264056703&amp;content_type=Article&amp;match_order=1&amp;q=%E5%A4%A7%E5%9E%8B%E8%AF%AD%E8%A8%80%E6%A8%A1%E5%9E%8B&amp;zhida_source=entity">大型语言模型</a>（LLM）的<strong>多个智能体（Multi-Agents）的协作</strong>而设计的框架。通过引**入角色扮演（Role-Playing）、任务分解（Task Decomposition）和流程控制（Process Control）**等概念，CrewAI 使得构建能够协同工作、解决复杂问题的<a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=264056703&amp;content_type=Article&amp;match_order=1&amp;q=%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E7%B3%BB%E7%BB%9F&amp;zhida_source=entity">多智能体系统</a>变得简单和高效。</p>
-<ol>
-<li><strong>什么是 CrewAI？</strong></li>
-<li><strong>安装与快速上手</strong></li>
-<li><strong>架构与核心组件</strong></li>
-<li><strong>深度解析：Agent (智能体)</strong></li>
-<li><strong>深度解析：Task (任务)</strong></li>
-<li><strong>深度解析：Tool (工具)</strong></li>
-<li><strong>深度解析：Crew (团队) 与 Process (流程)</strong></li>
-<li><strong>工作流与内部机制</strong></li>
-<li><strong>与其他框架的比较</strong></li>
-<li><strong>结语</strong></li>
-</ol>
-<h3 id="1-什么是-crewai"><a class="markdownIt-Anchor" href="#1-什么是-crewai"></a> <strong>1、什么是 CrewAI ？</strong></h3>
-<p>从零开始构建，完全独立于 LangChain 或其他代理框架。它为开发人员提供了高级的简洁性和精确的底层控制，非常适合创建适合任何场景的自主 AI 代理。</p>
-<ul>
-<li>CrewAI Crews：优化自主性和协作智能。</li>
-<li>CrewAI Flows：支持细粒度、事件驱动的控制，单个 LLM 调用精确的任务编排，并原生支持 Crews</li>
-</ul>
-<h3 id="3-架构与核心组件"><a class="markdownIt-Anchor" href="#3-架构与核心组件"></a> 3、架构与核心组件</h3>
-<p>CrewAI 让开发者不再需要手动管理智能体之间的状态、消息传递和任务交接，而是通过定义清晰的“角色”（Agents）和“任务”（Tasks），然后将它们组织进一个“团队”（Crew）中，并指定一个“工作流程”（Process），剩下的编排工作全部由框架自动完成。</p>
-<p><strong>3.1 四个核心组件概览</strong></p>
-<ol>
-<li>
-<p>Agent (智能体): 团队中的“成员”。每个 Agent 都有明确的角色、目标和背景故事，可以被赋予特定的工具来执行任务。</p>
-</li>
-<li>
-<p>Task (任务): 需要完成的“工作单元”。每个 Task 都有一份详细的描述和预期输出，并被指派给一个 Agent 来执行。</p>
-</li>
-<li>
-<p>Tool (工具): Agent 用来与外部世界交互的“能力”。这可以是任何函数或 API，例如搜索引擎、代码执行器、数据库查询接口等。</p>
-</li>
-<li>
-<p>Crew (团队): 将 Agents 和 Tasks 组织在一起的“容器”。Crew 负责根据指定的流程（Process）来编排任务的执行，管理智能体之间的协作。</p>
-</li>
-</ol>
-<p><strong>3.2 整体架构与数据流</strong></p>
-<p>1）开发工作流程：</p>
-<p><strong>定义 Agents -&gt; 定义 Tasks -&gt; 组建 Crew -&gt; 启动 (kickoff) -&gt; 产生结果</strong></p>
-<p>2）数据流向:</p>
-<ul>
-<li>
-<p>1）用户通过 crew.kickoff() 启动流程。</p>
-</li>
-<li>
-<p>2）Crew 根据 Process 决定第一个要执行的 Task。</p>
-</li>
-<li>
-<p>3）Crew 将 Task 的描述和可用的上下文（Context）传递给指定的 Agent。</p>
-</li>
-<li>
-<p>4）agent 的 LLM 大脑接收到信息，进行思考（Thought），决定下一步行动（Action），可能是使用某个 Tool，也可能是直接生成最终答案。</p>
-</li>
-<li>
-<p>5）如果使用 Tool，Agent 会执行它并获得观察结果（Observation）。</p>
-</li>
-<li>
-<p>6）Agent 将观察结果融入下一次思考，循环此过程，直到认为任务已完成。</p>
-</li>
-<li>
-<p>7）Agent 生成任务的最终输出。</p>
-</li>
-<li>
-<p>8）该 Task 的输出被存储起来，并作为下一个 Task 的上下文（Context）输入。</p>
-</li>
-<li>
-<p>9）Crew 根据 Process 启动下一个 Task，重复步骤 3-8，直到所有任务完成。</p>
-</li>
-<li>
-<p>10）Crew 返回最终的、经过整合的或最后一个任务的结果。</p>
-</li>
-</ul>
-<h3 id="4-深度解析agent-智能体"><a class="markdownIt-Anchor" href="#4-深度解析agent-智能体"></a> 4、深度解析：Agent (智能体)</h3>
-<p><strong>class Agent(BaseAgent):</strong></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Agent(</span><br><span class="line">role=『首席财务分析师』,</span><br><span class="line">goal=『分析公司的财务报表，并提供投资建议』,</span><br><span class="line">backstory=(</span><br><span class="line">    「你是一位拥有超过 <span class="number">20</span> 年经验的资深财务分析师，曾在高盛和摩根士丹利任职。」</span><br><span class="line">    「你以对细节的敏锐洞察力和从复杂数据中提取可行动见解的能力而闻名。」</span><br><span class="line">    「你精通财务建模、风险评估，并且总是以数据驱动你的每一个结论。」</span><br><span class="line">),</span><br><span class="line">llm=my_llm_instance, <span class="comment"># 例如 ChatOpenAI(model=「gpt-4o」)</span></span><br><span class="line">tools=[search_tool, financial_data_tool],</span><br><span class="line">verbose=<span class="literal">True</span>,</span><br><span class="line">memory=<span class="literal">True</span>,</span><br><span class="line">allow_delegation=<span class="literal">True</span></span><br><span class="line">）</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<ul>
-<li>role (角色)：这是 Agent 的身份标识。一个清晰的 role (如“高级软件工程师”、“市场营销总监”) 能极大地帮助 LLM 理解其行为边界和沟通风格。这是最重要的参数之一。</li>
-<li>goal (目标)：这是 Agent 的核心使命。它应该是一个清晰、简洁的句子，描述 Agent 存在的最终目的。例如，“开发高质量、可扩展的软件模块”。</li>
-<li>backstory (背景故事)： 这是 CrewAI 的一个精妙设计。backstory 为 Agent 注入了“灵魂”。一段详细的背景故事，包括其经验、技能、个性甚至工作风格，能够极大地提升 Agent 的表现。它通过丰富的上下文“预热”（prime）LLM，使其在后续任务中表现得更像一个真正的专家。</li>
-<li>llm (语言模型)：指定驱动 Agent 的具体 LLM 实例。这使得 CrewAI 具有高度灵活性，可以轻松接入 OpenAI、Google、Anthropic 的模型，甚至是本地运行的 Ollama 模型。</li>
-<li>tools (工具)：一个 Tool 对象的列表。这些是 Agent 可以用来与外部世界交互的武器。没有工具，Agent 就只能依赖其内部知识，无法获取实时信息或执行实际操作。</li>
-<li>verbose (详细模式)： 设置为 True 时，Agent 的完整思考-行动链（ReAct prompt）将被打印到控制台。这对于调试和理解 Agent 的决策过程至关重要。</li>
-<li>memory (记忆功能)：设置为 True 时，Agent 将拥有一个简单的短期记忆。它会记住在当前任务执行过程中的对话和工具使用历史，有助于在复杂的多步任务中保持上下文连贯。</li>
-<li>allow_delegation (允许委托)： 一个非常强大的功能。当设置为 True 时，如果一个 Agent 认为当前任务的某一部分超出了它的能力范围，或者由另一个 Agent 处理更合适，它可以将该子任务委托给团队中的其他 Agent。这在层级流程（Hierarchical Process）中尤其重要。</li>
-</ul>
-<h3 id="5-深度解析task-任务"><a class="markdownIt-Anchor" href="#5-深度解析task-任务"></a> 5、深度解析：Task (任务)</h3>
-<p><strong>class Task(BaseModel):</strong></p>
-<p>Task 是需要完成的具体工作。它定义了“做什么”和“期望输出什么”，并指定了“谁来做”。</p>
-<p><strong>5.1 Task 的定义与生命周期</strong></p>
-<p>一个 Task 代表了工作流中的一个步骤。它的生命周期很简单：被创建 -&gt; 被分配 -&gt; 被执行 -&gt; 完成并产出结果。这个结果将成为后续任务的重要输入。</p>
-<p><strong>5.2 关键参数详解</strong></p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">from CrewAI  import Task</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">market_analysis_task = Task(</span><br><span class="line">   description=(</span><br><span class="line">       「对 &#123;product&#125; 的市场进行全面分析。」</span><br><span class="line">       「识别主要竞争对手、他们的优势和劣势。」</span><br><span class="line">       「评估市场规模和增长潜力，并确定目标客户群体。」</span><br><span class="line">   ),</span><br><span class="line"></span><br><span class="line">   expected_output=(</span><br><span class="line">       「一份完整的市场分析报告，格式为 Markdown。」</span><br><span class="line">       「报告应包含以下部分：1. 市场概述 2. 竞争格局分析 」</span><br><span class="line">       「3. 目标客户画像 4. 市场机会与风险总结。」</span><br><span class="line">   ),</span><br><span class="line">   agent=market_researcher_agent, # 将任务指派给特定的 agent</span><br><span class="line">   context=[ competitor_analysis_task ] # 使用其他任务的输出作为上下文</span><br><span class="line">）</span><br></pre></td></tr></table></figure>
-<ul>
-<li><strong>description (描述)</strong>: 这是任务的核心。它应该是一段清晰、无歧义的指令，详细说明了 Agent 需要做什么。可以使用 {placeholder} 语法来动态插入变量，增加了任务的复用性。</li>
-<li><strong>expected_output (预期输出)</strong>: 这是成功的标尺。它精确地告诉 Agent，任务完成时应该交付什么样的成果，包括格式、结构和关键内容。一个明确的 expected_output 可以极大地提升输出结果的质量和稳定性。 agent (执行者): 指定哪个 Agent 负责执行此任务。</li>
-<li><strong>context (上下文):</strong> 这是一个 Task 对象的列表。CrewAI 会自动将 context 列表中所有任务的执行结果（result）拼接起来，作为当前任务的附加输入信息。这是实现任务间信息流动的关键机制。例如，一个“撰写博客文章”的任务，可以将一个“收集研究资料”的任务作为其上下文。</li>
-</ul>
-<h3 id="6-深度解析tool-工具"><a class="markdownIt-Anchor" href="#6-深度解析tool-工具"></a> 6、深度解析：Tool (工具)</h3>
-<p>工具是 Agent 的手和脚，使其能够不仅使用 LLM 的大脑，还可以与真实世界交互。</p>
-<p><strong>6.1 Tool 的重要性</strong></p>
-<p>LLM 的知识是静态的（截止到某个训练日期），并且它无法执行任何外部操作。工具解决了这两个核心问题：</p>
-<ul>
-<li><strong>获取实时信息</strong>: 如通过搜索引擎查询今天的新闻。</li>
-<li><strong>与外部系统交互</strong>: 如读写文件、查询数据库、调用 API。</li>
-<li><strong>执行确定性计算</strong>: 如复杂的数学运算。</li>
-</ul>
-<p><strong>6.2 使用现有工具 (LangChain Tools)</strong></p>
-<p>CrewAI 与 LangChain 生态系统无缝集成。你可以直接使用 langchain_community.tools 中已经封装好的大量工具。</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">from langchain_community.tools import DuckDuckGoSearchRun</span><br><span class="line"></span><br><span class="line">search_tool = DuckDuckGoSearchRun()</span><br><span class="line">然后在 Agent 中使用</span><br><span class="line">researcher = Agent(</span><br><span class="line">...,</span><br><span class="line">tools=[search_tool]</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<p><strong>6.3 创建自定义工具</strong></p>
-<p>CrewAI 提供了极其简单的方式来创建自定义工具——使用 @tool 装饰器。</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">from CrewAI _tools import tool</span><br><span class="line"></span><br><span class="line">@tool(“计算器工具”) </span><br><span class="line">def calculator(expression: str) -&gt; str:</span><br><span class="line">    「」「当需要进行数学计算时，使用此工具。输入应该是一个有效的数学表达式。」「」</span><br><span class="line">    try:</span><br><span class="line">       result = eval(expression)</span><br><span class="line">       return f「计算结果是: &#123;result&#125;」</span><br><span class="line">    except Exception as e:</span><br><span class="line">       return f「计算出错: &#123;e&#125;」</span><br><span class="line"># 使用</span><br><span class="line">financial_agent = Agent(</span><br><span class="line">...,</span><br><span class="line">tools=[calculator]</span><br><span class="line">）</span><br></pre></td></tr></table></figure>
-<h3 id="7-深度解析crew-团队-与-process-流程"><a class="markdownIt-Anchor" href="#7-深度解析crew-团队-与-process-流程"></a> 7、深度解析：Crew (团队) 与 Process (流程)</h3>
-<p><strong>class Crew(FlowTrackable, BaseModel):</strong></p>
-<p><strong>class Process(str, Enum):</strong></p>
-<p>Crew 是整个协作系统的指挥中心，它定义了团队的构成和工作方式。</p>
-<p><strong>7.1 Crew：智能体与任务的编排者</strong></p>
-<p>Crew 对象将定义好的 Agent 和 Task 组装起来，并配置协作流程。</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">from CrewAI  import Crew, Process</span><br><span class="line"></span><br><span class="line">my_crew = Crew(</span><br><span class="line">    agents=[researcher, writer],</span><br><span class="line">    tasks=[research_task, writing_task],</span><br><span class="line">    process=Process.sequential,  # 或者 Process.hierarchical</span><br><span class="line">    verbose=2</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<ul>
-<li>agents: 团队中的所有 Agent 成员列表。</li>
-<li>tasks: 需要完成的所有 Task 列表。</li>
-<li>process: 定义任务执行的流程。</li>
-<li>verbose: 设置详细级别。1 会打印 Agent 的行动和工具使用，2 会打印更详细的调试信息。</li>
-</ul>
-<p><strong>7.2 kickoff(): 启动团队协作</strong></p>
-<p>调用 my_crew.kickoff() 方法将正式启动整个工作流。Crew 会根据设定的 process 开始执行任务，直到所有任务完成，并返回最终结果。</p>
-<p><strong>7.3 Process：定义协作模式</strong></p>
-<p>这是 CrewAI 的核心功能之一，它决定了团队如何协作。</p>
-<ul>
-<li>顺序流程 (Sequential Process)</li>
-</ul>
-<p>这是默认的流程。任务将按照在 tasks 列表中的顺序，一个接一个地被执行。<strong>前一个任务的输出会自动成为下一个任务的上下文。</strong></p>
-<ul>
-<li>适用场景: 适用于线性的、有明确步骤依赖关系的工作流。例如：第一步调研 -&gt; 第二步写初稿 -&gt; 第三步润色。</li>
-<li>层级流程 (Hierarchical Process)</li>
-</ul>
-<p>这是一个更高级、更强大的流程。它会动态地创建一个**“管理者 Agent”**来协调整个工作流程。</p>
-<ul>
-<li>工作方式: 管理者 Agent 会审视所有待完成的任务，然后智能地决定执行顺序，甚至可以将复杂的任务分解并委托给合适的“员工 Agent”去执行。所有员工 Agent 完成任务后，会将结果汇报给管理者，由管理者进行汇总、提炼，最终形成一个高质量的综合性输出。</li>
-<li>适用场景: 适用于复杂的、非结构化的问题，需要规划、决策和综合分析的场景。例如，制定一份完整的商业计划书，需要市场分析、产品规划、财务预测等多个方面的协作</li>
-</ul>
-<h3 id="8-工作流与内部机制"><a class="markdownIt-Anchor" href="#8-工作流与内部机制"></a> <strong>8、工作流与内部机制</strong></h3>
-<p><strong>8.1 ReAct 框架：CrewAI 的思考-行动循环</strong></p>
-<p>CrewAI 的 Agent 底层采用了 ReAct (Reasoning and Acting) 框架。</p>
-<ol>
-<li>1）Thought (思考): Agent 首先会思考它需要做什么，以及如何去完成。它会分析当前的目标和已有的信息。</li>
-<li>2）Action (行动): 基于思考，Agent 决定一个行动。这个行动可能是：<br>
-使用某个 Tool，并指定输入参数。 将任务委托给另一个 Agent (如果 allow_delegation=True)。 认为任务已完成，输出最终答案 (Final Answer)。</li>
-<li>3）Observation (观察): 如果行动是使用 Tool，Agent 会得到一个执行结果，这就是“观察”。</li>
-<li>4）循环: Agent 将“观察”到的新信息融入到下一次的“思考”中，重复这个循环，直到它认为已经收集到足够的信息来完成任务。</li>
-</ol>
-<p>这个过程可以在 verbose=True 时清晰地看到，是 CrewAI 实现智能的关键。</p>
-<p><strong>8.2 上下文（Context）传递机制</strong></p>
-<p>CrewAI 通过 Task 的 context 参数和 Process 的设计，实现了上下文管理。</p>
-<ul>
-<li>显式传递: 通过在 Task 定义中指定 <strong>context=[task_A, task_B]</strong>，可以精确控制信息流。</li>
-<li>隐式传递 (顺序流程): 在顺序流程中，<strong>上一个任务的结果会自动成为下一个任务可用的上下文，无需手动指定。</strong></li>
-</ul>
-<p><strong>8.3 委托（Delegation）机制的实现</strong></p>
-<p>当 Agent 的 allow_delegation 为 True 且流程为层级模式时，Agent 的可用工具列表中会自动增加一个 delegate_work 工具。**当 Agent 在其思考过程中认为需要委托时，它会调用这个工具，并将子任务的描述和指定的接收 Agent 作为参数传入。**这个机制使得动态的任务分配和协作成为可能。</p>
-<h3 id="9-与其他框架的比较"><a class="markdownIt-Anchor" href="#9-与其他框架的比较"></a> 9、与其他框架的比较</h3>
-<p>9.1 CrewAI vs. Autogen</p>
-<ul>
-<li>Autogen (Microsoft): 更加关注于 Agent 之间的对话和交互模式（Conversation Patterns）。它非常灵活，但需要开发者更多地关注对话管理的细节。</li>
-<li>CrewAI : 更加关注于工作流和任务编排（Orchestration）。它通过 Agent, Task, Process 的抽象，提供了一个更高层次、更结构化的编程范式，使得构建目标导向的团队协作流程更为直观。</li>
-</ul>
-<p>9.2 CrewAI vs. LangGraph]</p>
-<ul>
-<li>LangGraph: 是一个基于图（Graph）的框架，将多智能体系统建模为状态图。它提供了极高的灵活性和控制力，可以构建任意复杂的循环、分支和并发流程，但学习曲线也更陡峭。</li>
-<li>CrewAI : 可以看作是 LangGraph 的一种高度抽象和特定应用。它预设了顺序和层级这两种最常见的协作模式，牺牲了一部分 LangGraph 的灵活性，换来了无与伦比的开发速度和易用性。对于大多数应用场景，CrewAI 的抽象已经足够强大。</li>
-</ul>
-<h2 id="2-委托模式深入"><a class="markdownIt-Anchor" href="#2-委托模式深入"></a> 2 委托模式深入</h2>
-<h3 id><a class="markdownIt-Anchor" href="#"></a> </h3>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2026/01/31/2026%E5%B9%B41%E6%9C%8830%E6%97%A5-agent%E6%A1%86%E6%9E%B6crewAI/" data-id="cml627033000n4kv4318c0zp7" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/agent/" rel="tag">agent</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
-    <a class="extend prev" rel="prev" href="/">&amp;laquo; pre</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/15/">15</a><a class="extend next" rel="next" href="/page/3/">next &amp;raquo;</a>
+    <a class="extend prev" rel="prev" href="/">&amp;laquo; pre</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/16/">16</a><a class="extend next" rel="next" href="/page/3/">next &amp;raquo;</a>
   </nav>
 </section>
         
@@ -1546,7 +2547,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>148</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>151</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>41</strong><br>标签</div></a>
     </div>

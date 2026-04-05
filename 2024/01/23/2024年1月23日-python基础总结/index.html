@@ -5,19 +5,19 @@
   
   <title>2024年1月23日 python语法总结 | Weakliy_Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="属性  列表  空列表获取[0] 会怎么样, 能返回 ‘’ 空字符串吗   可变对象 （如列表）  原因：直接赋值可变对象（如列表）会导致所有实例共享同一个对象，修改一个实例会影响其他实例：  1234567891011121314151617# 如果直接赋值class BadExample:    items: List[str] &#x3D; [&quot;default&quot;]  # 所有实例">
+  <meta name="description" content="Python 杂项  单个类内部的摆放顺序（最重要） 这是 PEP8 + Google 风格指南 统一规定的顺序： 类内部从上到下：  类文档字符串 类属性（类变量） __init__ 构造方法 魔术方法（__str__、__len__ 等） @property 装饰器方法 公共实例方法 私有实例方法（以 _ 开头） @staticmethod 静态方法 @classmethod 类方法  12">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2024年1月23日 python语法总结">
 <meta property="og:url" content="https://shakewely.github.io/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-python%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/index.html">
 <meta property="og:site_name" content="Weakliy_Blog">
-<meta property="og:description" content="属性  列表  空列表获取[0] 会怎么样, 能返回 ‘’ 空字符串吗   可变对象 （如列表）  原因：直接赋值可变对象（如列表）会导致所有实例共享同一个对象，修改一个实例会影响其他实例：  1234567891011121314151617# 如果直接赋值class BadExample:    items: List[str] &#x3D; [&quot;default&quot;]  # 所有实例">
+<meta property="og:description" content="Python 杂项  单个类内部的摆放顺序（最重要） 这是 PEP8 + Google 风格指南 统一规定的顺序： 类内部从上到下：  类文档字符串 类属性（类变量） __init__ 构造方法 魔术方法（__str__、__len__ 等） @property 装饰器方法 公共实例方法 私有实例方法（以 _ 开头） @staticmethod 静态方法 @classmethod 类方法  12">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://shakewely.github.io/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-python%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20250623212618377.png">
 <meta property="og:image" content="https://shakewely.github.io/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-python%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20250630224249641.png">
 <meta property="og:image" content="https://shakewely.github.io/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-python%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20250630224506782.png">
 <meta property="og:image" content="https://pic1.zhimg.com/70/v2-226c020e54407d7067a2abe194f444d8_1440w.image?source=172ae18b&biz_tag=Post">
 <meta property="article:published_time" content="2024-01-23T06:00:53.000Z">
-<meta property="article:modified_time" content="2026-03-12T03:04:59.559Z">
+<meta property="article:modified_time" content="2026-03-28T07:52:39.283Z">
 <meta property="article:author" content="Weakliy">
 <meta property="article:tag" content="python">
 <meta name="twitter:card" content="summary">
@@ -53,7 +53,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>148</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>151</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>41</strong><br>标签</div></a>
     </div>
@@ -111,7 +111,23 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="属性"><a class="markdownIt-Anchor" href="#属性"></a> 属性</h1>
+        <h1 id="python-杂项"><a class="markdownIt-Anchor" href="#python-杂项"></a> Python 杂项</h1>
+<h2 id="单个类内部的摆放顺序最重要"><a class="markdownIt-Anchor" href="#单个类内部的摆放顺序最重要"></a> <strong>单个类内部的摆放顺序（最重要）</strong></h2>
+<p>这是 <strong>PEP8 + Google 风格指南</strong> 统一规定的顺序：</p>
+<p><strong>类内部从上到下：</strong></p>
+<ol>
+<li><strong>类文档字符串</strong></li>
+<li><strong>类属性（类变量）</strong></li>
+<li><code>__init__</code> 构造方法</li>
+<li><strong>魔术方法（<code>__str__</code>、<code>__len__</code> 等）</strong></li>
+<li><strong>@property 装饰器方法</strong></li>
+<li><strong>公共实例方法</strong></li>
+<li><strong>私有实例方法（以 _ 开头）</strong></li>
+<li><strong>@staticmethod 静态方法</strong></li>
+<li><strong>@classmethod 类方法</strong></li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">模块说明：用户相关类定义</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 导入</span></span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">from</span> dataclasses <span class="keyword">import</span> dataclass</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 常量</span></span><br><span class="line">MAX_USER_COUNT = <span class="number">100</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 私有类</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">_InternalHelper</span>:</span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 公共类（内部严格按顺序摆放）</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">User</span>:</span><br><span class="line">    <span class="string">&quot;&quot;&quot;用户类，管理用户信息&quot;&quot;&quot;</span>  <span class="comment"># 1. 文档字符串</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 2. 类属性</span></span><br><span class="line">    version = <span class="string">&quot;1.0&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, name</span>):  <span class="comment"># 3. 构造方法</span></span><br><span class="line">        self.name = name</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__str__</span>(<span class="params">self</span>):  <span class="comment"># 4. 魔术方法</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">f&quot;User: <span class="subst">&#123;self.name&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">username</span>(<span class="params">self</span>):  <span class="comment"># 5. 属性方法:为了让你 “像访问变量一样调用方法”，同时还能保留方法的控制能力。</span></span><br><span class="line">        <span class="keyword">return</span> self.name.upper()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">get_info</span>(<span class="params">self</span>):  <span class="comment"># 6. 公共方法</span></span><br><span class="line">        <span class="keyword">return</span> self._format_info()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_format_info</span>(<span class="params">self</span>):  <span class="comment"># 7. 私有方法</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">f&quot;INFO: <span class="subst">&#123;self.name&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">is_valid_name</span>(<span class="params">name</span>):  <span class="comment"># 8. 静态方法</span></span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">len</span>(name) &gt; <span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="meta">    @classmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">from_dict</span>(<span class="params">cls, data</span>):  <span class="comment"># 9. 类方法</span></span><br><span class="line">        <span class="keyword">return</span> cls(data[<span class="string">&quot;name&quot;</span>])</span><br></pre></td></tr></table></figure>
+<h1 id="属性"><a class="markdownIt-Anchor" href="#属性"></a> 属性</h1>
 <h2 id="列表"><a class="markdownIt-Anchor" href="#列表"></a> 列表</h2>
 <ol>
 <li>空列表获取[0] 会怎么样, 能返回 ‘’ 空字符串吗</li>
@@ -1265,7 +1281,7 @@ from mypackage import utils  # ✅ OK，因为 utils 是个模块</p>
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>148</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>151</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>41</strong><br>标签</div></a>
     </div>

@@ -8,17 +8,17 @@
   <meta name="description" content="1   tokenizer 在这里干了什么事？ 针对这段代码： 12345encoded_input &#x3D; tokenizer(sentences, padding&#x3D;True, truncation&#x3D;True, return_tensors&#x3D;&amp;#x27;pt&amp;#x27;)print(&quot;encoded_input:&quot;,encoded_input)print(&quot;encod">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2026年3月16日 embed模型">
-<meta property="og:url" content="https://shakewely.github.io/2026/03/16/2026%E5%B9%B43%E6%9C%8816%E6%97%A5-embed%E6%A8%A1%E5%9E%8B/index.html">
+<meta property="og:url" content="https://shakewely.github.io/2026/03/16/2026%E5%B9%B43%E6%9C%8816%E6%97%A5-RAG2_%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5_/index.html">
 <meta property="og:site_name" content="Weakliy_Blog">
 <meta property="og:description" content="1   tokenizer 在这里干了什么事？ 针对这段代码： 12345encoded_input &#x3D; tokenizer(sentences, padding&#x3D;True, truncation&#x3D;True, return_tensors&#x3D;&amp;#x27;pt&amp;#x27;)print(&quot;encoded_input:&quot;,encoded_input)print(&quot;encod">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://shakewely.github.io/2026/03/16/2026%E5%B9%B43%E6%9C%8816%E6%97%A5-embed%E6%A8%A1%E5%9E%8B/image-20260316140726691.png">
-<meta property="og:image" content="https://shakewely.github.io/2026/03/16/2026%E5%B9%B43%E6%9C%8816%E6%97%A5-embed%E6%A8%A1%E5%9E%8B/image-20260316140736376.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/03/16/2026%E5%B9%B43%E6%9C%8816%E6%97%A5-RAG2_%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5_/image-20260316140726691.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/03/16/2026%E5%B9%B43%E6%9C%8816%E6%97%A5-RAG2_%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5_/image-20260316140736376.png">
 <meta property="article:published_time" content="2026-03-16T05:43:51.000Z">
-<meta property="article:modified_time" content="2026-03-17T05:36:46.869Z">
+<meta property="article:modified_time" content="2026-04-04T01:41:08.495Z">
 <meta property="article:author" content="Weakliy">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://shakewely.github.io/2026/03/16/2026%E5%B9%B43%E6%9C%8816%E6%97%A5-embed%E6%A8%A1%E5%9E%8B/image-20260316140726691.png">
+<meta name="twitter:image" content="https://shakewely.github.io/2026/03/16/2026%E5%B9%B43%E6%9C%8816%E6%97%A5-RAG2_%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5_/image-20260316140726691.png">
   
     <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
   
@@ -50,7 +50,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>148</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>151</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>41</strong><br>标签</div></a>
     </div>
@@ -76,9 +76,9 @@
   </div>
 </div>
 
-        <section id="main"><article id="post-2026年3月16日-embed模型" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-2026年3月16日-RAG2_工程实践_" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2026/03/16/2026%E5%B9%B43%E6%9C%8816%E6%97%A5-embed%E6%A8%A1%E5%9E%8B/" class="article-date">
+    <a href="/2026/03/16/2026%E5%B9%B43%E6%9C%8816%E6%97%A5-RAG2_%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5_/" class="article-date">
   <time class="post-time" datetime="2026-03-16T05:43:51.000Z" itemprop="datePublished">
     <span class="post-month">3月</span><br/>
     <span class="post-day">16</span>
@@ -252,7 +252,7 @@
 <h5 id="我进行了长自然语言的测试"><a class="markdownIt-Anchor" href="#我进行了长自然语言的测试"></a> 我进行了长自然语言的测试，</h5>
 <p>这样相似度也高很多， 似乎就是和你说的结构一样的原因吗？所以是不是 这个模型其实不适合我这个系统（因为我的数据都是json转出的）</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">SENTENCE_A = <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">作品编号：HUNTC-001影片标题：肖申克的救赎！经典纪念版！希望与自由的故事！只要坚持信念，即使身处监狱也能找到属于自己的救赎！系列名称：肖申克的救赎！导演：弗兰克・达拉邦特片长：220 分钟制作公司：Castle Rock Entertainment发行公司：华纳兄弟发行日期：2023-11-10类型标签：励志、经典电影、监狱题材、友情、希望、逃狱、高画质</span></span><br><span class="line"><span class="string">剧情简介：1947 年，银行家安迪・杜弗伦因涉嫌谋杀妻子及其情人被判无期徒刑，进入肖申克州立监狱服刑。他在狱中结识了资深囚犯瑞德，两人逐渐成为挚友。安迪利用自己的金融才能帮助监狱人员，同时默默坚持内心的希望与自由梦想，面对残酷的监狱环境与腐败制度，他一步步策划属于自己的救赎之路。最终，这部经典作品传达出『希望是件好事，也许是人间至善』的深刻主题。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">SENTENCE_B = <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">作品编号：FRANK-002影片标题：绿里奇迹！弗兰克・达拉邦特经典之作！关于人性、慈悲与奇迹的深刻寓言！系列名称：绿里奇迹导演：弗兰克・达拉邦特片长：185 分钟制作公司：Castle Rock Entertainment发行公司：华纳兄弟发行日期：2023-12-05类型标签：剧情、奇幻、人性、救赎、经典、监狱</span></span><br><span class="line"><span class="string">剧情简介：1932 年，冷山监狱死囚区的狱长保罗，遇到了拥有神秘治愈能力的大块头黑人约翰・科菲。他虽被指控犯下残忍罪行，内心却善良纯净。在死囚区的日子里，约翰用奇迹般的力量温暖了身边的人，也让保罗开始重新思考生命、罪恶与救赎。影片以温柔又沉重的方式，探讨人性善恶与世间的无奈与慈悲。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">SENTENCE_C = <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">作品编号：STEPHEN-001影片标题：功夫！周星驰巅峰之作！无厘头与武侠的完美结合！笑中带泪的经典传奇！系列名称：功夫导演：周星驰片长：100 分钟制作公司：星辉海外有限公司发行公司：华纳兄弟发行日期：2024-01-15类型标签：喜剧、动作、武侠、无厘头、经典、励志</span></span><br><span class="line"><span class="string">剧情简介：街头小混混星仔一心想加入斧头帮，却阴差阳错闯入了藏龙卧虎的猪龙城寨。这里看似平凡的居民，个个都是隐世高手。星仔在一次次闹剧与危机中，逐渐认清善恶，找回内心的正义，最终领悟武学真谛，成为真正的绝世高手，用功夫守护身边的人。影片将无厘头喜剧与武侠精神完美融合，成为经典。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br></pre></td></tr></table></figure>
-<p><img src="/2026/03/16/2026%E5%B9%B43%E6%9C%8816%E6%97%A5-embed%E6%A8%A1%E5%9E%8B/image-20260316140726691.png" alt="image-20260316140726691"></p>
+<p><img src="/2026/03/16/2026%E5%B9%B43%E6%9C%8816%E6%97%A5-RAG2_%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5_/image-20260316140726691.png" alt="image-20260316140726691"></p>
 <blockquote>
 <h3 id="是的主要就是结构相似在主导相似度"><a class="markdownIt-Anchor" href="#是的主要就是结构相似在主导相似度"></a> 是的，主要就是“结构相似”在主导相似度</h3>
 <p>你这三段长文本（A/B/C）都有大量相同结构与共同词汇，比如：</p>
@@ -312,7 +312,7 @@
 </blockquote>
 <h6 id="需要把相似度要表达的重点设计"><a class="markdownIt-Anchor" href="#需要把相似度要表达的重点设计"></a> <strong>需要把“相似度要表达的重点”设计</strong></h6>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">SENTENCE_A = <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">肖申克的救贖！經典紀念版！希望與自由的故事！只要堅持信念，即使身處監獄也能找到屬於自己的救贖！1947 年，銀行家安迪被冤入獄，在肖申克監獄中憑藉智慧與堅韌，堅守希望，最終完成自我救贖，詮釋「希望是人間至善」。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">SENTENCE_B = <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">绿里奇迹！弗蘭克・達拉邦特經典之作！關於人性、慈悲與奇蹟的深刻寓言！1932 年死囚監獄中，擁有神奇治癒能力的黑人科菲，用善良與奇蹟感化眾人，探討生命、罪惡與慈悲。&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br><span class="line">SENTENCE_C = <span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"><span class="string">功夫！周星馳巔峰之作！無厘頭與武俠的完美結合！笑中帶淚的經典傳奇！小混混星仔陰差陽錯闖入臥虎藏龍的豬籠城寨，在經歷成長後找回正義，成為絕世高手守護身邊之人。</span></span><br><span class="line"><span class="string">&#x27;&#x27;&#x27;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p><img src="/2026/03/16/2026%E5%B9%B43%E6%9C%8816%E6%97%A5-embed%E6%A8%A1%E5%9E%8B/image-20260316140736376.png" alt="image-20260316140736376"></p>
+<p><img src="/2026/03/16/2026%E5%B9%B43%E6%9C%8816%E6%97%A5-RAG2_%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5_/image-20260316140736376.png" alt="image-20260316140736376"></p>
 <blockquote></blockquote>
 <h3 id="结构数据写成metadata"><a class="markdownIt-Anchor" href="#结构数据写成metadata"></a> 结构数据写成metadata</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">doc = &#123;</span><br><span class="line">  &quot;id&quot;: &quot;HUNTC-001&quot;,</span><br><span class="line">  &quot;text&quot;: &quot;标题：...\n导演：...\n类型：...\n剧情：...&quot;,</span><br><span class="line">  &quot;metadata&quot;: &#123;</span><br><span class="line">    &quot;dvdid&quot;: &quot;HUNTC-001&quot;,</span><br><span class="line">    &quot;director&quot;: &quot;弗蘭克·達拉邦特&quot;,</span><br><span class="line">    &quot;genre&quot;: [&quot;励志&quot;,&quot;经典电影&quot;,&quot;监狱题材&quot;],</span><br><span class="line">    &quot;publish_date&quot;: &quot;2023-11-10&quot;,</span><br><span class="line">    &quot;duration&quot;: 220,</span><br><span class="line">    &quot;serial&quot;: &quot;肖申克的救赎&quot;,</span><br><span class="line">    &quot;site&quot;: &quot;__merged__&quot;,</span><br><span class="line">    &quot;url&quot;: None,</span><br><span class="line">    &quot;cover&quot;: &quot;https://...&quot;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -394,9 +394,128 @@
 <p>越小越相近，不是越大越相近。</p>
 </li>
 </ul>
-<h1 id="rag-测试"><a class="markdownIt-Anchor" href="#rag-测试"></a> RAG 测试</h1>
+<h2 id="长度限制"><a class="markdownIt-Anchor" href="#长度限制"></a> 长度限制</h2>
+<h3 id="1024和2048有什么区别"><a class="markdownIt-Anchor" href="#1024和2048有什么区别"></a> 1024和2048有什么区别</h3>
+<ul>
+<li>
+<p>存储与内存开销</p>
+<ul>
+<li>
+<p>上限越大，Milvus 为该列预留/管理的空间、以及 segment/缓存相关开销通常越高。</p>
+</li>
+<li>
+<p>但注意：只有当你实际写入的字符串更长时，整体数据量才会明显增加；如果大多数 title 仍很短，差异不一定很明显。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>写入/查询传输成本</p>
+<ul>
+<li>
+<p>返回结果里如果包含这个字段，字符串更长会让网络传输更大，序列化/反序列化更慢。</p>
+</li>
+<li>
+<p>这对“只做向量检索、只需要 id/少量元数据”的场景是纯负担。</p>
+</li>
+</ul>
+</li>
+<li>
+<p>检索相关能力</p>
+<ul>
+<li>
+<p>max_length 变大不会提升向量召回效果；向量检索主要看 embedding 与向量索引。</p>
+</li>
+<li>
+<p>只有当你需要在 Milvus 里做基于该字段的过滤/输出展示时，才有意义。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="因为-query-太短"><a class="markdownIt-Anchor" href="#因为-query-太短"></a> 因为 query 太短?</h2>
+<blockquote>
+<h3 id="query-语义不足"><a class="markdownIt-Anchor" href="#query-语义不足"></a> Query 语义不足</h3>
+<p>用户输入：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">school</span><br></pre></td></tr></table></figure>
+<p>系统不知道用户想找：</p>
+<ul>
+<li>school romance</li>
+<li>school horror</li>
+<li>school documentary</li>
+<li>school drama</li>
+</ul>
+<p>所以：</p>
+<p><strong>召回会比较泛</strong>。</p>
+<p>解决方法有 3 种。</p>
+<hr>
+<h1 id="5-方法一最推荐query-rewrite"><a class="markdownIt-Anchor" href="#5-方法一最推荐query-rewrite"></a> 5 方法一（最推荐）：Query Rewrite</h1>
+<p>先让 LLM 扩展 query。</p>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">school and students</span><br></pre></td></tr></table></figure>
+<p>rewrite 成：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">movies about school life, students, classroom, teachers, and high school environment</span><br></pre></td></tr></table></figure>
+<p>再 embedding。</p>
+<p>RAG 中很常见：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Query → Rewrite → Embedding → Vector search</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="6-方法二hybrid-search"><a class="markdownIt-Anchor" href="#6-方法二hybrid-search"></a> 6 方法二：Hybrid Search</h1>
+<p>结合：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">vector search</span><br><span class="line">+</span><br><span class="line">keyword search</span><br></pre></td></tr></table></figure>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">school AND student</span><br></pre></td></tr></table></figure>
+<p>然后 rerank。</p>
+<p>很多系统：</p>
+<ul>
+<li>OpenAI retrieval</li>
+<li>Cohere reranker</li>
+</ul>
+<p>都是这样做。</p>
+<hr>
+<h1 id="7-方法三reranker工业级方案"><a class="markdownIt-Anchor" href="#7-方法三reranker工业级方案"></a> 7 方法三：Reranker（工业级方案）</h1>
+<p>先：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Milvus Top 50</span><br></pre></td></tr></table></figure>
+<p>然后：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CrossEncoder rerank</span><br></pre></td></tr></table></figure>
+<p>例如模型：</p>
+<ul>
+<li>bge-reranker-large</li>
+<li>ms-marco-MiniLM-L-12-v2</li>
+</ul>
+<p>流程：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">query</span><br><span class="line">   ↓</span><br><span class="line">embedding</span><br><span class="line">   ↓</span><br><span class="line">Milvus top50</span><br><span class="line">   ↓</span><br><span class="line">reranker</span><br><span class="line">   ↓</span><br><span class="line">top5</span><br></pre></td></tr></table></figure>
+<p>效果会好很多。</p>
+</blockquote>
+<h2 id="可以把插入改成-upsert"><a class="markdownIt-Anchor" href="#可以把插入改成-upsert"></a> 可以把插入改成 upsert</h2>
+<p>（如果你当前 pymilvus 版本支持）或先按 ident 删除再插入。</p>
+<h1 id="rag"><a class="markdownIt-Anchor" href="#rag"></a> RAG</h1>
+<h2 id="数据利用"><a class="markdownIt-Anchor" href="#数据利用"></a> 数据利用</h2>
+<table>
+<thead>
+<tr>
+<th>字段</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>title</td>
+<td>keyword搜索</td>
+</tr>
+<tr>
+<td>genre</td>
+<td>filter</td>
+</tr>
+<tr>
+<td>plot</td>
+<td>RAG展示</td>
+</tr>
+<tr>
+<td>rewrite</td>
+<td>embedding</td>
+</tr>
+</tbody>
+</table>
 <h2 id="查询方式"><a class="markdownIt-Anchor" href="#查询方式"></a> 查询方式</h2>
-<h3 id="1-titleplot-向量化直接查询"><a class="markdownIt-Anchor" href="#1-titleplot-向量化直接查询"></a> 1 title+plot 向量化直接查询</h3>
+<h3 id="1-向量化直接查询titleplot"><a class="markdownIt-Anchor" href="#1-向量化直接查询titleplot"></a> 1 向量化直接查询(title+plot ) ❌</h3>
 <p>queries = [</p>
 <p>“监狱逃脱的经典电影”,</p>
 <p>“弗兰克·达拉邦特 拍的电影”,</p>
@@ -482,11 +601,409 @@
 <li>但仍混入偏动作 / 悬疑的片</li>
 </ul>
 </blockquote>
+<h3 id="2-基于-metadata-先过滤导演再做向量检索"><a class="markdownIt-Anchor" href="#2-基于-metadata-先过滤导演再做向量检索"></a> 2 基于 metadata 先过滤导演，再做向量检索</h3>
+<h3 id="3-混合索引-️"><a class="markdownIt-Anchor" href="#3-混合索引-️"></a> 3 混合索引 ✔️</h3>
+<p>倒排序+向量查询</p>
+<ul>
+<li>
+<p>用关键词引擎（BM25）召回 topN（例如 200）</p>
+</li>
+<li>
+<p>重排（Rerank）：</p>
+</li>
+<li>
+<p>再用向量相似度 / cross-encoder / LLM rerank 把 topN 排序成 topK</p>
+</li>
+</ul>
+<p>实现</p>
+<ul>
+<li>
+<p>多字段加权索引（比如 title 权重更高）</p>
+</li>
+<li>
+<p>简单 metadata 过滤（等值/包含/自定义函数）</p>
+</li>
+<li>
+<p>默认 tokenizer：</p>
+</li>
+</ul>
+<h2 id="结果测试与改进措施"><a class="markdownIt-Anchor" href="#结果测试与改进措施"></a> 结果测试与改进措施</h2>
+<ol>
+<li>向量结果不理想</li>
+<li>倒排序还行</li>
+</ol>
+<p>从之前的测试来看：</p>
+<ul>
+<li>纯向量搜索效果差 → 因为 embedding 质量低 + 噪声多。</li>
+<li>BM25 在 title 上很强。</li>
+<li>Hybrid 目前拉跨 → 很大概率是因为 embedding（title+plot）质量不高，导致向量分数拖累了 BM25 的好信号。</li>
+</ul>
+<h3 id="1-针对embedd"><a class="markdownIt-Anchor" href="#1-针对embedd"></a> 1 针对embedd</h3>
+<blockquote>
+<p>title + plot 简单拼接（甚至不加分隔符）容易出现以下问题：</p>
+<ul>
+<li><strong>噪声干扰</strong>：JAV title 极长、重复、堆砌色情词；plot 也很啰嗦、重复标题内容。模型容易把注意力分散到无关高频词（busty、creampie、virgin 等）上，而不是核心主题（“定額挿れ放題 + school”）。</li>
+<li><strong>长度问题</strong>：很多 embedding 模型有上下文长度限制（e.g. 512 tokens），长拼接可能被截断。</li>
+</ul>
+</blockquote>
+<p>尝试使用除了title + plot 的其他组合, 但是效果一般, 除了带gene有提升</p>
+<h4 id="10-更换embed模型-️"><a class="markdownIt-Anchor" href="#10-更换embed模型-️"></a> 1.0 更换embed模型  ✔️</h4>
+<p>之前的模型对语义理解不好更换:</p>
+<h4 id="11-vector过长"><a class="markdownIt-Anchor" href="#11-vector过长"></a> 1.1 vector过长?  ❌</h4>
+<p>并没有. 只有一条数据, 过长而已, 更换策略有未出现该问题</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Token indices sequence length is longer than the specified maximum sequence length <span class="keyword">for</span> this model (<span class="number">2016</span> &gt; <span class="number">512</span>). Running this sequence through the model will result <span class="keyword">in</span> indexing errors</span><br></pre></td></tr></table></figure>
+<h4 id="12-用llm-生成专用-embedding-文本-️"><a class="markdownIt-Anchor" href="#12-用llm-生成专用-embedding-文本-️"></a> 1.2 <strong>用LLM 生成专用 embedding 文本</strong>： ✔️</h4>
+<blockquote>
+<ul>
+<li>输入：title + plot + genre 等</li>
+<li>输出：一段<strong>简洁、去噪、突出主题</strong>的自然语言描述，例如 “定額挿れ放題系列 学校版 男学生可以无限制插入班上女学生和女教师 10人大规模拍摄 中出 多P 高清”</li>
+</ul>
+</blockquote>
+<h5 id="结果"><a class="markdownIt-Anchor" href="#结果"></a> 结果</h5>
+<p><strong>使用llm生成预览,避免噪声</strong>, 效果好</p>
+<h4 id="13-内容特化处理"><a class="markdownIt-Anchor" href="#13-内容特化处理"></a> 1.3 **内容特化处理 **❌</h4>
+<blockquote>
+<p>构建一个<strong>主题ontology</strong>（unlimited-fixed-price系列、teacher-student、school-life等），做query <strong>rewriting</strong>或分类路由。</p>
+</blockquote>
+<p>这种其实没必要, 可以采用关键词搜索, 不需要再向量搜索里使用</p>
+<h4 id="14-多向量multi-vector策略-️"><a class="markdownIt-Anchor" href="#14-多向量multi-vector策略-️"></a> 1.4 多向量（Multi-vector）策略 ✔️</h4>
+<p>：在 Milvus 中存两个向量</p>
+<blockquote>
+<ul>
+<li>一个 embed(title + serial)</li>
+<li>一个 embed(plot summary)</li>
+<li>查询时做 multi-vector hybrid search</li>
+</ul>
+</blockquote>
+<p>把 Milvus collection schema 扩展成 两个向量字段（比如 vector_title_genre 和 vector_plot），并把 add_movies/search 支持指定字段（或一次写入两套向量）。</p>
+<p>效果比较好, 虽然可能增加延迟, 但是增加了准确性</p>
+<h5 id="结果-2"><a class="markdownIt-Anchor" href="#结果-2"></a> 结果</h5>
+<ol>
+<li>初步看是有提升的, 至少q4现在能查询到</li>
+<li>但是还有有些不足, 比如第一名分数不是很相关</li>
+<li><strong>title效果, 似乎真的比plot好用</strong></li>
+</ol>
+<h4 id="15-无关信息污染-️"><a class="markdownIt-Anchor" href="#15-无关信息污染-️"></a> 1.5 无关信息污染 ✔️</h4>
+<p>营销标题污染,</p>
+<h4 id="16-语义漂移"><a class="markdownIt-Anchor" href="#16-语义漂移"></a> 1.6 语义漂移</h4>
+<p>query: 通过智慧越狱</p>
+<p>在捕捉 “智慧”</p>
+<blockquote>
+<p>输出:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">赌圣</span><br><span class="line">plot: 用智慧与赌术对抗邪恶势力</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h4 id="17-最终-embed-格式参考"><a class="markdownIt-Anchor" href="#17-最终-embed-格式参考"></a> 1.7 最终 Embed 格式参考</h4>
+<p><strong>核心原则</strong>：</p>
+<ul>
+<li>高信息密度 ✔️</li>
+<li>突出系列名 +  <s>核心角色关系 +关键标签</s>  (核心角色关系+标签句子总结)</li>
+<li>严格控制长度，去除营销废话 ✔️</li>
+<li>使用 /分隔，让模型更容易理解结构 ✔️</li>
+</ul>
+<h5 id="结果-3"><a class="markdownIt-Anchor" href="#结果-3"></a> 结果</h5>
+<ol>
+<li>初步看是有提升的, 至少q4现在能查询到</li>
+</ol>
+<p><strong>为什么这个格式更好？</strong></p>
+<ul>
+<li><strong>信息密度高</strong>：把最重要的信号（系列、角色关系、标签）放在最前面。</li>
+<li><strong>噪声极低</strong>：去掉了 rating、aroma、dripping wet 等<strong>营销废话</strong>。</li>
+<li><strong>结构清晰</strong>： 分隔让模型更容易学习不同部分的重要性。</li>
+<li><strong>对 Query Rewriting 友好</strong>：当你 rewrite 成 教師 生徒 性交 男教師 女學生 时，能和文档向量更好地对齐。</li>
+</ul>
+<h3 id="2-针对rewriting"><a class="markdownIt-Anchor" href="#2-针对rewriting"></a> 2 针对rewriting</h3>
+<h1 id="todo-21-llm-对用户query扩充语义"><a class="markdownIt-Anchor" href="#todo-21-llm-对用户query扩充语义"></a> TODO 2.1 llm 对用户query扩充语义</h1>
+<blockquote>
+<h3 id><a class="markdownIt-Anchor" href="#"></a> </h3>
+</blockquote>
+<h4 id="22-rewrite-embed"><a class="markdownIt-Anchor" href="#22-rewrite-embed"></a> 2.2  rewrite embed</h4>
+<blockquote>
+<h3 id="最终版-embedding-文本格式强烈建议采用"><a class="markdownIt-Anchor" href="#最终版-embedding-文本格式强烈建议采用"></a> 最终版 Embedding 文本格式（强烈建议采用）</h3>
+<p>使用一个小 LLM（甚至 7B~14B 的本地模型即可）把每条数据处理成下面这种<strong>简洁、高信息密度</strong>的格式：</p>
+<p>text</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">定額挿れ放題系列 学校版 男学生可无限制插入女学生和女教师 10人大规模拍摄 中出 滥交 高清</span><br><span class="line"></span><br><span class="line">乱伦 姐弟 兄妹浴室洗澡 秘密性关系 从小一起洗澡 长大后发生性行为 高清</span><br><span class="line"></span><br><span class="line">NTR 按摩 药媚 婚前情侣 女友被隔壁按摩师中出 男友被迫观看 单向镜 巨乳按摩师 生中出 高清</span><br></pre></td></tr></table></figure>
+<h3 id="具体-prompt可直接使用"><a class="markdownIt-Anchor" href="#具体-prompt可直接使用"></a> 具体 Prompt（可直接使用）</h3>
+<p>Python</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">prompt = &quot;&quot;&quot;</span><br><span class="line">你是一个专业的 JAV 视频元数据提炼专家。请将以下信息浓缩成**一句话**的 embedding 文本。</span><br><span class="line">要求：</span><br><span class="line">- 优先保留系列名（如定額挿れ放題、Magic Mirror、Hunter等）</span><br><span class="line">- 突出核心玩法、关系、场景（学校、教师、学生、乱伦、NTR、按摩、浴室等）</span><br><span class="line">- 必须包含主要标签（中出、滥交、单体、药媚、出轨、高清等）</span><br><span class="line">- 语言精炼，总长度控制在 80~150 字以内</span><br><span class="line">- 使用中文和日文混合，关键词尽量靠前</span><br><span class="line">- 不要加入任何评价、评分、营销词</span><br><span class="line"></span><br><span class="line">genre: &#123;genre&#125;</span><br><span class="line">title: &#123;title&#125;</span><br><span class="line">plot: &#123;plot&#125;</span><br><span class="line"></span><br><span class="line">请直接输出提炼后的一行文本，不要加任何解释：</span><br><span class="line">&quot;&quot;&quot;</span><br></pre></td></tr></table></figure>
+<h3 id="实际处理后的推荐示例按你的三条数据"><a class="markdownIt-Anchor" href="#实际处理后的推荐示例按你的三条数据"></a> 实际处理后的推荐示例（按你的三条数据）</h3>
+<p><strong>第1条（推荐输出）：</strong></p>
+<p>text</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">定額挿れ放題系列 学校版 男学生无限制插入女学生和女教师 10人大规模 中出 滥交 多P 高清</span><br></pre></td></tr></table></figure>
+<p><strong>第2条（推荐输出）：</strong></p>
+<p>text</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">乱伦 兄妹 姐弟浴室洗澡 从小一起洗澡 长大后秘密性交 近亲相奸 高清</span><br></pre></td></tr></table></figure>
+<p><strong>第3条（推荐输出）：</strong></p>
+<p>text</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Magic Mirror NTR 按摩 药媚 婚前情侣 女友被隔壁中出 男友单向镜被迫观看 巨乳按摩师 生中出 高清</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="实施建议"><a class="markdownIt-Anchor" href="#实施建议"></a> 实施建议</h3>
+<ol>
+<li><strong>立刻用上面 Prompt</strong> 对全量数据重新生成 embedding 文本。</li>
+<li>把生成的结果存到一个新字段，例如 embed_text。</li>
+<li>用这个 embed_text 字段去生成向量（而不是原始 title+plot）。</li>
+<li>重新入库后，再跑一次你之前的 4 个 queries 测试 hybrid search。</li>
+</ol>
+</blockquote>
+<h4 id="221-为什么拆分成一个个关键信息点"><a class="markdownIt-Anchor" href="#221-为什么拆分成一个个关键信息点"></a> 2.2.1 为什么拆分成一个个关键信息点?</h4>
+<blockquote>
+<p><strong>向量嵌入（embedding）确实是基于“语义”的，但“语义”并不是你想象中那种“越长越自然越好”的完整段落。</strong> 这正是很多人对 embedding 的最大误解。</p>
+<p>让我用最直白的方式解释<strong>为什么我们要把文本“拆分成一个个关键信息点”（或结构化、精炼成短句/关键词列表），而不是直接扔整段长文本</strong>：</p>
+<h3 id="1-向量模型的实际工作原理不是魔法"><a class="markdownIt-Anchor" href="#1-向量模型的实际工作原理不是魔法"></a> 1. 向量模型的实际工作原理（不是魔法）</h3>
+<ul>
+<li>
+<p>Embedding 模型（如你现在用的那个）会把输入文本<strong>切成 token</strong>（词或子词），然后计算每个 token 的重要性，并生成一个固定维度的向量。</p>
+</li>
+<li>
+<p>它的目标是：<strong>让语义相近的内容在向量空间里距离更近</strong>。</p>
+</li>
+<li>
+<p>但模型</p>
+<p>注意力是有限的</p>
+<p>（尤其是上下文长度限制在 512~8192 token 的模型）。如果输入文本又臭又长、充满重复和废话，它就会：</p>
+<ul>
+<li>把注意力分散到无关的高频词上（比如“dripping wet”“musky aroma”“4.47 rating”“guaranteed to find the perfect”等营销废话）。</li>
+<li>核心语义（“学校”“女学生”“女教師”“无限制插入”“定額挿れ放題”）被稀释，导致向量不够“尖锐”。</li>
+</ul>
+</li>
+</ul>
+<p>结果就是：<strong>两个真正相关的 JAV 作品，向量相似度反而低</strong>；而一些标题里堆了很多通用色情词的无关作品，反而分数更高。</p>
+</blockquote>
+<h3 id="3-针对metadata"><a class="markdownIt-Anchor" href="#3-针对metadata"></a> 3  针对metadata</h3>
+<h4 id="31-添加metadata查询️"><a class="markdownIt-Anchor" href="#31-添加metadata查询️"></a> 3.1 添加metadata查询✔️</h4>
+<p>效果不错, 过滤 导演 后准确率提升很多</p>
+<h4 id="32-先metadata过滤再vector-search-️"><a class="markdownIt-Anchor" href="#32-先metadata过滤再vector-search-️"></a> 3.2 先metadata过滤再vector search ✔️</h4>
+<h4 id="33-metadata用于bm25查询-️"><a class="markdownIt-Anchor" href="#33-metadata用于bm25查询-️"></a> 3.3 metadata用于bm25查询 ✔️</h4>
+<h3 id="4-re-ranker"><a class="markdownIt-Anchor" href="#4-re-ranker"></a> 4 Re-ranker</h3>
+<h4 id="41-加入-re-ranker"><a class="markdownIt-Anchor" href="#41-加入-re-ranker"></a> 4.1 加入 Re-ranker</h4>
+<p>召回 top 30~50 后，用 cross-encoder reranker 重新打分排序。 这通常能把最相关的学校版直接顶到 Top 1~3。</p>
+<h4 id="42-为什么要用重排"><a class="markdownIt-Anchor" href="#42-为什么要用重排"></a> 4.2 为什么要用重排</h4>
+<p>向量检索有一个问题：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">召回能力强</span><br><span class="line">但排序能力弱</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>例如：</p>
+<p>query:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">通过智慧越狱的电影</span><br></pre></td></tr></table></figure>
+<p>向量召回：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1 金蝉脱壳</span><br><span class="line">2 监狱风云</span><br><span class="line">3 肖申克的救赎</span><br><span class="line">4 战争片</span><br><span class="line">5 爱情片</span><br></pre></td></tr></table></figure>
+<p><strong>Reranker 会重新排序</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">1 肖申克的救赎</span><br><span class="line">2 金蝉脱壳</span><br><span class="line">3 监狱风云</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h1 id="todo-43-加入后效果"><a class="markdownIt-Anchor" href="#todo-43-加入后效果"></a> TODO 4.3 加入后效果</h1>
+<h3 id="5-关键词搜索"><a class="markdownIt-Anchor" href="#5-关键词搜索"></a> 5 关键词搜索</h3>
+<h4 id="51-支持短语查询"><a class="markdownIt-Anchor" href="#51-支持短语查询"></a> 5.1 支持短语查询</h4>
+<blockquote>
+<p>让 BM25 支持 “fixed price”“unlimited sex” 等短语匹配，进一步提升精度。</p>
+</blockquote>
+<h4 id="52-加入-genre-tags-过滤-️"><a class="markdownIt-Anchor" href="#52-加入-genre-tags-过滤-️"></a> 5.2 加入 genre / tags 过滤  ✔️</h4>
+<blockquote>
+<p>如果你的数据里有 genre 或 tags 字段（如 “school”, “teacher”），可以增加 filter_eq 或 boost。</p>
+</blockquote>
+<p>已经实现, 效果也不错</p>
+<h3 id="6-模型原因"><a class="markdownIt-Anchor" href="#6-模型原因"></a> 6 模型原因</h3>
+<blockquote>
+<ol>
+<li>
+<p><strong>Embedding 模型本身较弱</strong>（最主要原因） 当前 embedder 对<strong>细粒度剧情语义</strong>（尤其是角色关系：teacher ↔ student sex）理解能力差。在 JAV 这个标题极度模板化、噪声极大的领域，表现尤其糟糕。</p>
+<blockquote>
+<p>✔️ 已经有能力的提升, 目前对关键词搜索还可以; 但是还有待测试语义</p>
+</blockquote>
+</li>
+<li>
+<p><strong>Embedding 文本构造极差</strong> 你目前用的 genre + title 长文本，让模型学到了太多无关噪声，几乎无法突出 “教師與學生性交” 这个关键语义。</p>
+</li>
+<li>
+<p><strong>缺少强信号字段</strong> 你的数据里有 serial（系列名）、director、plot，但 embedding 时几乎8</p>
+</li>
+</ol>
+</blockquote>
+<p>向量模型<strong>根本没有理解 “teacher sex with students” 这个特定禁忌关系</strong>，而是把查询粗暴拆解成了 <strong>“high school” + “sex” + “students”</strong> 这几个高频词，然后匹配了任何带“高中/学校/学生”标签的作品。</p>
+<h4 id="61-向量模型根本没有理解️"><a class="markdownIt-Anchor" href="#61-向量模型根本没有理解️"></a> 6.1 向量模型根本没有理解✔️</h4>
+<p>更换模型有确实有一定的提升,</p>
+<p>至少在文本匹配上, <code>定额</code>的成功率上升了. 效果明显</p>
+<h4 id="62-embedding-模型对特定语义的适配较弱"><a class="markdownIt-Anchor" href="#62-embedding-模型对特定语义的适配较弱"></a> 6.2  Embedding 模型对特定语义的适配较弱❌</h4>
+<p>大部分通用 embedding 模型（尤其是英文为主的）对 教師生徒性交、定額挿れ放題 这类高度特定、禁忌、公式化的日文 JAV 语义理解能力有限。</p>
+<h3 id="7-query"><a class="markdownIt-Anchor" href="#7-query"></a> 7 query</h3>
+<h4 id="71-query问题"><a class="markdownIt-Anchor" href="#71-query问题"></a> 7.1 query问题</h4>
+<p>举个最直观的例子（用你关心的两个查询对比）：</p>
+<ul>
+<li><strong>Query A</strong>： “Unlimited sex with anyone for a fixed price school students teachers” → 这句话关键词很明确，<strong>BM25 能打得很准</strong>，向量优势不大。</li>
+<li><strong>Query B</strong>： “我想看老师和女学生偷偷在学校做爱的片子” 或 “A movie about high school teacher sex with his students” → 这时候<strong>BM25 很容易失效</strong>（因为标题里很少同时出现 “teacher sex with students” 这种精确组合），而<strong>好的向量</strong>能通过语义理解把“教师×学生性爱”这个隐含意图匹配出来。</li>
+</ul>
+<h4 id="72-query-rewrite-️"><a class="markdownIt-Anchor" href="#72-query-rewrite-️"></a> 7.2 query rewrite ♾️</h4>
+<h3 id="8-merge策略"><a class="markdownIt-Anchor" href="#8-merge策略"></a> 8 merge策略</h3>
+<h4 id="81-是什么"><a class="markdownIt-Anchor" href="#81-是什么"></a> 8.1 是什么</h4>
+<p>在**多路召回（Multi-Recall）**中，<code>Merge</code> 是：</p>
+<blockquote>
+<p><strong>把多个 Retriever 返回的候选结果融合成一个统一候选集合，并生成一个排序依据。</strong></p>
+</blockquote>
+<h4 id="82-merge策略"><a class="markdownIt-Anchor" href="#82-merge策略"></a> 8.2 merge策略</h4>
+<h4 id="最简单的union-merge并集合并"><a class="markdownIt-Anchor" href="#最简单的union-merge并集合并"></a> 最简单的：Union Merge（并集合并）</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">vector_docs + keyword_docs + sql_docs</span><br></pre></td></tr></table></figure>
+<h4 id="score-merge分数融合"><a class="markdownIt-Anchor" href="#score-merge分数融合"></a> Score Merge（分数融合）</h4>
+<p>把多个检索器的 score 加权。</p>
+<p>公式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">score = α * vector_score + β * bm25_score</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>doc</th>
+<th>vector</th>
+<th>bm25</th>
+<th>final</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>0.8</td>
+<td>2.1</td>
+<td>1.2</td>
+</tr>
+<tr>
+<td>B</td>
+<td>0.6</td>
+<td>3.0</td>
+<td>1.4</td>
+</tr>
+</tbody>
+</table>
+<h4 id="rank-fusion排序融合"><a class="markdownIt-Anchor" href="#rank-fusion排序融合"></a> Rank Fusion（排序融合）</h4>
+<p>不使用 score，而是使用 <strong>检索器中的排名</strong>。</p>
+<p><strong>Reciprocal Rank Fusion（RRF）</strong></p>
+<p>公式：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">score(d) = Σ 1 / (k + rank_i(d))</span><br><span class="line">rank_i(d) = 文档在第 i 个检索器中的排名</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>doc</th>
+<th>vector rank</th>
+<th>bm25 rank</th>
+<th>score</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>1</td>
+<td>5</td>
+<td>高</td>
+</tr>
+<tr>
+<td>B</td>
+<td>3</td>
+<td>1</td>
+<td>高</td>
+</tr>
+<tr>
+<td>C</td>
+<td>10</td>
+<td>2</td>
+<td>中</td>
+</tr>
+</tbody>
+</table>
+<h4 id="weighted-rank-fusion"><a class="markdownIt-Anchor" href="#weighted-rank-fusion"></a> Weighted Rank Fusion</h4>
+<p>RRF 的加权版本。</p>
+<h4 id="interleaving交叉合并"><a class="markdownIt-Anchor" href="#interleaving交叉合并"></a> Interleaving（交叉合并）</h4>
+<p>轮流取结果。</p>
+<h4 id="learning-to-rank-merge高级"><a class="markdownIt-Anchor" href="#learning-to-rank-merge高级"></a> Learning-to-Rank Merge（高级）</h4>
+<p>训练一个模型学习融合。</p>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">                   User Query</span><br><span class="line">                       │</span><br><span class="line">                       ▼</span><br><span class="line">                Query Preprocess</span><br><span class="line">          (clean / normalize / detect)</span><br><span class="line">                       │</span><br><span class="line">                       ▼</span><br><span class="line">               Query Understanding</span><br><span class="line">       (intent detect / rewrite / expand)</span><br><span class="line">                       │</span><br><span class="line">          ┌────────────┼────────────┐</span><br><span class="line">          │            │            │</span><br><span class="line">          ▼            ▼            ▼</span><br><span class="line">    Vector Query   Keyword Query   SQL Query</span><br><span class="line">          │            │            │</span><br><span class="line">          ▼            ▼            ▼</span><br><span class="line"></span><br><span class="line">┌──────────────────────────────────────────┐</span><br><span class="line">│              Multi Recall                │</span><br><span class="line">│                                          │</span><br><span class="line">│  Vector Retriever   Keyword Retriever    │</span><br><span class="line">│  (Embedding)        (BM25 / Inverted)    │</span><br><span class="line">│                                          │</span><br><span class="line">│  SQL Retriever      Metadata Retriever   │</span><br><span class="line">│  (DB / Schema)      (tag / filter)       │</span><br><span class="line">└───────────────┬───────────────┬──────────┘</span><br><span class="line">                │               │</span><br><span class="line">                ▼               ▼</span><br><span class="line">         Candidate Docs    Structured Data</span><br><span class="line">                        │</span><br><span class="line">                        ▼</span><br><span class="line">                       Merge</span><br><span class="line">              (union / RRF / deduplicate)</span><br><span class="line">                        │</span><br><span class="line">                        ▼</span><br><span class="line">                   Top-K Candidates</span><br><span class="line">                        │</span><br><span class="line">                        ▼</span><br><span class="line">                     Reranker</span><br><span class="line">           (Cross Encoder / BGE Reranker)</span><br><span class="line">                        │</span><br><span class="line">                        ▼</span><br><span class="line">                   Top-N Results</span><br><span class="line">                        │</span><br><span class="line">                        ▼</span><br><span class="line">               Context Compression</span><br><span class="line">        (chunk select / summarization)</span><br><span class="line">                        │</span><br><span class="line">                        ▼</span><br><span class="line">                  Prompt Builder</span><br><span class="line">             (system + context + query)</span><br><span class="line">                        │</span><br><span class="line">                        ▼</span><br><span class="line">                       LLM</span><br><span class="line">                        │</span><br><span class="line">                        ▼</span><br><span class="line">                      Answer</span><br></pre></td></tr></table></figure>
+<h2 id="测试数据集"><a class="markdownIt-Anchor" href="#测试数据集"></a> 测试数据集</h2>
+<h3 id="1-怎么选"><a class="markdownIt-Anchor" href="#1-怎么选"></a> 1. 怎么选?</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">维度</th>
+<th style="text-align:left">为什么重要</th>
+<th style="text-align:left">怎么选</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">标题形态</td>
+<td style="text-align:left">你很多 <code>title</code> 带大量营销句，BM25/向量行为与「短标题」不同</td>
+<td style="text-align:left">长标题若干 + <code>serial</code> 很短若干 + 中英混排（若有）</td>
+</tr>
+<tr>
+<td style="text-align:left">实体可辨度</td>
+<td style="text-align:left">同导演多部、同类型同主题易混</td>
+<td style="text-align:left">同一 <code>director</code> 至少 2～3 部；主题相近（如都带「監獄」「救贖」）各 1～2 部</td>
+</tr>
+<tr>
+<td style="text-align:left">类型覆盖</td>
+<td style="text-align:left">向量与关键词对不同 genre 敏感度不同</td>
+<td style="text-align:left"><code>genre</code> 里主类型尽量铺开（剧情/喜剧/动作/…），避免 80% 都是一种</td>
+</tr>
+<tr>
+<td style="text-align:left">文本长度</td>
+<td style="text-align:left"><code>plot</code> 极短 vs 很长影响截断、chunk、BM25 字段长度</td>
+<td style="text-align:left">最短、最长各若干条</td>
+</tr>
+<tr>
+<td style="text-align:left">时间</td>
+<td style="text-align:left"><code>publish_date</code> 分布若偏新或偏旧，过滤/排序可能偏置</td>
+<td style="text-align:left">按年份或季度分桶，每桶至少 1 部</td>
+</tr>
+<tr>
+<td style="text-align:left">稀缺 vs 头部</td>
+<td style="text-align:left">冷门片检索更难；热门片易被相似片淹没</td>
+<td style="text-align:left">各若干（不必严格比例，但两类都要有）</td>
+</tr>
+<tr>
+<td style="text-align:left">数据干净度</td>
+<td style="text-align:left"><code>plot</code> 空/极短、<code>genre</code> 空、字段异常</td>
+<td style="text-align:left">若有，单独做「脏数据桶」各 1～2 条，看系统是否优雅降级</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<blockquote>
+<p>queries = [</p>
+<h1 id="1-主题剧情类测试语义理解"><a class="markdownIt-Anchor" href="#1-主题剧情类测试语义理解"></a> 1. 主题/剧情类（测试语义理解）</h1>
+<p>​    “越狱的剧情”,<br>
+​    “关于父爱和救赎的电影”,<br>
+​    “讲末日灾难人类求生的故事”,<br>
+​    “少年成长冒险的治愈动画”,<br>
+​    “高智商犯罪反转的悬疑片”,</p>
+<h1 id="2-类型风格类测试-genre-匹配"><a class="markdownIt-Anchor" href="#2-类型风格类测试-genre-匹配"></a> 2. 类型/风格类（测试 genre 匹配）</h1>
+<p>​    “推荐经典动作大片”,<br>
+​    “搞笑解压的喜剧电影”,<br>
+​    “适合全家看的治愈动画”,<br>
+​    “紧张刺激的惊悚悬疑片”,<br>
+​    “热血励志的运动电影”,</p>
+<h1 id="3-实体导演ip类测试实体召回"><a class="markdownIt-Anchor" href="#3-实体导演ip类测试实体召回"></a> 3. 实体/导演/IP类（测试实体召回）</h1>
+<p>​    “宫崎骏有哪些好看的动画”,<br>
+​    “周星驰的无厘头喜剧”,<br>
+​    “漫威超级英雄系列”,<br>
+​    “香港经典警匪电影”,<br>
+​    “诺兰导演的科幻片”,</p>
+<h1 id="4-短标题关键词类测试-bm25"><a class="markdownIt-Anchor" href="#4-短标题关键词类测试-bm25"></a> 4. 短标题/关键词类（测试 BM25）</h1>
+<p>​    “肖申克”,<br>
+​    “千与千寻”,<br>
+​    “无间道”,<br>
+​    “速度与激情”,<br>
+​    “哈利波特”,</p>
+<h1 id="5-长句自然query测试向量语义"><a class="markdownIt-Anchor" href="#5-长句自然query测试向量语义"></a> 5. 长句自然query（测试向量语义）</h1>
+<p>​    “有没有讲监狱里人性和希望的电影”,<br>
+​    “适合心情不好看的温暖治愈电影”,<br>
+​    “特效震撼的怪兽科幻大片”,<br>
+​    “反转很多结局猜不到的悬疑片”,<br>
+​    “关于青春校园爱情的电影”,</p>
+<h1 id="6-泛化模糊查询测试泛化能力"><a class="markdownIt-Anchor" href="#6-泛化模糊查询测试泛化能力"></a> 6. 泛化/模糊查询（测试泛化能力）</h1>
+<p>​    “好看的经典电影”,<br>
+​    “高分必看动画”,<br>
+​    “催泪感人的片子”,<br>
+​    “硬核烧脑电影”,<br>
+​    “江湖武侠动作片”<br>
+]</p>
+</blockquote>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2026/03/16/2026%E5%B9%B43%E6%9C%8816%E6%97%A5-embed%E6%A8%A1%E5%9E%8B/" data-id="cmmuaf4q2000158v4api4asmo" class="article-share-link">分享</a>
+      <a data-url="https://shakewely.github.io/2026/03/16/2026%E5%B9%B43%E6%9C%8816%E6%97%A5-RAG2_%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5_/" data-id="cmnlwuxmz000460v49uu57780" class="article-share-link">分享</a>
       
       
     </footer>
@@ -494,6 +1011,15 @@
   
     
 <nav id="article-nav">
+  
+    <a href="/2026/03/21/2026%E5%B9%B43%E6%9C%8821%E6%97%A5-agent%E6%A1%86%E6%9E%B6langchain-agent/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          2026年3月21日 agent框架langchain_agent
+        
+      </div>
+    </a>
   
   
     <a href="/2026/03/11/2026%E5%B9%B43%E6%9C%8811%E6%97%A5-%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/" id="article-nav-older" class="article-nav-link-wrap">
@@ -547,7 +1073,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>148</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>151</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>41</strong><br>标签</div></a>
     </div>

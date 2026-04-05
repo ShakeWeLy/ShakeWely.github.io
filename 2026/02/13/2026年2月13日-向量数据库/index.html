@@ -5,12 +5,12 @@
   
   <title>2026年2月13日 向量数据库 | Weakliy_Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="s   向量数据库   1 向量    embedding  高维向量&#x3D; 多个特征  2 数据库      作用  相似搜索 提升性能    评价指标    3 应用场景   4 搜索(相似性搜索)  距离   点几   余弦相似度   高维空间里，*方向差异明显 → 余弦距离特别好用  语义 embedding 的特点：  向量长度不代表语义，只代表 “强度” 真正决定意思相不相近的是方向">
+  <meta name="description" content="s   向量数据库  0 为什么要专门的向量数据库 如果用 MySQL 这类传统数据库存储向量（比如把向量存成字符串 &#x2F; 数组），会遇到两个无法解决的痛点：   1. 检索速度极慢（暴力计算，无法扩展） 要找相似向量，传统数据库只能做 “暴力遍历”：  对每一个存储的向量，计算它和查询向量的 “距离”（比如余弦相似度）； 如果有 100 万个 768 维向量，就要做 100 万次高维距离计算，单">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2026年2月13日 向量数据库">
 <meta property="og:url" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/index.html">
 <meta property="og:site_name" content="Weakliy_Blog">
-<meta property="og:description" content="s   向量数据库   1 向量    embedding  高维向量&#x3D; 多个特征  2 数据库      作用  相似搜索 提升性能    评价指标    3 应用场景   4 搜索(相似性搜索)  距离   点几   余弦相似度   高维空间里，*方向差异明显 → 余弦距离特别好用  语义 embedding 的特点：  向量长度不代表语义，只代表 “强度” 真正决定意思相不相近的是方向">
+<meta property="og:description" content="s   向量数据库  0 为什么要专门的向量数据库 如果用 MySQL 这类传统数据库存储向量（比如把向量存成字符串 &#x2F; 数组），会遇到两个无法解决的痛点：   1. 检索速度极慢（暴力计算，无法扩展） 要找相似向量，传统数据库只能做 “暴力遍历”：  对每一个存储的向量，计算它和查询向量的 “距离”（比如余弦相似度）； 如果有 100 万个 768 维向量，就要做 100 万次高维距离计算，单">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316165521138.png">
 <meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171119459.png">
@@ -51,7 +51,7 @@
 <meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260224163056074.png">
 <meta property="og:image" content="https://shakewely.github.io/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260224163828349.png">
 <meta property="article:published_time" content="2026-02-13T02:59:23.000Z">
-<meta property="article:modified_time" content="2026-03-17T05:44:36.659Z">
+<meta property="article:modified_time" content="2026-03-17T08:17:24.522Z">
 <meta property="article:author" content="Weakliy">
 <meta property="article:tag" content="agent">
 <meta name="twitter:card" content="summary">
@@ -87,7 +87,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>148</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>151</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>41</strong><br>标签</div></a>
     </div>
@@ -149,6 +149,126 @@
 <p>s</p>
 </blockquote>
 <h1 id="向量数据库"><a class="markdownIt-Anchor" href="#向量数据库"></a> 向量数据库</h1>
+<h2 id="0-为什么要专门的向量数据库"><a class="markdownIt-Anchor" href="#0-为什么要专门的向量数据库"></a> 0 为什么要专门的向量数据库</h2>
+<p>如果用 MySQL 这类<strong>传统数据库存储向量</strong>（比如把向量存成字符串 / 数组），会遇到两个无法解决的痛点：</p>
+<blockquote>
+<h4 id="1-检索速度极慢暴力计算无法扩展"><a class="markdownIt-Anchor" href="#1-检索速度极慢暴力计算无法扩展"></a> 1. 检索速度极慢（暴力计算，无法扩展）</h4>
+<p>要找相似向量，传统数据库只能做 “暴力遍历”：</p>
+<ul>
+<li>对每一个存储的向量，计算它和查询向量的 “距离”（比如余弦相似度）；</li>
+<li>如果有 100 万个 768 维向量，就要做 100 万次高维距离计算，单查询可能要几秒甚至几十秒，完全无法满足实时需求（比如用户输入后要快速返回结果）。</li>
+</ul>
+<h4 id="2-无法处理高维数据的-维度灾难"><a class="markdownIt-Anchor" href="#2-无法处理高维数据的-维度灾难"></a> 2. 无法处理高维数据的 “维度灾难”</h4>
+<p>向量的维度越高（比如 1000 维以上），传统的索引方式（B + 树、哈希等）完全失效：</p>
+<ul>
+<li>高维空间中，“距离” 的意义会变得模糊（所有向量之间的距离都差不多）；</li>
+<li>传统数据库没有针对高维向量的优化，存储和计算效率会断崖式下降。</li>
+</ul>
+<h4 id="3-功能缺失"><a class="markdownIt-Anchor" href="#3-功能缺失"></a> 3. 功能缺失</h4>
+<p>传统数据库没有针对向量的专用功能：比如动态添加 / 删除向量、按相似度排序、批量嵌入、数据持久化优化等，需要自己手写大量代码实现，且效率极低。</p>
+</blockquote>
+<p><strong>向量数据库的核心价值就是 “高效处理相似性检索”，主要体现在：</strong></p>
+<blockquote>
+<h4 id="1-优化的索引算法核心"><a class="markdownIt-Anchor" href="#1-优化的索引算法核心"></a> 1. 优化的索引算法（核心）</h4>
+<p>向量数据库内置了专门的<strong>近似最近邻（ANN）算法</strong>（比如 HNSW、FAISS、IVF 等），能把 “暴力遍历” 的时间复杂度从 <code>O(n)</code> 降到 <code>O(log n)</code>：</p>
+<ul>
+<li>比如 100 万个向量的检索，从几秒缩短到<strong>毫秒级</strong>；</li>
+<li>牺牲极少量的精度（可配置），换取极致的速度，完全满足实时场景。</li>
+</ul>
+<h4 id="2-针对高维向量的存储优化"><a class="markdownIt-Anchor" href="#2-针对高维向量的存储优化"></a> 2. 针对高维向量的存储优化</h4>
+<ul>
+<li>对向量进行压缩、量化（比如把 32 位浮点数转成 8 位整数），大幅减少存储空间；</li>
+<li>优化内存布局，让向量计算更贴合 CPU/GPU 的缓存机制，提升计算效率。</li>
+</ul>
+<h4 id="3-专为向量场景设计的功能"><a class="markdownIt-Anchor" href="#3-专为向量场景设计的功能"></a> 3. 专为向量场景设计的功能</h4>
+<ul>
+<li>支持批量嵌入（自动把文本转向量并存入）；</li>
+<li>支持元数据过滤（比如检索 “水果相关” 且相似度高的向量）；</li>
+<li>支持增量更新（动态添加 / 删除向量，无需重建整个索引）；</li>
+<li>支持分布式部署（处理亿级向量的大规模场景）。</li>
+</ul>
+</blockquote>
+<h3 id="常见向量数据库"><a class="markdownIt-Anchor" href="#常见向量数据库"></a> <strong>常见向量数据库</strong></h3>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>数据库</th>
+<th>类型</th>
+<th>开源</th>
+<th>性能</th>
+<th>运维</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Milvus</strong></td>
+<td>分布式向量库</td>
+<td>✅</td>
+<td>极高</td>
+<td>中</td>
+<td>大规模生产、企业级</td>
+</tr>
+<tr>
+<td><strong>Qdrant</strong></td>
+<td>轻量向量库</td>
+<td>✅</td>
+<td>高</td>
+<td>低</td>
+<td>中小型、边缘、快速开发</td>
+</tr>
+<tr>
+<td><strong>Weaviate</strong></td>
+<td>向量 + 图</td>
+<td>✅</td>
+<td>中高</td>
+<td>中</td>
+<td>语义搜索、知识图谱</td>
+</tr>
+<tr>
+<td><strong>Chroma</strong></td>
+<td>轻量嵌入式</td>
+<td>✅</td>
+<td>中</td>
+<td>极低</td>
+<td>原型、学习、小项目</td>
+</tr>
+<tr>
+<td><strong>Pinecone</strong></td>
+<td>云托管</td>
+<td>❌</td>
+<td>高</td>
+<td>极低</td>
+<td>零运维、快速上线</td>
+</tr>
+<tr>
+<td><strong>Pgvector</strong></td>
+<td>PostgreSQL 扩展</td>
+<td>✅</td>
+<td>中</td>
+<td>低</td>
+<td>复用 PG 栈、混合查询</td>
+</tr>
+<tr>
+<td><strong>RedisVL</strong></td>
+<td>Redis 扩展</td>
+<td>✅</td>
+<td>极高</td>
+<td>低</td>
+<td>实时、低延迟、缓存</td>
+</tr>
+<tr>
+<td><strong>FAISS</strong></td>
+<td>算法库</td>
+<td>✅</td>
+<td>极高</td>
+<td>高</td>
+<td>科研、离线、底层优化</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
 <img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316165521138.png" alt="image-20260316165521138" style="zoom: 67%;">
 <h2 id="1-向量"><a class="markdownIt-Anchor" href="#1-向量"></a> 1 向量</h2>
 <img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316171119459.png" alt="image-20260316171119459" style="zoom:67%;">
@@ -266,6 +386,29 @@
 <h3 id="混合搜索"><a class="markdownIt-Anchor" href="#混合搜索"></a> 混合搜索</h3>
 <img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316165813058.png" alt="image-20260316165813058" style="zoom: 67%;">
 <img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316165843605.png" alt="image-20260316165843605" style="zoom:80%;">
+<h4 id="关键词搜索"><a class="markdownIt-Anchor" href="#关键词搜索"></a> 关键词搜索:</h4>
+<p>做法：</p>
+<ol>
+<li>
+<ul>
+<li>把每条电影的 title/director/plot/genre 等字段写入搜索引擎</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>建倒排索引（分词）</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>query 做分词后跑 BM25，返回 topK</li>
+</ul>
+</li>
+</ol>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">queries = [</span><br><span class="line">    <span class="string">&quot;监狱逃脱的经典电影&quot;</span>,</span><br><span class="line">    <span class="string">&quot;弗兰克·达拉邦特 拍的电影&quot;</span>,</span><br><span class="line">    <span class="string">&quot;无厘头喜剧 功夫打斗&quot;</span>,</span><br><span class="line">    <span class="string">&quot;海绵宝宝&quot;</span>,</span><br><span class="line">]</span><br><span class="line">index = BM25Index(fields=&#123;<span class="string">&quot;title&quot;</span>: <span class="number">2.0</span>, <span class="string">&quot;plot&quot;</span>: <span class="number">1.0</span>, <span class="string">&quot;director&quot;</span>: <span class="number">3.0</span>, <span class="string">&quot;genre&quot;</span>: <span class="number">1.0</span>&#125;)</span><br><span class="line"><span class="comment"># print(movies)</span></span><br><span class="line">index.add_documents(movies, id_key=<span class="string">&quot;dvdid&quot;</span>)  <span class="comment"># movies_example.json 里是 dvdid</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 2) 关键词检索：导演意图（等值过滤）</span></span><br><span class="line"><span class="keyword">for</span> q <span class="keyword">in</span> queries:</span><br><span class="line">    hits = index.search(</span><br><span class="line">    query= q,</span><br><span class="line">    top_k=<span class="number">10</span>,</span><br><span class="line">    <span class="comment"># filter_eq=&#123;&quot;director&quot;: &quot;弗蘭克·達拉邦特&quot;&#125;,</span></span><br><span class="line">)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;query:&quot;</span>, q)</span><br><span class="line">    <span class="keyword">for</span> h <span class="keyword">in</span> hits:</span><br><span class="line">        <span class="built_in">print</span>(h.score, h.doc.get(<span class="string">&quot;title&quot;</span>), h.doc.get(<span class="string">&quot;director&quot;</span>))</span><br></pre></td></tr></table></figure>
+<blockquote></blockquote>
+<h4 id="混合检索最实用关键词召回-向量重排或反过来"><a class="markdownIt-Anchor" href="#混合检索最实用关键词召回-向量重排或反过来"></a> 混合检索（最实用）：关键词召回 + 向量重排（或反过来）</h4>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">query: 监狱逃脱的经典电影</span></span><br><span class="line"><span class="function">8.217518413066625 越狱协议！真实事件改编！从华尔街精英到监狱囚徒的救赎！ 马库斯·高勒</span></span><br><span class="line"><span class="function">6.233823286878385 功夫！周星驰巅峰之作！无厘头与武侠的完美结合！笑中带泪的经典传奇！ 周星馳</span></span><br><span class="line"><span class="function">5.785495712647374 绿里奇迹！弗兰克·达拉邦特经典之作！关于人性、慈悲与奇迹的深刻寓言！ 弗蘭克·達拉邦特</span></span><br><span class="line"><span class="function">3.6703058496265872 赌圣！周星驰成名之作！无厘头喜剧开山之作！爆笑又经典！ 周星馳、劉鎮偉</span></span><br><span class="line"><span class="function">1.3657808880264422 海绵宝宝！永恒童年经典！治愈全世界的快乐小海绵！ 史蒂芬·希倫伯格</span></span><br><span class="line"><span class="function">1.3340229817409925 <span class="title">E.T</span>.外星人！最温柔的科幻经典！跨越星际的纯真友情！ 史蒂文·斯皮爾伯格</span></span><br><span class="line"><span class="function">1.0478153318395904 狮子王！迪士尼永恒经典！勇气与成长的史诗童话！ 罗杰·阿勒斯</span></span><br><span class="line"><span class="function">1.0186852729162292 侏罗纪公园！科幻冒险开山之作！恐龙世界的震撼经典！ 史蒂文·斯皮爾伯格</span></span><br><span class="line"><span class="function">0.9670372743711524 美丽人生！奥斯卡经典！父爱与勇气的最美赞歌！笑着流泪的神作！ 羅貝托·貝尼尼</span></span><br><span class="line"><span class="function">0.9670372743711524 心灵捕手！治愈无数人的励志经典！天才与自我救赎的成长之路！ 格斯·范·桑特</span></span><br><span class="line"><span class="function"><span class="title">query</span>: 弗兰克·达拉邦特 拍的电影</span></span><br><span class="line"><span class="function">59.802190761471635 绿里奇迹！弗兰克·达拉邦特经典之作！关于人性、慈悲与奇迹的深刻寓言！ 弗蘭克·達拉邦特</span></span><br><span class="line"><span class="function">21.868479864137754 肖申克的救贖！經典紀念版！希望與自由的故事！只要堅持信念，即使身處監獄也能找到屬於自己的救贖！ 弗蘭克·達拉邦特</span></span><br><span class="line"><span class="function">7.799911547034155 她！未来式爱情神作！写给现代人的孤独治愈诗！ 斯派克·琼斯</span></span><br><span class="line"><span class="function"><span class="title">query</span>: 无厘头喜剧 功夫打斗</span></span><br><span class="line"><span class="function">29.926343267198604 功夫！周星驰巅峰之作！无厘头与武侠的完美结合！笑中带泪的经典传奇！ 周星馳</span></span><br><span class="line"><span class="function">28.292612614974527 赌圣！周星驰成名之作！无厘头喜剧开山之作！爆笑又经典！ 周星馳、劉鎮偉</span></span><br><span class="line"><span class="function">27.776460176092158 少林足球！周星驰经典喜剧！功夫与足球的梦幻结合！坚持梦想终会发光！ 周星馳</span></span><br><span class="line"><span class="function">2.0508644717722775 美食总动员！皮克斯暖心动画！一只小老鼠的顶级厨师梦！ 布拉德·伯德</span></span><br><span class="line"><span class="function">2.0508644717722775 海绵宝宝！永恒童年经典！治愈全世界的快乐小海绵！ 史蒂芬·希倫伯格</span></span><br><span class="line"><span class="function"><span class="title">query</span>: 海绵宝宝</span></span><br><span class="line"><span class="function">33.88108631247046 海绵宝宝！永恒童年经典！治愈全世界的快乐小海绵！ 史蒂芬·希倫伯格</span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"></span></span><br></pre></td></tr></table></figure>
 <h3 id="索引"><a class="markdownIt-Anchor" href="#索引"></a> 索引</h3>
 <p>给点进行索引(产生数据结构:图表…)</p>
 <img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316215411466.png" alt="image-20260316215411466" style="zoom:50%;">
@@ -309,122 +452,83 @@
 <p><img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316223859404.png" alt="image-20260316223859404"></p>
 <p><img src="/2026/02/13/2026%E5%B9%B42%E6%9C%8813%E6%97%A5-%E5%90%91%E9%87%8F%E6%95%B0%E6%8D%AE%E5%BA%93/image-20260316223912290.png" alt="image-20260316223912290"></p>
 <h2 id><a class="markdownIt-Anchor" href="#"></a> </h2>
-<h2 id="为什么要专门的向量数据库"><a class="markdownIt-Anchor" href="#为什么要专门的向量数据库"></a> 为什么要专门的向量数据库</h2>
-<p>如果用 MySQL 这类<strong>传统数据库存储向量</strong>（比如把向量存成字符串 / 数组），会遇到两个无法解决的痛点：</p>
-<blockquote>
-<h4 id="1-检索速度极慢暴力计算无法扩展"><a class="markdownIt-Anchor" href="#1-检索速度极慢暴力计算无法扩展"></a> 1. 检索速度极慢（暴力计算，无法扩展）</h4>
-<p>要找相似向量，传统数据库只能做 “暴力遍历”：</p>
-<ul>
-<li>对每一个存储的向量，计算它和查询向量的 “距离”（比如余弦相似度）；</li>
-<li>如果有 100 万个 768 维向量，就要做 100 万次高维距离计算，单查询可能要几秒甚至几十秒，完全无法满足实时需求（比如用户输入后要快速返回结果）。</li>
-</ul>
-<h4 id="2-无法处理高维数据的-维度灾难"><a class="markdownIt-Anchor" href="#2-无法处理高维数据的-维度灾难"></a> 2. 无法处理高维数据的 “维度灾难”</h4>
-<p>向量的维度越高（比如 1000 维以上），传统的索引方式（B + 树、哈希等）完全失效：</p>
-<ul>
-<li>高维空间中，“距离” 的意义会变得模糊（所有向量之间的距离都差不多）；</li>
-<li>传统数据库没有针对高维向量的优化，存储和计算效率会断崖式下降。</li>
-</ul>
-<h4 id="3-功能缺失"><a class="markdownIt-Anchor" href="#3-功能缺失"></a> 3. 功能缺失</h4>
-<p>传统数据库没有针对向量的专用功能：比如动态添加 / 删除向量、按相似度排序、批量嵌入、数据持久化优化等，需要自己手写大量代码实现，且效率极低。</p>
-</blockquote>
-<p><strong>向量数据库的核心价值就是 “高效处理相似性检索”，主要体现在：</strong></p>
-<blockquote>
-<h4 id="1-优化的索引算法核心"><a class="markdownIt-Anchor" href="#1-优化的索引算法核心"></a> 1. 优化的索引算法（核心）</h4>
-<p>向量数据库内置了专门的<strong>近似最近邻（ANN）算法</strong>（比如 HNSW、FAISS、IVF 等），能把 “暴力遍历” 的时间复杂度从 <code>O(n)</code> 降到 <code>O(log n)</code>：</p>
-<ul>
-<li>比如 100 万个向量的检索，从几秒缩短到<strong>毫秒级</strong>；</li>
-<li>牺牲极少量的精度（可配置），换取极致的速度，完全满足实时场景。</li>
-</ul>
-<h4 id="2-针对高维向量的存储优化"><a class="markdownIt-Anchor" href="#2-针对高维向量的存储优化"></a> 2. 针对高维向量的存储优化</h4>
-<ul>
-<li>对向量进行压缩、量化（比如把 32 位浮点数转成 8 位整数），大幅减少存储空间；</li>
-<li>优化内存布局，让向量计算更贴合 CPU/GPU 的缓存机制，提升计算效率。</li>
-</ul>
-<h4 id="3-专为向量场景设计的功能"><a class="markdownIt-Anchor" href="#3-专为向量场景设计的功能"></a> 3. 专为向量场景设计的功能</h4>
-<ul>
-<li>支持批量嵌入（自动把文本转向量并存入）；</li>
-<li>支持元数据过滤（比如检索 “水果相关” 且相似度高的向量）；</li>
-<li>支持增量更新（动态添加 / 删除向量，无需重建整个索引）；</li>
-<li>支持分布式部署（处理亿级向量的大规模场景）。</li>
-</ul>
-</blockquote>
-<h3 id="常见向量数据库"><a class="markdownIt-Anchor" href="#常见向量数据库"></a> <strong>常见向量数据库</strong></h3>
+<h2 id="-2"><a class="markdownIt-Anchor" href="#-2"></a> </h2>
 <blockquote>
 <table>
 <thead>
 <tr>
-<th>数据库</th>
-<th>类型</th>
-<th>开源</th>
-<th>性能</th>
-<th>运维</th>
-<th>适用场景</th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>Milvus</strong></td>
-<td>分布式向量库</td>
-<td>✅</td>
-<td>极高</td>
-<td>中</td>
-<td>大规模生产、企业级</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 <tr>
-<td><strong>Qdrant</strong></td>
-<td>轻量向量库</td>
-<td>✅</td>
-<td>高</td>
-<td>低</td>
-<td>中小型、边缘、快速开发</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 <tr>
-<td><strong>Weaviate</strong></td>
-<td>向量 + 图</td>
-<td>✅</td>
-<td>中高</td>
-<td>中</td>
-<td>语义搜索、知识图谱</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 <tr>
-<td><strong>Chroma</strong></td>
-<td>轻量嵌入式</td>
-<td>✅</td>
-<td>中</td>
-<td>极低</td>
-<td>原型、学习、小项目</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 <tr>
-<td><strong>Pinecone</strong></td>
-<td>云托管</td>
-<td>❌</td>
-<td>高</td>
-<td>极低</td>
-<td>零运维、快速上线</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 <tr>
-<td><strong>Pgvector</strong></td>
-<td>PostgreSQL 扩展</td>
-<td>✅</td>
-<td>中</td>
-<td>低</td>
-<td>复用 PG 栈、混合查询</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 <tr>
-<td><strong>RedisVL</strong></td>
-<td>Redis 扩展</td>
-<td>✅</td>
-<td>极高</td>
-<td>低</td>
-<td>实时、低延迟、缓存</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 <tr>
-<td><strong>FAISS</strong></td>
-<td>算法库</td>
-<td>✅</td>
-<td>极高</td>
-<td>高</td>
-<td>科研、离线、底层优化</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
 </tr>
 </tbody>
 </table>
@@ -598,7 +702,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>148</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>151</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>41</strong><br>标签</div></a>
     </div>
