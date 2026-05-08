@@ -43,9 +43,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>152</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>154</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>41</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>42</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -70,6 +70,254 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-2026年5月8日-cam标定" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/" class="article-date">
+  <time class="post-time" datetime="2026-05-08T03:03:19.000Z" itemprop="datePublished">
+    <span class="post-month">5月</span><br/>
+    <span class="post-day">08</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/">2026年5月8日 cam标定</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="标定"><a class="markdownIt-Anchor" href="#标定"></a> 标定</h1>
+<h1 id="1-相机标定"><a class="markdownIt-Anchor" href="#1-相机标定"></a> 1. 相机标定</h1>
+<h2 id="11-目的"><a class="markdownIt-Anchor" href="#11-目的"></a> 1.1 目的:</h2>
+<p><strong>求相机内参和畸变参数</strong></p>
+<p>包括：</p>
+<ul>
+<li>焦距</li>
+<li>主点</li>
+<li>畸变系数</li>
+<li>外参</li>
+</ul>
+<h2 id="12-常用方法"><a class="markdownIt-Anchor" href="#12-常用方法"></a> 1.2 常用方法</h2>
+<h3 id="张正友标定法"><a class="markdownIt-Anchor" href="#张正友标定法"></a> <strong>张正友标定法</strong></h3>
+<h4 id="step-1准备棋盘格"><a class="markdownIt-Anchor" href="#step-1准备棋盘格"></a> Step 1：准备棋盘格</h4>
+<p>示例：<code>9 × 6</code> 棋盘格</p>
+<p>⚠️ 重要注意：</p>
+<ul>
+<li>数值代表<strong>内角点数量</strong></li>
+<li><strong>不是棋盘格子的数量</strong></li>
+</ul>
+<hr>
+<h4 id="step-2拍摄多张图片"><a class="markdownIt-Anchor" href="#step-2拍摄多张图片"></a> Step 2：拍摄多张图片</h4>
+<p>拍摄要求：</p>
+<ul>
+<li>不同角度</li>
+<li>不同距离</li>
+<li>不同位置</li>
+</ul>
+<p>示例姿态：</p>
+<ul>
+<li>左倾</li>
+<li>右倾</li>
+<li>近距离</li>
+<li>远距离</li>
+</ul>
+<p>推荐数量：<strong>10~20 张</strong>即可满足标定精度需求。</p>
+<hr>
+<h4 id="step-3检测角点"><a class="markdownIt-Anchor" href="#step-3检测角点"></a> Step 3：检测角点</h4>
+<p>使用 OpenCV 核心函数：</p>
+<ul>
+<li><code>cv2.findChessboardCorners()</code></li>
+</ul>
+<p>得到结果：</p>
+<ul>
+<li>棋盘格角点的<strong>图像像素坐标</strong></li>
+</ul>
+<p>精度优化：</p>
+<ul>
+<li><code>cv2.cornerSubPix()</code>：亚像素角点优化</li>
+<li>最终可达到<strong>亚像素级精度</strong></li>
+</ul>
+<hr>
+<h4 id="step-4建立对应关系"><a class="markdownIt-Anchor" href="#step-4建立对应关系"></a> Step 4：建立对应关系</h4>
+<p>构建<strong>世界坐标 ↔ 图像坐标</strong>的映射关系：</p>
+<ul>
+<li>世界坐标：<code>(X, Y, Z)</code></li>
+<li>图像坐标：<code>(u, v)</code></li>
+</ul>
+<p>标定简化规则：</p>
+<p>棋盘格为平面，默认令 <strong>Z = 0</strong></p>
+<p>只需使用：<code>(X, Y, 0)</code></p>
+<hr>
+<h4 id="step-5求单应矩阵-h"><a class="markdownIt-Anchor" href="#step-5求单应矩阵-h"></a> Step 5：求单应矩阵 H</h4>
+<p>每张标定图片，都对应一个<strong>单应矩阵（Homography）</strong></p>
+<hr>
+<h4 id="step-6求内参矩阵-k"><a class="markdownIt-Anchor" href="#step-6求内参矩阵-k"></a> Step 6：求内参矩阵 K</h4>
+<p>标定<strong>核心目标</strong>：求解相机内参矩阵</p>
+<p>内参矩阵格式：</p>
+<p>K=fx000fy0cxcy1</p>
+<p>求解依据：</p>
+<p>利用<strong>多张图像的单应约束</strong>，计算得到：</p>
+<ul>
+<li>fx、fy：焦距参数</li>
+<li>cx、cy：图像主点坐标</li>
+</ul>
+<hr>
+<h4 id="step-7求外参"><a class="markdownIt-Anchor" href="#step-7求外参"></a> Step 7：求外参</h4>
+<p>每张图片对应一组<strong>外参</strong>，表示：</p>
+<p><strong>棋盘格相对于相机的位置</strong></p>
+<p>外参包含：</p>
+<ul>
+<li>旋转矩阵 R</li>
+<li>平移向量 t</li>
+</ul>
+<hr>
+<h4 id="step-8求畸变参数"><a class="markdownIt-Anchor" href="#step-8求畸变参数"></a> Step 8：求畸变参数</h4>
+<p>真实相机镜头存在光学畸变：</p>
+<ul>
+<li>桶形畸变</li>
+<li>枕形畸变</li>
+</ul>
+<p>OpenCV 标准畸变系数：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[k1, k2, p1, p2, k3]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>k1,k2,k3：径向畸变系数</li>
+<li>p1,p2：切向畸变系数</li>
+</ul>
+<hr>
+<h1 id="2-手眼标定"><a class="markdownIt-Anchor" href="#2-手眼标定"></a> 2 手眼标定</h1>
+<h2 id="21-目的"><a class="markdownIt-Anchor" href="#21-目的"></a> 2.1 目的:</h2>
+<p>标定目的是为了统一坐标系 。摄像头检测的物体是在摄像头的坐标系下， 机械臂的运动又是在机械臂自身坐标系下。 物体是同一个物体， 但在不同的坐标系下有不同的坐标表示， 这就需要统一到一个坐标系下。</p>
+<h2 id="22-原理"><a class="markdownIt-Anchor" href="#22-原理"></a> 2.2 原理</h2>
+<p><img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/a8d9cb3d9f414b05b8eecb562624a406.png" alt="img"></p>
+<p><strong>机械臂手眼标定就是要找出相机坐标系到末端关节坐标系的转换关系。</strong></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/leo0308/article/details/141498200">https://blog.csdn.net/leo0308/article/details/141498200</a></p>
+</blockquote>
+<h2 id="23-常用方法"><a class="markdownIt-Anchor" href="#23-常用方法"></a> 2.3 常用方法</h2>
+<h3 id="通用思路"><a class="markdownIt-Anchor" href="#通用思路"></a> 通用思路</h3>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_45006390/article/details/121670412">https://blog.csdn.net/qq_45006390/article/details/121670412</a></p>
+</blockquote>
+<p>​    机器人的手眼标定其实就是<strong>两个坐标系之间的转换关系</strong>的标定。我们希望计算出<strong>相机坐标系到机械手坐标系</strong>的转换关系，并且我们已知<strong>对应的几个固定点</strong> <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210973822-105.png" alt="P"> 在这两个坐标系的坐标 <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210973822-106.png" alt="P_{camera}">和 <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210973823-107.png" alt="P_{robot}"> 。根据坐标转换 公式，可以得出：</p>
+<p><img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210973823-108.png" alt="P_{robot}=T_{camera}^{robot}P_{camera}"></p>
+<p>​    上式中的 <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210973823-109.png" alt="T_{camera}^{robot}"> 表示我们希望计算出的相机到机械手的转换矩阵。</p>
+<blockquote>
+<p>代码:</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/leo038/hand_eye_calibrate">https://github.com/leo038/hand_eye_calibrate</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/TIMIDBABY/HandEyeCalibrateForRobot">https://github.com/TIMIDBABY/HandEyeCalibrateForRobot</a></p>
+</blockquote>
+<h3 id="1-眼在手上"><a class="markdownIt-Anchor" href="#1-眼在手上"></a> 1 眼在手上</h3>
+<p><img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/de9f3d517cbbe7f0f318a70165b0bb96.jpg" alt="de9f3d517cbbe7f0f318a70165b0bb96"></p>
+<h4 id="11-待求量"><a class="markdownIt-Anchor" href="#11-待求量"></a> 1.1 待求量</h4>
+<p>​    相机安装在机械手上，随着机械手一起移动。对于 <em>Eye-in-Hand</em> 而言，<strong>相机坐标系</strong>相对于<strong>机械手末端夹具坐标系</strong>是<strong>固定的</strong>，而对于<strong>机械手基础坐标系</strong>是<strong>变化的</strong>。</p>
+<p>​    当相机固定于机械手末端夹具时，此时<strong>相机坐标系与机械手末端夹具坐标系</strong>的变换关系固定，而与基座坐标系的变换关系会时刻变化，因此此时的<strong>待求量</strong>变成了<strong>相机坐标系</strong>(camera )到<strong>机械手末端载具坐标系</strong>(tool)的变换矩阵 <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002345-120.png" alt="T_{camera}^{tool}">。</p>
+<h4 id="12-转换关系推导"><a class="markdownIt-Anchor" href="#12-转换关系推导"></a> 1.2 转换关系推导</h4>
+<p>​    根据各个坐标系的关系，我们可以给出下述的坐标变换方程：</p>
+<p><img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002345-121.png" alt="P_{base}=T_{tool}{base}P_{tool}=T_{tool}{base}T_{camera}^{tool}P_{camera}"></p>
+<p>​    上式中 <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002346-122.png" alt="P_{base}"> 代表固定在某个位置上的<strong>棋盘格中的角点</strong>，在机器人基座坐标系下的坐标。可以通过两种方式计算这个坐标：</p>
+<p>​    1）在机械手末端的夹具上<strong>加上探针</strong>，直接由<strong>末端去触碰棋盘格上的点</strong>，根据机器人正向运动学得到的<strong>末端夹具到基座坐标系</strong>的转换矩阵 <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002346-123.png" alt="T_{tool}^{base}"> 及<strong>棋盘格角点到末端坐标系</strong>的坐标 <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002346-124.png" alt="P_{tool}">，我们可以得到固定的<strong>棋盘格角点在机器人基座坐标系下的坐标</strong> <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002346-122.png" alt="P_{base}"> 。</p>
+<p>​    2）在机械手末端的夹具上<strong>安装相机</strong>，由相机去<strong>直接测量棋盘格角点机器对应的坐标</strong> <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002346-125.png" alt="P_{camera}">，通过计算<strong>机器手末端夹具到基座坐标系</strong>的转换矩阵 <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002346-123.png" alt="T_{tool}^{base}"> 和<strong>相机坐标系到机器人末端坐标系</strong>的转换矩阵 <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002345-120.png" alt="T_{camera}^{tool}">，便可以求出<strong>棋盘格在机器人基座坐标系</strong>下的坐标 <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002346-122.png" alt="P_{base}">。</p>
+<p>​    在第二种方式中，相机坐标系到机器人末端坐标系的转换矩阵 <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002345-120.png" alt="T_{camera}^{tool}"> 是我们的待求量，因此我们需要对<strong>开始时描述的坐标变换方程</strong>进行简单的<strong>变换</strong>：</p>
+<p><img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002346-126.png" alt="{T_{tool}{base}}{-1}P_{base}{P_{camera}}^{-1} = T_{camera}^{tool}"></p>
+<p>​    在上式中，坐标的三个变量都是<strong>已知量</strong>，由此我们可以计算<strong>出相机到机器人末端坐标系</strong>的转换矩阵 <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002345-120.png" alt="T_{camera}^{tool}">。</p>
+<h3 id="2-眼在手外"><a class="markdownIt-Anchor" href="#2-眼在手外"></a> 2 眼在手外</h3>
+<p><img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/d6763d3d126f6017cd5c9d2ef4f61a27.jpg" alt="d6763d3d126f6017cd5c9d2ef4f61a27"></p>
+<h4 id="21-待求量"><a class="markdownIt-Anchor" href="#21-待求量"></a> 2.1 待求量</h4>
+<p>​    相机固定在一个地方，机械手的运动不会带着相机一起移动。对于 <em>Eye-to-Hand</em> 而言，<strong>相机坐标系相对于机械手基础坐标系是固定的</strong>，而<strong>对于机械手末端夹具坐标系是变化的</strong>。</p>
+<p>​    在 <em>Eye-to-Hand</em> 的问题下，待求量为<strong>相机到机械手基座坐标系</strong>的<strong>固定转换矩阵</strong> <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq.png" alt="T_{camera}^{base}"> 。考虑到相机是固定在一个位置，因此相机只有相对于基座坐标系才是固定不变的，这样我们的<strong>待求量</strong><img src="https://latex.csdn.net/eq?T_%7Bcamera%7D%5E%7Bbase%7D" alt="T_{camera}^{base}"> <strong>是一个固定的参数</strong>，这样的标定才是有意义的。</p>
+<h4 id="22-标定思路"><a class="markdownIt-Anchor" href="#22-标定思路"></a> 2.2 标定思路</h4>
+<p>​    根据 <strong>第3.1节</strong> 中所介绍的通用求解思路，下一步需要通过<strong>棋盘格图像上的固定点</strong> <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924052-74.png" alt="P"> 来获得<strong>机械手基座坐标系下的固定点坐标</strong> <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-75.png" alt="P_{base}"> 和<strong>相机坐标系下的坐标</strong> <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-76.png" alt="P_{camera}">。</p>
+<p>​    通过识别棋盘格，我们可以得到<strong>棋盘格中的角点</strong>在<strong>相机坐标系下</strong>的坐标 <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-77.png" alt="P_{img}">，但是这是<strong>二维坐标</strong>，通过<strong>相机内参和物体的深度信息</strong>我们可以计算出 <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-76.png" alt="P_{camera}">。接下来我们只要测量出来对应的<strong>棋盘格点在机械手基座坐标系下</strong>的坐标 <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-75.png" alt="P_{base}">，便可以标定出<strong>机械手和相机之间的转换矩阵</strong> <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq.png" alt="T_{camera}^{base}">。</p>
+<h4 id="23-转换关系推导"><a class="markdownIt-Anchor" href="#23-转换关系推导"></a> 2.3 转换关系推导</h4>
+<p>​    在 <em>Eye-to-Hand</em> 问题下，<strong>棋盘格</strong>在标定的时候，会<strong>固定在机械手的末端夹具</strong>上，而机械手的<strong>末端夹具坐标系到基座坐标系的转换矩阵</strong>，可以通过机器人<strong>正向运动学</strong>计算得到。因此我们可以通过如下关系测量出棋盘格点在机器人基座坐标系下的坐标 <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-75.png" alt="P_{base}"> ：</p>
+<p><img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-78.png" alt="P_{base}=T_{tool}{base}T_{board}{tool}P_{board}"></p>
+<p>​    在上述公式中，<img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-79.png" alt="T_{tool}^{base}"> 和 <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-80.png" alt="T_{board}^{tool}"> 分别代表<strong>机械手末端夹具坐标系</strong>*(tool)<em>到<strong>基座坐标系</strong></em>(base)<em>的转换矩阵和<strong>棋盘格坐标系</strong></em>(board)<em>到<strong>机械手末端夹具坐标系</strong></em>(tool)*的转换矩阵。</p>
+<p>​    其中，<img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-79.png" alt="T_{tool}^{base}"> 可以实时根据<strong>机器人正向运动学</strong>得到，而 <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-80.png" alt="T_{board}^{tool}"> 可以通过设计<strong>一个固定尺寸</strong>的<strong>棋盘格</strong>得到。当棋盘格尺寸以及安装固定后，我们可以设<strong>棋盘格的左上角点为原点</strong>，然后通过测量或者设计尺寸<strong>计算棋盘格原点</strong>到<strong>机器人末端坐标原点</strong>的<strong>平移坐标</strong>，而棋盘格平面一般<strong>与机械手末端载具平面平行</strong>，因此该<strong>原点的法向量</strong>也可以获得，接下来就可以计算出 <img src="https://latex.csdn.net/eq?T_%7Bboard%7D%5E%7Btool%7D" alt="T_{board}^{tool}"> 。</p>
+<p>​    <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-81.png" alt="P_{board}"> 代表<strong>棋盘格角点再棋盘格坐标系下的坐标</strong>，这个同样可以根据设计棋盘格的尺寸得到。需要注意的是棋盘格的角点在<strong>机器人坐标系</strong>和<strong>图像坐标系</strong>的顺序需要<strong>一一对应</strong>，但是一般的方形棋盘格会存在旋转对称的问题，即我们无法区分棋盘格的原点是在左上角还是右下角，因此在进行手眼标定时可以<strong>使用非对称的棋盘格</strong>。</p>
+<p>​    通过上面的推导，我们已经可以计算出<strong>棋盘格角点在机器人基座坐标系中的坐标</strong> <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-75.png" alt="P_{base}">，然后根据<strong>张正友标定法</strong>得到<strong>棋盘格在相机坐标系中的坐标</strong> <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-76.png" alt="P_{camera}">。那么根据 <strong>第3.1节</strong> 中介绍的计算方法就可以得到相机到机器人的转换矩阵：</p>
+<p><img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-82.png" alt="T_{camera}^{base}=P_{base} {P_{camera}}^{-1}"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/" data-id="cmowd45gr0000tsv4cce2g8ew" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cv/" rel="tag">cv</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2026年5月7日-GGUF" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/05/07/2026%E5%B9%B45%E6%9C%887%E6%97%A5-GGUF/" class="article-date">
+  <time class="post-time" datetime="2026-05-07T07:20:38.000Z" itemprop="datePublished">
+    <span class="post-month">5月</span><br/>
+    <span class="post-day">07</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2026/05/07/2026%E5%B9%B45%E6%9C%887%E6%97%A5-GGUF/">2026年5月7日 GGUF</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/05/07/2026%E5%B9%B45%E6%9C%887%E6%97%A5-GGUF/" data-id="cmowd45gz0002tsv4cfzlbec6" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-2026年4月29日-python项目总结" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -1949,269 +2197,6 @@
 
 
   
-    <article id="post-2026年3月5日-agent协议mcp" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2026/03/05/2026%E5%B9%B43%E6%9C%885%E6%97%A5-agent%E5%8D%8F%E8%AE%AEmcp/" class="article-date">
-  <time class="post-time" datetime="2026-03-05T06:43:12.000Z" itemprop="datePublished">
-    <span class="post-month">3月</span><br/>
-    <span class="post-day">05</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2026/03/05/2026%E5%B9%B43%E6%9C%885%E6%97%A5-agent%E5%8D%8F%E8%AE%AEmcp/">2026年3月5日 agent协议mcp</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/29001189476">https://zhuanlan.zhihu.com/p/29001189476</a></p>
-</blockquote>
-<h2 id="介绍"><a class="markdownIt-Anchor" href="#介绍"></a> 介绍</h2>
-<h3 id="what"><a class="markdownIt-Anchor" href="#what"></a> What</h3>
-<p><strong>模型上下文协议:</strong> 定义了应用程序和 AI 模型之间交换上下文信息的方式。</p>
-<p>这使得开发者能够<strong>以一致的方式将各种数据源、工具和功能连接到 AI 模型</strong>（一个中间协议层），就像 USB-C 让不同设备能够通过相同的接口连接一样。</p>
-<img src="/2026/03/05/2026%E5%B9%B43%E6%9C%885%E6%97%A5-agent%E5%8D%8F%E8%AE%AEmcp/image-20260305163414198.png" alt="image-20260305163414198" style="zoom:50%;">
-<h3 id="why"><a class="markdownIt-Anchor" href="#why"></a> Why</h3>
-<p><strong>function call 平台依赖性强</strong>，不同 LLM 平台的 function call API 实现差异较大。例如，OpenAI 的函数调用方式与 Google 的不兼容，开发者在切换模型时需要重写代码，增加了适配成本。</p>
-<blockquote>
-<p>官方也提供了非常多现成的 MCP Servers，你只需要选择你希望接入的工具，然后接入即可。</p>
-<ul>
-<li><a href="https://link.zhihu.com/?target=https%3A//github.com/punkpeye/awesome-mcp-servers">Awesome MCP Servers</a></li>
-<li><a href="https://link.zhihu.com/?target=https%3A//mcpservers.org/">MCP Servers Website</a></li>
-<li><a href="https://link.zhihu.com/?target=https%3A//github.com/modelcontextprotocol/servers">Official MCP Servers</a></li>
-</ul>
-</blockquote>
-<h3 id="how"><a class="markdownIt-Anchor" href="#how"></a> How</h3>
-<blockquote>
-<p>其实就是把tool变成工具集…</p>
-</blockquote>
-<p><img src="/2026/03/05/2026%E5%B9%B43%E6%9C%885%E6%97%A5-agent%E5%8D%8F%E8%AE%AEmcp/image-20260305163935245.png" alt="image-20260305163935245"></p>
-<p><strong>MCP 的核心就三样东西：</strong></p>
-<p>Server：对外暴露工具的服务端，本质上是一个 Python 脚本，声明&quot;这些函数可以被 LLM 调用&quot;，跑起来之后就在监听请求。</p>
-<p>Tool：希望 LLM 使用的函数，可以是任何东西：查天气、查数据库)、发邮件。这跟写普通 Python 函数没什么区别，加个装饰器剩下的交给 MCP。</p>
-<p>Client：连接 Server 并调用工具的客户端。生产环境里一般就是 LLM 应用本身。测试阶段可以用 FastMCP 自带的客户端，开箱即用。</p>
-<h2 id="快速实现"><a class="markdownIt-Anchor" href="#快速实现"></a> 快速实现:</h2>
-<h3 id="1-集成手写agent"><a class="markdownIt-Anchor" href="#1-集成手写agent"></a> 1 集成手写agent</h3>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># fast_mcp_demo.py</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> fastmcp <span class="keyword">import</span> FastMCP  </span><br><span class="line"><span class="comment"># Initialize the server with a name  </span></span><br><span class="line">mcp = FastMCP(<span class="string">&quot;my-first-server&quot;</span>)  </span><br><span class="line"></span><br><span class="line"><span class="comment"># Define a tool using the @mcp.tool decorator  </span></span><br><span class="line"><span class="meta">@mcp.tool  </span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_weather</span>(<span class="params">city: <span class="built_in">str</span></span>) -&gt; <span class="built_in">dict</span>:  </span><br><span class="line">    <span class="string">&quot;&quot;&quot;Get the current weather for a city.&quot;&quot;&quot;</span>  </span><br><span class="line">    <span class="comment"># In production, you&#x27;d call a real weather API  </span></span><br><span class="line">    <span class="comment"># For now, we&#x27;ll return mock data  </span></span><br><span class="line">    weather_data = &#123;  </span><br><span class="line">        <span class="string">&quot;new york&quot;</span>: &#123;<span class="string">&quot;temp&quot;</span>: <span class="number">72</span>, <span class="string">&quot;condition&quot;</span>: <span class="string">&quot;sunny&quot;</span>&#125;,  </span><br><span class="line">        <span class="string">&quot;london&quot;</span>: &#123;<span class="string">&quot;temp&quot;</span>: <span class="number">59</span>, <span class="string">&quot;condition&quot;</span>: <span class="string">&quot;cloudy&quot;</span>&#125;,  </span><br><span class="line">        <span class="string">&quot;tokyo&quot;</span>: &#123;<span class="string">&quot;temp&quot;</span>: <span class="number">68</span>, <span class="string">&quot;condition&quot;</span>: <span class="string">&quot;rainy&quot;</span>&#125;,</span><br><span class="line">        <span class="string">&quot;beijing&quot;</span>: &#123;<span class="string">&quot;temp&quot;</span>: <span class="number">10</span>, <span class="string">&quot;condition&quot;</span>: <span class="string">&quot;sunny&quot;</span>&#125;,</span><br><span class="line">    &#125;  </span><br><span class="line">      </span><br><span class="line">    city_lower = city.lower()  </span><br><span class="line">    <span class="keyword">if</span> city_lower <span class="keyword">in</span> weather_data:  </span><br><span class="line">        <span class="keyword">return</span> &#123;<span class="string">&quot;city&quot;</span>: city, **weather_data[city_lower]&#125;  </span><br><span class="line">    <span class="keyword">else</span>:  </span><br><span class="line">        <span class="keyword">return</span> &#123;<span class="string">&quot;city&quot;</span>: city, <span class="string">&quot;temp&quot;</span>: <span class="number">70</span>, <span class="string">&quot;condition&quot;</span>: <span class="string">&quot;unknown&quot;</span>&#125;  </span><br><span class="line"></span><br><span class="line"><span class="comment"># Run the server  </span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:  </span><br><span class="line">     mcp.run(transport=<span class="string">&quot;stdio&quot;</span>)</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># test_client_agent.py</span></span><br><span class="line"><span class="keyword">import</span> asyncio  </span><br><span class="line"><span class="keyword">from</span> fastmcp <span class="keyword">import</span> Client  </span><br><span class="line"><span class="keyword">from</span> openai <span class="keyword">import</span> OpenAI</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">from</span> dotenv <span class="keyword">import</span> load_dotenv</span><br><span class="line"></span><br><span class="line">load_dotenv()</span><br><span class="line">KIMI_API_KEY=os.getenv(<span class="string">&quot;KIMI_API_KEY&quot;</span>)</span><br><span class="line">KIMI_API_URL=os.getenv(<span class="string">&quot;KIMI_API_URL&quot;</span>)</span><br><span class="line">KIMI_MODEL_NAME=os.getenv(<span class="string">&quot;KIMI_MODEL_NAME&quot;</span>)</span><br><span class="line"><span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">main</span>():  </span><br><span class="line">    <span class="comment"># Point the client at your server file  </span></span><br><span class="line">    client = Client(<span class="string">&quot;fast_mcp_demo.py&quot;</span>)  </span><br><span class="line">      </span><br><span class="line">    <span class="comment"># Connect to the server  </span></span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">with</span> client:  </span><br><span class="line">        <span class="comment"># List available tools  </span></span><br><span class="line">        tools = <span class="keyword">await</span> client.list_tools()  </span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Available tools:&quot;</span>)  </span><br><span class="line">        <span class="keyword">for</span> tool <span class="keyword">in</span> tools:  </span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;  - <span class="subst">&#123;tool.name&#125;</span>: <span class="subst">&#123;tool.description&#125;</span>&quot;</span>)  </span><br><span class="line">            <span class="built_in">print</span>(tool.inputSchema)</span><br><span class="line">          </span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;\n&quot;</span> + <span class="string">&quot;=&quot;</span>*<span class="number">50</span> + <span class="string">&quot;\n&quot;</span>)  </span><br><span class="line">          </span><br><span class="line">        <span class="comment"># Call the weather tool  </span></span><br><span class="line">        result = <span class="keyword">await</span> client.call_tool(  </span><br><span class="line">            <span class="string">&quot;get_weather&quot;</span>,   </span><br><span class="line">            &#123;<span class="string">&quot;city&quot;</span>: <span class="string">&quot;Tokyo&quot;</span>&#125;  </span><br><span class="line">        )  </span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;Weather result: <span class="subst">&#123;result&#125;</span>&quot;</span>)  </span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Kimi API Call&quot;</span>)</span><br><span class="line">        ai_client = OpenAI(api_key=KIMI_API_KEY, base_url=KIMI_API_URL)</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 修正: 按照 OpenAI/Kimi 的标准格式构造 tools</span></span><br><span class="line">        formatted_tools = [</span><br><span class="line">            &#123;</span><br><span class="line">                <span class="string">&quot;type&quot;</span>: <span class="string">&quot;function&quot;</span>,  <span class="comment"># 必须指定类型为 function</span></span><br><span class="line">                <span class="string">&quot;function&quot;</span>: &#123;</span><br><span class="line">                    <span class="string">&quot;name&quot;</span>: tool.name,</span><br><span class="line">                    <span class="string">&quot;description&quot;</span>: tool.description,</span><br><span class="line">                    <span class="string">&quot;parameters&quot;</span>: tool.inputSchema  <span class="comment"># 注意这里是 parameters</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">for</span> tool <span class="keyword">in</span> tools</span><br><span class="line">        ]</span><br><span class="line"></span><br><span class="line">        response = ai_client.chat.completions.create(</span><br><span class="line">            model=KIMI_MODEL_NAME,</span><br><span class="line">            messages=[&#123;<span class="string">&quot;role&quot;</span>: <span class="string">&quot;user&quot;</span>, <span class="string">&quot;content&quot;</span>: <span class="string">&quot;weather in beijing&quot;</span>&#125;],</span><br><span class="line">            tools=formatted_tools,</span><br><span class="line">            tool_choice=<span class="string">&quot;auto&quot;</span>  <span class="comment"># 建议显式加上</span></span><br><span class="line">        )</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 打印响应结果</span></span><br><span class="line">        message = response.choices[<span class="number">0</span>].message</span><br><span class="line">        <span class="keyword">if</span> message.tool_calls:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;Kimi 想要调用工具: <span class="subst">&#123;message.tool_calls[<span class="number">0</span>].function.name&#125;</span>&quot;</span>)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;参数: <span class="subst">&#123;message.tool_calls[<span class="number">0</span>].function.arguments&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;Kimi API Response: <span class="subst">&#123;message.content&#125;</span>&quot;</span>)</span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:  </span><br><span class="line">     asyncio.run(main())</span><br></pre></td></tr></table></figure>
-<h3 id="2-集成ai软件"><a class="markdownIt-Anchor" href="#2-集成ai软件"></a> 2 集成ai软件</h3>
-<img src="/2026/03/05/2026%E5%B9%B43%E6%9C%885%E6%97%A5-agent%E5%8D%8F%E8%AE%AEmcp/image-20260305144335380.png" alt="image-20260305144335380" style="zoom:50%;">
-<p><img src="/2026/03/05/2026%E5%B9%B43%E6%9C%885%E6%97%A5-agent%E5%8D%8F%E8%AE%AEmcp/image-20260305150738263.png" alt="image-20260305150738263"></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&quot;I5idlklcOPSxz09p-Hxjw&quot;: &#123;</span><br><span class="line">      &quot;name&quot;: &quot;MCP 服务器&quot;,</span><br><span class="line">      &quot;description&quot;: &quot;pip install wkl-mcp-demo&quot;,</span><br><span class="line">      &quot;baseUrl&quot;: &quot;&quot;,</span><br><span class="line">      &quot;command&quot;: &quot;uvx&quot;,</span><br><span class="line">      &quot;args&quot;: [</span><br><span class="line">        &quot;wkl-mcp-demo&quot;</span><br><span class="line">      ],</span><br><span class="line">      &quot;env&quot;: &#123;&#125;,</span><br><span class="line">      &quot;isActive&quot;: true,</span><br><span class="line">      &quot;type&quot;: &quot;stdio&quot;,</span><br><span class="line">      &quot;registryUrl&quot;: &quot;&quot;</span><br><span class="line">    &#125;,</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2026/03/05/2026%E5%B9%B43%E6%9C%885%E6%97%A5-agent%E5%8D%8F%E8%AE%AEmcp/" data-id="cmme79ecr000n8wv43b4y0ds2" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/agent/" rel="tag">agent</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2026年3月3日-agent上下文工程" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2026/03/03/2026%E5%B9%B43%E6%9C%883%E6%97%A5-agent%E4%B8%8A%E4%B8%8B%E6%96%87%E5%B7%A5%E7%A8%8B/" class="article-date">
-  <time class="post-time" datetime="2026-03-03T07:31:36.000Z" itemprop="datePublished">
-    <span class="post-month">3月</span><br/>
-    <span class="post-day">03</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2026/03/03/2026%E5%B9%B43%E6%9C%883%E6%97%A5-agent%E4%B8%8A%E4%B8%8B%E6%96%87%E5%B7%A5%E7%A8%8B/">2026年3月3日 agent上下文工程</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>1</p>
-</blockquote>
-<blockquote></blockquote>
-<h2 id="context-engineering"><a class="markdownIt-Anchor" href="#context-engineering"></a> Context Engineering</h2>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://news.qq.com/rain/a/20260226A076NP00">https://news.qq.com/rain/a/20260226A076NP00</a></p>
-</blockquote>
-<blockquote>
-<p>模型出错往往不是因为理解不了指令，而是因为看到了太多不相关的信息、相互矛盾的数据，或者缺失了关键事实。</p>
-</blockquote>
-<p>Context engineering 把上下文当作一条动态管道来处理，而非一段静态提示词：</p>
-<ol>
-<li>选对文档而不是全量灌入；</li>
-<li>将长文档压缩为面向任务的摘要；</li>
-<li>在检索之前重新表述模糊的用户查询；</li>
-<li>跨会话注入记忆和用户状态；</li>
-<li>用实时工具和数据锚定答案；组织所有输入，让模型知道什么最重要。</li>
-</ol>
-<h4 id="0-层次化布局结构本身就在传达重要性"><a class="markdownIt-Anchor" href="#0-层次化布局结构本身就在传达重要性"></a> 0 层次化布局：结构本身就在传达重要性</h4>
-<blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"> [System Rules]  </span><br><span class="line">You are a precise financial research assistant.  </span><br><span class="line">Answer only from provided context.  </span><br><span class="line">If information is missing, say <span class="string">&quot;I don&#x27;t have that information.&quot;</span>  </span><br><span class="line">Never make assumptions about numerical data.</span><br><span class="line"></span><br><span class="line">[Task]  </span><br><span class="line">Goal: Answer user question using context below.  </span><br><span class="line">Output format: Start with direct answer, <span class="keyword">then</span> provide supporting details.  </span><br><span class="line"></span><br><span class="line">[User Profile / Memory]  </span><br><span class="line">- Risk tolerance: Low  </span><br><span class="line">- Investment horizon: 5-10 years  </span><br><span class="line">- Region: India  </span><br><span class="line">- Previous sessions: Asked about HDFC Bank 3 <span class="built_in">times</span>, showed interest <span class="keyword">in</span> banking sector  </span><br><span class="line">- Preferences: Conservative investments, dividend-paying stocks  </span><br><span class="line"></span><br><span class="line">[Retrieved Context]  </span><br><span class="line">DOC 1: HDFC Bank Q4 2024 earnings report  </span><br><span class="line">- Revenue: ₹45,000 crores (up 15% YoY)  </span><br><span class="line">- Net profit: ₹12,000 crores (up 18% YoY)  </span><br><span class="line">- NPA ratio: 1.2% (improved from 1.5%)  </span><br><span class="line">DOC 2: Competitor analysis Q4 2024  </span><br><span class="line">- ICICI Bank revenue growth: 12% YoY  </span><br><span class="line">- SBI profit growth: 10% YoY  </span><br><span class="line">- HDFC Bank leading <span class="keyword">in</span> digital banking adoption  </span><br><span class="line"></span><br><span class="line">[Tool Outputs]  </span><br><span class="line">- live_price(<span class="string">&quot;HDFCBANK&quot;</span>): ₹1,842.50 (updated 2 minutes ago)  </span><br><span class="line">- news_summary(<span class="string">&quot;HDFCBANK&quot;</span>): <span class="string">&quot;Announced dividend of ₹19 per share for FY2024. Ex-dividend date March 15, 2025.&quot;</span>  </span><br><span class="line">- sector_analysis(<span class="string">&quot;Banking&quot;</span>): <span class="string">&quot;Banking sector up 8% this month due to positive earnings&quot;</span>  </span><br><span class="line"></span><br><span class="line">[Question]  </span><br><span class="line"> User: What<span class="string">&#x27;s the latest on HDFC Bank?</span></span><br></pre></td></tr></table></figure>
-</blockquote>
-<h4 id="1-选对文档而不是全量灌入"><a class="markdownIt-Anchor" href="#1-选对文档而不是全量灌入"></a> 1 选对文档而不是全量灌入；</h4>
-<blockquote>
-<ol>
-<li>相关性重排：初始搜索基于向量相似度或关键词匹配返回前50个结果，但相似不等于相关。交叉编码器会把查询和每个文档放在一起联合阅读，重新排序。速度慢一些准确度高得多，重排之后只保留前5个。</li>
-<li>冗余消除：同一个概念在文档库里出现在多个地方是常态，比如营销材料、技术规格、FAQ都可能提到同一功能。用 Embedding 对相似文本块做聚类，余弦相似度超过0.9的基本就是重复内容删掉一个即可。模型不需要看同一个事实10遍。</li>
-<li>任务感知过滤：利用元数据做筛选。每个文档都应打上标签：文档类型、最后更新日期、产品版本、地区、部门。查询进来时按相关维度过滤。</li>
-</ol>
-</blockquote>
-<h4 id="2-将长文档压缩为面向任务的摘要"><a class="markdownIt-Anchor" href="#2-将长文档压缩为面向任务的摘要"></a> 2 将长文档压缩为面向任务的摘要；</h4>
-<blockquote>
-<p>把长文档放进上下文之前，将其压缩成面向当前任务的密集摘要：不是通用摘要，而是针对当前查询定制的摘要。</p>
-<p>三种压缩策略各有侧重。</p>
-<ul>
-<li>带约束的LLM摘要：不要只说&quot;总结这个文档&quot;，而是说&quot;总结这个文档，只保留2025年1月之后关于定价变更的事实&quot;。约束条件指明了保留什么、丢弃什么。每个检索到的文档根据查询生成各自的约束。产出从3000个 Token 缩减到5–10个要点。</li>
-<li>句子级评分：用较小的模型（如<strong>BERT变体</strong>）为每个句子计算与查询的相关性分数，按分数排序后只保留前20%。这种方法叫Context-Preserving Compression，速度快，效果好，自动留下最相关的信息。</li>
-<li>层次化摘要：适合非常长的文档。先按章节分块每个章节独立生成摘要，再把这些摘要归纳成一个元摘要。最终形成三级结构，完整文档 → 章节摘要 → 最终摘要。根据上下文预算选用合适的层级。</li>
-</ul>
-</blockquote>
-<h4 id="3-在检索之前重新表述模糊的用户查询"><a class="markdownIt-Anchor" href="#3-在检索之前重新表述模糊的用户查询"></a> 3 在检索之前重新表述模糊的用户查询</h4>
-<blockquote>
-<p>三种可行的模式。</p>
-<p>澄清优先（适用于智能体场景），与其猜用户什么意思不如直接问。智能体回复：&quot;要比较业绩表现，需要明确几个信息——哪个时间段？包含哪些竞争对手？最关注哪些指标（收入、利润还是市场份额）？&quot;用户给出具体条件后，检索随之变得精确。这种策略只适用于多轮对话的智能体，单次问答系统用不上。但在智能体场景下效果很好——用户并不介意回答两三个澄清问题，如果换来的是更准确的答案。</p>
-<p>HyDE（Hypothetical Document Embeddings）用户问&quot;产品最新的改进有哪些&quot;，不直接用这个问题去搜索，而是让LLM先生成一段假答案：“最新的产品改进包括重新设计的仪表板、40%的加载速度提升、新增的协作功能和增强的移动端应用。“把这段假答案做 Embedding 后用于检索。为什么有效？因为假答案的措辞和实际文档的措辞一致。文档里不会写&quot;最新的改进是什么”，而会写&quot;重新设计了仪表板”“加载时间缩短了40%”。假答案的 Embedding 比原始问题的 Embedding 更贴近真实文档。</p>
-<p>多查询扩展，对原始查询生成3–5个改写版本。“最新产品改进&quot;可以展开为&quot;最近的产品更新”“本季度发布的新功能”“产品增强变更日志”“2.0版本有什么新内容”。每个查询分别检索，合并去重。这种方式能覆盖语义变体和不同的表述习惯。</p>
-</blockquote>
-<p>举个实际例子。用户问&quot;上季度的表现与竞争对手相比如何&quot;。</p>
-<p>这个问题里缺了太多信息：哪些竞争对手？哪一年的上季度？衡量什么指标——收入、利润、市场份额还是用户增长？</p>
-<p>LLM将其**重写为&quot;比较2024年第四季度（2024年10月至12月）公司X与竞争对手A、B、C在内部财务报告中的收入增长和利润率&quot;。**注意具体程度——精确的时间段、精确的竞争对手、精确的指标、明确的数据来源。检索时还会结合记忆中已知的竞争对手名单（层次化布局的用户档案部分记录了该用户之前多次查询过竞争对手A和B）。</p>
-<p>最终上下文对齐的是用户的意图，而非用户键入的字面内容。LLM拿到的是精确数据，不是模糊相关的内容。</p>
-<p>实现模式如下：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">User query  </span><br><span class="line">    ↓  </span><br><span class="line">LLM rewriter: &quot;Expand this into a precise search query.   </span><br><span class="line">Add time ranges, entity names, and specific metrics.&quot;  </span><br><span class="line">    ↓  </span><br><span class="line">Rewritten query  </span><br><span class="line">    ↓  </span><br><span class="line">Retrieval</span><br></pre></td></tr></table></figure>
-<h4 id="4-记忆与状态保留的是关系不只是事实"><a class="markdownIt-Anchor" href="#4-记忆与状态保留的是关系不只是事实"></a> 4 记忆与状态：保留的是关系，不只是事实</h4>
-<blockquote>
-<p>每轮对话结束后做一次LLM摘要——“用户问了什么？提供了什么？用户表达了哪些偏好或需求？”——将摘要与 Embedding 一起存入向量数据库。每轮对话开始前，用当前查询在历史情景摘要库中做向量搜索，取回最相关的3条，再从另一张表加载稳定偏好（这些不需要向量搜索，每次都带上），全部插入层次化布局的 [User Profile / Memory] 区块。</p>
-</blockquote>
-<blockquote>
-<p>三种记忆类型各有分工。</p>
-<ol>
-<li><strong>情景记忆</strong>，即过去对话的摘要。例如：&quot;<strong>上次会话</strong>讨论了为法律文档构建RAG系统，用户关心的是如何处理100多页的合同，最终决定采用512 Token 块配合50 Token 重叠的语义分块策略。&quot;注意，这不是完整的对话记录，而是一份200 Token 左右的摘要，只保留了关键内容。</li>
-<li><strong>语义记忆</strong>，存储在<strong>向量数据</strong>库中的过去交互记录。例如：&quot;用户<strong>3周前</strong>问过关于HDFC的类似问题，当时问的是季度收益，当前查询是关于股息公告，两者都涉及HDFC的财务表现，可以复用之前查询中关于公司基本面的上下文。&quot;语义记忆的价值在于发现模式：用户依次问了HDFC的收益、竞争对手、风险因素，可以判断他正在对HDFC做深度研究，从而主动推送相关信息。</li>
-<li><strong>偏好记忆</strong>，很少变化的稳定事实。“用户是初学投资者”“偏好TypeScript”“风险承受能力低”“在医疗保健领域工作”“位于孟买时区”。这些事实影响每一次交互——初学者得到更简洁的解释，低风险用户和高风险用户收到的建议完全不同。</li>
-</ol>
-</blockquote>
-<h4 id="5-实时工具"><a class="markdownIt-Anchor" href="#5-实时工具"></a> 5 实时工具</h4>
-<h2 id="context-engineering-2"><a class="markdownIt-Anchor" href="#context-engineering-2"></a> Context Engineering</h2>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/1945173424726058681">https://zhuanlan.zhihu.com/p/1945173424726058681</a></p>
-</blockquote>
-<h3 id="1-what-is-context-engineering"><a class="markdownIt-Anchor" href="#1-what-is-context-engineering"></a> <strong>1. What is Context Engineering?</strong></h3>
-<p><img src="/2026/03/03/2026%E5%B9%B43%E6%9C%883%E6%97%A5-agent%E4%B8%8A%E4%B8%8B%E6%96%87%E5%B7%A5%E7%A8%8B/image-20260303164354421.png" alt="image-20260303164354421"></p>
-<p><img src="/2026/03/03/2026%E5%B9%B43%E6%9C%883%E6%97%A5-agent%E4%B8%8A%E4%B8%8B%E6%96%87%E5%B7%A5%E7%A8%8B/image-20260303164347330.png" alt="image-20260303164347330"></p>
-<h3 id="2-why-context-engineering"><a class="markdownIt-Anchor" href="#2-why-context-engineering"></a> <strong>2. Why Context Engineering?</strong></h3>
-<h4 id="21-优化-llm-的二维思维模型"><a class="markdownIt-Anchor" href="#21-优化-llm-的二维思维模型"></a> 2.1 优化 LLM <strong>的二维思维模型</strong></h4>
-<p>当 agenticsystem 或单次 LLM 调用的输出不及预期时，问题的根源往往可以归结为两个方面:</p>
-<p><img src="/2026/03/03/2026%E5%B9%B43%E6%9C%883%E6%97%A5-agent%E4%B8%8A%E4%B8%8B%E6%96%87%E5%B7%A5%E7%A8%8B/image-20260303161147837.png" alt="image-20260303161147837"></p>
-<h4 id="22-两个简单的示例"><a class="markdownIt-Anchor" href="#22-两个简单的示例"></a> <strong>2.2 两个简单的示例</strong></h4>
-<h5 id="示例一-缺失上下文的代价"><a class="markdownIt-Anchor" href="#示例一-缺失上下文的代价"></a> 示例一: 缺失上下文的代价</h5>
-<p><img src="/2026/03/03/2026%E5%B9%B43%E6%9C%883%E6%97%A5-agent%E4%B8%8A%E4%B8%8B%E6%96%87%E5%B7%A5%E7%A8%8B/image-20260303164415313.png" alt="image-20260303164415313"></p>
-<blockquote>
-<p><strong>第二种的上下文:</strong></p>
-<p>信息性上下文(Informational):</p>
-<p>[Contact Data]: 识别发件人 Jim 是重要合作伙伴。</p>
-<p>行动性上下文(Actionable):</p>
-<p>send_calendar_invite 工具的描述</p>
-<p>基于这个完整的上下文，它能生成一个真正高效的回应</p>
-<p>“Hi Jim! 我明天日程完全满了。周四上午有空，你看方便吗?我发了一个暂定邀请，如果时间合适请确认。</p>
-</blockquote>
-<h5 id="示例二-上下文退化的挑战"><a class="markdownIt-Anchor" href="#示例二-上下文退化的挑战"></a> 示例二: 上下文退化的挑战</h5>
-<p><img src="/2026/03/03/2026%E5%B9%B43%E6%9C%883%E6%97%A5-agent%E4%B8%8A%E4%B8%8B%E6%96%87%E5%B7%A5%E7%A8%8B/image-20260303161752588.png" alt="image-20260303161752588"></p>
-<blockquote>
-<p>一种朴素的策略: 为了保证模型“无所不知&quot;，系统将每一次交互都记录下来——每一条用户指令、文件读取、编译错误、成功的工具调用–并将这整段历史作为上下文，在每次调用 Agent 时都完整地传递给LLM.</p>
-<p><strong>必然出现的失败级联</strong></p>
-<p>1.<strong>性能下降</strong>: 首先，性能会悄然下降。早期任务中1无关紧要的细节(例如一次已解决的语法错误)会不断稀释当前步骤所需的核心信息，造成上下文干扰(Context Distraction)</p>
-<p>2.<strong>成本与延迟激增</strong>: 随着上下文线性增长，每次API调用的 Token 数量急剧膨胀，导致成本失控和更高的延迟。</p>
-<p>3.<strong>最终崩溃</strong>: 最终，系统将撞上架构限制–上下文溢出(Context Overflow)。当累积的信息总量超过模型的上下文窗口上限(无论是 200K还是1M tokens)，API调用将直接失败，可能导致任务中断，或因信息截断而引向错误的结果。</p>
-</blockquote>
-<h3 id="3how-the-best-practice-of-context-engineering"><a class="markdownIt-Anchor" href="#3how-the-best-practice-of-context-engineering"></a> <strong>3.How? The Best Practice of Context Engineering</strong></h3>
-<h4 id="32-上下文工程的最佳实践"><a class="markdownIt-Anchor" href="#32-上下文工程的最佳实践"></a> <strong>3.2 上下文工程的最佳实践</strong></h4>
-<p><img src="/2026/03/03/2026%E5%B9%B43%E6%9C%883%E6%97%A5-agent%E4%B8%8A%E4%B8%8B%E6%96%87%E5%B7%A5%E7%A8%8B/image-20260303163407031.png" alt="image-20260303163407031"></p>
-<p><strong>写入(Write)</strong></p>
-<p>写入主要是将上下文持续久化，超越上下文窗口的限制在未来按需取用。通常情况下分为:</p>
-<ol>
-<li>会话内写入(Session-levelWrite): Agent 将<strong>中间思考</strong>、计划或临时数据写入一个会话内的<strong>草稿纸(Scratchpads)</strong>。这是一种轻量级的、非持久化的写入，用于管理当前任务的复杂性。</li>
-<li>持久化写入(Persistent Write): 系统将具有长期价值的信息(如用户偏好总结、关键事实)写入外部的记忆(Memory)系统，如向量数据库或知识图谱。</li>
-</ol>
-<p>这实现了跨会话的知识积累。例如，ChatGPT和Cursor等应用通过这种方式，让 Agent在与用户的持续交互中“学习&quot;和“成长&quot;，用户在解决某些问题时无需手动引入上下文。</p>
-<p>Anthropic也曾在博客中建议，Subagent output to a filesystem to minimize the 'game of telephone. 通过把 subagent 的输出写到文件以避免无意义的上下文传递，上下文窗口占用等。</p>
-<p><strong>选取(Select)</strong></p>
-<p>选取的目的，是在每次 LLM 调用前，从所有可用的信息源中，动态地拉取与当前子任务最相关的信息。这是保证上下文信噪比的关键。</p>
-<p>上下文工程中的选取包括三类:</p>
-<ol>
-<li><strong>确定性选取(Deterministic Select)</strong>: 指根据预设规则加载上下文。例如，编码 Agent 在启动时，<strong><a target="_blank" rel="noopener" href="http://xn--CLAUDE-hp7ix62ap8jktlgkkl00aeg5bkhbba3071hf65a.md">固定加载项目根目录下的CLAUDE.md</a></strong>文件，这是一种简单高效的<strong>先验知识</strong>注入。</li>
-<li><strong>模型驱动选取(Model-driven Select)</strong>: 当可用信息源<strong>过多时(如海量工具或文档)，可以利用模型自身的能力进行筛选</strong>。</li>
-<li><strong>检索式选取(Retrieval-based Select)</strong>: 这是最主流的方式，其核心范式是通过<strong>相似度检索</strong>，从记忆、草稿纸或外部知识库中选取信息。因此，选取操作的成败，在很大程度上依赖于底层检索系统的质量。</li>
-</ol>
-<p><strong>压缩（Compress)</strong></p>
-<p>压缩的目的，是在信息进入上下文窗口之前，对其进行有损或无损的压缩，用更少的 Token 承载最核心的信号。这是在上下文窗口容量有限的情况下，容纳更多有效信息的直接手段。</p>
-<p><img src="/2026/03/03/2026%E5%B9%B43%E6%9C%883%E6%97%A5-agent%E4%B8%8A%E4%B8%8B%E6%96%87%E5%B7%A5%E7%A8%8B/image-20260303163810517.png" alt="image-20260303163810517"></p>
-<p>当上下文窗口即将达到容量上限时，这些系统通常会启动&quot;auto-compact&quot;机制</p>
-<ol>
-<li>历史内容压缩（如图左侧所示）</li>
-<li>工具调用链压缩</li>
-<li>采用经过专门调优的&quot;上下文压缩大语言模型&quot;来实现信息压缩，</li>
-<li>另有修剪策略: 如<strong>硬截断超限历史</strong>，代价是失去部分语境。</li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2026/03/03/2026%E5%B9%B43%E6%9C%883%E6%97%A5-agent%E4%B8%8A%E4%B8%8B%E6%96%87%E5%B7%A5%E7%A8%8B/" data-id="cmme79ecq000j8wv4cq2s0h4j" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/agent/" rel="tag">agent</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -2256,9 +2241,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>152</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>154</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>41</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>42</strong><br>标签</div></a>
     </div>
 
 

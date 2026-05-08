@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2026年5月8日 cam标定 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="标定  1. 相机标定  1.1 目的: 求相机内参和畸变参数 包括：  焦距 主点 畸变系数 外参   1.2 常用方法  张正友标定法  Step 1：准备棋盘格 示例：9 × 6 棋盘格 ⚠️ 重要注意：  数值代表内角点数量 不是棋盘格子的数量    Step 2：拍摄多张图片 拍摄要求：  不同角度 不同距离 不同位置  示例姿态：  左倾 右倾 近距离 远距离  推荐数量：10~20">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2026年5月8日 cam标定">
+<meta property="og:url" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="标定  1. 相机标定  1.1 目的: 求相机内参和畸变参数 包括：  焦距 主点 畸变系数 外参   1.2 常用方法  张正友标定法  Step 1：准备棋盘格 示例：9 × 6 棋盘格 ⚠️ 重要注意：  数值代表内角点数量 不是棋盘格子的数量    Step 2：拍摄多张图片 拍摄要求：  不同角度 不同距离 不同位置  示例姿态：  左倾 右倾 近距离 远距离  推荐数量：10~20">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/a8d9cb3d9f414b05b8eecb562624a406.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210973822-105.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210973822-106.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210973823-107.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210973823-108.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210973823-109.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/de9f3d517cbbe7f0f318a70165b0bb96.jpg">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002345-120.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002345-121.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002346-122.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002346-123.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002346-124.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002346-122.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002346-125.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002346-123.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002345-120.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002346-122.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002345-120.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002346-126.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002345-120.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/d6763d3d126f6017cd5c9d2ef4f61a27.jpg">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq.png">
+<meta property="og:image" content="https://latex.csdn.net/eq?T_%7Bcamera%7D%5E%7Bbase%7D">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924052-74.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-75.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-76.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-77.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-76.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-75.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-75.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-78.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-79.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-80.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-79.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-80.png">
+<meta property="og:image" content="https://latex.csdn.net/eq?T_%7Bboard%7D%5E%7Btool%7D">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-81.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-75.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-76.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-82.png">
+<meta property="article:published_time" content="2026-05-08T03:03:19.000Z">
+<meta property="article:modified_time" content="2026-05-08T03:35:15.710Z">
+<meta property="article:author" content="Weakliy">
+<meta property="article:tag" content="cv">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/a8d9cb3d9f414b05b8eecb562624a406.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>154</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>42</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2026年5月8日-cam标定" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/" class="article-date">
+  <time class="post-time" datetime="2026-05-08T03:03:19.000Z" itemprop="datePublished">
+    <span class="post-month">5月</span><br/>
+    <span class="post-day">08</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2026年5月8日 cam标定
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="标定"><a class="markdownIt-Anchor" href="#标定"></a> 标定</h1>
+<h1 id="1-相机标定"><a class="markdownIt-Anchor" href="#1-相机标定"></a> 1. 相机标定</h1>
+<h2 id="11-目的"><a class="markdownIt-Anchor" href="#11-目的"></a> 1.1 目的:</h2>
+<p><strong>求相机内参和畸变参数</strong></p>
+<p>包括：</p>
+<ul>
+<li>焦距</li>
+<li>主点</li>
+<li>畸变系数</li>
+<li>外参</li>
+</ul>
+<h2 id="12-常用方法"><a class="markdownIt-Anchor" href="#12-常用方法"></a> 1.2 常用方法</h2>
+<h3 id="张正友标定法"><a class="markdownIt-Anchor" href="#张正友标定法"></a> <strong>张正友标定法</strong></h3>
+<h4 id="step-1准备棋盘格"><a class="markdownIt-Anchor" href="#step-1准备棋盘格"></a> Step 1：准备棋盘格</h4>
+<p>示例：<code>9 × 6</code> 棋盘格</p>
+<p>⚠️ 重要注意：</p>
+<ul>
+<li>数值代表<strong>内角点数量</strong></li>
+<li><strong>不是棋盘格子的数量</strong></li>
+</ul>
+<hr>
+<h4 id="step-2拍摄多张图片"><a class="markdownIt-Anchor" href="#step-2拍摄多张图片"></a> Step 2：拍摄多张图片</h4>
+<p>拍摄要求：</p>
+<ul>
+<li>不同角度</li>
+<li>不同距离</li>
+<li>不同位置</li>
+</ul>
+<p>示例姿态：</p>
+<ul>
+<li>左倾</li>
+<li>右倾</li>
+<li>近距离</li>
+<li>远距离</li>
+</ul>
+<p>推荐数量：<strong>10~20 张</strong>即可满足标定精度需求。</p>
+<hr>
+<h4 id="step-3检测角点"><a class="markdownIt-Anchor" href="#step-3检测角点"></a> Step 3：检测角点</h4>
+<p>使用 OpenCV 核心函数：</p>
+<ul>
+<li><code>cv2.findChessboardCorners()</code></li>
+</ul>
+<p>得到结果：</p>
+<ul>
+<li>棋盘格角点的<strong>图像像素坐标</strong></li>
+</ul>
+<p>精度优化：</p>
+<ul>
+<li><code>cv2.cornerSubPix()</code>：亚像素角点优化</li>
+<li>最终可达到<strong>亚像素级精度</strong></li>
+</ul>
+<hr>
+<h4 id="step-4建立对应关系"><a class="markdownIt-Anchor" href="#step-4建立对应关系"></a> Step 4：建立对应关系</h4>
+<p>构建<strong>世界坐标 ↔ 图像坐标</strong>的映射关系：</p>
+<ul>
+<li>世界坐标：<code>(X, Y, Z)</code></li>
+<li>图像坐标：<code>(u, v)</code></li>
+</ul>
+<p>标定简化规则：</p>
+<p>棋盘格为平面，默认令 <strong>Z = 0</strong></p>
+<p>只需使用：<code>(X, Y, 0)</code></p>
+<hr>
+<h4 id="step-5求单应矩阵-h"><a class="markdownIt-Anchor" href="#step-5求单应矩阵-h"></a> Step 5：求单应矩阵 H</h4>
+<p>每张标定图片，都对应一个<strong>单应矩阵（Homography）</strong></p>
+<hr>
+<h4 id="step-6求内参矩阵-k"><a class="markdownIt-Anchor" href="#step-6求内参矩阵-k"></a> Step 6：求内参矩阵 K</h4>
+<p>标定<strong>核心目标</strong>：求解相机内参矩阵</p>
+<p>内参矩阵格式：</p>
+<p>K=fx000fy0cxcy1</p>
+<p>求解依据：</p>
+<p>利用<strong>多张图像的单应约束</strong>，计算得到：</p>
+<ul>
+<li>fx、fy：焦距参数</li>
+<li>cx、cy：图像主点坐标</li>
+</ul>
+<hr>
+<h4 id="step-7求外参"><a class="markdownIt-Anchor" href="#step-7求外参"></a> Step 7：求外参</h4>
+<p>每张图片对应一组<strong>外参</strong>，表示：</p>
+<p><strong>棋盘格相对于相机的位置</strong></p>
+<p>外参包含：</p>
+<ul>
+<li>旋转矩阵 R</li>
+<li>平移向量 t</li>
+</ul>
+<hr>
+<h4 id="step-8求畸变参数"><a class="markdownIt-Anchor" href="#step-8求畸变参数"></a> Step 8：求畸变参数</h4>
+<p>真实相机镜头存在光学畸变：</p>
+<ul>
+<li>桶形畸变</li>
+<li>枕形畸变</li>
+</ul>
+<p>OpenCV 标准畸变系数：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[k1, k2, p1, p2, k3]</span><br></pre></td></tr></table></figure>
+<ul>
+<li>k1,k2,k3：径向畸变系数</li>
+<li>p1,p2：切向畸变系数</li>
+</ul>
+<hr>
+<h1 id="2-手眼标定"><a class="markdownIt-Anchor" href="#2-手眼标定"></a> 2 手眼标定</h1>
+<h2 id="21-目的"><a class="markdownIt-Anchor" href="#21-目的"></a> 2.1 目的:</h2>
+<p>标定目的是为了统一坐标系 。摄像头检测的物体是在摄像头的坐标系下， 机械臂的运动又是在机械臂自身坐标系下。 物体是同一个物体， 但在不同的坐标系下有不同的坐标表示， 这就需要统一到一个坐标系下。</p>
+<h2 id="22-原理"><a class="markdownIt-Anchor" href="#22-原理"></a> 2.2 原理</h2>
+<p><img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/a8d9cb3d9f414b05b8eecb562624a406.png" alt="img"></p>
+<p><strong>机械臂手眼标定就是要找出相机坐标系到末端关节坐标系的转换关系。</strong></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/leo0308/article/details/141498200">https://blog.csdn.net/leo0308/article/details/141498200</a></p>
+</blockquote>
+<h2 id="23-常用方法"><a class="markdownIt-Anchor" href="#23-常用方法"></a> 2.3 常用方法</h2>
+<h3 id="通用思路"><a class="markdownIt-Anchor" href="#通用思路"></a> 通用思路</h3>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_45006390/article/details/121670412">https://blog.csdn.net/qq_45006390/article/details/121670412</a></p>
+</blockquote>
+<p>​    机器人的手眼标定其实就是<strong>两个坐标系之间的转换关系</strong>的标定。我们希望计算出<strong>相机坐标系到机械手坐标系</strong>的转换关系，并且我们已知<strong>对应的几个固定点</strong> <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210973822-105.png" alt="P"> 在这两个坐标系的坐标 <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210973822-106.png" alt="P_{camera}">和 <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210973823-107.png" alt="P_{robot}"> 。根据坐标转换 公式，可以得出：</p>
+<p><img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210973823-108.png" alt="P_{robot}=T_{camera}^{robot}P_{camera}"></p>
+<p>​    上式中的 <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210973823-109.png" alt="T_{camera}^{robot}"> 表示我们希望计算出的相机到机械手的转换矩阵。</p>
+<blockquote>
+<p>代码:</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/leo038/hand_eye_calibrate">https://github.com/leo038/hand_eye_calibrate</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/TIMIDBABY/HandEyeCalibrateForRobot">https://github.com/TIMIDBABY/HandEyeCalibrateForRobot</a></p>
+</blockquote>
+<h3 id="1-眼在手上"><a class="markdownIt-Anchor" href="#1-眼在手上"></a> 1 眼在手上</h3>
+<p><img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/de9f3d517cbbe7f0f318a70165b0bb96.jpg" alt="de9f3d517cbbe7f0f318a70165b0bb96"></p>
+<h4 id="11-待求量"><a class="markdownIt-Anchor" href="#11-待求量"></a> 1.1 待求量</h4>
+<p>​    相机安装在机械手上，随着机械手一起移动。对于 <em>Eye-in-Hand</em> 而言，<strong>相机坐标系</strong>相对于<strong>机械手末端夹具坐标系</strong>是<strong>固定的</strong>，而对于<strong>机械手基础坐标系</strong>是<strong>变化的</strong>。</p>
+<p>​    当相机固定于机械手末端夹具时，此时<strong>相机坐标系与机械手末端夹具坐标系</strong>的变换关系固定，而与基座坐标系的变换关系会时刻变化，因此此时的<strong>待求量</strong>变成了<strong>相机坐标系</strong>(camera )到<strong>机械手末端载具坐标系</strong>(tool)的变换矩阵 <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002345-120.png" alt="T_{camera}^{tool}">。</p>
+<h4 id="12-转换关系推导"><a class="markdownIt-Anchor" href="#12-转换关系推导"></a> 1.2 转换关系推导</h4>
+<p>​    根据各个坐标系的关系，我们可以给出下述的坐标变换方程：</p>
+<p><img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002345-121.png" alt="P_{base}=T_{tool}{base}P_{tool}=T_{tool}{base}T_{camera}^{tool}P_{camera}"></p>
+<p>​    上式中 <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002346-122.png" alt="P_{base}"> 代表固定在某个位置上的<strong>棋盘格中的角点</strong>，在机器人基座坐标系下的坐标。可以通过两种方式计算这个坐标：</p>
+<p>​    1）在机械手末端的夹具上<strong>加上探针</strong>，直接由<strong>末端去触碰棋盘格上的点</strong>，根据机器人正向运动学得到的<strong>末端夹具到基座坐标系</strong>的转换矩阵 <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002346-123.png" alt="T_{tool}^{base}"> 及<strong>棋盘格角点到末端坐标系</strong>的坐标 <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002346-124.png" alt="P_{tool}">，我们可以得到固定的<strong>棋盘格角点在机器人基座坐标系下的坐标</strong> <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002346-122.png" alt="P_{base}"> 。</p>
+<p>​    2）在机械手末端的夹具上<strong>安装相机</strong>，由相机去<strong>直接测量棋盘格角点机器对应的坐标</strong> <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002346-125.png" alt="P_{camera}">，通过计算<strong>机器手末端夹具到基座坐标系</strong>的转换矩阵 <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002346-123.png" alt="T_{tool}^{base}"> 和<strong>相机坐标系到机器人末端坐标系</strong>的转换矩阵 <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002345-120.png" alt="T_{camera}^{tool}">，便可以求出<strong>棋盘格在机器人基座坐标系</strong>下的坐标 <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002346-122.png" alt="P_{base}">。</p>
+<p>​    在第二种方式中，相机坐标系到机器人末端坐标系的转换矩阵 <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002345-120.png" alt="T_{camera}^{tool}"> 是我们的待求量，因此我们需要对<strong>开始时描述的坐标变换方程</strong>进行简单的<strong>变换</strong>：</p>
+<p><img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002346-126.png" alt="{T_{tool}{base}}{-1}P_{base}{P_{camera}}^{-1} = T_{camera}^{tool}"></p>
+<p>​    在上式中，坐标的三个变量都是<strong>已知量</strong>，由此我们可以计算<strong>出相机到机器人末端坐标系</strong>的转换矩阵 <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778211002345-120.png" alt="T_{camera}^{tool}">。</p>
+<h3 id="2-眼在手外"><a class="markdownIt-Anchor" href="#2-眼在手外"></a> 2 眼在手外</h3>
+<p><img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/d6763d3d126f6017cd5c9d2ef4f61a27.jpg" alt="d6763d3d126f6017cd5c9d2ef4f61a27"></p>
+<h4 id="21-待求量"><a class="markdownIt-Anchor" href="#21-待求量"></a> 2.1 待求量</h4>
+<p>​    相机固定在一个地方，机械手的运动不会带着相机一起移动。对于 <em>Eye-to-Hand</em> 而言，<strong>相机坐标系相对于机械手基础坐标系是固定的</strong>，而<strong>对于机械手末端夹具坐标系是变化的</strong>。</p>
+<p>​    在 <em>Eye-to-Hand</em> 的问题下，待求量为<strong>相机到机械手基座坐标系</strong>的<strong>固定转换矩阵</strong> <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq.png" alt="T_{camera}^{base}"> 。考虑到相机是固定在一个位置，因此相机只有相对于基座坐标系才是固定不变的，这样我们的<strong>待求量</strong><img src="https://latex.csdn.net/eq?T_%7Bcamera%7D%5E%7Bbase%7D" alt="T_{camera}^{base}"> <strong>是一个固定的参数</strong>，这样的标定才是有意义的。</p>
+<h4 id="22-标定思路"><a class="markdownIt-Anchor" href="#22-标定思路"></a> 2.2 标定思路</h4>
+<p>​    根据 <strong>第3.1节</strong> 中所介绍的通用求解思路，下一步需要通过<strong>棋盘格图像上的固定点</strong> <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924052-74.png" alt="P"> 来获得<strong>机械手基座坐标系下的固定点坐标</strong> <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-75.png" alt="P_{base}"> 和<strong>相机坐标系下的坐标</strong> <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-76.png" alt="P_{camera}">。</p>
+<p>​    通过识别棋盘格，我们可以得到<strong>棋盘格中的角点</strong>在<strong>相机坐标系下</strong>的坐标 <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-77.png" alt="P_{img}">，但是这是<strong>二维坐标</strong>，通过<strong>相机内参和物体的深度信息</strong>我们可以计算出 <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-76.png" alt="P_{camera}">。接下来我们只要测量出来对应的<strong>棋盘格点在机械手基座坐标系下</strong>的坐标 <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-75.png" alt="P_{base}">，便可以标定出<strong>机械手和相机之间的转换矩阵</strong> <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq.png" alt="T_{camera}^{base}">。</p>
+<h4 id="23-转换关系推导"><a class="markdownIt-Anchor" href="#23-转换关系推导"></a> 2.3 转换关系推导</h4>
+<p>​    在 <em>Eye-to-Hand</em> 问题下，<strong>棋盘格</strong>在标定的时候，会<strong>固定在机械手的末端夹具</strong>上，而机械手的<strong>末端夹具坐标系到基座坐标系的转换矩阵</strong>，可以通过机器人<strong>正向运动学</strong>计算得到。因此我们可以通过如下关系测量出棋盘格点在机器人基座坐标系下的坐标 <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-75.png" alt="P_{base}"> ：</p>
+<p><img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-78.png" alt="P_{base}=T_{tool}{base}T_{board}{tool}P_{board}"></p>
+<p>​    在上述公式中，<img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-79.png" alt="T_{tool}^{base}"> 和 <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-80.png" alt="T_{board}^{tool}"> 分别代表<strong>机械手末端夹具坐标系</strong>*(tool)<em>到<strong>基座坐标系</strong></em>(base)<em>的转换矩阵和<strong>棋盘格坐标系</strong></em>(board)<em>到<strong>机械手末端夹具坐标系</strong></em>(tool)*的转换矩阵。</p>
+<p>​    其中，<img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-79.png" alt="T_{tool}^{base}"> 可以实时根据<strong>机器人正向运动学</strong>得到，而 <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-80.png" alt="T_{board}^{tool}"> 可以通过设计<strong>一个固定尺寸</strong>的<strong>棋盘格</strong>得到。当棋盘格尺寸以及安装固定后，我们可以设<strong>棋盘格的左上角点为原点</strong>，然后通过测量或者设计尺寸<strong>计算棋盘格原点</strong>到<strong>机器人末端坐标原点</strong>的<strong>平移坐标</strong>，而棋盘格平面一般<strong>与机械手末端载具平面平行</strong>，因此该<strong>原点的法向量</strong>也可以获得，接下来就可以计算出 <img src="https://latex.csdn.net/eq?T_%7Bboard%7D%5E%7Btool%7D" alt="T_{board}^{tool}"> 。</p>
+<p>​    <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-81.png" alt="P_{board}"> 代表<strong>棋盘格角点再棋盘格坐标系下的坐标</strong>，这个同样可以根据设计棋盘格的尺寸得到。需要注意的是棋盘格的角点在<strong>机器人坐标系</strong>和<strong>图像坐标系</strong>的顺序需要<strong>一一对应</strong>，但是一般的方形棋盘格会存在旋转对称的问题，即我们无法区分棋盘格的原点是在左上角还是右下角，因此在进行手眼标定时可以<strong>使用非对称的棋盘格</strong>。</p>
+<p>​    通过上面的推导，我们已经可以计算出<strong>棋盘格角点在机器人基座坐标系中的坐标</strong> <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-75.png" alt="P_{base}">，然后根据<strong>张正友标定法</strong>得到<strong>棋盘格在相机坐标系中的坐标</strong> <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-76.png" alt="P_{camera}">。那么根据 <strong>第3.1节</strong> 中介绍的计算方法就可以得到相机到机器人的转换矩阵：</p>
+<p><img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-82.png" alt="T_{camera}^{base}=P_{base} {P_{camera}}^{-1}"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/" data-id="cmowd45gr0000tsv4cce2g8ew" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/cv/" rel="tag">cv</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2026/05/07/2026%E5%B9%B45%E6%9C%887%E6%97%A5-GGUF/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2026年5月7日 GGUF</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>154</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>42</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2025 - 2026 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
