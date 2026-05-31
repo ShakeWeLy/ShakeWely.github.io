@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2026年5月28日 agent笔记 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="从零构建 Agent 系统：整体架构设计笔记  0. Agent 到底是什么  0.1 什么是 Agent 在我看来, agent是一个可以根据当前情况选择合适工具进行调用的状态机,并且具有循环触发的能力  0.2 Agent 与 ChatBot 的区别 相比chatbot, agent除了具备多轮对话外, 还具备loop能力, 能够持续多轮进行llm调用, 直至任务完成  0.3 Agent">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2026年5月28日 agent笔记">
+<meta property="og:url" content="https://shakewely.github.io/2026/05/28/2026%E5%B9%B45%E6%9C%8828%E6%97%A5-agent%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="从零构建 Agent 系统：整体架构设计笔记  0. Agent 到底是什么  0.1 什么是 Agent 在我看来, agent是一个可以根据当前情况选择合适工具进行调用的状态机,并且具有循环触发的能力  0.2 Agent 与 ChatBot 的区别 相比chatbot, agent除了具备多轮对话外, 还具备loop能力, 能够持续多轮进行llm调用, 直至任务完成  0.3 Agent">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-05-28T06:18:39.000Z">
+<meta property="article:modified_time" content="2026-05-28T06:30:26.148Z">
+<meta property="article:author" content="Weakliy">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>161</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>43</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2026年5月28日-agent笔记" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/05/28/2026%E5%B9%B45%E6%9C%8828%E6%97%A5-agent%E7%AC%94%E8%AE%B0/" class="article-date">
+  <time class="post-time" datetime="2026-05-28T06:18:39.000Z" itemprop="datePublished">
+    <span class="post-month">5月</span><br/>
+    <span class="post-day">28</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2026年5月28日 agent笔记
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="从零构建-agent-系统整体架构设计笔记"><a class="markdownIt-Anchor" href="#从零构建-agent-系统整体架构设计笔记"></a> 从零构建 Agent 系统：整体架构设计笔记</h1>
+<h2 id="0-agent-到底是什么"><a class="markdownIt-Anchor" href="#0-agent-到底是什么"></a> 0. Agent 到底是什么</h2>
+<h3 id="01-什么是-agent"><a class="markdownIt-Anchor" href="#01-什么是-agent"></a> 0.1 什么是 Agent</h3>
+<p>在我看来, agent是一个可以根据当前情况选择合适工具进行调用的状态机,并且具有循环触发的能力</p>
+<h3 id="02-agent-与-chatbot-的区别"><a class="markdownIt-Anchor" href="#02-agent-与-chatbot-的区别"></a> 0.2 Agent 与 ChatBot 的区别</h3>
+<p>相比chatbot, agent除了具备多轮对话外, 还具备loop能力, 能够持续多轮进行llm调用, 直至任务完成</p>
+<h3 id="03-agent-的核心循环"><a class="markdownIt-Anchor" href="#03-agent-的核心循环"></a> 0.3 Agent 的核心循环</h3>
+<p>用户输出触发 -&gt;agent loop -&gt; if state==finish -&gt; break</p>
+<h3 id="04-agent-系统的整体架构"><a class="markdownIt-Anchor" href="#04-agent-系统的整体架构"></a> 0.4 Agent 系统的整体架构</h3>
+<p>LLM 负责推理</p>
+<p>Tool 负责行动</p>
+<p>Memory 负责记忆</p>
+<p>Runtime 负责执行</p>
+<p>Scheduler 负责调度</p>
+<p>Evaluation 负责评估</p>
+<h3 id="05-为什么-agent-越来越像操作系统"><a class="markdownIt-Anchor" href="#05-为什么-agent-越来越像操作系统"></a> 0.5 为什么 Agent 越来越像操作系统</h3>
+<ul>
+<li>LLM 类似 CPU，负责推理与决策</li>
+<li>Context / Memory 类似内存（RAM）</li>
+<li>Vector DB / Knowledge Base 类似硬盘存储</li>
+<li>Tool 类似外设与系统调用</li>
+<li>Runtime 类似进程运行环境</li>
+<li>Scheduler 类似任务调度器</li>
+</ul>
+<hr>
+<h1 id="1-message消息系统设计"><a class="markdownIt-Anchor" href="#1-message消息系统设计"></a> 1. Message：消息系统设计</h1>
+<h2 id="11-为什么一切从-message-开始"><a class="markdownIt-Anchor" href="#11-为什么一切从-message-开始"></a> 1.1 为什么一切从 Message 开始</h2>
+<h3 id="111-agent-本质是消息驱动系统"><a class="markdownIt-Anchor" href="#111-agent-本质是消息驱动系统"></a> 1.1.1 Agent 本质是消息驱动系统</h3>
+<h3 id="112-message-与-event-的关系"><a class="markdownIt-Anchor" href="#112-message-与-event-的关系"></a> 1.1.2 Message 与 Event 的关系</h3>
+<h2 id="12-message-基础结构设计"><a class="markdownIt-Anchor" href="#12-message-基础结构设计"></a> 1.2 Message 基础结构设计</h2>
+<h3 id="121-rolecontent-模型"><a class="markdownIt-Anchor" href="#121-rolecontent-模型"></a> 1.2.1 role/content 模型</h3>
+<h3 id="122-metadata-扩展"><a class="markdownIt-Anchor" href="#122-metadata-扩展"></a> 1.2.2 metadata 扩展</h3>
+<h3 id="123-session-与-trace"><a class="markdownIt-Anchor" href="#123-session-与-trace"></a> 1.2.3 session 与 trace</h3>
+<h2 id="13-多种-message-类型"><a class="markdownIt-Anchor" href="#13-多种-message-类型"></a> 1.3 多种 Message 类型</h2>
+<h3 id="131-usermessage"><a class="markdownIt-Anchor" href="#131-usermessage"></a> 1.3.1 UserMessage</h3>
+<h3 id="132-assistantmessage"><a class="markdownIt-Anchor" href="#132-assistantmessage"></a> 1.3.2 AssistantMessage</h3>
+<h3 id="133-toolmessage"><a class="markdownIt-Anchor" href="#133-toolmessage"></a> 1.3.3 ToolMessage</h3>
+<h3 id="134-systemmessage"><a class="markdownIt-Anchor" href="#134-systemmessage"></a> 1.3.4 SystemMessage</h3>
+<h2 id="14-message-生命周期"><a class="markdownIt-Anchor" href="#14-message-生命周期"></a> 1.4 Message 生命周期</h2>
+<h3 id="141-消息创建"><a class="markdownIt-Anchor" href="#141-消息创建"></a> 1.4.1 消息创建</h3>
+<h3 id="142-消息流转"><a class="markdownIt-Anchor" href="#142-消息流转"></a> 1.4.2 消息流转</h3>
+<h3 id="143-消息持久化"><a class="markdownIt-Anchor" href="#143-消息持久化"></a> 1.4.3 消息持久化</h3>
+<h2 id="15-context-管理"><a class="markdownIt-Anchor" href="#15-context-管理"></a> 1.5 Context 管理</h2>
+<h3 id="151-conversation-history"><a class="markdownIt-Anchor" href="#151-conversation-history"></a> 1.5.1 Conversation History</h3>
+<h3 id="152-context-window"><a class="markdownIt-Anchor" href="#152-context-window"></a> 1.5.2 Context Window</h3>
+<h3 id="153-context-compression"><a class="markdownIt-Anchor" href="#153-context-compression"></a> 1.5.3 Context Compression</h3>
+<hr>
+<h1 id="2-llm模型抽象层"><a class="markdownIt-Anchor" href="#2-llm模型抽象层"></a> 2. LLM：模型抽象层</h1>
+<h2 id="21-为什么需要-llm-抽象层"><a class="markdownIt-Anchor" href="#21-为什么需要-llm-抽象层"></a> 2.1 为什么需要 LLM 抽象层</h2>
+<h3 id="211-解耦模型提供商"><a class="markdownIt-Anchor" href="#211-解耦模型提供商"></a> 2.1.1 解耦模型提供商</h3>
+<h3 id="212-统一接口设计"><a class="markdownIt-Anchor" href="#212-统一接口设计"></a> 2.1.2 统一接口设计</h3>
+<h2 id="22-basellm-设计"><a class="markdownIt-Anchor" href="#22-basellm-设计"></a> 2.2 BaseLLM 设计</h2>
+<h3 id="221-ask-接口"><a class="markdownIt-Anchor" href="#221-ask-接口"></a> 2.2.1 ask 接口</h3>
+<h3 id="222-stream-接口"><a class="markdownIt-Anchor" href="#222-stream-接口"></a> 2.2.2 stream 接口</h3>
+<h3 id="223-structured-output"><a class="markdownIt-Anchor" href="#223-structured-output"></a> 2.2.3 structured output</h3>
+<h2 id="23-streaming-流式输出"><a class="markdownIt-Anchor" href="#23-streaming-流式输出"></a> 2.3 Streaming 流式输出</h2>
+<h3 id="231-token-streaming"><a class="markdownIt-Anchor" href="#231-token-streaming"></a> 2.3.1 Token Streaming</h3>
+<h3 id="232-chunk-streaming"><a class="markdownIt-Anchor" href="#232-chunk-streaming"></a> 2.3.2 Chunk Streaming</h3>
+<h3 id="233-event-streaming"><a class="markdownIt-Anchor" href="#233-event-streaming"></a> 2.3.3 Event Streaming</h3>
+<h2 id="24-tool-calling"><a class="markdownIt-Anchor" href="#24-tool-calling"></a> 2.4 Tool Calling</h2>
+<h3 id="241-function-calling"><a class="markdownIt-Anchor" href="#241-function-calling"></a> 2.4.1 Function Calling</h3>
+<h3 id="242-structured-output"><a class="markdownIt-Anchor" href="#242-structured-output"></a> 2.4.2 Structured Output</h3>
+<h3 id="243-tool-choice"><a class="markdownIt-Anchor" href="#243-tool-choice"></a> 2.4.3 Tool Choice</h3>
+<h2 id="25-llm-response-标准化"><a class="markdownIt-Anchor" href="#25-llm-response-标准化"></a> 2.5 LLM Response 标准化</h2>
+<h3 id="251-content"><a class="markdownIt-Anchor" href="#251-content"></a> 2.5.1 content</h3>
+<h3 id="252-tool_calls"><a class="markdownIt-Anchor" href="#252-tool_calls"></a> 2.5.2 tool_calls</h3>
+<h3 id="253-usage"><a class="markdownIt-Anchor" href="#253-usage"></a> 2.5.3 usage</h3>
+<h3 id="254-reasoning"><a class="markdownIt-Anchor" href="#254-reasoning"></a> 2.5.4 reasoning</h3>
+<h2 id="26-prompt-engineering-与-context-engineering"><a class="markdownIt-Anchor" href="#26-prompt-engineering-与-context-engineering"></a> 2.6 Prompt Engineering 与 Context Engineering</h2>
+<h3 id="261-prompt-layering"><a class="markdownIt-Anchor" href="#261-prompt-layering"></a> 2.6.1 Prompt Layering</h3>
+<h3 id="262-prompt-template"><a class="markdownIt-Anchor" href="#262-prompt-template"></a> 2.6.2 Prompt Template</h3>
+<h3 id="263-context-injection"><a class="markdownIt-Anchor" href="#263-context-injection"></a> 2.6.3 Context Injection</h3>
+<hr>
+<h1 id="3-tool工具系统设计"><a class="markdownIt-Anchor" href="#3-tool工具系统设计"></a> 3. Tool：工具系统设计</h1>
+<h2 id="31-tool-的本质"><a class="markdownIt-Anchor" href="#31-tool-的本质"></a> 3.1 Tool 的本质</h2>
+<h3 id="311-tool-可调用能力"><a class="markdownIt-Anchor" href="#311-tool-可调用能力"></a> 3.1.1 Tool = 可调用能力</h3>
+<h3 id="312-tool-与-api-的区别"><a class="markdownIt-Anchor" href="#312-tool-与-api-的区别"></a> 3.1.2 Tool 与 API 的区别</h3>
+<h2 id="32-basetool-设计"><a class="markdownIt-Anchor" href="#32-basetool-设计"></a> 3.2 BaseTool 设计</h2>
+<h3 id="321-name"><a class="markdownIt-Anchor" href="#321-name"></a> 3.2.1 name</h3>
+<h3 id="322-description"><a class="markdownIt-Anchor" href="#322-description"></a> 3.2.2 description</h3>
+<h3 id="323-parameters"><a class="markdownIt-Anchor" href="#323-parameters"></a> 3.2.3 parameters</h3>
+<h3 id="324-run"><a class="markdownIt-Anchor" href="#324-run"></a> 3.2.4 run</h3>
+<h2 id="33-tool-schema-设计"><a class="markdownIt-Anchor" href="#33-tool-schema-设计"></a> 3.3 Tool Schema 设计</h2>
+<h3 id="331-json-schema"><a class="markdownIt-Anchor" href="#331-json-schema"></a> 3.3.1 JSON Schema</h3>
+<h3 id="332-参数验证"><a class="markdownIt-Anchor" href="#332-参数验证"></a> 3.3.2 参数验证</h3>
+<h3 id="333-类型系统"><a class="markdownIt-Anchor" href="#333-类型系统"></a> 3.3.3 类型系统</h3>
+<h2 id="34-tool-registry"><a class="markdownIt-Anchor" href="#34-tool-registry"></a> 3.4 Tool Registry</h2>
+<h3 id="341-tool-注册"><a class="markdownIt-Anchor" href="#341-tool-注册"></a> 3.4.1 Tool 注册</h3>
+<h3 id="342-tool-查找"><a class="markdownIt-Anchor" href="#342-tool-查找"></a> 3.4.2 Tool 查找</h3>
+<h3 id="343-tool-discovery"><a class="markdownIt-Anchor" href="#343-tool-discovery"></a> 3.4.3 Tool Discovery</h3>
+<h2 id="35-tool-执行系统"><a class="markdownIt-Anchor" href="#35-tool-执行系统"></a> 3.5 Tool 执行系统</h2>
+<h3 id="351-tool-executor"><a class="markdownIt-Anchor" href="#351-tool-executor"></a> 3.5.1 Tool Executor</h3>
+<h3 id="352-retry"><a class="markdownIt-Anchor" href="#352-retry"></a> 3.5.2 Retry</h3>
+<h3 id="353-timeout"><a class="markdownIt-Anchor" href="#353-timeout"></a> 3.5.3 Timeout</h3>
+<h3 id="354-permission"><a class="markdownIt-Anchor" href="#354-permission"></a> 3.5.4 Permission</h3>
+<h2 id="36-tool-streaming"><a class="markdownIt-Anchor" href="#36-tool-streaming"></a> 3.6 Tool Streaming</h2>
+<h3 id="361-实时输出"><a class="markdownIt-Anchor" href="#361-实时输出"></a> 3.6.1 实时输出</h3>
+<h3 id="362-增量结果"><a class="markdownIt-Anchor" href="#362-增量结果"></a> 3.6.2 增量结果</h3>
+<h3 id="363-tool-event"><a class="markdownIt-Anchor" href="#363-tool-event"></a> 3.6.3 Tool Event</h3>
+<hr>
+<h1 id="4-agent智能体核心循环"><a class="markdownIt-Anchor" href="#4-agent智能体核心循环"></a> 4. Agent：智能体核心循环</h1>
+<h2 id="41-agent-的最小定义"><a class="markdownIt-Anchor" href="#41-agent-的最小定义"></a> 4.1 Agent 的最小定义</h2>
+<h3 id="411-llm-tool"><a class="markdownIt-Anchor" href="#411-llm-tool"></a> 4.1.1 LLM + Tool</h3>
+<h3 id="412-agent-loop"><a class="markdownIt-Anchor" href="#412-agent-loop"></a> 4.1.2 Agent Loop</h3>
+<h2 id="42-react-模式"><a class="markdownIt-Anchor" href="#42-react-模式"></a> 4.2 ReAct 模式</h2>
+<h3 id="421-reason"><a class="markdownIt-Anchor" href="#421-reason"></a> 4.2.1 Reason</h3>
+<h3 id="422-act"><a class="markdownIt-Anchor" href="#422-act"></a> 4.2.2 Act</h3>
+<h3 id="423-observe"><a class="markdownIt-Anchor" href="#423-observe"></a> 4.2.3 Observe</h3>
+<h2 id="43-agent-loop-实现"><a class="markdownIt-Anchor" href="#43-agent-loop-实现"></a> 4.3 Agent Loop 实现</h2>
+<h3 id="431-tool-call-loop"><a class="markdownIt-Anchor" href="#431-tool-call-loop"></a> 4.3.1 Tool Call Loop</h3>
+<h3 id="432-tool-result-injection"><a class="markdownIt-Anchor" href="#432-tool-result-injection"></a> 4.3.2 Tool Result Injection</h3>
+<h3 id="433-final-response"><a class="markdownIt-Anchor" href="#433-final-response"></a> 4.3.3 Final Response</h3>
+<h2 id="44-planning-与-reflection"><a class="markdownIt-Anchor" href="#44-planning-与-reflection"></a> 4.4 Planning 与 Reflection</h2>
+<h3 id="441-task-planning"><a class="markdownIt-Anchor" href="#441-task-planning"></a> 4.4.1 Task Planning</h3>
+<h3 id="442-self-reflection"><a class="markdownIt-Anchor" href="#442-self-reflection"></a> 4.4.2 Self Reflection</h3>
+<h3 id="443-retry-strategy"><a class="markdownIt-Anchor" href="#443-retry-strategy"></a> 4.4.3 Retry Strategy</h3>
+<h2 id="45-structured-agent"><a class="markdownIt-Anchor" href="#45-structured-agent"></a> 4.5 Structured Agent</h2>
+<h3 id="451-状态驱动-agent"><a class="markdownIt-Anchor" href="#451-状态驱动-agent"></a> 4.5.1 状态驱动 Agent</h3>
+<h3 id="452-workflow-agent"><a class="markdownIt-Anchor" href="#452-workflow-agent"></a> 4.5.2 Workflow Agent</h3>
+<h3 id="453-graph-agent"><a class="markdownIt-Anchor" href="#453-graph-agent"></a> 4.5.3 Graph Agent</h3>
+<hr>
+<h1 id="5-memory记忆系统设计"><a class="markdownIt-Anchor" href="#5-memory记忆系统设计"></a> 5. Memory：记忆系统设计</h1>
+<h2 id="51-为什么-agent-需要-memory"><a class="markdownIt-Anchor" href="#51-为什么-agent-需要-memory"></a> 5.1 为什么 Agent 需要 Memory</h2>
+<h3 id="511-chat-history-的局限"><a class="markdownIt-Anchor" href="#511-chat-history-的局限"></a> 5.1.1 Chat History 的局限</h3>
+<h3 id="512-长期记忆的重要性"><a class="markdownIt-Anchor" href="#512-长期记忆的重要性"></a> 5.1.2 长期记忆的重要性</h3>
+<h2 id="52-short-term-memory"><a class="markdownIt-Anchor" href="#52-short-term-memory"></a> 5.2 Short-Term Memory</h2>
+<h3 id="521-conversation-memory"><a class="markdownIt-Anchor" href="#521-conversation-memory"></a> 5.2.1 Conversation Memory</h3>
+<h3 id="522-window-memory"><a class="markdownIt-Anchor" href="#522-window-memory"></a> 5.2.2 Window Memory</h3>
+<h3 id="523-summary-memory"><a class="markdownIt-Anchor" href="#523-summary-memory"></a> 5.2.3 Summary Memory</h3>
+<h2 id="53-working-memory"><a class="markdownIt-Anchor" href="#53-working-memory"></a> 5.3 Working Memory</h2>
+<h3 id="531-当前任务状态"><a class="markdownIt-Anchor" href="#531-当前任务状态"></a> 5.3.1 当前任务状态</h3>
+<h3 id="532-intermediate-result"><a class="markdownIt-Anchor" href="#532-intermediate-result"></a> 5.3.2 Intermediate Result</h3>
+<h3 id="533-task-context"><a class="markdownIt-Anchor" href="#533-task-context"></a> 5.3.3 Task Context</h3>
+<h2 id="54-long-term-memory"><a class="markdownIt-Anchor" href="#54-long-term-memory"></a> 5.4 Long-Term Memory</h2>
+<h3 id="541-user-profile"><a class="markdownIt-Anchor" href="#541-user-profile"></a> 5.4.1 User Profile</h3>
+<h3 id="542-vector-memory"><a class="markdownIt-Anchor" href="#542-vector-memory"></a> 5.4.2 Vector Memory</h3>
+<h3 id="543-knowledge-memory"><a class="markdownIt-Anchor" href="#543-knowledge-memory"></a> 5.4.3 Knowledge Memory</h3>
+<h2 id="55-memory-retrieval"><a class="markdownIt-Anchor" href="#55-memory-retrieval"></a> 5.5 Memory Retrieval</h2>
+<h3 id="551-embedding-retrieval"><a class="markdownIt-Anchor" href="#551-embedding-retrieval"></a> 5.5.1 Embedding Retrieval</h3>
+<h3 id="552-semantic-search"><a class="markdownIt-Anchor" href="#552-semantic-search"></a> 5.5.2 Semantic Search</h3>
+<h3 id="553-hybrid-search"><a class="markdownIt-Anchor" href="#553-hybrid-search"></a> 5.5.3 Hybrid Search</h3>
+<h2 id="56-memory-生命周期"><a class="markdownIt-Anchor" href="#56-memory-生命周期"></a> 5.6 Memory 生命周期</h2>
+<h3 id="561-写入"><a class="markdownIt-Anchor" href="#561-写入"></a> 5.6.1 写入</h3>
+<h3 id="562-压缩"><a class="markdownIt-Anchor" href="#562-压缩"></a> 5.6.2 压缩</h3>
+<h3 id="563-遗忘"><a class="markdownIt-Anchor" href="#563-遗忘"></a> 5.6.3 遗忘</h3>
+<h3 id="564-更新"><a class="markdownIt-Anchor" href="#564-更新"></a> 5.6.4 更新</h3>
+<hr>
+<h1 id="6-mcp-skill能力扩展系统"><a class="markdownIt-Anchor" href="#6-mcp-skill能力扩展系统"></a> 6. MCP / Skill：能力扩展系统</h1>
+<h2 id="61-什么是-skill"><a class="markdownIt-Anchor" href="#61-什么是-skill"></a> 6.1 什么是 Skill</h2>
+<h3 id="611-skill-与-tool-的区别"><a class="markdownIt-Anchor" href="#611-skill-与-tool-的区别"></a> 6.1.1 Skill 与 Tool 的区别</h3>
+<h3 id="612-高层行为封装"><a class="markdownIt-Anchor" href="#612-高层行为封装"></a> 6.1.2 高层行为封装</h3>
+<h2 id="62-skill-系统设计"><a class="markdownIt-Anchor" href="#62-skill-系统设计"></a> 6.2 Skill 系统设计</h2>
+<h3 id="621-skill-registry"><a class="markdownIt-Anchor" href="#621-skill-registry"></a> 6.2.1 Skill Registry</h3>
+<h3 id="622-skill-composition"><a class="markdownIt-Anchor" href="#622-skill-composition"></a> 6.2.2 Skill Composition</h3>
+<h3 id="623-skill-routing"><a class="markdownIt-Anchor" href="#623-skill-routing"></a> 6.2.3 Skill Routing</h3>
+<h2 id="63-mcp-协议"><a class="markdownIt-Anchor" href="#63-mcp-协议"></a> 6.3 MCP 协议</h2>
+<h3 id="631-mcp-的核心思想"><a class="markdownIt-Anchor" href="#631-mcp-的核心思想"></a> 6.3.1 MCP 的核心思想</h3>
+<h3 id="632-mcp-client"><a class="markdownIt-Anchor" href="#632-mcp-client"></a> 6.3.2 MCP Client</h3>
+<h3 id="633-mcp-server"><a class="markdownIt-Anchor" href="#633-mcp-server"></a> 6.3.3 MCP Server</h3>
+<h2 id="64-外部能力集成"><a class="markdownIt-Anchor" href="#64-外部能力集成"></a> 6.4 外部能力集成</h2>
+<h3 id="641-ide"><a class="markdownIt-Anchor" href="#641-ide"></a> 6.4.1 IDE</h3>
+<h3 id="642-browser"><a class="markdownIt-Anchor" href="#642-browser"></a> 6.4.2 Browser</h3>
+<h3 id="643-database"><a class="markdownIt-Anchor" href="#643-database"></a> 6.4.3 Database</h3>
+<h3 id="644-github"><a class="markdownIt-Anchor" href="#644-github"></a> 6.4.4 GitHub</h3>
+<h2 id="65-agent-os-与插件化"><a class="markdownIt-Anchor" href="#65-agent-os-与插件化"></a> 6.5 Agent OS 与插件化</h2>
+<h3 id="651-plugin-architecture"><a class="markdownIt-Anchor" href="#651-plugin-architecture"></a> 6.5.1 Plugin Architecture</h3>
+<h3 id="652-capability-discovery"><a class="markdownIt-Anchor" href="#652-capability-discovery"></a> 6.5.2 Capability Discovery</h3>
+<h3 id="653-dynamic-tool-mount"><a class="markdownIt-Anchor" href="#653-dynamic-tool-mount"></a> 6.5.3 Dynamic Tool Mount</h3>
+<hr>
+<h1 id="7-runtimeagent-runtime-设计"><a class="markdownIt-Anchor" href="#7-runtimeagent-runtime-设计"></a> 7. Runtime：Agent Runtime 设计</h1>
+<h2 id="71-runtime-的本质"><a class="markdownIt-Anchor" href="#71-runtime-的本质"></a> 7.1 Runtime 的本质</h2>
+<h3 id="711-agent-的执行环境"><a class="markdownIt-Anchor" href="#711-agent-的执行环境"></a> 7.1.1 Agent 的执行环境</h3>
+<h3 id="712-runtime-与-framework-的区别"><a class="markdownIt-Anchor" href="#712-runtime-与-framework-的区别"></a> 7.1.2 Runtime 与 Framework 的区别</h3>
+<h2 id="72-event-driven-architecture"><a class="markdownIt-Anchor" href="#72-event-driven-architecture"></a> 7.2 Event-Driven Architecture</h2>
+<h3 id="721-event-bus"><a class="markdownIt-Anchor" href="#721-event-bus"></a> 7.2.1 Event Bus</h3>
+<h3 id="722-emiton"><a class="markdownIt-Anchor" href="#722-emiton"></a> 7.2.2 emit/on</h3>
+<h3 id="723-event-propagation"><a class="markdownIt-Anchor" href="#723-event-propagation"></a> 7.2.3 Event Propagation</h3>
+<h2 id="73-生命周期管理"><a class="markdownIt-Anchor" href="#73-生命周期管理"></a> 7.3 生命周期管理</h2>
+<h3 id="731-on_start"><a class="markdownIt-Anchor" href="#731-on_start"></a> 7.3.1 on_start</h3>
+<h3 id="732-on_tool_call"><a class="markdownIt-Anchor" href="#732-on_tool_call"></a> 7.3.2 on_tool_call</h3>
+<h3 id="733-on_finish"><a class="markdownIt-Anchor" href="#733-on_finish"></a> 7.3.3 on_finish</h3>
+<h3 id="734-on_error"><a class="markdownIt-Anchor" href="#734-on_error"></a> 7.3.4 on_error</h3>
+<h2 id="74-stream-runtime"><a class="markdownIt-Anchor" href="#74-stream-runtime"></a> 7.4 Stream Runtime</h2>
+<h3 id="741-token-stream"><a class="markdownIt-Anchor" href="#741-token-stream"></a> 7.4.1 Token Stream</h3>
+<h3 id="742-tool-stream"><a class="markdownIt-Anchor" href="#742-tool-stream"></a> 7.4.2 Tool Stream</h3>
+<h3 id="743-ui-stream"><a class="markdownIt-Anchor" href="#743-ui-stream"></a> 7.4.3 UI Stream</h3>
+<h3 id="744-tts-stream"><a class="markdownIt-Anchor" href="#744-tts-stream"></a> 7.4.4 TTS Stream</h3>
+<h2 id="75-session-与-state"><a class="markdownIt-Anchor" href="#75-session-与-state"></a> 7.5 Session 与 State</h2>
+<h3 id="751-session-管理"><a class="markdownIt-Anchor" href="#751-session-管理"></a> 7.5.1 Session 管理</h3>
+<h3 id="752-runtime-state"><a class="markdownIt-Anchor" href="#752-runtime-state"></a> 7.5.2 Runtime State</h3>
+<h3 id="753-context-state"><a class="markdownIt-Anchor" href="#753-context-state"></a> 7.5.3 Context State</h3>
+<h2 id="76-interrupt-与-control"><a class="markdownIt-Anchor" href="#76-interrupt-与-control"></a> 7.6 Interrupt 与 Control</h2>
+<h3 id="761-pause"><a class="markdownIt-Anchor" href="#761-pause"></a> 7.6.1 Pause</h3>
+<h3 id="762-resume"><a class="markdownIt-Anchor" href="#762-resume"></a> 7.6.2 Resume</h3>
+<h3 id="763-cancel"><a class="markdownIt-Anchor" href="#763-cancel"></a> 7.6.3 Cancel</h3>
+<h3 id="764-retry"><a class="markdownIt-Anchor" href="#764-retry"></a> 7.6.4 Retry</h3>
+<hr>
+<h1 id="8-scheduler调度与工作流系统"><a class="markdownIt-Anchor" href="#8-scheduler调度与工作流系统"></a> 8. Scheduler：调度与工作流系统</h1>
+<h2 id="81-为什么需要-scheduler"><a class="markdownIt-Anchor" href="#81-为什么需要-scheduler"></a> 8.1 为什么需要 Scheduler</h2>
+<h3 id="811-agent-并发问题"><a class="markdownIt-Anchor" href="#811-agent-并发问题"></a> 8.1.1 Agent 并发问题</h3>
+<h3 id="812-workflow-编排"><a class="markdownIt-Anchor" href="#812-workflow-编排"></a> 8.1.2 Workflow 编排</h3>
+<h2 id="82-task-scheduling"><a class="markdownIt-Anchor" href="#82-task-scheduling"></a> 8.2 Task Scheduling</h2>
+<h3 id="821-queue"><a class="markdownIt-Anchor" href="#821-queue"></a> 8.2.1 Queue</h3>
+<h3 id="822-priority"><a class="markdownIt-Anchor" href="#822-priority"></a> 8.2.2 Priority</h3>
+<h3 id="823-retry"><a class="markdownIt-Anchor" href="#823-retry"></a> 8.2.3 Retry</h3>
+<h3 id="824-timeout"><a class="markdownIt-Anchor" href="#824-timeout"></a> 8.2.4 Timeout</h3>
+<h2 id="83-async-runtime"><a class="markdownIt-Anchor" href="#83-async-runtime"></a> 8.3 Async Runtime</h2>
+<h3 id="831-asyncio"><a class="markdownIt-Anchor" href="#831-asyncio"></a> 8.3.1 asyncio</h3>
+<h3 id="832-create_task"><a class="markdownIt-Anchor" href="#832-create_task"></a> 8.3.2 create_task</h3>
+<h3 id="833-worker-pool"><a class="markdownIt-Anchor" href="#833-worker-pool"></a> 8.3.3 Worker Pool</h3>
+<h2 id="84-workflow-系统"><a class="markdownIt-Anchor" href="#84-workflow-系统"></a> 8.4 Workflow 系统</h2>
+<h3 id="841-dag"><a class="markdownIt-Anchor" href="#841-dag"></a> 8.4.1 DAG</h3>
+<h3 id="842-graph-workflow"><a class="markdownIt-Anchor" href="#842-graph-workflow"></a> 8.4.2 Graph Workflow</h3>
+<h3 id="843-state-machine"><a class="markdownIt-Anchor" href="#843-state-machine"></a> 8.4.3 State Machine</h3>
+<h2 id="85-multi-agent-coordination"><a class="markdownIt-Anchor" href="#85-multi-agent-coordination"></a> 8.5 Multi-Agent Coordination</h2>
+<h3 id="851-planner"><a class="markdownIt-Anchor" href="#851-planner"></a> 8.5.1 Planner</h3>
+<h3 id="852-executor"><a class="markdownIt-Anchor" href="#852-executor"></a> 8.5.2 Executor</h3>
+<h3 id="853-reviewer"><a class="markdownIt-Anchor" href="#853-reviewer"></a> 8.5.3 Reviewer</h3>
+<h2 id="86-resource-management"><a class="markdownIt-Anchor" href="#86-resource-management"></a> 8.6 Resource Management</h2>
+<h3 id="861-token-budget"><a class="markdownIt-Anchor" href="#861-token-budget"></a> 8.6.1 Token Budget</h3>
+<h3 id="862-rate-limit"><a class="markdownIt-Anchor" href="#862-rate-limit"></a> 8.6.2 Rate Limit</h3>
+<h3 id="863-context-budget"><a class="markdownIt-Anchor" href="#863-context-budget"></a> 8.6.3 Context Budget</h3>
+<hr>
+<h1 id="9-evaluation评估与可观测性"><a class="markdownIt-Anchor" href="#9-evaluation评估与可观测性"></a> 9. Evaluation：评估与可观测性</h1>
+<h2 id="91-为什么-agent-需要-evaluation"><a class="markdownIt-Anchor" href="#91-为什么-agent-需要-evaluation"></a> 9.1 为什么 Agent 需要 Evaluation</h2>
+<h3 id="911-agent-的不稳定性"><a class="markdownIt-Anchor" href="#911-agent-的不稳定性"></a> 9.1.1 Agent 的不稳定性</h3>
+<h3 id="912-回归问题"><a class="markdownIt-Anchor" href="#912-回归问题"></a> 9.1.2 回归问题</h3>
+<h2 id="92-tool-evaluation"><a class="markdownIt-Anchor" href="#92-tool-evaluation"></a> 9.2 Tool Evaluation</h2>
+<h3 id="921-tool-success-rate"><a class="markdownIt-Anchor" href="#921-tool-success-rate"></a> 9.2.1 Tool Success Rate</h3>
+<h3 id="922-tool-accuracy"><a class="markdownIt-Anchor" href="#922-tool-accuracy"></a> 9.2.2 Tool Accuracy</h3>
+<h3 id="923-tool-retry"><a class="markdownIt-Anchor" href="#923-tool-retry"></a> 9.2.3 Tool Retry</h3>
+<h2 id="93-task-evaluation"><a class="markdownIt-Anchor" href="#93-task-evaluation"></a> 9.3 Task Evaluation</h2>
+<h3 id="931-task-completion"><a class="markdownIt-Anchor" href="#931-task-completion"></a> 9.3.1 Task Completion</h3>
+<h3 id="932-goal-success"><a class="markdownIt-Anchor" href="#932-goal-success"></a> 9.3.2 Goal Success</h3>
+<h3 id="933-human-feedback"><a class="markdownIt-Anchor" href="#933-human-feedback"></a> 9.3.3 Human Feedback</h3>
+<h2 id="94-trajectory-evaluation"><a class="markdownIt-Anchor" href="#94-trajectory-evaluation"></a> 9.4 Trajectory Evaluation</h2>
+<h3 id="941-推理路径"><a class="markdownIt-Anchor" href="#941-推理路径"></a> 9.4.1 推理路径</h3>
+<h3 id="942-action-sequence"><a class="markdownIt-Anchor" href="#942-action-sequence"></a> 9.4.2 Action Sequence</h3>
+<h3 id="943-reflection-quality"><a class="markdownIt-Anchor" href="#943-reflection-quality"></a> 9.4.3 Reflection Quality</h3>
+<h2 id="95-observability"><a class="markdownIt-Anchor" href="#95-observability"></a> 9.5 Observability</h2>
+<h3 id="951-logging"><a class="markdownIt-Anchor" href="#951-logging"></a> 9.5.1 Logging</h3>
+<h3 id="952-metrics"><a class="markdownIt-Anchor" href="#952-metrics"></a> 9.5.2 Metrics</h3>
+<h3 id="953-tracing"><a class="markdownIt-Anchor" href="#953-tracing"></a> 9.5.3 Tracing</h3>
+<h3 id="954-replay"><a class="markdownIt-Anchor" href="#954-replay"></a> 9.5.4 Replay</h3>
+<h2 id="96-benchmark-与-regression"><a class="markdownIt-Anchor" href="#96-benchmark-与-regression"></a> 9.6 Benchmark 与 Regression</h2>
+<h3 id="961-benchmark-dataset"><a class="markdownIt-Anchor" href="#961-benchmark-dataset"></a> 9.6.1 Benchmark Dataset</h3>
+<h3 id="962-automated-testing"><a class="markdownIt-Anchor" href="#962-automated-testing"></a> 9.6.2 Automated Testing</h3>
+<h3 id="963-regression-testing"><a class="markdownIt-Anchor" href="#963-regression-testing"></a> 9.6.3 Regression Testing</h3>
+<hr>
+<h1 id="10-工业级-agent-系统设计"><a class="markdownIt-Anchor" href="#10-工业级-agent-系统设计"></a> 10. 工业级 Agent 系统设计</h1>
+<h2 id="101-从-demo-到-production"><a class="markdownIt-Anchor" href="#101-从-demo-到-production"></a> 10.1 从 Demo 到 Production</h2>
+<h2 id="102-agent-framework-架构"><a class="markdownIt-Anchor" href="#102-agent-framework-架构"></a> 10.2 Agent Framework 架构</h2>
+<h2 id="103-分布式-agent-runtime"><a class="markdownIt-Anchor" href="#103-分布式-agent-runtime"></a> 10.3 分布式 Agent Runtime</h2>
+<h2 id="104-agent-platform-设计"><a class="markdownIt-Anchor" href="#104-agent-platform-设计"></a> 10.4 Agent Platform 设计</h2>
+<h2 id="105-agent-os-的未来"><a class="markdownIt-Anchor" href="#105-agent-os-的未来"></a> 10.5 Agent OS 的未来</h2>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/05/28/2026%E5%B9%B45%E6%9C%8828%E6%97%A5-agent%E7%AC%94%E8%AE%B0/" data-id="cmptvn9s6000d9sv4fobd39cj" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2026/05/29/2026%E5%B9%B45%E6%9C%8829%E6%97%A5-embed%E5%BE%AE%E8%B0%83/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          2026年5月29日 embed微调
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2026/05/28/2026%E5%B9%B45%E6%9C%8828%E6%97%A5-agent%E7%9F%A5%E8%AF%86%E5%BA%93/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2026年5月28日 agent知识库</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>161</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>43</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2025 - 2026 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

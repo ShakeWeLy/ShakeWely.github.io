@@ -5,13 +5,15 @@
   
   <title>2026年1月24日 agent开发杂谈 | Weakliy_Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="article">
+  <meta name="description" content="自进化 自我进化用一句来讲，大概是这样：  真实任务里的经验，怎么变成下一次任务可复用、可验证、可治理的能力。   策略 上下文进化：将执行经验、用户偏好或环境约束写回本地记忆文件、会话索引或技能目录，在下一次任务触发时通过检索提取并拼接入上下文。 技能进化：把经验外化成结构化的 SKILL.md、技能包或工作流脚本。系统依据执行报错或反馈信号，自动修改技能代码，在测试集中跑通后覆盖老版本，失败">
+<meta property="og:type" content="article">
 <meta property="og:title" content="2026年1月24日 agent开发杂谈">
 <meta property="og:url" content="https://shakewely.github.io/2026/01/24/2026%E5%B9%B41%E6%9C%8824%E6%97%A5-agent%E5%BC%80%E5%8F%91%E6%9D%82%E8%B0%88/index.html">
 <meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="自进化 自我进化用一句来讲，大概是这样：  真实任务里的经验，怎么变成下一次任务可复用、可验证、可治理的能力。   策略 上下文进化：将执行经验、用户偏好或环境约束写回本地记忆文件、会话索引或技能目录，在下一次任务触发时通过检索提取并拼接入上下文。 技能进化：把经验外化成结构化的 SKILL.md、技能包或工作流脚本。系统依据执行报错或反馈信号，自动修改技能代码，在测试集中跑通后覆盖老版本，失败">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-01-24T06:12:01.000Z">
-<meta property="article:modified_time" content="2026-01-24T06:12:01.819Z">
+<meta property="article:modified_time" content="2026-05-23T14:22:29.534Z">
 <meta property="article:author" content="Weakliy">
 <meta name="twitter:card" content="summary">
   
@@ -45,9 +47,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>154</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>161</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>42</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>43</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -103,7 +105,42 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <h1 id="自进化"><a class="markdownIt-Anchor" href="#自进化"></a> 自进化</h1>
+<p>自我进化用一句来讲，大概是这样：</p>
+<blockquote>
+<p>真实任务里的经验，怎么变成下一次任务可复用、可验证、可治理的能力。</p>
+</blockquote>
+<h3 id="策略"><a class="markdownIt-Anchor" href="#策略"></a> 策略</h3>
+<p><strong>上下文进化</strong>：将执行经验、用户偏好或环境约束写回本地记忆文件、会话索引或技能目录，在下一次任务触发时通过检索提取并拼接入上下文。</p>
+<p><strong>技能进化</strong>：把经验外化成结构化的 <a target="_blank" rel="noopener" href="http://SKILL.md">SKILL.md</a>、技能包或工作流脚本。系统依据执行报错或反馈信号，自动修改技能代码，在测试集中跑通后覆盖老版本，失败则触发版本回滚。</p>
+<p><strong>群体智能进化</strong>：多个 Agent、多台机器、多个用户的本地经验接入云端共享层。系统在服务端完成轨迹去重、冲突合并、安全脱敏与质量验证，最后将提纯后的技能或记忆分发回所有终端。</p>
+<p><strong>策略进化</strong>：将真实的交互轨迹与成败反馈收集起来，直接修改 Agent 的核心调度代码、工作流拓扑，甚至转化为强化学习（RL）的标量奖励来更新大模型的底层参数。</p>
+<h4 id="1-上下文进化"><a class="markdownIt-Anchor" href="#1-上下文进化"></a> 1 上下文进化</h4>
+<p>典型的上下文资产包括：</p>
+<ul>
+<li>跨会话记忆✅</li>
+<li>会话检索</li>
+<li>用户画像✅</li>
+<li>项目级上下文</li>
+<li>技能目录的动态装载</li>
+<li>失败后的反思记录</li>
+</ul>
+<p><strong>触发时机</strong></p>
+<p>执行反馈与用户纠正产生分叉，一部分写入策展记忆，一部分沉淀为 Skills。当新任务到来，系统通过 session_search 将历史记忆与技能一并汇入下一轮上下文。</p>
+<h4 id="2-技能进化"><a class="markdownIt-Anchor" href="#2-技能进化"></a> 2. 技能进化</h4>
+<p>系统依据执行报错或反馈信号，自动修改技能代码，在测试集中跑通后覆盖老版本，失败则触发版本回滚。</p>
+<p>所以当我们发现某类经验开始重复出现，就不应该继续把它留在记忆层，而应该上升成技能资产。</p>
+<p>允许 agent 自己创建、编辑、补丁、删文件、写附属文件。</p>
+<p><strong>自动复盘机制。</strong></p>
+<p>第一层是 nudge。memory 按用户回合数触发，skills 按工具迭代次数触发。达到阈值以后，系统会在主任务完成后，后台 fork 一个 review agent，让它复查当前会话，看有没有东西值得落 memory 或 patch/create skill。[run_agent.py] run_agent.py#L2448-L2547  [run_agent.py] run_agent.py#L11586-L11612</p>
+<p>第二层是 guidance。系统提示里直接写明：</p>
+<ul>
+<li>复杂任务、踩坑任务、发现可复用流程，要考虑存技能</li>
+<li>技能用着发现过时或不完整，要立刻 patch</li>
+</ul>
+<h4 id="3-多agent-skill共享层"><a class="markdownIt-Anchor" href="#3-多agent-skill共享层"></a> 3 多agent skill共享层</h4>
+<h4 id="4-微调模型"><a class="markdownIt-Anchor" href="#4-微调模型"></a> 4 微调模型</h4>
+
       
     </div>
     <footer class="article-footer">
@@ -177,9 +214,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>154</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>161</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>42</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>43</strong><br>标签</div></a>
     </div>
 
 

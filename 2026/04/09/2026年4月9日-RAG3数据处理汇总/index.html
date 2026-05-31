@@ -5,17 +5,26 @@
   
   <title>2026年4月9日 RAG3数据处理汇总 | Weakliy_Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="可选处理方案（不改代码，只给方案）  方案 A：把合并区域“展开填充”（推荐做数据分析时用） 目标：让合并块里的每个格子都有同样的值（不管是左右合并还是上下合并）。   做法 （ 1.xlsx ）：用 1openpyxl 读取工作表，拿到 1ws.merged_cells.ranges ，对每个 range：  取左上角值 top_left &#x3D; ws.cell(min_row, min_col)">
+  <meta name="description" content="处理 PDF、Word、Markdown 等不同格式文档？   chunk size   向量索引   混合   检索失败   重排序     可选处理方案（不改代码，只给方案）  方案 A：把合并区域“展开填充”（推荐做数据分析时用） 目标：让合并块里的每个格子都有同样的值（不管是左右合并还是上下合并）。   做法 （ 1.xlsx ）：用 1openpyxl 读取工作表，拿到 1ws.merg">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2026年4月9日 RAG3数据处理汇总">
 <meta property="og:url" content="https://shakewely.github.io/2026/04/09/2026%E5%B9%B44%E6%9C%889%E6%97%A5-RAG3%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%B1%87%E6%80%BB/index.html">
 <meta property="og:site_name" content="Weakliy_Blog">
-<meta property="og:description" content="可选处理方案（不改代码，只给方案）  方案 A：把合并区域“展开填充”（推荐做数据分析时用） 目标：让合并块里的每个格子都有同样的值（不管是左右合并还是上下合并）。   做法 （ 1.xlsx ）：用 1openpyxl 读取工作表，拿到 1ws.merged_cells.ranges ，对每个 range：  取左上角值 top_left &#x3D; ws.cell(min_row, min_col)">
+<meta property="og:description" content="处理 PDF、Word、Markdown 等不同格式文档？   chunk size   向量索引   混合   检索失败   重排序     可选处理方案（不改代码，只给方案）  方案 A：把合并区域“展开填充”（推荐做数据分析时用） 目标：让合并块里的每个格子都有同样的值（不管是左右合并还是上下合并）。   做法 （ 1.xlsx ）：用 1openpyxl 读取工作表，拿到 1ws.merg">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2026/04/09/2026%E5%B9%B44%E6%9C%889%E6%97%A5-RAG3%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%B1%87%E6%80%BB/image-20260522160454281.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/04/09/2026%E5%B9%B44%E6%9C%889%E6%97%A5-RAG3%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%B1%87%E6%80%BB/image-20260522160500800.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/04/09/2026%E5%B9%B44%E6%9C%889%E6%97%A5-RAG3%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%B1%87%E6%80%BB/image-20260522160914144.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/04/09/2026%E5%B9%B44%E6%9C%889%E6%97%A5-RAG3%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%B1%87%E6%80%BB/image-20260522161145966.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/04/09/2026%E5%B9%B44%E6%9C%889%E6%97%A5-RAG3%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%B1%87%E6%80%BB/image-20260522161347778.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/04/09/2026%E5%B9%B44%E6%9C%889%E6%97%A5-RAG3%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%B1%87%E6%80%BB/image-20260522161816890.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/04/09/2026%E5%B9%B44%E6%9C%889%E6%97%A5-RAG3%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%B1%87%E6%80%BB/image-20260522161627221.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/04/09/2026%E5%B9%B44%E6%9C%889%E6%97%A5-RAG3%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%B1%87%E6%80%BB/image-20260522162138063.png">
 <meta property="article:published_time" content="2026-04-09T05:54:42.000Z">
-<meta property="article:modified_time" content="2026-04-09T08:09:37.023Z">
+<meta property="article:modified_time" content="2026-05-22T09:14:36.225Z">
 <meta property="article:author" content="Weakliy">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shakewely.github.io/2026/04/09/2026%E5%B9%B44%E6%9C%889%E6%97%A5-RAG3%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%B1%87%E6%80%BB/image-20260522160454281.png">
   
     <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
   
@@ -47,9 +56,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>154</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>161</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>42</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>43</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -105,7 +114,21 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="可选处理方案不改代码只给方案"><a class="markdownIt-Anchor" href="#可选处理方案不改代码只给方案"></a> 可选处理方案（不改代码，只给方案）</h2>
+        <p>处理 PDF、Word、Markdown 等不同格式文档？</p>
+<img src="/2026/04/09/2026%E5%B9%B44%E6%9C%889%E6%97%A5-RAG3%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%B1%87%E6%80%BB/image-20260522160454281.png" alt="image-20260522160454281" style="zoom:33%;">
+<h2 id="chunk-size"><a class="markdownIt-Anchor" href="#chunk-size"></a> chunk size</h2>
+<p><img src="/2026/04/09/2026%E5%B9%B44%E6%9C%889%E6%97%A5-RAG3%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%B1%87%E6%80%BB/image-20260522160500800.png" alt="image-20260522160500800"></p>
+<h2 id="向量索引"><a class="markdownIt-Anchor" href="#向量索引"></a> 向量索引</h2>
+<p><img src="/2026/04/09/2026%E5%B9%B44%E6%9C%889%E6%97%A5-RAG3%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%B1%87%E6%80%BB/image-20260522160914144.png" alt="image-20260522160914144"></p>
+<h2 id="混合"><a class="markdownIt-Anchor" href="#混合"></a> 混合</h2>
+<p><img src="/2026/04/09/2026%E5%B9%B44%E6%9C%889%E6%97%A5-RAG3%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%B1%87%E6%80%BB/image-20260522161145966.png" alt="image-20260522161145966"></p>
+<h2 id="检索失败"><a class="markdownIt-Anchor" href="#检索失败"></a> 检索失败</h2>
+<p><img src="/2026/04/09/2026%E5%B9%B44%E6%9C%889%E6%97%A5-RAG3%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%B1%87%E6%80%BB/image-20260522161347778.png" alt="image-20260522161347778"></p>
+<h2 id="重排序"><a class="markdownIt-Anchor" href="#重排序"></a> 重排序</h2>
+<p><img src="/2026/04/09/2026%E5%B9%B44%E6%9C%889%E6%97%A5-RAG3%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%B1%87%E6%80%BB/image-20260522161816890.png" alt="image-20260522161816890"></p>
+<p><img src="/2026/04/09/2026%E5%B9%B44%E6%9C%889%E6%97%A5-RAG3%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%B1%87%E6%80%BB/image-20260522161627221.png" alt="image-20260522161627221"></p>
+<img src="/2026/04/09/2026%E5%B9%B44%E6%9C%889%E6%97%A5-RAG3%E6%95%B0%E6%8D%AE%E5%A4%84%E7%90%86%E6%B1%87%E6%80%BB/image-20260522162138063.png" alt="image-20260522162138063" style="zoom:50%;">
+<h2 id="可选处理方案不改代码只给方案"><a class="markdownIt-Anchor" href="#可选处理方案不改代码只给方案"></a> 可选处理方案（不改代码，只给方案）</h2>
 <h3 id="方案-a把合并区域展开填充推荐做数据分析时用"><a class="markdownIt-Anchor" href="#方案-a把合并区域展开填充推荐做数据分析时用"></a> 方案 A：把合并区域“展开填充”（推荐做数据分析时用）</h3>
 <p>目标：让合并块里的每个格子都有同样的值（不管是左右合并还是上下合并）。</p>
 <ul>
@@ -237,9 +260,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>154</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>161</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>42</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>43</strong><br>标签</div></a>
     </div>
 
 

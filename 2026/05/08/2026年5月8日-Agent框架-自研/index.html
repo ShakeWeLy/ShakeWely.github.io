@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2026年5月8日 Agent框架-自研 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="🤖一 Agent开发Question  1 Agent runtime 和LLM runtime 有什么区别   一、LLM Runtime 是什么 LLM Runtime 的核心目标：  让大模型“高效推理”  它关注：  模型加载 KV Cache Token 推理 GPU 调度 batching attention 优化 quantization speculative decoding">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2026年5月8日 Agent框架-自研">
+<meta property="og:url" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-Agent%E6%A1%86%E6%9E%B6-%E8%87%AA%E7%A0%94/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="🤖一 Agent开发Question  1 Agent runtime 和LLM runtime 有什么区别   一、LLM Runtime 是什么 LLM Runtime 的核心目标：  让大模型“高效推理”  它关注：  模型加载 KV Cache Token 推理 GPU 调度 batching attention 优化 quantization speculative decoding">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-Agent%E6%A1%86%E6%9E%B6-%E8%87%AA%E7%A0%94/image-20260522152641612.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-Agent%E6%A1%86%E6%9E%B6-%E8%87%AA%E7%A0%94/image-20260522152901155.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-Agent%E6%A1%86%E6%9E%B6-%E8%87%AA%E7%A0%94/image-20260522151814001.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-Agent%E6%A1%86%E6%9E%B6-%E8%87%AA%E7%A0%94/image-20260522152100979.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-Agent%E6%A1%86%E6%9E%B6-%E8%87%AA%E7%A0%94/image-20260522150306617.png">
+<meta property="article:published_time" content="2026-05-08T07:34:22.000Z">
+<meta property="article:modified_time" content="2026-05-28T06:30:24.823Z">
+<meta property="article:author" content="Weakliy">
+<meta property="article:tag" content="agent">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-Agent%E6%A1%86%E6%9E%B6-%E8%87%AA%E7%A0%94/image-20260522152641612.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>161</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>43</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2026年5月8日-Agent框架-自研" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-Agent%E6%A1%86%E6%9E%B6-%E8%87%AA%E7%A0%94/" class="article-date">
+  <time class="post-time" datetime="2026-05-08T07:34:22.000Z" itemprop="datePublished">
+    <span class="post-month">5月</span><br/>
+    <span class="post-day">08</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2026年5月8日 Agent框架-自研
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="一-agent开发question"><a class="markdownIt-Anchor" href="#一-agent开发question"></a> 🤖一 Agent开发Question</h1>
+<h2 id="1-agent-runtime-和llm-runtime-有什么区别"><a class="markdownIt-Anchor" href="#1-agent-runtime-和llm-runtime-有什么区别"></a> 1 Agent runtime 和LLM runtime 有什么区别</h2>
+<blockquote>
+<h4 id="一-llm-runtime-是什么"><a class="markdownIt-Anchor" href="#一-llm-runtime-是什么"></a> 一、LLM Runtime 是什么</h4>
+<p>LLM Runtime 的核心目标：</p>
+<blockquote>
+<p>让大模型“高效推理”</p>
+</blockquote>
+<p>它关注：</p>
+<ul>
+<li>模型加载</li>
+<li>KV Cache</li>
+<li>Token 推理</li>
+<li>GPU 调度</li>
+<li>batching</li>
+<li>attention 优化</li>
+<li>quantization</li>
+<li>speculative decoding</li>
+</ul>
+<hr>
+<h5 id="常见-llm-runtime"><a class="markdownIt-Anchor" href="#常见-llm-runtime"></a> 常见 LLM Runtime</h5>
+<h5 id="推理框架"><a class="markdownIt-Anchor" href="#推理框架"></a> 推理框架</h5>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/vllm-project/vllm?utm_source=chatgpt.com">vLLM</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT-LLM?utm_source=chatgpt.com">TensorRT-LLM</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/ggml-org/llama.cpp?utm_source=chatgpt.com">llama.cpp</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/sgl-project/sglang?utm_source=chatgpt.com">SGLang</a></li>
+<li><a target="_blank" rel="noopener" href="https://ollama.com?utm_source=chatgpt.com">Ollama</a></li>
+</ul>
+<hr>
+<h5 id="llm-runtime-负责什么"><a class="markdownIt-Anchor" href="#llm-runtime-负责什么"></a> LLM Runtime 负责什么</h5>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">response = llm.generate(prompt)</span><br></pre></td></tr></table></figure>
+<p>runtime 内部：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">1. tokenize</span><br><span class="line">2. load kv cache</span><br><span class="line">3. attention compute</span><br><span class="line">4. sample next token</span><br><span class="line">5. stream token</span><br></pre></td></tr></table></figure>
+<p>它不关心：</p>
+<ul>
+<li>用户目标</li>
+<li>tool calling</li>
+<li>memory</li>
+<li>planning</li>
+<li>workflow</li>
+</ul>
+<hr>
+<h4 id="二-agent-runtime-是什么"><a class="markdownIt-Anchor" href="#二-agent-runtime-是什么"></a> 二、Agent Runtime 是什么</h4>
+<p>Agent Runtime 的核心目标：</p>
+<blockquote>
+<p>让模型“完成任务”</p>
+</blockquote>
+<p>它关注：</p>
+<ul>
+<li>tool calling</li>
+<li>memory</li>
+<li>planning</li>
+<li>task loop</li>
+<li>workflow</li>
+<li>multi-agent</li>
+<li>state management</li>
+<li>retry</li>
+<li>reflection</li>
+<li>routing</li>
+</ul>
+<hr>
+<h2 id="agent-runtime-的典型流程"><a class="markdownIt-Anchor" href="#agent-runtime-的典型流程"></a> Agent Runtime 的典型流程</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">User Query</span><br><span class="line">   ↓</span><br><span class="line">Planner</span><br><span class="line">   ↓</span><br><span class="line">Tool Selection</span><br><span class="line">   ↓</span><br><span class="line">Execute Tool</span><br><span class="line">   ↓</span><br><span class="line">Observation</span><br><span class="line">   ↓</span><br><span class="line">LLM Reasoning</span><br><span class="line">   ↓</span><br><span class="line">Next Action</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="常见-agent-runtime"><a class="markdownIt-Anchor" href="#常见-agent-runtime"></a> 常见 Agent Runtime</h2>
+<h3 id="agent-framework"><a class="markdownIt-Anchor" href="#agent-framework"></a> Agent Framework</h3>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/langchain-ai/langgraph?utm_source=chatgpt.com">LangGraph</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/microsoft/autogen?utm_source=chatgpt.com">AutoGen</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/crewAIInc/crewAI?utm_source=chatgpt.com">CrewAI</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/mannaandpoem/OpenManus?utm_source=chatgpt.com">OpenManus</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/pydantic/pydantic-ai?utm_source=chatgpt.com">PydanticAI</a></li>
+</ul>
+</blockquote>
+<h2 id="2-怎么设计dataclass"><a class="markdownIt-Anchor" href="#2-怎么设计dataclass"></a> 2 怎么设计dataclass</h2>
+<p>2.1 继续才分dict;</p>
+<p>2.2 不要管全局, task 前后分别都有dataclass</p>
+<h2 id="3-agentspec"><a class="markdownIt-Anchor" href="#3-agentspec"></a> 3 AgentSpec</h2>
+<p>因为可能都是ReAct agent, 只是prompt和tools不同,但都是同一个类, 所以采用AgentSpec而不是class</p>
+<p>更像：“agent profile registry”</p>
+<p>而不是：“class registry”</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"> &quot;brief_react&quot;: AgentSpec(</span><br><span class="line">     cls=BriefReActAgent,</span><br><span class="line">     tools=[],</span><br><span class="line">     system_prompt=...,</span><br><span class="line"> ),</span><br><span class="line"></span><br><span class="line"> &quot;reacttoolcall&quot;: AgentSpec(</span><br><span class="line">     cls=BriefReActAgent,</span><br><span class="line">     tools=[toolcall],</span><br><span class="line">     system_prompt=...,</span><br><span class="line"> )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="4-emit-envent和log有什么区别"><a class="markdownIt-Anchor" href="#4-emit-envent和log有什么区别"></a> 4 emit envent和log有什么区别?</h2>
+<h3 id="41-区别是什么"><a class="markdownIt-Anchor" href="#41-区别是什么"></a> 4.1 区别是什么</h3>
+<p><strong>1. log 是单向的</strong></p>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">logger.info(&quot;tool started&quot;)</span><br></pre></td></tr></table></figure>
+<p>通常：</p>
+<ul>
+<li>人看</li>
+<li>排查问题</li>
+<li>调试</li>
+<li>监控</li>
+</ul>
+<p>它不会：</p>
+<ul>
+<li>驱动系统</li>
+<li>触发行为</li>
+<li>通知其他模块</li>
+</ul>
+<p><strong>2. event 是系统通信</strong></p>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">_emit_event(</span><br><span class="line">    &quot;tool_start&quot;,</span><br><span class="line">    &#123;&quot;tool&quot;: &quot;search&quot;&#125;</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>本质：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">“告诉整个系统：</span><br><span class="line">某件事发生了”</span><br></pre></td></tr></table></figure>
+<p>然后：</p>
+<ul>
+<li>UI更新</li>
+<li>websocket推送</li>
+<li>TTS暂停</li>
+<li>Scheduler记录</li>
+<li>Agent切换状态</li>
+</ul>
+<p>都可能被触发。</p>
+<h3 id="42-怎么设计-分开写event-吗-llm层和runtime层-甚至是agent层"><a class="markdownIt-Anchor" href="#42-怎么设计-分开写event-吗-llm层和runtime层-甚至是agent层"></a> 4.2 怎么设计? 分开写event 吗? llm层和runtime层, 甚至是agent层??</h3>
+<p>通常都会：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">分层事件</span><br></pre></td></tr></table></figure>
+<p>而不是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">所有 event 全塞 runtime</span><br></pre></td></tr></table></figure>
+<p>因为不同层：</p>
+<ul>
+<li>负责的东西不同</li>
+<li>生命周期不同</li>
+<li>粒度不同</li>
+</ul>
+<h3 id="43-even-是不是比简单的callable高级"><a class="markdownIt-Anchor" href="#43-even-是不是比简单的callable高级"></a> 4.3  even 是不是比简单的callable高级?</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">callable = 点对点回调</span><br><span class="line">event    = 可扩展的系统通信</span><br></pre></td></tr></table></figure>
+<p>event 本质上是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">“管理过的 callable”</span><br></pre></td></tr></table></figure>
+<p>或者：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">“可订阅、可广播、可扩展的 callback 系统”</span><br></pre></td></tr></table></figure>
+<h3 id="44-stream-event"><a class="markdownIt-Anchor" href="#44-stream-event"></a> 4.4 stream event</h3>
+<p><code>callable</code> 明确只用于流式文本；<code>on_event</code> 可能承载更多类型（start/end/error…）。</p>
+<ol>
+<li></li>
+</ol>
+<h2 id="6-tool"><a class="markdownIt-Anchor" href="#6-tool"></a> 6 tool</h2>
+<h3 id="61-要不要把list-tool变成readfile"><a class="markdownIt-Anchor" href="#61-要不要把list-tool变成readfile"></a> 6,1 要不要把list tool变成readfile</h3>
+<p>@weakagent/tools/tool/list_tools.py 要不要 合并到read file和@weakagent/tools/files/read_file.py, 然后单独写一个tool_list的记录文件? 甚至我感觉不用, 直接read就可以了?</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">**`read`（ReadFileTool）** — 读取**文件系统上的静态文件内容**（如 .md、.py 等本地文件）。</span><br><span class="line">**`list_tools`（ListToolsTool）** — 查询**当前 agent 运行时的内存状态**（已挂载了哪些工具、还能添加哪 些内置工具）。</span><br><span class="line"></span><br><span class="line">两者的数据来源完全不同：一个来自磁盘，一个来自 agent 的 `available_tools` 集合。所以**不适合合并**到 read 里。</span><br><span class="line"></span><br><span class="line">你的思路「直接 read 就可以了」也不太行，因为 read 读的是文件，不是 agent 内存里的工具注册表。</span><br><span class="line"></span><br><span class="line">不过你的感觉「感觉不用」有一定道理——`list_tools` 确实是个运行时调试/元工具，不是业务工具。我的建议是：</span><br><span class="line"></span><br><span class="line">**保持现状**，`list_tools.py` 留在 `weakagent/tools/tool/` 作为一个独立的元工具，不合并，不单独写记录 文件。因为：</span><br><span class="line">1. 它和 read 职责正交（磁盘 vs 内存）</span><br><span class="line">2. 它是 agent 系统内部自省用的，独立文件更清晰</span><br><span class="line">3. 没必要额外维护一个工具清单文件——工具注册是代码事实，不是文档</span><br></pre></td></tr></table></figure>
+<h3 id="62-添加hot-reload-tool"><a class="markdownIt-Anchor" href="#62-添加hot-reload-tool"></a> 6.2 添加hot reload tool</h3>
+<p>实现:</p>
+<h3 id="63-添加手动命令"><a class="markdownIt-Anchor" href="#63-添加手动命令"></a> 6.3 添加/手动命令</h3>
+<p>-&gt; 可以直接被hot reload 替代了</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">### 结论</span><br><span class="line">**可以替换。** `HotReloadTool` 是 `AddToolTool` 的超集——所有 `AddToolTool` 的功能都能通过 `hot_reload` 的 `remount_tools` 参数完成，且额外支持代码热重载、替换已有工具、刷新注册表等能力。如果只为&quot;挂载一个 尚未挂载的工具&quot;这个场景，`hot_reload` 略重（需传 `module_names` + `remount_tools`），但功能上完全覆盖 。</span><br></pre></td></tr></table></figure>
+<h2 id="7-loop"><a class="markdownIt-Anchor" href="#7-loop"></a> 7 loop</h2>
+<h4 id="以后怎么避免误杀整个-loop"><a class="markdownIt-Anchor" href="#以后怎么避免误杀整个-loop"></a> 以后怎么避免「误杀整个 loop」</h4>
+<p>可选改进（当前代码还没做）：</p>
+<ol>
+<li>400 不重试 — <code>retry_if_not_exception_type(BadRequestError)</code> 或只对 429/5xx 重试</li>
+<li><code>run_loop</code> 按轮捕获 — 单轮 <code>run()</code> 失败只打印错误，继续 <code>You&gt;</code></li>
+<li><code>think()</code> 优雅降级 — API 400 时写 assistant 错误消息并 <code>FINISHED</code>，而不是 <code>raise</code></li>
+</ol>
+<blockquote>
+<h2 id="核心矛盾"><a class="markdownIt-Anchor" href="#核心矛盾"></a> 核心矛盾</h2>
+<p>Recovery 的设计是「把错误当作下一轮 user message，让 agent 自我修复」。但 400 schema 错误发生在请求发出之前——只要 <code>bash</code> 还挂在 agent 上，任何一轮都会在 <code>think()</code> 阶段失败，agent 无法调用 <code>patch_file</code> / <code>hot_reload</code> 去修。</p>
+<p>所以：坏 schema + 自动 recovery = 必死循环，直到 <code>max_steps</code> 或你 Ctrl+C。</p>
+<hr>
+<h2 id="怎么打破循环手动"><a class="markdownIt-Anchor" href="#怎么打破循环手动"></a> 怎么打破循环（手动）</h2>
+<ol>
+<li>重启进程，并修正 <code>bash.py</code>（<code>properties</code> 改回正确结构）</li>
+<li>或在代码里先 卸载 bash：<code>available_tools</code> 里移除 <code>bash</code>，再跑</li>
+<li>修好后 <code>hot_reload</code> + <code>remount_tools=[&quot;bash&quot;]</code></li>
+</ol>
+<hr>
+<h2 id="框架上还应补的防护如需我可以改"><a class="markdownIt-Anchor" href="#框架上还应补的防护如需我可以改"></a> 框架上还应补的防护（如需我可以改）</h2>
+<ol>
+<li>同一 error fingerprint 最多 recovery 1–2 次，之后停掉并回到 <code>You&gt;</code></li>
+<li>新 <code>run()</code> 开始时 <code>current_step = 0</code>、<code>state = IDLE</code></li>
+<li>schema 类 400：不 schedule recovery，或自动 unmount 报错工具</li>
+<li><code>BaseTool.to_params()</code> 校验 <code>parameters.type == &quot;object&quot;</code>，坏 schema 不发给 API</li>
+</ol>
+<hr>
+<p>一句话：你故意写错的 schema 导致每次 LLM 调用必 400；recovery 又把失败自动当成下一轮 request，而 bad tool 仍挂着，所以会在同一 session 里无限重试，直到 step 上限或你手动停。这不是 API「随机报错」，是预期内的死循环。</p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">“Recovery 机制期望通过‘产生对话’来修复错误；但 Schema 错误直接剥夺了 Agent‘产生对话’的权利。”</span><br><span class="line"></span><br><span class="line">当一个坏掉的工具（Bad Tool）变成了 Agent 身体里摘不掉的“毒瘤”，任何一次尝试呼叫大模型的举动（think()）都会在临门一脚前被 API 拒之门外。Agent 连思考的机会都没有，更别提调用 patch_file 去动手术了。这就成了一个完美的闭环死锁。</span><br><span class="line"></span><br><span class="line">你提出的这几条框架级防护措施，完全切中了分布式/智能体系统中的熔断（Circuit Breaker）和防御性编程精髓。如果你要动手重构框架，我强烈建议按照以下方案去补强：</span><br></pre></td></tr></table></figure>
+<h2 id="框架防护实现方案"><a class="markdownIt-Anchor" href="#框架防护实现方案"></a> 框架防护实现方案</h2>
+<h3 id="1-静态防线basetoolto_params-强制校验源头拦截"><a class="markdownIt-Anchor" href="#1-静态防线basetoolto_params-强制校验源头拦截"></a> 1. 静态防线：<code>BaseTool.to_params()</code> 强制校验（源头拦截）</h3>
+<p>别让脏数据出门。在工具加载或序列化为 OpenAI JSON Schema 时，直接在本地做拦截。如果格式不对，拒绝启动或拒绝发送。</p>
+<h3 id="2-动态防线schema-400-自动隔离卸载unmount"><a class="markdownIt-Anchor" href="#2-动态防线schema-400-自动隔离卸载unmount"></a> 2. 动态防线：Schema 400 自动隔离/卸载（Unmount）</h3>
+<p>如果静态校验漏过了，API 返回了 400（且特征明显是 Schema 错误），框架应该启动<strong>隔离机制</strong>——“既然你让我过敏，我就先把你切除”。</p>
+<h2 id="9-更新长期记忆"><a class="markdownIt-Anchor" href="#9-更新长期记忆"></a> 9 更新长期记忆</h2>
+<h3 id="0-什么long-memory-需要记忆哪些"><a class="markdownIt-Anchor" href="#0-什么long-memory-需要记忆哪些"></a> 0 什么long memory 需要记忆哪些?</h3>
+<blockquote>
+<p>模型在“跨会话、跨任务、长期运行”过程中，持续保留的重要信息。</p>
+</blockquote>
+<p>不是所有东西都要记，而是：<br>
+<strong>“未来还会影响决策、行为、回答”的信息才值得长期记忆。</strong></p>
+<blockquote>
+<h1 id="1-用户画像user-profile"><a class="markdownIt-Anchor" href="#1-用户画像user-profile"></a> 1. 用户画像（User Profile）</h1>
+<p>这是最核心的长期记忆。</p>
+<p>例如：</p>
+<ul>
+<li>用户是谁</li>
+<li>做什么方向</li>
+<li>技术栈</li>
+<li>偏好</li>
+<li>常用语言</li>
+<li>长期目标</li>
+</ul>
+<p>比如你：</p>
+<ul>
+<li>AI / CV 方向</li>
+<li>YOLO、FastAPI、Spring AI</li>
+<li>喜欢深入原理</li>
+<li>正在做 Agent 系统</li>
+<li>偏向工程化</li>
+</ul>
+<p>这些都属于长期稳定信息。</p>
+<h1 id="2-长期项目状态project-memory"><a class="markdownIt-Anchor" href="#2-长期项目状态project-memory"></a> 2. 长期项目状态（Project Memory）</h1>
+<p>Agent 很重要的一类。</p>
+<p>例如：</p>
+<ul>
+<li>当前正在开发什么系统</li>
+<li>系统架构</li>
+<li>模块职责</li>
+<li>已做过的设计决策</li>
+<li>已踩过的坑</li>
+</ul>
+<p>例如：</p>
+<ul>
+<li>ChatService / SqlService / QueryService</li>
+<li>FastAPI 人脸识别系统</li>
+<li>YOLO 剪枝项目</li>
+<li>SQL 工业分析系统</li>
+</ul>
+<p>这些属于：<br>
+“未来多轮会持续引用的信息”。</p>
+<hr>
+<h1 id="3-用户偏好preference-memory"><a class="markdownIt-Anchor" href="#3-用户偏好preference-memory"></a> 3. 用户偏好（Preference Memory）</h1>
+<p>这类非常实用。</p>
+<p>例如：</p>
+<ul>
+<li>喜欢中文回答</li>
+<li>喜欢深入原理</li>
+<li>不喜欢过度简化</li>
+<li>commit message 要固定模板</li>
+<li>喜欢 PyTorch 风格文档</li>
+<li>回答不要太水</li>
+</ul>
+<p>这会直接影响生成风格。</p>
+<h1 id="不该进入-long-memory-的内容"><a class="markdownIt-Anchor" href="#不该进入-long-memory-的内容"></a> 不该进入 Long Memory 的内容</h1>
+<p>很多人会把“聊天记录”直接当长期记忆。</p>
+<p>这是错误的。</p>
+<p>以下通常不该长期保存：</p>
+<hr>
+<h2 id="1-一次性问题"><a class="markdownIt-Anchor" href="#1-一次性问题"></a> 1. 一次性问题</h2>
+<p>例如：</p>
+<ul>
+<li>今天 CUDA 报错</li>
+<li>pip install 失败</li>
+<li>某次日志分析</li>
+</ul>
+<p>这些生命周期太短。</p>
+<hr>
+<h2 id="2-短期上下文"><a class="markdownIt-Anchor" href="#2-短期上下文"></a> 2. 短期上下文</h2>
+<p>例如：</p>
+<ul>
+<li>“帮我翻译一下”</li>
+<li>“解释这段代码”</li>
+<li>“这个变量是什么意思”</li>
+</ul>
+<p>会话结束基本没价值。</p>
+<hr>
+<h2 id="3-临时状态"><a class="markdownIt-Anchor" href="#3-临时状态"></a> 3. 临时状态</h2>
+<p>例如：</p>
+<ul>
+<li>今天在公司</li>
+<li>正在下载模型</li>
+<li>刚刚编译失败</li>
+</ul>
+<p>这种属于 working memory。</p>
+</blockquote>
+<h4 id="判断标准"><a class="markdownIt-Anchor" href="#判断标准"></a> 判断标准</h4>
+<p>判断该不该进入 Long Memory：</p>
+<p>问一句：</p>
+<blockquote>
+<p>“未来 1 个月后，这条信息还会影响 Agent 行为吗？”</p>
+</blockquote>
+<p>如果：</p>
+<ul>
+<li>会 → 值得长期记忆</li>
+<li>不会 → 放短期记忆</li>
+</ul>
+<h3 id="2-怎么载入"><a class="markdownIt-Anchor" href="#2-怎么载入"></a> 2 怎么载入</h3>
+<p>2.1 全量直接拼 Prompt</p>
+<p>2.2 动态检索相关记忆。</p>
+<h3 id="3-怎么拼"><a class="markdownIt-Anchor" href="#3-怎么拼"></a> 3 怎么拼?</h3>
+<h4 id="31-拼到-system-prompt"><a class="markdownIt-Anchor" href="#31-拼到-system-prompt"></a> 3.1 拼到 system prompt</h4>
+<p>1 双rule=system</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;role&quot;: &quot;system&quot;,</span><br><span class="line">  &quot;content&quot;: &quot;你是 AI 助手&quot;</span><br><span class="line">&#125;,</span><br><span class="line">&#123;</span><br><span class="line">  &quot;role&quot;: &quot;system&quot;,</span><br><span class="line">  &quot;content&quot;: &quot;[Memory]\n用户正在做 YOLO 剪枝&quot;</span><br><span class="line">&#125;,</span><br><span class="line">&#123;</span><br><span class="line">  &quot;role&quot;: &quot;user&quot;,</span><br><span class="line">  &quot;content&quot;: &quot;为什么速度没提升？&quot;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>2</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">你是 AI 助手</span><br><span class="line"></span><br><span class="line">[Memory]</span><br><span class="line">- 用户正在做 YOLO 剪枝</span><br><span class="line">- 用户使用 TensorRT</span><br></pre></td></tr></table></figure>
+<h4 id="34-system-list"><a class="markdownIt-Anchor" href="#34-system-list"></a> 3.4 system list</h4>
+<h4 id="33-fake-assistanttool-message"><a class="markdownIt-Anchor" href="#33-fake-assistanttool-message"></a> 3.3 fake assistant/tool message</h4>
+<h3 id="4-什么时候写"><a class="markdownIt-Anchor" href="#4-什么时候写"></a> 4 什么时候写</h3>
+<h4 id="4-memory-flush"><a class="markdownIt-Anchor" href="#4-memory-flush"></a> 4 memory flush</h4>
+<h4 id="5-自动归档"><a class="markdownIt-Anchor" href="#5-自动归档"></a> 5 自动归档</h4>
+<h2 id="10-设置-rereading"><a class="markdownIt-Anchor" href="#10-设置-rereading"></a> 10 设置 rereading?</h2>
+<h3 id="为什么会有-re-reading"><a class="markdownIt-Anchor" href="#为什么会有-re-reading"></a> 为什么会有 Re-Reading</h3>
+<p>很多模型会出现：</p>
+<ul>
+<li>忽略用户约束</li>
+<li>长上下文遗漏</li>
+<li>RAG 检索结果没用上</li>
+<li>Tool 调用后忘记原问题</li>
+<li>多轮对话后偏题</li>
+</ul>
+<blockquote>
+<h3 id="三-agent-中的-re-reading-场景"><a class="markdownIt-Anchor" href="#三-agent-中的-re-reading-场景"></a> 三、Agent 中的 Re-Reading 场景</h3>
+<p>Agent 比普通 Chat 更容易丢信息。</p>
+<p>因为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">User</span><br><span class="line"> -&gt; Planner</span><br><span class="line"> -&gt; Tool</span><br><span class="line"> -&gt; Memory</span><br><span class="line"> -&gt; RAG</span><br><span class="line"> -&gt; Reflection</span><br><span class="line"> -&gt; Final Answer</span><br></pre></td></tr></table></figure>
+<p>上下文会越来越长。</p>
+<p>因此常见：</p>
+<hr>
+<h4 id="1-tool-后-re-reading"><a class="markdownIt-Anchor" href="#1-tool-后-re-reading"></a> 1. Tool 后 Re-Reading</h4>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">用户：</span><br><span class="line">帮我查 RTX 5090 显存</span><br></pre></td></tr></table></figure>
+<p>Agent：</p>
+<ul>
+<li>调 web tool</li>
+<li>返回一堆网页</li>
+<li>最后回答时忘记用户问的是“显存”</li>
+</ul>
+<p>所以：</p>
+<p>Tool 后：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Re-read original user request:</span><br><span class="line">&quot;帮我查 RTX 5090 显存&quot;</span><br></pre></td></tr></table></figure>
+<hr>
+<h4 id="2-多轮任务-re-reading"><a class="markdownIt-Anchor" href="#2-多轮任务-re-reading"></a> 2. 多轮任务 Re-Reading</h4>
+<p>例如 Coding Agent：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Step1: 生成代码</span><br><span class="line">Step2: 修改代码</span><br><span class="line">Step3: 修 Bug</span><br></pre></td></tr></table></figure>
+<p>容易：</p>
+<ul>
+<li>忘记最初架构</li>
+<li>忘记用户限制</li>
+</ul>
+<p>所以每轮：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Re-read system constraints and user requirements.</span><br></pre></td></tr></table></figure>
+<hr>
+<h4 id="3-rag-后-re-reading"><a class="markdownIt-Anchor" href="#3-rag-后-re-reading"></a> 3. RAG 后 Re-Reading</h4>
+<p>RAG 常见问题：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">检索内容很多</span><br><span class="line">模型没真正利用</span><br></pre></td></tr></table></figure>
+<p>所以：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">在回答前，</span><br><span class="line">重新阅读：</span><br><span class="line">1. 用户问题</span><br><span class="line">2. 检索结果</span><br><span class="line">3. 当前计划</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="四-re-reading-reflection"><a class="markdownIt-Anchor" href="#四-re-reading-reflection"></a> 四、Re-Reading ≠ Reflection</h3>
+<p>很多人会混。</p>
+<p>区别：</p>
+<table>
+<thead>
+<tr>
+<th>技术</th>
+<th>核心</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Re-Reading</td>
+<td>重新聚焦上下文</td>
+</tr>
+<tr>
+<td>Reflection</td>
+<td>自我检查推理错误</td>
+</tr>
+<tr>
+<td>Self-Consistency</td>
+<td>多路径推理投票</td>
+</tr>
+<tr>
+<td>ReAct</td>
+<td>推理 + 工具调用</td>
+</tr>
+<tr>
+<td>Retry</td>
+<td>失败重试</td>
+</tr>
+</tbody>
+</table>
+<p>Re-Reading 更轻量。</p>
+<p>它不一定“思考”。</p>
+<p>只是：</p>
+<blockquote>
+<p>再看一遍。</p>
+</blockquote>
+</blockquote>
+<h2 id="11-进行工具管理"><a class="markdownIt-Anchor" href="#11-进行工具管理"></a> 11 进行工具管理?</h2>
+<h3 id="动态工具检索-two-stage-tool-retrieval"><a class="markdownIt-Anchor" href="#动态工具检索-two-stage-tool-retrieval"></a> 🎯 动态工具检索 (Two-Stage Tool Retrieval)</h3>
+<p>不要把所有的工具一次性塞给大模型。</p>
+<ol>
+<li><strong>第一阶段（检索）：</strong> 用户输入请求后，利用一个轻量级的向量检索器（Embedding Router）或意图分类模型，从数百个工具中筛选出最相关的 3~5 个工具。</li>
+<li><strong>第二阶段（决策）：</strong> 仅将这几个筛选后的工具 Schema 送入大模型，让其进行最终的调用决策。这不仅极大地节省了 Context 成本，还显著提高了 Agent 的决策准确率。</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Tool Selector</span><br><span class="line">    ├── Tool Classifier（分类器）</span><br><span class="line">    ├── Rule-based Filter（规则过滤）</span><br><span class="line">    ├── Semantic Retriever（语义检索）</span><br><span class="line">    └── Ranker（最终排序）</span><br></pre></td></tr></table></figure>
+<p><strong>动态注入</strong>： 不同任务类型使用不同的工具子集。例如：</p>
+<ul>
+<li>编程任务 → 重点注入代码、文件、调试工具</li>
+<li>研究任务 → 重点注入搜索、浏览、RAG 工具</li>
+</ul>
+<h1 id="️二-实现相关"><a class="markdownIt-Anchor" href="#️二-实现相关"></a> ✍️二 实现相关</h1>
+<h2 id="1-user-message"><a class="markdownIt-Anchor" href="#1-user-message"></a> 1 user message</h2>
+<h2 id="2-怎么设计agent启动scheduler任务"><a class="markdownIt-Anchor" href="#2-怎么设计agent启动scheduler任务"></a> 2 怎么设计agent启动scheduler任务</h2>
+<h3 id="21-为什么不要直接-factory"><a class="markdownIt-Anchor" href="#21-为什么不要直接-factory"></a> 2.1 为什么不要直接 Factory</h3>
+<p>因为：</p>
+<p>Factory 更偏：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">创建对象</span><br></pre></td></tr></table></figure>
+<p>而你这里更像：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">根据 task_type 找执行器</span><br></pre></td></tr></table></figure>
+<p>所以：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Registry 比 Factory 更准确</span><br></pre></td></tr></table></figure>
+<h3 id="22-executor-为什么不用taskexecute"><a class="markdownIt-Anchor" href="#22-executor-为什么不用taskexecute"></a> 2.2 Executor? 为什么不用task.execute</h3>
+<p>你在纠结：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">task.execute()</span><br></pre></td></tr></table></figure>
+<p>还是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">executor.execute(task)</span><br></pre></td></tr></table></figure>
+<p>本质上是在：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">OO（面向对象）</span><br><span class="line">vs</span><br><span class="line">Runtime/Engine 架构</span><br></pre></td></tr></table></figure>
+<p>之间做选择。</p>
+<p><strong>Task 更应该像 DTO</strong></p>
+<p>推荐：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">class Task(BaseModel):</span><br><span class="line">    id: str</span><br><span class="line">    type: str</span><br><span class="line">    payload: dict</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>Executor 才是 Runtime</strong></p>
+<p>真正复杂的是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">class SummaryExecutor:</span><br></pre></td></tr></table></figure>
+<p>它才有：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">self.memory</span><br><span class="line">self.llm</span><br><span class="line">self.agent_factory</span><br><span class="line">self.eventbus</span><br></pre></td></tr></table></figure>
+<p>因为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">它属于运行时</span><br></pre></td></tr></table></figure>
+<blockquote>
+<h3 id="真正推荐的是注册式执行器"><a class="markdownIt-Anchor" href="#真正推荐的是注册式执行器"></a> 真正推荐的是“注册式执行器”</h3>
+<p>类似：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">task.type</span><br><span class="line">    ↓</span><br><span class="line">registry</span><br><span class="line">    ↓</span><br><span class="line">executor class</span><br></pre></td></tr></table></figure>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">registry.register(</span><br><span class="line">    &quot;daily_summary&quot;,</span><br><span class="line">    DailySummaryExecutor</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">registry.register(</span><br><span class="line">    &quot;weekly_report&quot;,</span><br><span class="line">    WeeklyReportExecutor</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h3 id="23-那为什么tool-设计成toolexecute"><a class="markdownIt-Anchor" href="#23-那为什么tool-设计成toolexecute"></a> 2.3 那为什么tool 设计成tool…execute</h3>
+<p>Task 本质是“调度<strong>描述</strong>”，它的存在是为了让系统可以把“什么时候做什么事”持久化下来、排队、恢复、分布式执行。它更像一条记录、一份计划书，所以它必须保持稳定、纯粹、无依赖，这样才能被存到数据库里、跨进程传输、失败后重新执行。如果你让 Task 自己去 execute，那它就必须知道怎么调用 LLM、怎么用 tool、怎么处理 retry、怎么管理状态，这**会导致它从“数据”变成“运行时系统”，**整个调度层会和业务逻辑强耦合，系统会逐渐失去可拆分性和可扩展性。</p>
+<p>而 Tool 不一样，Tool 本质是“能力本身”，它不是计划，也不是调度结果，而是<strong>最底层的动作单元</strong>，比如搜索、计算、请求 API、读数据库。它的特点是输入明确、输出明确、<strong>无调度逻辑</strong>，它不会关心什么时候被调用，也不会关心是谁在调用，它只负责“做一件事”。所以 Tool 设计成 execute 是合理的，因为它本来就是被执行的对象。</p>
+<p>真正关键的区别在于：<br>
+<strong>Task 解决的是“要不要做、什么时候做”，Tool 解决的是“具体怎么做”。</strong></p>
+<p>如果把 Task 也设计成 execute，就等于把调度系统和执行系统混在一个对象里，最终会变成一个既要管时间、状态、队列，又要懂业务逻辑和外部能力的“超级对象”，系统会失去分层结构，后期扩展（比如加新 tool、加分布式 worker、加重试队列）都会变得非常痛苦。</p>
+<p>所以不是“能不能这样设计”的问题，而是：<br>
+一旦 Task 负责 execute，系统就不再是调度系统，而变成一个难以拆分的运行时整体；而把 execute 放在 Tool 上，是在保持“调度”和“能力”分离，让整个系统可以像操作系统一样分层运行。</p>
+<blockquote>
+<p>这是个很好的“你已经开始区分层级了”的问题，因为：</p>
+<blockquote>
+<p><strong>Tool 和 Task / Executor 根本不是同一层抽象</strong></p>
+</blockquote>
+<p>你卡住的点本质是：<br>
+👉 “为什么有的东西是 data + executor 分离，有的又是 object.execute()？”</p>
+<hr>
+<p>Tool 是“可执行能力单元”，Task 是“调度数据单元”。</p>
+<hr>
+<h2 id="三-为什么-tool-可以-execute"><a class="markdownIt-Anchor" href="#三-为什么-tool-可以-execute"></a> 三、为什么 Tool 可以 execute？</h2>
+<p>因为 Tool 本质是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">最底层“动作原子”</span><br></pre></td></tr></table></figure>
+<p>类似：</p>
+<h2 id="cpu-instruction"><a class="markdownIt-Anchor" href="#cpu-instruction"></a> CPU instruction</h2>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ADD / SUB / LOAD / STORE</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="tool-原子能力"><a class="markdownIt-Anchor" href="#tool-原子能力"></a> Tool = 原子能力</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SearchTool</span>:</span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">execute</span>(<span class="params">query</span>):</span><br><span class="line">        ...</span><br></pre></td></tr></table></figure>
+<p>它特点：</p>
+<h3 id="没有调度逻辑"><a class="markdownIt-Anchor" href="#没有调度逻辑"></a> ✔ 没有“调度逻辑”</h3>
+<h3 id="没有任务生命周期"><a class="markdownIt-Anchor" href="#没有任务生命周期"></a> ✔ 没有“任务生命周期”</h3>
+<h3 id="没有业务编排"><a class="markdownIt-Anchor" href="#没有业务编排"></a> ✔ 没有“业务编排”</h3>
+<h3 id="输入-输出非常明确"><a class="markdownIt-Anchor" href="#输入-输出非常明确"></a> ✔ 输入 → 输出非常明确</h3>
+<hr>
+<h1 id="四-task-为什么不能-execute"><a class="markdownIt-Anchor" href="#四-task-为什么不能-execute"></a> 四、Task 为什么不能 execute？</h1>
+<p>因为 Task 是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">“描述”</span><br></pre></td></tr></table></figure>
+<p>不是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">“能力”</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="task-如果-execute会变成"><a class="markdownIt-Anchor" href="#task-如果-execute会变成"></a> Task 如果 execute，会变成：</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">task.execute() -&gt; 内部决定调用 tool / llm / memory</span><br></pre></td></tr></table></figure>
+<p>问题：</p>
+<p>👉 Task 变成“mini runtime”</p>
+<p>最终：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Task = Scheduler + Executor + Tool + Agent</span><br></pre></td></tr></table></figure>
+<p>系统直接坍缩</p>
+<h2 id="六-为什么-tool-必须是-execute-风格"><a class="markdownIt-Anchor" href="#六-为什么-tool-必须是-execute-风格"></a> 六、为什么 Tool 必须是 execute 风格？</h2>
+<p>因为 Tool 有一个非常关键特点：</p>
+<hr>
+<h2 id="tool-是可替换能力模块"><a class="markdownIt-Anchor" href="#tool-是可替换能力模块"></a> 👉 Tool 是“可替换能力模块”</h2>
+<p>例如：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">search_tool_v1</span><br><span class="line">search_tool_v2</span><br><span class="line">search_tool_llm_based</span><br></pre></td></tr></table></figure>
+<p>统一接口：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tool.execute(<span class="built_in">input</span>)</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="如果不用-execute会变成"><a class="markdownIt-Anchor" href="#如果不用-execute会变成"></a> 如果不用 execute，会变成：</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tool.search()</span><br><span class="line">tool.query()</span><br><span class="line">tool.run()</span><br><span class="line">tool.call()</span><br></pre></td></tr></table></figure>
+<p>系统会变得：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">不可统一编排</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h3 id="24-如何创建"><a class="markdownIt-Anchor" href="#24-如何创建"></a> 2.4 如何创建</h3>
+<p>用户通过自然语言让 Agent 调用 <code>scheduler</code> 工具，例如：</p>
+<blockquote>
+<p>每天早上 9 点提醒我开会</p>
+</blockquote>
+<p>Agent 会创建 cron 任务 <code>0 9 * * *</code></p>
+<p><strong>实现特点小结</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">特性</th>
+<th style="text-align:left">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">调度引擎</td>
+<td style="text-align:left">自研轻量实现，线程 + <code>time.sleep</code> 轮询</td>
+</tr>
+<tr>
+<td style="text-align:left">精度</td>
+<td style="text-align:left">约 ±30 秒（30 秒检查间隔）</td>
+</tr>
+<tr>
+<td style="text-align:left">持久化</td>
+<td style="text-align:left">用户任务存 <code>tasks.json</code>，重启后恢复</td>
+</tr>
+<tr>
+<td style="text-align:left">防递归</td>
+<td style="text-align:left">定时执行 Agent 任务时会设 <code>is_scheduled_task=True</code>，并排除 <code>scheduler</code> 工具</td>
+</tr>
+<tr>
+<td style="text-align:left">会话隔离</td>
+<td style="text-align:left">定时任务用独立 <code>session_id</code>（<code>scheduler_&#123;receiver&#125;_&#123;task_id&#125;</code>），不污染用户对话</td>
+</tr>
+<tr>
+<td style="text-align:left">记忆注入</td>
+<td style="text-align:left">定时任务结果可写回用户会话历史，便于后续追问</td>
+</tr>
+</tbody>
+</table>
+<h3 id="25-如何运行"><a class="markdownIt-Anchor" href="#25-如何运行"></a> 2.5 如何运行</h3>
+<p>在独立 daemon 线程里循环：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">scheduler_service.pyLines 55-65</span><br><span class="line"></span><br><span class="line">​    def _run_loop(self):</span><br><span class="line"></span><br><span class="line">​        &quot;&quot;&quot;Main scheduler loop&quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">​        logger.debug(&quot;[Scheduler] Scheduler loop started&quot;)</span><br><span class="line"></span><br><span class="line">​        </span><br><span class="line"></span><br><span class="line">​        while self.running:</span><br><span class="line"></span><br><span class="line">​            try:</span><br><span class="line"></span><br><span class="line">​                self._check_and_execute_tasks()</span><br><span class="line"></span><br><span class="line">​            except Exception as e:</span><br><span class="line"></span><br><span class="line">​                logger.error(f&quot;[Scheduler] Error in scheduler loop: &#123;e&#125;&quot;)</span><br><span class="line"></span><br><span class="line">​            time.sleep(30)</span><br></pre></td></tr></table></figure>
+<p>到期后根据 <code>action.type</code> 分发：</p>
+<ul>
+<li><code>agent_task</code>：调用 Agent 执行任务，结果发到对应渠道</li>
+<li><code>send_message</code>：发固定文本（旧格式）</li>
+<li><code>tool_call</code> / <code>skill_call</code>：直接调工具或让 Agent 跑 skill</li>
+</ul>
+<p>启动入口在 <code>AgentInitializer._initialize_scheduler()</code>，首次初始化 Agent 时调用 <code>init_scheduler()</code> 并启动后台服务。</p>
+<h3 id="26-scheduler-runner要全局单例吗-什么情况下考虑使用全局单例"><a class="markdownIt-Anchor" href="#26-scheduler-runner要全局单例吗-什么情况下考虑使用全局单例"></a> 2.6 scheduler runner要全局单例吗? 什么情况下考虑使用全局单例</h3>
+<h2 id="3-memory设计"><a class="markdownIt-Anchor" href="#3-memory设计"></a> 3 memory设计</h2>
+<h3 id="1-memory机制"><a class="markdownIt-Anchor" href="#1-memory机制"></a> 1 memory机制✅</h3>
+<p><img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-Agent%E6%A1%86%E6%9E%B6-%E8%87%AA%E7%A0%94/image-20260522152641612.png" alt="image-20260522152641612"></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">我发现一个问题, 当进行flush memory的时候, user request会默默消失, 变成上一条的, 比如我刚刚问的其实是You&gt; hot reload tool 具体是如何实现的?     [WARNING][2026-05-27 14:29:46][short.py:367] - Memory cleanup: keep_last_n trimmed turns. before=116 after=113 keep_last_n=12[INFO][2026-05-27 14:29:46][base.py:450] - Short memory pruned before run (messages=113 strategy=keep_last_n)[INFO][2026-05-27 14:29:46][base.py:484] - Executing step 3/100[WARNING][2026-05-27 14:29:46][short.py:265] - Short memory flush run_id=d834004ae1e3 flushed=74 kept=40[INFO][2026-05-27 14:29:46][base.py:498] - Short memory flushed run_id=d834004ae1e3 flushed=74 kept=40[INFO][2026-05-27 14:29:55][llm.py:171] - Token usage: Input=14645, Completion=693, Cumulative Input=939702, Cumulative Completion=19060, Total=15338, Cumulative Total=958762</span><br></pre></td></tr></table></figure>
+<h3 id="2-长tool-result-处理"><a class="markdownIt-Anchor" href="#2-长tool-result-处理"></a> 2 长tool result 处理 ✅</h3>
+<p><img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-Agent%E6%A1%86%E6%9E%B6-%E8%87%AA%E7%A0%94/image-20260522152901155.png" alt="image-20260522152901155"></p>
+<h3 id="3-记忆格式"><a class="markdownIt-Anchor" href="#3-记忆格式"></a> 3 记忆格式</h3>
+<p><img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-Agent%E6%A1%86%E6%9E%B6-%E8%87%AA%E7%A0%94/image-20260522151814001.png" alt="image-20260522151814001"></p>
+<p><img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-Agent%E6%A1%86%E6%9E%B6-%E8%87%AA%E7%A0%94/image-20260522152100979.png" alt="image-20260522152100979"></p>
+<h3 id="4-memory-是如何存储的"><a class="markdownIt-Anchor" href="#4-memory-是如何存储的"></a> 4 memory 是如何存储的?</h3>
+<h2 id="4-system-messsage"><a class="markdownIt-Anchor" href="#4-system-messsage"></a> 4 system messsage</h2>
+<h3 id="41如何保存"><a class="markdownIt-Anchor" href="#41如何保存"></a> 4.1如何保存?</h3>
+<ol>
+<li>是在run的时候检查是否需要session_id 有无system message, 再加一个标志位,只第一个run检查</li>
+<li>还是init agent的时候检查和写入?</li>
+<li>如果同一个session, 但是long memory 变换导致system message变换了, 又该如何处理?=&gt; 给system message 添加一个字段, 判断该message是不是long memory的, 进行增量更新? 还是?</li>
+</ol>
+<h2 id="5-结构化输出"><a class="markdownIt-Anchor" href="#5-结构化输出"></a> 5 结构化输出</h2>
+<h3 id="1-失败重试history-fail-message-替换"><a class="markdownIt-Anchor" href="#1-失败重试history-fail-message-替换"></a> 1 失败重试+history fail message 替换</h3>
+<h2 id="6-幂等性保护"><a class="markdownIt-Anchor" href="#6-幂等性保护"></a> 6 幂等性保护?</h2>
+<h2 id="7-排队机制"><a class="markdownIt-Anchor" href="#7-排队机制"></a> 7 排队机制?</h2>
+<h3 id="1-单个消息排队"><a class="markdownIt-Anchor" href="#1-单个消息排队"></a> 1 单个消息排队?</h3>
+<h3 id="2-多用户排队"><a class="markdownIt-Anchor" href="#2-多用户排队"></a> 2 多用户排队?</h3>
+<h3 id="3"><a class="markdownIt-Anchor" href="#3"></a> 3</h3>
+<h2 id="8-hook-插入点"><a class="markdownIt-Anchor" href="#8-hook-插入点"></a> 8 Hook 插入点</h2>
+<h3 id="1-image-20260522150306617"><a class="markdownIt-Anchor" href="#1-image-20260522150306617"></a> 1 <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-Agent%E6%A1%86%E6%9E%B6-%E8%87%AA%E7%A0%94/image-20260522150306617.png" alt="image-20260522150306617"></h3>
+<h2 id="9-mcp"><a class="markdownIt-Anchor" href="#9-mcp"></a> 9 MCP</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">                ┌──────────────┐</span><br><span class="line">Client ───────▶ │ HTTP Gateway │</span><br><span class="line">                └──────┬───────┘</span><br><span class="line">                       │</span><br><span class="line">        ┌──────────────┴──────────────┐</span><br><span class="line">        │                             │</span><br><span class="line">   Tool API                    Stream API</span><br><span class="line"> (HTTP JSON)                  (SSE/WebSocket)</span><br><span class="line">        │                             │</span><br><span class="line">   MCP Core                     MCP Runtime</span><br></pre></td></tr></table></figure>
+<h2 id="999-自我进化"><a class="markdownIt-Anchor" href="#999-自我进化"></a> 999 自我进化</h2>
+<p>自我进化用一句来讲，大概是这样：</p>
+<blockquote>
+<p>真实任务里的经验，怎么变成下一次任务可复用、可验证、可治理的能力。</p>
+</blockquote>
+<h3 id="策略"><a class="markdownIt-Anchor" href="#策略"></a> 策略</h3>
+<p><strong>上下文进化</strong>：将执行经验、用户偏好或环境约束写回本地记忆文件、会话索引或技能目录，在下一次任务触发时通过检索提取并拼接入上下文。</p>
+<p><strong>技能进化</strong>：把经验外化成结构化的 <a target="_blank" rel="noopener" href="http://SKILL.md">SKILL.md</a>、技能包或工作流脚本。系统依据执行报错或反馈信号，自动修改技能代码，在测试集中跑通后覆盖老版本，失败则触发版本回滚。</p>
+<p><strong>群体智能进化</strong>：多个 Agent、多台机器、多个用户的本地经验接入云端共享层。系统在服务端完成轨迹去重、冲突合并、安全脱敏与质量验证，最后将提纯后的技能或记忆分发回所有终端。</p>
+<p><strong>策略进化</strong>：将真实的交互轨迹与成败反馈收集起来，直接修改 Agent 的核心调度代码、工作流拓扑，甚至转化为强化学习（RL）的标量奖励来更新大模型的底层参数。</p>
+<h4 id="1-上下文进化"><a class="markdownIt-Anchor" href="#1-上下文进化"></a> 1 上下文进化</h4>
+<p>典型的上下文资产包括：</p>
+<ul>
+<li>跨会话记忆✅</li>
+<li>会话检索</li>
+<li>用户画像✅</li>
+<li>项目级上下文</li>
+<li>技能目录的动态装载</li>
+<li>失败后的反思记录</li>
+</ul>
+<p><strong>触发时机</strong></p>
+<p>执行反馈与用户纠正产生分叉，一部分写入策展记忆，一部分沉淀为 Skills。当新任务到来，系统通过 session_search 将历史记忆与技能一并汇入下一轮上下文。</p>
+<h4 id="2-技能进化"><a class="markdownIt-Anchor" href="#2-技能进化"></a> 2. 技能进化</h4>
+<p>系统依据执行报错或反馈信号，自动修改技能代码，在测试集中跑通后覆盖老版本，失败则触发版本回滚。</p>
+<p>所以当我们发现某类经验开始重复出现，就不应该继续把它留在记忆层，而应该上升成技能资产。</p>
+<p>允许 agent 自己创建、编辑、补丁、删文件、写附属文件。</p>
+<p><strong>自动复盘机制。</strong></p>
+<p>第一层是 nudge。memory 按用户回合数触发，skills 按工具迭代次数触发。达到阈值以后，系统会在主任务完成后，后台 fork 一个 review agent，让它复查当前会话，看有没有东西值得落 memory 或 patch/create skill。[run_agent.py] run_agent.py#L2448-L2547  [run_agent.py] run_agent.py#L11586-L11612</p>
+<p>第二层是 guidance。系统提示里直接写明：</p>
+<ul>
+<li>复杂任务、踩坑任务、发现可复用流程，要考虑存技能</li>
+<li>技能用着发现过时或不完整，要立刻 patch</li>
+</ul>
+<h4 id="3-多agent-skill共享层"><a class="markdownIt-Anchor" href="#3-多agent-skill共享层"></a> 3 多agent skill共享层</h4>
+<h4 id="4-微调模型"><a class="markdownIt-Anchor" href="#4-微调模型"></a> 4 微调模型</h4>
+<h1 id="三-代码相关"><a class="markdownIt-Anchor" href="#三-代码相关"></a> 📋三, 代码相关</h1>
+<h2 id="1-manager-agentmanagerget_instance-这个能不能写在weakagentagentmanagerpy-进行初始化"><a class="markdownIt-Anchor" href="#1-manager-agentmanagerget_instance-这个能不能写在weakagentagentmanagerpy-进行初始化"></a> 1 manager = AgentManager.get_instance() 这个能不能写在@weakagent/agent/manager.py , 进行初始化</h2>
+<p>可以写，但按你现在这套实现，直接写在 <code>manager.py</code> 顶层基本没效果。</p>
+<p>原因是：</p>
+<ul>
+<li><code>AgentManager.get_instance()</code> 只是“取现有实例”，不会创建。</li>
+<li>模块导入时如果还没调用过 <code>await AgentManager.instance()</code>，它返回的就是 <code>None</code>。</li>
+<li>所以在 <code>manager.py</code> 顶层写 <code>manager = AgentManager.get_instance()</code>，大概率只是把 <code>None</code> 绑定到一个变量。</li>
+</ul>
+<p>更推荐两种方式：</p>
+<ul>
+<li>在应用启动处统一初始化一次：<code>await AgentManager.instance()</code></li>
+<li>业务代码里继续用 <code>get_instance()</code> 取（拿不到就报“未初始化”），你现在 <code>run_sub_agent</code> 就是这种防御写法。</li>
+</ul>
+<h2 id="2-现在的调用链是不是从briefreactmultiagent-sub_agent-name-manager-factoryagent_type-如果factorypy-14-21-没有就会报错-为什么factory要register-factory也要register"><a class="markdownIt-Anchor" href="#2-现在的调用链是不是从briefreactmultiagent-sub_agent-name-manager-factoryagent_type-如果factorypy-14-21-没有就会报错-为什么factory要register-factory也要register"></a> 2 现在的调用链是不是从BriefReActMultiAgent-&gt;sub_agent name -&gt; manager -&gt; Factory.agent_type; 如果@factory.py (14-21) 没有就会报错? 为什么factory要register, factory也要register</h2>
+<p>当前链路是：</p>
+<p><code>BriefReActMultiAgent.execute_tool()</code><br>
+→ 调 <code>RunSubAgentTool</code>（传 <code>sub_agent_name</code>）<br>
+→ <code>manager.create_agent(sub_agent_name, ...)</code><br>
+→ <code>manager.factory.create(agent_type=sub_agent_name)</code><br>
+→ <code>AgentFactory</code> 从 <code>_registry</code> 找到类并实例化。</p>
+<p>如果 <code>factory.py</code> 里没有这个 key（比如没注册某个 <code>sub_agent_name</code>），会报错/失败，而且你这里是“双保险”：</p>
+<ul>
+<li><code>run_sub_agent.py</code> 先检查 <code>sub_agent_name in factory.supported_types</code>，不在就直接返回失败；</li>
+<li>就算前面没检查，<code>factory.create()</code> 里也会 <code>Unsupported agent_type</code>。</li>
+</ul>
+<h3 id="21-问为什么-factory-要-registermanager-也要-register"><a class="markdownIt-Anchor" href="#21-问为什么-factory-要-registermanager-也要-register"></a> 2.1 问“为什么 factory 要 register，manager 也要 register”：</h3>
+<p>它们职责不一样，不是重复。</p>
+<ul>
+<li><code>Factory.register</code>：注册类型映射（<code>&quot;multi_react&quot; -&gt; BriefReActMultiAgent</code>），解决“怎么创建”。</li>
+<li><code>Manager.register</code>：注册运行时实例（agent_id、parent/children、task、状态），解决“创建后怎么管理”。</li>
+</ul>
+<p>可以理解成：</p>
+<ul>
+<li>Factory 是“类工厂/构造器路由表”；</li>
+<li>Manager 是“实例生命周期管理器”。</li>
+</ul>
+<p>两层都需要，分别管“出生”和“养育”。</p>
+<h2 id="3-default_kwargs"><a class="markdownIt-Anchor" href="#3-default_kwargs"></a> 3 default_kwargs</h2>
+<p>more default_kwargs</p>
+<p>后续会进行payload覆盖</p>
+<h3 id="31-部分参数单独处理"><a class="markdownIt-Anchor" href="#31-部分参数单独处理"></a> 3.1 部分参数单独处理</h3>
+<ul>
+<li><code>name</code> 单独处理：<code>name</code> 作为显式参数传进来时，必须覆盖 <code>default_kwargs</code> 里的 <code>name</code>，也覆盖你在 <code>**kwargs</code> 里可能传的 <code>name</code>。所以工厂在合并完 <code>kwargs</code> 后再强制 <code>payload[&quot;name&quot;]=name</code>。</li>
+<li><code>llm</code> / <code>config_name</code> 单独处理：这是依赖注入逻辑。
+<ul>
+<li>如果调用方直接给了 <code>llm</code> 实例，就用它（最高优先级）。</li>
+<li>否则如果给了 <code>config_name</code>，工厂帮你构造 <code>LLM(config_name=...)</code> 再注入（让调用方不用自己 new）。</li>
+<li>这也会覆盖默认或 <code>**kwargs</code> 里可能带的 <code>llm</code>，保证“工厂参数 &gt; 其它来源”</li>
+</ul>
+</li>
+</ul>
+<h1 id="三-代码语法解析"><a class="markdownIt-Anchor" href="#三-代码语法解析"></a> 🪄三, 代码语法解析</h1>
+<h2 id="1-和-kwargs-any-的区别是什么-作用是什么"><a class="markdownIt-Anchor" href="#1-和-kwargs-any-的区别是什么-作用是什么"></a> 1  *, 和 **kwargs: Any 的区别是什么 作用是什么?</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">def create_agent(</span><br><span class="line">    self,</span><br><span class="line">    agent_type: str,</span><br><span class="line">    *,</span><br><span class="line">    agent_id: Optional[str] = None,</span><br><span class="line">    parent_id: Optional[str] = None,</span><br><span class="line">    **kwargs: Any,</span><br><span class="line">) -&gt; str:</span><br><span class="line">    &quot;&quot;&quot;Create and register an agent via AgentFactory.&quot;&quot;&quot;</span><br><span class="line">    agent = self.factory.create(agent_type, **kwargs)</span><br><span class="line">    return self.register(</span><br><span class="line">        agent,</span><br><span class="line">        agent_id=agent_id,</span><br><span class="line">        agent_type=agent_type,</span><br><span class="line">        parent_id=parent_id,</span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+<p>在 Python 函数签名里，这两个东西作用不同：</p>
+<ul>
+<li>
+<p><strong><code>*,</code></strong>：把它后面的参数都变成<strong>只能用关键字传</strong>（keyword-only）。</p>
+<ul>
+<li>所以这里 <code>agent_id</code>、<code>parent_id</code> 不能用位置参数传，只能写成 <code>agent_id=&quot;...&quot;</code>、<code>parent_id=&quot;...&quot;</code>。</li>
+<li>好处是调用更清晰，也避免把一堆可选参数按位置传导致顺序/含义搞错。</li>
+</ul>
+</li>
+<li>
+<p><strong><code>**kwargs: Any</code></strong>：收集调用时额外传入的、签名里没显式列出来的所有关键字参数，打包成一个 <code>dict</code>（类型标注为值是 <code>Any</code>）。</p>
+<ul>
+<li>在 runtime 里通常用来把这些“创建 agent 的参数”（比如 <code>name</code>、<code>system_prompt</code>、<code>max_steps</code> 等）继续转发给工厂/agent 构造。</li>
+</ul>
+</li>
+</ul>
+<p>举例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">runtime.create_agent(<span class="string">&quot;echo&quot;</span>, <span class="string">&quot;oops&quot;</span>)          <span class="comment"># 会报错，因为 * 之后不允许位置参数</span></span><br><span class="line">runtime.create_agent(<span class="string">&quot;echo&quot;</span>, agent_id=<span class="string">&quot;a1&quot;</span>)   <span class="comment"># OK</span></span><br><span class="line">runtime.create_agent(<span class="string">&quot;echo&quot;</span>, name=<span class="string">&quot;p&quot;</span>, max_steps=<span class="number">1</span>)  <span class="comment"># name/max_steps 会进 kwargs</span></span><br></pre></td></tr></table></figure>
+<h1 id="五-优化相关"><a class="markdownIt-Anchor" href="#五-优化相关"></a> 五 优化相关</h1>
+<h2 id="1-react-agent"><a class="markdownIt-Anchor" href="#1-react-agent"></a> 1 ReAct agent</h2>
+<ol>
+<li>把think message 作为临时历史对话发送给tool select, 而不再写入上下文</li>
+<li>把next prompt作为临时message, 指导loop中每一个step</li>
+<li></li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-Agent%E6%A1%86%E6%9E%B6-%E8%87%AA%E7%A0%94/" data-id="cmptvn9s7000g9sv495e5cz5r" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/agent/" rel="tag">agent</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2026/05/14/2026%E5%B9%B45%E6%9C%8814%E6%97%A5-ModelExecutoPool/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          2026年5月14日 ModelExecutoPool
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2026年5月8日 cam标定</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>161</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>43</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2025 - 2026 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

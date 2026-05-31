@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2026年5月26日 线程管理 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="线程（Thread） 线程是操作系统提供的最小执行调度单位之一，属于进程内部的执行流。 一个进程可以包含多个线程，这些线程共享进程的内存空间，由操作系统进行调度执行。   1. 线程的本质 线程可以理解为：  进程内部的一条执行路径  特点：  由操作系统调度（OS scheduler） 属于内核级并发（kernel-level concurrency） 多线程可以在多核 CPU 上实现并行执行">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2026年5月26日 线程管理">
+<meta property="og:url" content="https://shakewely.github.io/2026/05/26/2026%E5%B9%B45%E6%9C%8826%E6%97%A5-%E7%BA%BF%E7%A8%8B%E7%AE%A1%E7%90%86/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="线程（Thread） 线程是操作系统提供的最小执行调度单位之一，属于进程内部的执行流。 一个进程可以包含多个线程，这些线程共享进程的内存空间，由操作系统进行调度执行。   1. 线程的本质 线程可以理解为：  进程内部的一条执行路径  特点：  由操作系统调度（OS scheduler） 属于内核级并发（kernel-level concurrency） 多线程可以在多核 CPU 上实现并行执行">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-05-26T01:27:37.000Z">
+<meta property="article:modified_time" content="2026-05-26T06:10:08.451Z">
+<meta property="article:author" content="Weakliy">
+<meta property="article:tag" content="python">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>161</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>43</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2026年5月26日-线程管理" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/05/26/2026%E5%B9%B45%E6%9C%8826%E6%97%A5-%E7%BA%BF%E7%A8%8B%E7%AE%A1%E7%90%86/" class="article-date">
+  <time class="post-time" datetime="2026-05-26T01:27:37.000Z" itemprop="datePublished">
+    <span class="post-month">5月</span><br/>
+    <span class="post-day">26</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2026年5月26日 线程管理
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="线程thread"><a class="markdownIt-Anchor" href="#线程thread"></a> 线程（Thread）</h1>
+<p>线程是操作系统提供的<strong>最小执行调度单位之一</strong>，属于进程内部的执行流。</p>
+<p>一个进程可以包含多个线程，这些线程共享进程的内存空间，由操作系统进行调度执行。</p>
+<hr>
+<h2 id="1-线程的本质"><a class="markdownIt-Anchor" href="#1-线程的本质"></a> 1. 线程的本质</h2>
+<p>线程可以理解为：</p>
+<blockquote>
+<p><strong>进程内部的一条执行路径</strong></p>
+</blockquote>
+<p>特点：</p>
+<ul>
+<li>由操作系统调度（OS scheduler）</li>
+<li>属于内核级并发（kernel-level concurrency）</li>
+<li>多线程可以在多核 CPU 上实现并行执行</li>
+</ul>
+<hr>
+<h2 id="2-线程与进程的关系"><a class="markdownIt-Anchor" href="#2-线程与进程的关系"></a> 2. 线程与进程的关系</h2>
+<ul>
+<li>进程：资源分配单位（内存、文件句柄等）</li>
+<li>线程：执行单位（代码执行流）</li>
+</ul>
+<p>一个进程中可以包含多个线程：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">进程</span><br><span class="line"> ├── 线程1（执行任务A）</span><br><span class="line"> ├── 线程2（执行任务B）</span><br><span class="line"> └── 线程3（执行任务C）</span><br></pre></td></tr></table></figure>
+<p>特点：</p>
+<ul>
+<li>线程共享进程内存</li>
+<li>线程之间通信简单（但也更容易出错）</li>
+</ul>
+<hr>
+<h2 id="3-python-中的线程"><a class="markdownIt-Anchor" href="#3-python-中的线程"></a> 3. Python 中的线程</h2>
+<p>Python 使用 <code>threading</code> 模块支持多线程：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">task</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;running&quot;</span>)</span><br><span class="line"></span><br><span class="line">t = threading.Thread(target=task)</span><br><span class="line">t.start()</span><br><span class="line">t.join()</span><br></pre></td></tr></table></figure>
+<p>说明：</p>
+<ul>
+<li><code>start()</code>：启动线程</li>
+<li><code>join()</code>：等待线程结束</li>
+</ul>
+<hr>
+<h2 id="4-线程调度机制"><a class="markdownIt-Anchor" href="#4-线程调度机制"></a> 4. 线程调度机制</h2>
+<p>线程由操作系统进行调度：</p>
+<ul>
+<li>抢占式调度（preemptive）</li>
+<li>CPU 时间片轮转</li>
+<li>多线程可以“看起来同时运行”</li>
+</ul>
+<hr>
+<h2 id="5-python-线程的限制gil"><a class="markdownIt-Anchor" href="#5-python-线程的限制gil"></a> 5. Python 线程的限制（GIL）</h2>
+<p>Python 有一个重要限制：</p>
+<blockquote>
+<p><strong>GIL（Global Interpreter Lock，全局解释器锁）</strong></p>
+</blockquote>
+<p>影响：</p>
+<ul>
+<li>同一时刻只能有一个线程执行 Python 字节码</li>
+<li>多线程无法真正并行执行 CPU 计算</li>
+</ul>
+<hr>
+<h2 id="6-gil-的影响"><a class="markdownIt-Anchor" href="#6-gil-的影响"></a> 6. GIL 的影响</h2>
+<h3 id="️-适合场景io-密集"><a class="markdownIt-Anchor" href="#️-适合场景io-密集"></a> ✔️ 适合场景（IO 密集）</h3>
+<ul>
+<li>网络请求</li>
+<li>文件读写</li>
+<li>数据库操作</li>
+</ul>
+<p>原因：</p>
+<blockquote>
+<p>线程在 IO 阻塞时会释放 GIL</p>
+</blockquote>
+<hr>
+<h3 id="不适合场景cpu-密集"><a class="markdownIt-Anchor" href="#不适合场景cpu-密集"></a> ❌ 不适合场景（CPU 密集）</h3>
+<ul>
+<li>图像处理</li>
+<li>深度学习计算</li>
+<li>大规模数值计算</li>
+</ul>
+<p>原因：</p>
+<blockquote>
+<p>线程无法真正并行执行 CPU 计算</p>
+</blockquote>
+<hr>
+<h2 id="7-线程的优缺点"><a class="markdownIt-Anchor" href="#7-线程的优缺点"></a> 7. 线程的优缺点</h2>
+<h3 id="优点"><a class="markdownIt-Anchor" href="#优点"></a> 优点</h3>
+<ul>
+<li>创建开销比进程小</li>
+<li>适合 IO 并发</li>
+<li>共享内存，通信方便</li>
+</ul>
+<h3 id="缺点"><a class="markdownIt-Anchor" href="#缺点"></a> 缺点</h3>
+<ul>
+<li>GIL 限制并行能力</li>
+<li>线程安全问题（竞争条件）</li>
+<li>调试复杂</li>
+</ul>
+<hr>
+<h2 id="8-线程-vs-协程-vs-进程核心对比"><a class="markdownIt-Anchor" href="#8-线程-vs-协程-vs-进程核心对比"></a> 8. 线程 vs 协程 vs 进程（核心对比）</h2>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>调度方式</th>
+<th>并行能力</th>
+<th>开销</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>进程</td>
+<td>OS调度</td>
+<td>强（多核）</td>
+<td>高</td>
+<td>CPU密集</td>
+</tr>
+<tr>
+<td>线程</td>
+<td>OS调度</td>
+<td>受GIL限制</td>
+<td>中</td>
+<td>IO并发</td>
+</tr>
+<tr>
+<td>协程</td>
+<td>用户态调度</td>
+<td>无并行</td>
+<td>极低</td>
+<td>高并发IO</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="9-线程的执行模型"><a class="markdownIt-Anchor" href="#9-线程的执行模型"></a> 9. 线程的执行模型</h2>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">操作系统调度</span><br><span class="line">    ↓</span><br><span class="line">线程A / 线程B / 线程C</span><br><span class="line">    ↓</span><br><span class="line">时间片轮转执行</span><br><span class="line">    ↓</span><br><span class="line">切换上下文（context switch）</span><br></pre></td></tr></table></figure>
+<hr>
+<p>下面给你一版<strong>Python 线程库汇总笔记（结构化 + 可直接做学习文档）</strong>，和你前面的 asyncio / 协程笔记风格统一。</p>
+<hr>
+<h2 id="python-线程库汇总"><a class="markdownIt-Anchor" href="#python-线程库汇总"></a> Python 线程库汇总</h2>
+<p>Python 的线程相关能力主要由标准库 <code>threading</code> 提供，同时配合 <code>concurrent.futures</code> 实现线程池管理。</p>
+<p>线程的本质是：</p>
+<blockquote>
+<p><strong>由操作系统调度的执行流，用于实现并发执行</strong></p>
+</blockquote>
+<hr>
+<h1 id="threading基础线程库"><a class="markdownIt-Anchor" href="#threading基础线程库"></a> threading（基础线程库）</h1>
+<p><code>threading</code> 是 Python 最底层的线程控制模块，用于创建和管理线程。</p>
+<hr>
+<h3 id="11-创建线程"><a class="markdownIt-Anchor" href="#11-创建线程"></a> 1.1 创建线程</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">task</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;running&quot;</span>)</span><br><span class="line"></span><br><span class="line">t = threading.Thread(target=task)</span><br><span class="line">t.start()</span><br><span class="line">t.join()</span><br></pre></td></tr></table></figure>
+<p>说明：</p>
+<ul>
+<li><code>Thread</code>：创建线程对象</li>
+<li><code>start()</code>：启动线程（交给 OS 调度）</li>
+<li><code>join()</code>：阻塞等待线程结束</li>
+</ul>
+<hr>
+<h3 id="12-带参数的线程"><a class="markdownIt-Anchor" href="#12-带参数的线程"></a> 1.2 带参数的线程</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">task</span>(<span class="params">name</span>):</span><br><span class="line">    <span class="built_in">print</span>(name)</span><br><span class="line"></span><br><span class="line">t = threading.Thread(target=task, args=(<span class="string">&quot;A&quot;</span>,))</span><br><span class="line">t.start()</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="13-获取当前线程"><a class="markdownIt-Anchor" href="#13-获取当前线程"></a> 1.3 获取当前线程</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(threading.current_thread().name)</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="14-守护线程daemon-thread"><a class="markdownIt-Anchor" href="#14-守护线程daemon-thread"></a> 1.4 守护线程（daemon thread）</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">t = threading.Thread(target=task, daemon=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+<p>特点：</p>
+<ul>
+<li>主线程结束时自动退出</li>
+<li>不会阻止程序退出</li>
+</ul>
+<hr>
+<h2 id="2-线程同步机制重点"><a class="markdownIt-Anchor" href="#2-线程同步机制重点"></a> 2. 线程同步机制（重点）</h2>
+<p>多线程共享内存，因此必须解决<strong>数据竞争问题</strong></p>
+<hr>
+<h3 id="21-lock互斥锁"><a class="markdownIt-Anchor" href="#21-lock互斥锁"></a> 2.1 Lock（互斥锁）</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">lock = threading.Lock()</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">task</span>():</span><br><span class="line">    <span class="keyword">with</span> lock:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;critical section&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>作用：</p>
+<ul>
+<li>同一时间只允许一个线程执行代码块</li>
+<li>防止数据竞争</li>
+</ul>
+<hr>
+<h3 id="22-rlock可重入锁"><a class="markdownIt-Anchor" href="#22-rlock可重入锁"></a> 2.2 RLock（可重入锁）</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lock = threading.RLock()</span><br></pre></td></tr></table></figure>
+<p>特点：</p>
+<ul>
+<li>同一线程可多次获取锁</li>
+<li>防止递归死锁</li>
+</ul>
+<hr>
+<h3 id="23-condition条件变量"><a class="markdownIt-Anchor" href="#23-condition条件变量"></a> 2.3 Condition（条件变量）</h3>
+<p>用于线程间通信：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cond = threading.Condition()</span><br></pre></td></tr></table></figure>
+<p>用途：</p>
+<ul>
+<li>线程等待某个条件</li>
+<li>线程通知其他线程</li>
+</ul>
+<hr>
+<h3 id="24-event事件机制"><a class="markdownIt-Anchor" href="#24-event事件机制"></a> 2.4 Event（事件机制）</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">event = threading.Event()</span><br></pre></td></tr></table></figure>
+<p>方法：</p>
+<ul>
+<li><code>event.set()</code>：触发事件</li>
+<li><code>event.wait()</code>：阻塞等待</li>
+</ul>
+<hr>
+<h3 id="25-semaphore信号量"><a class="markdownIt-Anchor" href="#25-semaphore信号量"></a> 2.5 Semaphore（信号量）</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sem = threading.Semaphore(<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+<p>作用：</p>
+<ul>
+<li>控制同时访问资源的线程数量</li>
+<li>类似“限流器”</li>
+</ul>
+<hr>
+<h2 id="3-线程池推荐方式"><a class="markdownIt-Anchor" href="#3-线程池推荐方式"></a> 3. 线程池（推荐方式）</h2>
+<h3 id="concurrentfuturesthreadpoolexecutor"><a class="markdownIt-Anchor" href="#concurrentfuturesthreadpoolexecutor"></a> concurrent.futures.ThreadPoolExecutor</h3>
+<p>这是 Python 更高级的线程管理方式。</p>
+<hr>
+<h3 id="31-基本使用"><a class="markdownIt-Anchor" href="#31-基本使用"></a> 3.1 基本使用</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> concurrent.futures <span class="keyword">import</span> ThreadPoolExecutor</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">task</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> x * <span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> ThreadPoolExecutor(max_workers=<span class="number">3</span>) <span class="keyword">as</span> pool:</span><br><span class="line">    results = pool.<span class="built_in">map</span>(task, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="32-submit-提交任务"><a class="markdownIt-Anchor" href="#32-submit-提交任务"></a> 3.2 submit 提交任务</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">future = pool.submit(task, <span class="number">10</span>)</span><br><span class="line"><span class="built_in">print</span>(future.result())</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="33-future-对象"><a class="markdownIt-Anchor" href="#33-future-对象"></a> 3.3 Future 对象</h3>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Future = “未来结果”</span><br></pre></td></tr></table></figure>
+<p>方法：</p>
+<ul>
+<li><code>result()</code>：获取结果</li>
+<li><code>done()</code>：是否完成</li>
+<li><code>cancel()</code>：取消任务</li>
+</ul>
+<hr>
+<h2 id="4-线程调度机制-2"><a class="markdownIt-Anchor" href="#4-线程调度机制-2"></a> 4. 线程调度机制</h2>
+<p>线程由操作系统调度：</p>
+<ul>
+<li>抢占式调度（preemptive scheduling）</li>
+<li>CPU 时间片轮转</li>
+<li>上下文切换（context switch）</li>
+</ul>
+<hr>
+<h2 id="5-python-线程的核心限制gil"><a class="markdownIt-Anchor" href="#5-python-线程的核心限制gil"></a> 5. Python 线程的核心限制（GIL）</h2>
+<p>Python 有 GIL（全局解释器锁）：</p>
+<p>影响：</p>
+<ul>
+<li>同一时刻只能有一个线程执行 Python 字节码</li>
+<li>多线程不能真正并行 CPU 计算</li>
+</ul>
+<hr>
+<h3 id="适合场景"><a class="markdownIt-Anchor" href="#适合场景"></a> 适合场景</h3>
+<ul>
+<li>网络请求</li>
+<li>文件 IO</li>
+<li>数据库访问</li>
+</ul>
+<hr>
+<h3 id="不适合场景"><a class="markdownIt-Anchor" href="#不适合场景"></a> 不适合场景</h3>
+<ul>
+<li>CPU 密集计算</li>
+<li>图像处理</li>
+<li>深度学习训练</li>
+</ul>
+<hr>
+<h2 id="6-线程执行模型"><a class="markdownIt-Anchor" href="#6-线程执行模型"></a> 6. 线程执行模型</h2>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">操作系统</span><br><span class="line">   ↓</span><br><span class="line">线程1 线程2 线程3</span><br><span class="line">   ↓</span><br><span class="line">CPU 时间片轮转执行</span><br><span class="line">   ↓</span><br><span class="line">上下文切换</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="7-threading-vs-threadpoolexecutor"><a class="markdownIt-Anchor" href="#7-threading-vs-threadpoolexecutor"></a> 7. threading vs ThreadPoolExecutor</h2>
+<table>
+<thead>
+<tr>
+<th>对比</th>
+<th>threading</th>
+<th>ThreadPoolExecutor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>抽象层级</td>
+<td>低</td>
+<td>高</td>
+</tr>
+<tr>
+<td>使用难度</td>
+<td>高</td>
+<td>低</td>
+</tr>
+<tr>
+<td>线程复用</td>
+<td>❌</td>
+<td>✔️</td>
+</tr>
+<tr>
+<td>推荐程度</td>
+<td>一般</td>
+<td>推荐</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="8-一句话总结"><a class="markdownIt-Anchor" href="#8-一句话总结"></a> 8. 一句话总结</h2>
+<blockquote>
+<p>Python 线程库提供基于操作系统调度的并发能力，适合 IO 密集型任务，但受 GIL 限制无法实现 CPU 级真正并行，实际开发中更推荐使用线程池进行管理。</p>
+</blockquote>
+<hr>
+<p>如果你下一步要继续整理，我可以帮你补：</p>
+<ul>
+<li>asyncio vs threading 对比（面试高频）</li>
+<li>GIL 深入原理（为什么存在）</li>
+<li>线程池 vs 协程池设计思想</li>
+<li>CPU 密集任务为什么必须用 multiprocessing</li>
+</ul>
+<p>这些会把“并发体系”彻底串起来。</p>
+<h1 id="线程管理"><a class="markdownIt-Anchor" href="#线程管理"></a> 线程管理</h1>
+<h2 id="问题1-线程混乱"><a class="markdownIt-Anchor" href="#问题1-线程混乱"></a> 问题1: 线程混乱</h2>
+<p>延迟五秒</p>
+<blockquote>
+<p>你的理解对：<strong>任务 A 跑完后，池里若还排着任务 B，工作线程会马上再进一次 <code>start_processing()</code></strong>。下面用代码标出「在哪创建 / 在哪结束 / 在哪再启动」。</p>
+<h2 id="先澄清a-b-是什么"><a class="markdownIt-Anchor" href="#先澄清a-b-是什么"></a> 先澄清：A、B 是什么？</h2>
+<p>它们<strong>不是</strong>两个独立对象，而是：</p>
+<ul>
+<li>同一条 <strong><code>Stream-object-line1-workspace1-AF-202A_0</code></strong> 工作线程（<code>max_workers=1</code>）</li>
+<li>对<strong>同一个</strong> <code>processor.start_processing</code> <strong>调了两次</strong> <code>submit</code></li>
+<li>两次调用共用同一个 <code>processor</code> 实例和同一个 <code>is_processing</code> 标志</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">slot.stream = ThreadPoolExecutor(max_workers=1, thread_name_prefix=f&quot;Stream-&#123;suffix&#125;&quot;)</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="任务-a-b-在哪创建"><a class="markdownIt-Anchor" href="#任务-a-b-在哪创建"></a> 任务 A / B 在哪「创建」？</h2>
+<p>每次 <code>acsBiyiVisionRequest</code> → <code>stream_process_webcam(get_result=False)</code> 都会 <strong>submit 一次</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">if self._keep_stream_processing_thread_alive():</span><br><span class="line">    hk = self.detection_path.get_key()</span><br><span class="line">    stream_ex = keyed_inference_pool.get_stream_executor(hk)</span><br><span class="line">    self.processor_thread = None</span><br><span class="line">    self._stream_processing_future = stream_ex.submit(self.processor.start_processing)</span><br><span class="line">    logger.info(&quot;stream_process_webcam: keyed stream pool submit start_processing hub_key=%s&quot;, hk)</span><br></pre></td></tr></table></figure>
+<table>
+<thead>
+<tr>
+<th>调用</th>
+<th>池里</th>
+<th><code>_stream_processing_future</code> 指向</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>第 1 次 Request</td>
+<td>排队/执行 <strong>任务 A</strong></td>
+<td><code>Future_A</code></td>
+</tr>
+<tr>
+<td>第 2 次 Request（未防重）</td>
+<td>再排队 <strong>任务 B</strong></td>
+<td>被改成 <strong><code>Future_B</code></strong>（覆盖变量，A 可能还在跑）</td>
+</tr>
+</tbody>
+</table>
+<p><code>submit</code> 只把「再跑一遍 <code>start_processing</code>」放进队列，<strong>没有</strong>单独的 Task 类，也<strong>没有</strong>显式 <code>destroy</code>。</p>
+<hr>
+<h2 id="任务-a-在哪结束-销毁"><a class="markdownIt-Anchor" href="#任务-a-在哪结束-销毁"></a> 任务 A 在哪「结束 / 销毁」？</h2>
+<p>没有 <code>destroy()</code>。A 的生命周期就是 <strong><code>start_processing()</code> 这一次函数调用</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">sequenceDiagram</span><br><span class="line">    participant Pool as Stream线程池(1 worker)</span><br><span class="line">    participant SP as start_processing()</span><br><span class="line">    participant Main as MainThread</span><br><span class="line"></span><br><span class="line">    Note over Pool,SP: 任务 A 开始</span><br><span class="line">    Pool-&gt;&gt;SP: 调用 start_processing()  # 任务 A</span><br><span class="line">    SP-&gt;&gt;SP: is_processing = True (219)</span><br><span class="line">    loop while is_processing</span><br><span class="line">        SP-&gt;&gt;SP: frame_queue.get → process_frame</span><br><span class="line">    end</span><br><span class="line">    Main-&gt;&gt;SP: stop_processing_video() → is_processing=False</span><br><span class="line">    SP-&gt;&gt;SP: 退出 while (227)</span><br><span class="line">    SP-&gt;&gt;SP: 日志「AI处理结束统计」「停止处理帧」(313-315)</span><br><span class="line">    SP-&gt;&gt;SP: 函数 return → 任务 A 结束</span><br><span class="line">    Note over Pool: Future_A 变为 done</span><br></pre></td></tr></table></figure>
+<p>对应代码：</p>
+<p><strong>1. 被 Result API 叫停（任务 A 正在跑时）：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">self.is_detecting.value = False</span><br><span class="line">if self.processor:</span><br><span class="line">    self.processor.stop_processing_video()</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">def stop_processing_video(self):</span><br><span class="line">    self.is_processing = False</span><br></pre></td></tr></table></figure>
+<p><strong>2. 循环退出 → A 结束：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">while self.is_processing:</span><br></pre></td></tr></table></figure>
+<p><code>is_processing == False</code> 后跳出 <code>while</code>，打日志，<strong>函数返回 = 任务 A 在池里算完成</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">logger.info(f&quot;🤖 AI处理结束统计: 总帧数=&#123;self.processed_frame_count&#125; | ...&quot;)</span><br><span class="line">logger.info(&quot;停止处理帧&quot;)</span><br><span class="line">self.processed_result_queue.put(None)</span><br><span class="line">...</span><br><span class="line">    logger.info(f&quot;结果已存在，跳过 check_detection_result()，保留已保存的结果: &#123;self.__result.resultStr&#125;&quot;)</span><br></pre></td></tr></table></figure>
+<p>你日志里 <strong>42.064～42.066</strong> 的 Stream 线程输出，就是 <strong>任务 A 在这里结束</strong>。</p>
+<p><strong>3. MainThread 侧对 Future 的清理（只清引用，不杀线程）：</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">finally:</span><br><span class="line">    if clear_future:</span><br><span class="line">        self._stream_processing_future = None</span><br></pre></td></tr></table></figure>
+<p>若等的其实是 <code>Future_B</code> 且 B 还没跑完，这里会 <strong>卡满 5 秒</strong> 才走到 <code>finally</code>。</p>
+<hr>
+<h2 id="任务-b-在哪启动"><a class="markdownIt-Anchor" href="#任务-b-在哪启动"></a> 任务 B 在哪「启动」？</h2>
+<p><strong>任务 A 的 <code>start_processing()</code> return 之后</strong>，同一条 Stream 工作线程从队列里取出下一个 callable，<strong>再进一次</strong> <code>start_processing()</code> —— 这就是任务 B：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">def start_processing(self):</span><br><span class="line">    self.is_processing = True   # ← B 一进来又把开关打开</span><br><span class="line">    ...</span><br><span class="line">    while self.is_processing:</span><br></pre></td></tr></table></figure>
+<p>要点：</p>
+<ul>
+<li>B <strong>不是</strong>新线程，仍是 <code>Stream-..._0</code></li>
+<li>B <strong>在 A 函数返回后立刻</strong>由线程池调度启动（中间无别的逻辑）</li>
+<li>B 入口 <strong><code>is_processing = True</code></strong>，所以 <strong>42.044 的 stop 管不到 B</strong>（stop 发生在 B 启动之前，且 B 会重置为 True）</li>
+</ul>
+<hr>
+<h2 id="和你日志对齐的一条时间线"><a class="markdownIt-Anchor" href="#和你日志对齐的一条时间线"></a> 和你日志对齐的一条时间线</h2>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">39.536  Request → submit 任务 A（Future_A）</span><br><span class="line">        Stream 线程：执行 start_processing()  # A</span><br><span class="line"></span><br><span class="line">42.044  Result → stop_processing()</span><br><span class="line">        MainThread：Future_?.result(timeout=5) 开始等</span><br><span class="line"></span><br><span class="line">42.066  A：while 结束 → 「停止处理帧」→ return</span><br><span class="line">        Future_A 完成</span><br><span class="line"></span><br><span class="line">        【若之前又 submit 过 B】</span><br><span class="line">42.066  同一线程立刻再调 start_processing()  # B</span><br><span class="line">        is_processing = True，继续消费 frame_queue …</span><br><span class="line"></span><br><span class="line">47.046  若 Main 等的是 Future_B → 5s 超时</span><br></pre></td></tr></table></figure>
+<p>若<strong>本周期只 submit 一次</strong>，通常只有 A，<code>Future_A</code> 应在 42.066 前后就返回，<strong>不会</strong>卡 5 秒。<br>
+卡 5 秒说明池里<strong>确实还有 B</strong>（本周期重复 Request，或上一轮残留/超时未清队列）。</p>
+<hr>
+<h2 id="mainthread-在等谁"><a class="markdownIt-Anchor" href="#mainthread-在等谁"></a> MainThread 在等谁？</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">elif self._stream_processing_future is not None:</span><br><span class="line">    try:</span><br><span class="line">        self._stream_processing_future.result(timeout=timeout)</span><br></pre></td></tr></table></figure>
+<p><code>_stream_processing_future</code> <strong>永远是最后一次 <code>submit</code> 的 Future</strong>：</p>
+<ul>
+<li>日志里的「停止处理帧」→ 往往是 <strong>先结束的那个（A）</strong></li>
+<li><code>result(5)</code> 等的 → <strong>最后一次 submit 对应的（常常是 B）</strong></li>
+</ul>
+<p>所以会出现：<strong>A 已经停了，API 还要等 5 秒</strong>。</p>
+<hr>
+<h2 id="小结表"><a class="markdownIt-Anchor" href="#小结表"></a> 小结表</h2>
+<table>
+<thead>
+<tr>
+<th>问题</th>
+<th>答案</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A 结束后会马上触发 B 吗？</td>
+<td><strong>会</strong>，只要池队列里还有下一次 <code>submit(start_processing)</code></td>
+</tr>
+<tr>
+<td>A 在哪销毁？</td>
+<td><strong>不销毁对象</strong>；<code>start_processing</code> 因 <code>is_processing=False</code> 退出 <code>while</code> 并 <strong>return</strong>，<code>Future_A</code> 变 done</td>
+</tr>
+<tr>
+<td>B 在哪启动？</td>
+<td><strong>同一条 Stream 线程</strong>，A return 后线程池执行队列里下一个任务 → 再次进入 <code>start_processing()</code> 第 219 行</td>
+</tr>
+<tr>
+<td>5 秒从哪来？</td>
+<td>Main 对 <strong>最后一个 Future</strong> 做 <code>result(timeout=5.0)</code>，B 没被 stop，常等满超时</td>
+</tr>
+</tbody>
+</table>
+<p>若要避免 B 被误启动，需要在 <code>submit</code> 前等待/取消未完成的 Future，并在 keyed 模式下用 Future 状态做防重，而不是只看 <code>processor_thread</code>。需要的话我可以按这个思路改 <code>detector.py</code> / <code>biyi.py</code>。</p>
+</blockquote>
+<h3 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h3>
+<p>所以就是A @app/core/stream/detector.py:400-404 发送停止信号后, while循环推出, Future  A结束, 同时立马进入Future  B, 但是Future B会把elf.is_processing = True, 所以导致@detector.py (409-411) _join_processor_stream:1 本身读取的是Future B, 2. is_processing = True所以无法停止只能timeout</p>
+<p>同时只是timeout, Future  B依旧在进行</p>
+<h3 id="修复方案"><a class="markdownIt-Anchor" href="#修复方案"></a> 修复方案</h3>
+<p>submit 前防重 + keyed 活跃判断</p>
+<blockquote>
+<hr>
+<h2 id="方案对比简表"><a class="markdownIt-Anchor" href="#方案对比简表"></a> 方案对比（简表）</h2>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>改动</th>
+<th>保留 keyed 预热</th>
+<th>解决 5s 卡死</th>
+<th>推荐度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A. 配置关掉 keyed stream</td>
+<td>只改 JSON</td>
+<td>❌</td>
+<td>✅</td>
+<td>临时/单机验证</td>
+</tr>
+<tr>
+<td>B. submit 前防重 + keyed 活跃判断</td>
+<td>小</td>
+<td>✅</td>
+<td>✅ 防 B 产生</td>
+<td><strong>首选</strong></td>
+</tr>
+<tr>
+<td>C. <code>start_processing</code> 入口不盲目 <code>True</code></td>
+<td>小</td>
+<td>✅</td>
+<td>✅ B 秒退</td>
+<td><strong>首选（配合 B）</strong></td>
+</tr>
+<tr>
+<td>D. Result 已有结果则缩短/跳过 join</td>
+<td>小</td>
+<td>✅</td>
+<td>✅ API 快</td>
+<td><strong>首选（配合 B）</strong></td>
+</tr>
+<tr>
+<td>E. 周期内只 submit 一次，用 flag 启停</td>
+<td>中</td>
+<td>✅</td>
+<td>✅ 根治</td>
+<td>中长期</td>
+</tr>
+<tr>
+<td>F. API 层 <code>asyncio.to_thread</code></td>
+<td>小</td>
+<td>✅</td>
+<td>⚠️ 只不堵事件循环</td>
+<td>辅助</td>
+</tr>
+<tr>
+<td>G. stop 时清空 <code>frame_queue</code></td>
+<td>小</td>
+<td>✅</td>
+<td>⚠️ 缩短 B 空转</td>
+<td>辅助</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="a-配置绕过最快不治本"><a class="markdownIt-Anchor" href="#a-配置绕过最快不治本"></a> A. 配置绕过（最快，不治本）</h2>
+<p><code>AF-202A.json</code>：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;keep_stream_processing_thread_alive&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>优点</strong>：已验证 API ~几十 ms 返回。</li>
+<li><strong>缺点</strong>：每周期新建 <code>ProcessorThreadWebcam</code>，失去常驻线程/预热收益。</li>
+</ul>
+<p>适合：先上线止血，再改代码。</p>
+<hr>
+<h2 id="b-禁止重复-submit堵住-b-的来源"><a class="markdownIt-Anchor" href="#b-禁止重复-submit堵住-b-的来源"></a> B. 禁止重复 <code>submit</code>（堵住 B 的来源）</h2>
+<p><strong>问题根源</strong>：每次 Request 都 <code>submit</code>，且 <code>biyi.py</code> 只查 <code>processor_thread</code>（keyed 下恒为 <code>None</code>）。</p>
+<p><strong>改 <code>detector.py</code></strong>：submit 前判断上一轮 Future：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> self._stream_processing_future <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> <span class="keyword">not</span> self._stream_processing_future.done():</span><br><span class="line">    logger.info(<span class="string">&quot;stream already running, skip submit&quot;</span>)</span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    self._stream_processing_future = stream_ex.submit(self.processor.start_processing)</span><br></pre></td></tr></table></figure>
+<p><strong>改 <code>biyi.py</code></strong>：keyed 模式用 Future / <code>is_detecting</code> 判断：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">future = video_detector._stream_processing_future</span><br><span class="line">stream_running = (</span><br><span class="line">    future <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> <span class="keyword">not</span> future.done()</span><br><span class="line">) <span class="keyword">or</span> video_detector.is_detecting.value</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>优点</strong>：改动小，直接避免 A 结束后立刻进 B。</li>
+<li><strong>注意</strong>：上一轮若 <strong>超时未 done</strong>，要先 <code>stop</code> + 短等或丢弃旧 Future 再开新周期（见 D）。</li>
+</ul>
+<hr>
+<h2 id="c-start_processing-入口尊重已停止b-即使被调度也立刻退出"><a class="markdownIt-Anchor" href="#c-start_processing-入口尊重已停止b-即使被调度也立刻退出"></a> C. <code>start_processing</code> 入口尊重「已停止」（B 即使被调度也立刻退出）</h2>
+<p>在 <code>processor.py</code> 里，<code>is_processing = True</code> 之前检查全局停流状态：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">start_processing</span>(<span class="params">self</span>):</span><br><span class="line">    <span class="comment"># 若 Result 已停流，不要再开 while（避免 B 把 stop 抵消）</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> self.is_detecting.value:</span><br><span class="line">        logger.info(<span class="string">&quot;start_processing skipped: detection already stopped&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    self.is_processing = <span class="literal">True</span></span><br><span class="line">    <span class="keyword">while</span> self.is_processing:</span><br><span class="line">        ...</span><br></pre></td></tr></table></figure>
+<p>或增加 <code>self._stop_requested</code> 标志，在 <code>stop_processing_video()</code> 里置位，B 入口检查后立即 <code>return</code>。</p>
+<ul>
+<li><strong>优点</strong>：即使队列里误排了 B，也<strong>不会</strong> <code>is_processing=True</code> 空转 5 秒。</li>
+<li><strong>缺点</strong>：单独用不能防止重复 submit，需与 B 一起用。</li>
+</ul>
+<hr>
+<h2 id="d-result-api-不必死等-future你已有-set_result"><a class="markdownIt-Anchor" href="#d-result-api-不必死等-future你已有-set_result"></a> D. Result API 不必死等 Future（你已有 <code>set_result</code>）</h2>
+<p><code>_trigger_plc_end_task</code> 里已经 <code>set_result(detection_result)</code>，结果在 <strong>42.028</strong> 就有了，不必再等 <strong>47.046</strong>。</p>
+<p><strong>改 <code>stream_process_webcam_get_result</code> 或 <code>biyi.py</code></strong>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 若 processor 已有结果，join 用短超时或跳过</span></span><br><span class="line"><span class="keyword">if</span> self.processor.get_result() <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">    self._join_processor_stream(timeout=<span class="number">0.2</span>)  <span class="comment"># 或仅 stop，不 join</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    self._join_processor_stream(timeout=<span class="number">5.0</span>)</span><br></pre></td></tr></table></figure>
+<p>或 keyed 路径：<strong>只 <code>stop</code> + <code>drain_queue</code>，不 <code>result(5)</code></strong>。</p>
+<ul>
+<li><strong>优点</strong>：对 PLC 场景最直接，API 延迟从 5s → 几百 ms。</li>
+<li><strong>注意</strong>：后台 Stream 线程可能还在空转，需配合 C 或 B 收尾。</li>
+</ul>
+<hr>
+<h2 id="e-架构对齐keyed-只-submit-一次根治"><a class="markdownIt-Anchor" href="#e-架构对齐keyed-只-submit-一次根治"></a> E. 架构对齐：keyed =「只 submit 一次」（根治）</h2>
+<p><code>keep_stream_processing_thread_alive: true</code> 的语义应是：</p>
+<ul>
+<li><strong>进程生命周期内</strong> <code>submit(start_processing)</code> <strong>一次</strong>；</li>
+<li>每个检测周期只切 <code>is_detecting</code> / <code>is_processing</code>，<strong>不再</strong>每周期 <code>submit</code>。</li>
+</ul>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">启动服务 / 首次 Request → submit 一次 → 常驻 while</span><br><span class="line">周期开始 → is_detecting=True</span><br><span class="line">周期结束 → is_detecting=False, is_processing=False（或只停 detecting，循环空转等待）</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>优点</strong>：与「常驻线程」设计一致，无 A/B 队列问题。</li>
+<li><strong>缺点</strong>：改动面较大，要梳理 <code>stream_process_webcam</code> / <code>clear()</code> / 多周期重置逻辑。</li>
+</ul>
+<hr>
+<h2 id="f-api-不阻塞事件循环辅助"><a class="markdownIt-Anchor" href="#f-api-不阻塞事件循环辅助"></a> F. API 不阻塞事件循环（辅助）</h2>
+<p><code>biyi.py</code>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">result = <span class="keyword">await</span> asyncio.to_thread(video_detector.stream_process_webcam_get_result)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>优点</strong>：其他 HTTP 不被拖死。</li>
+<li><strong>缺点</strong>：<strong>该请求仍等 5 秒</strong>，PLC 客户端体感不变；需与 B/C/D 一起做。</li>
+</ul>
+<hr>
+<h2 id="g-stop-时清空-frame_queue缩短-b-空转"><a class="markdownIt-Anchor" href="#g-stop-时清空-frame_queue缩短-b-空转"></a> G. stop 时清空 <code>frame_queue</code>（缩短 B 空转）</h2>
+<p>在 <code>stream_process_webcam_get_result</code> 的 stop 后：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 清空积压帧，避免 B 长时间 get/process</span></span><br><span class="line"><span class="keyword">while</span> <span class="keyword">not</span> self.frame_queue.empty():</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        self.frame_queue.get_nowait()</span><br><span class="line">    <span class="keyword">except</span> queue.Empty:</span><br><span class="line">        <span class="keyword">break</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>优点</strong>：减轻 B 拖时间（尤其 <code>is_detecting=False</code> 时仍在循环 get）。</li>
+<li><strong>缺点</strong>：不解决「等错 Future」；需配合 C。</li>
+</ul>
+<hr>
+<h2 id="推荐组合实用"><a class="markdownIt-Anchor" href="#推荐组合实用"></a> 推荐组合（实用）</h2>
+<p><strong>短期（1～2 个文件）：</strong></p>
+<ol>
+<li><strong>B</strong> — submit 防重 + keyed 活跃判断</li>
+<li><strong>C</strong> — <code>start_processing</code> 入口检查 <code>is_detecting</code></li>
+<li><strong>D</strong> — Result 已有 <code>set_result</code> 则 <code>join</code> 短超时（0.2～0.5s）</li>
+</ol>
+<p><strong>中期：</strong></p>
+<ol start="4">
+<li><strong>E</strong> — 每 hub_key 只 submit 一次，周期用 flag 控制</li>
+</ol>
+<p><strong>临时止血：</strong></p>
+<ul>
+<li><strong>A</strong> — 该产线 JSON 设 <code>keep_stream_processing_thread_alive: false</code></li>
+</ul>
+<hr>
+<h2 id="不建议单独做的"><a class="markdownIt-Anchor" href="#不建议单独做的"></a> 不建议单独做的</h2>
+<ul>
+<li><strong>只加 <code>asyncio.to_thread</code></strong>：不解决 5 秒，只解放其他接口。</li>
+<li><strong>只把 <code>timeout=5</code> 改大</strong>：更慢。</li>
+<li><strong>超时后不处理排队任务</strong>：脏 B 会污染下一周期。</li>
+</ul>
+<hr>
+<p>如果你要落地改代码，我建议按 <strong>B + C + D</strong> 做最小 PR（<code>detector.py</code>、<code>processor.py</code>、<code>biyi.py</code> 三处）。你说一声我可以直接改一版。</p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/05/26/2026%E5%B9%B45%E6%9C%8826%E6%97%A5-%E7%BA%BF%E7%A8%8B%E7%AE%A1%E7%90%86/" data-id="cmptvn9s5000a9sv48e0adu1d" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2026/05/28/2026%E5%B9%B45%E6%9C%8828%E6%97%A5-agent%E7%9F%A5%E8%AF%86%E5%BA%93/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          2026年5月28日 agent知识库
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2026/05/20/2026%E5%B9%B45%E6%9C%8820%E6%97%A5-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2026年5月20日 推理优化</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>161</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>43</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2025 - 2026 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

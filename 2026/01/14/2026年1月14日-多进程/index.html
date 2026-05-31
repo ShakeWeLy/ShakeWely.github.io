@@ -5,20 +5,18 @@
   
   <title>2026年1月14日 多进程 | Weakliy_Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="ss  基类 1  继承重写 1  进程池 pool  进程复用：进程池中的工作进程一旦创建，会持续存活直到进程池关闭，可反复处理多个任务，无需每次执行任务都创建新进程。 任务排队与调度：当提交的任务数量超过进程池的工作进程数时，未被执行的任务会进入任务队列排队，等待空闲工作进程来处理。  pool.异步apply  同步 apply()：提交任务后，会阻塞主进程，直到该任务执行完成并返回结果，">
+  <meta name="description" content="线程（Thread） 线程是操作系统提供的最小执行调度单位之一，属于进程内部的执行流。 一个进程可以包含多个线程，这些线程共享进程的内存空间，由操作系统进行调度执行。   1. 线程的本质 线程可以理解为：  进程内部的一条执行路径  特点：  由操作系统调度（OS scheduler） 属于内核级并发（kernel-level concurrency） 多线程可以在多核 CPU 上实现并行执">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2026年1月14日 多进程">
 <meta property="og:url" content="https://shakewely.github.io/2026/01/14/2026%E5%B9%B41%E6%9C%8814%E6%97%A5-%E5%A4%9A%E8%BF%9B%E7%A8%8B/index.html">
 <meta property="og:site_name" content="Weakliy_Blog">
-<meta property="og:description" content="ss  基类 1  继承重写 1  进程池 pool  进程复用：进程池中的工作进程一旦创建，会持续存活直到进程池关闭，可反复处理多个任务，无需每次执行任务都创建新进程。 任务排队与调度：当提交的任务数量超过进程池的工作进程数时，未被执行的任务会进入任务队列排队，等待空闲工作进程来处理。  pool.异步apply  同步 apply()：提交任务后，会阻塞主进程，直到该任务执行完成并返回结果，">
+<meta property="og:description" content="线程（Thread） 线程是操作系统提供的最小执行调度单位之一，属于进程内部的执行流。 一个进程可以包含多个线程，这些线程共享进程的内存空间，由操作系统进行调度执行。   1. 线程的本质 线程可以理解为：  进程内部的一条执行路径  特点：  由操作系统调度（OS scheduler） 属于内核级并发（kernel-level concurrency） 多线程可以在多核 CPU 上实现并行执">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://shakewely.github.io/2026/01/14/2026%E5%B9%B41%E6%9C%8814%E6%97%A5-%E5%A4%9A%E8%BF%9B%E7%A8%8B/788a97385cc3a149dba8ea01785c16e5.png">
 <meta property="article:published_time" content="2026-01-14T14:01:39.000Z">
-<meta property="article:modified_time" content="2026-01-22T07:23:48.352Z">
+<meta property="article:modified_time" content="2026-05-26T06:09:17.620Z">
 <meta property="article:author" content="Weakliy">
-<meta property="article:tag" content="前后端">
+<meta property="article:tag" content="python">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://shakewely.github.io/2026/01/14/2026%E5%B9%B41%E6%9C%8814%E6%97%A5-%E5%A4%9A%E8%BF%9B%E7%A8%8B/788a97385cc3a149dba8ea01785c16e5.png">
   
     <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
   
@@ -50,9 +48,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>154</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>161</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>42</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>43</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -108,100 +106,317 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="ss"><a class="markdownIt-Anchor" href="#ss"></a> ss</h1>
-<h5 id="基类"><a class="markdownIt-Anchor" href="#基类"></a> 基类</h5>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-<h5 id="继承重写"><a class="markdownIt-Anchor" href="#继承重写"></a> 继承重写</h5>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-<h5 id="进程池"><a class="markdownIt-Anchor" href="#进程池"></a> 进程池</h5>
-<p>pool</p>
+        <hr>
+<h1 id="线程thread"><a class="markdownIt-Anchor" href="#线程thread"></a> 线程（Thread）</h1>
+<p>线程是操作系统提供的<strong>最小执行调度单位之一</strong>，属于进程内部的执行流。</p>
+<p>一个进程可以包含多个线程，这些线程共享进程的内存空间，由操作系统进行调度执行。</p>
+<hr>
+<h2 id="1-线程的本质"><a class="markdownIt-Anchor" href="#1-线程的本质"></a> 1. 线程的本质</h2>
+<p>线程可以理解为：</p>
 <blockquote>
-<p><strong>进程复用</strong>：进程池中的工作进程一旦创建，会持续存活直到进程池关闭，可反复处理多个任务，无需每次执行任务都创建新进程。</p>
-<p><strong>任务排队与调度</strong>：当提交的任务数量超过进程池的工作进程数时，未被执行的任务会进入任务队列排队，等待空闲工作进程来处理。</p>
+<p><strong>进程内部的一条执行路径</strong></p>
 </blockquote>
-<p>pool.异步apply</p>
+<p>特点：</p>
+<ul>
+<li>由操作系统调度（OS scheduler）</li>
+<li>属于内核级并发（kernel-level concurrency）</li>
+<li>多线程可以在多核 CPU 上实现并行执行</li>
+</ul>
+<hr>
+<h2 id="2-线程与进程的关系"><a class="markdownIt-Anchor" href="#2-线程与进程的关系"></a> 2. 线程与进程的关系</h2>
+<ul>
+<li>进程：资源分配单位（内存、文件句柄等）</li>
+<li>线程：执行单位（代码执行流）</li>
+</ul>
+<p>一个进程中可以包含多个线程：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">进程</span><br><span class="line"> ├── 线程1（执行任务A）</span><br><span class="line"> ├── 线程2（执行任务B）</span><br><span class="line"> └── 线程3（执行任务C）</span><br></pre></td></tr></table></figure>
+<p>特点：</p>
+<ul>
+<li>线程共享进程内存</li>
+<li>线程之间通信简单（但也更容易出错）</li>
+</ul>
+<hr>
+<h2 id="3-python-中的线程"><a class="markdownIt-Anchor" href="#3-python-中的线程"></a> 3. Python 中的线程</h2>
+<p>Python 使用 <code>threading</code> 模块支持多线程：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">task</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;running&quot;</span>)</span><br><span class="line"></span><br><span class="line">t = threading.Thread(target=task)</span><br><span class="line">t.start()</span><br><span class="line">t.join()</span><br></pre></td></tr></table></figure>
+<p>说明：</p>
+<ul>
+<li><code>start()</code>：启动线程</li>
+<li><code>join()</code>：等待线程结束</li>
+</ul>
+<hr>
+<h2 id="4-线程调度机制"><a class="markdownIt-Anchor" href="#4-线程调度机制"></a> 4. 线程调度机制</h2>
+<p>线程由操作系统进行调度：</p>
+<ul>
+<li>抢占式调度（preemptive）</li>
+<li>CPU 时间片轮转</li>
+<li>多线程可以“看起来同时运行”</li>
+</ul>
+<hr>
+<h2 id="5-python-线程的限制gil"><a class="markdownIt-Anchor" href="#5-python-线程的限制gil"></a> 5. Python 线程的限制（GIL）</h2>
+<p>Python 有一个重要限制：</p>
 <blockquote>
-<p><strong>同步 <code>apply()</code></strong>：提交任务后，会阻塞主进程，直到该任务执行完成并返回结果，才能继续执行后续代码（效率较低，适合简单单任务场景）。</p>
-<p><strong>异步 <code>apply_async()</code></strong>：提交任务后，<strong>不会阻塞主进程</strong>，主进程可以继续执行后续代码，任务在子进程中后台运行，结果可通过回调函数或返回值对象获取（效率较高，适合多任务并行场景）。</p>
+<p><strong>GIL（Global Interpreter Lock，全局解释器锁）</strong></p>
 </blockquote>
-<p>pool.close</p>
+<p>影响：</p>
+<ul>
+<li>同一时刻只能有一个线程执行 Python 字节码</li>
+<li>多线程无法真正并行执行 CPU 计算</li>
+</ul>
+<hr>
+<h2 id="6-gil-的影响"><a class="markdownIt-Anchor" href="#6-gil-的影响"></a> 6. GIL 的影响</h2>
+<h3 id="️-适合场景io-密集"><a class="markdownIt-Anchor" href="#️-适合场景io-密集"></a> ✔️ 适合场景（IO 密集）</h3>
+<ul>
+<li>网络请求</li>
+<li>文件读写</li>
+<li>数据库操作</li>
+</ul>
+<p>原因：</p>
 <blockquote>
-<p><code>pool.close()</code> 只是 “禁止提交新任务”，不会终止现有任务，也不会释放进程池资源。</p>
-<p>通常 <code>pool.close()</code> 会与 <code>pool.join()</code> 配合使用（<code>join()</code> 用于阻塞主进程，等待进程池中所有任务执行完成并释放资源）。</p>
+<p>线程在 IO 阻塞时会释放 GIL</p>
 </blockquote>
-<p><code>.daemon</code> 对应的是<strong>守护进程（Daemon Process）</strong></p>
-<p><strong>生命周期依赖主进程</strong>：守护进程会随着<strong>主进程的退出而自动终止</strong>，无论它自身的任务是否执行完成。这是守护进程最核心的特征，也是它与普通子进程的核心区别。</p>
-<p><strong>无法创建子进程</strong>：守护进程本身不能再创建新的子进程（如果尝试创建，会抛出相关异常或导致不可预期的行为）。</p>
-<p><strong>无终端关联</strong>：守护进程通常脱离终端运行，不与用户交互，这也是它与普通后台运行进程的共性之一，但并非其核心定义。</p>
-<p>map方法</p>
+<hr>
+<h3 id="不适合场景cpu-密集"><a class="markdownIt-Anchor" href="#不适合场景cpu-密集"></a> ❌ 不适合场景（CPU 密集）</h3>
+<ul>
+<li>图像处理</li>
+<li>深度学习计算</li>
+<li>大规模数值计算</li>
+</ul>
+<p>原因：</p>
 <blockquote>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">result_obj = pool.map_async(</span><br><span class="line">    func,        <span class="comment"># 必须：要并行执行的任务函数（顶层可序列化，不可为嵌套/lambda）</span></span><br><span class="line">    iterable,    <span class="comment"># 必须：可迭代对象（列表、元组、range等），元素作为func参数</span></span><br><span class="line">    chunksize=<span class="literal">None</span>,  <span class="comment"># 可选：任务分块大小，大任务量时设置可提高效率</span></span><br><span class="line">    callback=<span class="literal">None</span>,   <span class="comment"># 可选：全局回调函数（所有任务完成后触发，接收结果列表作为参数）</span></span><br><span class="line">    error_callback=<span class="literal">None</span>  <span class="comment"># 可选：异常回调函数（任务执行出错时触发，接收异常信息）</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<p>回调函数 <code>global_callback</code> 会在所有任务执行完成后自动触发</p>
+<p>线程无法真正并行执行 CPU 计算</p>
 </blockquote>
-<h5 id="进程间通信queue"><a class="markdownIt-Anchor" href="#进程间通信queue"></a> 进程间通信queue</h5>
-<p>进程间通信（IPC）实现的消息队列，采用「先进先出（FIFO）」的原则存储和获取数据，支持任意可序列化的 Python 对象</p>
-<blockquote>
-<h3 id="核心操作方法"><a class="markdownIt-Anchor" href="#核心操作方法"></a> 核心操作方法</h3>
+<hr>
+<h2 id="7-线程的优缺点"><a class="markdownIt-Anchor" href="#7-线程的优缺点"></a> 7. 线程的优缺点</h2>
+<h3 id="优点"><a class="markdownIt-Anchor" href="#优点"></a> 优点</h3>
+<ul>
+<li>创建开销比进程小</li>
+<li>适合 IO 并发</li>
+<li>共享内存，通信方便</li>
+</ul>
+<h3 id="缺点"><a class="markdownIt-Anchor" href="#缺点"></a> 缺点</h3>
+<ul>
+<li>GIL 限制并行能力</li>
+<li>线程安全问题（竞争条件）</li>
+<li>调试复杂</li>
+</ul>
+<hr>
+<h2 id="8-线程-vs-协程-vs-进程核心对比"><a class="markdownIt-Anchor" href="#8-线程-vs-协程-vs-进程核心对比"></a> 8. 线程 vs 协程 vs 进程（核心对比）</h2>
 <table>
 <thead>
 <tr>
-<th style="text-align:center">方法</th>
-<th style="text-align:center">功能说明</th>
+<th>模型</th>
+<th>调度方式</th>
+<th>并行能力</th>
+<th>开销</th>
+<th>适用场景</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center"><code>q.put(item, block=True, timeout=None)</code></td>
-<td style="text-align:center">向队列中放入数据（item 为可序列化对象）- <code>block=True</code>：队列满时阻塞等待- <code>timeout</code>：阻塞超时时间，超时抛出 <code>Queue.Full</code> 异常- 若 <code>block=False</code>：队列满时直接抛出 <code>Queue.Full</code> 异常</td>
+<td>进程</td>
+<td>OS调度</td>
+<td>强（多核）</td>
+<td>高</td>
+<td>CPU密集</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>q.get(block=True, timeout=None)</code></td>
-<td style="text-align:center">从队列中取出并删除数据（先进先出）- <code>block=True</code>：队列空时阻塞等待- <code>timeout</code>：阻塞超时时间，超时抛出 <code>Queue.Empty</code> 异常- 若 <code>block=False</code>：队列空时直接抛出 <code>Queue.Empty</code> 异常</td>
+<td>线程</td>
+<td>OS调度</td>
+<td>受GIL限制</td>
+<td>中</td>
+<td>IO并发</td>
 </tr>
 <tr>
-<td style="text-align:center"><code>q.empty()</code></td>
-<td style="text-align:center">判断队列是否为空（返回布尔值）<strong>注意</strong>：多进程场景下可能不准确（判断瞬间队列状态可能被其他进程修改）</td>
-</tr>
-<tr>
-<td style="text-align:center"><code>q.full()</code></td>
-<td style="text-align:center">判断队列是否已满（返回布尔值）<strong>注意</strong>：多进程场景下可能不准确（同理，状态可能被其他进程修改）</td>
-</tr>
-<tr>
-<td style="text-align:center"><code>q.qsize()</code></td>
-<td style="text-align:center">返回当前队列中的数据数量<strong>注意</strong>：多进程场景下为近似值，非精确值</td>
-</tr>
-<tr>
-<td style="text-align:center"><code>q.close()</code></td>
-<td style="text-align:center">关闭队列，禁止后续向队列中放入数据，已放入的数据仍可被取出</td>
-</tr>
-<tr>
-<td style="text-align:center"><code>q.join_thread()</code></td>
-<td style="text-align:center">等待队列的后台线程完成数据传输，通常在 <code>q.close()</code> 后调用</td>
+<td>协程</td>
+<td>用户态调度</td>
+<td>无并行</td>
+<td>极低</td>
+<td>高并发IO</td>
 </tr>
 </tbody>
 </table>
-</blockquote>
+<hr>
+<h2 id="9-线程的执行模型"><a class="markdownIt-Anchor" href="#9-线程的执行模型"></a> 9. 线程的执行模型</h2>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">操作系统调度</span><br><span class="line">    ↓</span><br><span class="line">线程A / 线程B / 线程C</span><br><span class="line">    ↓</span><br><span class="line">时间片轮转执行</span><br><span class="line">    ↓</span><br><span class="line">切换上下文（context switch）</span><br></pre></td></tr></table></figure>
+<hr>
+<p>下面给你一版<strong>Python 线程库汇总笔记（结构化 + 可直接做学习文档）</strong>，和你前面的 asyncio / 协程笔记风格统一。</p>
+<hr>
+<h2 id="python-线程库汇总"><a class="markdownIt-Anchor" href="#python-线程库汇总"></a> Python 线程库汇总</h2>
+<p>Python 的线程相关能力主要由标准库 <code>threading</code> 提供，同时配合 <code>concurrent.futures</code> 实现线程池管理。</p>
+<p>线程的本质是：</p>
 <blockquote>
-<p><strong>可序列化的 Python 对象（数字、字符串、列表、字典等</strong></p>
-<p>s</p>
-<p><code>pickle</code> 序列化</p>
+<p><strong>由操作系统调度的执行流，用于实现并发执行</strong></p>
 </blockquote>
-<h5 id="pipe全双工"><a class="markdownIt-Anchor" href="#pipe全双工"></a> Pipe全双工</h5>
-<p><img src="/2026/01/14/2026%E5%B9%B41%E6%9C%8814%E6%97%A5-%E5%A4%9A%E8%BF%9B%E7%A8%8B/788a97385cc3a149dba8ea01785c16e5.png" alt="788a97385cc3a149dba8ea01785c16e5"></p>
-<h2 id="线程"><a class="markdownIt-Anchor" href="#线程"></a> 线程</h2>
-<p>Lock</p>
+<hr>
+<h1 id="threading基础线程库"><a class="markdownIt-Anchor" href="#threading基础线程库"></a> threading（基础线程库）</h1>
+<p><code>threading</code> 是 Python 最底层的线程控制模块，用于创建和管理线程。</p>
+<hr>
+<h3 id="11-创建线程"><a class="markdownIt-Anchor" href="#11-创建线程"></a> 1.1 创建线程</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">task</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;running&quot;</span>)</span><br><span class="line"></span><br><span class="line">t = threading.Thread(target=task)</span><br><span class="line">t.start()</span><br><span class="line">t.join()</span><br></pre></td></tr></table></figure>
+<p>说明：</p>
+<ul>
+<li><code>Thread</code>：创建线程对象</li>
+<li><code>start()</code>：启动线程（交给 OS 调度）</li>
+<li><code>join()</code>：阻塞等待线程结束</li>
+</ul>
+<hr>
+<h3 id="12-带参数的线程"><a class="markdownIt-Anchor" href="#12-带参数的线程"></a> 1.2 带参数的线程</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">task</span>(<span class="params">name</span>):</span><br><span class="line">    <span class="built_in">print</span>(name)</span><br><span class="line"></span><br><span class="line">t = threading.Thread(target=task, args=(<span class="string">&quot;A&quot;</span>,))</span><br><span class="line">t.start()</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="13-获取当前线程"><a class="markdownIt-Anchor" href="#13-获取当前线程"></a> 1.3 获取当前线程</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> threading</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(threading.current_thread().name)</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="14-守护线程daemon-thread"><a class="markdownIt-Anchor" href="#14-守护线程daemon-thread"></a> 1.4 守护线程（daemon thread）</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">t = threading.Thread(target=task, daemon=<span class="literal">True</span>)</span><br></pre></td></tr></table></figure>
+<p>特点：</p>
+<ul>
+<li>主线程结束时自动退出</li>
+<li>不会阻止程序退出</li>
+</ul>
+<hr>
+<h2 id="2-线程同步机制重点"><a class="markdownIt-Anchor" href="#2-线程同步机制重点"></a> 2. 线程同步机制（重点）</h2>
+<p>多线程共享内存，因此必须解决<strong>数据竞争问题</strong></p>
+<hr>
+<h3 id="21-lock互斥锁"><a class="markdownIt-Anchor" href="#21-lock互斥锁"></a> 2.1 Lock（互斥锁）</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">lock = threading.Lock()</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">task</span>():</span><br><span class="line">    <span class="keyword">with</span> lock:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;critical section&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>作用：</p>
+<ul>
+<li>同一时间只允许一个线程执行代码块</li>
+<li>防止数据竞争</li>
+</ul>
+<hr>
+<h3 id="22-rlock可重入锁"><a class="markdownIt-Anchor" href="#22-rlock可重入锁"></a> 2.2 RLock（可重入锁）</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lock = threading.RLock()</span><br></pre></td></tr></table></figure>
+<p>特点：</p>
+<ul>
+<li>同一线程可多次获取锁</li>
+<li>防止递归死锁</li>
+</ul>
+<hr>
+<h3 id="23-condition条件变量"><a class="markdownIt-Anchor" href="#23-condition条件变量"></a> 2.3 Condition（条件变量）</h3>
+<p>用于线程间通信：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cond = threading.Condition()</span><br></pre></td></tr></table></figure>
+<p>用途：</p>
+<ul>
+<li>线程等待某个条件</li>
+<li>线程通知其他线程</li>
+</ul>
+<hr>
+<h3 id="24-event事件机制"><a class="markdownIt-Anchor" href="#24-event事件机制"></a> 2.4 Event（事件机制）</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">event = threading.Event()</span><br></pre></td></tr></table></figure>
+<p>方法：</p>
+<ul>
+<li><code>event.set()</code>：触发事件</li>
+<li><code>event.wait()</code>：阻塞等待</li>
+</ul>
+<hr>
+<h3 id="25-semaphore信号量"><a class="markdownIt-Anchor" href="#25-semaphore信号量"></a> 2.5 Semaphore（信号量）</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sem = threading.Semaphore(<span class="number">3</span>)</span><br></pre></td></tr></table></figure>
+<p>作用：</p>
+<ul>
+<li>控制同时访问资源的线程数量</li>
+<li>类似“限流器”</li>
+</ul>
+<hr>
+<h2 id="3-线程池推荐方式"><a class="markdownIt-Anchor" href="#3-线程池推荐方式"></a> 3. 线程池（推荐方式）</h2>
+<h3 id="concurrentfuturesthreadpoolexecutor"><a class="markdownIt-Anchor" href="#concurrentfuturesthreadpoolexecutor"></a> concurrent.futures.ThreadPoolExecutor</h3>
+<p>这是 Python 更高级的线程管理方式。</p>
+<hr>
+<h3 id="31-基本使用"><a class="markdownIt-Anchor" href="#31-基本使用"></a> 3.1 基本使用</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> concurrent.futures <span class="keyword">import</span> ThreadPoolExecutor</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">task</span>(<span class="params">x</span>):</span><br><span class="line">    <span class="keyword">return</span> x * <span class="number">2</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> ThreadPoolExecutor(max_workers=<span class="number">3</span>) <span class="keyword">as</span> pool:</span><br><span class="line">    results = pool.<span class="built_in">map</span>(task, [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="32-submit-提交任务"><a class="markdownIt-Anchor" href="#32-submit-提交任务"></a> 3.2 submit 提交任务</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">future = pool.submit(task, <span class="number">10</span>)</span><br><span class="line"><span class="built_in">print</span>(future.result())</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="33-future-对象"><a class="markdownIt-Anchor" href="#33-future-对象"></a> 3.3 Future 对象</h3>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Future = “未来结果”</span><br></pre></td></tr></table></figure>
+<p>方法：</p>
+<ul>
+<li><code>result()</code>：获取结果</li>
+<li><code>done()</code>：是否完成</li>
+<li><code>cancel()</code>：取消任务</li>
+</ul>
+<hr>
+<h2 id="4-线程调度机制-2"><a class="markdownIt-Anchor" href="#4-线程调度机制-2"></a> 4. 线程调度机制</h2>
+<p>线程由操作系统调度：</p>
+<ul>
+<li>抢占式调度（preemptive scheduling）</li>
+<li>CPU 时间片轮转</li>
+<li>上下文切换（context switch）</li>
+</ul>
+<hr>
+<h2 id="5-python-线程的核心限制gil"><a class="markdownIt-Anchor" href="#5-python-线程的核心限制gil"></a> 5. Python 线程的核心限制（GIL）</h2>
+<p>Python 有 GIL（全局解释器锁）：</p>
+<p>影响：</p>
+<ul>
+<li>同一时刻只能有一个线程执行 Python 字节码</li>
+<li>多线程不能真正并行 CPU 计算</li>
+</ul>
+<hr>
+<h3 id="适合场景"><a class="markdownIt-Anchor" href="#适合场景"></a> 适合场景</h3>
+<ul>
+<li>网络请求</li>
+<li>文件 IO</li>
+<li>数据库访问</li>
+</ul>
+<hr>
+<h3 id="不适合场景"><a class="markdownIt-Anchor" href="#不适合场景"></a> 不适合场景</h3>
+<ul>
+<li>CPU 密集计算</li>
+<li>图像处理</li>
+<li>深度学习训练</li>
+</ul>
+<hr>
+<h2 id="6-线程执行模型"><a class="markdownIt-Anchor" href="#6-线程执行模型"></a> 6. 线程执行模型</h2>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">操作系统</span><br><span class="line">   ↓</span><br><span class="line">线程1 线程2 线程3</span><br><span class="line">   ↓</span><br><span class="line">CPU 时间片轮转执行</span><br><span class="line">   ↓</span><br><span class="line">上下文切换</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="7-threading-vs-threadpoolexecutor"><a class="markdownIt-Anchor" href="#7-threading-vs-threadpoolexecutor"></a> 7. threading vs ThreadPoolExecutor</h2>
+<table>
+<thead>
+<tr>
+<th>对比</th>
+<th>threading</th>
+<th>ThreadPoolExecutor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>抽象层级</td>
+<td>低</td>
+<td>高</td>
+</tr>
+<tr>
+<td>使用难度</td>
+<td>高</td>
+<td>低</td>
+</tr>
+<tr>
+<td>线程复用</td>
+<td>❌</td>
+<td>✔️</td>
+</tr>
+<tr>
+<td>推荐程度</td>
+<td>一般</td>
+<td>推荐</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="8-一句话总结"><a class="markdownIt-Anchor" href="#8-一句话总结"></a> 8. 一句话总结</h2>
 <blockquote>
-<p>互斥锁</p>
+<p>Python 线程库提供基于操作系统调度的并发能力，适合 IO 密集型任务，但受 GIL 限制无法实现 CPU 级真正并行，实际开发中更推荐使用线程池进行管理。</p>
 </blockquote>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lock.acquire()</span><br><span class="line">lock.release()</span><br></pre></td></tr></table></figure>
-<p>Rlock 可重入锁</p>
-<blockquote>
-<p>重复上锁</p>
-</blockquote>
-<p>semaphore</p>
-<blockquote>
-<p>信号量-1</p>
-</blockquote>
+<hr>
+<p>如果你下一步要继续整理，我可以帮你补：</p>
+<ul>
+<li>asyncio vs threading 对比（面试高频）</li>
+<li>GIL 深入原理（为什么存在）</li>
+<li>线程池 vs 协程池设计思想</li>
+<li>CPU 密集任务为什么必须用 multiprocessing</li>
+</ul>
+<p>这些会把“并发体系”彻底串起来。</p>
 
       
     </div>
@@ -209,7 +424,7 @@
       <a data-url="https://shakewely.github.io/2026/01/14/2026%E5%B9%B41%E6%9C%8814%E6%97%A5-%E5%A4%9A%E8%BF%9B%E7%A8%8B/" data-id="cml62702w000a4kv42t5x4l8w" class="article-share-link">分享</a>
       
       
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%89%8D%E5%90%8E%E7%AB%AF/" rel="tag">前后端</a></li></ul>
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/python/" rel="tag">python</a></li></ul>
 
     </footer>
   </div>
@@ -278,9 +493,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>154</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>161</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>42</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>43</strong><br>标签</div></a>
     </div>
 
 
