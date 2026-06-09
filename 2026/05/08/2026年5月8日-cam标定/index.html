@@ -54,7 +54,7 @@
 <meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-76.png">
 <meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-82.png">
 <meta property="article:published_time" content="2026-05-08T03:03:19.000Z">
-<meta property="article:modified_time" content="2026-05-08T03:35:15.710Z">
+<meta property="article:modified_time" content="2026-06-04T07:59:30.969Z">
 <meta property="article:author" content="Weakliy">
 <meta property="article:tag" content="cv">
 <meta name="twitter:card" content="summary">
@@ -90,7 +90,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>161</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>164</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>43</strong><br>标签</div></a>
     </div>
@@ -298,6 +298,167 @@
 <p>​    <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-81.png" alt="P_{board}"> 代表<strong>棋盘格角点再棋盘格坐标系下的坐标</strong>，这个同样可以根据设计棋盘格的尺寸得到。需要注意的是棋盘格的角点在<strong>机器人坐标系</strong>和<strong>图像坐标系</strong>的顺序需要<strong>一一对应</strong>，但是一般的方形棋盘格会存在旋转对称的问题，即我们无法区分棋盘格的原点是在左上角还是右下角，因此在进行手眼标定时可以<strong>使用非对称的棋盘格</strong>。</p>
 <p>​    通过上面的推导，我们已经可以计算出<strong>棋盘格角点在机器人基座坐标系中的坐标</strong> <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-75.png" alt="P_{base}">，然后根据<strong>张正友标定法</strong>得到<strong>棋盘格在相机坐标系中的坐标</strong> <img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-76.png" alt="P_{camera}">。那么根据 <strong>第3.1节</strong> 中介绍的计算方法就可以得到相机到机器人的转换矩阵：</p>
 <p><img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-cam%E6%A0%87%E5%AE%9A/eq-1778210924053-82.png" alt="T_{camera}^{base}=P_{base} {P_{camera}}^{-1}"></p>
+<h1 id="3-实现"><a class="markdownIt-Anchor" href="#3-实现"></a> 3 实现</h1>
+<h2 id="31-眼在手上标定采样"><a class="markdownIt-Anchor" href="#31-眼在手上标定采样"></a> 3.1 眼在手上标定采样</h2>
+<h3 id="1-标定过程"><a class="markdownIt-Anchor" href="#1-标定过程"></a> 1 标定过程</h3>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1xQgBztEsF">https://www.bilibili.com/video/BV1xQgBztEsF</a></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">特性</th>
+<th style="text-align:left">眼在手上</th>
+<th style="text-align:left">眼在手外</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">移动部件</td>
+<td style="text-align:left">相机（末端带动）</td>
+<td style="text-align:left"><strong>标定板（末端带动）</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">固定部件</td>
+<td style="text-align:left">标定板</td>
+<td style="text-align:left"><strong>相机</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">运动目的</td>
+<td style="text-align:left">让相机从不同角度看静止标定板</td>
+<td style="text-align:left">让标定板从不同角度出现在静止相机中</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-问题汇总"><a class="markdownIt-Anchor" href="#2-问题汇总"></a> 2 问题汇总</h3>
+<h4 id="21-在手眼标定中棋盘格是否需要确认上下方向"><a class="markdownIt-Anchor" href="#21-在手眼标定中棋盘格是否需要确认上下方向"></a> 2.1 在<strong>手眼标定</strong>中，棋盘格是否需要确认上下方向?</h4>
+<p>通常不需要刻意确认“上下方向”，但<strong>必须保证棋盘格在标定过程中相对于所附着的刚体（末端或固定支架）保持固定的位姿。</strong></p>
+<h4 id="22-眼在手上标定时移动的是机器人末端夹爪法兰棋盘格必须保持固定不动"><a class="markdownIt-Anchor" href="#22-眼在手上标定时移动的是机器人末端夹爪法兰棋盘格必须保持固定不动"></a> 2.2 <strong>眼在手上标定时，移动的是机器人末端（夹爪/法兰），棋盘格必须保持固定不动。</strong></h4>
+<p>手眼标定的核心方程 AX=XB<em>A**X</em>=<em>XB</em> 或等价形式依赖于<strong>相对运动</strong>的约束：</p>
+<ul>
+<li>A<em>A</em>：机器人末端的两次运动之间的变换（由机器人控制器给出）</li>
+<li>B<em>B</em>：相机相对于<strong>同一标定板</strong>的两次观测之间的变换（通过视觉求解）</li>
+</ul>
+<p>如果棋盘格也在移动，那么两次观测之间的 B<em>B</em> 就不再是单纯的相机运动，而是相机与棋盘格<strong>相对运动</strong>的叠加。此时方程退化为 AX=X⋅(未知移动棋盘格的影响)<em>A**X</em>=<em>X</em>⋅(未知移动棋盘格的影响)，无法分离出唯一的手眼矩阵 X<em>X</em>。</p>
+<h4 id="23-是否需要拍全棋盘格"><a class="markdownIt-Anchor" href="#23-是否需要拍全棋盘格"></a> 2.3 是否需要拍全棋盘格?</h4>
+<p><strong>必须确保棋盘格的所有内角点都完整出现在相机视野内</strong>。</p>
+<p>OpenCV 的 <code>cv2.findChessboardCorners</code> 要求棋盘格的所有内角点（例如 9×6 棋盘格有 8×5 个内角点）都在图像中，且能够形成完整的矩形网格。</p>
+<ul>
+<li>
+<p>如果棋盘格部分超出视野或被遮挡，函数会返回 <code>False</code>，无法提取任何角点。</p>
+</li>
+<li>
+<p>即使强行使用部分角点（修改代码），也无法确定角点的全局编号（哪个是(0,0)哪个是(8,5)），导致物体坐标系错乱。</p>
+</li>
+</ul>
+<h4 id="24-图像xyz和法兰的xyz不一样标定有影响吗"><a class="markdownIt-Anchor" href="#24-图像xyz和法兰的xyz不一样标定有影响吗"></a> 2.4 图像xyz和法兰的xyz不一样,标定有影响吗?</h4>
+<p><strong>没有影响</strong>。手眼标定本身就包含了<strong>两个坐标系之间的旋转对齐</strong>，不需要你事先将相机XYZ与法兰XYZ对齐。标定结果会<strong>自然地描述两个坐标系之间的相对方位</strong></p>
+<h4 id="25-位姿坐标如何选择-选谁的位姿坐标"><a class="markdownIt-Anchor" href="#25-位姿坐标如何选择-选谁的位姿坐标"></a> 2.5 位姿坐标如何选择? 选谁的位姿坐标?</h4>
+<p>注意! 位姿要选择和相机相对静止的坐标</p>
+<p>需要选择和手上相机固定轴的坐标, 如果相机固定在末端轴, 就需要末端的位姿; 如果机械臂末端而外嫁了工具坐标, 且相机固定在工具上, 那么位姿输入要是根据坐标而不是末端坐标</p>
+<h4 id="26-机器人避免纯平移运动"><a class="markdownIt-Anchor" href="#26-机器人避免纯平移运动"></a> 2.6 机器人避免纯平移运动</h4>
+<p>每次移动应包含明显的<strong>旋转变化</strong></p>
+<h2 id="32-内参标定结果"><a class="markdownIt-Anchor" href="#32-内参标定结果"></a> 3.2 内参标定结果</h2>
+<h3 id="1-结果对比"><a class="markdownIt-Anchor" href="#1-结果对比"></a> 1 结果对比</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">参数</th>
+<th style="text-align:left">DEFAULT (无畸变)</th>
+<th style="text-align:left">Calib1 (第一次)</th>
+<th style="text-align:left">Calib2 (第二次)</th>
+<th style="text-align:left">Calib1→Calib2 变化</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">fx</td>
+<td style="text-align:left">476.1199</td>
+<td style="text-align:left">442.9018</td>
+<td style="text-align:left">456.2401</td>
+<td style="text-align:left">+13.3383 (+3.0%)</td>
+</tr>
+<tr>
+<td style="text-align:left">fy</td>
+<td style="text-align:left">476.1199</td>
+<td style="text-align:left">442.7662</td>
+<td style="text-align:left">454.0876</td>
+<td style="text-align:left">+11.3214 (+2.6%)</td>
+</tr>
+<tr>
+<td style="text-align:left">cx</td>
+<td style="text-align:left">321.7154</td>
+<td style="text-align:left">332.2391</td>
+<td style="text-align:left">346.8900</td>
+<td style="text-align:left">+14.6509</td>
+</tr>
+<tr>
+<td style="text-align:left">cy</td>
+<td style="text-align:left">197.3588</td>
+<td style="text-align:left">246.3240</td>
+<td style="text-align:left">225.5018</td>
+<td style="text-align:left">-20.8222</td>
+</tr>
+<tr>
+<td style="text-align:left">畸变系数</td>
+<td style="text-align:left">无</td>
+<td style="text-align:left">k1=0.07639 k2=-0.06578 p1=0.00341 p2=0.00316 k3=-0.24026</td>
+<td style="text-align:left">k1=0.12873 k2=-0.22656 p1=-0.01889 p2=0.01624 k3=0.10490</td>
+<td style="text-align:left"></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">指标</th>
+<th style="text-align:left">DEFAULT</th>
+<th style="text-align:left">Calib1</th>
+<th style="text-align:left">与 DEFAULT 差</th>
+<th style="text-align:left">Calib2</th>
+<th style="text-align:left">与 DEFAULT 差</th>
+<th style="text-align:left">谁更接近 DEFAULT</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">fx</td>
+<td style="text-align:left">476.12</td>
+<td style="text-align:left">442.90</td>
+<td style="text-align:left">-33.22</td>
+<td style="text-align:left">456.24</td>
+<td style="text-align:left">-19.88</td>
+<td style="text-align:left">✅ <strong>Calib2</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">fy</td>
+<td style="text-align:left">476.12</td>
+<td style="text-align:left">442.77</td>
+<td style="text-align:left">-33.35</td>
+<td style="text-align:left">454.09</td>
+<td style="text-align:left">-22.03</td>
+<td style="text-align:left">✅ <strong>Calib2</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">cx</td>
+<td style="text-align:left">321.72</td>
+<td style="text-align:left">332.24</td>
+<td style="text-align:left">+10.52</td>
+<td style="text-align:left">346.89</td>
+<td style="text-align:left">+25.17</td>
+<td style="text-align:left">✅ <strong>Calib1</strong></td>
+</tr>
+<tr>
+<td style="text-align:left">cy</td>
+<td style="text-align:left">197.36</td>
+<td style="text-align:left">246.32</td>
+<td style="text-align:left">+48.96</td>
+<td style="text-align:left">225.50</td>
+<td style="text-align:left">+28.14</td>
+<td style="text-align:left">✅ <strong>Calib2</strong></td>
+</tr>
+</tbody>
+</table>
 
       
     </div>
@@ -374,7 +535,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>161</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>164</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>43</strong><br>标签</div></a>
     </div>

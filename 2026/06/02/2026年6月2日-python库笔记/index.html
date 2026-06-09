@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2026年6月2日 python库笔记 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="2. 装饰器 @dataclass(kw_only&#x3D;True)  kw_only&#x3D;True：要求所有字段必须使用关键字参数初始化  python 12345# 正确用法robot &#x3D; RobotConfig(id&#x3D;&quot;robot1&quot;, calibration_dir&#x3D;Path(&quot;.&#x2F;calib&quot;))# 错误用法（会报错）robot &#x3D; RobotConfig">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2026年6月2日 python库笔记">
+<meta property="og:url" content="https://shakewely.github.io/2026/06/02/2026%E5%B9%B46%E6%9C%882%E6%97%A5-python%E5%BA%93%E7%AC%94%E8%AE%B0/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="2. 装饰器 @dataclass(kw_only&#x3D;True)  kw_only&#x3D;True：要求所有字段必须使用关键字参数初始化  python 12345# 正确用法robot &#x3D; RobotConfig(id&#x3D;&quot;robot1&quot;, calibration_dir&#x3D;Path(&quot;.&#x2F;calib&quot;))# 错误用法（会报错）robot &#x3D; RobotConfig">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-02T14:15:32.000Z">
+<meta property="article:modified_time" content="2026-06-05T02:17:26.243Z">
+<meta property="article:author" content="Weakliy">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>164</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>43</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2026年6月2日-python库笔记" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/06/02/2026%E5%B9%B46%E6%9C%882%E6%97%A5-python%E5%BA%93%E7%AC%94%E8%AE%B0/" class="article-date">
+  <time class="post-time" datetime="2026-06-02T14:15:32.000Z" itemprop="datePublished">
+    <span class="post-month">6月</span><br/>
+    <span class="post-day">02</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2026年6月2日 python库笔记
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="2-装饰器-dataclasskw_onlytrue"><a class="markdownIt-Anchor" href="#2-装饰器-dataclasskw_onlytrue"></a> 2. <strong>装饰器 <code>@dataclass(kw_only=True)</code></strong></h3>
+<ul>
+<li><code>kw_only=True</code>：要求所有字段必须使用关键字参数初始化</li>
+</ul>
+<p>python</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 正确用法</span><br><span class="line">robot = RobotConfig(id=&quot;robot1&quot;, calibration_dir=Path(&quot;./calib&quot;))</span><br><span class="line"></span><br><span class="line"># 错误用法（会报错）</span><br><span class="line">robot = RobotConfig(&quot;robot1&quot;, Path(&quot;./calib&quot;))</span><br></pre></td></tr></table></figure>
+<h3 id="3-draccus类"><a class="markdownIt-Anchor" href="#3-draccus类"></a> 3. <strong>draccus类</strong></h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">RobotConfig</span>(draccus.ChoiceRegistry, abc.ABC)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">@RobotConfig.register_subclass(<span class="params"><span class="string">&quot;so101_follower&quot;</span></span>)  </span><span class="comment"># 注册为类型 &quot;so101_follower&quot;</span></span><br><span class="line"><span class="meta">@RobotConfig.register_subclass(<span class="params"><span class="string">&quot;so100_follower&quot;</span></span>)  </span><span class="comment"># 也注册为 &quot;so100_follower&quot;</span></span><br></pre></td></tr></table></figure>
+<p>一个类可以对应多个类型名称，实现向后兼容</p>
+<h3 id="1-为什么需要-default_factory"><a class="markdownIt-Anchor" href="#1-为什么需要-default_factory"></a> 1. 为什么需要 <code>default_factory</code>？</h3>
+<p><strong>错误做法 ❌：</strong></p>
+<p>python</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@dataclass</span><br><span class="line">class BadConfig:</span><br><span class="line">    cameras: dict = &#123;&#125;  # 危险！所有实例共享同一个字典</span><br></pre></td></tr></table></figure>
+<p><strong>正确做法 ✓：</strong></p>
+<p>python</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@dataclass</span><br><span class="line">class GoodConfig:</span><br><span class="line">    cameras: dict = field(default_factory=dict)  # 每个实例都有独立的字典</span><br></pre></td></tr></table></figure>
+<h3 id="6-类型别名"><a class="markdownIt-Anchor" href="#6-类型别名"></a> 6. <strong>类型别名</strong></h3>
+<p>python</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">SO100FollowerConfig: TypeAlias = SOFollowerRobotConfig</span><br><span class="line">SO101FollowerConfig: TypeAlias = SOFollowerRobotConfig</span><br></pre></td></tr></table></figure>
+<p><strong>作用</strong>：</p>
+<ul>
+<li>提供语义化的类型名称（虽然实际是同一个类）</li>
+<li>便于代码维护和理解</li>
+<li>未来如果 SO100 和 SO101 配置不同，可以轻松分离</li>
+</ul>
+<h3 id="7-关联的配置类"><a class="markdownIt-Anchor" href="#7-关联的配置类"></a> 7  关联的配置类</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> TypeAlias</span><br><span class="line"></span><br><span class="line"><span class="comment"># 类型别名（语义化）</span></span><br><span class="line">SO100FollowerConfig: TypeAlias = SOFollowerRobotConfig</span><br><span class="line">SO101FollowerConfig: TypeAlias = SOFollowerRobotConfig</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SO100Follower</span>(<span class="title class_ inherited__">SOFollower</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;SO100 专用实现&quot;&quot;&quot;</span></span><br><span class="line">    config_class = SO100FollowerConfig  <span class="comment"># 使用语义化配置</span></span><br><span class="line">    name = <span class="string">&quot;so100&quot;</span>  <span class="comment"># 特定型号名称</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SO101Follower</span>(<span class="title class_ inherited__">SOFollower</span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;SO101 专用实现&quot;&quot;&quot;</span></span><br><span class="line">    config_class = SO101FollowerConfig</span><br><span class="line">    name = <span class="string">&quot;so101&quot;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">class Robot(ABC):</span><br><span class="line">    &quot;&quot;&quot;基础机器人类&quot;&quot;&quot;</span><br><span class="line">    config_class = None  # 子类必须定义</span><br><span class="line">    </span><br><span class="line">    @classmethod</span><br><span class="line">    def from_config_dict(cls, config_dict: dict):</span><br><span class="line">        &quot;&quot;&quot;从字典创建机器人实例的工厂方法&quot;&quot;&quot;</span><br><span class="line">        # 动态获取应该使用哪个配置类</span><br><span class="line">        config = cls.config_class(**config_dict)  # ← 关键：使用 config_class</span><br><span class="line">        return cls(config)</span><br><span class="line">    </span><br><span class="line">    @classmethod</span><br><span class="line">    def from_yaml(cls, yaml_path: Path):</span><br><span class="line">        &quot;&quot;&quot;从YAML文件创建机器人&quot;&quot;&quot;</span><br><span class="line">        config_dict = yaml.safe_load(yaml_path)</span><br><span class="line">        return cls.from_config_dict(config_dict)</span><br><span class="line"></span><br><span class="line"># 使用示例</span><br><span class="line">class SO100Follower(SOFollower):</span><br><span class="line">    config_class = SO100FollowerConfig  # 绑定配置类</span><br><span class="line">    name = &quot;so100&quot;</span><br><span class="line"></span><br><span class="line">class SO101Follower(SOFollower):</span><br><span class="line">    config_class = SO101FollowerConfig</span><br><span class="line">    name = &quot;so101&quot;</span><br><span class="line"></span><br><span class="line"># 动态创建 - 无需知道具体类</span><br><span class="line">robot_classes = &#123;</span><br><span class="line">    &quot;so100&quot;: SO100Follower,</span><br><span class="line">    &quot;so101&quot;: SO101Follower,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"># 从配置文件加载</span><br><span class="line">def load_robot(robot_type: str, config_file: Path):</span><br><span class="line">    robot_class = robot_classes[robot_type]</span><br><span class="line">    return robot_class.from_yaml(config_file)  # 自动使用正确的配置类</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h3 id="8-多重继承-str-enum枚举值同时是字符串可以直接序列化为-json"><a class="markdownIt-Anchor" href="#8-多重继承-str-enum枚举值同时是字符串可以直接序列化为-json"></a> 8 <strong>多重继承</strong> <code>(str, Enum)</code>：枚举值同时是字符串，可以直接序列化为 JSON</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"># 作为枚举使用</span><br><span class="line">mode = MotorNormMode.RANGE_0_100</span><br><span class="line">print(mode.value)  # &quot;range_0_100&quot;</span><br><span class="line">print(mode.name)   # &quot;RANGE_0_100&quot;</span><br><span class="line"></span><br><span class="line"># 直接作为字符串使用（因为是 str 的子类）</span><br><span class="line">config = &#123;&quot;norm_mode&quot;: &quot;degrees&quot;&#125;  # 可以自动转换</span><br><span class="line">mode = MotorNormMode(config[&quot;norm_mode&quot;])  # &quot;degrees&quot; -&gt; MotorNormMode.DEGREES</span><br><span class="line"></span><br><span class="line"># 在 FastAPI 中自动验证</span><br><span class="line">from pydantic import BaseModel</span><br><span class="line">class MotorConfig(BaseModel):</span><br><span class="line">    norm_mode: MotorNormMode  # 自动验证是否为有效值</span><br></pre></td></tr></table></figure>
+<h2 id="8-什么是-protocol"><a class="markdownIt-Anchor" href="#8-什么是-protocol"></a> 8 什么是 Protocol？</h2>
+<p>用于检查方法和属性是否实现</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">from typing import Protocol</span><br><span class="line"></span><br><span class="line">class CanFly(Protocol):</span><br><span class="line">    def fly(self) -&gt; None:</span><br><span class="line">        &quot;&quot;&quot;会飞的对象必须实现 fly 方法&quot;&quot;&quot;</span><br><span class="line">        ...</span><br><span class="line"></span><br><span class="line"># 不需要显式继承 CanFly</span><br><span class="line">class Bird:</span><br><span class="line">    def fly(self) -&gt; None:</span><br><span class="line">        print(&quot;Bird flying&quot;)</span><br><span class="line"></span><br><span class="line">class Airplane:</span><br><span class="line">    def fly(self) -&gt; None:</span><br><span class="line">        print(&quot;Airplane flying&quot;)</span><br><span class="line"></span><br><span class="line">class Car:</span><br><span class="line">    def drive(self) -&gt; None:</span><br><span class="line">        print(&quot;Car driving&quot;)</span><br><span class="line"></span><br><span class="line"># Bird 和 Airplane 都符合 CanFly Protocol（因为它们有 fly 方法）</span><br><span class="line">def make_it_fly(obj: CanFly) -&gt; None:</span><br><span class="line">    obj.fly()</span><br><span class="line"></span><br><span class="line">make_it_fly(Bird())      # ✅ 类型检查通过</span><br><span class="line">make_it_fly(Airplane())  # ✅ 类型检查通过</span><br><span class="line">make_it_fly(Car())       # ❌ 类型检查失败：Car 没有 fly 方法</span><br></pre></td></tr></table></figure>
+<h2 id="9-的-强制后面的参数必须用关键字传参-为什么这样设计"><a class="markdownIt-Anchor" href="#9-的-强制后面的参数必须用关键字传参-为什么这样设计"></a> 9 的 <code>*</code><strong>强制后面的参数必须用关键字传参</strong>。为什么这样设计？</h2>
+<ol>
+<li><strong>可读性</strong>：<code>num_retry=3</code> 比直接写 <code>3</code> 更清楚是什么意思</li>
+<li><strong>稳定性</strong>：以后增加参数或调整顺序时，不会破坏已有调用代码</li>
+<li><strong>避免误用</strong>：防止把重试次数和错误标志按位置填反</li>
+</ol>
+<h2 id="10-contextmanager"><a class="markdownIt-Anchor" href="#10-contextmanager"></a> 10  <code>@contextmanager</code></h2>
+<h2 id="11-cached_property"><a class="markdownIt-Anchor" href="#11-cached_property"></a> 11. <code>@cached_property</code></h2>
+<h3 id="作用"><a class="markdownIt-Anchor" href="#作用"></a> 作用</h3>
+<p>将方法变成<strong>只计算一次的属性</strong>，首次访问后缓存结果。</p>
+<h3 id="来源"><a class="markdownIt-Anchor" href="#来源"></a> 来源</h3>
+<p>python</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> cached_property</span><br></pre></td></tr></table></figure>
+<h3 id="示例"><a class="markdownIt-Anchor" href="#示例"></a> 示例</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">DataAnalyzer</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, large_data</span>):</span><br><span class="line">        self.data = large_data</span><br><span class="line">    </span><br><span class="line"><span class="meta">    @cached_property</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">expensive_calculation</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;正在计算中...（只会执行一次）&quot;</span>)</span><br><span class="line">        result = <span class="built_in">sum</span>(self.data)  <span class="comment"># 假设这是复杂计算</span></span><br><span class="line">        <span class="keyword">return</span> result</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用</span></span><br><span class="line">analyzer = DataAnalyzer([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])</span><br><span class="line"><span class="built_in">print</span>(analyzer.expensive_calculation)  <span class="comment"># 打印并计算 → 15</span></span><br><span class="line"><span class="built_in">print</span>(analyzer.expensive_calculation)  <span class="comment"># 直接返回缓存结果 → 15</span></span><br><span class="line"><span class="comment"># 不会再次打印&quot;正在计算中...&quot;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>手动 <code>None</code> 判断</th>
+<th>完全可控，无需导入</th>
+<th>代码冗余，需要手动处理线程</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>@cached_property</code></td>
+<td>简洁、线程安全、语义清晰</td>
+<td>需要导入，灵活性稍低</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<h2 id="12-from-__future__-import-annotations"><a class="markdownIt-Anchor" href="#12-from-__future__-import-annotations"></a> 12 <code>from __future__ import annotations</code></h2>
+<p><code>from __future__ import annotations</code> 是一个<strong>特殊的 future statement</strong>，Python 要求它必须出现在：</p>
+<ol>
+<li>模块的 <strong>docstring 之后</strong>（如果有）</li>
+<li><strong>任何其他代码之前</strong>（包括其他 import 语</li>
+</ol>
+<h3 id="没有-__future__-时"><a class="markdownIt-Anchor" href="#没有-__future__-时"></a> 没有 <code>__future__</code> 时：</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># user.py</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">User</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">create_post</span>(<span class="params">self</span>) -&gt; Post:  <span class="comment"># ❌ NameError: name &#x27;Post&#x27; is not defined</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 必须这样写：</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">User</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">create_post</span>(<span class="params">self</span>) -&gt; <span class="string">&#x27;Post&#x27;</span>:  <span class="comment"># ✅ 使用字符串</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 或者确保 Post 已定义</span></span><br><span class="line"><span class="keyword">from</span> post <span class="keyword">import</span> Post  <span class="comment"># 可能导致循环导入</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">User</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">create_post</span>(<span class="params">self</span>) -&gt; Post:  <span class="comment"># ✅ 但可能有循环依赖问题</span></span><br><span class="line">        <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+<h3 id="有-__future__-时"><a class="markdownIt-Anchor" href="#有-__future__-时"></a> 有 <code>__future__</code> 时：</h3>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> __future__ <span class="keyword">import</span> annotations</span><br><span class="line"><span class="keyword">from</span> typing <span class="keyword">import</span> <span class="type">List</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">User</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">create_post</span>(<span class="params">self</span>) -&gt; Post:  <span class="comment"># ✅ Post 不需要提前定义</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">get_posts</span>(<span class="params">self</span>) -&gt; <span class="type">List</span>[Post]:  <span class="comment"># ✅ 支持泛型中的向前引用</span></span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Post</span>:  <span class="comment"># 可以在后面定义</span></span><br><span class="line">    <span class="keyword">pass</span></span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/06/02/2026%E5%B9%B46%E6%9C%882%E6%97%A5-python%E5%BA%93%E7%AC%94%E8%AE%B0/" data-id="cmq6neg330001dwv44hnfatpi" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2026/06/05/2026%E5%B9%B46%E6%9C%885%E6%97%A5-lerobo/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          2026年6月5日 lerobo
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2026/05/29/2026%E5%B9%B45%E6%9C%8829%E6%97%A5-embed%E5%BE%AE%E8%B0%83/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2026年5月29日 embed微调</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>164</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>43</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2025 - 2026 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
