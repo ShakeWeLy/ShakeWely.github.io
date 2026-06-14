@@ -43,9 +43,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>164</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>167</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>43</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>44</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -70,6 +70,1188 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-2025年3月10日-onnx3进阶使用与常见问题" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/03/10/2025%E5%B9%B43%E6%9C%8810%E6%97%A5-onnx3%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" class="article-date">
+  <time class="post-time" datetime="2025-03-10T13:15:13.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">10</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/03/10/2025%E5%B9%B43%E6%9C%8810%E6%97%A5-onnx3%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/">2025年3月10日 onnx2</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <ul>
+<li></li>
+</ul>
+<h2 id="导出报错"><a class="markdownIt-Anchor" href="#导出报错"></a> 导出报错</h2>
+<p>Unsupported: ONNX export of convolution for kernel of unknown shape”，这通常与动态形状或无法推断的卷积核尺寸有</p>
+<ol>
+<li>
+<p>静态化Reshape操作</p>
+</li>
+<li>
+<p>修复多级融合的TracerWarning fused_cls = sum(w * c for w, c in zip(weights_cls, preds_cls))</p>
+<p><code>sum(w * c for w, c in zip(...))</code>中的迭代操作会被PyTorch的JIT Tracer识别为动态控制流，导致ONNX导出时无法生成静态计算图。这种Python层的迭代操作在模型跟踪阶段会被视为潜在动态行为，从而触发TracerWarning</p>
+</li>
+</ol>
+<h3 id="2-importerror-dll-load-failed-while-importing-onnx_cpp2py_export-动态链接库dll初始化例程失败"><a class="markdownIt-Anchor" href="#2-importerror-dll-load-failed-while-importing-onnx_cpp2py_export-动态链接库dll初始化例程失败"></a> 2 ImportError: DLL load failed while importing onnx_cpp2py_export: 动态链接库(DLL)初始化例程失败。</h3>
+<blockquote>
+<p>重新安装 onnx</p>
+</blockquote>
+<h2 id="结构报错"><a class="markdownIt-Anchor" href="#结构报错"></a> 结构报错</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="1-为什么导出的onnx会有那么多identity这是什么怎么消除"><a class="markdownIt-Anchor" href="#1-为什么导出的onnx会有那么多identity这是什么怎么消除"></a> 1 为什么导出的onnx会有那么多Identity，这是什么，怎么消除</h3>
+<p><img src="/2025/03/10/2025%E5%B9%B43%E6%9C%8810%E6%97%A5-onnx3%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/image-20250310215555781.png" alt="image-20250310215555781"></p>
+<ol>
+<li><strong>数据传递占位符</strong> Identity节点的核心功能是将输入张量原样输出，不进行任何计算</li>
+<li><strong>框架转换机制缺陷</strong></li>
+<li><strong>自定义算子副作用</strong></li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/03/10/2025%E5%B9%B43%E6%9C%8810%E6%97%A5-onnx3%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8%E4%B8%8E%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" data-id="cmanj8o1s0006lcv45hyj3669" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/onnx/" rel="tag">onnx</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2025年3月10日-C++-记录" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/03/10/2025%E5%B9%B43%E6%9C%8810%E6%97%A5-C++-%E8%AE%B0%E5%BD%95/" class="article-date">
+  <time class="post-time" datetime="2025-03-10T05:29:15.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">10</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/03/10/2025%E5%B9%B43%E6%9C%8810%E6%97%A5-C++-%E8%AE%B0%E5%BD%95/">2025年3月10日 C++记录</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="c"><a class="markdownIt-Anchor" href="#c"></a> ✨C++</h1>
+<p>C++开发选择什么方向？ - 不午睡会死仙人Zz的回答 - 知乎<br>
+<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/659403626/answer/1944064566465138818">https://www.zhihu.com/question/659403626/answer/1944064566465138818</a></p>
+<h2 id="基础知识"><a class="markdownIt-Anchor" href="#基础知识"></a> 基础知识</h2>
+<h3 id="1-变量作用域"><a class="markdownIt-Anchor" href="#1-变量作用域"></a> 1 变量作用域</h3>
+<ol>
+<li>什么是局部变量 ☑️</li>
+<li>什么是全局变量 ☑️</li>
+<li>什么是块作用域，如何实现？</li>
+<li>类？</li>
+</ol>
+<h3 id="2-常量"><a class="markdownIt-Anchor" href="#2-常量"></a> 2 常量？</h3>
+<ol>
+<li>定义？</li>
+<li>如何定义常量</li>
+</ol>
+<h3 id="3-修饰符"><a class="markdownIt-Anchor" href="#3-修饰符"></a> 3 修饰符</h3>
+<ol>
+<li>
+<p>修饰符类型</p>
+</li>
+<li>
+<p>类型限定符：是什么？</p>
+<table>
+<thead>
+<tr>
+<th>static</th>
+<th>用于定义静态变量，表示该变量的作用域仅限于当前文件或当前函数内，不会被其他文件或函数访问。</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>const</td>
+<td></td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li></li>
+</ol>
+<h3 id="4-c-存储类"><a class="markdownIt-Anchor" href="#4-c-存储类"></a> 4 C++ 存储类</h3>
+<p>控制变量和函数生命周期及可见性的手段。？？？</p>
+<ul>
+<li><strong>extern</strong> 都有什么用？全局变量，具有外部链接，默认存储类为extern</li>
+<li><strong>auto</strong></li>
+<li><strong>static</strong></li>
+</ul>
+<h3 id="5-运算符"><a class="markdownIt-Anchor" href="#5-运算符"></a> 5 运算符</h3>
+<ul>
+<li>
+<p>逻辑运算符</p>
+</li>
+<li>
+<h4 id="运算符优先级"><a class="markdownIt-Anchor" href="#运算符优先级"></a> 运算符优先级</h4>
+</li>
+</ul>
+<h3 id="6-lambda-函数与表达式"><a class="markdownIt-Anchor" href="#6-lambda-函数与表达式"></a> 6 Lambda 函数与表达式</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[](int x, int y) -&gt; int &#123; int z = x + y; return z + x; &#125;</span><br></pre></td></tr></table></figure>
+<p>递归+lamda</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">auto dfs = [&amp;](this auto&amp;&amp; dfs, int i, int j) -&gt; int &#123;   // 递归逻辑  &#125;;</span><br></pre></td></tr></table></figure>
+<h3 id="7-c-引用"><a class="markdownIt-Anchor" href="#7-c-引用"></a> 7 C++ 引用</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int a = 10;</span><br><span class="line">int &amp;ref = a;  // ref 是 a 的引用</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>int &amp;ref</code> 表示 <code>ref</code> 是一个 <code>int</code> 类型的引用。</li>
+<li><code>ref</code> 是 <code>a</code> 的别名，对 <code>ref</code> 的操作会直接作用于 <code>a</code>。</li>
+</ul>
+<h2 id="code-细节"><a class="markdownIt-Anchor" href="#code-细节"></a> code 细节</h2>
+<h4 id="1-越界"><a class="markdownIt-Anchor" href="#1-越界"></a> 1 越界</h4>
+<ul>
+<li><strong>先判断空栈，再取栈顶元素</strong>。<code>if(val &lt; min_stack.back() || min_stack.empty())</code></li>
+</ul>
+<h2 id="std"><a class="markdownIt-Anchor" href="#std"></a> std</h2>
+<h3 id="1-map-和-set"><a class="markdownIt-Anchor" href="#1-map-和-set"></a> 1 map 和 set</h3>
+<table>
+<thead>
+<tr>
+<th>特点</th>
+<th>unordered_map</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>存储</td>
+<td>键值对 (key, value)</td>
+</tr>
+<tr>
+<td>使用场景</td>
+<td>需要存储键值对，例如统计频率，映射关系</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>map[key]</code></td>
+<td>访问 / 插入元素，若 key 不存在会默认插入一个默认值</td>
+</tr>
+<tr>
+<td><code>map.at(key)</code></td>
+<td>访问元素，key 不存在会抛异常</td>
+</tr>
+<tr>
+<td><code>map.insert(&#123;key, value&#125;)</code></td>
+<td>插入键值对</td>
+</tr>
+<tr>
+<td><code>map.emplace(key, value)</code></td>
+<td>就地构造，效率比 <code>insert</code> 更高</td>
+</tr>
+<tr>
+<td><code>map.erase(key)</code></td>
+<td>删除键为 <code>key</code> 的元素</td>
+</tr>
+<tr>
+<td><code>map.clear()</code></td>
+<td>清空所有元素</td>
+</tr>
+<tr>
+<td><code>map.count(key)</code></td>
+<td>判断 key 是否存在，存在返回 1，不存在返回 0</td>
+</tr>
+<tr>
+<td><code>map.find(key)</code></td>
+<td>查找 key，返回迭代器，等于 <code>map.end()</code> 表示没找到</td>
+</tr>
+<tr>
+<td><code>map.size()</code></td>
+<td>返回元素个数</td>
+</tr>
+<tr>
+<td><code>map.empty()</code></td>
+<td>判断是否为空</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>set.insert(key)</code></td>
+<td>插入元素</td>
+</tr>
+<tr>
+<td><code>set.emplace(key)</code></td>
+<td>就地构造，效率更高</td>
+</tr>
+<tr>
+<td><code>set.erase(key)</code></td>
+<td>删除元素</td>
+</tr>
+<tr>
+<td><code>set.clear()</code></td>
+<td>清空元素</td>
+</tr>
+<tr>
+<td><code>set.count(key)</code></td>
+<td>判断元素是否存在，存在返回 1</td>
+</tr>
+<tr>
+<td><code>set.find(key)</code></td>
+<td>查找元素，返回迭代器</td>
+</tr>
+<tr>
+<td><code>set.size()</code></td>
+<td>返回元素个数</td>
+</tr>
+<tr>
+<td><code>set.empty()</code></td>
+<td>判断是否为空</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-vector"><a class="markdownIt-Anchor" href="#2-vector"></a> 2 vector</h3>
+<table>
+<thead>
+<tr>
+<th>功能类别</th>
+<th>函数名</th>
+<th>作用描述</th>
+<th>时间复杂度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>插入</strong></td>
+<td><code>push_back(val)</code></td>
+<td>在 vector 尾部插入元素 <code>val</code></td>
+<td><strong>摊销 O(1)</strong></td>
+</tr>
+<tr>
+<td><strong>删除</strong></td>
+<td><code>pop_back()</code></td>
+<td>删除 vector 尾部元素</td>
+<td><strong>O(1)</strong></td>
+</tr>
+<tr>
+<td><strong>访问</strong></td>
+<td><code>back()</code></td>
+<td>返回 vector 的最后一个元素（不删除）</td>
+<td><strong>O(1)</strong></td>
+</tr>
+<tr>
+<td></td>
+<td><code>front()</code></td>
+<td>返回 vector 的第一个元素（不删除）</td>
+<td><strong>O(1)</strong></td>
+</tr>
+<tr>
+<td></td>
+<td><code>at(index)</code></td>
+<td>返回指定下标元素，带边界检查</td>
+<td><strong>O(1)</strong></td>
+</tr>
+<tr>
+<td></td>
+<td><code>operator[]</code></td>
+<td>返回指定下标元素（不带边界检查）</td>
+<td><strong>O(1)</strong></td>
+</tr>
+<tr>
+<td><strong>状态</strong></td>
+<td><code>empty()</code></td>
+<td>检查 vector 是否为空</td>
+<td><strong>O(1)</strong></td>
+</tr>
+<tr>
+<td></td>
+<td><code>size()</code></td>
+<td>返回 vector 中元素个数</td>
+<td><strong>O(1)</strong></td>
+</tr>
+<tr>
+<td><strong>清空</strong></td>
+<td><code>clear()</code></td>
+<td>清空 vector 所有元素</td>
+<td><strong>O(n)</strong></td>
+</tr>
+<tr>
+<td><strong>其他</strong></td>
+<td><code>resize(n)</code></td>
+<td>调整 vector 大小为 <code>n</code>，默认填充值为零</td>
+<td><strong>O(n)</strong></td>
+</tr>
+<tr>
+<td></td>
+<td><code>reserve(n)</code></td>
+<td>预留空间，避免多次扩容</td>
+<td><strong>O(n)</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="3-字符串操作函数"><a class="markdownIt-Anchor" href="#3-字符串操作函数"></a> 3、字符串操作函数</h3>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>功能</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>s.length()</code> / <code>s.size()</code></td>
+<td>字符串长度</td>
+<td></td>
+</tr>
+<tr>
+<td><code>s.substr(pos, len)</code></td>
+<td>子串</td>
+<td><code>s.substr(0, 3)</code></td>
+</tr>
+<tr>
+<td><code>s.find(sub)</code></td>
+<td>查找子串位置</td>
+<td><code>s.find(&quot;abc&quot;)</code></td>
+</tr>
+<tr>
+<td><code>s.rfind(sub)</code></td>
+<td>反向查找子串位置</td>
+<td></td>
+</tr>
+<tr>
+<td><code>s.erase(pos, len)</code></td>
+<td>删除子串</td>
+<td></td>
+</tr>
+<tr>
+<td><code>s.insert(pos, sub)</code></td>
+<td>插入子串</td>
+<td></td>
+</tr>
+<tr>
+<td><code>s.replace(pos, len, sub)</code></td>
+<td>替换子串</td>
+<td></td>
+</tr>
+<tr>
+<td><code>reverse(s.begin(), s.end())</code></td>
+<td>字符串反转</td>
+<td></td>
+</tr>
+<tr>
+<td><code>sort(s.begin(), s.end())</code></td>
+<td>字符串排序</td>
+<td></td>
+</tr>
+<tr>
+<td><code>toupper(ch)</code> / <code>tolower(ch)</code></td>
+<td>字符大小写转换</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="4-数字cmath"><a class="markdownIt-Anchor" href="#4-数字cmath"></a> 4、数字（<cmath>`）</cmath></h3>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>功能</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>abs(x)</code></td>
+<td>绝对值</td>
+<td><code>abs(-3) // 3</code></td>
+</tr>
+<tr>
+<td><code>pow(a, b)</code></td>
+<td>幂</td>
+<td><code>pow(2, 3) // 8</code></td>
+</tr>
+<tr>
+<td><code>sqrt(x)</code></td>
+<td>开方</td>
+<td><code>sqrt(16) // 4</code></td>
+</tr>
+<tr>
+<td><code>log(x)</code></td>
+<td>自然对数</td>
+<td></td>
+</tr>
+<tr>
+<td><code>log10(x)</code></td>
+<td>以 10 为底的对数</td>
+<td></td>
+</tr>
+<tr>
+<td><code>ceil(x)</code></td>
+<td>向上取整</td>
+<td><code>ceil(2.3) // 3</code></td>
+</tr>
+<tr>
+<td><code>floor(x)</code></td>
+<td>向下取整</td>
+<td><code>floor(2.7) // 2</code></td>
+</tr>
+<tr>
+<td><code>round(x)</code></td>
+<td>四舍五入</td>
+<td><code>round(2.5) // 3</code></td>
+</tr>
+<tr>
+<td><code>max(a, b)</code> / <code>min(a, b)</code></td>
+<td>最大/最小值</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="5-算法algorithm"><a class="markdownIt-Anchor" href="#5-算法algorithm"></a> 5 算法（<code>&lt;algorithm&gt;</code>）</h3>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>功能</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sort(start, end)</code></td>
+<td>排序</td>
+<td></td>
+</tr>
+<tr>
+<td><code>reverse(start, end)</code></td>
+<td>反转</td>
+<td></td>
+</tr>
+<tr>
+<td><code>next_permutation(start, end)</code></td>
+<td>下一个排列</td>
+<td></td>
+</tr>
+<tr>
+<td><code>prev_permutation(start, end)</code></td>
+<td>上一个排列</td>
+<td></td>
+</tr>
+<tr>
+<td><code>lower_bound(start, end, val)</code></td>
+<td>二分查找，返回 ≥val 的首元素迭代器</td>
+<td></td>
+</tr>
+<tr>
+<td><code>upper_bound(start, end, val)</code></td>
+<td>二分查找，返回 &gt;val 的首元素迭代器</td>
+<td></td>
+</tr>
+<tr>
+<td><code>count(start, end, val)</code></td>
+<td>统计元素出现次数</td>
+<td></td>
+</tr>
+<tr>
+<td><code>find(start, end, val)</code></td>
+<td>查找元素</td>
+<td></td>
+</tr>
+<tr>
+<td><code>accumulate(start, end, init)</code></td>
+<td>元素累加 (需 <code>&lt;numeric&gt;</code>)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h1 id="力扣刷题"><a class="markdownIt-Anchor" href="#力扣刷题"></a> 🚀力扣刷题</h1>
+<h2 id="算法设计"><a class="markdownIt-Anchor" href="#算法设计"></a> 算法设计</h2>
+<h3 id="1-快慢指针算法"><a class="markdownIt-Anchor" href="#1-快慢指针算法"></a> 1 快慢指针算法</h3>
+<ol>
+<li>判断循环</li>
+<li>遍历</li>
+</ol>
+<h3 id="2-贪心算法"><a class="markdownIt-Anchor" href="#2-贪心算法"></a> 2 贪心算法</h3>
+<ol>
+<li>一般用在有cost的</li>
+</ol>
+<h3 id="3-动态规划"><a class="markdownIt-Anchor" href="#3-动态规划"></a> 3 动态规划</h3>
+<ol>
+<li>后面的前面已经解决过了// 重后面开始算起，简单的算起</li>
+<li>背包问题 爬楼梯</li>
+<li>滚动数组</li>
+<li>递归【枚举判断初始条件是否正确】–&gt; 变成动态规划  存储前状态变量</li>
+</ol>
+<h3 id="4-滑动窗口思想总结"><a class="markdownIt-Anchor" href="#4-滑动窗口思想总结"></a> 4 滑动窗口思想总结</h3>
+<p><strong>核心思想：</strong><br>
+滑动窗口是一种高效解决「子数组 / 子区间 / 子串」问题的技巧，</p>
+<p>维护窗口大小，缩小当前维护与扩展窗口</p>
+<p>通常用于：</p>
+<ul>
+<li><strong>连续子序列</strong>：比如最长不重复子串、子数组和等。</li>
+<li></li>
+</ul>
+<h3 id="5-用栈追溯"><a class="markdownIt-Anchor" href="#5-用栈追溯"></a> 5 用栈追溯</h3>
+<h3 id="5-链表"><a class="markdownIt-Anchor" href="#5-链表"></a> 5 链表</h3>
+<ol>
+<li>呀节点 避免nullptr的判断 <code>return dummy-&gt;next</code> 即可</li>
+</ol>
+<h1 id="记录"><a class="markdownIt-Anchor" href="#记录"></a> 🌏记录</h1>
+<h2 id="命名空间"><a class="markdownIt-Anchor" href="#命名空间"></a> 命名空间</h2>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/cl122763974/article/details/139457699">https://blog.csdn.net/cl122763974/article/details/139457699</a></p>
+<ol>
+<li>避免冲突</li>
+<li>易于维护, 不同模块和相同类</li>
+</ol>
+</blockquote>
+<h2 id="code"><a class="markdownIt-Anchor" href="#code"></a> code</h2>
+<blockquote>
+<p>缩进也报错?</p>
+<p>选择&quot;UTF-8 带签名(BOM)&quot;???</p>
+</blockquote>
+<h3 id="数"><a class="markdownIt-Anchor" href="#数"></a> 数</h3>
+<blockquote>
+<p>INFINITY 是 C++ 中表示正无穷大的宏</p>
+<p>NaN 不等于任何值（包括自身），用 std::isnan(x) 检查。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">float nan = std::nan(&quot;&quot;); // NaN</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h3 id="vector"><a class="markdownIt-Anchor" href="#vector"></a> Vector</h3>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Vector <span class="title">output</span><span class="params">(output_channel, <span class="number">0.0f</span>)</span></span>;  <span class="comment">// 初始化输出向量</span></span><br><span class="line"><span class="comment">// 初始化权重矩阵</span></span><br><span class="line"><span class="function">Matrix <span class="title">weight</span><span class="params">(output_channel, Vector(x_size, <span class="number">0.0f</span>))</span></span>;</span><br></pre></td></tr></table></figure>
+<p>区别</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cout &lt;&lt; list.<span class="built_in">at</span>(<span class="number">2</span>) &lt;&lt; endl;</span><br><span class="line">cout &lt;&lt; list[<span class="number">2</span>] &lt;&lt; endl;</span><br><span class="line">cout &lt;&lt; list.<span class="keyword">operator</span>[](<span class="number">2</span>) &lt;&lt; endl;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">capacity</span>()</span><br><span class="line"><span class="built_in">max_size</span>()</span><br></pre></td></tr></table></figure>
+<h3 id="map"><a class="markdownIt-Anchor" href="#map"></a> MAP</h3>
+<blockquote>
+<p>std::map 是一个关联容器，存储键值对（key-value pairs），每个元素是一个 std::pair&lt;const Key, T&gt;。</p>
+<ul>
+<li>Key：键的类型（在你的代码中是 string）。</li>
+<li>T：值的类型（在你的代码中是 int）。</li>
+<li>const Key：键是常量，不能修改，以保证 map 的排序和唯一性。</li>
+</ul>
+</blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">print</span><span class="params">(map&lt;string, <span class="type">int</span>&gt;map)</span></span>&#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">auto</span> it = map.<span class="built_in">begin</span>(); it != map.<span class="built_in">end</span>(); it++)&#123;</span><br><span class="line">        cout &lt;&lt; it-&gt;first &lt;&lt; <span class="string">&quot; &quot;</span> &lt;&lt; it-&gt;second &lt;&lt; endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="it-vs-it"><a class="markdownIt-Anchor" href="#it-vs-it"></a> it++ vs ++it</h5>
+<blockquote>
+<p>无影响,会优化</p>
+</blockquote>
+<p><strong>it-&gt;first 和 it-&gt;second 是什么？</strong></p>
+<blockquote>
+<p>it-&gt;first 和 it-&gt;second 是访问 std::map 中键值对的成员，</p>
+</blockquote>
+<h3 id="函数"><a class="markdownIt-Anchor" href="#函数"></a> 函数</h3>
+<p>三个有什么区别</p>
+<blockquote>
+<ul>
+<li>
+<h3 id="1-void-swapint-a-int-b"><a class="markdownIt-Anchor" href="#1-void-swapint-a-int-b"></a> 1. void swap(int a, int b)</h3>
+<ul>
+<li>
+<p><strong>参数传递方式</strong>：值传递（Pass by Value）</p>
+</li>
+<li>
+<p>接收参数的副本</p>
+</li>
+</ul>
+<h3 id="2-void-swapint-a-int-b"><a class="markdownIt-Anchor" href="#2-void-swapint-a-int-b"></a> 2. void swap(int *a, int *b)</h3>
+<ul>
+<li>
+<p><strong>参数传递方式</strong>：指针传递（Pass by Pointer）</p>
+</li>
+<li>
+<p>通过解引用（*a 和 *b）直接访问和修改调用者的变量</p>
+</li>
+</ul>
+<h3 id="3-void-swapint-a-int-b"><a class="markdownIt-Anchor" href="#3-void-swapint-a-int-b"></a> 3. void swap(int &amp;a, int &amp;b)</h3>
+<ul>
+<li><strong>参数传递方式</strong>：引用传递（Pass by Reference）</li>
+<li>函数接收的是调用者变量的引用，a 和 b 是原始变量的别名，任何对 a 和 b 的修改直接反映到调用者的变量上。</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<h4 id="函数重载"><a class="markdownIt-Anchor" href="#函数重载"></a> <strong>函数重载</strong></h4>
+<blockquote>
+<p>允许在同一作用域内定义多个同名函数，但这些函数的参数列表（参数数量、类型或顺序）必须不同。编译器会根据调用时提供的参数类型和数量，自动选择最匹配的函数版本来执行</p>
+</blockquote>
+<h4 id="函数指针数组的写法规则"><a class="markdownIt-Anchor" href="#函数指针数组的写法规则"></a> 函数指针数组的写法规则</h4>
+<p><strong>函数签名一致</strong>：</p>
+<ul>
+<li>数组中所有函数指针指向的函数必须具有<strong>相同的返回类型</strong>和<strong>相同的参数列表</strong>（包括参数类型和数量）。</li>
+<li>例如，所有函数指针都指向 void(int*, int*) 类型的函数。</li>
+</ul>
+<p><strong>声明语法</strong>：</p>
+<ul>
+<li>函数指针的声明形式为：返回类型 (*指针名)(参数列表)。</li>
+<li>函数指针数组的声明形式为：返回类型 (*数组名[大小])(参数列表)。</li>
+<li>例如：void (<em>swapFuncs[2])(int</em>, int*) 表示一个数组，包含两个指向 void(int*, int*) 类型函数的指针。</li>
+</ul>
+<h4 id="模板函数"><a class="markdownIt-Anchor" href="#模板函数"></a> 模板函数</h4>
+<blockquote>
+<p>定义一个函数的“蓝图”，让它能够处理多种数据类型（如 int、double、std::string 等），而不需要为每种类型写一个单独的函数。</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt; <span class="comment">// 或者 template &lt;class T&gt;</span></span><br><span class="line">返回类型 函数名(参数列表) &#123;</span><br><span class="line">    <span class="comment">// 函数体，使用 T 作为类型</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="什么是函数对象"><a class="markdownIt-Anchor" href="#什么是函数对象"></a> 什么是函数对象？</h4>
+<blockquote>
+<p>函数对象是一个<strong>行为类似函数的类对象</strong>。在C++中，函数对象是通过定义了<strong>函数调用运算符</strong>（operator()）的类或结构体创建的.像普通函数一样被调用，但因为是对象，它可以保存状态、支持更多灵活性</p>
+</blockquote>
+<blockquote>
+<p>一个函数对象需要重载 operator()，使其可以通过 () 调用。</p>
+</blockquote>
+<h3 id="构造函数"><a class="markdownIt-Anchor" href="#构造函数"></a> 构造函数</h3>
+<p><code>NoBackprop() : previous_state(Config::enable_backprop) &#123;&#125;</code></p>
+<p>和<code>NoBackprop() &#123;previous_state = Config::enable_backprop;&#125;</code></p>
+<h3 id="指针"><a class="markdownIt-Anchor" href="#指针"></a> 指针</h3>
+<ul>
+<li><code>int *p, q;   // p 是指针，q 是普通整数（新手常见错误）</code></li>
+</ul>
+<blockquote>
+<h3 id="什么是函数指针和指针函数以及区别"><a class="markdownIt-Anchor" href="#什么是函数指针和指针函数以及区别"></a> 🔥 什么是函数指针和指针函数以及区别</h3>
+<h3 id="什么是常量指针和指针常量以及区别"><a class="markdownIt-Anchor" href="#什么是常量指针和指针常量以及区别"></a> 🔥 什么是常量指针和指针常量以及区别</h3>
+<blockquote>
+<p><strong>常量指针</strong>： 指的是指针本身的值（即指向的地址）可以改变，但指针指向的对象的值不能通过这个指针进行修改。</p>
+<p><strong>指针常量</strong>：指的是指针本身的值（即指向的地址）不能改变，但可以通过这个指针修改指向对象的值</p>
+</blockquote>
+</blockquote>
+<h4 id><a class="markdownIt-Anchor" href="#"></a> </h4>
+<h3 id="类"><a class="markdownIt-Anchor" href="#类"></a> 类</h3>
+<p>if not define --&gt; define  --&gt; endif</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#ifndef MYCLASS_H</span><br><span class="line">#define MYCLASS_H</span><br><span class="line"></span><br><span class="line">class MyClass &#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line">#endif</span><br></pre></td></tr></table></figure>
+<h4 id="cpp"><a class="markdownIt-Anchor" href="#cpp"></a> cpp</h4>
+<blockquote>
+<h2 id="用-this-或改名避免混淆"><a class="markdownIt-Anchor" href="#用-this-或改名避免混淆"></a> 用 <code>this-&gt;</code> 或改名避免混淆</h2>
+<h3 id="方法-1用-this-明确访问成员变量"><a class="markdownIt-Anchor" href="#方法-1用-this-明确访问成员变量"></a> 方法 1：用 <code>this-&gt;</code> 明确访问成员变量</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cpp复制编辑void MyClass::setValue(int value) &#123;</span><br><span class="line">    this-&gt;value = value;  // ✅ 正确：this-&gt;value 表示成员变量</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="方法-2参数改名避免遮蔽"><a class="markdownIt-Anchor" href="#方法-2参数改名避免遮蔽"></a> 方法 2：参数改名，避免遮蔽</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cpp复制编辑void MyClass::setValue(int v) &#123;</span><br><span class="line">    value = v;  // ✅ 正确：v 是参数，value 是成员变量</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<p>MyClass::MyClass():value(0){</p>
+<p>std::cout&lt;&lt;“运行构造函数”&lt;&lt;std::endl;}</p>
+<p>MyClass::MyClass(){</p>
+<p>value = 0;</p>
+<p>std::cout&lt;&lt;“运行构造函数”&lt;&lt;std::endl;}</p>
+<table>
+<thead>
+<tr>
+<th>写法</th>
+<th>初始化时机</th>
+<th>效率</th>
+<th>推荐吗？</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>: value(0)</code></td>
+<td>构造函数进入前</td>
+<td>✅ 更快</td>
+<td>✅ 推荐</td>
+</tr>
+<tr>
+<td><code>value = 0;</code></td>
+<td>构造函数体内赋值</td>
+<td>稍慢一点</td>
+<td>✅ 也可以</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<h4 id="h"><a class="markdownIt-Anchor" href="#h"></a> .h</h4>
+<p>为什么要写const</p>
+<blockquote>
+<p>// 成员函数</p>
+<p>void setValue(int value);</p>
+<p>int getValue() const;</p>
+</blockquote>
+<h4 id="静态和非静态成员"><a class="markdownIt-Anchor" href="#静态和非静态成员"></a> 静态和非静态成员</h4>
+<p>1 这个错误是因为我们试图直接访问 Config 类的非静态成员变量 enable_backprop。我们需要将 Config 类中的成员变量声明为静态的。</p>
+<blockquote>
+<ol>
+<li>普通成员变量：</li>
+</ol>
+<ul>
+<li>
+<p>每个类的实例（对象）都有自己独立的成员变量副本</p>
+</li>
+<li>
+<p>需要通过对象来访问（例如：config.enable_backprop）</p>
+</li>
+<li>
+<p>每个对象的内存中都会存储这些变量</p>
+</li>
+</ul>
+<ol>
+<li>静态成员变量：</li>
+</ol>
+<ul>
+<li>
+<p>所有类的实例共享同一个变量</p>
+</li>
+<li>
+<p>可以直接通过类名访问（例如：Config::enable_backprop）</p>
+</li>
+<li>
+<p>在内存中只有一份副本</p>
+</li>
+<li>
+<p>在程序启动时就分配内存，程序结束时才释放</p>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>/ 静态成员需要在类外定义</p>
+</blockquote>
+<h4 id="虚函数"><a class="markdownIt-Anchor" href="#虚函数"></a> 虚函数</h4>
+<blockquote>
+<p><strong>虚函数</strong> 允许在派生类中重写函数，但可以有默认实现。它是可选的，可以在基类中提供实现。</p>
+<p><strong>纯虚函数</strong> 没有默认实现，派生类必须提供实现。它使得基类成为抽象类，不能实例化。</p>
+</blockquote>
+<h4 id="-2"><a class="markdownIt-Anchor" href="#-2"></a> </h4>
+<h2 id="类似"><a class="markdownIt-Anchor" href="#类似"></a> 类似</h2>
+<p>1 CPP类似python <code>with</code>的东西</p>
+<blockquote>
+<p>with using_config(“enable_backprop”, False):  x = Variable(np.array(2.Ð))  y = square(x)</p>
+<p>使用构造函数和析构函数</p>
+</blockquote>
+<h2 id="库"><a class="markdownIt-Anchor" href="#库"></a> 库</h2>
+<h3 id="include-iomanip-用于格式化输出"><a class="markdownIt-Anchor" href="#include-iomanip-用于格式化输出"></a> #include <iomanip>  // 用于格式化输出</iomanip></h3>
+<h3 id="raiiresource-acquisition-is-initialization"><a class="markdownIt-Anchor" href="#raiiresource-acquisition-is-initialization"></a> RAII（Resource Acquisition Is Initialization</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ConfigTest(const ConfigTest&amp;) = delete;</span><br><span class="line">ConfigTest&amp; operator=(const ConfigTest&amp;) = delete;</span><br><span class="line">ConfigTest a;</span><br><span class="line">ConfigTest b = a;  // ❌ 编译错误：拷贝构造被删除</span><br><span class="line">b = a;             // ❌ 编译错误：拷贝赋值被删除</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="random"><a class="markdownIt-Anchor" href="#random"></a> random</h2>
+<blockquote>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">random_device rd;</span><br><span class="line"><span class="function">mt19937 <span class="title">gen</span><span class="params">(rd())</span></span>;</span><br><span class="line"><span class="function">uniform_real_distribution&lt;<span class="type">float</span>&gt; <span class="title">dis</span><span class="params">(<span class="number">-0.1f</span>, <span class="number">0.1f</span>)</span></span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>
+<p>random_device 是 C++11 引入的  库中的类，用于生成非确定性随机数（通常基于硬件或操作系统的熵源）</p>
+</li>
+<li>
+<p>mt19937 是  库中的梅森旋转算法（Mersenne Twister）伪随机数生成器，是一种高效、高周期的伪随机数生成器</p>
+</li>
+<li>
+<p>uniform_real_distribution<float> 是 <random> 库中的类，用于生成指定范围内的<strong>均匀分布浮点随机数</strong>。</random></float></p>
+<p>dis 是一个分布对象，指定范围为 [-0.1, 0.1)（包含 -0.1，不包含 0.1）。</p>
+</li>
+</ul>
+</blockquote>
+<h2 id="异常处理机制"><a class="markdownIt-Anchor" href="#异常处理机制"></a> 异常处理机制\</h2>
+<h4 id="基本的异常处理语法"><a class="markdownIt-Anchor" href="#基本的异常处理语法"></a> ✅ 基本的异常处理语法</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">cpp复制编辑try &#123;</span><br><span class="line">    // 可能抛出异常的代码</span><br><span class="line">    throw std::runtime_error(&quot;Something went wrong!&quot;);</span><br><span class="line">&#125;</span><br><span class="line">catch (const std::runtime_error&amp; e) &#123;</span><br><span class="line">    std::cout &lt;&lt; &quot;Caught runtime_error: &quot; &lt;&lt; e.what() &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br><span class="line">catch (...) &#123;</span><br><span class="line">    std::cout &lt;&lt; &quot;Caught unknown exception&quot; &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>try</code>：监控语句块。</li>
+<li><code>throw</code>：抛出异常。</li>
+<li><code>catch</code>：捕获异常。</li>
+<li><code>...</code>：捕获所有类型的异常（最后一个兜底捕获器）。</li>
+</ul>
+<h3 id="标准异常类位于-stdexcept"><a class="markdownIt-Anchor" href="#标准异常类位于-stdexcept"></a> 标准异常类（位于 <code>&lt;stdexcept&gt;</code>）</h3>
+<h3 id="noexcept"><a class="markdownIt-Anchor" href="#noexcept"></a> noexcept</h3>
+<blockquote>
+<p><code>noexcept</code> 是 C++11 引入的一个关键字，用于声明一个函数 <strong>不会抛出异常</strong>。它有助于：</p>
+<ol>
+<li><strong>编译器优化</strong></li>
+<li><strong>提高异常安全性</strong></li>
+<li><strong>使标准库函数更高效</strong></li>
+</ol>
+</blockquote>
+<h2 id="threading"><a class="markdownIt-Anchor" href="#threading"></a> 🧠threading</h2>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>多线程（<code>std::thread</code>）</th>
+<th>异步（<code>std::async</code>）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>调度方式</td>
+<td>手动管理线程生命周期</td>
+<td>自动管理线程和返回值</td>
+</tr>
+<tr>
+<td>获取结果</td>
+<td>不提供返回值机制</td>
+<td><code>future.get()</code> 可取回结果</td>
+</tr>
+<tr>
+<td>使用场景</td>
+<td>更复杂的并发控制（锁、同步）</td>
+<td>简单并发任务、获取返回值</td>
+</tr>
+<tr>
+<td>更适合谁？</td>
+<td>控制更强的程序员</td>
+<td>想写少点代码的程序员 😄</td>
+</tr>
+</tbody>
+</table>
+<h2 id="cpp思路"><a class="markdownIt-Anchor" href="#cpp思路"></a> CPP思路</h2>
+<blockquote>
+<h3 id="batch-normalization-的核心目标"><a class="markdownIt-Anchor" href="#batch-normalization-的核心目标"></a> 🧠 <strong>Batch Normalization 的核心目标</strong>：</h3>
+<blockquote>
+<p>在网络的每一层，将激活值标准化，使其均值为 0，方差为 1，从而加速训练、提升稳定性。</p>
+</blockquote>
+<hr>
+<h3 id="你需要思考的关键点按执行流程划分"><a class="markdownIt-Anchor" href="#你需要思考的关键点按执行流程划分"></a> 🎯 <strong>你需要思考的关键点（按执行流程划分）</strong>：</h3>
+<h4 id="1-输入数据是什么形状"><a class="markdownIt-Anchor" href="#1-输入数据是什么形状"></a> 1. <strong>输入数据是什么形状？</strong></h4>
+<ul>
+<li>是一个 batch，一个通道，一张图，还是一个数？</li>
+<li>不同形状下，BN 应该在哪些维度上求均值和方差？</li>
+</ul>
+<h4 id="2-你需要计算什么"><a class="markdownIt-Anchor" href="#2-你需要计算什么"></a> 2. <strong>你需要计算什么？</strong></h4>
+<ul>
+<li><strong>均值（mean）</strong></li>
+<li><strong>方差（variance）</strong></li>
+<li>你会选择 <code>全局mean</code>、<code>通道mean</code> 还是 <code>按batch求mean</code>？</li>
+</ul>
+<h4 id="3-归一化怎么做"><a class="markdownIt-Anchor" href="#3-归一化怎么做"></a> 3. <strong>归一化怎么做？</strong></h4>
+<ul>
+<li>将数据减去均值，再除以标准差</li>
+<li>要考虑 <strong>数值稳定性</strong>（加入小的 ε）</li>
+</ul>
+<h4 id="4-训练时-vs-推理时"><a class="markdownIt-Anchor" href="#4-训练时-vs-推理时"></a> 4. <strong>训练时 vs 推理时</strong></h4>
+<ul>
+<li>训练：用 batch 的均值/方差</li>
+<li>推理：用<strong>累计的滑动平均值</strong></li>
+</ul>
+<h4 id="5-可学习的参数-γ-β缩放-平移"><a class="markdownIt-Anchor" href="#5-可学习的参数-γ-β缩放-平移"></a> 5. <strong>可学习的参数 γ、β（缩放 + 平移）</strong></h4>
+<ul>
+<li>为啥需要？BN 本质上是归一化 + 一个线性变换</li>
+<li>γ 控制方差，β 控制均值 —— 不影响模型表达能力</li>
+</ul>
+<h4 id="6-反向传播要怎么处理"><a class="markdownIt-Anchor" href="#6-反向传播要怎么处理"></a> 6. <strong>反向传播要怎么处理？</strong></h4>
+<ul>
+<li>归一化涉及除法和平方，链式法则复杂</li>
+<li>γ 和 β 的梯度如何计算？</li>
+<li>对输入的梯度是否能用链式求导？</li>
+</ul>
+<hr>
+<h3 id="总结你需要自己实现或思考的组件"><a class="markdownIt-Anchor" href="#总结你需要自己实现或思考的组件"></a> 📌 总结你需要自己实现或思考的组件：</h3>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>是否必须</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>均值与方差计算</td>
+<td>✅</td>
+<td>按 batch / 通道计算</td>
+</tr>
+<tr>
+<td>归一化</td>
+<td>✅</td>
+<td><code>x_norm = (x - mean) / sqrt(var+ε)</code></td>
+</tr>
+<tr>
+<td>γ 和 β 参数</td>
+<td>✅</td>
+<td>可学习参数，用于恢复分布</td>
+</tr>
+<tr>
+<td>训练/推理切换机制</td>
+<td>✅</td>
+<td>使用 batch 统计 or 滑动平均值</td>
+</tr>
+<tr>
+<td>backward</td>
+<td>✅</td>
+<td>计算输入、γ、β 的梯度</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<blockquote>
+<h3 id="核心思路指南maxpooling-实现"><a class="markdownIt-Anchor" href="#核心思路指南maxpooling-实现"></a> 🧠 核心思路指南：MaxPooling 实现</h3>
+<h4 id="1-操作对象是什么"><a class="markdownIt-Anchor" href="#1-操作对象是什么"></a> 1. <strong>操作对象是什么？</strong></h4>
+<ul>
+<li>输入通常是一个二维或三维矩阵（如单通道或多通道 feature map）。</li>
+<li>你需要按固定窗口（例如 2×2 或 3×3）滑动，提取每个窗口的最大值。</li>
+</ul>
+<hr>
+<h4 id="2-滑动的方式"><a class="markdownIt-Anchor" href="#2-滑动的方式"></a> 2. <strong>滑动的方式？</strong></h4>
+<ul>
+<li>核心概念是「窗口大小」和「步长（stride）」。</li>
+<li>每次从输入矩阵中裁剪一个小块窗口，沿着行/列按 stride 移动。</li>
+<li>边缘处理策略是否允许溢出窗口？是否需要 padding？</li>
+</ul>
+<hr>
+<h4 id="3-提取什么信息"><a class="markdownIt-Anchor" href="#3-提取什么信息"></a> 3. <strong>提取什么信息？</strong></h4>
+<ul>
+<li>每个滑动窗口中提取一个值（最大值），形成输出矩阵中的一个元素。</li>
+<li>输出矩阵的大小可通过公式推导得到（由输入大小、窗口大小、stride 决定）。</li>
+</ul>
+<hr>
+<h4 id="4-输出结果结构"><a class="markdownIt-Anchor" href="#4-输出结果结构"></a> 4. <strong>输出结果结构？</strong></h4>
+<ul>
+<li>如果输入是二维矩阵 → 输出也是二维；</li>
+<li>如果输入是多通道（如 [C, H, W]） → 每个通道独立池化，输出保持通道数不变。</li>
+</ul>
+<hr>
+<h4 id="5-如何组织代码结构"><a class="markdownIt-Anchor" href="#5-如何组织代码结构"></a> 5. <strong>如何组织代码结构？</strong></h4>
+<ul>
+<li>一个通用函数 / 类，支持参数：
+<ul>
+<li><code>kernel_size</code></li>
+<li><code>stride</code></li>
+<li><code>padding</code>（可选）</li>
+</ul>
+</li>
+<li>建议按“逐通道处理”和“窗口遍历”两个层级设计逻辑。</li>
+</ul>
+<hr>
+<h4 id="6-可选进阶功能"><a class="markdownIt-Anchor" href="#6-可选进阶功能"></a> 6. <strong>可选进阶功能</strong></h4>
+<ul>
+<li>池化位置索引记录（用于反向传播 / Unpooling）</li>
+<li>实现 Average Pooling 作为对照</li>
+<li>支持 batch 输入维度（例如 [N, C, H, W]）</li>
+</ul>
+</blockquote>
+<h1 id="cpp_dl"><a class="markdownIt-Anchor" href="#cpp_dl"></a> CPP_DL</h1>
+<blockquote>
+<h3 id="初级巩固类构建积木块"><a class="markdownIt-Anchor" href="#初级巩固类构建积木块"></a> ✅ <strong>初级巩固类（构建积木块）</strong></h3>
+<ol>
+<li><strong>手写 ReLU / Sigmoid / Tanh 等激活函数</strong>
+<ul>
+<li>实现 forward 和 backward（反向传播）</li>
+<li>加深函数微分和链式法则的理解</li>
+</ul>
+</li>
+<li><strong>手写 MaxPooling / AvgPooling 层</strong>
+<ul>
+<li>包括 forward 和反向传播（对位置进行追踪）</li>
+</ul>
+</li>
+<li><strong>手写 Linear (全连接层) + Softmax + CrossEntropy</strong>
+<ul>
+<li>和你已有的 Conv 组合起来，构建 MLP</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="中级组合类搭建小模型"><a class="markdownIt-Anchor" href="#中级组合类搭建小模型"></a> 🔄 <strong>中级组合类（搭建小模型）</strong></h3>
+<ol>
+<li><strong>实现简单的 MLP（多层感知机）进行分类任务</strong>
+<ul>
+<li>用自己实现的 Linear + ReLU + Softmax</li>
+</ul>
+</li>
+<li><strong>实现简化版的 CNN</strong>
+<ul>
+<li>使用你自己写的 Conv + Pooling + Linear，训练 MNIST 手写数字（可以从 CSV 数据加载开始）</li>
+</ul>
+</li>
+<li><strong>手写一个计算图引擎（自动求导）</strong>
+<ul>
+<li>类似 PyTorch 的 autograd：支持前向 + 反向传播（Tensor + Node + backward）</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="进阶项目模仿框架"><a class="markdownIt-Anchor" href="#进阶项目模仿框架"></a> 📦 <strong>进阶项目（模仿框架）</strong></h3>
+<ol>
+<li><strong>手写简易的深度学习框架 miniDNN</strong>
+<ul>
+<li>模仿 PyTorch 的结构，模块化设计：<code>Tensor</code> 类、<code>Layer</code> 类、<code>Model</code> 类</li>
+<li>支持动态图 / 静态图、自动求导、优化器等</li>
+</ul>
+</li>
+<li><strong>实现 YOLO 输出解码 + 后处理（Anchor解码 + Sigmoid + NMS）</strong>
+<ul>
+<li>模拟实际输出张量解码流程，如 <code>[N, 13,13,3,85]</code> 解析</li>
+</ul>
+</li>
+<li><strong>用 C++ 推理一个 ONNX 模型（如 ResNet18）</strong>
+<ul>
+<li>不依赖第三方框架，纯手写 Tensor 运算 + 模型结构 + 权重加载</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h3 id="挑战类偏实际落地"><a class="markdownIt-Anchor" href="#挑战类偏实际落地"></a> 🧠 <strong>挑战类（偏实际落地）</strong></h3>
+<ol>
+<li><strong>用 C++ 和 OpenCV 实现简易目标检测系统</strong></li>
+</ol>
+<ul>
+<li>读取视频帧 + 推理（NMS + 解码）+ 绘制结果</li>
+<li>可以用你自己的 NMS 和解码模块</li>
+</ul>
+<ol>
+<li><strong>实现简化版 YOLOv3/YOLOv5 推理模块</strong></li>
+</ol>
+<ul>
+<li>输入图片，输出检测框（用你写的 Conv、NMS）</li>
+<li>加载预训练的权重文件（比如从 <code>.weights</code> 解析）</li>
+</ul>
+<ol>
+<li><strong>移植 C++ 代码到嵌入式平台（边缘设备）</strong></li>
+</ol>
+<ul>
+<li>比如使用 ARM 的板子，或 Jetson Nano 进行测试</li>
+</ul>
+<hr>
+<h3 id="建议学习路线"><a class="markdownIt-Anchor" href="#建议学习路线"></a> 💡 建议学习路线：</h3>
+<ul>
+<li>✅ 项目 1~3 巩固基础</li>
+<li>🔁 项目 4~6 做一个“可训练”的小网络</li>
+<li>📦 项目 7~9 构建框架级别认知</li>
+<li>🧠 项目 10~12 面向实际部署能力</li>
+</ul>
+</blockquote>
+<h2 id="优化"><a class="markdownIt-Anchor" href="#优化"></a> 优化</h2>
+<blockquote>
+<p>(base) PS F:\Cppdata\cpp_code\ctorch\build&gt; .\Debug\autograd.exe<br>
+iter: 0 z.data: 13<br>
+iter: 10 z.data: 0.0933579<br>
+iter: 20 z.data: 12.3269<br>
+iter: 30 z.data: 1.93872<br>
+iter: 40 z.data: 9.48611<br>
+iter: 50 z.data: 5.50273<br>
+iter: 60 z.data: 5.5404<br>
+iter: 70 z.data: 9.45205<br>
+iter: 80 z.data: 1.9659<br>
+iter: 90 z.data: 12.3092<br>
+x.data: -0.175315<br>
+y.data: -0.262973</p>
+<blockquote>
+<p>问题在于：</p>
+<ol>
+<li>
+<p>z.data的值在迭代过程中波动很大，没有稳定收敛</p>
+</li>
+<li>
+<p>最终x和y的值变成了负数，这显然不是我们期望的结果</p>
+</li>
+</ol>
+</blockquote>
+<blockquote></blockquote>
+</blockquote>
+<blockquote></blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/03/10/2025%E5%B9%B43%E6%9C%8810%E6%97%A5-C++-%E8%AE%B0%E5%BD%95/" data-id="cmgs67i4400014gv45xmiggsv" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/" rel="tag">C++</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2025年3月7日-loss汇总" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/03/06/2025%E5%B9%B43%E6%9C%887%E6%97%A5-loss%E6%B1%87%E6%80%BB/" class="article-date">
+  <time class="post-time" datetime="2025-03-06T04:44:46.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">06</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/03/06/2025%E5%B9%B43%E6%9C%887%E6%97%A5-loss%E6%B1%87%E6%80%BB/">2025年3月7日 loss汇总</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/03/06/2025%E5%B9%B43%E6%9C%887%E6%97%A5-loss%E6%B1%87%E6%80%BB/" data-id="cm8q1tfhy001cpcv43gu2ejcs" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-2025年3月6日-多尺度特征" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -678,196 +1860,6 @@
 
 
   
-    <article id="post-2025年2月14日-推理框架2" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/02/13/2025%E5%B9%B42%E6%9C%8814%E6%97%A5-%E6%8E%A8%E7%90%86%E6%A1%86%E6%9E%B62/" class="article-date">
-  <time class="post-time" datetime="2025-02-13T14:12:11.000Z" itemprop="datePublished">
-    <span class="post-month">2月</span><br/>
-    <span class="post-day">13</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/02/13/2025%E5%B9%B42%E6%9C%8814%E6%97%A5-%E6%8E%A8%E7%90%86%E6%A1%86%E6%9E%B62/">2025年2月14日 推理框架2——MNN</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="mnn"><a class="markdownIt-Anchor" href="#mnn"></a> MNN</h1>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/02/13/2025%E5%B9%B42%E6%9C%8814%E6%97%A5-%E6%8E%A8%E7%90%86%E6%A1%86%E6%9E%B62/" data-id="cm8q1tfhm000npcv4gkf71mcg" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl%E3%80%81infer/" rel="tag">dl、infer</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2025年2月13日-推理框架" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/02/13/2025%E5%B9%B42%E6%9C%8813%E6%97%A5-%E6%8E%A8%E7%90%86%E6%A1%86%E6%9E%B6/" class="article-date">
-  <time class="post-time" datetime="2025-02-13T06:43:20.000Z" itemprop="datePublished">
-    <span class="post-month">2月</span><br/>
-    <span class="post-day">13</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/02/13/2025%E5%B9%B42%E6%9C%8813%E6%97%A5-%E6%8E%A8%E7%90%86%E6%A1%86%E6%9E%B6/">2025年2月13日 推理框架1-OpenVINO</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="openvino"><a class="markdownIt-Anchor" href="#openvino"></a> OpenVINO</h2>
-<h2 id="introduce"><a class="markdownIt-Anchor" href="#introduce"></a> Introduce</h2>
-<h3 id="openvino-工具"><a class="markdownIt-Anchor" href="#openvino-工具"></a> OpenVINO 工具</h3>
-<ul>
-<li><a target="_blank" rel="noopener" href="https://github.com/openvinotoolkit/nncf">神经网络压缩框架 （NNCF）</a> - 高级模型优化技术，包括量化、滤波器修剪、二值化和稀疏性。</li>
-<li><a target="_blank" rel="noopener" href="https://github.com/openvinotoolkit/openvino.genai">GenAI 存储库</a>和 <a target="_blank" rel="noopener" href="https://github.com/openvinotoolkit/openvino_tokenizers">OpenVINO Tokenizers</a> - 用于开发和优化生成式 AI 应用程序的资源和工具。</li>
-<li><a target="_blank" rel="noopener" href="https://github.com/openvinotoolkit/model_server">OpenVINO™ 模型服务器 （OVMS）</a> - 一种可扩展的高性能解决方案，用于为针对 Intel 架构优化的模型提供服务。</li>
-<li><a target="_blank" rel="noopener" href="https://geti.intel.com/">Intel® Geti™</a> - 适用于计算机视觉用例的交互式视频和图像注释工具。</li>
-</ul>
-<h3 id="如何优化的"><a class="markdownIt-Anchor" href="#如何优化的"></a> 如何优化的</h3>
-<img src="/2025/02/13/2025%E5%B9%B42%E6%9C%8813%E6%97%A5-%E6%8E%A8%E7%90%86%E6%A1%86%E6%9E%B6/image-20250213215109749.png" alt="image-20250213215109749"> 
-<ol>
-<li>模型压缩、层融合（Layer Fusion）、量化（Quantization）等技术优化模型</li>
-<li>自动利用硬件加速特性</li>
-</ol>
-<h2 id="workflow"><a class="markdownIt-Anchor" href="#workflow"></a> Workflow</h2>
-<p><img src="/2025/02/13/2025%E5%B9%B42%E6%9C%8813%E6%97%A5-%E6%8E%A8%E7%90%86%E6%A1%86%E6%9E%B6/image-20250213214620596.png" alt></p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">训练模型 (TF/PyTorch) → 转换为 IR → 优化 → 部署到 CPU/GPU/VPU → 推理 → 性能调优</span><br></pre></td></tr></table></figure>
-<p>Openvino整体框架为：<strong>Openvino前端→ Plugin中间层→ Backend后端</strong></p>
-<img src="/2025/02/13/2025%E5%B9%B42%E6%9C%8813%E6%97%A5-%E6%8E%A8%E7%90%86%E6%A1%86%E6%9E%B6/image-20250213220750908.png" alt="image-20250213220750908" style="zoom:50%;">
-<h2 id="code"><a class="markdownIt-Anchor" href="#code"></a> Code</h2>
-<p>Python：<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_44613415/article/details/143507060">https://blog.csdn.net/weixin_44613415/article/details/143507060</a></p>
-<p>​	<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_38739735/article/details/137099211=">https://blog.csdn.net/weixin_38739735/article/details/137099211=</a></p>
-<p>C：<a target="_blank" rel="noopener" href="https://blog.csdn.net/bjbz_cxy/article/details/130318904">https://blog.csdn.net/bjbz_cxy/article/details/130318904</a></p>
-<p>​	<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_44732054/article/details/140971622">https://blog.csdn.net/qq_44732054/article/details/140971622</a></p>
-<h1 id="ncnn"><a class="markdownIt-Anchor" href="#ncnn"></a> ncnn</h1>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/PHILICS7/article/details/125430079">https://blog.csdn.net/PHILICS7/article/details/125430079</a></p>
-<p>ncnn是腾讯优图推出的在手机端极致优化的高性能神经网络前向计架框架，适用于手机端的CPU计算且无需依赖第三方计算库，ncnn只用作推理而非边训练边推理。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/02/13/2025%E5%B9%B42%E6%9C%8813%E6%97%A5-%E6%8E%A8%E7%90%86%E6%A1%86%E6%9E%B6/" data-id="cm8q1tfhl000lpcv473w5empa" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl%E3%80%81infer/" rel="tag">dl、infer</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2025年1月25日-Segmentation模型" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/02/10/2025%E5%B9%B41%E6%9C%8825%E6%97%A5-Segmentation%E6%A8%A1%E5%9E%8B/" class="article-date">
-  <time class="post-time" datetime="2025-02-10T07:29:02.000Z" itemprop="datePublished">
-    <span class="post-month">2月</span><br/>
-    <span class="post-day">10</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/02/10/2025%E5%B9%B41%E6%9C%8825%E6%97%A5-Segmentation%E6%A8%A1%E5%9E%8B/">2025年1月25日 Segmentation模型</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="segmentation"><a class="markdownIt-Anchor" href="#segmentation"></a> Segmentation</h1>
-<h2 id="unet"><a class="markdownIt-Anchor" href="#unet"></a> UNET</h2>
-<img src="/2025/02/10/2025%E5%B9%B41%E6%9C%8825%E6%97%A5-Segmentation%E6%A8%A1%E5%9E%8B/image-20250105155647634.png" alt="image-20250105155647634" style="zoom:33%;"> 
-<h3 id="u2net"><a class="markdownIt-Anchor" href="#u2net"></a> U2NET</h3>
-<p>SOD任务</p>
-<p><img src="/2025/02/10/2025%E5%B9%B41%E6%9C%8825%E6%97%A5-Segmentation%E6%A8%A1%E5%9E%8B/image-20250105155624697.png" alt="image-20250105155624697" style="zoom:50%;"> 整体</p>
-<p><img src="/2025/02/10/2025%E5%B9%B41%E6%9C%8825%E6%97%A5-Segmentation%E6%A8%A1%E5%9E%8B/image-20250105155734798.png" alt="image-20250105155734798" style="zoom: 33%;"> 小块</p>
-<h2 id="sam"><a class="markdownIt-Anchor" href="#sam"></a> SAM</h2>
-<p><img src="https://github.com/facebookresearch/segment-anything/raw/main/assets/model_diagram.png?raw=true" alt="SAM design"></p>
-<p><img src="/2025/02/10/2025%E5%B9%B41%E6%9C%8825%E6%97%A5-Segmentation%E6%A8%A1%E5%9E%8B/image-20250107134550384.png" alt="image-20250107134550384"></p>
-<img src="/2025/02/10/2025%E5%B9%B41%E6%9C%8825%E6%97%A5-Segmentation%E6%A8%A1%E5%9E%8B/image-20250107134129164.png" alt="image-20250107134129164" style="zoom: 50%;">
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/02/10/2025%E5%B9%B41%E6%9C%8825%E6%97%A5-Segmentation%E6%A8%A1%E5%9E%8B/" data-id="cm8q1tfhf000fpcv4fgiq10pj" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/model/" rel="tag">model</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -912,9 +1904,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>164</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>167</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>43</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>44</strong><br>标签</div></a>
     </div>
 
 

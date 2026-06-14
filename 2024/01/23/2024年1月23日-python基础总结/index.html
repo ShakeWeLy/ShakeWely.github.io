@@ -17,7 +17,7 @@
 <meta property="og:image" content="https://shakewely.github.io/2024/01/23/2024%E5%B9%B41%E6%9C%8823%E6%97%A5-python%E5%9F%BA%E7%A1%80%E6%80%BB%E7%BB%93/image-20250630224506782.png">
 <meta property="og:image" content="https://pic1.zhimg.com/70/v2-226c020e54407d7067a2abe194f444d8_1440w.image?source=172ae18b&biz_tag=Post">
 <meta property="article:published_time" content="2024-01-23T06:00:53.000Z">
-<meta property="article:modified_time" content="2026-05-17T13:27:38.599Z">
+<meta property="article:modified_time" content="2026-06-10T05:47:48.836Z">
 <meta property="article:author" content="Weakliy">
 <meta property="article:tag" content="python">
 <meta name="twitter:card" content="summary">
@@ -53,9 +53,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>164</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>167</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>43</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>44</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -267,6 +267,30 @@
 <p>如果init是空的</p>
 <p>from mypackage import Core  # ❌ 报错：找不到 Core<br>
 from mypackage import utils  # ✅ OK，因为 utils 是个模块</p>
+</blockquote>
+<h2 id="赋值变量"><a class="markdownIt-Anchor" href="#赋值变量"></a> 赋值变量</h2>
+<blockquote>
+<p>不是浅拷贝，也不是深拷贝 — <code>result_frame = frame</code> 只是引用赋值（两个变量指向同一块 <code>numpy</code> 数组）。</p>
+<h3 id="实际会发生什么"><a class="markdownIt-Anchor" href="#实际会发生什么"></a> 实际会发生什么</h3>
+<ol>
+<li><code>cv2.putText(result_frame, ...)</code> 是原地修改<br>
+OpenCV 会直接改传入数组的像素，所以 <code>putText</code> 之后 <code>frame</code> 上也会有文字（和 <code>result_frame</code> 是同一张图）。</li>
+<li><code>append_depth_to_result_frame</code> 可能换一张新图<br>
+有深度且 <code>show_color_and_depth=True</code> 时，内部用 <code>np.hstack</code> 拼接，会新建数组：</li>
+</ol>
+<p>deep_detect_utils.pyLines 180-180</p>
+<p>​        return np.hstack([color_bgr, depth_bgr])</p>
+<p>此时 <code>result_frame</code> 指向拼接后的新图；<code>frame</code> 仍指向原彩色图，但上面已经有 <code>putText</code> 画过的字。</p>
+<ol>
+<li>没有深度可拼时<br>
+<code>append_depth_to_result_frame</code> 直接 <code>return result_frame</code>，仍是同一块被 <code>putText</code> 改过的数组。</li>
+</ol>
+<h3 id="为什么要写-result_frame-frame"><a class="markdownIt-Anchor" href="#为什么要写-result_frame-frame"></a> 为什么要写 <code>result_frame = frame</code></h3>
+<p>主要是给后面 <code>putText</code> / <code>append_depth_to_result_frame</code> 一个“输出帧”变量名，和 fruit processor 写法一致；本身并不复制数据。</p>
+<ul>
+<li><code>plot_debug=False</code>：走 <code>result_frame = frame</code>，原样返回，不会画。</li>
+<li><code>plot_debug=True</code>：会画，且画在 <code>frame</code> 本体上（除非后面 <code>hstack</code> 换了新数组）。</li>
+</ul>
 </blockquote>
 <h2 id="class"><a class="markdownIt-Anchor" href="#class"></a> class</h2>
 <h3 id="1-成员函数的变量-和成员变量"><a class="markdownIt-Anchor" href="#1-成员函数的变量-和成员变量"></a> 1 成员函数的变量 和成员变量</h3>
@@ -1414,9 +1438,9 @@ from mypackage import utils  # ✅ OK，因为 utils 是个模块</p>
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>164</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>167</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>43</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>44</strong><br>标签</div></a>
     </div>
 
 

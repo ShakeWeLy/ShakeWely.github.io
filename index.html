@@ -43,9 +43,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>164</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>167</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>43</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>44</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -70,6 +70,517 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-2026年6月11日-cpp-learn" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/06/11/2026%E5%B9%B46%E6%9C%8811%E6%97%A5-cpp-learn/" class="article-date">
+  <time class="post-time" datetime="2026-06-11T12:13:02.000Z" itemprop="datePublished">
+    <span class="post-month">6月</span><br/>
+    <span class="post-day">11</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2026/06/11/2026%E5%B9%B46%E6%9C%8811%E6%97%A5-cpp-learn/">2026年6月11日 cpp learn</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>有了 GPU 支持，你可以进行 GPU 加速的计算：</p>
+<h3 id="1-编译支持-cuda-的-opencv"><a class="markdownIt-Anchor" href="#1-编译支持-cuda-的-opencv"></a> <strong>1. 编译支持 CUDA 的 OpenCV</strong></h3>
+<p>bash</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 检查 OpenCV 是否已支持 CUDA</span><br><span class="line">opencv_version=$(pkg-config --modversion opencv4)</span><br><span class="line">echo &quot;OpenCV version: $opencv_version&quot;</span><br><span class="line"></span><br><span class="line"># 检查 OpenCV 的 CUDA 支持（需要从源码编译带 CUDA 的版本）</span><br><span class="line">opencv_config=$(pkg-config --cflags opencv4)</span><br><span class="line">if echo &quot;$opencv_config&quot; | grep -q &quot;CUDA&quot;; then</span><br><span class="line">    echo &quot;OpenCV has CUDA support&quot;</span><br><span class="line">else</span><br><span class="line">    echo &quot;Current OpenCV does not have CUDA support (需要从源码编译)&quot;</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+<h2 id="2-安装nvcc"><a class="markdownIt-Anchor" href="#2-安装nvcc"></a> 2. 安装nvcc</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># 只安装核心 CUDA 工具，不安装有问题的组件</span><br><span class="line">sudo apt-get install -y --no-install-recommends cuda-compiler-12-4 cuda-libraries-dev-12-4</span><br><span class="line"></span><br><span class="line"># 验证</span><br><span class="line">/usr/local/cuda-12.4/bin/nvcc --version</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/06/11/2026%E5%B9%B46%E6%9C%8811%E6%97%A5-cpp-learn/" data-id="cmqdpw1oo0000rgv40pdt05q0" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2026年6月9日-训练后量化" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/06/09/2026%E5%B9%B46%E6%9C%889%E6%97%A5-%E8%AE%AD%E7%BB%83%E5%90%8E%E9%87%8F%E5%8C%96/" class="article-date">
+  <time class="post-time" datetime="2026-06-09T14:41:22.000Z" itemprop="datePublished">
+    <span class="post-month">6月</span><br/>
+    <span class="post-day">09</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2026/06/09/2026%E5%B9%B46%E6%9C%889%E6%97%A5-%E8%AE%AD%E7%BB%83%E5%90%8E%E9%87%8F%E5%8C%96/">2026年6月9日 训练后量化</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近在搞量化相关的, 之前学习到的量化也只是皮毛. 什么是量化? 怎么量化?</p>
+<p>这篇用于深入理解和使用量化, 并进行结果分析</p>
+<h1 id="1-前言"><a class="markdownIt-Anchor" href="#1-前言"></a> 1 前言</h1>
+<h2 id="11-量化"><a class="markdownIt-Anchor" href="#11-量化"></a> 1.1 量化</h2>
+<p>量化分为训练后量化(PTQ)和训练时量化(QAT)</p>
+<p><strong>PTQ</strong> 主要是针对模型压缩后,比如int8, 带来的精度损失进行微调. 具体流程是找出最合适的 <strong>Scale（缩放因子）</strong>，把 FP32 的浮点数安全地映射到 INT8 的整数范围（<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>−</mo><mn>128</mn></mrow><annotation encoding="application/x-tex">-128</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">−</span><span class="mord">1</span><span class="mord">2</span><span class="mord">8</span></span></span></span> 到 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>127</mn></mrow><annotation encoding="application/x-tex">127</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">2</span><span class="mord">7</span></span></span></span>）。用极少量的<strong>校准数据,</strong> 提高统计学方法挽回精度的损失.</p>
+<img src="/2026/06/09/2026%E5%B9%B46%E6%9C%889%E6%97%A5-%E8%AE%AD%E7%BB%83%E5%90%8E%E9%87%8F%E5%8C%96/image-20260611084854824.png" alt="image-20260611084854824" style="zoom:50%;">
+<p><strong>QAT</strong> 主要是对量化后得模型进行微调,找出最合适的 <strong>Scale（缩放因子）</strong>, 相当于预训练模型微调训练</p>
+<p>量化的本质就是<strong>寻找最优映射（Scale）并尽可能减少信息损失</strong>：</p>
+<ul>
+<li><strong>PTQ：</strong> 考前不复习，直接用统计学公式<strong>盲猜</strong>一个最优鞋码（Scale），几分钟搞定。</li>
+<li><strong>QAT：</strong> 穿上鞋去操场上<strong>拉练几个大项（跑梯度下降训练）</strong>，让鞋码（Scale）和脚（Weights）磨合到最完美的契合度。</li>
+</ul>
+<p>但 QAT 比 PTQ 还多做了一件事：<strong>对抗“舍入误差”（Rounding Error）</strong>。</p>
+<p>把浮点数变成整数，不可避免地要进行四舍五入。</p>
+<ul>
+<li><strong>PTQ 极其死板：</strong> <code>0.4</code> 必须变 <code>0</code>，<code>0.6</code> 必须变 <code>1</code>。</li>
+<li><strong>QAT 极其聪明：</strong> 通过神经网络训练，模型可能会发现，在当前这一层，把 <code>0.4</code> 强制变成 <code>1</code> 反而能让后面的矩阵乘法结果更接近原版。这种“不讲理”的微调能力，是纯统计学的 PTQ 绝对做不到的。</li>
+</ul>
+<h1 id="2-pqt"><a class="markdownIt-Anchor" href="#2-pqt"></a> 2 PQT</h1>
+<h2 id="21-具体流程"><a class="markdownIt-Anchor" href="#21-具体流程"></a> 2.1 具体流程</h2>
+<p>普通 PTQ 的目标是找出最合适的 <strong>Scale（缩放因子）</strong>，把 FP32 的浮点数安全地映射到 INT8 的整数范围（<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>−</mo><mn>128</mn></mrow><annotation encoding="application/x-tex">-128</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">−</span><span class="mord">1</span><span class="mord">2</span><span class="mord">8</span></span></span></span> 到 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>127</mn></mrow><annotation encoding="application/x-tex">127</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">2</span><span class="mord">7</span></span></span></span>）。它的具体步骤如下：</p>
+<h3 id="1-权重weights直接量化"><a class="markdownIt-Anchor" href="#1-权重weights直接量化"></a> 1. 权重（Weights）直接量化</h3>
+<p>模型的权重（比如卷积层、全连接层的参数）是固定的、静态的。</p>
+<ul>
+<li>工具（如 TensorRT 或 ModelOpt）会直接扫描每一层权重的最大值（Max）和最小值（Min）。</li>
+<li>映射公式非常直接：把这个最大绝对值直接映射到 INT8 的 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>127</mn></mrow><annotation encoding="application/x-tex">127</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">2</span><span class="mord">7</span></span></span></span>。</li>
+<li><strong>耗时：</strong> 几秒钟，纯粹的矩阵运算。</li>
+</ul>
+<h3 id="2-激活值activations校准calibration"><a class="markdownIt-Anchor" href="#2-激活值activations校准calibration"></a> 2. 激活值（Activations）校准（Calibration）</h3>
+<p>这是普通 PTQ 最关键的一步。网络的输入和中间层的输出（激活值）是<strong>动态的</strong>，输入不同的图片或文本，中间层的数值范围大不相同。</p>
+<ul>
+<li><strong>准备校准集：</strong> 抽取极少量的真实数据（通常 <strong>32 ~ 128 个样本</strong>，不需要标签）。</li>
+<li><strong>前向跑数据（Forward Pass）：</strong> 让这些数据在 FP32 模型里跑一次，工具会像“监控摄像头”一样，记录下每一层激活值数据的分布直方图。</li>
+<li><strong>计算激活值 Scale：</strong> 因为激活值可能存在极端的离群点（Outliers），如果直接按最大值截断，会导致大部分正常数据的精度严重压缩。所以工具会使用一<strong>些高级统计学算法</strong>来找到最佳截断点Scale：
+<ul>
+<li><strong>KL 散度（KLD / Entropy）：</strong> 寻找一个截断点，使得量化前后的信息熵（数据分布）损失最小（TensorRT 默认视觉模型算法）。</li>
+<li><strong>Percentile（分位数）：</strong> 比如丢弃全网络最大的 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0.01</mn><mi mathvariant="normal">%</mi></mrow><annotation encoding="application/x-tex">0.01\%</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.80556em;vertical-align:-0.05556em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">0</span><span class="mord">1</span><span class="mord">%</span></span></span></span> 的数据，只用 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>99.99</mn><mi mathvariant="normal">%</mi></mrow><annotation encoding="application/x-tex">99.99\%</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.80556em;vertical-align:-0.05556em;"></span><span class="mord">9</span><span class="mord">9</span><span class="mord">.</span><span class="mord">9</span><span class="mord">9</span><span class="mord">%</span></span></span></span> 的最大值作为截断范围。</li>
+<li><strong>MinMax：</strong> 简单粗暴，直接用统计到的绝对最大值。</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-合并与导出"><a class="markdownIt-Anchor" href="#3-合并与导出"></a> 3. 合并与导出</h3>
+<p>把计算好的“权重 INT8 矩阵”和“每一层激活值的 Scale 缩放表”打包。</p>
+<p>交给 TensorRT 后，推理时数据一进来，就乘以对应的 Scale 变成 INT8 进行硬件加速，出结果时再除以 Scale 变回浮点数。</p>
+<h1 id="3-qat"><a class="markdownIt-Anchor" href="#3-qat"></a> 3 QAT</h1>
+<h2 id="31-具体流程"><a class="markdownIt-Anchor" href="#31-具体流程"></a> 3.1 具体流程</h2>
+<h3 id="1-自动插入伪量化节点fake-quantization"><a class="markdownIt-Anchor" href="#1-自动插入伪量化节点fake-quantization"></a> 1. 自动插入“伪量化”节点（Fake-Quantization）</h3>
+<p>你不需要手动去改写 PyTorch 的网络层。ModelOpt 可以自动扫描你的 PyTorch 模型，在卷积层、全连接层、激活函数等地方自动插入 <code>FakeQuantize</code> 节点。</p>
+<ul>
+<li><strong>原理：</strong> 在前向传播时，数据会被转换为低精度再转回高精度（模拟 INT8 的精度损失）；在反向传播时，正常的更新梯度。</li>
+</ul>
+<h3 id="2-校准与范围学习calibration-learnable-scales"><a class="markdownIt-Anchor" href="#2-校准与范围学习calibration-learnable-scales"></a> 2. 校准与范围学习（Calibration &amp; Learnable Scales）</h3>
+<p>量化最难的是确定“截断范围”（Scale）。ModelOpt 提供了多种算法：</p>
+<ul>
+<li>它可以在 QAT 开始前，通过少量数据进行<strong>校准（Calibration）</strong>，初始化一个比较好的量化范围。</li>
+<li>在 QAT 训练过程中，这个量化范围（Scale）会变成<strong>可学习的参数</strong>，随着网络权重一起优化，找到最完美的截断点。</li>
+</ul>
+<h2 id="32-伪量化节点"><a class="markdownIt-Anchor" href="#32-伪量化节点"></a> 3.2 伪量化节点</h2>
+<p>是:</p>
+<p>在 QAT（量化感知训练）期间，普通的 PyTorch 算子（比如卷积层）其实<strong>依然在用 FP32（32位浮点数）进行计算</strong>。</p>
+<blockquote></blockquote>
+<p>在前向传播和反向传播中分别扮演不同的角色：</p>
+<ul>
+<li>
+<p><strong>前向传播（Forward）—— 制造伤害（模拟误差）：</strong> 当一个完美的 FP32 浮点数（比如 <code>0.342178</code>）流经伪量化节点时，它会执行以下操作：</p>
+<ol>
+<li><strong>量化（Quantize）</strong>：根据当前的缩放因子（Scale），把它四舍五入变成 INT8 整数（比如 <code>87</code>）。</li>
+<li><strong>反量化（Dequantize）</strong>：立刻把这个 <code>87</code> 再乘回 Scale，变回 FP32 浮点数（比如 <code>0.339843</code>）。</li>
+</ol>
+<p>这个过程故意丢失了尾部的精度（<code>0.342178</code> 变成了 <code>0.339843</code>），这就叫<strong>量化噪声</strong>。后面的卷积层吃到的就是这个“带有噪声、被污染过”的输入。</p>
+</li>
+<li>
+<p><strong>反向传播（Backward）—— 绕过惩罚（传递梯度）：</strong> 当梯度传回来时，因为四舍五入函数（Round）的导数是 0，伪量化节点会使用一种叫 <strong>STE（Straight-Through Estimator，直通估计器）</strong> 的技术，直接假装什么都没发生，把后面的梯度<strong>原封不动地传过自己</strong>，让前面的层能够正常更新权重。</p>
+</li>
+</ul>
+<blockquote>
+<p>💡 <strong>总结它的目的</strong>：让模型在训练时，提前<strong>体验并适应</strong>未来部署到 INT8 硬件上时才会遇到的精度损失，从而在训练中自己调整权重来弥补这个损失。</p>
+</blockquote>
+<h4 id="️-原始的-fp32-结构"><a class="markdownIt-Anchor" href="#️-原始的-fp32-结构"></a> ➡️ 原始的 FP32 结构：</h4>
+<p>非常干净，输入和权重直接送进卷积层做矩阵乘法。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[输入 Activation (FP32)] ───┐</span><br><span class="line">                            ▼</span><br><span class="line">[权重 Weights (FP32)] ────&gt; [ Conv2d 算子 ] ───&gt; [输出 (FP32)]</span><br></pre></td></tr></table></figure>
+<h4 id="️-插入伪量化qdq后的-qat-结构"><a class="markdownIt-Anchor" href="#️-插入伪量化qdq后的-qat-结构"></a> ➡️ 插入伪量化（QDQ）后的 QAT 结构：</h4>
+<p>ModelOpt 会在权重（Weights）<strong>输入前，以及</strong>激活值（Activation/输入）进入算子前，硬生生插进两对 QDQ 节点：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[输入 Activation (FP32)] ──&gt; [ Quantize ] ──&gt; [ Dequantize ] ───┐</span><br><span class="line">                                                                 ▼</span><br><span class="line">[权重 Weights (FP32)] ────&gt; [ Quantize ] ──&gt; [ Dequantize ] ──&gt; [ Conv2d 算子 ] ──&gt; [输出 (FP32)]</span><br></pre></td></tr></table></figure>
+<p>如上图所示，原本一根线拉过去的计算，现在中间多出了好几个拦截点：</p>
+<ol>
+<li><strong>权重支路</strong>：原本静态的 Weight，现在每次前向传播前，都要先经过一套 <code>Q -&gt; DQ</code> 的洗礼，变成带有 INT8 误差的 FP32 权重，再送进 Conv2d。</li>
+<li><strong>特征图支路</strong>：上一层传过来的动态特征图，同样要经过 <code>Q -&gt; DQ</code> 节点。这两个节点里还包含着<strong>可以学习的 <code>Scale</code>（缩放因子）参数</strong>。</li>
+</ol>
+<h2 id="33-图融合"><a class="markdownIt-Anchor" href="#33-图融合"></a> 3.3 图融合</h2>
+<ol>
+<li>它会把 <code>Quantize</code> 和 <code>Dequantize</code> 剥离，只把里面训练好的 <code>Scale</code> 参数提取出来。</li>
+<li>它把夹在中间的 <code>Conv2d (FP32)</code> 物理替换为 NVIDIA Tensor Core 支持的 <strong><code>Conv2d (True INT8)</code></strong> 硬件指令。</li>
+<li>最终的物理结构变成了最纯粹的：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[输入 (INT8)] ───&gt; [ 真正的硬件级 INT8 Conv2d 算子 ] ───&gt; [输出 (INT8)]</span><br></pre></td></tr></table></figure>
+<h1 id="4-常见层"><a class="markdownIt-Anchor" href="#4-常见层"></a> 4 常见层</h1>
+<p><img src="/2026/06/09/2026%E5%B9%B46%E6%9C%889%E6%97%A5-%E8%AE%AD%E7%BB%83%E5%90%8E%E9%87%8F%E5%8C%96/image-20260610083715917.png" alt="image-20260610083715917"></p>
+<p>batch=3</p>
+<p><img src="/2026/06/09/2026%E5%B9%B46%E6%9C%889%E6%97%A5-%E8%AE%AD%E7%BB%83%E5%90%8E%E9%87%8F%E5%8C%96/image-20260610083805595.png" alt="image-20260610083805595"></p>
+<table>
+<thead>
+<tr>
+<th><strong>性能指标 (单张平均)</strong></th>
+<th><strong>模式 A：单张循环 (Batch=1)</strong></th>
+<th><strong>模式 B：批处理 (Batch=3)</strong></th>
+<th><strong>性能变化趋势</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>前处理 (Preprocess)</strong></td>
+<td>~0.97 ms</td>
+<td><strong>~1.35 ms</strong> <em>(剔除首包异常)</em></td>
+<td>略微上升 (+39%)</td>
+</tr>
+<tr>
+<td><strong>模型推理 (Inference)</strong></td>
+<td>~4.20 ms</td>
+<td><strong>~2.20 ms</strong> <em>(提升巨大)</em></td>
+<td><strong>缩短 47.6% (性能翻倍)</strong></td>
+</tr>
+<tr>
+<td><strong>后处理 (Postprocess)</strong></td>
+<td>~0.83 ms</td>
+<td><strong>~0.45 ms</strong> <em>(剔除首包异常)</em></td>
+<td><strong>缩短 45.8%</strong></td>
+</tr>
+<tr>
+<td><strong>单张总耗时 (Total)</strong></td>
+<td>~6.00 ms</td>
+<td><strong>~4.00 ms</strong></td>
+<td><strong>整体耗时缩短约 1/3</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="1-推理速度inference从-42ms-暴跌至-22ms"><a class="markdownIt-Anchor" href="#1-推理速度inference从-42ms-暴跌至-22ms"></a> 1. 推理速度（Inference）：从 4.2ms 暴跌至 2.2ms</h3>
+<ul>
+<li><strong>Batch=1 耗时（~4.2ms）</strong>：由于每次只喂一张图，RTX 3060 的 CUDA 核心（Stream Processors）根本吃不饱，GPU 频繁在“接收单张数据 -&gt; 计算 -&gt; 返回”之间切换，硬件利用率低下。</li>
+<li><strong>Batch=3 耗时（~2.2ms，单张平摊）</strong>：虽然 Batch=3 时，整组（3张图）的总推理耗时大概是 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2.2</mn><mo>×</mo><mn>3</mn><mo>=</mo><mn>6.6</mn><mtext> ms</mtext></mrow><annotation encoding="application/x-tex">2.2 \times 3 = 6.6\text{ ms}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">2</span><span class="mord">.</span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">6</span><span class="mord">.</span><span class="mord">6</span><span class="mord text"><span class="mord"> ms</span></span></span></span></span>，但是由于 3 张图的张量在显存中连续，TensorRT 的矩阵乘法算子可以<strong>并行同时计算 3 张图的特征图</strong>。平摊到每张图上，推理时间直接斩半。</li>
+</ul>
+<h3 id="2-任务退化警告warning-unable-to-automatically-guess-model-task"><a class="markdownIt-Anchor" href="#2-任务退化警告warning-unable-to-automatically-guess-model-task"></a> 2. 任务退化警告：<code>WARNING: Unable to automatically guess model task</code></h3>
+<p>在第二段日志开头出现了一个关键警告：</p>
+<blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">WARNING Unable to automatically guess model task, assuming &#x27;task=detect&#x27;.</span><br></pre></td></tr></table></figure>
+</blockquote>
+<ul>
+<li><strong>原因</strong>：由于你使用的是纯粹的 <code>.engine</code> 文件且没有通过代码显式指定 <code>task</code> 属性，Ultralytics 框架无法确定它是分割（segment）还是检测（detect），于是<strong>默认退化成了目标检测（detect）</strong>。</li>
+<li><strong>影响</strong>：看两段日志的检测输出就能发现端倪：
+<ul>
+<li><strong>Batch=1 时（正确识别为分割）</strong>：能检测出 <code>carrots</code>、<code>eggplants</code> 等非常复杂的长尾类别（比如 6 carrots, 4 eggplants）。</li>
+<li><strong>Batch=3 时（退化为目标检测）</strong>：检测出来的类别变成了大类：<code>apples</code>, <code>oranges</code>, <code>pear_greens</code>。并且<strong>后处理时间（Postprocess）从 0.83ms 骤降到 0.45ms</strong>，就是因为目标检测的后处理计算量远小于实例分割的 Mask 生成。</li>
+</ul>
+</li>
+</ul>
+<h3 id="3-首包启动开销warmup-artifact"><a class="markdownIt-Anchor" href="#3-首包启动开销warmup-artifact"></a> 3. 首包启动开销（Warmup Artifact）</h3>
+<p>观察 Batch=3 的第一组输出：</p>
+<blockquote>
+<p><code>Speed: 7.9ms preprocess, 2.6ms inference, 3.3ms postprocess</code> 其前处理（7.9ms）和后处理（3.3ms）明显偏高。这是因为 TensorRT 在接收到真正的数据进行第一次推理时，需要向操作系统申请显存（图中显存占用了 <strong>2404 MiB</strong>）、初始化 <code>IExecutionContext</code> 上下文并建立内存映射。从第二组开始（前处理 1.3ms，后处理 0.4ms），速度就进入了稳定的全速状态。</p>
+</blockquote>
+<p>第一段是<strong>修正了任务类型（恢复为了真正的实例分割 <code>task=segment</code>）后的 TensorRT INT8 引擎</strong>输出，第二段是原生的 <strong>PyTorch FP16/FP32 模型 (<code>.pt</code>)</strong> 输出。</p>
+<table>
+<thead>
+<tr>
+<th><strong>指标 (单张平均)</strong></th>
+<th><strong>PyTorch 原生 (.pt)</strong></th>
+<th><strong>TensorRT INT8 (.engine)</strong></th>
+<th><strong>性能倍数 / 优化幅度</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>前处理 (Preprocess)</strong></td>
+<td>~1.25 ms</td>
+<td><strong>~1.15 ms</strong></td>
+<td>基本持平 (TRT 略快)</td>
+</tr>
+<tr>
+<td><strong>模型推理 (Inference)</strong></td>
+<td>~5.50 ms</td>
+<td><strong>~1.60 ms</strong></td>
+<td><strong>TRT 快了 3.44 倍 (缩短 71%)</strong></td>
+</tr>
+<tr>
+<td><strong>后处理 (Postprocess)</strong></td>
+<td>~1.65 ms</td>
+<td><strong>~1.25 ms</strong></td>
+<td><strong>TRT 快了 1.32 倍 (缩短 24%)</strong></td>
+</tr>
+<tr>
+<td><strong>单张总耗时 (Total)</strong></td>
+<td>~8.40 ms</td>
+<td><strong>~4.00 ms</strong></td>
+<td><strong>整体耗时缩短一半以上</strong></td>
+</tr>
+<tr>
+<td><strong>理论吞吐量 (FPS)</strong></td>
+<td>~119 FPS</td>
+<td><strong>~250 FPS</strong></td>
+<td><strong>吞吐量直接翻倍</strong></td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">0: 480x640 3 apples, 2 carrots, 1 eggplant, 4 pear_greens, 1.6ms</span><br><span class="line">1: 480x640 2 apples, 1 carrot, 1 eggplant, 4 pear_greens, 1.6ms</span><br><span class="line">2: 480x640 2 apples, 1 carrot, 1 eggplant, 4 pear_greens, 1.6ms</span><br><span class="line">Speed: 1.1ms preprocess, 1.6ms inference, 1.1ms postprocess per image at shape (1, 3, 480, 640)</span><br><span class="line">Saved: original_160513236_jpg.rf.eOSvSN7TK8DmQRqOq30B.jpg</span><br><span class="line">Saved: original_160514954_jpg.rf.uhI9bJenX55KMSkIf7vJ.jpg</span><br><span class="line">Saved: original_160901413_jpg.rf.fFTSMecLjmWxbfxQwQPp.jpg</span><br><span class="line"></span><br><span class="line">0: 480x640 3 apples, 1 carrot, 1 eggplant, 4 pear_greens, 1.6ms</span><br><span class="line">1: 480x640 2 apples, 1 carrot, 1 eggplant, 4 pear_greens, 1.6ms</span><br><span class="line">2: 480x640 3 apples, 1 carrot, 1 eggplant, 4 pear_greens, 1.6ms</span><br><span class="line">Speed: 1.2ms preprocess, 1.6ms inference, 1.4ms postprocess per image at shape (1, 3, 480, 640)</span><br><span class="line">Saved: original_160903161_jpg.rf.yodYM7O1UrA5eFz8yY19.jpg</span><br><span class="line">Saved: original_160929619_jpg.rf.zqH80BHsWolhMpqezhcR.jpg</span><br><span class="line">Saved: original_160953247_jpg.rf.dU1vLVwvGOLYBMftTat9.jpg</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">0: 480x640 3 apples, 2 carrots, 1 eggplant, 4 pear_greens, 5.5ms</span><br><span class="line">1: 480x640 2 apples, 1 carrot, 1 eggplant, 4 pear_greens, 5.5ms</span><br><span class="line">2: 480x640 2 apples, 1 carrot, 1 eggplant, 4 pear_greens, 5.5ms</span><br><span class="line">Speed: 1.3ms preprocess, 5.5ms inference, 1.6ms postprocess per image at shape (1, 3, 480, 640)</span><br><span class="line">Saved: original_160513236_jpg.rf.eOSvSN7TK8DmQRqOq30B.jpg</span><br><span class="line">Saved: original_160514954_jpg.rf.uhI9bJenX55KMSkIf7vJ.jpg</span><br><span class="line">Saved: original_160901413_jpg.rf.fFTSMecLjmWxbfxQwQPp.jpg</span><br><span class="line"></span><br><span class="line">0: 480x640 2 apples, 1 carrot, 1 eggplant, 4 pear_greens, 5.5ms</span><br><span class="line">1: 480x640 2 apples, 1 carrot, 1 eggplant, 4 pear_greens, 5.5ms</span><br><span class="line">2: 480x640 3 apples, 1 carrot, 1 eggplant, 4 pear_greens, 5.5ms</span><br><span class="line">Speed: 1.2ms preprocess, 5.5ms inference, 1.7ms postprocess per image at shape (1, 3, 480, 640)</span><br><span class="line">Saved: original_160903161_jpg.rf.yodYM7O1UrA5eFz8yY19.jpg</span><br><span class="line">Saved: original_160929619_jpg.rf.zqH80BHsWolhMpqezhcR.jpg</span><br><span class="line">Saved: original_160953247_jpg.rf.dU1vLVwvGOLYBMftTat9.jpg</span><br></pre></td></tr></table></figure>
+<h2 id="二-核心差异深层分析"><a class="markdownIt-Anchor" href="#二-核心差异深层分析"></a> 二、 核心差异深层分析</h2>
+<h3 id="1-推理速度inference的断层式碾压55ms-vs-16ms"><a class="markdownIt-Anchor" href="#1-推理速度inference的断层式碾压55ms-vs-16ms"></a> 1. 推理速度（Inference）的断层式碾压（5.5ms vs 1.6ms）</h3>
+<p>这是本次对比的核心亮点。为什么 TensorRT 能够把推理时间压到不可思议的 <strong>1.6ms</strong>？</p>
+<ul>
+<li><strong>动态范围量化（INT8）</strong>：PyTorch 默认使用 <code>FP32</code>（32位浮点数）或 <code>FP16</code> 进行计算。而你的 TRT 引擎使用了 <code>INT8</code>（8位整数）。在显存体积和计算吞吐上，INT8 具有压倒性优势，RTX 3060 的 Tensor Cores 处理 INT8 矩阵乘法的速度远快于浮点数。</li>
+<li><strong>计算图融合（Graph Fusion）</strong>：PyTorch 在运行时是逐层调用 CUDA 核函数的。TensorRT 在编译阶段（你之前等的 155 秒）将 YOLO 里的 <code>Conv + BatchNorm + ReLU</code> 融合成了一个单一的算子，极大减少了显存与 GPU 寄存器之间的数据拷贝（Memory Bound 优化）。</li>
+<li><strong>核心选择（Kernel Selection）</strong>：TensorRT 针对你这块 RTX 3060 Laptop 显卡的硬件架构（Ampere 架构），在底层精选了最契合的底层 CUDA 算子。</li>
+</ul>
+<h3 id="2-后处理postprocess为什么变快了165ms-vs-125ms"><a class="markdownIt-Anchor" href="#2-后处理postprocess为什么变快了165ms-vs-125ms"></a> 2. 后处理（Postprocess）为什么变快了？（1.65ms vs 1.25ms）</h3>
+<ul>
+<li><strong>思考</strong>：后处理（如 NMS 非极大值抑制、Mask 原型系数相乘等）通常是在 CPU 或通过普通的 PyTorch 算子在 GPU 上跑的，为什么 TRT 也会变快？</li>
+<li><strong>原因</strong>：在第二阶段导出 ONNX 过程中，YOLO 的一部分后处理节点（甚至包括部分 Gather/Slice 边界处理）被转换成了高效的 ONNX/TRT 原生算子，或者通过 TensorRT 的编译进行了优化。数据从“模型结束”到“后处理开始”的交接更加紧凑，减少了 CPU/GPU 的同步等待时间。</li>
+</ul>
+<h3 id="3-数据一致性业务安全"><a class="markdownIt-Anchor" href="#3-数据一致性业务安全"></a> 3. 数据一致性（业务安全）</h3>
+<p>最让人欣慰的是数据的完全一致。例如：</p>
+<ul>
+<li>图片 01：<code>3 apples, 2 carrots, 1 eggplant, 4 pear_greens</code></li>
+<li>图片 02：<code>2 apples, 1 carrot, 1 eggplant, 4 pear_greens</code></li>
+</ul>
+<p>在两套引擎下<strong>数量和类别完全恒定</strong>。这证明在当前的水果实例分割场景下，<strong>TensorRT INT8 量化完全没有引发精度崩塌</strong>，你可以非常安全地在生产环境替换掉 <code>.pt</code> 模型。</p>
+<h1 id><a class="markdownIt-Anchor" href="#"></a> </h1>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/06/09/2026%E5%B9%B46%E6%9C%889%E6%97%A5-%E8%AE%AD%E7%BB%83%E5%90%8E%E9%87%8F%E5%8C%96/" data-id="cmqdpw1os0001rgv4de0u4xqz" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2026年6月9日-推理优化" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/06/09/2026%E5%B9%B46%E6%9C%889%E6%97%A5-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/" class="article-date">
+  <time class="post-time" datetime="2026-06-09T14:40:02.000Z" itemprop="datePublished">
+    <span class="post-month">6月</span><br/>
+    <span class="post-day">09</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2026/06/09/2026%E5%B9%B46%E6%9C%889%E6%97%A5-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/">2026年6月9日 推理优化</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="fruit-项目-ai-推理性能优化全景备忘录"><a class="markdownIt-Anchor" href="#fruit-项目-ai-推理性能优化全景备忘录"></a> Fruit 项目 AI 推理性能优化全景备忘录</h1>
+<p>本策划文档系统性汇总了 Fruit 项目在 <strong>AI 模型推理与数据流</strong> 上的全量优化项。涵盖已完成的基线构筑、刚刚定位并待实施的运行期重构，以及未来的模型层深度榨干方案。</p>
+<hr>
+<h2 id="一-已完成的基础优化第一阶段稳固基线"><a class="markdownIt-Anchor" href="#一-已完成的基础优化第一阶段稳固基线"></a> 一、 已完成的基础优化（第一阶段：稳固基线）</h2>
+<p><em>核心目标：消除高额的硬件连接与线程冷启动固定开销。</em></p>
+<h3 id="1-摄像头常驻打开"><a class="markdownIt-Anchor" href="#1-摄像头常驻打开"></a> 1. 摄像头常驻打开</h3>
+<ul>
+<li><strong>内容简介</strong>：将视频流拉取模块改为常驻守护线程，避免每次 API 请求时重新初始化硬件驱动和建立视频流连接，彻底消除了秒级的硬件唤醒延迟。</li>
+</ul>
+<h3 id="2-模型启动期预热-warmup"><a class="markdownIt-Anchor" href="#2-模型启动期预热-warmup"></a> 2. 模型启动期预热 (Warmup)</h3>
+<ul>
+<li><strong>内容简介</strong>：在系统初始化（<code>main.py</code>）阶段，使用哑数据（Dummy Data）提前触发 GPU 前向传播。规避了首次真实请求时，CUDA 引擎初始化和算子动态加载带来的首帧高延迟。</li>
+</ul>
+<h3 id="3-推理线程常驻"><a class="markdownIt-Anchor" href="#3-推理线程常驻"></a> 3. 推理线程常驻</h3>
+<ul>
+<li><strong>内容简介</strong>：构建长寿命的常驻推理线程池，避免在高频 API 请求下频繁创建、销毁 Python 线程所导致的系统上下文切换与 CPU 损耗。</li>
+</ul>
+<h3 id="4-模型推理复用池-model-hub"><a class="markdownIt-Anchor" href="#4-模型推理复用池-model-hub"></a> 4. 模型推理复用池 (Model Hub)</h3>
+<ul>
+<li><strong>内容简介</strong>：设计跨路径的模型单例复用机制。当不同的检测路径（<code>detection_path</code>）调用相同的底层模型时，共享内存与显存中的同一个模型实例，大幅降低了多路并发时的总显存占用。</li>
+</ul>
+<hr>
+<h2 id="二-刚刚发现并确认的优化第二阶段精细重构"><a class="markdownIt-Anchor" href="#二-刚刚发现并确认的优化第二阶段精细重构"></a> 二、 刚刚发现并确认的优化（第二阶段：精细重构）</h2>
+<p><em>核心目标：消灭运行期（Runtime）热路径上的对象重建、串行阻塞、无谓渲染与轮询抖动。</em></p>
+<h3 id="5-消除每请求配置更新与-processor-重建p0"><a class="markdownIt-Anchor" href="#5-消除每请求配置更新与-processor-重建p0"></a> 5. 消除每请求配置更新与 Processor 重建【P0】</h3>
+<ul>
+<li><strong>内容简介</strong>：重构 <code>target_detection.py</code>，绕过会触发文件锁（I/O 竞争）与重算相机内参的 <code>update_detector_config</code> 重型方法。改为在运行期<strong>原地（In-place）动态修改</strong> <code>target_classes</code> 属性，让“模型预热”的成果真正留存。</li>
+</ul>
+<h3 id="6-位置检测降帧与多帧-batch-推理优化p0"><a class="markdownIt-Anchor" href="#6-位置检测降帧与多帧-batch-推理优化p0"></a> 6. 位置检测降帧与多帧 Batch 推理优化【P0】</h3>
+<ul>
+<li><strong>内容简介</strong>：针对水果位置检测（Position）无需滑动窗口计数的特性，将 <code>reading_frames_count</code> 降为 <code>1</code>，消灭串行循环；或在必须多帧时，解耦深度配准逻辑，利用 YOLO 原生 Batch 一次性前向推理，将多帧延迟缩减至接近单帧。</li>
+</ul>
+<h3 id="7-帧获取由-sleep-轮询改为-condition-唤醒机制p2"><a class="markdownIt-Anchor" href="#7-帧获取由-sleep-轮询改为-condition-唤醒机制p2"></a> 7. 帧获取由 Sleep 轮询改为 Condition 唤醒机制【P2】</h3>
+<ul>
+<li><strong>内容简介</strong>：废除 <code>_get_last_frame</code> 中固定的 <code>time.sleep(0.05)</code> 盲等轮询。在 <code>annotated_hub</code> 写入新帧时引入 <code>threading.Condition</code> 信号通知（<code>notify_all</code>），让推理线程在帧就绪的瞬间被精准唤醒，消除几十毫秒的随机等待延迟。</li>
+</ul>
+<h3 id="8-生产路径按需-plot-与去除深度图拼接p1"><a class="markdownIt-Anchor" href="#8-生产路径按需-plot-与去除深度图拼接p1"></a> 8. 生产路径按需 <code>plot()</code> 与去除深度图拼接【P1】</h3>
+<ul>
+<li><strong>内容简介</strong>：将耗费大量 CPU 算力的实例分割 <code>plot()</code> 遮罩渲染和左右深度伪彩图拼接做“按需门控”机制。前 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">N-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 帧纯做矩阵计算，仅在最后一帧或显式开启 Debug 存图时才执行图像可视化绘制。</li>
+</ul>
+<h3 id="9-禁用-inarea-推理的控制台-verbose-打印p1"><a class="markdownIt-Anchor" href="#9-禁用-inarea-推理的控制台-verbose-打印p1"></a> 9. 禁用 InArea 推理的控制台 verbose 打印【P1】</h3>
+<ul>
+<li><strong>内容简介</strong>：将 <code>FruitInAreaFrameProcessor</code> 内部调用模型时的 <code>verbose=True</code> 显式改为 <code>False</code>。消灭高频热路径上往控制台（stdout）打印文本引起的同步 I/O 阻塞。</li>
+</ul>
+<h3 id="10-限制-max_det-固定-imgsz-与本地-half-推理p2"><a class="markdownIt-Anchor" href="#10-限制-max_det-固定-imgsz-与本地-half-推理p2"></a> 10. 限制 <code>max_det</code>、固定 <code>imgsz</code> 与本地 <code>half</code> 推理【P2】</h3>
+<ul>
+<li><strong>内容简介</strong>：在 Object Detection 架构 Schema 中沉入新参数：位置场景限制 <code>max_det=1</code> 以断崖式降低 NMS（非极大值抑制）计算耗时；固定 <code>imgsz</code> 规避隐式 letterbox 尺寸缩放；本地 <code>.pt</code> 跑测时开启 <code>half=True</code>（FP16）使 GPU 吞吐翻倍。</li>
+</ul>
+<hr>
+<h2 id="三-未完成的进阶优化第三阶段模型与引擎深度挖掘"><a class="markdownIt-Anchor" href="#三-未完成的进阶优化第三阶段模型与引擎深度挖掘"></a> 三、 未完成的进阶优化（第三阶段：模型与引擎深度挖掘）</h2>
+<p><em>核心目标：通过重构编译配置、量化、任务裁剪，将 TensorRT 推理性能榨干到极致。</em></p>
+<h3 id="11-引擎导出参数调优零训练成本最快见效"><a class="markdownIt-Anchor" href="#11-引擎导出参数调优零训练成本最快见效"></a> 11. 引擎导出参数调优（零训练成本，最快见效）</h3>
+<ul>
+<li><strong>内容简介</strong>：在 <code>ultralytics</code> 导出 <code>.engine</code> 时进行定制：
+<ul>
+<li><strong>矩形输入</strong>：将默认 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>640</mn><mo>×</mo><mn>640</mn></mrow><annotation encoding="application/x-tex">640 \times 640</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">6</span><span class="mord">4</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">6</span><span class="mord">4</span><span class="mord">0</span></span></span></span> 的方形编译改为匹配相机的矩形 <code>imgsz=(480, 640)</code>，直接<strong>减少约 33% 像素</strong>的计算量。</li>
+<li><strong>静态 Shape</strong>：若锁定 Batch 帧数，导出时固定 <code>batch=3</code>（单帧则固定 <code>batch=1</code>），利用静态 Shape 让 TensorRT 针对性挑选最优算子（Tactic Selection），消除动态 Shape 的 Profile 消耗。</li>
+<li><strong>启用简化</strong>：开启 <code>simplify=True</code> 融合多余的 ONNX 算子。</li>
+</ul>
+</li>
+</ul>
+<h3 id="12-int8-训练后量化-ptq-qat"><a class="markdownIt-Anchor" href="#12-int8-训练后量化-ptq-qat"></a> 12. INT8 训练后量化 (PTQ / QAT)</h3>
+<ul>
+<li><strong>内容简介</strong>：在 FP16 基础上推进 <strong>INT8 量化</strong>，预期可为 Orin/GPU 带来 1.5~2 倍的吞吐飞跃。收集产线几百张真实图片作为标定集（Calibration Dataset）进行 PTQ 导出；若精度（质心坐标）抖动超出预期，则引入量化感知训练（QAT）进行精度补偿。</li>
+</ul>
+<h3 id="13-端到端-nms-编译进引擎消除-host-传输瓶颈"><a class="markdownIt-Anchor" href="#13-端到端-nms-编译进引擎消除-host-传输瓶颈"></a> 13. 端到端 NMS 编译进引擎（消除 Host 传输瓶颈）</h3>
+<ul>
+<li><strong>内容简介</strong>：导出时设置 <code>nms=True</code>，利用 TensorRT 的 <code>EfficientNMS_TRT</code> 插件将检测框解码与 NMS 过滤完全融进 GPU 内部。使得模型直接输出过滤后的最终边界框，免除了大张量回传（GPU <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> CPU）与在 Python 层跑 NMS 的严重耗时。</li>
+</ul>
+<h3 id="14-任务模型选型降级head-结构裁剪"><a class="markdownIt-Anchor" href="#14-任务模型选型降级head-结构裁剪"></a> 14. 任务模型选型降级（Head 结构裁剪）</h3>
+<ul>
+<li><strong>内容简介</strong>：严格按业务“取什么信息”匹配最轻量的 Model Head。
+<ul>
+<li>评估 Line2 主链路，由于其仅提取 BBox 中心点，可将 <strong>Segment（分割）模型降级为 Detect（检测）模型</strong>，彻底砍掉 Proto Mask 分支与 Mask 上采样计算。</li>
+<li>严格控制 OBB（定向边界框）模型的使用范围，仅在需要旋转角度的路径上保留。</li>
+</ul>
+</li>
+</ul>
+<h3 id="15-模型容量缩减-剪枝与蒸馏"><a class="markdownIt-Anchor" href="#15-模型容量缩减-剪枝与蒸馏"></a> 15. 模型容量缩减、剪枝与蒸馏</h3>
+<ul>
+<li><strong>内容简介</strong>：针对水果定位等相对单一的工业场景，优先采用 Nano/Small 级别的小模型。进一步优化可采用结构化剪枝（Structured Pruning）剔除冗余通道，或通过大模型（Teacher）蒸馏小模型（Student）的方式，在保障精度的前提下极速瘦身。</li>
+</ul>
+<h3 id="16-图像预处理全面移至-gpu-cuda-preprocess"><a class="markdownIt-Anchor" href="#16-图像预处理全面移至-gpu-cuda-preprocess"></a> 16. 图像预处理全面移至 GPU (CUDA Preprocess)</h3>
+<ul>
+<li><strong>内容简介</strong>：将目前在 CPU（NumPy）上执行的图像 <code>resize</code>、归一化、色彩通道转换等预处理操作，改写为 GPU Tensor 操作（或利用 TensorRT 内部算子）。配合常驻 Hub 连续内存中的 Pinned Memory 传输，彻底释放 CPU 压力，实现全链路全加速。</li>
+</ul>
+<h1 id="现场"><a class="markdownIt-Anchor" href="#现场"></a> 现场</h1>
+<p><img src="/2026/06/09/2026%E5%B9%B46%E6%9C%889%E6%97%A5-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/image-20260610164954378.png" alt="image-20260610164954378"></p>
+<h1 id="stream流唤醒机制"><a class="markdownIt-Anchor" href="#stream流唤醒机制"></a> stream流唤醒机制</h1>
+<p>之前, 固定0.05秒取出新帧-&gt;20fps<br>
+推理三帧: 串行执行 , 取帧-&gt;推理-&gt;取帧-&gt;推理-&gt;取帧-&gt;推理 (每帧耗时约#0 | 耗时: 39.02ms)<br>
+<strong>如果推理时间小于50ms, 那么下一次推理还是用的旧的相同帧</strong></p>
+<p>现在frame_id 唤醒机制, 20fps-&gt;0.05秒取一新帧; 60 pfs -&gt;0.05/3秒取新帧<br>
+推理三帧: 串行执行, 且帧不同导致时间: 50ms+50+50+推理等操作, 时间花在等帧**(采帧阶段就花了约 25ms，且这段时间 Infer 线程完全空闲。)**<br>
+如果fps=60: 时间: 50+推理等操作; 取帧花费时间减少</p>
+<p><img src="/2026/06/09/2026%E5%B9%B46%E6%9C%889%E6%97%A5-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/image-20260610151724731.png" alt="image-20260610151724731"></p>
+<p><img src="/2026/06/09/2026%E5%B9%B46%E6%9C%889%E6%97%A5-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/image-20260610151745867.png" alt="image-20260610151745867"></p>
+<p>对比汇总</p>
+<ol>
+<li>GPU 推理：逐帧 ~49ms → batch ~24ms，省约 25ms</li>
+<li>0.05s 会存在帧重复</li>
+<li>batch推理在拉流fps高的时候有效(避免白等)</li>
+<li>onnx会有30ms提升</li>
+</ol>
+<h3 id="pt"><a class="markdownIt-Anchor" href="#pt"></a> pt</h3>
+<p><img src="/2026/06/09/2026%E5%B9%B46%E6%9C%889%E6%97%A5-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/image-20260610162129050.png" alt></p>
+<h3 id="half-pt"><a class="markdownIt-Anchor" href="#half-pt"></a> half pt</h3>
+<p><img src="/2026/06/09/2026%E5%B9%B46%E6%9C%889%E6%97%A5-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/image-20260610161721061.png" alt="image-20260610161721061"></p>
+<h3 id="onnx"><a class="markdownIt-Anchor" href="#onnx"></a> onnx</h3>
+<p><img src="/2026/06/09/2026%E5%B9%B46%E6%9C%889%E6%97%A5-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/image-20260610161840987.png" alt="image-20260610161840987"></p>
+<h3 id="trt"><a class="markdownIt-Anchor" href="#trt"></a> trt:</h3>
+<p><img src="/2026/06/09/2026%E5%B9%B46%E6%9C%889%E6%97%A5-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/image-20260610161258506.png" alt="image-20260610161258506"></p>
+<h1 id="帮我creattask-异步协议图片-防止波动带来的干扰"><a class="markdownIt-Anchor" href="#帮我creattask-异步协议图片-防止波动带来的干扰"></a> 帮我creattask 异步协议图片, 防止波动带来的干扰</h1>
+<p><img src="/2026/06/09/2026%E5%B9%B46%E6%9C%889%E6%97%A5-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/d542c25b1bf18817b7fe42c721f22dc0.png" alt="d542c25b1bf18817b7fe42c721f22dc0"></p>
+<blockquote>
+<p><img src="/2026/06/09/2026%E5%B9%B46%E6%9C%889%E6%97%A5-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/image-20260610163813318.png" alt="image-20260610163813318"></p>
+<p>减少2~5秒以及大波动</p>
+</blockquote>
+<h3 id="plot是不是也可以推理后保存-减少api延迟-同时还能保存现场结果"><a class="markdownIt-Anchor" href="#plot是不是也可以推理后保存-减少api延迟-同时还能保存现场结果"></a> plot是不是也可以推理后保存, 减少api延迟, 同时还能保存现场结果</h3>
+<p><img src="/2026/06/09/2026%E5%B9%B46%E6%9C%889%E6%97%A5-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/image-20260610171343825.png" alt="image-20260610171343825"></p>
+<blockquote>
+<p>确实和不plot的耗时接近, 就是更容易导致硬件波动</p>
+<p>同时copy到CPU的yolo result耗时也很低, 正常情况不到0.8ms</p>
+</blockquote>
+<h2 id="查数据cpu"><a class="markdownIt-Anchor" href="#查数据cpu"></a> 查数据CPU</h2>
+<p>1ms左右</p>
+<p><img src="/2026/06/09/2026%E5%B9%B46%E6%9C%889%E6%97%A5-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/image-20260610164137544.png" alt="image-20260610164137544"></p>
+<h2 id="不plot"><a class="markdownIt-Anchor" href="#不plot"></a> 不plot</h2>
+<p><img src="/2026/06/09/2026%E5%B9%B46%E6%9C%889%E6%97%A5-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/image-20260610164317918.png" alt="image-20260610164317918"></p>
+<blockquote>
+<p>减少10~15ms左右</p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/06/09/2026%E5%B9%B46%E6%9C%889%E6%97%A5-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/" data-id="cmqdpw1ot0002rgv43xhk7kvu" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DL/" rel="tag">DL</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-2026年6月6日-pyd源码编译" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -1904,752 +2415,6 @@ embed就是将文本转换为向量, 使得语义相近的物体在高维空间�
 
 
   
-    <article id="post-2026年5月20日-推理优化" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2026/05/20/2026%E5%B9%B45%E6%9C%8820%E6%97%A5-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/" class="article-date">
-  <time class="post-time" datetime="2026-05-20T06:09:29.000Z" itemprop="datePublished">
-    <span class="post-month">5月</span><br/>
-    <span class="post-day">20</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2026/05/20/2026%E5%B9%B45%E6%9C%8820%E6%97%A5-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/">2026年5月20日 推理优化</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2026/05/20/2026%E5%B9%B45%E6%9C%8820%E6%97%A5-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/" data-id="cmptvn9rq00089sv40q9l360g" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2026年5月16日-TFLOPS" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/" class="article-date">
-  <time class="post-time" datetime="2026-05-16T01:59:02.000Z" itemprop="datePublished">
-    <span class="post-month">5月</span><br/>
-    <span class="post-day">16</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/">2026年5月16日 TFLOPS</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
-<p>相机延迟高, 怎么优化</p>
-<h1 id="前置知识"><a class="markdownIt-Anchor" href="#前置知识"></a> 前置知识</h1>
-<h2 id="1-tflops"><a class="markdownIt-Anchor" href="#1-tflops"></a> 1 TFLOPS</h2>
-<blockquote>
-<p><strong>FP32（单精度，常说的理论算力）</strong>：≈ <strong>12.7 TFLOPS</strong></p>
-<p>“12.7 TFLOPS” ≈ 每秒 <strong>12.7 万亿次浮点运算</strong></p>
-<p><strong>Tensor Core（AI训练常用）</strong>：</p>
-<ul>
-<li>FP16 / Tensor TFLOPS：约 <strong>50~100+ TFLOPS（视稀疏性和模式）</strong></li>
-</ul>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">Model</th>
-<th style="text-align:left">size (pixels)</th>
-<th style="text-align:left">mAPval 50-95</th>
-<th style="text-align:left">Speed CPU ONNX (ms)</th>
-<th style="text-align:left">Speed T4 TensorRT10 (ms)</th>
-<th style="text-align:left">params (M)</th>
-<th style="text-align:left">FLOPs (B)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"><a target="_blank" rel="noopener" href="https://github.com/ultralytics/assets/releases/download/v8.4.0/yolo11n.pt">YOLO11n</a></td>
-<td style="text-align:left">640</td>
-<td style="text-align:left">39.5</td>
-<td style="text-align:left">56.1 ± 0.8</td>
-<td style="text-align:left">1.5 ± 0.0</td>
-<td style="text-align:left">2.6</td>
-<td style="text-align:left">6.5GFLOPs</td>
-</tr>
-<tr>
-<td style="text-align:left"><a target="_blank" rel="noopener" href="https://github.com/ultralytics/assets/releases/download/v8.4.0/yolo11s.pt">YOLO11s</a></td>
-<td style="text-align:left">640</td>
-<td style="text-align:left">47.0</td>
-<td style="text-align:left">90.0 ± 1.2</td>
-<td style="text-align:left">2.5 ± 0.0</td>
-<td style="text-align:left">9.4</td>
-<td style="text-align:left">21.5GFLOPs</td>
-</tr>
-</tbody>
-</table>
-<p>实际可能:</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">4 TFLOPs effective</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">4 / 0.0215 ≈ 186 FPS</span><br></pre></td></tr></table></figure>
-<p>在 3060 上：</p>
-<table>
-<thead>
-<tr>
-<th>情况</th>
-<th>FPS</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>PyTorch 未优化</td>
-<td>30–60 FPS</td>
-</tr>
-<tr>
-<td>TensorRT / ONNX</td>
-<td>60–120 FPS</td>
-</tr>
-<tr>
-<td>极致优化（FP16 + fuse）</td>
-<td>100–150 FP</td>
-</tr>
-</tbody>
-</table>
-</blockquote>
-<p><strong>AI 里真正速度还取决于：</strong></p>
-<ul>
-<li>CUDA 核心利用率</li>
-<li>显存带宽（3060 是 192-bit）</li>
-<li>Tensor Core 是否启用（混合精度</li>
-</ul>
-<h3 id="fps模型计算量gpu算力"><a class="markdownIt-Anchor" href="#fps模型计算量gpu算力"></a> FPS≈模型计算量GPU算力</h3>
-<p>例如：</p>
-<ul>
-<li>GPU：12 TFLOPS</li>
-<li>模型：120 GFLOPs/帧</li>
-</ul>
-<p>那么理论：</p>
-<p>FPS≈12×1012120×109=100FPS\approx\frac{12\times10<sup>{12}}{120\times10</sup>{9}}=100FPS≈120×10912×1012=100</p>
-<p>理论上约：</p>
-<ul>
-<li>100 FPS</li>
-</ul>
-<h3 id="flops-实际速度"><a class="markdownIt-Anchor" href="#flops-实际速度"></a> FLOPs ≠ 实际速度</h3>
-<p>有些模型：</p>
-<ul>
-<li>FLOPs 很低</li>
-<li>但 FPS 不高</li>
-</ul>
-<p>因为：</p>
-<ul>
-<li>内存访问特别碎</li>
-<li>depthwise conv 很多</li>
-<li>小 kernel 太多</li>
-<li>GPU 利用率低</li>
-</ul>
-<p>例如：</p>
-<table>
-<thead>
-<tr>
-<th>模型</th>
-<th>FLOPs低</th>
-<th>但速度</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>MobileNet</td>
-<td>✅</td>
-<td>不一定快</td>
-</tr>
-<tr>
-<td>EfficientNet</td>
-<td>✅</td>
-<td>经常偏慢</td>
-</tr>
-<tr>
-<td>YOLO</td>
-<td>FLOPs不算低</td>
-<td>但非常快</td>
-</tr>
-</tbody>
-</table>
-<h4 id="推理时间真正近似公式"><a class="markdownIt-Anchor" href="#推理时间真正近似公式"></a> 推理时间真正近似公式</h4>
-<p>更接近：</p>
-<p>推理时间= 计算时间 + 显存访问时间 + 调度开销 + 数据传输时间推理时间</p>
-<h2 id="2-模型计算量"><a class="markdownIt-Anchor" href="#2-模型计算量"></a> 2 模型计算量</h2>
-<h3 id="怎么知道模型计算量"><a class="markdownIt-Anchor" href="#怎么知道模型计算量"></a> 怎么知道模型计算量</h3>
-<h3 id="模型预热"><a class="markdownIt-Anchor" href="#模型预热"></a> 模型预热</h3>
-<h1 id="参数量-vs-flops"><a class="markdownIt-Anchor" href="#参数量-vs-flops"></a> 参数量 vs FLOPs</h1>
-<p>很多人会混淆。</p>
-<h2 id="params参数量"><a class="markdownIt-Anchor" href="#params参数量"></a> Params（参数量）</h2>
-<p>表示：</p>
-<ul>
-<li>模型大小</li>
-<li>占多少显存</li>
-</ul>
-<p>例如：</p>
-<ul>
-<li>7M 参数<br>
-≈ 28MB FP32</li>
-</ul>
-<hr>
-<h2 id="flops计算量"><a class="markdownIt-Anchor" href="#flops计算量"></a> FLOPs（计算量）</h2>
-<p>表示：</p>
-<ul>
-<li>推理需要算多少次</li>
-</ul>
-<p>决定：</p>
-<ul>
-<li>推理耗时</li>
-<li>GPU压力</li>
-</ul>
-<h1 id="问题分析"><a class="markdownIt-Anchor" href="#问题分析"></a> 问题分析</h1>
-<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260516210324515.png" alt="image-20260516210324515"></p>
-<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260516210345208.png" alt="image-20260516210345208"></p>
-<p>结论可以分三块说：<strong>你们在比的不是同一个计时范围</strong>、<strong>拍照路径和执行线程和视频不一样</strong>、<strong>前几帧变慢是正常现象</strong>。</p>
-<hr>
-<h2 id="1-为什么-ai_inference_single-比-ultralytics-的-speed-大很多"><a class="markdownIt-Anchor" href="#1-为什么-ai_inference_single-比-ultralytics-的-speed-大很多"></a> 1. 为什么 <code>[AI_INFERENCE_SINGLE]</code> 比 Ultralytics 的 <code>Speed:</code> 大很多？</h2>
-<p><code>[AI_INFERENCE_SINGLE]</code> 包的是<strong>整段</strong> <code>process_frame</code> + <code>_apply_fps_overlay</code>，而日志里 Ultralytics 的<br>
-<code>Speed: … preprocess … inference … postprocess</code> 一般指 <strong><code>model(...)</code>（predict）内部</strong>拆的三段。</p>
-<p>以 <code>FruitInAreaFrameProcessor</code> 为例，YOLO 打完成绩之后你还有一大段工作在<strong>同一次计时里</strong>：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 1. 推理</span><br><span class="line">yolo_result = self.model(frame, conf=self.conf, device=self.device, verbose=True)</span><br><span class="line"></span><br><span class="line"># 2. 检查区域</span><br><span class="line">self._areas_detected = DetectUtils.check_yolo_result_in_areas(yolo_result, self.area_lists, self.target_classes)</span><br><span class="line">...</span><br><span class="line"># 4. 画框</span><br><span class="line">result_frame = yolo_result[0].plot()</span><br><span class="line">from app.core.utils.drawing_utils import DrawingUtils</span><br><span class="line">result_frame = DrawingUtils.draw_area(result_frame, self.area_lists, (0, 255, 0))</span><br><span class="line">cv2.putText(result_frame, message, (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)</span><br></pre></td></tr></table></figure>
-<p>你日志里是 <code>480x640</code>、多类、十多颗水果，<strong>分割模型</strong>在 <code>results[0].plot()</code> 里要把每个实例的 mask 叠到图上，多半是<strong>纯 CPU/OpenCV</strong>，很容易比 predict 本身的几十毫秒再长出一大截。<strong>所以 889ms vs 里外合计约 129ms：差的主要是「YOLO predict 之外的 plot/画框/叠加」</strong>，而不是表格里那一行 inference 变慢了。</p>
-<p>外层还有 <code>start_processing_single_frame</code> 里对 <strong><code>_apply_fps_overlay</code></strong>（若 <code>settings.ai_draw_fps</code> 为真则会 <code>copy</code> + <code>addWeighted</code>）等，也都在同一计时窗里。</p>
-<hr>
-<h2 id="2-为什么拍照多帧检测和视频流里看到的延迟感觉差很多"><a class="markdownIt-Anchor" href="#2-为什么拍照多帧检测和视频流里看到的延迟感觉差很多"></a> 2. 为什么「拍照多帧检测」和视频流里看到的延迟感觉差很多？</h2>
-<p><strong>拍照路径</strong>：<code>stream_process_multiple_frames</code> 里<strong>每一帧</strong>都是**「新建一个线程池 → 扔一次 <code>start_processing_single_frame</code> → shutdown**」：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">with ThreadPoolExecutor(max_workers=1) as executor:</span><br><span class="line">    future = executor.submit(</span><br><span class="line">        self.processor.start_processing_single_frame,</span><br><span class="line">        frame_data, self.debug, processed_photo_path if i == frame_count - 1 else &quot;&quot;</span><br><span class="line">    )</span><br><span class="line">    try:</span><br><span class="line">        future.result(timeout=timeout_seconds)</span><br></pre></td></tr></table></figure>
-<p>你贴的日志里也印证了这一点：第 1/2/3 帧分别是 <strong><code>ThreadPoolExecutor-0_0</code></strong>、<strong><code>-1_0</code></strong>、<strong><code>-2_0</code></strong>，也就是每轮都是<strong>不同的 worker 上下文</strong>。再配合上面说的「predict 只占一部分」以及首帧预处理在 Ultralytics 里也会偏高（见你第一帧 <code>preprocess 25.8ms</code> vs 后面的 <code>~0.9ms</code>），体感就会和「稳定在 ~14ms inference」的那段视频日志差很远。</p>
-<p><strong>视频连续检测</strong>：走的是 <code>start_processing</code> 的那种<strong>长期循环</strong>，同一条链路反复跑，<code>model</code>/<code>plot</code>/<code>cuDNN</code>/缓存都更容易进入稳态；你在 <code>test_120fps.mp4</code> 那一段里看到的 <strong><code>~13–16ms inference</code></strong>，就是这类稳态。</p>
-<blockquote>
-<ol>
-<li>不要使用三个线程</li>
-</ol>
-</blockquote>
-<hr>
-<h2 id="3-为什么视频前几帧也很大-后面突然变小"><a class="markdownIt-Anchor" href="#3-为什么视频前几帧也很大-后面突然变小"></a> 3. 为什么视频前几帧也很大、后面突然变小？</h2>
-<p>这和你日志里的曲线一致：<strong>第 1 帧 ~92ms → 中间的 ~43–46ms → 再往后的 ~13–16ms</strong>。常见原因包括：</p>
-<ul>
-<li><strong>CUDA / cuDNN</strong> 首轮选算法、建缓存、allocator 铺开；</li>
-<li><strong>Ultralytics 内部</strong>预处理/后处理在第一两次路径上会触发的初始化（你已有「首帧 preprocess 明显更高」的现象）；</li>
-<li>若当时是<strong>刚拉起读流/刚切源</strong>，还有可能叠上 <strong>解码/缓冲区</strong>尚未稳定。</li>
-</ul>
-<p>所以「前几张大、后面稳定在十几毫秒」是预期行为，不是问题特有的异常。</p>
-<hr>
-<p><strong>若要验证</strong>：在同一个 <code>process_frame</code> 里用 <code>time.perf_counter()</code> 分别包住 <code>model(...)</code>、<code>plot()</code>、<code>draw_area</code>，你会很快看到_gap 主要是在哪一段；结构上也可以考虑拍照路径<strong>不要每帧新开 <code>ThreadPoolExecutor</code></strong>（复用线程池或直接在当前线程推理），能减少线程与调度带来的不确定性。</p>
-<h2 id="4-占用细节"><a class="markdownIt-Anchor" href="#4-占用细节"></a> 4. 占用细节</h2>
-<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260516211414299.png" alt="image-20260516211414299"></p>
-<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260516211511866.png" alt="image-20260516211511866"></p>
-<h3 id="1拍照多帧threadpoolexecutor-3_0-4_0-5_0约-211247"><a class="markdownIt-Anchor" href="#1拍照多帧threadpoolexecutor-3_0-4_0-5_0约-211247"></a> 1）拍照多帧（<code>ThreadPoolExecutor-3_0 / 4_0 / 5_0</code>，约 21:12:47）</h3>
-<table>
-<thead>
-<tr>
-<th>指标</th>
-<th>情况</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Ultralytics</strong></td>
-<td>每帧 <code>preprocess + inference + postprocess</code> ≈ <strong>86～88 ms</strong></td>
-</tr>
-<tr>
-<td><strong><code>model=</code>（perf_counter）</strong></td>
-<td><strong>85～91 ms</strong>，和 Ultralytics 同一量级</td>
-</tr>
-<tr>
-<td><strong><code>plot</code></strong></td>
-<td><strong>≈5 ms</strong></td>
-</tr>
-<tr>
-<td><strong><code>draw_area</code></strong></td>
-<td><strong>≈0.05 ms</strong>，可忽略</td>
-</tr>
-<tr>
-<td><strong><code>[AI_INFERENCE_SINGLE]</code></strong></td>
-<td><strong>～95～100 ms</strong>，比 <code>model+plot+draw</code> 多出一截（约 <strong>3～10 ms</strong>：<code>putText</code>、区域校验、<code>_apply_fps_overlay</code> 若为开、线程调度等都算在内）</td>
-</tr>
-</tbody>
-</table>
-<p>说明：<strong>这轮请求时 GPU/CUDA 已经热好</strong>，首帧没有再出现 <strong><code>model≈1248 ms</code></strong>；差异主要来自整条 <code>process_frame</code> 里 <strong><code>model(...)</code></strong>，不是 <code>plot</code>/<code>draw_area</code>。</p>
-<hr>
-<h3 id="2本地视频-processorthreadwebcam约-211146"><a class="markdownIt-Anchor" href="#2本地视频-processorthreadwebcam约-211146"></a> 2）本地视频、<code>ProcessorThreadWebcam</code>（约 21:11:46）</h3>
-<table>
-<thead>
-<tr>
-<th>帧序</th>
-<th>Ultralytics inference</th>
-<th><strong><code>model=</code> 墙钟</strong></th>
-<th><strong><code>plot</code></strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>第 1 帧</td>
-<td><strong>94.8 ms</strong></td>
-<td><strong>102 ms</strong></td>
-<td><strong>12.9 ms</strong></td>
-</tr>
-<tr>
-<td>之后几帧</td>
-<td><strong>～13～20 ms</strong></td>
-<td><strong>～24～29 ms</strong></td>
-<td><strong>～5～12 ms</strong></td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li><strong>warmup</strong>：第 1 帧 GPU/CUDA、cudnn、缓存等最重，和你们之前「视频前几帧慢」一致。</li>
-<li><strong>为什么 <code>model=</code> 常比 Ultralytics 的 <code>inference</code> 再高 ~10 ms？</strong><br>
-<code>perf_counter</code> 包住的是<strong>整段</strong> <code>model(...)</code> 返回：里面除了「纯 kernel 推理」，往往还有同步、解码型后处理等在 Python/C++ 边界上的墙钟开销；Ultralytics 打在日志里的那一段 <strong>不见得等于</strong>你在 Python 侧量的整段耗时，所以会看到 <strong>Ultra ~14–20 ms、你却量到 ~23–29 ms</strong>，这是正常现象。</li>
-<li><strong><code>plot</code></strong> 仍会占几毫秒～十几毫秒，仍远小于 <strong><code>model</code>。</strong></li>
-</ul>
-<hr>
-<h3 id="3两段合在一起说明什么"><a class="markdownIt-Anchor" href="#3两段合在一起说明什么"></a> 3）两段合在一起说明什么？</h3>
-<ul>
-<li><strong>同一次进程里</strong>：若先有「冷线程 / 首次 CUDA」路径，会出现 <strong><code>model</code> 一秒钟级</strong> spike（你更早那次的 <strong>1248 ms</strong>）；<strong>同一进程稍后</strong>再在 <code>ThreadPoolExecutor</code> 里跑，<code>model</code> 就只 <strong>～90 ms</strong>。<br>
-本质是 <strong>谁在什么线程上、第几次碰 GPU</strong>，不是 <code>plot</code>。</li>
-<li><strong>固定 <code>ProcessorThreadWebcam</code> 线程</strong>持续跑：<strong>首帧大一点，后面 <code>model</code> 明显低于拍照路径里重复的 ~80 ms</strong>，是因为 Ultralytics 内部计时和你们外层墙钟口径不同 + 流水线是否持续喂帧；你这两段里都说明 <strong>瓶颈仍在 <code>model(...)</code></strong>。</li>
-</ul>
-<p>若要<strong>压掉拍照首帧 ~1 s</strong>：在应用启动或首次检测前，<strong>在同一个最终用于推理的线程上做一次 warmup</strong>，或 <strong><code>stream_process_multiple_frames</code> 里复用单个 <code>ThreadPoolExecutor</code>/<code>ProcessPoolExecutor</code></strong>，避免每次都是「从未跑过 CUDA 的工作线程」。需要的话可以再改 detector 那一段具体代码方案。</p>
-<blockquote>
-<ol>
-<li>全局模型warm up</li>
-<li>线程专属的模型warm up(因为已经load一次模型了)</li>
-<li>复用单一线程</li>
-<li>单针plot似乎压力更小? 少5ms</li>
-</ol>
-</blockquote>
-<h1 id="拍照使用同一个线程使用"><a class="markdownIt-Anchor" href="#拍照使用同一个线程使用"></a> 拍照使用同一个线程使用</h1>
-<h2 id="1-问题"><a class="markdownIt-Anchor" href="#1-问题"></a> 1 问题</h2>
-<p>旧的</p>
-<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260516213326744.png" alt="image-20260516213326744"></p>
-<p>新的</p>
-<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260516213427846.png" alt="image-20260516213427846"></p>
-<p><strong>with ThreadPoolExecutor(max_workers=1) as inference_executor:</strong></p>
-<h1 id="推理线程长期存在"><a class="markdownIt-Anchor" href="#推理线程长期存在"></a> 推理线程长期存在</h1>
-<h2 id="问题-线程内首帧延迟高"><a class="markdownIt-Anchor" href="#问题-线程内首帧延迟高"></a> 问题: 线程内首帧延迟高</h2>
-<p><strong>非模型预热问题</strong></p>
-<p>旧:</p>
-<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260516215657748.png" alt="image-20260516215657748"></p>
-<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260516215724436.png" alt="image-20260516215724436"></p>
-<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260516215937263.png" alt="image-20260516215937263"></p>
-<h2 id="线程复用"><a class="markdownIt-Anchor" href="#线程复用"></a> 线程复用</h2>
-<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260516222340412.png" alt></p>
-<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260516222407252.png" alt="image-20260516222407252"></p>
-<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260516222432052.png" alt="image-20260516222432052"></p>
-<p>1min after…</p>
-<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260516222514195.png" alt="image-20260516222514195"></p>
-<p>5min after</p>
-<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260516223303305.png" alt="image-20260516223303305"></p>
-<p>30min after</p>
-<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260516230213453.png" alt="image-20260516230213453"></p>
-<p><strong>「1 = 全局第一次推理的典型冷启动；2、3 = 已在同一进程内热过 GPU，首帧只剩「单次会话级」 warmup，所以会小一个数量级」。</strong></p>
-<h1 id="多个线程同一个模型"><a class="markdownIt-Anchor" href="#多个线程同一个模型"></a> 多个线程同一个模型</h1>
-<h2 id="问题"><a class="markdownIt-Anchor" href="#问题"></a> 问题</h2>
-<p>第一个</p>
-<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260521102420714.png" alt="image-20260521102420714"></p>
-<p>第二个</p>
-<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260521102448559.png" alt="image-20260521102448559"></p>
-<blockquote>
-<p>wsp1的延迟变高了12ms</p>
-<img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260521102521087.png" alt="image-20260521102521087" style="zoom:33%;"> 
-</blockquote>
-<h3 id><a class="markdownIt-Anchor" href="#"></a> </h3>
-<h2 id="detector复用"><a class="markdownIt-Anchor" href="#detector复用"></a> detector复用</h2>
-<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260521102353265.png" alt="image-20260521102353265"></p>
-<p>第二个</p>
-<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260521102337884.png" alt="image-20260521102337884"></p>
-<blockquote>
-<p>wsp1 基本还是维持在和原来的20mns左右</p>
-<img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260521102648033.png" alt="image-20260521102648033" style="zoom:50%;"> 
-</blockquote>
-<h2 id="模型复用"><a class="markdownIt-Anchor" href="#模型复用"></a> 模型复用</h2>
-<p>第一个</p>
-<img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260521111449158.png" alt="image-20260521111449158">
-<p>第二个</p>
-<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260521111538273.png" alt="image-20260521111538273"></p>
-<h3 id="使用复用"><a class="markdownIt-Anchor" href="#使用复用"></a> 使用复用</h3>
-<img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260521103854051.png" alt="image-20260521103854051" style="zoom: 67%;"> 
-<h3 id="不用复用"><a class="markdownIt-Anchor" href="#不用复用"></a> 不用复用</h3>
-<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260521104529419.png" alt="image-20260521104529419"></p>
-<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260521104636740.png" alt="image-20260521104636740"></p>
-<h3 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h3>
-<p>1 共享model大约减少10ms推理延迟(一帧)</p>
-<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260521110801124.png" alt="image-20260521110801124"></p>
-<table>
-<thead>
-<tr>
-<th>测试组别</th>
-<th>运行阶段</th>
-<th>运行对象</th>
-<th>耗时区间 (ms)</th>
-<th>平均耗时 (ms)</th>
-<th>核心特征</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>第1组</td>
-<td>空载前置</td>
-<td>W1</td>
-<td>32~49</td>
-<td>41</td>
-<td>三组里空载最优，延迟最低</td>
-</tr>
-<tr>
-<td>第1组</td>
-<td>稳态运行</td>
-<td>W2</td>
-<td>61~108</td>
-<td>85</td>
-<td>首帧 147ms，预热后快速收敛稳定</td>
-</tr>
-<tr>
-<td>第1组</td>
-<td>后置回归</td>
-<td>W1</td>
-<td>47~68</td>
-<td>57</td>
-<td>降速幅度最小，恢复性最好</td>
-</tr>
-<tr>
-<td>第2组</td>
-<td>空载前置</td>
-<td>W1</td>
-<td>43~64</td>
-<td>50</td>
-<td>性能平稳，资源充足</td>
-</tr>
-<tr>
-<td>第2组</td>
-<td>稳态运行</td>
-<td>W2</td>
-<td>56~122</td>
-<td>100</td>
-<td>初始化极端卡顿，整体耗时更高</td>
-</tr>
-<tr>
-<td>第2组</td>
-<td>后置回归</td>
-<td>W1</td>
-<td>64~111</td>
-<td>85</td>
-<td>延迟大幅抬升，稳定性变差</td>
-</tr>
-</tbody>
-</table>
-<p>2 减少模型预热时间</p>
-<table>
-<thead>
-<tr>
-<th>组别</th>
-<th>模式</th>
-<th>workspace</th>
-<th>冷启动 (ms)</th>
-<th>热启动 (ms)</th>
-<th>提升倍数</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>第 1 组</td>
-<td>共享流</td>
-<td>wk1</td>
-<td>936.17</td>
-<td>42.48</td>
-<td><strong>22 倍</strong></td>
-</tr>
-<tr>
-<td>第 1 组</td>
-<td>共享流</td>
-<td>wk2</td>
-<td>163.17</td>
-<td>85.21</td>
-<td><strong>1.9 倍</strong></td>
-</tr>
-<tr>
-<td>第 1 组</td>
-<td>共享流</td>
-<td>wk3</td>
-<td>236.28</td>
-<td>121.76</td>
-<td><strong>1.9 倍</strong></td>
-</tr>
-<tr>
-<td>—</td>
-<td>—</td>
-<td>—</td>
-<td>—</td>
-<td>—</td>
-<td>—</td>
-</tr>
-<tr>
-<td>第 2 组</td>
-<td>独立流</td>
-<td>wk1</td>
-<td>928.42</td>
-<td>75.65</td>
-<td><strong>12 倍</strong></td>
-</tr>
-<tr>
-<td>第 2 组</td>
-<td>独立流</td>
-<td>wk2</td>
-<td>612.52</td>
-<td>63.94</td>
-<td><strong>9.6 倍</strong></td>
-</tr>
-<tr>
-<td>第 2 组</td>
-<td>独立流</td>
-<td>wk3</td>
-<td>1109.33</td>
-<td>239.68</td>
-<td><strong>4.6 倍</strong></td>
-</tr>
-<tr>
-<td>—</td>
-<td>—</td>
-<td>—</td>
-<td>—</td>
-<td>—</td>
-<td>—</td>
-</tr>
-<tr>
-<td>第 3 组</td>
-<td>独立流</td>
-<td>wk1</td>
-<td>366.76</td>
-<td>187.96</td>
-<td><strong>2.0 倍</strong></td>
-</tr>
-<tr>
-<td>第 3 组</td>
-<td>独立流</td>
-<td>wk2</td>
-<td>263.21</td>
-<td>115.09</td>
-<td><strong>2.3 倍</strong></td>
-</tr>
-<tr>
-<td>第 3 组</td>
-<td>独立流</td>
-<td>wk3</td>
-<td>942.00</td>
-<td>79.93</td>
-<td><strong>11.8 倍</strong></td>
-</tr>
-<tr>
-<td>—</td>
-<td>—</td>
-<td>—</td>
-<td>—</td>
-<td>—</td>
-<td>—</td>
-</tr>
-<tr>
-<td>第 4 组</td>
-<td>共享流</td>
-<td>wk1</td>
-<td>870.81</td>
-<td>48.76</td>
-<td><strong>17.9 倍</strong></td>
-</tr>
-<tr>
-<td>第 4 组</td>
-<td>共享流</td>
-<td>wk2</td>
-<td>146.99</td>
-<td>83.51</td>
-<td><strong>1.8 倍</strong></td>
-</tr>
-<tr>
-<td>第 4 组</td>
-<td>共享流</td>
-<td>wk3</td>
-<td>224.31</td>
-<td>123.87</td>
-<td><strong>1.8 倍</strong></td>
-</tr>
-</tbody>
-</table>
-<p>3 虽然手动单独了复用</p>
-<p>但是同一进程稍后GPU似乎本来就会复用? 所以降低不是很多</p>
-<h1 id="目标数量"><a class="markdownIt-Anchor" href="#目标数量"></a> 目标数量</h1>
-<h2 id="问题检测目标多的时候-plot时间长"><a class="markdownIt-Anchor" href="#问题检测目标多的时候-plot时间长"></a> 问题:检测目标多的时候, plot时间长</h2>
-<p>少</p>
-<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260520141834237.png" alt="image-20260520141834237"></p>
-<p>多</p>
-<h2 id="总结-2"><a class="markdownIt-Anchor" href="#总结-2"></a> 总结</h2>
-<p>生产环境不plot</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/" data-id="cmptvn9rp00069sv414vn0tt0" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/" rel="tag">推理优化</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2026年5月15日-uv汇总" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2026/05/15/2026%E5%B9%B45%E6%9C%8815%E6%97%A5-uv%E6%B1%87%E6%80%BB/" class="article-date">
-  <time class="post-time" datetime="2026-05-15T14:18:40.000Z" itemprop="datePublished">
-    <span class="post-month">5月</span><br/>
-    <span class="post-day">15</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2026/05/15/2026%E5%B9%B45%E6%9C%8815%E6%97%A5-uv%E6%B1%87%E6%80%BB/">2026年5月15日 uv汇总</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="uv-init-之后python版本是多少"><a class="markdownIt-Anchor" href="#uv-init-之后python版本是多少"></a> uv init 之后python版本是多少</h2>
-<p><code>uv init</code> 本身不会“固定”一个 Python 版本，它会：</p>
-<ol>
-<li>使用你当前环境找到的 Python</li>
-<li>生成 <code>pyproject.toml</code></li>
-<li>自动写一个 <code>requires-python</code></li>
-</ol>
-<p>例如你当前机器默认是 Python 3.12：</p>
-<h2 id="我现在uv-build-之后只能安装在固定python版本吗"><a class="markdownIt-Anchor" href="#我现在uv-build-之后只能安装在固定python版本吗"></a> 我现在uv build 之后只能安装在固定python版本吗?</h2>
-<p>不是。<code>uv build</code> 构建出来的包，是否“只能安装在固定 Python 版本”，取决于你项目里声明的 Python 兼容范围，而不是 <code>uv build</code> 本身</p>
-<h2 id="uv-sync-干什么的"><a class="markdownIt-Anchor" href="#uv-sync-干什么的"></a> uv sync 干什么的</h2>
-<p><code>uv sync</code> 的核心作用一句话概括就是：</p>
-<blockquote>
-<p><strong>把你的项目环境“同步”成 pyproject.toml + uv.lock 里定义的状态</strong></p>
-</blockquote>
-<p>它做的不是“随便装点包”，而是<strong>严格对齐依赖环境</strong>。</p>
-<h2 id="uv-add-做了什么"><a class="markdownIt-Anchor" href="#uv-add-做了什么"></a> uv add 做了什么</h2>
-<p>执行：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uv add fastapi</span><br></pre></td></tr></table></figure>
-<p>它会自动做 4 件事：</p>
-<p>① 修改 pyproject.toml</p>
-<p>自动写入：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[project]</span><br><span class="line">dependencies = [</span><br><span class="line">  &quot;fastapi&gt;=0.0.0&quot;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-<p>（具体版本可能带约束）</p>
-<hr>
-<p>② 更新 uv.lock</p>
-<p>生成或更新锁文件：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastapi==0.110.0</span><br></pre></td></tr></table></figure>
-<p>👉 锁死真实安装版本</p>
-<hr>
-<p>③ 安装到当前环境</p>
-<p>等价于：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install fastapi</span><br></pre></td></tr></table></figure>
-<p>但 uv 更快 + 更严格</p>
-<hr>
-<p>④ 解析依赖树</p>
-<p>会自动处理：</p>
-<ul>
-<li>fastapi 依赖的 starlette</li>
-<li>pydantic</li>
-<li>anyio</li>
-</ul>
-<p>全部一起算好版本</p>
-<p>uv init test 会创建venv吗</p>
-<p>不会。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uv init test</span><br></pre></td></tr></table></figure>
-<p>👉 <strong>只做“项目初始化”，不会创建 venv。</strong></p>
-<hr>
-<h2 id="uv-init-做了什么"><a class="markdownIt-Anchor" href="#uv-init-做了什么"></a> uv init 做了什么</h2>
-<p>执行后主要生成：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">test/</span><br><span class="line"> ├── pyproject.toml</span><br><span class="line"> ├── README.md</span><br><span class="line"> └── .gitignore</span><br></pre></td></tr></table></figure>
-<p>它的作用是：</p>
-<blockquote>
-<p>创建一个“Python 项目结构”，不是运行环境</p>
-</blockquote>
-<h2 id="uv-add-会自动创建环境吗"><a class="markdownIt-Anchor" href="#uv-add-会自动创建环境吗"></a> uv add 会自动创建环境吗</h2>
-<p>会的——<strong>在大多数情况下，<code>uv add</code> 会自动帮你创建 <code>.venv</code>，但有前提条件。</strong></p>
-<p>可以这样理解：</p>
-<blockquote>
-<p><code>uv add</code> = “加依赖 + 安装 +（必要时）自动创建虚拟环境”</p>
-</blockquote>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2026/05/15/2026%E5%B9%B45%E6%9C%8815%E6%97%A5-uv%E6%B1%87%E6%80%BB/" data-id="cmptvn9rn00049sv4go9n2etx" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -2694,9 +2459,9 @@ embed就是将文本转换为向量, 使得语义相近的物体在高维空间�
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>164</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>167</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>43</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>44</strong><br>标签</div></a>
     </div>
 
 
