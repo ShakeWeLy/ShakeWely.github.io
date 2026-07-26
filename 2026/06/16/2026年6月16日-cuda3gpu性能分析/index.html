@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2026年6月16日 cuda3gpu性能分析 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="一 前言  如何优化 代码应用热点-&gt; 热点分析-&gt;优化-&gt;分析代码    二 分析工具      工具 分析范围 输出 适用场景     Nsight Systems 整个应用程序（系统级） 时间线视图、所有操作概览 找到瓶颈在哪里   Nsight Compute 单个CUDA内核（内核级） 指令级指标、详细分析 找到瓶颈为什么在那里     2.1 Nsight syst">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2026年6月16日 cuda3gpu性能分析">
+<meta property="og:url" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="一 前言  如何优化 代码应用热点-&gt; 热点分析-&gt;优化-&gt;分析代码    二 分析工具      工具 分析范围 输出 适用场景     Nsight Systems 整个应用程序（系统级） 时间线视图、所有操作概览 找到瓶颈在哪里   Nsight Compute 单个CUDA内核（内核级） 指令级指标、详细分析 找到瓶颈为什么在那里     2.1 Nsight syst">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618093957651.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260616103606543.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260616085351778.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618093747959.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618094105871.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618094200219.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618094449476.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618135426616.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618094644180.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618094702665.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618095605284.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618095521223.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618095540617.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618095210700.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618095650171.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618095820720.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618110527483.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618110723421.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618111136952.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618112023318.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618111421943.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618112159279.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618134822754.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618112438530.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618112614867.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618112721130.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618112730139.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260622204525070.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618112832360.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618112935120.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618113526085.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618113510925.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618113552512.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618113704152.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618113816477.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618113931808.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618114150284.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260622213356690.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260619204949472.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260619205117900.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260619205414357.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260619205932883.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260622205849785.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260622212538135.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260622213116857.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260622212548353.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260619210432562.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260622205556849.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260619210705875.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260619210725210.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260622213245742.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260619211426089.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260622210608895.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260622210823437.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260622210536426.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260622210513028.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260619212022770.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260619212110233.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260616090016803.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260616103643688.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260616103949677.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260616104015576.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260616104122955.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260616104447630.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260616104712327.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260616104728590.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260616104752660.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260616105256825.png">
+<meta property="article:published_time" content="2026-06-16T00:53:31.000Z">
+<meta property="article:modified_time" content="2026-06-22T15:58:03.037Z">
+<meta property="article:author" content="Weakliy">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618093957651.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>181</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>45</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2026年6月16日-cuda3gpu性能分析" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/" class="article-date">
+  <time class="post-time" datetime="2026-06-16T00:53:31.000Z" itemprop="datePublished">
+    <span class="post-month">6月</span><br/>
+    <span class="post-day">16</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2026年6月16日 cuda3gpu性能分析
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="一-前言"><a class="markdownIt-Anchor" href="#一-前言"></a> 一 前言</h1>
+<h3 id="如何优化"><a class="markdownIt-Anchor" href="#如何优化"></a> 如何优化</h3>
+<p>代码应用热点-&gt; 热点分析-&gt;优化-&gt;分析代码</p>
+<img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618093957651.png" alt="image-20260618093957651" style="zoom:25%;">
+<p><img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260616103606543.png" alt="image-20260616103606543"></p>
+<h1 id="二-分析工具"><a class="markdownIt-Anchor" href="#二-分析工具"></a> 二 分析工具</h1>
+<img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260616085351778.png" alt="image-20260616085351778" style="zoom:33%;">
+<p><img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618093747959.png" alt="image-20260618093747959"></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">工具</th>
+<th style="text-align:left">分析范围</th>
+<th style="text-align:left">输出</th>
+<th style="text-align:left">适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><strong>Nsight Systems</strong></td>
+<td style="text-align:left">整个应用程序（系统级）</td>
+<td style="text-align:left">时间线视图、所有操作概览</td>
+<td style="text-align:left">找到瓶颈在哪里</td>
+</tr>
+<tr>
+<td style="text-align:left"><strong>Nsight Compute</strong></td>
+<td style="text-align:left">单个CUDA内核（内核级）</td>
+<td style="text-align:left">指令级指标、详细分析</td>
+<td style="text-align:left">找到瓶颈为什么在那里</td>
+</tr>
+</tbody>
+</table>
+<h2 id="21-nsight-system"><a class="markdownIt-Anchor" href="#21-nsight-system"></a> 2.1 Nsight system</h2>
+<p>主要分析系统层面</p>
+<p><strong>功能:</strong></p>
+<img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618094105871.png" alt="image-20260618094105871" style="zoom:50%;"> 
+<p><strong>分析:</strong></p>
+<img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618094200219.png" alt="image-20260618094200219" style="zoom: 50%;">  
+<h3 id="212-界面分析"><a class="markdownIt-Anchor" href="#212-界面分析"></a> 2.1.2 界面分析</h3>
+<img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618094449476.png" alt="image-20260618094449476" style="zoom:33%;">
+<img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618135426616.png" alt="image-20260618135426616" style="zoom:33%;">
+<h3 id="213-threads"><a class="markdownIt-Anchor" href="#213-threads"></a> 2.1.3  Threads</h3>
+<img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618094644180.png" alt="image-20260618094644180" style="zoom:50%;"> 
+<p><img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618094702665.png" alt="image-20260618094702665"></p>
+<h4 id="1-cpu利用率"><a class="markdownIt-Anchor" href="#1-cpu利用率"></a> <strong>1 CPU利用率</strong></h4>
+<p><img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618095605284.png" alt> <img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618095521223.png" alt="image-20260618095521223"> <img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618095540617.png" alt="image-20260618095540617"></p>
+<h4 id="2-os-runtime"><a class="markdownIt-Anchor" href="#2-os-runtime"></a> 2 os runtime</h4>
+<ol>
+<li>信号量等待</li>
+<li>互斥锁等待</li>
+</ol>
+<p><img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618095210700.png" alt="image-20260618095210700"></p>
+<img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618095650171.png" alt="image-20260618095650171" style="zoom:50%;"> 
+<h4 id="3-cuda-api"><a class="markdownIt-Anchor" href="#3-cuda-api"></a> 3 cuda api</h4>
+<img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618095820720.png" alt="image-20260618095820720" style="zoom:50%;"> 
+<p><img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618110527483.png" alt="image-20260618110527483"></p>
+<h4 id="4-nvtx-注释"><a class="markdownIt-Anchor" href="#4-nvtx-注释"></a> 4 NVTX 注释</h4>
+<ol>
+<li>算法时间分布</li>
+</ol>
+<p><img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618110723421.png" alt></p>
+<h3 id="214-gpu"><a class="markdownIt-Anchor" href="#214-gpu"></a> 2.1.4 GPU</h3>
+<blockquote>
+<p>确保开启sudo权限和更新nsys版本</p>
+</blockquote>
+<ol>
+<li>kernels-&gt;stream</li>
+</ol>
+<img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618111136952.png" alt="image-20260618111136952" style="zoom:50%;"> 
+<img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618112023318.png" alt="image-20260618112023318" style="zoom: 67%;">  
+<h4 id="5-总览"><a class="markdownIt-Anchor" href="#5-总览"></a> 5 总览</h4>
+<ol>
+<li>平均kernel占有率</li>
+<li>memory操作数量</li>
+</ol>
+<p><img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618111421943.png" alt="image-20260618111421943"></p>
+<h4 id="6-memory"><a class="markdownIt-Anchor" href="#6-memory"></a> 6 memory</h4>
+<ol>
+<li>1</li>
+<li>2</li>
+</ol>
+<p><img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618112159279.png" alt="image-20260618112159279"></p>
+<h4 id="7-kernel-stream"><a class="markdownIt-Anchor" href="#7-kernel-stream"></a> 7 kernel stream</h4>
+<ol>
+<li>kernel启动(cpu) 与kernel执行 <strong>颜色关联</strong></li>
+<li>2</li>
+</ol>
+<img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618134822754.png" alt="image-20260618134822754" style="zoom:50%;">
+<h2 id="22-nsight-compute"><a class="markdownIt-Anchor" href="#22-nsight-compute"></a> 2.2 Nsight compute</h2>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/721868889">https://zhuanlan.zhihu.com/p/721868889</a></p>
+</blockquote>
+<p>优化kernel层面交互和分析以及debug,深入分析单个 CUDA 内核的性能瓶颈，帮助你优化内核代码。</p>
+<p><strong>功能</strong></p>
+<img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618112438530.png" alt="image-20260618112438530" style="zoom:50%;"> 
+<ol>
+<li>优化功能</li>
+<li>baseline比较</li>
+<li>数据收集</li>
+</ol>
+<h3 id="221-界面分析"><a class="markdownIt-Anchor" href="#221-界面分析"></a> 2.2.1 界面分析</h3>
+<img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618112614867.png" alt="image-20260618112614867" style="zoom:67%;">
+<p><img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618112721130.png" alt="image-20260618112721130" style="zoom:50%;"> <img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618112730139.png" alt="image-20260618112730139" style="zoom: 80%;"></p>
+<hr>
+<p><img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260622204525070.png" alt="image-20260622204525070"></p>
+<h4 id="1-顶部标签页栏top-navigation-tabs"><a class="markdownIt-Anchor" href="#1-顶部标签页栏top-navigation-tabs"></a> 1. 顶部标签页栏（Top Navigation Tabs）</h4>
+<p>在界面的左上角，有一排切换标签，它们代表了性能分析的不同维度：</p>
+<ul>
+<li><strong>Summary（当前所在页）：</strong> 全局多 Kernel 的性能总览表，用于多 Kernel 之间的横向对比。</li>
+<li><strong>Details：</strong> 极其详细的单 Kernel 报告页。你之前发给我的那些“优化建议（Speedup Estimates）”、Roofline 模型图、Warp 状态、MIO/L2 异常指标，全部藏在点击这个标签后的详情里。</li>
+<li><strong>Source：</strong> 代码对齐剖析页。能把 CUDA C++ 源码、PTX 中间码和 SASS 汇编码并排显示，并精确标出哪一行代码卡死了硬件。</li>
+<li><strong>Context / Comments / Raw / Session：</strong> 用于查看运行环境上下文、记录优化笔记、查看原始性能计数器（Counters）数据以及管理多次采样的 Session。</li>
+</ul>
+<h4 id="2-核心数据表格列解析table-columns"><a class="markdownIt-Anchor" href="#2-核心数据表格列解析table-columns"></a> 2. 核心数据表格列解析（Table Columns）</h4>
+<p>从左到右，这个表格为你展示了当前 Kernel 的“体检报告”：</p>
+<ul>
+<li><strong>ID：</strong> 触发执行的顺序编号（0, 1, 2…）。每次你的程序调用一次这个 Kernel，就会记录一行。</li>
+<li><strong>Estimated Speedup [%]（预估提升空间）：</strong>
+<ul>
+<li><strong>当前数值：11.76%</strong></li>
+<li><strong>含义：</strong> 这是一个非常贴心的指标。Nsight Compute 根据它发现的瓶颈，计算出“如果你把这个 Kernel 的底层代码优化到完美状态，理论上整个 Kernel 能变快多少”。</li>
+</ul>
+</li>
+<li><strong>Function Name / Demangled Name（函数名）：</strong>
+<ul>
+<li><strong>当前显示：<code>no_divergence(float \*, int)</code></strong></li>
+<li><strong>含义：</strong> 告诉你当前这行数据对应的是哪一个 CUDA 核函数。Demangled Name 会把 C++ 的编译修饰名还原，完整显示它的入参类型。</li>
+</ul>
+</li>
+<li><strong>Duration [ms]（执行耗时）：</strong>
+<ul>
+<li><strong>当前数值：1.30 ms</strong></li>
+<li><strong>含义：</strong> 该 Kernel 单次执行在 GPU 上实际跑了多久。这是最直观的性能指标，优化就是要想办法把这个数字压下去。</li>
+</ul>
+</li>
+<li><strong>Runtime Improvement [ms]（预估运行时间缩短）：</strong>
+<ul>
+<li><strong>当前数值：0.15 ms</strong></li>
+<li><strong>含义：</strong> 对应前面的 11.76%。如果把瓶颈修掉，单次执行预计能省下 0.15 毫秒。</li>
+</ul>
+</li>
+<li><strong>Compute Throughput [%]（计算吞吐量 / SM 利用率）：</strong>
+<ul>
+<li><strong>当前数值：93.25%</strong></li>
+<li><strong>含义：</strong> 非常高！这说明你的 Kernel 在执行时，GPU 的<strong>计算单元（数学运算）几乎全负荷拉满了</strong>。这也是为什么你之前的瓶颈里，虽然有 MIO 或 L2 不均衡，但预计总收益不太高的原因——因为算力已经用得很充分了。</li>
+</ul>
+</li>
+<li><strong>Memory Throughput [%]（内存吞吐量 / 带宽利用率）：</strong>
+<ul>
+<li><strong>当前数值：1.63% ~ 1.87%</strong></li>
+<li><strong>含义：</strong> 非常低。结合上面 93.25% 的计算利用率，说明这是一个<strong>极度极度典型的“算力受限型（Compute-Bound）”Kernel</strong>。它一直在做高密度的数学计算，而极少去读写显存。</li>
+</ul>
+</li>
+<li><strong># Registers（寄存器数量）：</strong>
+<ul>
+<li><strong>当前数值：16</strong></li>
+<li><strong>含义：</strong> 每个线程分配了 16 个硬件寄存器。16 是一个非常小的数字，说明这个 Kernel 静态资源占用极低，硬件理论上可以塞满 100% 的 Occupancy（硬件占用率）。</li>
+</ul>
+</li>
+<li><strong>Grid Size / Block Size（网格与线程块尺寸）：</strong>
+<ul>
+<li><strong>当前数值：Grid (4096, 1, 1), Block (256, 1, 1)</strong></li>
+<li><strong>含义：</strong> 你的启动配置（Launch Configuration）。这里每个 Block 有 256 个线程，一共启动了 4096 个 Block。总线程数 = 4096 × 256 = 1,048,576 个线程。这是一个非常标准且健康的配置，能很好地填满大算力 GPU。</li>
+</ul>
+</li>
+<li><strong>Result Type：</strong>
+<ul>
+<li><strong>显示：Kernel</strong>。说明采样的对象是一个标准的 CUDA 核函数。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id><a class="markdownIt-Anchor" href="#"></a> </h3>
+<h4 id="1-api-stream"><a class="markdownIt-Anchor" href="#1-api-stream"></a> 1 API stream</h4>
+<img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618112832360.png" alt="image-20260618112832360" style="zoom:50%;"> 
+<h3 id="224-section"><a class="markdownIt-Anchor" href="#224-section"></a> 2.2.4 section</h3>
+<img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618112935120.png" alt="image-20260618112935120" style="zoom:50%;">
+<h3 id="222-details功能"><a class="markdownIt-Anchor" href="#222-details功能"></a> 2.2.2 Details功能</h3>
+<h3 id="1-sol"><a class="markdownIt-Anchor" href="#1-sol"></a> 1 SOL</h3>
+<h4 id="1"><a class="markdownIt-Anchor" href="#1"></a> 1</h4>
+<p>1</p>
+<p><img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618113526085.png" alt></p>
+<p>2</p>
+<p><img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618113510925.png" alt="image-20260618113510925"></p>
+<p>3</p>
+<ol>
+<li>都不高</li>
+</ol>
+<p><img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618113552512.png" alt="image-20260618113552512"></p>
+<h4 id="2"><a class="markdownIt-Anchor" href="#2"></a> 2</h4>
+<img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618113704152.png" alt="image-20260618113704152" style="zoom:50%;">
+<p>nvprof 与 ncu区别</p>
+<h4 id="3表格"><a class="markdownIt-Anchor" href="#3表格"></a> 3表格</h4>
+<p><img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618113816477.png" alt="image-20260618113816477"></p>
+<h3 id="2-compute-workload"><a class="markdownIt-Anchor" href="#2-compute-workload"></a> 2 compute workload</h3>
+<p><img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618113931808.png" alt="image-20260618113931808"></p>
+<ol>
+<li>根据运行的pipeline来分析硬件使用情况是否符合自己的预期</li>
+<li></li>
+</ol>
+<img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260618114150284.png" alt="image-20260618114150284" style="zoom: 50%;">
+<blockquote>
+<p><img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260622213356690.png" alt="image-20260622213356690"></p>
+</blockquote>
+<h3 id="3-wrp-cheduler"><a class="markdownIt-Anchor" href="#3-wrp-cheduler"></a> 3 wrp/ cheduler</h3>
+<img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260619204949472.png" alt="image-20260619204949472" style="zoom:50%;">
+<h4 id="1-warp结构"><a class="markdownIt-Anchor" href="#1-warp结构"></a> <strong>1 warp结构</strong></h4>
+<p><img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260619205117900.png" alt="image-20260619205117900" style="zoom:50%;">\</p>
+<h4 id="2-warp-scheduler"><a class="markdownIt-Anchor" href="#2-warp-scheduler"></a> 2 warp scheduler</h4>
+<p>不同架构的wrap slot 是不一样的</p>
+<img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260619205414357.png" alt="image-20260619205414357" style="zoom:50%;"> 
+<ol>
+<li>没使用</li>
+<li>激活</li>
+<li>原因阻塞</li>
+<li>准备好</li>
+<li>已选择</li>
+</ol>
+<p><img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260619205932883.png" alt="image-20260619205932883"></p>
+<blockquote>
+<p><img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260622205849785.png" alt="image-20260622205849785"></p>
+</blockquote>
+<h3 id="3-warp-state-statistics"><a class="markdownIt-Anchor" href="#3-warp-state-statistics"></a> 3  Warp State Statistics</h3>
+<p>在回答：<strong>“Warp 为什么没有在持续发射指令？”</strong></p>
+<p>以及：<strong>“GPU 的时间究竟花在计算、等待内存，还是等待同步上？”</strong></p>
+<blockquote>
+<p>这里展开了之前我们零散看到的几个关键警报，并给出了具体底层数据：</p>
+<ul>
+<li><strong>Avg. Active Threads Per Warp: <code>16.08</code> / Avg. Not Predicated Off Threads: <code>16.06</code></strong>
+<ul>
+<li><strong>硬核解读：</strong> 这两个数字精准实锤了 <strong>Thread Divergence（分支分歧）</strong>。一个 Warp 有 32 个线程，但在整个运行周期中，平均只有 16.08 个线程处于活跃状态；更糟糕的是，除去被硬件用掩码强行挂起（Predicated Off）的线程，真正有效干活的线程只有 <strong>16.06</strong> 个。<strong>这就意味着你的硬件计算资源在运行时被精确地拦腰斩断（浪费了 49.8% 的算力）</strong>。</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260622212538135.png" alt="image-20260622212538135"></p>
+</blockquote>
+<h3 id="4-instruction-statistics第一张图核心"><a class="markdownIt-Anchor" href="#4-instruction-statistics第一张图核心"></a> 4 Instruction Statistics（第一张图核心）</h3>
+<p>你的 Kernel 到底在执行哪些 SASS 指令？</p>
+<img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260622213116857.png" alt="image-20260622213116857" style="zoom:50%;"> 
+<blockquote>
+<ul>
+<li><strong>Executed Instructions: <code>98,893,824</code> / FP32 Non-Fused Instructions: <code>65,536,000</code></strong>
+<ul>
+<li><strong>硬核解读：</strong> 你的 Kernel 一共执行了约 9889 万条汇编指令。而其中，<strong>未融合的 FP32 单精度计算指令占了 6553.6 万条（占比高达 66.2%）</strong>。</li>
+<li><strong>破案了：</strong> 整个 Kernel 超过三分之二的指令都在做基础的 FP32 加法或乘法。由于这 6553.6 万条指令完全没有利用 FMA 融合，导致计算单元在成倍地重复劳动。</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260622212548353.png" alt="image-20260622212548353"></p>
+</blockquote>
+<hr>
+<h3 id="5-memory"><a class="markdownIt-Anchor" href="#5-memory"></a> 5 memory</h3>
+<h4 id="1-memory-hierarchy"><a class="markdownIt-Anchor" href="#1-memory-hierarchy"></a> <strong>1 memory hierarchy</strong></h4>
+<img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260619210432562.png" alt="image-20260619210432562" style="zoom:50%;">
+<blockquote>
+<img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260622205556849.png" alt="image-20260622205556849" style="zoom: 33%;"> 
+</blockquote>
+<h4 id="2-memory-report"><a class="markdownIt-Anchor" href="#2-memory-report"></a> <strong>2 memory report</strong></h4>
+<p><img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260619210705875.png" alt="image-20260619210705875"></p>
+<img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260619210725210.png" alt="image-20260619210725210" style="zoom:67%;">
+<ol>
+<li>优化blank conflict</li>
+<li>尽量实际和理论数据传输量相同</li>
+<li></li>
+</ol>
+<p><strong>sector/request</strong>?</p>
+<blockquote>
+<p><img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260622213245742.png" alt="image-20260622213245742"></p>
+</blockquote>
+<h3 id="4-launch-statistics-occupancy"><a class="markdownIt-Anchor" href="#4-launch-statistics-occupancy"></a> 4  Launch Statistics &amp; Occupancy</h3>
+<img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260619211426089.png" alt="image-20260619211426089" style="zoom:50%;">
+<blockquote>
+<p>这里展示了你的启动参数以及硬件资源的静态/动态利用情况：</p>
+<ul>
+<li><strong>Launch 静态资源参数：</strong>
+<ul>
+<li><strong>Block Size: <code>256</code> / Registers Per Thread: <code>16</code></strong>：由于每个线程只用了 16 个寄存器，这个资源消耗极低。</li>
+<li><strong>Shared Memory Per Block: <code>0</code></strong>：代码中完全没有显式使用共享内存（Shared Memory）。</li>
+</ul>
+</li>
+<li><strong>Occupancy 占用率指标：</strong>
+<ul>
+<li><strong>Theoretical Occupancy: <code>100%</code></strong>：因为寄存器和共享内存用得少，硬件理论上允许你把每个 SM 里的物理线程坑位全部塞满。</li>
+<li><strong>Achieved Occupancy: <code>98.07%</code></strong> 🌟：<strong>这个数字非常优秀！</strong> 实际占用率达到了 98.07%，说明你的 Grid 足够大（4096），硬件资源从宏观上来看是全部被调动起来了的。</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260622210608895.png" alt="image-20260622210608895"></p>
+<p><img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260622210823437.png" alt="image-20260622210823437"></p>
+</blockquote>
+<h3 id="6-gpu-and-memory-workload-distribution工作负载分布"><a class="markdownIt-Anchor" href="#6-gpu-and-memory-workload-distribution工作负载分布"></a> 6 GPU and Memory Workload Distribution（工作负载分布）</h3>
+<blockquote>
+<p>这里揭示了数据在各级缓存（L1、L2、DRAM）之间的流转和时钟周期统计：</p>
+<ul>
+<li><strong>Average SM Active Cycles: <code>2,326,778</code></strong></li>
+<li><strong>Average L2 Active Cycles: <code>221,375</code></strong></li>
+<li><strong>Average DRAM Active Cycles: <code>709,930</code></strong></li>
+<li><strong>硬核解读：</strong> SM 核心整整活跃了 232 万个周期，而 L2 缓存只活跃了 22 万个周期。这再次以绝对的数据优势证明：<strong>这是一个纯粹到极点的计算受限（Compute-Bound）Kernel</strong>。数据一经读入，就在 SM 的寄存器内部被疯狂计算（循环），极少与外面的 L2 缓存和 DRAM 发生频繁交互。</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260622210536426.png" alt="image-20260622210536426"></p>
+</blockquote>
+<h3 id="7-source-counters源计数器-分支效率"><a class="markdownIt-Anchor" href="#7-source-counters源计数器-分支效率"></a> 7  Source Counters（源计数器 - 分支效率）</h3>
+<p><strong>源代码级别（Source-Level）的性能指标，包括分支效率（Branch Efficiency）以及采样得到的 Warp Stall 原因。</strong></p>
+<p>Warp Stall Sampling（Warp 停顿采样）指标会在 Kernel 执行期间周期性地进行采样统计。</p>
+<p>这些指标用于反映：</p>
+<p><strong>Warp 在什么时间处于停顿状态（Stalled），从而无法被调度器（Scheduler）调度执行。</strong></p>
+<blockquote>
+<p>这是揭示分歧原因的终极底层铁证：</p>
+<ul>
+<li><strong>Branch Instructions [inst]: <code>196,608</code></strong></li>
+<li><strong>Branch Efficiency [%]: <code>50.00%</code></strong> 🌟🌟🌟</li>
+<li><strong>硬核解读：</strong> 你的 Kernel 内部总共执行了 19.6 万次分支跳转指令（例如执行到 <code>if</code> 语句）。而<strong>分支效率（Branch Efficiency）是精准的 50.00%</strong>。 这说明在整个 GPU 的宏观执行中，所有的分支全部对半开（一半走 <code>if</code>，一半走 <code>else</code>），且完全错落交织在同一个 Warp 内部，导致了最完美的对称分支分歧。</li>
+</ul>
+</blockquote>
+<p><img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260622210513028.png" alt="image-20260622210513028"></p>
+<h3 id="-2"><a class="markdownIt-Anchor" href="#-2"></a> </h3>
+<h3 id="223-wrap"><a class="markdownIt-Anchor" href="#223-wrap"></a> 2.2.3 wrap</h3>
+<h4 id="231-stall-resaon"><a class="markdownIt-Anchor" href="#231-stall-resaon"></a> 2.3.1 stall resaon</h4>
+<img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260619212022770.png" alt="image-20260619212022770" style="zoom:50%;"> 
+<img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260619212110233.png" alt="image-20260619212110233" style="zoom:50%;">
+<h3 id="224-source"><a class="markdownIt-Anchor" href="#224-source"></a> 2.2.4 Source</h3>
+<h4 id="1-sass"><a class="markdownIt-Anchor" href="#1-sass"></a> 1 SASS</h4>
+<h4 id="2-ptx"><a class="markdownIt-Anchor" href="#2-ptx"></a> 2 PTX</h4>
+<h1 id="三-优化方向"><a class="markdownIt-Anchor" href="#三-优化方向"></a> 三 优化方向</h1>
+<h2 id="核心指标分析"><a class="markdownIt-Anchor" href="#核心指标分析"></a> 核心指标分析</h2>
+<h3 id="1-融合指令fused"><a class="markdownIt-Anchor" href="#1-融合指令fused"></a> 1 融合指令（Fused）</h3>
+<p>支持 <strong>FMA（Fused Multiply-Add，乘加融合）</strong> 指令（即一步完成 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>×</mo><mi>B</mi><mo>+</mo><mi>C</mi></mrow><annotation encoding="application/x-tex">A \times B + C</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathnormal">A</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span></span></span></span>）。如果把乘法和加法拆成两条指令执行，不仅吞吐量减半，还会带来额外的寄存器读写开销</p>
+<h3 id="2-mio-throttle-stallsmio-管道丢速停顿"><a class="markdownIt-Anchor" href="#2-mio-throttle-stallsmio-管道丢速停顿"></a> 2 Mio Throttle Stalls（MIO 管道丢速/停顿）</h3>
+<p>线程束（Warp）在执行两条指令之间平均要等 33.1 个周期，其中有 <strong>19.7 个周期（高达 59.6%）</strong> 卡在了等待 <strong>MIO（Memory Input/Output）指令队列</strong>释放空间上。说明 MIO 管道被塞满了。</p>
+<h3 id="3-l2-slices-workload-imbalancel2-缓存分片负载不均衡"><a class="markdownIt-Anchor" href="#3-l2-slices-workload-imbalancel2-缓存分片负载不均衡"></a> 3 L2 Slices Workload Imbalance（L2 缓存分片负载不均衡）</h3>
+<p><strong>现状数据：</strong> 某些 L2 Slices（分片）的活跃周期比平均值<strong>高出了 40.09%</strong>，而最闲的分片比平均值低 3.95%。</p>
+<p><strong>诱因：</strong></p>
+<ol>
+<li><strong>非连续/固定步长的内存访问（Strided Access with Power-of-2 Steps）：</strong> 如果你的线程在访问一个大矩阵或多维数组时，跳跃的步长（Stride）刚好是 <strong>2 的幂次方</strong>（例如每次跳跃 1024、2048 个元素，这在处理图像通道、矩阵转置、或者特定 ROI 区域拉取时非常常见）。这会导致所有线程计算出来的物理内存地址，经过哈希后<strong>全部神奇地指向同一个或少数几个 L2 Slice</strong>。</li>
+<li><strong>严重的内存热点（Data Hotspots）：</strong> 大量的线程在同一时间去读取/原子写入（Atomic Operations）全局显存中的<strong>同一块特定区域</strong>（比如全局计数器、或者某个特定的锚点数据）。</li>
+</ol>
+<h3 id="4-thread-divergence线程分支分歧"><a class="markdownIt-Anchor" href="#4-thread-divergence线程分支分歧"></a> 4 <strong>Thread Divergence（线程分支分歧）</strong></h3>
+<h4 id="1-现象解读一半的算力在陪跑"><a class="markdownIt-Anchor" href="#1-现象解读一半的算力在陪跑"></a> 1. 现象解读：一半的算力在“陪跑”</h4>
+<ul>
+<li><strong>核心数据：</strong> 该 Kernel 在执行时，每个周期平均只有 <strong>16.1 个线程</strong>是真正活跃（Active）的。</li>
+<li><strong>直白翻译：</strong> GPU 是以 <strong>Warp（线程束，共 32 个线程）</strong> 为最小单位由硬件同步执行相同指令的（SIMT 架构）。而你的程序在运行时，一个 Warp 里的 32 个兄弟，<strong>平均每个周期只有 16.1 个在真正干活，剩下的 15.9 个线程都在围观或被挂起</strong>。你的 GPU 算力直接被白白浪费了近 50%。</li>
+</ul>
+<h4 id="2-为什么会发生-thread-divergence"><a class="markdownIt-Anchor" href="#2-为什么会发生-thread-divergence"></a> 2. 为什么会发生 Thread Divergence？</h4>
+<p>根本原因在于你的 CUDA 代码中包含了<strong>条件分支语句（如 <code>if-else</code>、<code>switch</code>、<code>while</code>）</strong>，并且分选条件取决于线程的 ID 或它处理的数据。</p>
+<p>当一个 Warp 内的 32 个线程走到一个 <code>if-else</code> 冲突点时：</p>
+<ol>
+<li>满足 <code>if</code> 条件的线程（假设有 16 个）去执行 <code>if</code> 块内的代码，此时<strong>不满足条件的另外 16 个线程必须原地原地挂起、死等</strong>。</li>
+<li><code>if</code> 块执行完后，轮到满足 <code>else</code> 条件的 16 个线程去执行，此时<strong>刚才干完活的 16 个线程反过来原地死等</strong>。</li>
+<li>这种串行排队执行不同分支的现象，就是<strong>分支分歧</strong></li>
+</ol>
+<h3 id="5-long-scoreboard-stalls长记分板停顿"><a class="markdownIt-Anchor" href="#5-long-scoreboard-stalls长记分板停顿"></a> 5 Long Scoreboard Stalls（长记分板停顿）</h3>
+<ul>
+<li><strong>核心数据：</strong> 线程束（Warp）在两条指令之间平均要等 40 个周期，其中有 <strong>30.3 个周期（高达 75.7%）</strong> 都卡在 <code>Long Scoreboard</code> 依赖上。</li>
+<li><strong>什么是 Long Scoreboard？</strong> GPU 的“记分板（Scoreboard）”是用来追踪指令数据依赖的硬件机制。而 <strong>Long Scoreboard</strong> 专门负责追踪<strong>高延迟的内存访问请求</strong>——主要包括：从全局显存（Global Memory）、本地内存（Local Memory）以及纹理内存（Texture）中读取数据。</li>
+<li><strong>现状解读：</strong> 你的代码发出了读取显存的指令，但数据从**遥远的 DRAM 运回片上寄存器需要几百个周期。**在这期间，后续的代码又马上需要用到这个数据。硬件一看数据还没到，只能让线程束原地“发呆”死等。</li>
+</ul>
+<h3 id="6-achieved-occupancy实际占用率偏低"><a class="markdownIt-Anchor" href="#6-achieved-occupancy实际占用率偏低"></a> 6 Achieved Occupancy（实际占用率偏低）</h3>
+<ul>
+<li><strong>核心数据：</strong> 理论最大占用率是 100%，但实际测得的占用率（Achieved Occupancy）只有 <strong>74.4%</strong>。</li>
+<li><strong>为什么会有这个落差？</strong> 理论占用率是根据你 Kernel 消耗的寄存器和共享内存算出来的（静态指标）。而<strong>实际占用率</strong>是运行时真正在跑的活跃 Warp 比例（动态指标）。 报告指出，造成这 25.6% 落差的原因是 <strong>Warp 调度开销（Scheduling Overheads）</strong> 或 <strong>负载不均衡（Workload Imbalances）</strong>。结合下面的 Long Scoreboard 指标可以断定：大量的 Warp 因为在等显存数据（卡在 Long Scoreboard 停顿），导致硬件调度器没有足够的“处于就绪状态的 Warp”来发射指令，使得原本充裕的物理通道出现了间歇性闲置。</li>
+</ul>
+<blockquote>
+<h3 id="方案-a引入软件流水线异步或提前加载prefetching"><a class="markdownIt-Anchor" href="#方案-a引入软件流水线异步或提前加载prefetching"></a> 方案 A：引入“软件流水线”——异步或提前加载（Prefetching）</h3>
+<ul>
+<li><strong>原理：</strong> 不要等到马上要用数据时才去读显存，把读操作提前。</li>
+<li><strong>做法（CUDA 11+ / Ampere 架构及以上）：</strong> 如果是从全局显存加载到共享内存，强烈建议使用 <strong><code>cuda::memcpy_async</code>（异步内存拷贝）</strong>。它直接在硬件层面将数据从 Global Memory 搬运到 Shared Memory，中间<strong>不占用寄存器</strong>，这意味着线程可以一边继续做其他的计算（如上一轮循环的计算），一边让硬件在后台运下一轮的数据。</li>
+</ul>
+<h3 id="方案-b重构内存访问模式提高缓存命中率"><a class="markdownIt-Anchor" href="#方案-b重构内存访问模式提高缓存命中率"></a> 方案 B：重构内存访问模式，提高缓存命中率</h3>
+<ul>
+<li><strong>做法：</strong> 检查你的显存访问是否做到了<strong>合并访问（Coalesced Access）</strong>。如果访问不连续（如上一张图提示的 L2 Slices 不均衡），会导致单次读取触发多条显存事务，极大地延长了数据返回的周期，加剧 Long Scoreboard 停顿。</li>
+<li><strong>效果：</strong> 让数据连续，让 L1/L2 缓存命中。只要数据在 L2 缓存里就被截获，返回速度会比去 DRAM 快数倍，Scoreboard 很快就能解除锁定。</li>
+</ul>
+<h3 id="方案-c增大计算内存比增加-ilp指令级并行"><a class="markdownIt-Anchor" href="#方案-c增大计算内存比增加-ilp指令级并行"></a> 方案 C：增大计算/内存比（增加 ILP：指令级并行）</h3>
+<ul>
+<li><strong>做法：</strong> 如果你的循环里只有一条读指令和一条计算指令，可以尝试进行<strong>循环展开（Loop Unrolling，使用 <code>#pragma unroll</code>）</strong>，或者让一个线程一次处理 2 个或 4 个元素（比如利用 <code>float4</code> 读入后，连续做 4 次不相关的计算）。</li>
+<li><strong>效果：</strong> 抛出多个不依赖的读取请求（Memory-level parallelism），并用不依赖该数据的其他计算指令去填补等待的空白期，以此来“欺骗”硬件调度器。</li>
+</ul>
+</blockquote>
+<hr>
+<h3 id="1-bank-conflict存储体冲突"><a class="markdownIt-Anchor" href="#1-bank-conflict存储体冲突"></a> 1 Bank Conflict（存储体冲突）</h3>
+<p><strong>什么是bank</strong></p>
+<p><strong>为什么会bank conflict</strong></p>
+<p><strong>怎么解决</strong></p>
+<h3 id="sm效率低问题"><a class="markdownIt-Anchor" href="#sm效率低问题"></a> <strong>SM效率低问题</strong></h3>
+<p>是什么</p>
+<ol>
+<li>主要cpu活动:</li>
+<li>内显存拷贝</li>
+<li>kernel启动延迟: kernel合并</li>
+</ol>
+<h3 id="实现占有率低"><a class="markdownIt-Anchor" href="#实现占有率低"></a> 实现占有率低:</h3>
+<p>是什么</p>
+<p>怎么看: system</p>
+<p><img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260616090016803.png" alt="image-20260616090016803"></p>
+<img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260616103643688.png" alt="image-20260616103643688" style="zoom:33%;"> 
+<h3 id="添加注释"><a class="markdownIt-Anchor" href="#添加注释"></a> 添加注释</h3>
+<img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260616103949677.png" alt="image-20260616103949677" style="zoom:33%;">
+<p><img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260616104015576.png" alt="image-20260616104015576"></p>
+<h3 id="案例"><a class="markdownIt-Anchor" href="#案例"></a> 案例</h3>
+<p><img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260616104122955.png" alt="image-20260616104122955"></p>
+<p><img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260616104447630.png" alt="image-20260616104447630"></p>
+<ol>
+<li>
+<p>看瓶颈在哪?</p>
+<p>例如矩阵操作, 使用混合精度</p>
+<img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260616104712327.png" alt="image-20260616104712327" style="zoom: 25%;">
+</li>
+</ol>
+<img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260616104728590.png" alt="image-20260616104728590" style="zoom:33%;">
+<img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260616104752660.png" alt="image-20260616104752660" style="zoom:33%;">
+<blockquote>
+<p>顺序读, ,跳跃写=&gt; 显存消耗大, 计算量小</p>
+<p>放到shared memory的快速范文</p>
+</blockquote>
+<img src="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/image-20260616105256825.png" alt="image-20260616105256825" style="zoom:50%;">
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/" data-id="cms1vppgc0005lkv42xnxhvpj" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2%E9%99%84%E5%BD%95/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          2026年6月16日 cuda编程2附录
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2026/06/15/2026%E5%B9%B46%E6%9C%8815%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2-%E5%87%BD%E6%95%B0%E8%AF%B4%E6%98%8E/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2026年6月15日 cuda编程2 函数说明</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>181</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>45</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2025 - 2026 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

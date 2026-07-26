@@ -18,7 +18,7 @@
 <meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-Agent%E6%A1%86%E6%9E%B6-%E8%87%AA%E7%A0%94/image-20260522152100979.png">
 <meta property="og:image" content="https://shakewely.github.io/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-Agent%E6%A1%86%E6%9E%B6-%E8%87%AA%E7%A0%94/image-20260522150306617.png">
 <meta property="article:published_time" content="2026-05-08T07:34:22.000Z">
-<meta property="article:modified_time" content="2026-05-28T06:30:24.823Z">
+<meta property="article:modified_time" content="2026-06-21T11:24:58.281Z">
 <meta property="article:author" content="Weakliy">
 <meta property="article:tag" content="agent">
 <meta name="twitter:card" content="summary">
@@ -54,9 +54,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>167</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>181</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>44</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>45</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -259,6 +259,16 @@
 <h3 id="63-添加手动命令"><a class="markdownIt-Anchor" href="#63-添加手动命令"></a> 6.3 添加/手动命令</h3>
 <p>-&gt; 可以直接被hot reload 替代了</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">### 结论</span><br><span class="line">**可以替换。** `HotReloadTool` 是 `AddToolTool` 的超集——所有 `AddToolTool` 的功能都能通过 `hot_reload` 的 `remount_tools` 参数完成，且额外支持代码热重载、替换已有工具、刷新注册表等能力。如果只为&quot;挂载一个 尚未挂载的工具&quot;这个场景，`hot_reload` 略重（需传 `module_names` + `remount_tools`），但功能上完全覆盖 。</span><br></pre></td></tr></table></figure>
+<h3 id="65-browser-tool"><a class="markdownIt-Anchor" href="#65-browser-tool"></a> 6.5 browser tool</h3>
+<h4 id="1-如何实现"><a class="markdownIt-Anchor" href="#1-如何实现"></a> 1 如何实现?</h4>
+<ol>
+<li>
+<h2 id="playwright"><a class="markdownIt-Anchor" href="#playwright"></a> Playwright</h2>
+</li>
+<li>
+<h2 id="browser-use库"><a class="markdownIt-Anchor" href="#browser-use库"></a> browser use库</h2>
+</li>
+</ol>
 <h2 id="7-loop"><a class="markdownIt-Anchor" href="#7-loop"></a> 7 loop</h2>
 <h4 id="以后怎么避免误杀整个-loop"><a class="markdownIt-Anchor" href="#以后怎么避免误杀整个-loop"></a> 以后怎么避免「误杀整个 loop」</h4>
 <p>可选改进（当前代码还没做）：</p>
@@ -513,103 +523,33 @@
 <li>编程任务 → 重点注入代码、文件、调试工具</li>
 <li>研究任务 → 重点注入搜索、浏览、RAG 工具</li>
 </ul>
-<h1 id="️二-实现相关"><a class="markdownIt-Anchor" href="#️二-实现相关"></a> ✍️二 实现相关</h1>
-<h2 id="1-user-message"><a class="markdownIt-Anchor" href="#1-user-message"></a> 1 user message</h2>
-<h2 id="2-怎么设计agent启动scheduler任务"><a class="markdownIt-Anchor" href="#2-怎么设计agent启动scheduler任务"></a> 2 怎么设计agent启动scheduler任务</h2>
-<h3 id="21-为什么不要直接-factory"><a class="markdownIt-Anchor" href="#21-为什么不要直接-factory"></a> 2.1 为什么不要直接 Factory</h3>
-<p>因为：</p>
-<p>Factory 更偏：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">创建对象</span><br></pre></td></tr></table></figure>
-<p>而你这里更像：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">根据 task_type 找执行器</span><br></pre></td></tr></table></figure>
-<p>所以：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Registry 比 Factory 更准确</span><br></pre></td></tr></table></figure>
-<h3 id="22-executor-为什么不用taskexecute"><a class="markdownIt-Anchor" href="#22-executor-为什么不用taskexecute"></a> 2.2 Executor? 为什么不用task.execute</h3>
-<p>你在纠结：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">task.execute()</span><br></pre></td></tr></table></figure>
-<p>还是：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">executor.execute(task)</span><br></pre></td></tr></table></figure>
-<p>本质上是在：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">OO（面向对象）</span><br><span class="line">vs</span><br><span class="line">Runtime/Engine 架构</span><br></pre></td></tr></table></figure>
-<p>之间做选择。</p>
-<p><strong>Task 更应该像 DTO</strong></p>
-<p>推荐：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">class Task(BaseModel):</span><br><span class="line">    id: str</span><br><span class="line">    type: str</span><br><span class="line">    payload: dict</span><br></pre></td></tr></table></figure>
-<hr>
-<p><strong>Executor 才是 Runtime</strong></p>
-<p>真正复杂的是：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">class SummaryExecutor:</span><br></pre></td></tr></table></figure>
-<p>它才有：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">self.memory</span><br><span class="line">self.llm</span><br><span class="line">self.agent_factory</span><br><span class="line">self.eventbus</span><br></pre></td></tr></table></figure>
-<p>因为：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">它属于运行时</span><br></pre></td></tr></table></figure>
-<blockquote>
-<h3 id="真正推荐的是注册式执行器"><a class="markdownIt-Anchor" href="#真正推荐的是注册式执行器"></a> 真正推荐的是“注册式执行器”</h3>
-<p>类似：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">task.type</span><br><span class="line">    ↓</span><br><span class="line">registry</span><br><span class="line">    ↓</span><br><span class="line">executor class</span><br></pre></td></tr></table></figure>
-<p>例如：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">registry.register(</span><br><span class="line">    &quot;daily_summary&quot;,</span><br><span class="line">    DailySummaryExecutor</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">registry.register(</span><br><span class="line">    &quot;weekly_report&quot;,</span><br><span class="line">    WeeklyReportExecutor</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-</blockquote>
-<h3 id="23-那为什么tool-设计成toolexecute"><a class="markdownIt-Anchor" href="#23-那为什么tool-设计成toolexecute"></a> 2.3 那为什么tool 设计成tool…execute</h3>
-<p>Task 本质是“调度<strong>描述</strong>”，它的存在是为了让系统可以把“什么时候做什么事”持久化下来、排队、恢复、分布式执行。它更像一条记录、一份计划书，所以它必须保持稳定、纯粹、无依赖，这样才能被存到数据库里、跨进程传输、失败后重新执行。如果你让 Task 自己去 execute，那它就必须知道怎么调用 LLM、怎么用 tool、怎么处理 retry、怎么管理状态，这**会导致它从“数据”变成“运行时系统”，**整个调度层会和业务逻辑强耦合，系统会逐渐失去可拆分性和可扩展性。</p>
-<p>而 Tool 不一样，Tool 本质是“能力本身”，它不是计划，也不是调度结果，而是<strong>最底层的动作单元</strong>，比如搜索、计算、请求 API、读数据库。它的特点是输入明确、输出明确、<strong>无调度逻辑</strong>，它不会关心什么时候被调用，也不会关心是谁在调用，它只负责“做一件事”。所以 Tool 设计成 execute 是合理的，因为它本来就是被执行的对象。</p>
-<p>真正关键的区别在于：<br>
-<strong>Task 解决的是“要不要做、什么时候做”，Tool 解决的是“具体怎么做”。</strong></p>
-<p>如果把 Task 也设计成 execute，就等于把调度系统和执行系统混在一个对象里，最终会变成一个既要管时间、状态、队列，又要懂业务逻辑和外部能力的“超级对象”，系统会失去分层结构，后期扩展（比如加新 tool、加分布式 worker、加重试队列）都会变得非常痛苦。</p>
-<p>所以不是“能不能这样设计”的问题，而是：<br>
-一旦 Task 负责 execute，系统就不再是调度系统，而变成一个难以拆分的运行时整体；而把 execute 放在 Tool 上，是在保持“调度”和“能力”分离，让整个系统可以像操作系统一样分层运行。</p>
-<blockquote>
-<p>这是个很好的“你已经开始区分层级了”的问题，因为：</p>
-<blockquote>
-<p><strong>Tool 和 Task / Executor 根本不是同一层抽象</strong></p>
-</blockquote>
-<p>你卡住的点本质是：<br>
-👉 “为什么有的东西是 data + executor 分离，有的又是 object.execute()？”</p>
-<hr>
-<p>Tool 是“可执行能力单元”，Task 是“调度数据单元”。</p>
-<hr>
-<h2 id="三-为什么-tool-可以-execute"><a class="markdownIt-Anchor" href="#三-为什么-tool-可以-execute"></a> 三、为什么 Tool 可以 execute？</h2>
-<p>因为 Tool 本质是：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">最底层“动作原子”</span><br></pre></td></tr></table></figure>
-<p>类似：</p>
-<h2 id="cpu-instruction"><a class="markdownIt-Anchor" href="#cpu-instruction"></a> CPU instruction</h2>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ADD / SUB / LOAD / STORE</span><br></pre></td></tr></table></figure>
-<hr>
-<h2 id="tool-原子能力"><a class="markdownIt-Anchor" href="#tool-原子能力"></a> Tool = 原子能力</h2>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SearchTool</span>:</span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">execute</span>(<span class="params">query</span>):</span><br><span class="line">        ...</span><br></pre></td></tr></table></figure>
-<p>它特点：</p>
-<h3 id="没有调度逻辑"><a class="markdownIt-Anchor" href="#没有调度逻辑"></a> ✔ 没有“调度逻辑”</h3>
-<h3 id="没有任务生命周期"><a class="markdownIt-Anchor" href="#没有任务生命周期"></a> ✔ 没有“任务生命周期”</h3>
-<h3 id="没有业务编排"><a class="markdownIt-Anchor" href="#没有业务编排"></a> ✔ 没有“业务编排”</h3>
-<h3 id="输入-输出非常明确"><a class="markdownIt-Anchor" href="#输入-输出非常明确"></a> ✔ 输入 → 输出非常明确</h3>
-<hr>
-<h1 id="四-task-为什么不能-execute"><a class="markdownIt-Anchor" href="#四-task-为什么不能-execute"></a> 四、Task 为什么不能 execute？</h1>
-<p>因为 Task 是：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">“描述”</span><br></pre></td></tr></table></figure>
-<p>不是：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">“能力”</span><br></pre></td></tr></table></figure>
-<hr>
-<h2 id="task-如果-execute会变成"><a class="markdownIt-Anchor" href="#task-如果-execute会变成"></a> Task 如果 execute，会变成：</h2>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">task.execute() -&gt; 内部决定调用 tool / llm / memory</span><br></pre></td></tr></table></figure>
-<p>问题：</p>
-<p>👉 Task 变成“mini runtime”</p>
-<p>最终：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Task = Scheduler + Executor + Tool + Agent</span><br></pre></td></tr></table></figure>
-<p>系统直接坍缩</p>
-<h2 id="六-为什么-tool-必须是-execute-风格"><a class="markdownIt-Anchor" href="#六-为什么-tool-必须是-execute-风格"></a> 六、为什么 Tool 必须是 execute 风格？</h2>
-<p>因为 Tool 有一个非常关键特点：</p>
-<hr>
-<h2 id="tool-是可替换能力模块"><a class="markdownIt-Anchor" href="#tool-是可替换能力模块"></a> 👉 Tool 是“可替换能力模块”</h2>
-<p>例如：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">search_tool_v1</span><br><span class="line">search_tool_v2</span><br><span class="line">search_tool_llm_based</span><br></pre></td></tr></table></figure>
-<p>统一接口：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tool.execute(<span class="built_in">input</span>)</span><br></pre></td></tr></table></figure>
-<hr>
-<h2 id="如果不用-execute会变成"><a class="markdownIt-Anchor" href="#如果不用-execute会变成"></a> 如果不用 execute，会变成：</h2>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tool.search()</span><br><span class="line">tool.query()</span><br><span class="line">tool.run()</span><br><span class="line">tool.call()</span><br></pre></td></tr></table></figure>
-<p>系统会变得：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">不可统一编排</span><br></pre></td></tr></table></figure>
-</blockquote>
+<h1 id="️二-设计实现相关"><a class="markdownIt-Anchor" href="#️二-设计实现相关"></a> ✍️二 设计实现相关</h1>
+<h2 id="1-上下文相关"><a class="markdownIt-Anchor" href="#1-上下文相关"></a> 1 上下文相关</h2>
+<h3 id="11-user-message-如何上下文拼接"><a class="markdownIt-Anchor" href="#11-user-message-如何上下文拼接"></a> 1.1 user message, 如何上下文拼接✅</h3>
+<h4 id="110-直接拼接"><a class="markdownIt-Anchor" href="#110-直接拼接"></a> 1.1.0 直接拼接</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">usr1: 原始query</span><br><span class="line"></span><br><span class="line">assistant1: content+tool_use</span><br><span class="line"></span><br><span class="line">tollcall1: toolcall result</span><br><span class="line"></span><br><span class="line">assistant2: content+tool_use</span><br><span class="line"></span><br><span class="line">tollcall2: toolcall result</span><br><span class="line"></span><br><span class="line">assistant3: content+tool_use</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<h4 id="111-把history写入user"><a class="markdownIt-Anchor" href="#111-把history写入user"></a> 1.1.1 把history写入user</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">usr1: 原始query</span><br><span class="line"></span><br><span class="line">assistant1: content+tool_use</span><br><span class="line"></span><br><span class="line">usr1: **history**+原始query+ toolcall result</span><br><span class="line"></span><br><span class="line">assistant1: content+tool_use</span><br><span class="line"></span><br><span class="line">usr1:  **history**+原始query+ toolcall result</span><br><span class="line"></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<h4 id="111设计next-prompt"><a class="markdownIt-Anchor" href="#111设计next-prompt"></a> 1.1.1设计next prompt</h4>
+<p>设计而外的next prompt作为user prompt</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">usr1: 原始query</span><br><span class="line"></span><br><span class="line">assistant1: content+tool_use</span><br><span class="line"></span><br><span class="line">tollcall1: toolcall result</span><br><span class="line"></span><br><span class="line">usr2: **next prompt**</span><br><span class="line"></span><br><span class="line">assistant2: content+tool_use</span><br><span class="line"></span><br><span class="line">tollcall2: toolcall result</span><br><span class="line"></span><br><span class="line">usr3: **next prompt**</span><br><span class="line"></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<h4 id="112-把toolcall-result作为user-prompt"><a class="markdownIt-Anchor" href="#112-把toolcall-result作为user-prompt"></a> 1.1.2 把toolcall result作为user prompt</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">usr1: 原始query</span><br><span class="line"></span><br><span class="line">assistant1: content+tool_use</span><br><span class="line"></span><br><span class="line">usr2: toolcall result</span><br><span class="line"></span><br><span class="line">assistant2: content+tool_use</span><br><span class="line"></span><br><span class="line">usr3: toolcall result</span><br><span class="line"></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<h3 id="12-怎么agent-stop的"><a class="markdownIt-Anchor" href="#12-怎么agent-stop的"></a> 1.2 怎么agent stop的? ✅</h3>
+<h4 id="121-无toolcall-调用"><a class="markdownIt-Anchor" href="#121-无toolcall-调用"></a> 1.2.1  无toolcall 调用</h4>
+<h4 id="122-调用特殊的结束工具"><a class="markdownIt-Anchor" href="#122-调用特殊的结束工具"></a> 1.2.2 调用特殊的结束工具</h4>
+<h3 id="13-message如何压缩的"><a class="markdownIt-Anchor" href="#13-message如何压缩的"></a> 1.3 message如何压缩的 ✅</h3>
+<h4 id="131-run-stream时"><a class="markdownIt-Anchor" href="#131-run-stream时"></a> 1.3.1 run stream时</h4>
+<ol>
+<li>只保留20max step的历史, 但是不最多只跑20 step</li>
+</ol>
+<h4 id="132-runtime时"><a class="markdownIt-Anchor" href="#132-runtime时"></a> 1.3.2 runtime时</h4>
+<ol>
+<li>只保留n max run的历史, 且只保留query+terminate message, 省略中间调用链</li>
+<li>中间tool链可选提取出SKILL</li>
+</ol>
+<h2 id="2-scheduler如何设计的"><a class="markdownIt-Anchor" href="#2-scheduler如何设计的"></a> 2 scheduler如何设计的</h2>
+<h3 id="21-怎么设计agent启动scheduler任务"><a class="markdownIt-Anchor" href="#21-怎么设计agent启动scheduler任务"></a> 2.1 怎么设计agent启动scheduler任务</h3>
 <h3 id="24-如何创建"><a class="markdownIt-Anchor" href="#24-如何创建"></a> 2.4 如何创建</h3>
 <p>用户通过自然语言让 Agent 调用 <code>scheduler</code> 工具，例如：</p>
 <blockquote>
@@ -661,7 +601,17 @@
 <li><code>tool_call</code> / <code>skill_call</code>：直接调工具或让 Agent 跑 skill</li>
 </ul>
 <p>启动入口在 <code>AgentInitializer._initialize_scheduler()</code>，首次初始化 Agent 时调用 <code>init_scheduler()</code> 并启动后台服务。</p>
-<h3 id="26-scheduler-runner要全局单例吗-什么情况下考虑使用全局单例"><a class="markdownIt-Anchor" href="#26-scheduler-runner要全局单例吗-什么情况下考虑使用全局单例"></a> 2.6 scheduler runner要全局单例吗? 什么情况下考虑使用全局单例</h3>
+<h3 id="26-上下文是如何拼接的"><a class="markdownIt-Anchor" href="#26-上下文是如何拼接的"></a> 2.6 上下文是如何拼接的?</h3>
+<p>scheduler session 的上下文 = 完整 system prompt + 该 task 隔离 session 的历史 + 本轮 <code>task_description</code> 作为 user 消息 + 本轮 tool 多轮过程；与用户聊天 session 无关，且重启后历史会被压成「任务描述 + 最终回复」的文本对。</p>
+<ol>
+<li>本轮 <code>task_description</code> 作为 user 消息 ,+ 本轮 tool 多轮过程(如果有)</li>
+<li>不同的task有不同的上下文, 且与用户聊天 session 无关</li>
+<li>重启时, 会读取历史(内存/数据库)四个user assistant对, 且只会保留query+final content, 中间的toll call 省略了.</li>
+<li>第二次触发会保留上一次的完整tool工具链,但是最多四轮</li>
+<li>task结果可选择是否写回对话session的上下文</li>
+</ol>
+<h3 id="27-tool-去scheduler-防止嵌套"><a class="markdownIt-Anchor" href="#27-tool-去scheduler-防止嵌套"></a> 2.7 tool 去scheduler, 防止嵌套</h3>
+<h3 id="2999-scheduler-runner要全局单例吗-什么情况下考虑使用全局单例"><a class="markdownIt-Anchor" href="#2999-scheduler-runner要全局单例吗-什么情况下考虑使用全局单例"></a> 2.999 scheduler runner要全局单例吗? 什么情况下考虑使用全局单例</h3>
 <h2 id="3-memory设计"><a class="markdownIt-Anchor" href="#3-memory设计"></a> 3 memory设计</h2>
 <h3 id="1-memory机制"><a class="markdownIt-Anchor" href="#1-memory机制"></a> 1 memory机制✅</h3>
 <p><img src="/2026/05/08/2026%E5%B9%B45%E6%9C%888%E6%97%A5-Agent%E6%A1%86%E6%9E%B6-%E8%87%AA%E7%A0%94/image-20260522152641612.png" alt="image-20260522152641612"></p>
@@ -726,7 +676,8 @@
 <h4 id="3-多agent-skill共享层"><a class="markdownIt-Anchor" href="#3-多agent-skill共享层"></a> 3 多agent skill共享层</h4>
 <h4 id="4-微调模型"><a class="markdownIt-Anchor" href="#4-微调模型"></a> 4 微调模型</h4>
 <h1 id="三-代码相关"><a class="markdownIt-Anchor" href="#三-代码相关"></a> 📋三, 代码相关</h1>
-<h2 id="1-manager-agentmanagerget_instance-这个能不能写在weakagentagentmanagerpy-进行初始化"><a class="markdownIt-Anchor" href="#1-manager-agentmanagerget_instance-这个能不能写在weakagentagentmanagerpy-进行初始化"></a> 1 manager = AgentManager.get_instance() 这个能不能写在@weakagent/agent/manager.py , 进行初始化</h2>
+<h1 id="1-runtime"><a class="markdownIt-Anchor" href="#1-runtime"></a> 1 runtime</h1>
+<h3 id="11-manager-agentmanagerget_instance-这个能不能写在weakagentagentmanagerpy-进行初始化"><a class="markdownIt-Anchor" href="#11-manager-agentmanagerget_instance-这个能不能写在weakagentagentmanagerpy-进行初始化"></a> 1.1 manager = AgentManager.get_instance() 这个能不能写在@weakagent/agent/manager.py , 进行初始化</h3>
 <p>可以写，但按你现在这套实现，直接写在 <code>manager.py</code> 顶层基本没效果。</p>
 <p>原因是：</p>
 <ul>
@@ -739,7 +690,7 @@
 <li>在应用启动处统一初始化一次：<code>await AgentManager.instance()</code></li>
 <li>业务代码里继续用 <code>get_instance()</code> 取（拿不到就报“未初始化”），你现在 <code>run_sub_agent</code> 就是这种防御写法。</li>
 </ul>
-<h2 id="2-现在的调用链是不是从briefreactmultiagent-sub_agent-name-manager-factoryagent_type-如果factorypy-14-21-没有就会报错-为什么factory要register-factory也要register"><a class="markdownIt-Anchor" href="#2-现在的调用链是不是从briefreactmultiagent-sub_agent-name-manager-factoryagent_type-如果factorypy-14-21-没有就会报错-为什么factory要register-factory也要register"></a> 2 现在的调用链是不是从BriefReActMultiAgent-&gt;sub_agent name -&gt; manager -&gt; Factory.agent_type; 如果@factory.py (14-21) 没有就会报错? 为什么factory要register, factory也要register</h2>
+<h3 id="12-现在的调用链是不是从briefreactmultiagent-sub_agent-name-manager-factoryagent_type-如果factorypy-14-21-没有就会报错-为什么factory要register-factory也要register"><a class="markdownIt-Anchor" href="#12-现在的调用链是不是从briefreactmultiagent-sub_agent-name-manager-factoryagent_type-如果factorypy-14-21-没有就会报错-为什么factory要register-factory也要register"></a> 1.2 现在的调用链是不是从BriefReActMultiAgent-&gt;sub_agent name -&gt; manager -&gt; Factory.agent_type; 如果@factory.py (14-21) 没有就会报错? 为什么factory要register, factory也要register</h3>
 <p>当前链路是：</p>
 <p><code>BriefReActMultiAgent.execute_tool()</code><br>
 → 调 <code>RunSubAgentTool</code>（传 <code>sub_agent_name</code>）<br>
@@ -751,7 +702,7 @@
 <li><code>run_sub_agent.py</code> 先检查 <code>sub_agent_name in factory.supported_types</code>，不在就直接返回失败；</li>
 <li>就算前面没检查，<code>factory.create()</code> 里也会 <code>Unsupported agent_type</code>。</li>
 </ul>
-<h3 id="21-问为什么-factory-要-registermanager-也要-register"><a class="markdownIt-Anchor" href="#21-问为什么-factory-要-registermanager-也要-register"></a> 2.1 问“为什么 factory 要 register，manager 也要 register”：</h3>
+<h4 id="121-问为什么-factory-要-registermanager-也要-register"><a class="markdownIt-Anchor" href="#121-问为什么-factory-要-registermanager-也要-register"></a> 1.2.1 问“为什么 factory 要 register，manager 也要 register”：</h4>
 <p>它们职责不一样，不是重复。</p>
 <ul>
 <li><code>Factory.register</code>：注册类型映射（<code>&quot;multi_react&quot; -&gt; BriefReActMultiAgent</code>），解决“怎么创建”。</li>
@@ -763,6 +714,101 @@
 <li>Manager 是“实例生命周期管理器”。</li>
 </ul>
 <p>两层都需要，分别管“出生”和“养育”。</p>
+<h2 id="2-scheduler"><a class="markdownIt-Anchor" href="#2-scheduler"></a> 2 scheduler</h2>
+<h3 id="21-为什么不要直接-factory"><a class="markdownIt-Anchor" href="#21-为什么不要直接-factory"></a> 2.1 为什么不要直接 Factory</h3>
+<p>因为：</p>
+<p>Factory 更偏：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">创建对象</span><br></pre></td></tr></table></figure>
+<p>而你这里更像：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">根据 task_type 找执行器</span><br></pre></td></tr></table></figure>
+<p>所以：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Registry 比 Factory 更准确</span><br></pre></td></tr></table></figure>
+<h3 id="22-executor-为什么不用taskexecute"><a class="markdownIt-Anchor" href="#22-executor-为什么不用taskexecute"></a> 2.2 Executor? 为什么不用task.execute</h3>
+<p>你在纠结：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">task.execute()</span><br></pre></td></tr></table></figure>
+<p>还是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">executor.execute(task)</span><br></pre></td></tr></table></figure>
+<p>本质上是在：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">OO（面向对象）</span><br><span class="line">vs</span><br><span class="line">Runtime/Engine 架构</span><br></pre></td></tr></table></figure>
+<p>之间做选择。</p>
+<p><strong>Task 更应该像 DTO</strong></p>
+<p>推荐：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">class Task(BaseModel):</span><br><span class="line">    id: str</span><br><span class="line">    type: str</span><br><span class="line">    payload: dict</span><br></pre></td></tr></table></figure>
+<hr>
+<p><strong>Executor 才是 Runtime</strong></p>
+<p>真正复杂的是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">class SummaryExecutor:</span><br></pre></td></tr></table></figure>
+<p>它才有：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">self.memory</span><br><span class="line">self.llm</span><br><span class="line">self.agent_factory</span><br><span class="line">self.eventbus</span><br></pre></td></tr></table></figure>
+<p>因为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">它属于运行时</span><br></pre></td></tr></table></figure>
+<blockquote>
+<h3 id="真正推荐的是注册式执行器"><a class="markdownIt-Anchor" href="#真正推荐的是注册式执行器"></a> 真正推荐的是“注册式执行器”</h3>
+<p>类似：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">task.type</span><br><span class="line"> ↓</span><br><span class="line">registry</span><br><span class="line"> ↓</span><br><span class="line">executor class</span><br></pre></td></tr></table></figure>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">registry.register(</span><br><span class="line"> &quot;daily_summary&quot;,</span><br><span class="line"> DailySummaryExecutor</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">registry.register(</span><br><span class="line"> &quot;weekly_report&quot;,</span><br><span class="line"> WeeklyReportExecutor</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h3 id="23-那为什么tool-设计成toolexecute"><a class="markdownIt-Anchor" href="#23-那为什么tool-设计成toolexecute"></a> 2.3 那为什么tool 设计成tool…execute</h3>
+<p>Task 本质是“调度<strong>描述</strong>”，它的存在是为了让系统可以把“什么时候做什么事”持久化下来、排队、恢复、分布式执行。它更像一条记录、一份计划书，所以它必须保持稳定、纯粹、无依赖，这样才能被存到数据库里、跨进程传输、失败后重新执行。如果你让 Task 自己去 execute，那它就必须知道怎么调用 LLM、怎么用 tool、怎么处理 retry、怎么管理状态，这**会导致它从“数据”变成“运行时系统”，**整个调度层会和业务逻辑强耦合，系统会逐渐失去可拆分性和可扩展性。</p>
+<p>而 Tool 不一样，Tool 本质是“能力本身”，它不是计划，也不是调度结果，而是<strong>最底层的动作单元</strong>，比如搜索、计算、请求 API、读数据库。它的特点是输入明确、输出明确、<strong>无调度逻辑</strong>，它不会关心什么时候被调用，也不会关心是谁在调用，它只负责“做一件事”。所以 Tool 设计成 execute 是合理的，因为它本来就是被执行的对象。</p>
+<p>真正关键的区别在于：<br>
+<strong>Task 解决的是“要不要做、什么时候做”，Tool 解决的是“具体怎么做”。</strong></p>
+<p>如果把 Task 也设计成 execute，就等于把调度系统和执行系统混在一个对象里，最终会变成一个既要管时间、状态、队列，又要懂业务逻辑和外部能力的“超级对象”，系统会失去分层结构，后期扩展（比如加新 tool、加分布式 worker、加重试队列）都会变得非常痛苦。</p>
+<p>所以不是“能不能这样设计”的问题，而是：<br>
+一旦 Task 负责 execute，系统就不再是调度系统，而变成一个难以拆分的运行时整体；而把 execute 放在 Tool 上，是在保持“调度”和“能力”分离，让整个系统可以像操作系统一样分层运行。</p>
+<blockquote>
+<p>这是个很好的“你已经开始区分层级了”的问题，因为：</p>
+<blockquote>
+<p><strong>Tool 和 Task / Executor 根本不是同一层抽象</strong></p>
+</blockquote>
+<p>你卡住的点本质是：<br>
+👉 “为什么有的东西是 data + executor 分离，有的又是 object.execute()？”</p>
+<hr>
+<p>Tool 是“可执行能力单元”，Task 是“调度数据单元”。</p>
+<hr>
+<h2 id="三-为什么-tool-可以-execute"><a class="markdownIt-Anchor" href="#三-为什么-tool-可以-execute"></a> 三、为什么 Tool 可以 execute？</h2>
+<p>因为 Tool 本质是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">最底层“动作原子”</span><br></pre></td></tr></table></figure>
+<p>类似：</p>
+<h2 id="cpu-instruction"><a class="markdownIt-Anchor" href="#cpu-instruction"></a> CPU instruction</h2>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ADD / SUB / LOAD / STORE</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="tool-原子能力"><a class="markdownIt-Anchor" href="#tool-原子能力"></a> Tool = 原子能力</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">SearchTool</span>:</span><br><span class="line">    <span class="keyword">async</span> <span class="keyword">def</span> <span class="title function_">execute</span>(<span class="params">query</span>):</span><br><span class="line">        ...</span><br></pre></td></tr></table></figure>
+<p>它特点：</p>
+<h3 id="没有调度逻辑"><a class="markdownIt-Anchor" href="#没有调度逻辑"></a> ✔ 没有“调度逻辑”</h3>
+<h3 id="没有任务生命周期"><a class="markdownIt-Anchor" href="#没有任务生命周期"></a> ✔ 没有“任务生命周期”</h3>
+<h3 id="没有业务编排"><a class="markdownIt-Anchor" href="#没有业务编排"></a> ✔ 没有“业务编排”</h3>
+<h3 id="输入-输出非常明确"><a class="markdownIt-Anchor" href="#输入-输出非常明确"></a> ✔ 输入 → 输出非常明确</h3>
+<hr>
+<h1 id="四-task-为什么不能-execute"><a class="markdownIt-Anchor" href="#四-task-为什么不能-execute"></a> 四、Task 为什么不能 execute？</h1>
+<p>因为 Task 是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">“描述”</span><br></pre></td></tr></table></figure>
+<p>不是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">“能力”</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="task-如果-execute会变成"><a class="markdownIt-Anchor" href="#task-如果-execute会变成"></a> Task 如果 execute，会变成：</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">task.execute() -&gt; 内部决定调用 tool / llm / memory</span><br></pre></td></tr></table></figure>
+<p>问题：</p>
+<p>👉 Task 变成“mini runtime”</p>
+<p>最终：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Task = Scheduler + Executor + Tool + Agent</span><br></pre></td></tr></table></figure>
+<p>系统直接坍缩</p>
+<h2 id="六-为什么-tool-必须是-execute-风格"><a class="markdownIt-Anchor" href="#六-为什么-tool-必须是-execute-风格"></a> 六、为什么 Tool 必须是 execute 风格？</h2>
+<p>因为 Tool 有一个非常关键特点：</p>
+<hr>
+<h2 id="tool-是可替换能力模块"><a class="markdownIt-Anchor" href="#tool-是可替换能力模块"></a> 👉 Tool 是“可替换能力模块”</h2>
+<p>例如：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">search_tool_v1</span><br><span class="line">search_tool_v2</span><br><span class="line">search_tool_llm_based</span><br></pre></td></tr></table></figure>
+<p>统一接口：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tool.execute(<span class="built_in">input</span>)</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="如果不用-execute会变成"><a class="markdownIt-Anchor" href="#如果不用-execute会变成"></a> 如果不用 execute，会变成：</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">tool.search()</span><br><span class="line">tool.query()</span><br><span class="line">tool.run()</span><br><span class="line">tool.call()</span><br></pre></td></tr></table></figure>
+<p>系统会变得：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">不可统一编排</span><br></pre></td></tr></table></figure>
+</blockquote>
 <h2 id="3-default_kwargs"><a class="markdownIt-Anchor" href="#3-default_kwargs"></a> 3 default_kwargs</h2>
 <p>more default_kwargs</p>
 <p>后续会进行payload覆盖</p>
@@ -881,9 +927,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>167</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>181</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>44</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>45</strong><br>标签</div></a>
     </div>
 
 

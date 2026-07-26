@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2026年6月15日 cuda编程2 函数说明 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="一、 设备内存分配：cudaMalloc cudaMalloc 是最基础的显存分配函数，相当于 C 语言中的 malloc，只不过它是在 GPU 的显存上挖出一块空间。 C++ 1cudaError_t cudaMalloc(void **devPtr, size_t size);  1. 核心机制  参数：  devPtr：传入一个指针的地址（双指针），函数成功后会将分配好的显存首地址写进这个">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2026年6月15日 cuda编程2 函数说明">
+<meta property="og:url" content="https://shakewely.github.io/2026/06/15/2026%E5%B9%B46%E6%9C%8815%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2-%E5%87%BD%E6%95%B0%E8%AF%B4%E6%98%8E/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="一、 设备内存分配：cudaMalloc cudaMalloc 是最基础的显存分配函数，相当于 C 语言中的 malloc，只不过它是在 GPU 的显存上挖出一块空间。 C++ 1cudaError_t cudaMalloc(void **devPtr, size_t size);  1. 核心机制  参数：  devPtr：传入一个指针的地址（双指针），函数成功后会将分配好的显存首地址写进这个">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/15/2026%E5%B9%B46%E6%9C%8815%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2-%E5%87%BD%E6%95%B0%E8%AF%B4%E6%98%8E/image-20260617211720528.png">
+<meta property="article:published_time" content="2026-06-15T03:11:18.000Z">
+<meta property="article:modified_time" content="2026-06-23T09:14:34.983Z">
+<meta property="article:author" content="Weakliy">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shakewely.github.io/2026/06/15/2026%E5%B9%B46%E6%9C%8815%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2-%E5%87%BD%E6%95%B0%E8%AF%B4%E6%98%8E/image-20260617211720528.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>181</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>45</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2026年6月15日-cuda编程2-函数说明" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/06/15/2026%E5%B9%B46%E6%9C%8815%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2-%E5%87%BD%E6%95%B0%E8%AF%B4%E6%98%8E/" class="article-date">
+  <time class="post-time" datetime="2026-06-15T03:11:18.000Z" itemprop="datePublished">
+    <span class="post-month">6月</span><br/>
+    <span class="post-day">15</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2026年6月15日 cuda编程2 函数说明
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="一-设备内存分配cudamalloc"><a class="markdownIt-Anchor" href="#一-设备内存分配cudamalloc"></a> 一、 设备内存分配：<code>cudaMalloc</code></h2>
+<p><code>cudaMalloc</code> 是最基础的显存分配函数，相当于 C 语言中的 <code>malloc</code>，只不过它是在 <strong>GPU 的显存</strong>上挖出一块空间。</p>
+<p>C++</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t cudaMalloc(void **devPtr, size_t size);</span><br></pre></td></tr></table></figure>
+<h3 id="1-核心机制"><a class="markdownIt-Anchor" href="#1-核心机制"></a> 1. 核心机制</h3>
+<ul>
+<li><strong>参数</strong>：
+<ul>
+<li><code>devPtr</code>：传入一个指针的地址（双指针），函数成功后会将分配好的<strong>显存首地址</strong>写进这个指针。</li>
+<li><code>size</code>：需要分配的字节数（Byte）。</li>
+</ul>
+</li>
+<li><strong>内存类型</strong>：分配的是 <strong>可分页的设备内存（Pageable Device Memory）</strong>。</li>
+<li><strong>特性</strong>：
+<ul>
+<li><strong>CPU 无法直接读写</strong>这块内存，必须通过 <code>cudaMemcpy</code> 等传输函数。如果在 CPU 端直接对 <code>devPtr</code> 解引用（例如 <code>*devPtr = 1.0f</code>），程序会发生段错误（Segmentation Fault）直接崩溃。</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-使用示例"><a class="markdownIt-Anchor" href="#2-使用示例"></a> 2. 使用示例</h3>
+<p>C++</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">float *d_data = nullptr;</span><br><span class="line">size_t bytes = 1024 * sizeof(float);</span><br><span class="line">cudaMalloc(&amp;d_data, bytes); // 在 GPU 分配 4KB 空间</span><br><span class="line">// ... 使用 d_data ...</span><br><span class="line">cudaFree(d_data);           // 释放显存</span><br></pre></td></tr></table></figure>
+<h2 id="二-主机锁页内存分配cudahostalloc"><a class="markdownIt-Anchor" href="#二-主机锁页内存分配cudahostalloc"></a> 二、 主机锁页内存分配：<code>cudaHostAlloc</code></h2>
+<p><code>cudaHostAlloc</code> 是在 <strong>CPU 端（主机端）</strong> 分配内存的函数。但它分配的不是普通的内存，而是 <strong>锁页内存（Pinned Memory / Page-locked Memory）</strong>。</p>
+<p>C++</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t cudaHostAlloc(void **hostPtr, size_t size, unsigned int flags);</span><br></pre></td></tr></table></figure>
+<h3 id="1-什么是锁页内存为什么需要它"><a class="markdownIt-Anchor" href="#1-什么是锁页内存为什么需要它"></a> 1. 什么是“锁页内存”？为什么需要它？</h3>
+<p>普通的 C 语言 <code>malloc</code> 分配的是<strong>可分页内存（Pageable Memory）</strong>。操作系统为了节省物理内存，随时可能会把这块内存交换到硬盘的虚拟内存中（Page Out）。</p>
+<p>当 GPU 想通过 PCIe 总线从普通的 Host 内存复制数据时，系统由于担心数据被操作系统移动，必须先在 CPU 内存里开辟一块隐藏的“锁页缓冲区”，把你的数据复制过去，然后再从这个缓冲区通过 PCIe 传给 GPU。这导致了<strong>两次复制</strong>，浪费了时间。</p>
+<p>使用 <code>cudaHostAlloc</code> 则是直接告诉操作系统：“<strong>锁定这块物理内存，绝对不准交换到硬盘，也不准改变物理地址</strong>。”</p>
+<h3 id="2-它的优势与代价"><a class="markdownIt-Anchor" href="#2-它的优势与代价"></a> 2. 它的优势与代价</h3>
+<ul>
+<li><strong>优势 1（更高带宽）</strong>：GPU 可以通过 DMA（直接内存访问）直接从该内存拿数据，跳过中间缓冲，传输速度显著提升（通常能提升 30%~50% 甚至更多）。</li>
+<li><strong>优势 2（异步传输的先决条件）</strong>：只有锁页内存，才能支持后面要讲的 <code>cudaMemcpyAsync</code>（异步拷贝）。</li>
+<li><strong>代价</strong>：由于内存被死死锁住，系统可用的物理内存变少了。如果过度分配 <code>cudaHostAlloc</code>，会导致整个操作系统变得极度卡顿。</li>
+</ul>
+<h3 id="3-使用示例"><a class="markdownIt-Anchor" href="#3-使用示例"></a> 3. 使用示例</h3>
+<p>C++</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">float *h_data = nullptr;</span><br><span class="line">size_t bytes = 1024 * sizeof(float);</span><br><span class="line">// 使用默认标志分配锁页内存</span><br><span class="line">cudaHostAlloc(&amp;h_data, bytes, cudaHostAllocDefault); </span><br><span class="line">// ... 使用 h_data ...</span><br><span class="line">cudaFreeHost(h_data);       // 注意：锁页内存必须用 cudaFreeHost 释放</span><br></pre></td></tr></table></figure>
+<h2 id="三-异步内存拷贝cudamemcpyasync"><a class="markdownIt-Anchor" href="#三-异步内存拷贝cudamemcpyasync"></a> 三、 异步内存拷贝：<code>cudaMemcpyAsync</code></h2>
+<p>传统的 <code>cudaMemcpy</code> 是同步的（会把 CPU 死死卡住直到传输完毕）。而 <code>cudaMemcpyAsync</code> 是它的<strong>异步非阻塞版本</strong>。</p>
+<p>C++</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t cudaMemcpyAsync(void *dst, const void *src, size_t count, </span><br><span class="line">                            cudaMemcpyKind kind, cudaStream_t stream);</span><br></pre></td></tr></table></figure>
+<h3 id="1-核心机制-2"><a class="markdownIt-Anchor" href="#1-核心机制-2"></a> 1. 核心机制</h3>
+<ul>
+<li><strong>参数</strong>：
+<ul>
+<li><code>dst</code> / <code>src</code> / <code>count</code> / <code>kind</code>：目标地址、源地址、字节数、拷贝方向（如 <code>cudaMemcpyHostToDevice</code>），这四个与同步版本完全一致。</li>
+<li><code>stream</code>：<strong>流参数</strong>。指定将这个拷贝任务放进哪一个 CUDA 流队列中。</li>
+</ul>
+</li>
+<li><strong>特性（CPU 立即返回）</strong>： 当 CPU 执行到这一行时，它仅仅是向 GPU 的底层硬件驱动队列下发了一条“搬运数据”的指令，<strong>耗时基本为 0，随后立刻返回执行下一行代码</strong>。此时，数据的传输动作在 GPU 后台默默进行。</li>
+</ul>
+<h3 id="2-成功触发异步的两大死理极其重要"><a class="markdownIt-Anchor" href="#2-成功触发异步的两大死理极其重要"></a> 2. 成功触发异步的两大死理（极其重要）</h3>
+<p>新手经常发现自己写了 <code>cudaMemcpyAsync</code>，但程序运行速度没有任何提升。要让它真正实现异步，必须满足以下两个条件：</p>
+<ol>
+<li><strong>Host 端必须使用锁页内存</strong>：如果 <code>src</code> 或 <code>dst</code> 位于主机端，它必须是由 <code>cudaHostAlloc</code>（或 <code>cudaMallocHost</code>）分配的锁页内存。如果是普通的 <code>malloc</code> 内存，CUDA 内部会自动将其退化为同步传输。</li>
+<li><strong>必须使用非默认流</strong>：传入的 <code>stream</code> 参数不能是默认的 <code>0</code> 流。因为默认流具有隐式同步的特性，会打断所有的并行。</li>
+</ol>
+<h3 id="3-使用示例-2"><a class="markdownIt-Anchor" href="#3-使用示例-2"></a> 3. 使用示例</h3>
+<p>C++</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">// 假设 h_data 是由 cudaHostAlloc 分配的，d_data 是由 cudaMalloc 分配的</span><br><span class="line">cudaStream_t stream;</span><br><span class="line">cudaStreamCreate(&amp;stream); // 创建非默认流</span><br><span class="line"></span><br><span class="line">// 异步发射：CPU 发完这行指令立刻往下走，不会在这里等待传输完成</span><br><span class="line">cudaMemcpyAsync(d_data, h_data, bytes, cudaMemcpyHostToDevice, stream);</span><br><span class="line"></span><br><span class="line">// 执行核函数（它在同一个流里，会自动排队在拷贝后面，不需要 CPU 操心）</span><br><span class="line">my_kernel&lt;&lt;&lt;blocks, threads, 0, stream&gt;&gt;&gt;(d_data);</span><br><span class="line"></span><br><span class="line">// 在 CPU 需要使用结果前，进行流同步</span><br><span class="line">cudaStreamSynchronize(stream); </span><br><span class="line">cudaStreamDestroy(stream);</span><br></pre></td></tr></table></figure>
+<h2 id="总结与记忆卡片"><a class="markdownIt-Anchor" href="#总结与记忆卡片"></a> 💡 总结与记忆卡片</h2>
+<p>我们可以把这三者的配合关系比喻为一个高效的<strong>物流体系</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>函数</th>
+<th>扮演的角色</th>
+<th>相当于现实中的…</th>
+<th>注意事项</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>cudaMalloc</code></strong></td>
+<td>准备 GPU 仓库</td>
+<td>在外地（GPU）租用了一个自动化现代仓库</td>
+<td>CPU 无法直接进去拿货。</td>
+</tr>
+<tr>
+<td><strong><code>cudaHostAlloc</code></strong></td>
+<td>准备 CPU 专属货台</td>
+<td>在本地（CPU）建了一个<strong>专属的、不限流的</strong>高速直通货台</td>
+<td>占用物理空间，不用了要及时释放。</td>
+</tr>
+<tr>
+<td><strong><code>cudaMemcpyAsync</code></strong></td>
+<td>签发异步运单</td>
+<td>把拉货任务单扔给快递员（Stream），签完字<strong>立刻去干别的事</strong></td>
+<td>必须配合上述的“高速直通货台（锁页内存）”和“独立车道（非默认流）”才生效。</td>
+</tr>
+</tbody>
+</table>
+<h2 id="一-智能的二合一内存cudamallocmanaged"><a class="markdownIt-Anchor" href="#一-智能的二合一内存cudamallocmanaged"></a> 一、 智能的“二合一”内存：<code>cudaMallocManaged</code></h2>
+<p><code>cudaMallocManaged</code> 分配的是 <strong>统一内存（Unified Memory，简称 UM）</strong>。它是英伟达在 CUDA 6.0 引入的极具革命性的技术。</p>
+<p>C++</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t cudaMallocManaged(void **devPtr, size_t size, unsigned int flags = cudaMemAttachGlobal);</span><br></pre></td></tr></table></figure>
+<h3 id="1-核心机制什么是统一内存"><a class="markdownIt-Anchor" href="#1-核心机制什么是统一内存"></a> 1. 核心机制（什么是统一内存？）</h3>
+<p>在过去，我们需要分别维护 Host 指针（<code>h_ptr</code>）和 Device 指针（<code>d_ptr</code>），并手动写 <code>cudaMemcpy</code>。 而 <code>cudaMallocManaged</code> <strong>只分配一个指针</strong>（<code>devPtr</code>）。这个指针极其神奇：<strong>CPU 可以直接读写它，GPU 也可以直接读写它</strong>。</p>
+<h3 id="2-底层黑科技页错误page-fault与自动迁移"><a class="markdownIt-Anchor" href="#2-底层黑科技页错误page-fault与自动迁移"></a> 2. 底层黑科技：页错误（Page Fault）与自动迁移</h3>
+<p>你可能会问：两块硬件物理上是分开的，为什么能共用一个指针？ 它的底层依赖于操作系统的 <strong>页表错误（Page Faulting）</strong> 机制：</p>
+<ol>
+<li>当你调用 <code>cudaMallocManaged(&amp;ptr, size)</code> 时，系统并没有立刻在 CPU 或 GPU 上真正分配物理内存，只是规划了一张“虚拟地址映射表”。</li>
+<li><strong>CPU 读写 <code>ptr</code></strong>：如果数据此时在 GPU 端，CPU 访问会触发一个硬件中断（Page Fault），CUDA 驱动会自动通过 PCIe 总线把数据从 GPU 抓回内存，让 CPU 读写。</li>
+<li><strong>GPU 读写 <code>ptr</code></strong>：当你在核函数里使用 <code>ptr</code> 时，如果数据在 CPU 端，GPU 同样会触发 Page Fault，驱动会自动把数据迁移到显存中。</li>
+</ol>
+<h3 id="3-优缺点分析"><a class="markdownIt-Anchor" href="#3-优缺点分析"></a> 3. 优缺点分析</h3>
+<ul>
+<li><strong>绝对优势</strong>：
+<ul>
+<li><strong>代码极度简化</strong>：删掉了 90% 的 <code>cudaMemcpy</code> 核心代码，写 CUDA 就像写普通 C++ 一样简单。</li>
+<li><strong>支持内存超售（Over-subscription）</strong>：在支持的架构上（如 Pascal 及之后），如果 GPU 显存只有 11GB，但你分配了 32GB 的统一内存，程序<strong>不会崩溃</strong>。CUDA 会像操作系统使用虚拟内存一样，在需要时自动在内存和显存之间换入换出。</li>
+</ul>
+</li>
+<li><strong>劣势</strong>：
+<ul>
+<li><strong>初次访问延迟高</strong>：因为数据是“按需动态迁移”的，第一次触发 Page Fault 会带来显著的延迟。</li>
+<li><strong>控制上限较低</strong>：对于极致的高性能计算，自动迁移的效率往往不如你手动用 <code>cudaMemcpyAsync</code> 编织的流水线（03_3代码）。</li>
+</ul>
+</li>
+</ul>
+<h3 id="4-使用示例"><a class="markdownIt-Anchor" href="#4-使用示例"></a> 4. 使用示例</h3>
+<p>C++</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">float *ptr = nullptr;</span><br><span class="line">cudaMallocManaged(&amp;ptr, 1024 * sizeof(float));</span><br><span class="line"></span><br><span class="line">// CPU 直接初始化</span><br><span class="line">for(int i=0; i&lt;1024; i++) ptr[i] = 1.0f; </span><br><span class="line"></span><br><span class="line">// GPU 直接计算（不需要写 cudaMemcpy！）</span><br><span class="line">my_kernel&lt;&lt;&lt;blocks, threads&gt;&gt;&gt;(ptr); </span><br><span class="line">cudaDeviceSynchronize(); // 必须同步，因为内核是异步的</span><br><span class="line"></span><br><span class="line">// CPU 直接读取结果</span><br><span class="line">printf(&quot;Result: %f\n&quot;, ptr[0]); </span><br><span class="line"></span><br><span class="line">cudaFree(ptr); // 统一内存也是用普通的 cudaFree 释放</span><br></pre></td></tr></table></figure>
+<h2 id="二-cudamemset-是啥"><a class="markdownIt-Anchor" href="#二-cudamemset-是啥"></a> 二 <code>cudaMemset</code> 是啥？</h2>
+<h3 id="核心概念gpu-版的-memset"><a class="markdownIt-Anchor" href="#核心概念gpu-版的-memset"></a> 💡 核心概念：GPU 版的 <code>memset</code></h3>
+<p>你在标准 C/C++ 中肯定用过 <code>memset(ptr, 0, size)</code>，用来把内存中某块区域全部刷成 0（或者其他指定的值）。</p>
+<h2 id="二-传统的-c-普通内存可分页内存"><a class="markdownIt-Anchor" href="#二-传统的-c-普通内存可分页内存"></a> 二、 传统的 C++ 普通内存（可分页内存）</h2>
+<p>这就是我们在写普通 C++ 程序时，通过 <code>new</code>、<code>malloc</code> 或者 <code>std::vector</code> 分配的内存。在 CUDA 的语境下，它被称为 <strong>可分页主机内存（Pageable Host Memory）</strong>。</p>
+<h3 id="1-核心机制-3"><a class="markdownIt-Anchor" href="#1-核心机制-3"></a> 1. 核心机制</h3>
+<ul>
+<li>它是完全受操作系统虚拟内存管理器控制的。操作系统为了防止物理内存爆满，随时会把这块内存的物理页交换到硬盘的 Swap 分区（虚拟内存）中，此时它的<strong>物理地址是会随时改变的</strong>。</li>
+</ul>
+<h3 id="2-在-cuda-中的局限性"><a class="markdownIt-Anchor" href="#2-在-cuda-中的局限性"></a> 2. 在 CUDA 中的局限性</h3>
+<ul>
+<li><strong>无法用于异步拷贝</strong>：如前所述，由于它的物理地址随时在变，GPU 的 DMA（直接内存访问）引擎无法直接抓取它。如果你对它使用 <code>cudaMemcpyAsync</code>，CUDA 内部会默默将其退化为普通的<strong>同步拷贝</strong>。</li>
+<li><strong>传输速度慢</strong>：每次你用 <code>cudaMemcpy</code> 传输普通 C++ 内存的数据时，CUDA 驱动都需要在后台偷偷干两件事：
+<ol>
+<li>在系统内部临时申请一块临时的“锁页内存”；</li>
+<li>把你的普通 C++ 内存数据复制到这块临时锁页内存，然后再传给 GPU。 这无形中造成了 CPU 内部的二次拷贝，极大地压低了 PCIe 的传输带宽。</li>
+</ol>
+</li>
+</ul>
+<h2 id="cudaevent_t"><a class="markdownIt-Anchor" href="#cudaevent_t"></a> cudaEvent_t</h2>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">cudaEvent_t start, stop;</span><br><span class="line"></span><br><span class="line"><span class="built_in">cudaEventCreate</span>(&amp;start);</span><br><span class="line"></span><br><span class="line"><span class="built_in">cudaEventCreate</span>(&amp;stop);</span><br><span class="line"></span><br><span class="line"><span class="built_in">cudaEventRecord</span>(start);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">add_global&lt;&lt;&lt;blocksPerGrid, threadsPerBlock&gt;&gt;&gt;(out, a, b, N);</span><br><span class="line"></span><br><span class="line"><span class="built_in">cudaEventRecord</span>(stop);</span><br><span class="line"></span><br><span class="line"><span class="built_in">cudaEventSynchronize</span>(stop);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="built_in">cudaEventDestroy</span>(start);</span><br><span class="line"></span><br><span class="line"><span class="built_in">cudaEventDestroy</span>(stop);</span><br></pre></td></tr></table></figure>
+<p>nvcc 优化</p>
+<p>nvcc 编译过程</p>
+<p>nvcc运行时api和驱动api</p>
+<p>smi功耗监控和设置</p>
+<p>SM wrap</p>
+<p>线程块与sm的映射关系是CUDA程序性能优化的关键环节。</p>
+<h2 id="21-线程模型"><a class="markdownIt-Anchor" href="#21-线程模型"></a> 2.1 线程模型</h2>
+<h3 id="211-线程与sm-硬件"><a class="markdownIt-Anchor" href="#211-线程与sm-硬件"></a> 2.1.1 线程与SM, 硬件</h3>
+<h3 id="212"><a class="markdownIt-Anchor" href="#212"></a> 2.1.2</h3>
+<p>线程生命周期\</p>
+<p>寄存器等资源有限\</p>
+<h2 id="22-矩阵相乘"><a class="markdownIt-Anchor" href="#22-矩阵相乘"></a> 2.2 矩阵相乘</h2>
+<h2 id="23-线程块大小选择与资源分配"><a class="markdownIt-Anchor" href="#23-线程块大小选择与资源分配"></a> 2.3 线程块大小选择与资源分配</h2>
+<h2 id="32倍速"><a class="markdownIt-Anchor" href="#32倍速"></a> 32倍速</h2>
+<h3 id="寄存器个数限制"><a class="markdownIt-Anchor" href="#寄存器个数限制"></a> 寄存器个数限制</h3>
+<h4 id="硬件常驻的全开或全关原则"><a class="markdownIt-Anchor" href="#硬件常驻的全开或全关原则"></a> 硬件常驻的“全开或全关”原则</h4>
+<p>GPU 的调度策略是：<strong>一个 Block 内的所有线程必须同时被分配到同一个 SM 上执行。</strong> * 如果一个 Block 计算出来的总寄存器需求量，<strong>超过了单个 SM 的硬件上限</strong>，那么这个核函数将直接<strong>无法启动</strong>（报错：launch out of resources）。</p>
+<h3 id="共享内存"><a class="markdownIt-Anchor" href="#共享内存"></a> 共享内存</h3>
+<h4 id="1-共享内存是按块block分配的"><a class="markdownIt-Anchor" href="#1-共享内存是按块block分配的"></a> 1. 共享内存是“按块（Block）”分配的</h4>
+<p><strong>动态分配时的乘法效应：</strong> 如果你在核函数启动时动态申请了共享内存（例如每个线程需要 64 字节），那么一个 Block 实际申请的共享内存大小为：</p>
+<p class="katex-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>Block Shared Memory</mtext><mo>=</mo><mtext>Block Size</mtext><mo>×</mo><mn>64</mn><mtext> 字节</mtext></mrow><annotation encoding="application/x-tex">\text{Block Shared Memory} = \text{Block Size} \times 64 \text{ 字节}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord text"><span class="mord">Block Shared Memory</span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.77777em;vertical-align:-0.08333em;"></span><span class="mord text"><span class="mord">Block Size</span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord">6</span><span class="mord">4</span><span class="mord text"><span class="mord"> </span><span class="mord cjk_fallback">字节</span></span></span></span></span></span></p>
+<p><strong>硬件限制：</strong> 每个 SM（Streaming Multiprocessor）处理器的共享内存容量是有限的（例如 64KB 或 100KB）。如果你的 Block Size 设得太大，导致单个 Block 索要的共享内存超过了 SM 的上限，程序就会直接报错无法启动。</p>
+<p>2 当一个 Block 被发射到 SM 上执行时，它必须<strong>同时满足</strong>硬件对其物理资源的分配要求，其中最核心的两个资源是：<strong>线程数上限</strong>和<strong>共享内存容量</strong>。</p>
+<h3 id="活跃线程块大小"><a class="markdownIt-Anchor" href="#活跃线程块大小"></a> 活跃线程块大小</h3>
+<h2 id="24-动态并行"><a class="markdownIt-Anchor" href="#24-动态并行"></a> 2.4  动态并行</h2>
+<h2 id="25-wrap机制"><a class="markdownIt-Anchor" href="#25-wrap机制"></a> 2.5 Wrap机制</h2>
+<p>发散问题: shuffle指令</p>
+<p>bank冲突</p>
+<h1 id="3-内存"><a class="markdownIt-Anchor" href="#3-内存"></a> 3 内存</h1>
+<h2 id="31"><a class="markdownIt-Anchor" href="#31"></a> 3.1</h2>
+<p>L1L2缓存</p>
+<h1 id="4cuda数据访问"><a class="markdownIt-Anchor" href="#4cuda数据访问"></a> 4cuda数据访问</h1>
+<table>
+<thead>
+<tr>
+<th><strong>层级</strong></th>
+<th><strong>概念</strong></th>
+<th><strong>角色</strong></th>
+<th><strong>数量级</strong></th>
+<th><strong>本质</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>软件设计层</strong></td>
+<td><strong>CUDA Stream</strong></td>
+<td><strong>任务排队队列</strong></td>
+<td>程序员任意创建（几个到几十个）</td>
+<td>纯软件层面的<strong>异步指令通道</strong>（逻辑概念）</td>
+</tr>
+<tr>
+<td><strong>硬件架构层</strong></td>
+<td><strong>SM (流式多处理器)</strong></td>
+<td>核心制造工厂</td>
+<td>一块 GPU 内有数十个到上百个（如 H100 有 132 个）</td>
+<td>独立的<strong>硬件调度与执行单元</strong>（物理实体）</td>
+</tr>
+<tr>
+<td><strong>硬件计算层</strong></td>
+<td><strong>CUDA Core</strong></td>
+<td>基础流水线工人</td>
+<td>每个 SM 内部有 64~128 个（整块卡上万个）</td>
+<td>负责执行单条指令的 <strong>ALU (算术逻辑单元)</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<h2 id="二-它们之间是如何一步步映射的"><a class="markdownIt-Anchor" href="#二-它们之间是如何一步步映射的"></a> 二、 它们之间是如何一步步映射的？</h2>
+<p>当我们提交一段多流代码时，软件层面的 Stream 任务是如何一步步落到硬件上执行的？</p>
+<h3 id="步骤-1stream软件-rightarrow-硬件指令队列-hws"><a class="markdownIt-Anchor" href="#步骤-1stream软件-rightarrow-硬件指令队列-hws"></a> 步骤 1：Stream（软件） <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> 硬件指令队列 (HWS)</h3>
+<p>当你向 <code>Stream0</code> 和 <code>Stream1</code> 异步提交了两个不同的核函数（Kernel 0 和 Kernel 1）时，CUDA 驱动和 GPU 内部的 <strong>硬件调度器（Hardware Vector Scheduler / Host Interface）</strong> 会接管这两个流。</p>
+<ul>
+<li>只要这两个流是非默认流，硬件调度器就会把它们视为<strong>两个相互独立、没有依赖关系的任务源</strong>。</li>
+</ul>
+<h3 id="步骤-2grid-rightarrow-sm软件网格映射到硬件工厂"><a class="markdownIt-Anchor" href="#步骤-2grid-rightarrow-sm软件网格映射到硬件工厂"></a> 步骤 2：Grid <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> SM（软件网格映射到硬件工厂）</h3>
+<p>每一个 Kernel 在发射时，都对应一个由大量线程块组成的 <strong>Grid（网格）</strong>。</p>
+<ul>
+<li>
+<p>硬件调度器会以 <strong>Block（线程块）</strong> 为最小单位，把 Kernel 0 和 Kernel 1 的 Blocks 动态分发给显卡上的各个 <strong>SM</strong>。</p>
+</li>
+<li>
+<p><strong>🔥 核心重叠点（Stream 与 SM 的关系）</strong>：</p>
+<p>如果你的 GPU 上有 80 个 SM，而 <code>Stream0</code> 的 Kernel 0 规模很小，只占用了 20 个 SM。此时，硬件调度器发现还有 60 个 SM 闲着，它就会<strong>立刻把 <code>Stream1</code> 的 Kernel 1 的线程块也分发到剩下的 SM 上去运行</strong>！</p>
+<blockquote>
+<p><strong>结论</strong>：在同一时刻，<strong>同一个 SM 内部可以同时并存来自不同 Stream 的不同线程块</strong>；或者说，不同的 SM 可以同时在跑不同 Stream 的任务。这就是**流并发（Concurrent Kernel Execution）**的硬件本质。</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="3-block-rightarrow-warp-rightarrow-cuda-core硬件微架构的执行"><a class="markdownIt-Anchor" href="#3-block-rightarrow-warp-rightarrow-cuda-core硬件微架构的执行"></a> 3. Block <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> Warp <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> CUDA Core（硬件微架构的执行）</h3>
+<p>当 Block 被指派到某个具体的 SM 后，SM 内部的 <strong>Warp Scheduler（线程束调度器）</strong> 会把 Block 进一步拆解为 32 个线程一组的 <strong>Warp（线程束）</strong>。</p>
+<ul>
+<li>SM 会根据指令准备情况，调度这些 Warp 去轮流使用 SM 内部的 <strong>CUDA Core</strong>（执行单精度浮点运算 FP32、整数运算 INT32 等）。</li>
+<li><strong>Warp 是硬件上真正的基本执行单元</strong>。一个 Warp 里的 32 个线程在同一时刻必须执行同一条指令（SIMT 架构），它们会并排霸占 32 个 CUDA Core 进行计算。</li>
+</ul>
+<h2 id="三-用一个生动的工业园区来做比喻"><a class="markdownIt-Anchor" href="#三-用一个生动的工业园区来做比喻"></a> 三、 用一个生动的“工业园区”来做比喻</h2>
+<p>如果把整块 NVIDIA 显卡比作一个<strong>大型现代化工业园区</strong>：</p>
+<ul>
+<li><strong>CUDA Core 是“流水线工人”</strong>：他们什么都不懂，只会机械地做最基础的加减乘除（ALU 计算）。</li>
+<li><strong>SM 是“生产车间”</strong>：每个车间里有 128 个工人（CUDA Core），并配备了共享的原材料仓库（Shared Memory/寄存器）和车间主任（Warp Scheduler）。车间主任负责指挥哪 32 个工人上去同时干一模一样的活（Warp 执行）。</li>
+<li><strong>整个 GPU 就是“工业园区”</strong>：里面整整齐齐排着 100 个这样的生产车间（SM）。</li>
+<li><strong>CUDA Stream 是“订单传送带”</strong>：
+<ul>
+<li>程序员是厂长。你开了 4 条独立的传送带（4个 Stream）往园区里送原料和需求。</li>
+<li><code>Stream0</code> 送来的是一批“造手机（Kernel 0）”的 Block 组件；<code>Stream1</code> 送来的是一批“造手表（Kernel 1）”的 Block 组件。</li>
+<li>园区的总调度室（硬件调度器）一看，1车间到50车间现在空着，去造手机（<code>Stream0</code>）；51车间到100车间也空着，去造手表（<code>Stream1</code>）。</li>
+<li>甚至，如果 1 车间的空间和原材料很大，它可以前半边流水线造手机，后半边流水线造手表（同一个 SM 同时并发运行多个 Stream 的 Block）。</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>你之前写了这么多多流流水线（03_3）、流间同步（04_2），现在我们不妨跳出来，返璞归真，彻底把 <strong>CUDA Stream（CUDA流）</strong> 的底层本质、定义以及它一生的完整操作梳理得明明白白。</p>
+<h2 id="一-什么是-cuda-stream通俗定义"><a class="markdownIt-Anchor" href="#一-什么是-cuda-stream通俗定义"></a> 一、 什么是 CUDA Stream？（通俗定义）</h2>
+<p>在英伟达官方的定义中：<strong>CUDA Stream 是一系列由 CPU 主机端发射、并在 GPU 设备端按照严格顺序执行的异步操作序列。</strong></p>
+<p>用大白话来解释：</p>
+<ul>
+<li><strong>它就是一个“先进先出”（FIFO）的硬件任务队列。</strong></li>
+<li>你（CPU）往这个队列里扔进一连串的任务（比如：H2D拷贝、跑核函数、D2H拷贝）。</li>
+<li>GPU 拿到这个队列后，会像排队买奶茶一样，<strong>严格按照你扔进去的先后顺序，一件一件地执行</strong>。执行完第一件，才会动第二件。</li>
+</ul>
+<h3 id="为什么需要它"><a class="markdownIt-Anchor" href="#为什么需要它"></a> 为什么需要它？</h3>
+<p>如果没有流，GPU 就像一个单核 CPU，只能做完一件事再做下一件。有了流，CPU 可以同时创建多个队列（Stream0, Stream1…）。GPU 内部有不同的硬件引擎（计算引擎、拷贝引擎），它们可以<strong>同时去处理不同流里的任务</strong>，从而实现并行的流水线。</p>
+<h2 id="二-默认流default-stream-vs-非默认流"><a class="markdownIt-Anchor" href="#二-默认流default-stream-vs-非默认流"></a> 二、 默认流（Default Stream） vs 非默认流</h2>
+<p>在 CUDA 中，流分为两大类：</p>
+<ol>
+<li><strong>默认流（Default Stream / NULL Stream / 0流）</strong>
+<ul>
+<li><strong>特点</strong>：如果你在写代码时<strong>不指定任何流参数</strong>（比如普通的 <code>cudaMemcpy</code>，或者核函数配置不写第四个参数 <code>kernel&lt;&lt;&lt;b, t&gt;&gt;&gt;()</code>），任务就会自动跑在默认流里。</li>
+<li><strong>致命缺点</strong>：默认流是<strong>隐式同步</strong>的。它是一个“恶霸”，当它在 GPU 里运行时，会霸道地拦截其他所有流，导致其他流无法与它并行。</li>
+</ul>
+</li>
+<li><strong>非默认流（Non-default Stream）</strong>
+<ul>
+<li><strong>特点</strong>：由程序员通过代码显式创建（如你代码里的 <code>cudaStreamCreate</code>）。</li>
+<li><strong>优点</strong>：它们彼此之间是<strong>完全独立、互不干扰、互不阻塞</strong>的。</li>
+</ul>
+</li>
+</ol>
+<h2 id="三-cuda-流的完整操作生命周期"><a class="markdownIt-Anchor" href="#三-cuda-流的完整操作生命周期"></a> 三、 CUDA 流的“完整操作生命周期”</h2>
+<p>一个非默认流从生到死，在代码中要经历 <strong>5 个标准步骤</strong>。我们结合你提供的这段 Thrust 代码，来看看它的完整演修过程：</p>
+<h3 id="步骤-1定义与创建出生"><a class="markdownIt-Anchor" href="#步骤-1定义与创建出生"></a> 步骤 1：定义与创建（出生）</h3>
+<p>使用 <code>cudaStream_t</code> 声明句柄，并调用 <code>cudaStreamCreate</code> 显式向 GPU 驱动申请一个硬件队列空间。</p>
+<p>C++</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cudaStream_t stream;            // 1. 定义流句柄</span><br><span class="line">cudaStreamCreate(&amp;stream);      // 2. 真正创建流</span><br></pre></td></tr></table></figure>
+<h3 id="步骤-2任务绑定与发射搬砖"><a class="markdownIt-Anchor" href="#步骤-2任务绑定与发射搬砖"></a> 步骤 2：任务绑定与发射（搬砖）</h3>
+<p>把你要做的操作（拷贝、计算、排序）丢进这个流里排队。在原生 CUDA 中是用尖括号或 Async 函数；在 Thrust 库中，则是通过指定执行策略：</p>
+<p>C++</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// 告诉 Thrust 算法：把排序内部所有的核函数，全部推进刚才创建的这个 stream 队列里</span><br><span class="line">thrust::sort(thrust::cuda::par.on(stream), d_vec.begin(), d_vec.end());</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>⚠️ 注意</strong>：这一步是**完全异步（非阻塞）**的。CPU 刚把排序命令塞进队列，耗时不到 1 微秒，就立刻执行下一行代码了。</p>
+</blockquote>
+<h3 id="步骤-3流查询探路-可选"><a class="markdownIt-Anchor" href="#步骤-3流查询探路-可选"></a> 步骤 3：流查询（探路 - 可选）</h3>
+<p>虽然你的代码里没写，但在大厂生产环境里，CPU 提完任务后经常会调用这个函数：</p>
+<p>C++</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t err = cudaStreamQuery(stream);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>如果返回 <code>cudaSuccess</code>：说明流里的任务（排序）已经全干完了。</li>
+<li>如果返回 <code>cudaErrorNotReady</code>：说明 GPU 还在队列里忙活着呢，CPU 你先别急。</li>
+</ul>
+<h3 id="步骤-4流同步死等"><a class="markdownIt-Anchor" href="#步骤-4流同步死等"></a> 步骤 4：流同步（死等）</h3>
+<p>当 CPU 接下来必须用到 GPU 计算出来的结果（比如你要打印、或者验证数据）时，CPU 必须强制停下脚步，死等该流清空。</p>
+<p>C++</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaStreamSynchronize(stream); // CPU 阻塞在这里，直到当前 stream 里的排序彻底完工</span><br></pre></td></tr></table></figure>
+<h3 id="步骤-5流销毁寿终正寝"><a class="markdownIt-Anchor" href="#步骤-5流销毁寿终正寝"></a> 步骤 5：流销毁（寿终正寝）</h3>
+<p>当程序结束或者这个流不再需要时，必须手动释放它，否则会导致显卡底层驱动的上下文内存泄漏。</p>
+<p>C++</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaStreamDestroy(stream);     // 销毁流，释放硬件队列资源</span><br></pre></td></tr></table></figure>
+<h2 id="四-站在更高的维度看你的这段代码"><a class="markdownIt-Anchor" href="#四-站在更高的维度看你的这段代码"></a> 四、 站在更高的维度看你的这段代码</h2>
+<p>你给出的这段代码，虽然简短，但它展示了现代 CUDA 混合编程的一个非常标准的过程：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">【CPU 主机端】                       【GPU 设备端 (stream 队列)】</span><br><span class="line">      |                                      |</span><br><span class="line"> cudaStreamCreate(&amp;stream); ---------&gt; [ 创建独立硬队列 ]</span><br><span class="line">      |                                      |</span><br><span class="line"> thrust::sort(par.on(stream)...); ---&gt; [ 排队: 基数排序Kernel ] (异步返回)</span><br><span class="line">      |                                      |</span><br><span class="line">  (CPU 继续跑, 分配h_vec等)                   |  (GPU 内部开始疯狂排序...)</span><br><span class="line">      |                                      |</span><br><span class="line"> cudaStreamSynchronize(stream); ----&gt; [ 等待该队列清空 ] (CPU 卡住)</span><br><span class="line">      | &lt;----------------------------- [ 排序内核彻底收工 ] (解除阻塞)</span><br><span class="line"> std::cout &lt;&lt; &quot;排序在流中完成&quot;;</span><br><span class="line">      |</span><br><span class="line"> cudaStreamDestroy(stream); ---------&gt; [ 销毁、回收队列资源 ]</span><br></pre></td></tr></table></figure>
+<h3 id="终极启发"><a class="markdownIt-Anchor" href="#终极启发"></a> 💡 终极启发</h3>
+<p>如果你的程序里<strong>只有一个非默认流</strong>（就像这段代码），那么它在 GPU 内部依然是串行的，性能和不用流几乎没有区别。</p>
+<p>CUDA 流的真正威力在于<strong>多流组合（Multi-stream）</strong>。当你把这段代码的逻辑外面套上一个 <code>for(int i=0; i&lt;NUM_STREAMS; i++)</code> 循环，创建 4 个或 8 个流，同时对 8 块不同的 <code>d_vec</code> 进行排序时，GPU 内部的多个计算核心就会同时开火，那才是流发挥出成倍算力提升的时刻！</p>
+</blockquote>
+<h2 id="cudastreamcreate"><a class="markdownIt-Anchor" href="#cudastreamcreate"></a> cudaStreamCreate</h2>
+<p>cudaStream_t stream0, stream1;</p>
+<p>CHECK(cudaStreamCreate(&amp;stream0));</p>
+<h2 id="cudaeventcreate"><a class="markdownIt-Anchor" href="#cudaeventcreate"></a> cudaEventCreate</h2>
+<p>cudaEvent_t start0, start1, stop0, stop1;</p>
+<p>CHECK(cudaEventCreate(&amp;start0));</p>
+<h3 id="cudaeventrecord"><a class="markdownIt-Anchor" href="#cudaeventrecord"></a> cudaEventRecord</h3>
+<h3 id="cudaeventelapsedtimems-start-stop"><a class="markdownIt-Anchor" href="#cudaeventelapsedtimems-start-stop"></a> cudaEventElapsedTime(&amp;ms, start, stop);</h3>
+<h3 id="cudaeventcreatewithflagsdata_readycudaeventdisabletiming"><a class="markdownIt-Anchor" href="#cudaeventcreatewithflagsdata_readycudaeventdisabletiming"></a> cudaEventCreateWithFlags(&amp;data_ready,cudaEventDisableTiming));</h3>
+<h3 id="cudamemcpyasync"><a class="markdownIt-Anchor" href="#cudamemcpyasync"></a> cudaMemcpyAsync</h3>
+<h3 id="cudastreamquery"><a class="markdownIt-Anchor" href="#cudastreamquery"></a> cudaStreamQuery</h3>
+<p>cudaError_t status = cudaStreamQuery(stream1);</p>
+<h3 id="cudastreamdestroy"><a class="markdownIt-Anchor" href="#cudastreamdestroy"></a> cudaStreamDestroy</h3>
+<p>CHECK(cudaStreamDestroy(stream1));</p>
+<h3 id="cudastreamwaiteventconsumer_stream-data_ready-0"><a class="markdownIt-Anchor" href="#cudastreamwaiteventconsumer_stream-data_ready-0"></a> cudaStreamWaitEvent(consumer_stream, data_ready, 0));</h3>
+<h3 id="cudastreamsynchronize"><a class="markdownIt-Anchor" href="#cudastreamsynchronize"></a> cudaStreamSynchronize</h3>
+<p><strong>显式同步</strong>阻塞函数</p>
+<p><strong>CPU 坐下喝茶，死等指定的这个 <code>stream</code>（流）把里面排队的所有任务彻底做完”</strong>。</p>
+<p>由于 CPU 把所有 4 个流的任务全部提交完之后，才执行 <code>cudaEventSynchronize</code>。所以在提交期间，<strong>CPU 是完全自由的</strong>。</p>
+<h3 id="cudaeventsynchronize"><a class="markdownIt-Anchor" href="#cudaeventsynchronize"></a> cudaEventSynchronize</h3>
+<h1 id="5-报错处理"><a class="markdownIt-Anchor" href="#5-报错处理"></a> 5 报错处理</h1>
+<h4 id="cudapeekatlasterror"><a class="markdownIt-Anchor" href="#cudapeekatlasterror"></a> cudaPeekAtLastError</h4>
+<h1 id="6"><a class="markdownIt-Anchor" href="#6"></a> 6</h1>
+<p>数据传输与计算量比值</p>
+<blockquote>
+<p>最好接近1</p>
+</blockquote>
+<p>算术强度</p>
+<blockquote>
+<p>算术强度低更多受到内存延迟影响</p>
+</blockquote>
+<p>wrap收敛性</p>
+<blockquote>
+<p>指令融合, 分支规约\</p>
+<ol>
+<li>合并为一个表达式</li>
+<li>运算符替代</li>
+</ol>
+<p>减少分支发散</p>
+<ol>
+<li>避免条件分支</li>
+<li>重排计算逻辑</li>
+<li>减少全局内存访问</li>
+</ol>
+</blockquote>
+<ol>
+<li>线程块规模设计</li>
+<li>分块策略</li>
+<li>32倍数</li>
+</ol>
+<h1 id="7"><a class="markdownIt-Anchor" href="#7"></a> 7</h1>
+<p>合并访问和对其优化</p>
+<p>数据类型与内存地址对其</p>
+<p>bank冲突</p>
+<p>shared memory bank conflict</p>
+<ol>
+<li>共享内存大小设置</li>
+<li>访问模式连续</li>
+<li>内存操作同步</li>
+<li>原子操作, 块内求和</li>
+</ol>
+<h1 id="8"><a class="markdownIt-Anchor" href="#8"></a> 8</h1>
+<p>更新数据数据竞争</p>
+<p>原子操作产生额外消耗</p>
+<ol>
+<li>串行</li>
+<li>内存读写</li>
+<li>原子操作次数</li>
+<li>热点问题</li>
+<li>直方图桶</li>
+</ol>
+<p><strong>warp同步</strong></p>
+<ol>
+<li>硬件实现</li>
+<li>wrap shuffle</li>
+</ol>
+<p><strong>线程块同步</strong></p>
+<ol>
+<li>所有线程可达,避免死锁</li>
+<li>块内同步</li>
+<li>共享内存同步</li>
+</ol>
+<p><strong>线程内交换数据</strong></p>
+<p><strong>协作组</strong></p>
+<p>块间交换</p>
+<h1 id="8-trust"><a class="markdownIt-Anchor" href="#8-trust"></a> 8 Trust</h1>
+<h2 id="1-cudamemcpy-cudamemcpydevicetodevice-是什么"><a class="markdownIt-Anchor" href="#1-cudamemcpy-cudamemcpydevicetodevice-是什么"></a> 1. <code>cudaMemcpy(..., cudaMemcpyDeviceToDevice)</code> 是什么？</h2>
+<p>这一行代码的核心含义是：<strong>“在 GPU 显存内部进行数据的自我复制。”</strong></p>
+<p>具体到这段代码：</p>
+<ul>
+<li><strong>源头（<code>raw_ptr</code>）</strong>：是由 Thrust 的 <code>d_vec</code> 管理的<strong>显存</strong>空间。</li>
+<li><strong>目的地（<code>d_raw</code>）</strong>：是由原生 <code>cudaMalloc</code> 分配的另一块<strong>显存</strong>空间。</li>
+<li><strong>行为</strong>：GPU 收到指令后，直接把数据从显存的 A 区域拷贝到 B 区域，<strong>全程数据不经过 PCIe 总线，不经过 CPU 主机内存</strong>。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th><strong>拷贝方向 (Kind)</strong></th>
+<th><strong>物理路径</strong></th>
+<th><strong>决定速度的瓶颈</strong></th>
+<th><strong>典型速度 (以主流硬件为例)</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong><code>HostToDevice</code></strong> / <strong><code>DeviceToHost</code></strong></td>
+<td>数据必须挤过 <strong>PCIe 总线</strong>（CPU <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>↔</mo></mrow><annotation encoding="application/x-tex">\leftrightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">↔</span></span></span></span> GPU 外部通道）</td>
+<td>PCIe 总线带宽</td>
+<td>约 <strong>16 GB/s - 64 GB/s</strong> (PCIe 4.0/5.0)</td>
+</tr>
+<tr>
+<td><strong><code>DeviceToDevice</code></strong></td>
+<td>数据直接在 <strong>GPU 芯片内部显存颗粒</strong> 之间流转</td>
+<td>显存（VRAM）的高速硬件带宽</td>
+<td>约 <strong>900 GB/s - 2 TB/s</strong> (HBM / GDDR6)</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">cublasStatus_t cublasSgemm(</span><br><span class="line">    cublasHandle_t handle,           // cuBLAS 句柄，通过 cublasCreate 初始化</span><br><span class="line">    cublasOperation_t transa,        // A 矩阵是否转置 (CUBLAS_OP_N / CUBLAS_OP_T)</span><br><span class="line">    cublasOperation_t transb,        // B 矩阵是否转置</span><br><span class="line">    int m, int n, int k,             // 矩阵维度的核心参数</span><br><span class="line">    const float *alpha,              // 标量 alpha 的指针（通常设为 1.0 的地址）</span><br><span class="line">    const float *A, int lda,         // A 矩阵指针及其主维度 (Leading Dimension)</span><br><span class="line">    const float *B, int ldb,         // B 矩阵指针及其主维度</span><br><span class="line">    const float *beta,               // 标量 beta 的指针（通常设为 0.0 的地址）</span><br><span class="line">    float *C, int ldc                // C 矩阵指针及其主维度</span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+<h1 id="9-非默认流"><a class="markdownIt-Anchor" href="#9-非默认流"></a> 9 非默认流</h1>
+<p>1 创建</p>
+<p>2 数据传输与核函数执行重叠, 异步api 同步运行</p>
+<p>3 并发运行异步api for 循环</p>
+<p>4 流优先级</p>
+<p>5 不同流运行不同任务</p>
+<h1 id="10-thrust"><a class="markdownIt-Anchor" href="#10-thrust"></a> 10 THRUST</h1>
+<p>1 Thrust</p>
+<p>2 cuBLAS: sgemm</p>
+<p>3 cuRand: 高斯分布生成, 随机数</p>
+<p>4寸</p>
+<h1 id="11-多gpu"><a class="markdownIt-Anchor" href="#11-多gpu"></a> 11 多GPU</h1>
+<p>任务分块, 设备间通信, 同步;</p>
+<p>1 cudaSetDevice</p>
+<p><strong>2 MPI: 分发和收集</strong></p>
+<p>3 cpu, gpu并行异构计算</p>
+<p>4 分布式cuda: 主次节点</p>
+<p>5 动态调度与负载均衡: 进程排名;</p>
+<h2 id="12-完整项目"><a class="markdownIt-Anchor" href="#12-完整项目"></a> 12 完整项目</h2>
+<ol>
+<li>全局内存吞吐量</li>
+<li>核函数占用绿</li>
+<li>线程收敛性</li>
+</ol>
+<blockquote>
+<p>分子动力学模拟项目</p>
+</blockquote>
+<h1 id="nvcc-命令行"><a class="markdownIt-Anchor" href="#nvcc-命令行"></a> nvcc 命令行</h1>
+<h2 id="-g"><a class="markdownIt-Anchor" href="#-g"></a> -G</h2>
+<p>确保你的代码是可调试的: 在编译你的 CUDA 代码时，必须使用 -G 或 -lineinfo 标志来生成调试信息。</p>
+<p>-G: 生成完整的调试信息，但会严重禁用所有编译器优化，极大影响性能，仅用于调试。</p>
+<p>-lineinfo (–generate-line-info): 生成行号信息，允许调试和性能分析，但对性能影响较小，是 Nsight Compute 性能分析的首选。对于调试 <strong>device</strong> 函数，-lineinfo 通常就足够了。</p>
+<p>示例编译命令:</p>
+<p>nvcc -g -G -o my_program my_program.cu # 使用 -g -G 进行完整调试</p>
+<p><img src="/2026/06/15/2026%E5%B9%B46%E6%9C%8815%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2-%E5%87%BD%E6%95%B0%E8%AF%B4%E6%98%8E/image-20260617211720528.png" alt="image-20260617211720528"></p>
+<h2 id="cuda-gdb"><a class="markdownIt-Anchor" href="#cuda-gdb"></a> cuda-gdb</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 版本号与 nvcc 一致（你的是 12.4）</span><br><span class="line">sudo apt-get install cuda-gdb-12-4</span><br></pre></td></tr></table></figure>
+<h3 id="命令行使用"><a class="markdownIt-Anchor" href="#命令行使用"></a> 命令行使用</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">(cuda-gdb) <span class="built_in">break</span> buggy_kernel          <span class="comment"># 在 kernel 入口断点</span></span><br><span class="line">(cuda-gdb) <span class="built_in">break</span> 01_1debug_practice.cu:23   <span class="comment"># 按行号</span></span><br><span class="line">(cuda-gdb) run                           <span class="comment"># 运行</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 命中 kernel 后，查看 GPU 线程</span></span><br><span class="line">(cuda-gdb) info cuda threads             <span class="comment"># 所有 CUDA 线程</span></span><br><span class="line">(cuda-gdb) cuda thread (0,0,0),(100,0,0) <span class="comment"># 切到 block(0,0,0) thread(100,0,0)</span></span><br><span class="line">(cuda-gdb) <span class="built_in">print</span> idx                     <span class="comment"># 看 kernel 内变量</span></span><br><span class="line">(cuda-gdb) next                          <span class="comment"># 单步（当前 CUDA 线程）</span></span><br><span class="line">(cuda-gdb) <span class="built_in">continue</span>                      <span class="comment"># 继续</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">cuda-gdb -batch \</span><br><span class="line">  -ex <span class="string">&quot;break buggy_kernel&quot;</span> \</span><br><span class="line">  -ex <span class="string">&quot;run&quot;</span> \</span><br><span class="line">  -ex <span class="string">&quot;info cuda threads&quot;</span> \</span><br><span class="line">  -ex <span class="string">&quot;quit&quot;</span> \</span><br><span class="line">  ./01_1debug_practice_debug</span><br></pre></td></tr></table></figure>
+<h2 id="compute-sanitizer"><a class="markdownIt-Anchor" href="#compute-sanitizer"></a> compute-sanitizer</h2>
+<h2 id="nsight扩展"><a class="markdownIt-Anchor" href="#nsight扩展"></a> nsight扩展</h2>
+<p><a target="_blank" rel="noopener" href="https://developer.nvidia.com/nsight-visual-studio-code-edition">https://developer.nvidia.com/nsight-visual-studio-code-edition</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/06/15/2026%E5%B9%B46%E6%9C%8815%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2-%E5%87%BD%E6%95%B0%E8%AF%B4%E6%98%8E/" data-id="cms1vppg80003lkv4c9o8bwb5" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          2026年6月16日 cuda3gpu性能分析
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2026/06/15/2026%E5%B9%B46%E6%9C%8815%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2-%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2026年6月15日 cuda编程2 学习记录</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>181</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>45</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2025 - 2026 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2026年6月26日 attention | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="会议室讨论  Query (Q) 是“提问者”：他负责去询问信息。 Key (K) 是“标签”：它定义了信息的内容。 Value (V) 是“内容”：它是实际的信息本身。    0 Attention  Self-Attention  QK   @V  乘上 VVV（Value）代表的是：根据计算出的注意力权重（关注度），对所有词的语义特征进行“加权求和”，从而提炼出新的综合特征表示。 通过 A">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2026年6月26日 attention">
+<meta property="og:url" content="https://shakewely.github.io/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="会议室讨论  Query (Q) 是“提问者”：他负责去询问信息。 Key (K) 是“标签”：它定义了信息的内容。 Value (V) 是“内容”：它是实际的信息本身。    0 Attention  Self-Attention  QK   @V  乘上 VVV（Value）代表的是：根据计算出的注意力权重（关注度），对所有词的语义特征进行“加权求和”，从而提炼出新的综合特征表示。 通过 A">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260630224119046.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/1fd6e4e0c9694f09b643c923de8f9a79tplv-73owjymdk6-jj-mark-v100005o6Y6YeR5oqA5pyv56S-5Yy6IEAg6ZmI5aOu5a6e55qE5pCs56CW5pel6K6wq75.webp">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/faa6e8af5b4142109f1aca521019e099tplv-73owjymdk6-jj-mark-v100005o6Y6YeR5oqA5pyv56S-5Yy6IEAg6ZmI5aOu5a6e55qE5pCs56CW5pel6K6wq75.webp">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/4ce41d8e06ae4eafbec145a851ed0445tplv-73owjymdk6-jj-mark-v100005o6Y6YeR5oqA5pyv56S-5Yy6IEAg6ZmI5aOu5a6e55qE5pCs56CW5pel6K6wq75.webp">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260630220924137.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/v2-5ca825b63ff1e7f8e3470b1a58f241b2_720w.webp">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260714161204307.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260711165954796.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260714210803040.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260711171142696.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260711095445312.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260711095526589.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260711103218294.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260715101728659.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260715102226200.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260715102840204.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260715103420773.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260713144921784.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260713145050573.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/v2-3741879221a5167b8ca683a2c453ffab_720w.webp">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260715114839995.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260715115455860.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260714115618909.png">
+<meta property="article:published_time" content="2026-06-26T01:42:09.000Z">
+<meta property="article:modified_time" content="2026-07-15T06:13:27.342Z">
+<meta property="article:author" content="Weakliy">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shakewely.github.io/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260630224119046.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>181</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>45</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2026年6月26日-attention" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/" class="article-date">
+  <time class="post-time" datetime="2026-06-26T01:42:09.000Z" itemprop="datePublished">
+    <span class="post-month">6月</span><br/>
+    <span class="post-day">26</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2026年6月26日 attention
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="会议室讨论"><a class="markdownIt-Anchor" href="#会议室讨论"></a> 会议室讨论</h3>
+<ul>
+<li><strong>Query (Q) 是“提问者”</strong>：他负责去询问信息。</li>
+<li><strong>Key (K) 是“标签”</strong>：它定义了信息的内容。</li>
+<li><strong>Value (V) 是“内容”</strong>：它是实际的信息本身。</li>
+</ul>
+<p><img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260630224119046.png" alt="image-20260630224119046"></p>
+<h1 id="0-attention"><a class="markdownIt-Anchor" href="#0-attention"></a> 0 Attention</h1>
+<h2 id="self-attention"><a class="markdownIt-Anchor" href="#self-attention"></a> Self-Attention</h2>
+<h3 id="qk"><a class="markdownIt-Anchor" href="#qk"></a> QK</h3>
+<p><img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/1fd6e4e0c9694f09b643c923de8f9a79tplv-73owjymdk6-jj-mark-v100005o6Y6YeR5oqA5pyv56S-5Yy6IEAg6ZmI5aOu5a6e55qE5pCs56CW5pel6K6wq75.webp" alt="图1"></p>
+<h3 id="v"><a class="markdownIt-Anchor" href="#v"></a> @V</h3>
+<p><img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/faa6e8af5b4142109f1aca521019e099tplv-73owjymdk6-jj-mark-v100005o6Y6YeR5oqA5pyv56S-5Yy6IEAg6ZmI5aOu5a6e55qE5pCs56CW5pel6K6wq75.webp" alt="在这里插入图片描述"></p>
+<p>乘上 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi></mrow><annotation encoding="application/x-tex">V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span></span></span></span>（Value）代表的是：<strong>根据计算出的注意力权重（关注度），对所有词的语义特征进行“加权求和”，从而提炼出新的综合特征表示。</strong></p>
+<p>通过 <code>Attention @ V</code>，原本单一维度的“词”，被融汇了上下文中其他相关词的信息。</p>
+<ul>
+<li>比如原本“苹果”这个词的向量只代表水果，但在“苹果手机”的上下文中，通过注意力机制去乘以与“手机”相关的 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi></mrow><annotation encoding="application/x-tex">V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span></span></span></span> 向量后，它输出的新向量就带有了电子产品的语义特征。</li>
+</ul>
+<p>这就是注意力机制能够“结合上下文”更新词向量的终极奥秘</p>
+<h2 id="multi-head-attention"><a class="markdownIt-Anchor" href="#multi-head-attention"></a> Multi-Head Attention</h2>
+<p><img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/4ce41d8e06ae4eafbec145a851ed0445tplv-73owjymdk6-jj-mark-v100005o6Y6YeR5oqA5pyv56S-5Yy6IEAg6ZmI5aOu5a6e55qE5pCs56CW5pel6K6wq75.webp" alt="在这里插入图片描述"></p>
+<h2 id="cross-attention"><a class="markdownIt-Anchor" href="#cross-attention"></a> Cross-Attention</h2>
+<h2 id="flashattention"><a class="markdownIt-Anchor" href="#flashattention"></a> FlashAttention</h2>
+<blockquote>
+<p>transformer的并行到底体现在哪里？ - chouheiwa的回答 - 知乎<br>
+<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/656342880/answer/2052007560274784445">https://www.zhihu.com/question/656342880/answer/2052007560274784445</a></p>
+</blockquote>
+<h1 id="1-训练并行"><a class="markdownIt-Anchor" href="#1-训练并行"></a> 1 训练并行</h1>
+<h2 id="self-attention-怎么把单行道拆成一次矩阵乘"><a class="markdownIt-Anchor" href="#self-attention-怎么把单行道拆成一次矩阵乘"></a> Self-attention 怎么把单行道拆成一次矩阵乘</h2>
+<h2 id="训练能并行的真正钥匙因果掩码-teacher-forcing"><a class="markdownIt-Anchor" href="#训练能并行的真正钥匙因果掩码-teacher-forcing"></a> 训练能并行的真正钥匙：因果掩码 + teacher forcing</h2>
+<p>可以把训练时的 Transformer 想象成：</p>
+<blockquote>
+<p><strong>一次输入完整句子，然后让句子里的每一个位置都&quot;扮演&quot;一次推理过程。</strong></p>
+</blockquote>
+<p>也就是说，一次前向传播实际上<strong>同时模拟了多个不同长度的前缀</strong>：</p>
+<ul>
+<li>第 0 个位置相当于在做：<code>&lt;BOS&gt; → I</code></li>
+<li>第 1 个位置相当于在做：<code>&lt;BOS&gt; I → love</code></li>
+<li>第 2 个位置相当于在做：<code>&lt;BOS&gt; I love → AI</code></li>
+<li>第 3 个位置相当于在做：<code>&lt;BOS&gt; I love AI → !</code></li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">          &lt;BOS&gt;    I    love    AI</span><br><span class="line"></span><br><span class="line">&lt;BOS&gt;       ✓      ×      ×      ×</span><br><span class="line"></span><br><span class="line">I           ✓      ✓      ×      ×</span><br><span class="line"></span><br><span class="line">love        ✓      ✓      ✓      ×</span><br><span class="line"></span><br><span class="line">AI          ✓      ✓      ✓      ✓</span><br></pre></td></tr></table></figure>
+<p><img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260630220924137.png" alt="image-20260630220924137"></p>
+<h2 id="注意力内部还能再榨多头并行和-flashattention"><a class="markdownIt-Anchor" href="#注意力内部还能再榨多头并行和-flashattention"></a> 注意力内部还能再榨：多头并行和 FlashAttention</h2>
+<h2 id="模型放不下单卡五个维度切着来"><a class="markdownIt-Anchor" href="#模型放不下单卡五个维度切着来"></a> 模型放不下单卡：五个维度切着来</h2>
+<p><img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/v2-5ca825b63ff1e7f8e3470b1a58f241b2_720w.webp" alt="img"></p>
+<h1 id="3-decoder-only推理"><a class="markdownIt-Anchor" href="#3-decoder-only推理"></a> 3 decoder only推理</h1>
+<h3 id="️-阶段一prefill-阶段算力密集型-compute-bound"><a class="markdownIt-Anchor" href="#️-阶段一prefill-阶段算力密集型-compute-bound"></a> 🛠️ 阶段一：Prefill 阶段（算力密集型 Compute-bound）</h3>
+<ul>
+<li><strong>特点：</strong> 输入是一整块文本（比如 2000 个词的 Prompt）。</li>
+<li><strong>GPU 状态：</strong> GPU 最擅长做<strong>大规模矩阵并行计算</strong>。因为一次性进来的 Token 很多，GPU 的计算单元（Tensor Cores）能被完全塞满，计算效率极高（速度非常快）。</li>
+<li><strong>缓存动作：</strong> 这一步是 KV Cache 的<strong>生产者</strong>，负责把算好的海量 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mo separator="true">,</mo><mi>V</mi></mrow><annotation encoding="application/x-tex">K, V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span></span></span></span> 写入显存。</li>
+</ul>
+<h3 id="阶段二decoding-阶段带宽内存密集型-memory-bound"><a class="markdownIt-Anchor" href="#阶段二decoding-阶段带宽内存密集型-memory-bound"></a> 🐌 阶段二：Decoding 阶段（带宽/内存密集型 Memory-bound）</h3>
+<ul>
+<li><strong>特点：</strong> 每次输入只有 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 个新词（比如每次生成一个字）。</li>
+<li><strong>GPU 状态：</strong> GPU 处于“吃不饱”的状态。因为只有一个 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Q</mi><mrow><mi>n</mi><mi>e</mi><mi>w</mi></mrow></msub></mrow><annotation encoding="application/x-tex">Q_{new}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.02691em;">w</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，计算量极小，但 GPU 必须频繁地、一次又一次地去显存里读取巨大的 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mo separator="true">,</mo><mi>V</mi></mrow><annotation encoding="application/x-tex">K, V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span></span></span></span> 缓存池（KV Cache）。<strong>读取显存的速度（显存带宽）成为了卡脖子的瓶颈</strong>。</li>
+<li><strong>缓存动作：</strong> 这一步是 KV Cache 的<strong>消费者与追加者</strong>。</li>
+</ul>
+<h2 id="1-prefill-阶段为什么必须从头算"><a class="markdownIt-Anchor" href="#1-prefill-阶段为什么必须从头算"></a> 1. Prefill 阶段：为什么必须从头算？</h2>
+<p>当你输入一个全新的 Prompt “人工智能”，此时模型的 <strong>KV Cache 是完全空的</strong>。</p>
+<p>模型为了能理解这 4 个字并预测第 5 个字（“改”），它必须首先计算出这 4 个字彼此之间的关联。因此，它会做一次<strong>并行的大计算</strong>：</p>
+<p><img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260714161204307.png" alt></p>
+<h1 id="3-推理优化"><a class="markdownIt-Anchor" href="#3-推理优化"></a> 3 推理优化</h1>
+<h2 id="1-为什么标准-attention-是内存瓶颈"><a class="markdownIt-Anchor" href="#1-为什么标准-attention-是内存瓶颈"></a> 1 为什么标准 Attention 是内存瓶颈？</h2>
+<p>1 来自qk矩阵的巨大</p>
+<blockquote>
+<p>矩阵大小是 O(T²)（T = 序列长度）。对于长上下文（T=8k~128k），这会占用海量显存（FP16 下 8k 序列一个 head 就需要 ~256MB</p>
+</blockquote>
+<p>2 显存读写频繁：</p>
+<blockquote>
+<p>需要多次 global memory 访问（写 scores → 读 scores 做 softmax → 写回）。</p>
+</blockquote>
+<p>2 IO 受限而非 Compute 受限</p>
+<blockquote>
+<p>现代 GPU 计算能力（TFLOPS）远超内存带宽（HBM），标准实现大量时间浪费在内存搬运上，而不是实际计算。</p>
+</blockquote>
+<h2 id="2-kv-cache"><a class="markdownIt-Anchor" href="#2-kv-cache"></a> 2 KV cache</h2>
+<p><strong>什么是KV Cache?</strong></p>
+<p>就是把之前的K V矩阵常驻在显存中</p>
+<blockquote></blockquote>
+<p><strong>为什么需要KV Cache？</strong></p>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/653658936/answer/107469197025">https://www.zhihu.com/question/653658936/answer/107469197025</a></p>
+</blockquote>
+<p>在自回归生成中，每个新Token的生成都需要所有历史Token的Key和Value。如果每次重新计算所有历史Token的K和V，计算量随序列长度二次增长 O(N2)。</p>
+<p>KV Cache的核心思想：<strong>用显存换计算</strong>——将之前计算好的K和V存储起来，新Token生成时只需计算当前Token的K和V，然后从Cache中读取历史K和V。</p>
+<p><img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260711165954796.png" alt="image-20260711165954796" style="zoom: 50%;"> <img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260714210803040.png" alt="image-20260714210803040"></p>
+<blockquote>
+<p>因为k和v是会在每一个新的q中重复使用, 但是q会变:推理过程中, 之前的q和kv的结果会cache, 但是之前的q不会, 而之前kv因为要和新的q计算, 所以就需要cache</p>
+</blockquote>
+<blockquote>
+<h2 id="1-为什么之前计算的结果无法被-cache图片红色框"><a class="markdownIt-Anchor" href="#1-为什么之前计算的结果无法被-cache图片红色框"></a> ❌ 1. 为什么“之前计算的结果”无法被 Cache？(图片红色框)</h2>
+<p>你可能觉得，既然 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Q</mi><mn>4</mn></msub></mrow><annotation encoding="application/x-tex">Q_4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">4</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 和 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mn>1</mn></msub><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><msub><mi>K</mi><mn>4</mn></msub></mrow><annotation encoding="application/x-tex">K_1..K_4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">.</span><span class="mord">.</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">4</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 已经算过一次注意力权重了，下一次 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Q</mi><mn>5</mn></msub></mrow><annotation encoding="application/x-tex">Q_5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">5</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 进来时，能不能复用一部分之前算出来的权重（结果）？</p>
+<p><strong>答案是：不能。因为每一轮的“总权重”必须重新做 Softmax 归一化。</strong></p>
+<p>我们用数字做个极简的对比：</p>
+<ul>
+<li>
+<p><strong>这一轮（生成第 5 个字）：</strong> 我们拿 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Q</mi><mn>4</mn></msub></mrow><annotation encoding="application/x-tex">Q_4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">4</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 去和 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mn>1</mn></msub><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><msub><mi>K</mi><mn>4</mn></msub></mrow><annotation encoding="application/x-tex">K_1..K_4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">.</span><span class="mord">.</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">4</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 算点积，假设算出来的原始得分是 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">[</mo><mn>10</mn><mo separator="true">,</mo><mn>5</mn><mo separator="true">,</mo><mn>2</mn><mo separator="true">,</mo><mn>8</mn><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">[10, 5, 2, 8]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">1</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">5</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">8</span><span class="mclose">]</span></span></span></span>。</p>
+<p>经过 Softmax 归一化后，它们变成了比例（比如 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">[</mo><mn>0.8</mn><mo separator="true">,</mo><mn>0.1</mn><mo separator="true">,</mo><mn>0.02</mn><mo separator="true">,</mo><mn>0.08</mn><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">[0.8, 0.1, 0.02, 0.08]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">0</span><span class="mord">.</span><span class="mord">8</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">0</span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">0</span><span class="mord">8</span><span class="mclose">]</span></span></span></span>），和为 1。<strong>这就是这一轮的“结果”。</strong></p>
+</li>
+<li>
+<p><strong>下一轮（生成第 6 个字）：</strong></p>
+<p>新来的主角是 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Q</mi><mn>5</mn></msub></mrow><annotation encoding="application/x-tex">Q_5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">5</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>（代表第 5 个字“改”）。</p>
+<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Q</mi><mn>5</mn></msub></mrow><annotation encoding="application/x-tex">Q_5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">5</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 是一个<strong>全新</strong>的向量，它去和 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mn>1</mn></msub><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><msub><mi>K</mi><mn>5</mn></msub></mrow><annotation encoding="application/x-tex">K_1..K_5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">.</span><span class="mord">.</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">5</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 算点积。算出来的原始得分可能是 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">[</mo><mn>1</mn><mo separator="true">,</mo><mn>9</mn><mo separator="true">,</mo><mn>4</mn><mo separator="true">,</mo><mn>2</mn><mo separator="true">,</mo><mn>12</mn><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">[1, 9, 4, 2, 12]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">9</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">4</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mord">2</span><span class="mclose">]</span></span></span></span>。</p>
+<p>这时候，模型必须对这 5 个全新的数字<strong>整体重新做一次 Softmax 归一化</strong>。</p>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>在有了 KV Cache 的 Decoding 阶段，模型进入了高效循环。当要预测第 6 个字“变”时：</p>
+<ul>
+<li><strong>输入：</strong> 模型的输入端<strong>只被喂进了单个 Token —— “改”</strong>。</li>
+<li><strong>投影：</strong> 既然输入只有“改”，那么模型在这一层经过权重矩阵投影时，就<strong>只能产生一个 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Q</mi><mn>5</mn></msub></mrow><annotation encoding="application/x-tex">Q_5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">5</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>、一个 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mn>5</mn></msub></mrow><annotation encoding="application/x-tex">K_5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">5</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>、和一个 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>V</mi><mn>5</mn></msub></mrow><annotation encoding="application/x-tex">V_5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.22222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">5</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></strong>。这三个向量都属于“改”。</li>
+<li><strong>结论：</strong> 从物理产生上，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Q</mi><mn>5</mn></msub></mrow><annotation encoding="application/x-tex">Q_5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">5</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 就是“改”的查询向量。</li>
+</ul>
+</blockquote>
+<p><img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260711171142696.png" alt="image-20260711171142696"></p>
+<p><strong>怎么实现KV Cache?</strong></p>
+<p>简单来说,</p>
+<hr>
+<p><strong>Cache了什么</strong></p>
+<p>cache了一次自回归过程的k v向量</p>
+<blockquote>
+<p>当输入一个词（Token）时，它首先会被转化为一个高维的稠密向量（Embedding）。但这个向量只是静态的词义，缺乏上下文。</p>
+<p>为了让词与词之间产生联系，模型会利用<strong>三个不同的权重矩阵</strong>（<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>W</mi><mi>Q</mi></msub><mo separator="true">,</mo><msub><mi>W</mi><mi>K</mi></msub><mo separator="true">,</mo><msub><mi>W</mi><mi>V</mi></msub></mrow><annotation encoding="application/x-tex">W_Q, W_K, W_V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.969438em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.328331em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">Q</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">K</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.22222em;">V</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，这些是模型训练好后固定不变的参数），将这个词的 Embedding 投影到三个不同的向量空间。</p>
+<p>这三个空间对应的就是 <strong>Query（查询）</strong>、<strong>Key（键）</strong> 和 <strong>Value（值）</strong>。</p>
+</blockquote>
+<img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260711095445312.png" alt="image-20260711095445312" style="zoom: 50%;"> 
+<img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260711095526589.png" alt="image-20260711095526589" style="zoom:50%;"> 
+<hr>
+<p><strong>什么样的特殊情况能复用？（前缀对齐）</strong></p>
+<p>如果你的新 Prompt 不是“乱序”的，而是<strong>保持相同的前缀</strong>，那么情况就完全不同了。</p>
+<ul>
+<li>假设你已经对模型输入过： <code>Prompt 1: &quot;人工智能的未来发展空间是什么？&quot;</code> （模型缓存了这一串的 KV）</li>
+<li>半小时后，你输入了一个新的 Prompt： <code>Prompt 2: &quot;人工智能的未来发展空间对就业有什么影响？&quot;</code></li>
+</ul>
+<p>这时候，<strong>“人工智能的未来发展空间”</strong> 这一段完全相同的前缀，它们的绝对位置和上下文是完全一致的！</p>
+<hr>
+<p><strong>为什么K2融合了K1的信息?</strong></p>
+<blockquote>
+<p>在计算 K$的时候，不是直接拿第 2 个字“工”的向量乘以权重矩阵 W_K吗？既然是只乘了“工”字，为什么会融合“人”的信息呢？</p>
+</blockquote>
+<img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260711103218294.png" alt="image-20260711103218294" style="zoom: 50%;"> 
+<hr>
+<p><strong>为啥kvcache要使用K1呢? V1我能理解但是K1和K2… Kn有什么区别呢? 对于Qn? 是因为使用了V1 所以要使用K1 吗</strong></p>
+<blockquote>
+<p>：“既然最后要乘以 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>V</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>V</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">V_1, V_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.22222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.22222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，那我就直接用 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi></mrow><annotation encoding="application/x-tex">V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span></span></span></span> 就行了，为什么中间还要强行塞一个 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mn>1</mn></msub><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><msub><mi>K</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">K_1..K_n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">.</span><span class="mord">.</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 进来计算呢？”</p>
+</blockquote>
+<p>因为我们要用 V_1（也就是“人”这个字的内容），我们才必须先用 K_1$来算出“我们需要多少比例的 V_1</p>
+<p><img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260715101728659.png" alt="image-20260715101728659"></p>
+<hr>
+<p><strong><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mn>1</mn></msub><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><msub><mi>K</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">K_1..K_n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">.</span><span class="mord">.</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 彼此有什么区别？（对于最新的 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Q</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">Q_n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 而言）</strong></p>
+<p>对于同一个最新的 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Q</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">Q_n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 而言，<strong>每一个 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">K_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 代表了历史中每一个不同位置的 Token “自荐”时的不同侧重点。</strong></p>
+<p>继续以我们之前堆叠后的状态为例。假设最新生成的 Token 是 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Q</mi><mn>5</mn></msub></mrow><annotation encoding="application/x-tex">Q_5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">5</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>（“改”），它要去探测历史：</p>
+<ul>
+<li>
+<p><strong><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">K_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>（“人”的 Key）：</strong> 它的向量内部在呐喊：<code>“我是句子的开头，我是主语‘人’！”</code></p>
+</li>
+<li>
+<p><strong><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">K_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>（“工”的 Key）：</strong> 它的向量在呐喊：<code>“我紧跟在‘人’后面，我们组成了‘人工’，代表科技和非自然！”</code></p>
+</li>
+<li>
+<p><strong><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mn>3</mn></msub></mrow><annotation encoding="application/x-tex">K_3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>（“智”的 Key）：</strong> 它的向量在呐喊：<code>“我是‘智能’的核心，代表智慧和算法！”</code></p>
+</li>
+<li>
+<p><strong><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mn>4</mn></msub></mrow><annotation encoding="application/x-tex">K_4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">4</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>（“能”的 Key）：</strong> 它的向量在呐喊：<code>“我是‘智能’的结尾，我可以和‘改’组成‘智能改变未来’！”</code></p>
+</li>
+<li>
+<p><img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260715102226200.png" alt="image-20260715102226200"></p>
+</li>
+</ul>
+<p><strong>正因为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mn>1</mn></msub><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><msub><mi>K</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">K_1..K_n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">.</span><span class="mord">.</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 每一个向量内部蕴含的“位置信息”、“语法成分标签”和“上下文特征”截然不同，对于同一个 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Q</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">Q_n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 来说，算出来的注意力得分才会千差万别。</strong></p>
+<hr>
+<p><strong>K 1到底是什么</strong></p>
+<p>单独来说</p>
+<img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260715102840204.png" alt="image-20260715102840204" style="zoom:50%;"> 
+<p>但是上下文变长时</p>
+<blockquote>
+<p>对于同一个模型、同一个输入序列，在<strong>某一次特定的前向传播</strong>中，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">K_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 的数值确实是完全固定的。</p>
+</blockquote>
+<hr>
+<p><strong>每一个 Block 都有自己独立的 KV Cache 账本</strong></p>
+<img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260715103420773.png" alt="image-20260715103420773" style="zoom: 67%;"> 
+<hr>
+<p><strong>Transformer 是多层堆叠是怎么样的? 每一层的输入输出是什么?</strong></p>
+<p><strong>encoder:</strong></p>
+<p>b1 输入是embed的x0,   之后<strong>转成qkv</strong> -&gt; 输出x1(shape相同)<br>
+b2 输入将x1<strong>转qkv</strong>, --&gt;输出x2<br>
+…<br>
+bn</p>
+<hr>
+<p><strong>decoder:</strong></p>
+<p>把输入的x 作为decoder的q矩阵, 不再单独转q</p>
+<hr>
+<blockquote>
+<p>⚙️ 内部加工过程（Layer 内部发生了什么？）</p>
+<p>当 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mrow><mi>i</mi><mi>n</mi></mrow></msub></mrow><annotation encoding="application/x-tex">X_{in}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 进入第 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span> 层后，会发生以下两步关键转换：</p>
+<h4 id="第一步self-attention-空间整合横向互动"><a class="markdownIt-Anchor" href="#第一步self-attention-空间整合横向互动"></a> 第一步：Self-Attention 空间整合（横向互动）</h4>
+<ol>
+<li>模型利用权重矩阵把 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mrow><mi>i</mi><mi>n</mi></mrow></msub></mrow><annotation encoding="application/x-tex">X_{in}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 投影出我们上一问提到的 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi><mo separator="true">,</mo><mi>K</mi><mo separator="true">,</mo><mi>V</mi></mrow><annotation encoding="application/x-tex">Q, K, V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">Q</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span></span></span></span>。</li>
+<li><strong>核心动作：</strong> 拿着当前 Token 的 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi></mrow><annotation encoding="application/x-tex">Q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">Q</span></span></span></span>，去和历史所有 Token 的 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi></mrow><annotation encoding="application/x-tex">K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span></span></span></span> 做点积，算权重，然后对 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi></mrow><annotation encoding="application/x-tex">V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span></span></span></span> 加权求和。</li>
+<li><strong>结果：</strong> 这一步实现了“信息在不同 Token 之间的横向流动”。比如“工”字在这一步融合了“人”字的信息。</li>
+</ol>
+<h4 id="第二步ffn-mlp-维度特征提取纵向挖掘"><a class="markdownIt-Anchor" href="#第二步ffn-mlp-维度特征提取纵向挖掘"></a> 第二步：FFN / MLP 维度特征提取（纵向挖掘）</h4>
+<ol>
+<li>经过注意力机制融合后的向量，会进入一个前馈神经网络（通常是一个两层的全连接层）。</li>
+<li><strong>核心动作：</strong> 此时 Token 之间不再互相关注了，而是<strong>每个 Token 各自独立地</strong>进行非线性变换。它把维度放大（比如从 4096 升到 11008 维），再缩小回来。</li>
+<li><strong>结果：</strong> 这一步用来<strong>记忆知识、抽取高阶特征</strong>（类似专家系统在深度剖析这个词当前代表的含义）。</li>
+</ol>
+<h3 id="每一层的输出output-matrixx_out"><a class="markdownIt-Anchor" href="#每一层的输出output-matrixx_out"></a> 🔹 每一层的输出（Output Matrix：<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mrow><mi>o</mi><mi>u</mi><mi>t</mi></mrow></msub></mrow><annotation encoding="application/x-tex">X_{out}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">u</span><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>）</h3>
+<ul>
+<li><strong>数学形式：</strong> 形状与输入完全一致，依然是 <code>[Batch_Size, Sequence_Length, Hidden_Dim]</code>。</li>
+<li><strong>语义内涵：</strong> * 经过当前层的“横向融合（Attention）”和“纵向深挖（FFN）”后，每个 Token 位置上的向量被赋予了<strong>更新、更抽象、更深刻的上下文语义</strong>。
+<ul>
+<li>这个 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mrow><mi>o</mi><mi>u</mi><mi>t</mi></mrow></msub></mrow><annotation encoding="application/x-tex">X_{out}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">u</span><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 随即作为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mrow><mi>i</mi><mi>n</mi></mrow></msub></mrow><annotation encoding="application/x-tex">X_{in}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，毫无保留地送入第 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">N+1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 层。</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<h2 id="存什么-不存什么"><a class="markdownIt-Anchor" href="#存什么-不存什么"></a> 存什么、不存什么</h2>
+<p>在你代码里，attention 算到这一步：</p>
+<p>00_1self_attention.pyLines 121-121</p>
+<p>​        q, k, v = qkv.chunk(3, dim=-1)  <em># 各 (B, n_heads, T, head_dim)</em></p>
+<p>会缓存的：</p>
+<ul>
+<li><code>k</code>：形状 <code>(B, n_heads, T, head_dim)</code></li>
+<li><code>v</code>：形状 <code>(B, n_heads, T, head_dim)</code></li>
+<li>每一层各自一份（第 1 层、第 2 层……的 K/V 互不共用）</li>
+</ul>
+<p>一般不缓存的：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">不存</th>
+<th style="text-align:left">原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>q</code></td>
+<td style="text-align:left">每步只对新 token 现算</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>attn_scores</code> / <code>attn_weights</code></td>
+<td style="text-align:left">中间量，用完即丢</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>x</code> 隐状态</td>
+<td style="text-align:left">不是 KV cache 本体（有的框架另存 hidden state，那是另一回事）</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>out</code>（attention 输出）</td>
+<td style="text-align:left">每步重算</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<hr>
+<h2 id="3-上下文窗口"><a class="markdownIt-Anchor" href="#3-上下文窗口"></a> 3 上下文窗口</h2>
+<img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260713144921784.png" alt="image-20260713144921784" style="zoom:67%;"> 
+<p><img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260713145050573.png" alt="image-20260713145050573"></p>
+<blockquote>
+<h2 id="上下文窗口长度的决定因素"><a class="markdownIt-Anchor" href="#上下文窗口长度的决定因素"></a> 🧭 上下文窗口长度的决定因素</h2>
+<p>所以，你问的“上下文窗口的长度就是这个的运行因素吗？”答案是绝对的“是”。大模型厂商宣称的“支持 100k 还是 1M 上下文”，本质上是在向这两个极限发起挑战。</p>
+<p>为了让上下文窗口变得极长，技术界在 2024~2026 年间普及了以下几种续命技术：</p>
+<ol>
+<li>
+<p><strong>GQA（Grouped-Query Attention，分组查询注意力）：</strong></p>
+<p>让多个不同的 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi></mrow><annotation encoding="application/x-tex">Q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">Q</span></span></span></span> 共享同一个 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi></mrow><annotation encoding="application/x-tex">K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span></span></span></span> 和 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi></mrow><annotation encoding="application/x-tex">V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span></span></span></span>。这样可以把 KV Cache 的体积直接<strong>压缩到原来的 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi mathvariant="normal">/</mi><mn>4</mn></mrow><annotation encoding="application/x-tex">1/4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mord">/</span><span class="mord">4</span></span></span></span> 甚至 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi mathvariant="normal">/</mi><mn>8</mn></mrow><annotation encoding="application/x-tex">1/8</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mord">/</span><span class="mord">8</span></span></span></span></strong>，大大缓解了显存压力。</p>
+</li>
+<li>
+<p><strong>PagedAttention（如 vLLM 框架）：</strong></p>
+<p>像操作系统的虚拟内存一样，把显存切成一块块小碎块（Pages）来动态管理 KV Cache。不再为每个请求预留连续的巨大显存，解决了显存碎片化问题，让吞吐量提升数倍。</p>
+</li>
+<li>
+<p><strong>RoPE（旋转位置编码）的外推与插值：</strong></p>
+<p>不仅要显存放得下，还要模型在面对第 100,000 个位置的词时，数学上不会“算糊涂”。科学家们通过修改位置编码的数学公式，让模型能理解超长距离的位置依赖。</p>
+</li>
+</ol>
+</blockquote>
+<h2 id="4-串行工程优化"><a class="markdownIt-Anchor" href="#4-串行工程优化"></a> 4 串行工程优化</h2>
+<img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/v2-3741879221a5167b8ca683a2c453ffab_720w.webp" alt="img" style="zoom: 80%;">
+<h2 id="5-pagedattention"><a class="markdownIt-Anchor" href="#5-pagedattention"></a> 5 PagedAttention</h2>
+<blockquote>
+<h2 id="1-传统-kv-cache-的痛点巨大的显存浪费"><a class="markdownIt-Anchor" href="#1-传统-kv-cache-的痛点巨大的显存浪费"></a> 🪨 1. 传统 KV Cache 的痛点：巨大的显存浪费</h2>
+<p>在传统的推理框架中，模型必须为每一个请求（Request）在显存中开辟一块<strong>连续</strong>的物理空间，用来存放该请求源源不断产生的 KV Cache。</p>
+<p>因为模型在生成前<strong>根本不知道用户最终会生成多长的文本</strong>（比如可能生成 10 个字，也可能生成 2048 个字），为了防止中途显存溢出，传统的做法是<strong>按照最大长度（Max Sequence Length）预先分配一整块连续显存</strong>。</p>
+<p>这就导致了三个极其致命的显存浪费（通常浪费高达 <strong>60% - 80%</strong>）：</p>
+<ol>
+<li><strong>未用预留浪费（Reservation）：</strong> 如果模型为用户预留了 2048 个 Token 的空间，但用户聊了 10 个字就结束了，剩下的 2038 个 Token 空间的显存就被白白浪费了，别人也用不了。</li>
+<li><strong>动态成长浪费（Internal Fragmentation）：</strong> 随着文本一步步生成，显存从前往后慢慢填满，那些还没用到的空间只能空置。</li>
+<li><strong>内存碎片（External Fragmentation）：</strong> 不同的请求频繁启动和结束，显存被切割得支离破碎，明明总剩余显存还够，却因为找不到一块<strong>连续</strong>的显存，导致新请求无法启动。</li>
+</ol>
+<h2 id="2-pagedattention-的降维打击像操作系统一样分页"><a class="markdownIt-Anchor" href="#2-pagedattention-的降维打击像操作系统一样分页"></a> 💡 2. PagedAttention 的降维打击：像操作系统一样分页</h2>
+<p>PagedAttention 的核心思想是：<strong>打破“连续性”的诅咒。</strong></p>
+<p>它允许将每个请求的 KV Cache 存放在<strong>不连续的物理显存</strong>中。</p>
+<h3 id="核心机制物理块physical-blocks与虚拟映射"><a class="markdownIt-Anchor" href="#核心机制物理块physical-blocks与虚拟映射"></a> 核心机制：物理块（Physical Blocks）与虚拟映射</h3>
+<ol>
+<li><strong>KV 块（KV Blocks）：</strong> PagedAttention 把每个请求的 KV Cache 划分为固定大小的“块”（Block），每个块默认可以容纳固定数量（例如 16 个）Token 的 KV 向量。</li>
+<li><strong>逻辑内存 vs 物理内存：</strong>
+<ul>
+<li><strong>逻辑块（Logical Blocks）：</strong> 在模型眼里，它看到的依然是连续的一串字（<code>Block 0: 0~15字</code> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> <code>Block 1: 16~31字</code> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> <code>Block 2: 32~47字</code>）。</li>
+<li><strong>物理块（Physical Blocks）：</strong> 在实际的显卡内存里，这些块被分散在天南海北、任意不连续的空闲位置。</li>
+</ul>
+</li>
+<li><strong>块表（Block Table）：</strong> 框架维护了一个映射表（类似操作系统的页表 Page Table）。当模型需要计算第 35 个字的 Attention 时，它通过块表查到逻辑上的 <code>Block 2</code> 对应的物理显存地址是 <code>Physical Block 104</code>，然后直接去那里读取数据。</li>
+</ol>
+</blockquote>
+<hr>
+<h2 id="kv-cache量化"><a class="markdownIt-Anchor" href="#kv-cache量化"></a> KV cache量化</h2>
+<p><img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260715114839995.png" alt="image-20260715114839995"></p>
+<p><img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260715115455860.png" alt="image-20260715115455860"></p>
+<blockquote>
+<h2 id="4-主流的-kv-cache-量化技术方案"><a class="markdownIt-Anchor" href="#4-主流的-kv-cache-量化技术方案"></a> 4. 主流的 KV Cache 量化技术方案</h2>
+<p>为了解决精度损失问题，业界演进出了几种不同的量化粒度：</p>
+<h3 id="1-按-token-量化per-token-quantization"><a class="markdownIt-Anchor" href="#1-按-token-量化per-token-quantization"></a> ① 按 Token 量化（Per-Token Quantization）</h3>
+<ul>
+<li><strong>原理</strong>：对每一个 Token 向量，独立计算一组缩放因子 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi></mrow><annotation encoding="application/x-tex">S</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span>。</li>
+<li><strong>特点</strong>：实现简单，对吞吐量友好，但在面对离群值通道时，精度保护不够。</li>
+</ul>
+<h3 id="2-按通道按头量化per-channel-per-head-quantization"><a class="markdownIt-Anchor" href="#2-按通道按头量化per-channel-per-head-quantization"></a> ② 按通道/按头量化（Per-Channel / Per-Head Quantization）</h3>
+<ul>
+<li><strong>原理</strong>：针对 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mo separator="true">,</mo><mi>V</mi></mrow><annotation encoding="application/x-tex">K, V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span></span></span></span> 矩阵的不同维度（如每个 Attention Head 内部的 Channel）分别计算缩放因子。</li>
+<li><strong>特点</strong>：精度保留极好，能完美避开离群值的干扰，但硬件计算对齐稍微复杂一点。</li>
+</ul>
+<h3 id="3-fp8-kv-cachehopper-blackwell-架构新宠"><a class="markdownIt-Anchor" href="#3-fp8-kv-cachehopper-blackwell-架构新宠"></a> ③ FP8 KV Cache（Hopper / Blackwell 架构新宠）</h3>
+<p>随着 NVIDIA H100 等新一代 GPU 硬件原生支持 <strong>FP8（8位浮点数，如 E4M3 和 E5M2 格式）</strong>，FP8 KV Cache 正在迅速取代 INT8。</p>
+<ul>
+<li><strong>优势</strong>：它既有低精度的带宽优势，又保留了浮点数对大范围数值（离群值）的容忍度。在 vLLM 等主流框架中，开启 FP8 KV Cache 几乎可以做到<strong>几乎无损的精度保留</strong>。</li>
+</ul>
+<h3 id="4-极致压缩int4-量化如-kivi-算法"><a class="markdownIt-Anchor" href="#4-极致压缩int4-量化如-kivi-算法"></a> ④ 极致压缩：INT4 量化（如 KIVI 算法）</h3>
+<p>2024 年底至 2026 年，像 <strong>KIVI</strong> 这样的算法把 KV Cache 卷到了 <strong>INT4</strong>。</p>
+<ul>
+<li><strong>核心思路</strong>：因为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi></mrow><annotation encoding="application/x-tex">K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span></span></span></span> 向量对离群值极度敏感，而 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi></mrow><annotation encoding="application/x-tex">V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span></span></span></span> 向量相对平缓。KIVI 对 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi></mrow><annotation encoding="application/x-tex">K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span></span></span></span> 采用 Group-wise 细粒度量化，对 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi></mrow><annotation encoding="application/x-tex">V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span></span></span></span> 采用 Channel-wise 量化。在 Llama 等模型上，成功在 4-bit 精度下实现了近乎无损的超长文本生成。</li>
+</ul>
+</blockquote>
+<h1 id="4-结构优化"><a class="markdownIt-Anchor" href="#4-结构优化"></a> 4 结构优化</h1>
+<h2 id="1-gqa-grouped-query-attention"><a class="markdownIt-Anchor" href="#1-gqa-grouped-query-attention"></a> 1 GQA (Grouped Query Attention)</h2>
+<img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260714115618909.png" alt="image-20260714115618909" style="zoom:67%;">
+<blockquote>
+<p>假设模型总维度是 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>D</mi><mrow><mi>m</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>l</mi></mrow></msub><mo>=</mo><mn>4096</mn></mrow><annotation encoding="application/x-tex">D_{model} = 4096</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">4</span><span class="mord">0</span><span class="mord">9</span><span class="mord">6</span></span></span></span>，每个头维度 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>=</mo><mn>128</mn></mrow><annotation encoding="application/x-tex">D = 128</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">2</span><span class="mord">8</span></span></span></span>，则总头数为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4096</mn><mi mathvariant="normal">/</mi><mn>128</mn><mo>=</mo><mn>32</mn></mrow><annotation encoding="application/x-tex">4096 / 128 = 32</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">4</span><span class="mord">0</span><span class="mord">9</span><span class="mord">6</span><span class="mord">/</span><span class="mord">1</span><span class="mord">2</span><span class="mord">8</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span><span class="mord">2</span></span></span></span> 个。</p>
+<h4 id="如果是-mha-multi-head-attention"><a class="markdownIt-Anchor" href="#如果是-mha-multi-head-attention"></a> 如果是 MHA (Multi-Head Attention)：</h4>
+<ul>
+<li><strong>计算矩阵：</strong>
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>W</mi><mi>Q</mi></msub><mo>∈</mo><msup><mi mathvariant="double-struck">R</mi><mrow><msub><mi>D</mi><mrow><mi>m</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>l</mi></mrow></msub><mo>×</mo><mn>4096</mn></mrow></msup></mrow><annotation encoding="application/x-tex">W_Q \in \mathbb{R}^{D_{model} \times 4096}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.969438em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.328331em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">Q</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8413309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord"><span class="mord mathbb">R</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3487714285714287em;margin-left:-0.02778em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15122857142857138em;"><span></span></span></span></span></span></span><span class="mbin mtight">×</span><span class="mord mtight">4</span><span class="mord mtight">0</span><span class="mord mtight">9</span><span class="mord mtight">6</span></span></span></span></span></span></span></span></span></span></span></span> (32 个头，每个 128)</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>W</mi><mi>K</mi></msub><mo>∈</mo><msup><mi mathvariant="double-struck">R</mi><mrow><msub><mi>D</mi><mrow><mi>m</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>l</mi></mrow></msub><mo>×</mo><mn>4096</mn></mrow></msup></mrow><annotation encoding="application/x-tex">W_K \in \mathbb{R}^{D_{model} \times 4096}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">K</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8413309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord"><span class="mord mathbb">R</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3487714285714287em;margin-left:-0.02778em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15122857142857138em;"><span></span></span></span></span></span></span><span class="mbin mtight">×</span><span class="mord mtight">4</span><span class="mord mtight">0</span><span class="mord mtight">9</span><span class="mord mtight">6</span></span></span></span></span></span></span></span></span></span></span></span> (32 个头，每个 128)</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>W</mi><mi>V</mi></msub><mo>∈</mo><msup><mi mathvariant="double-struck">R</mi><mrow><msub><mi>D</mi><mrow><mi>m</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>l</mi></mrow></msub><mo>×</mo><mn>4096</mn></mrow></msup></mrow><annotation encoding="application/x-tex">W_V \in \mathbb{R}^{D_{model} \times 4096}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.22222em;">V</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8413309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord"><span class="mord mathbb">R</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3487714285714287em;margin-left:-0.02778em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15122857142857138em;"><span></span></span></span></span></span></span><span class="mbin mtight">×</span><span class="mord mtight">4</span><span class="mord mtight">0</span><span class="mord mtight">9</span><span class="mord mtight">6</span></span></span></span></span></span></span></span></span></span></span></span> (32 个头，每个 128)</li>
+</ul>
+</li>
+<li><strong>缓存大小：</strong> 你需要存 32 个 K 和 32 个 V，一共 64 个向量。</li>
+</ul>
+<h4 id="如果是-gqa-h_kv-4"><a class="markdownIt-Anchor" href="#如果是-gqa-h_kv-4"></a> 如果是 GQA (<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mrow><mi>k</mi><mi>v</mi></mrow></msub><mo>=</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">H_{kv} = 4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.08125em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">v</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">4</span></span></span></span>)：</h4>
+<ul>
+<li><strong>计算矩阵：</strong>
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>W</mi><mi>Q</mi></msub><mo>∈</mo><msup><mi mathvariant="double-struck">R</mi><mrow><msub><mi>D</mi><mrow><mi>m</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>l</mi></mrow></msub><mo>×</mo><mn>4096</mn></mrow></msup></mrow><annotation encoding="application/x-tex">W_Q \in \mathbb{R}^{D_{model} \times 4096}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.969438em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.328331em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">Q</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8413309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord"><span class="mord mathbb">R</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3487714285714287em;margin-left:-0.02778em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15122857142857138em;"><span></span></span></span></span></span></span><span class="mbin mtight">×</span><span class="mord mtight">4</span><span class="mord mtight">0</span><span class="mord mtight">9</span><span class="mord mtight">6</span></span></span></span></span></span></span></span></span></span></span></span> (仍然是 32 个头)</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>W</mi><mi>K</mi></msub><mo>∈</mo><msup><mi mathvariant="double-struck">R</mi><mrow><msub><mi>D</mi><mrow><mi>m</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>l</mi></mrow></msub><mo>×</mo><mn>512</mn></mrow></msup></mrow><annotation encoding="application/x-tex">W_K \in \mathbb{R}^{D_{model} \times 512}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">K</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8413309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord"><span class="mord mathbb">R</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3487714285714287em;margin-left:-0.02778em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15122857142857138em;"><span></span></span></span></span></span></span><span class="mbin mtight">×</span><span class="mord mtight">5</span><span class="mord mtight">1</span><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span> (<strong>只有 4 个头</strong>，即 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><mo>×</mo><mn>128</mn><mo>=</mo><mn>512</mn></mrow><annotation encoding="application/x-tex">4 \times 128 = 512</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">4</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">2</span><span class="mord">8</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">5</span><span class="mord">1</span><span class="mord">2</span></span></span></span>)</li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>W</mi><mi>V</mi></msub><mo>∈</mo><msup><mi mathvariant="double-struck">R</mi><mrow><msub><mi>D</mi><mrow><mi>m</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>l</mi></mrow></msub><mo>×</mo><mn>512</mn></mrow></msup></mrow><annotation encoding="application/x-tex">W_V \in \mathbb{R}^{D_{model} \times 512}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.22222em;">V</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8413309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord"><span class="mord mathbb">R</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3487714285714287em;margin-left:-0.02778em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15122857142857138em;"><span></span></span></span></span></span></span><span class="mbin mtight">×</span><span class="mord mtight">5</span><span class="mord mtight">1</span><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span> (<strong>只有 4 个头</strong>)</li>
+</ul>
+</li>
+<li><strong>实际操作：</strong> 当计算 Attention 时，模型会将 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>W</mi><mi>Q</mi></msub></mrow><annotation encoding="application/x-tex">W_Q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.969438em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.328331em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">Q</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span> 输出的 32 个头，<strong>每 8 个一组</strong>，分别去乘以对应的那 1 个 K 和 1 个 V。</li>
+</ul>
+<h3 id="3-为什么这样可以实现关键逻辑"><a class="markdownIt-Anchor" href="#3-为什么这样可以实现关键逻辑"></a> 3. 为什么这样可以实现？（关键逻辑）</h3>
+<p>你可能会问：<strong>共享了 K 和 V，模型不会变笨吗？</strong></p>
+<p>研究发现：</p>
+<ol>
+<li><strong>信息的冗余性：</strong> 在 Transformer 中，不同头捕捉到的特征往往高度重合。让多个头共享 KV，损失的信息量远小于节省的显存带来的收益。</li>
+<li><strong>Q 的多样性保留：</strong> 因为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mi>q</mi></msub></mrow><annotation encoding="application/x-tex">H_q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.969438em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.15139200000000003em;"><span style="top:-2.5500000000000003em;margin-left:-0.08125em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">q</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span>（查询头）的数量依然保持为 32 个，每一个“查询者”依然拥有独特的视角去理解问题。只要“查询者”足够多，模型就依然能捕捉到细微的语义差别。</li>
+</ol>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/" data-id="cms1vppge0009lkv41gx22e9u" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2026/07/04/2026%E5%B9%B47%E6%9C%884%E6%97%A5-MRI-afni/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          2026年7月4日 MRI_afni
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2%E9%99%84%E5%BD%95/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2026年6月16日 cuda编程2附录</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>181</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>45</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2025 - 2026 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

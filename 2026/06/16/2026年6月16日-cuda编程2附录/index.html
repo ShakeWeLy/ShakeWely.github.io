@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2026年6月16日 cuda编程2附录 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="1 归约算法 没问题！既然前缀和看懂了，那我们用同样接地气的方式，把归约算法（Reduction）也彻底拉下神坛。 如果说前缀和是“排队买票”，那么归约算法就是“全校拉力赛选拔冠军”或者“全班合买一份大礼物凑钱”。 我们用“凑钱买礼物”来打比方：  什么是归约？ 假设你们班有 8 个同学（编号 0 到 7），每个人兜里有一点零钱：  输入数组：[3, 1, 7, 0, 4, 1, 6, 3] （">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2026年6月16日 cuda编程2附录">
+<meta property="og:url" content="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2%E9%99%84%E5%BD%95/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="1 归约算法 没问题！既然前缀和看懂了，那我们用同样接地气的方式，把归约算法（Reduction）也彻底拉下神坛。 如果说前缀和是“排队买票”，那么归约算法就是“全校拉力赛选拔冠军”或者“全班合买一份大礼物凑钱”。 我们用“凑钱买礼物”来打比方：  什么是归约？ 假设你们班有 8 个同学（编号 0 到 7），每个人兜里有一点零钱：  输入数组：[3, 1, 7, 0, 4, 1, 6, 3] （">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-06-16T09:03:59.000Z">
+<meta property="article:modified_time" content="2026-06-16T09:16:07.654Z">
+<meta property="article:author" content="Weakliy">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>181</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>45</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2026年6月16日-cuda编程2附录" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2%E9%99%84%E5%BD%95/" class="article-date">
+  <time class="post-time" datetime="2026-06-16T09:03:59.000Z" itemprop="datePublished">
+    <span class="post-month">6月</span><br/>
+    <span class="post-day">16</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2026年6月16日 cuda编程2附录
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="1-归约算法"><a class="markdownIt-Anchor" href="#1-归约算法"></a> 1 归约算法</h1>
+<p>没问题！既然前缀和看懂了，那我们用同样接地气的方式，把归约算法（Reduction）也彻底拉下神坛。</p>
+<p>如果说前缀和是“排队买票”，那么归约算法就是“全校拉力赛选拔冠军”<strong>或者</strong>“全班合买一份大礼物凑钱”。</p>
+<p>我们用“凑钱买礼物”来打比方：</p>
+<h2 id="什么是归约"><a class="markdownIt-Anchor" href="#什么是归约"></a> 什么是归约？</h2>
+<p>假设你们班有 8 个同学（编号 0 到 7），每个人兜里有一点零钱：</p>
+<ul>
+<li><strong>输入数组</strong>：<code>[3, 1, 7, 0, 4, 1, 6, 3]</code> （单位：元）</li>
+</ul>
+<p>现在的任务是：<strong>把这 8 个人的钱全部加起来，算出总共凑了多少钱。</strong></p>
+<ul>
+<li><strong>串行思维（CPU）</strong>：班长拿着一个存钱罐，从 0 号同学开始收起：“3块，加 1 块是 4 块，再加 7 块是 11 块……” 班长一个人挨个收、挨个加，走完 8 个人，算出总数。</li>
+<li><strong>并行思维（GPU）</strong>：GPU 认为班长一个人收太慢了。GPU 有的是人（成百上千的线程），那怎么让大家<strong>同时</strong>干活，把钱凑到一起呢？</li>
+</ul>
+<p>这就需要用到<strong>树状折半归约</strong>。</p>
+<h2 id="gpu-的并行解法打擂台式的折半合并"><a class="markdownIt-Anchor" href="#gpu-的并行解法打擂台式的折半合并"></a> GPU 的并行解法：打擂台式的折半合并</h2>
+<p>GPU 决定不设班长，让同学们两两配对，同时把钱加起来。</p>
+<p>8 个同学（8 个线程）同时在教室里坐好。</p>
+<h3 id="第一轮全班对半分后半部分把钱给前半部分"><a class="markdownIt-Anchor" href="#第一轮全班对半分后半部分把钱给前半部分"></a> 第一轮：全班对半分，后半部分把钱给前半部分</h3>
+<p>全班 8 个人，对半分就是前 4 个和后 4 个。</p>
+<ul>
+<li>0 号和 4 号配对：4 号把钱（4元）丢给 0 号。0 号算出：<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mo>+</mo><mn>4</mn><mo>=</mo><mn mathvariant="bold">7</mn></mrow><annotation encoding="application/x-tex">3 + 4 = \mathbf{7}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">3</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">4</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">7</span></span></span></span></span></li>
+<li>1 号和 5 号配对：5 号把钱（1元）丢给 1 号。1 号算出：<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>+</mo><mn>1</mn><mo>=</mo><mn mathvariant="bold">2</mn></mrow><annotation encoding="application/x-tex">1 + 1 = \mathbf{2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">2</span></span></span></span></span></li>
+<li>2 号和 6 号配对：6 号把钱（6元）丢给 2 号。2 号算出：<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>7</mn><mo>+</mo><mn>6</mn><mo>=</mo><mn mathvariant="bold">13</mn></mrow><annotation encoding="application/x-tex">7 + 6 = \mathbf{13}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">7</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">6</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">1</span><span class="mord mathbf">3</span></span></span></span></span></li>
+<li>3 号和 7 号配对：7 号把钱（3元）丢给 3 号。3 号算出：<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>+</mo><mn>3</mn><mo>=</mo><mn mathvariant="bold">3</mn></mrow><annotation encoding="application/x-tex">0 + 3 = \mathbf{3}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">3</span></span></span></span></span></li>
+</ul>
+<p><strong>这一轮只花了“一次相加”的时间</strong>（因为 4 对人是同时加的）。</p>
+<p>此时，钱全部集中到了前 4 个人（0, 1, 2, 3 号）手里，数组变成了：</p>
+<p><code>[7, 2, 13, 3,  x, x, x, x]</code> （后半部分任务完成，可以下班了）。</p>
+<h3 id="第二轮剩下的人继续对半分"><a class="markdownIt-Anchor" href="#第二轮剩下的人继续对半分"></a> 第二轮：剩下的人继续对半分</h3>
+<p>现在只有 4 个人手里有钱了，继续对半分（前 2 个和后 2 个）。</p>
+<ul>
+<li>0 号和 2 号配对：2 号把钱（13元）丢给 0 号。0 号算出：<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>7</mn><mo>+</mo><mn>13</mn><mo>=</mo><mn mathvariant="bold">20</mn></mrow><annotation encoding="application/x-tex">7 + 13 = \mathbf{2 0}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">7</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">3</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">2</span><span class="mord mathbf">0</span></span></span></span></span></li>
+<li>1 号和 3 号配对：3 号把钱（3元）丢给 1 号。1 号算出：<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>+</mo><mn>3</mn><mo>=</mo><mn mathvariant="bold">5</mn></mrow><annotation encoding="application/x-tex">2 + 3 = \mathbf{5}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">5</span></span></span></span></span></li>
+</ul>
+<p><strong>又只花了“一次相加”的时间</strong>。</p>
+<p>此时，钱全部集中到了前 2 个人（0, 1 号）手里，数组变成了：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[20, 5,  x, x,  x, x, x, x]</span><br></pre></td></tr></table></figure>
+<h3 id="第三轮决胜局"><a class="markdownIt-Anchor" href="#第三轮决胜局"></a> 第三轮：决胜局</h3>
+<p>现在只剩 0 号和 1 号了。</p>
+<ul>
+<li>0 号和 1 号配对：1 号把钱（5元）丢给 0 号。0 号算出：<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>20</mn><mo>+</mo><mn>5</mn><mo>=</mo><mn mathvariant="bold">25</mn></mrow><annotation encoding="application/x-tex">20 + 5 = \mathbf{2 5}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">2</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">5</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">2</span><span class="mord mathbf">5</span></span></span></span></span></li>
+</ul>
+<p><strong>最后花了一次相加的时间</strong>。</p>
+<p>大功告成！全班的总金额 <code>25</code> 元，现在端端正正地坐在 <strong>0 号位置</strong>上。</p>
+<h2 id="为什么这叫归约"><a class="markdownIt-Anchor" href="#为什么这叫归约"></a> 为什么这叫“归约”？</h2>
+<p>在这个过程中，原本 8 个分散的数据，经过三轮“折半合并”，最终“归纳约束”成了一个单一的总和数字。</p>
+<p>如果用图看，它就像一棵倒过来的二叉树，或者像世界杯淘汰赛：</p>
+<h3 id="它的威力在哪里"><a class="markdownIt-Anchor" href="#它的威力在哪里"></a> 它的威力在哪里？</h3>
+<ul>
+<li>如果有 <strong>100 万</strong>个数据。</li>
+<li><strong>CPU（班长）</strong>：要加 <strong>1,000,000 次</strong>。</li>
+<li><strong>GPU（全班齐动员）</strong>：第一轮 50 万人同时加，第二轮 25 万人同时加……对半折叠，只需要 <strong>20 轮</strong>。</li>
+</ul>
+<p>100 万次串行相加 vs 20 次并行折叠，这就是为什么 GPU 算大数组总和、最大值、最小值会快得飞起。</p>
+<h2 id="回头看代码你就彻底通了"><a class="markdownIt-Anchor" href="#回头看代码你就彻底通了"></a> 回头看代码，你就彻底通了</h2>
+<p>现在你再看最开始的那段 CUDA 核心代码：</p>
+<p>Code snippet</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// stride 就是步长（也就是每次对半分的那个分界线）</span><br><span class="line">for (unsigned int stride = blockDim.x / 2; stride &gt; 0; stride &gt;&gt;= 1) &#123;</span><br><span class="line">    if (tid &lt; stride) &#123;</span><br><span class="line">        // 前半部分的同学（tid &lt; stride），把后半部分对应位置的钱拿过来加掉</span><br><span class="line">        sdata[tid] += sdata[tid + stride];</span><br><span class="line">    &#125;</span><br><span class="line">    __syncthreads(); // 每一轮加完，大家大喊一声“我加完了！”，等所有人都好了再进入下一轮</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>stride &gt;&gt;= 1</code>：就是每轮把干活的人数砍掉一半（8 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> 4 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> 2 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> 1）。</li>
+<li><code>if (tid &lt; stride)</code>：就是只让前半部分的同学干活，后半部分的同学把钱丢过去之后就可以原地休息了。</li>
+</ul>
+<p>是不是比死记硬背代码好懂多了？</p>
+<h1 id="1-前缀和算法"><a class="markdownIt-Anchor" href="#1-前缀和算法"></a> 1 前缀和算法</h1>
+<p>没关系，前缀和（Scan）算法第一次看确实容易绕晕，因为它和我们习惯的串行思维完全不同。</p>
+<p>我们用一个最接地气的<strong>排队买票</strong>例子，彻底拆解它的原理。</p>
+<h2 id="什么是前缀和用买票类比"><a class="markdownIt-Anchor" href="#什么是前缀和用买票类比"></a> 什么是前缀和？（用买票类比）</h2>
+<p>假设有 4 个人排队买电影票，每个人想买的张数不一样：</p>
+<ul>
+<li><strong>输入数组 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi></mrow><annotation encoding="application/x-tex">A</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal">A</span></span></span></span></strong>：<code>[2, 3, 1, 4]</code> （分别代表甲、乙、丙、丁要买的票数）</li>
+</ul>
+<p>现在我们要计算每个人排队时，<strong>在自己之前，前面一共卖出了多少张票</strong>。这样大家就能知道自己买完票后，票根上的序号是多少。</p>
+<ul>
+<li><strong>独占式前缀和（Exclusive Scan）</strong>：不包含自己，只算前面的人。
+<ul>
+<li>甲前面没人 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> <code>0</code></li>
+<li>乙前面有甲 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> <code>2</code></li>
+<li>丙前面有甲+乙 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>+</mo><mn>3</mn><mo>=</mo></mrow><annotation encoding="application/x-tex">2 + 3 =</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span></span></span></span> <code>5</code></li>
+<li>丁前面有甲+乙+丙 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>+</mo><mn>3</mn><mo>+</mo><mn>1</mn><mo>=</mo></mrow><annotation encoding="application/x-tex">2 + 3 + 1 =</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">3</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span></span></span></span> <code>6</code></li>
+<li><strong>输出数组 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>B</mi></mrow><annotation encoding="application/x-tex">B</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span></strong>：<code>[0, 2, 5, 6]</code></li>
+</ul>
+</li>
+</ul>
+<p>在 CPU 里，我们用一个 <code>for</code> 循环，一边走一边累加，一眨眼就建好了。<strong>但是在 GPU 里，有几千个线程同时在跑，它们不能像排队一样“一个接一个”地去加，否则并行就变成了串行。</strong></p>
+<p>那 GPU 怎么同时算出这个结果呢？这就需要用到 <strong>Blelloch 算法</strong>。</p>
+<h2 id="gpu-的并行解法blelloch-算法"><a class="markdownIt-Anchor" href="#gpu-的并行解法blelloch-算法"></a> GPU 的并行解法：Blelloch 算法</h2>
+<p>为了让成百上千个线程同时干活，算法把过程分成了两步：<strong>上划阶段（算总和）</strong> 和 <strong>下划阶段（发结果）</strong>。</p>
+<p>我们以 8 个数字 <code>[3, 1, 7, 0, 4, 1, 6, 3]</code> 为例：</p>
+<h3 id="第一步up-sweep上划阶段-画一棵倒过来的树"><a class="markdownIt-Anchor" href="#第一步up-sweep上划阶段-画一棵倒过来的树"></a> 第一步：Up-Sweep（上划阶段）—— 画一棵倒过来的树</h3>
+<p>这一步的目的和“归约”一样，把数据两两相加，一层一层往上报，直到算出总和。</p>
+<ul>
+<li><strong>第一层</strong>：两两相加
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mo>+</mo><mn>1</mn><mo>=</mo><mn mathvariant="bold">4</mn></mrow><annotation encoding="application/x-tex">3+1=\mathbf{4}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">3</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">4</span></span></span></span></span></li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>7</mn><mo>+</mo><mn>0</mn><mo>=</mo><mn mathvariant="bold">7</mn></mrow><annotation encoding="application/x-tex">7+0=\mathbf{7}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">7</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">7</span></span></span></span></span></li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><mo>+</mo><mn>1</mn><mo>=</mo><mn mathvariant="bold">5</mn></mrow><annotation encoding="application/x-tex">4+1=\mathbf{5}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">4</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">5</span></span></span></span></span></li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>6</mn><mo>+</mo><mn>3</mn><mo>=</mo><mn mathvariant="bold">9</mn></mrow><annotation encoding="application/x-tex">6+3=\mathbf{9}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">6</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">9</span></span></span></span></span></li>
+<li>现在的数组变成：<code>[3, 4, 7, 7, 4, 5, 6, 9]</code>（加粗的位置更新了）</li>
+</ul>
+</li>
+<li><strong>第二层</strong>：跨步增大，继续两两相加
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><mo>+</mo><mn>7</mn><mo>=</mo><mn mathvariant="bold">11</mn></mrow><annotation encoding="application/x-tex">4+7=\mathbf{11}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">4</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">7</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">1</span><span class="mord mathbf">1</span></span></span></span></span></li>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>5</mn><mo>+</mo><mn>9</mn><mo>=</mo><mn mathvariant="bold">14</mn></mrow><annotation encoding="application/x-tex">5+9=\mathbf{14}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">5</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">9</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">1</span><span class="mord mathbf">4</span></span></span></span></span></li>
+</ul>
+</li>
+<li><strong>第三层</strong>：最后一加
+<ul>
+<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>11</mn><mo>+</mo><mn>14</mn><mo>=</mo><mn mathvariant="bold">25</mn></mrow><annotation encoding="application/x-tex">11+14=\mathbf{25}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">4</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">2</span><span class="mord mathbf">5</span></span></span></span></span>（这是整个数组的总和）</li>
+</ul>
+</li>
+</ul>
+<p>此时，数组的最后一个位置变成了 <code>25</code>。</p>
+<h3 id="第二步down-sweep下划阶段-把结果分发下去"><a class="markdownIt-Anchor" href="#第二步down-sweep下划阶段-把结果分发下去"></a> 第二步：Down-Sweep（下划阶段）—— 把结果分发下去</h3>
+<p>这是最巧妙的一步。我们<strong>先把顶端的总和清零（变成 0）</strong>，然后从上往下走。</p>
+<p>每遇到一个节点，做两件事：</p>
+<ol>
+<li><strong>把自己的值传给左子节点。</strong></li>
+<li><strong>把自己原来的值和左子节点的值相加，传给右子节点。</strong></li>
+</ol>
+<p>我们来看看这个神奇的过程：</p>
+<ul>
+<li><strong>顶层</strong>：把最后的 <code>25</code> 变成 <code>0</code>。</li>
+<li><strong>往下走第一层</strong>：
+<ul>
+<li>原来左边是 <code>11</code>，右边是 <code>14</code>。</li>
+<li>按照规则：旧的 <code>0</code> 给左边；左边的 <code>11</code> 加上旧的 <code>0</code> 变成 <code>11</code> 给右边。</li>
+<li>现在的顶层两节点变成：<code>[11, 0]</code> （对应原来的 11 和 14 位置）。</li>
+</ul>
+</li>
+<li><strong>继续往下走</strong>：重复这个“左传，加右”的操作。</li>
+</ul>
+<p>当这个过程一直推导到最底层时，你会发现，原本的数组魔术般地变成了：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[0, 3, 4, 11, 11, 15, 16, 22]</span><br></pre></td></tr></table></figure>
+<p>这就是原数组 <code>[3, 1, 7, 0, 4, 1, 6, 3]</code> 的<strong>独占前缀和</strong>！</p>
+<ul>
+<li>第 0 个数前面总和是 <code>0</code></li>
+<li>第 1 个数前面总和是 <code>3</code></li>
+<li>第 2 个数前面总和是 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mo>+</mo><mn>1</mn><mo>=</mo><mn mathvariant="bold">4</mn></mrow><annotation encoding="application/x-tex">3+1 = \mathbf{4}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">3</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">4</span></span></span></span></span></li>
+<li>第 3 个数前面总和是 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mo>+</mo><mn>1</mn><mo>+</mo><mn>7</mn><mo>=</mo><mn mathvariant="bold">11</mn></mrow><annotation encoding="application/x-tex">3+1+7 = \mathbf{11}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">3</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">7</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">1</span><span class="mord mathbf">1</span></span></span></span></span></li>
+<li>……以此类推。</li>
+</ul>
+<h2 id="为什么要大费周章这么做"><a class="markdownIt-Anchor" href="#为什么要大费周章这么做"></a> 为什么要大费周章这么做？</h2>
+<p>你可能会问：“又是上划又是下划，这不比 CPU 的 <code>for</code> 循环复杂多了吗？”</p>
+<p>对单线程来说是的。但对 GPU 来说：</p>
+<ol>
+<li><strong>树的每一层，所有节点都是并行计算的</strong>。原本需要 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span> 次的串行相加，现在只需要 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo><mi>log</mi><mo>⁡</mo></mo><mn>2</mn></msub><mi>N</mi></mrow><annotation encoding="application/x-tex">\log_2 N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.93858em;vertical-align:-0.24414em;"></span><span class="mop"><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.20696799999999996em;"><span style="top:-2.4558600000000004em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.24414em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span> 层的计算。</li>
+<li>处理 100 万个数据，CPU 的 <code>for</code> 循环要走 100 万步；而 GPU 只需要上划 20 层，下划 20 层，总共 <strong>40 步</strong>就能搞定。</li>
+</ol>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<ul>
+<li><strong>前缀和</strong>就是求“当前元素之前所有元素的累加和”。</li>
+<li>GPU 不能用 <code>for</code> 循环硬干，所以用<strong>树状结构</strong>。</li>
+<li><strong>Up-Sweep</strong> 像拼图一样把局部和合并上去。</li>
+<li><strong>Down-Sweep</strong> 利用“左传、加右”的数学规律把偏移量完美分发下来。</li>
+</ul>
+<p>这个算法理解了之后，再看刚才代码里的 <code>sdata[bi] += sdata[ai]</code> 交换逻辑，是不是就清晰多了？</p>
+<h2 id="1-核心概念什么是双调序列"><a class="markdownIt-Anchor" href="#1-核心概念什么是双调序列"></a> 1. 核心概念：什么是“双调序列”？</h2>
+<p>在学算法之前，先记住一个定义：</p>
+<blockquote>
+<p><strong>双调序列（Bitonic Sequence）</strong>：一个数组，它满足<strong>先单调递增，后单调递减</strong>（或者先递减后递增）。它就像一座“山峰”或者一个“山谷”。</p>
+<ul>
+<li>比如 <code>[1, 4, 9, 8, 5, 2]</code> 就是一个标准的双调序列（先升到 9，再降到 2）。</li>
+<li>甚至把这个序列循环位移，比如 <code>[5, 2, 1, 4, 9, 8]</code>（先降到 1，再升到 9），它依然算双调序列。</li>
+</ul>
+</blockquote>
+<h3 id="为什么双调序列这么重要"><a class="markdownIt-Anchor" href="#为什么双调序列这么重要"></a> 为什么双调序列这么重要？</h3>
+<p>因为数学家 Batcher 证明了一个定理（<strong>双调合并定理</strong>）：</p>
+<p>如果你把一个双调序列<strong>对半分开</strong>，让前半部分的每一个元素和后半部分对应位置的元素进行比较（小的放前面，大的放后面），那么：</p>
+<ol>
+<li>得到的前半部分和后半部分，<strong>各自依然是双调序列</strong>。</li>
+<li><strong>前半部分的所有元素，都绝对小于后半部分的所有元素。</strong></li>
+</ol>
+<p>这就太厉害了！这意味着只要数据变成了“双调序列”，GPU 只需要<strong>无脑地对半分、两两比较</strong>，就能把数据切成“小的一堆”和“大的一堆”，一直切下去，整个数组就排好序了。这个过程叫做 <strong>Bitonic Merge（双调合并）</strong>。</p>
+<h2 id="2-核心矛盾现实数据不是双调的怎么办"><a class="markdownIt-Anchor" href="#2-核心矛盾现实数据不是双调的怎么办"></a> 2. 核心矛盾：现实数据不是双调的怎么办？</h2>
+<p>你肯定会问：“人家给我的初始数组是乱序的（比如 <code>[4, 2, 7, 1]</code>），根本不是什么先升后降的山峰，怎么用这个定理呢？”</p>
+<p>双调排序的精妙解法：<strong>农村包围城市，从小山峰拼成大山峰！</strong></p>
+<ul>
+<li><strong>2 个元素</strong>：任意两个数，一定能组成一个双调序列（一个升，一个降，或者直接看作双调）。</li>
+<li><strong>第 1 阶段（制造小山峰）</strong>：把每 2 个元素排成一升一降。比如 <code>[4, 2]</code> 变成升序 <code>[2, 4]</code>，<code>[7, 1]</code> 变成降序 <code>[7, 1]</code>。拼起来就是 <code>[2, 4, 7, 1]</code>。看！这不就组成了长度为 4 的“先升后降”的双调小山峰了吗？</li>
+<li><strong>第 2 阶段（制造中山峰）</strong>：对这个长度为 4 的双调序列进行“双调合并”，把它变成一个长度为 4 的纯升序序列。同时把隔壁 4 个元素变成纯降序序列。两边一拼，又变成了一个长度为 8 的双调大山峰！</li>
+<li><strong>最终阶段</strong>：当全班 100 万个数据变成了一座超级大山峰时，执行最后一次总合并，全变成升序，大功告成！</li>
+</ul>
+<h2 id="3-图解执行过程以-8-个数字为例"><a class="markdownIt-Anchor" href="#3-图解执行过程以-8-个数字为例"></a> 3. 图解执行过程（以 8 个数字为例）</h2>
+<p>我们来看看乱序数组 <code>[3, 7, 4, 8, 6, 2, 1, 5]</code> 是如何一步步被驯服的。</p>
+<p>双调排序要求数组长度必须是 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">2^n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.664392em;vertical-align:0em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.664392em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span></span></span>。</p>
+<h3 id="阶段一两两成组构建长度为-4-的双调序列"><a class="markdownIt-Anchor" href="#阶段一两两成组构建长度为-4-的双调序列"></a> 阶段一：两两成组，构建长度为 4 的双调序列</h3>
+<ul>
+<li>线程同时干活：
+<ul>
+<li>把前两个 <code>[3, 7]</code> 变成<strong>升序</strong> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> <code>[3, 7]</code></li>
+<li>把次两个 <code>[4, 8]</code> 变成<strong>降序</strong> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> <code>[8, 4]</code></li>
+</ul>
+</li>
+<li>此时前 4 个数合并成了 <code>[3, 7, 8, 4]</code>（完美的山峰：3到8升，8到4降）。</li>
+<li>同理，后 4 个数 <code>[6, 2, 1, 5]</code> 经过一升一降的处理，变成了 <code>[2, 6, 5, 1]</code>（也是完美的山峰）。</li>
+</ul>
+<h3 id="阶段二四四成组构建长度为-8-的双调序列"><a class="markdownIt-Anchor" href="#阶段二四四成组构建长度为-8-的双调序列"></a> 阶段二：四四成组，构建长度为 8 的双调序列</h3>
+<p>现在我们手头有两个长度为 4 的双调山峰了。</p>
+<ul>
+<li><strong>左边 4 个数 <code>[3, 7, 8, 4]</code></strong>：我们要把它合并成一个<strong>纯升序</strong>序列。
+<ul>
+<li>根据刚才的定理，跨步为 2 对半分比较：3和8比，7和4比。</li>
+<li>经过两轮无脑两两比较，它变成了纯升序：<code>[3, 4, 7, 8]</code>。</li>
+</ul>
+</li>
+<li><strong>右边 4 个数 <code>[2, 6, 5, 1]</code></strong>：我们要把它合并成一个<strong>纯降序</strong>序列。
+<ul>
+<li>经过无脑两两比较，它变成了纯降序：<code>[6, 5, 2, 1]</code>。</li>
+</ul>
+</li>
+<li><strong>合龙！</strong> 现在把左边（升）和右边（降）拼起来：<code>[3, 4, 7, 8, 6, 5, 2, 1]</code>。</li>
+<li><strong>看奇迹！</strong> 整个 8 个数字的数组，现在变成了一座覆盖全体的、完美的、先升后降的<strong>超级大山峰</strong>！</li>
+</ul>
+<h3 id="阶段三终极大合并bitonic-merge"><a class="markdownIt-Anchor" href="#阶段三终极大合并bitonic-merge"></a> 阶段三：终极大合并（Bitonic Merge）</h3>
+<p>既然全数组已经是一座大山峰了，我们只需要对它进行最后的折半清洗：</p>
+<ol>
+<li><strong>跨步为 4 比较</strong>（0和4比，1和5比…）：小的放左，大的放右。
+<ul>
+<li>数组变成：<code>[3, 4, 2, 1 | 6, 5, 7, 8]</code> （左边全部小于右边！）</li>
+</ul>
+</li>
+<li><strong>跨步为 2 比较</strong>：
+<ul>
+<li>数组变成：<code>[2, 1, 3, 4 | 6, 5, 7, 8]</code></li>
+</ul>
+</li>
+<li><strong>跨步为 1 比较</strong>（相邻比较）：
+<ul>
+<li>数组变成：<code>[1, 2, 3, 4 | 5, 6, 7, 8]</code></li>
+</ul>
+</li>
+</ol>
+<p><strong>全部排好序了！</strong></p>
+<h2 id="4-为什么它是-gpu-的最爱"><a class="markdownIt-Anchor" href="#4-为什么它是-gpu-的最爱"></a> 4. 为什么它是 GPU 的最爱？</h2>
+<p>看完过程，你发现规律了吗？</p>
+<ol>
+<li><strong>没有任何未知的跳转</strong>：第几步该哪个位置和哪个位置比，在数组长度确定的那一刻就固定了。</li>
+<li><strong>完美并行</strong>：每一轮比较中，所有的两两比较都是互相独立的！比如 0和4比 的时候，1和5比 可以在另一个线程同时进行，不需要等待。</li>
+<li><strong>硬件友好</strong>：当跨步很小（比如在 32 以内）时，所有的比较和交换都可以通过 <strong>Warp Shuffle（线程束洗牌指令）</strong> 直接在寄存器里完成，根本不需要读写昂贵的内存。</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2%E9%99%84%E5%BD%95/" data-id="cms1vppgb0004lkv45oj4fp6z" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          2026年6月26日 attention
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda3gpu%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2026年6月16日 cuda3gpu性能分析</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>181</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>45</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2025 - 2026 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
