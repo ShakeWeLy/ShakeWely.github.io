@@ -43,7 +43,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>181</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>183</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>45</strong><br>标签</div></a>
     </div>
@@ -71,10 +71,10 @@
 
         <section id="main">
   
-    <article id="post-2026年7月26日-nnNet组会汇报" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-2026年7月20日-MRI论文复现" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2026/07/26/2026%E5%B9%B47%E6%9C%8826%E6%97%A5-nnNet%E7%BB%84%E4%BC%9A%E6%B1%87%E6%8A%A5/" class="article-date">
-  <time class="post-time" datetime="2026-07-26T14:13:26.000Z" itemprop="datePublished">
+    <a href="/2026/07/26/2026%E5%B9%B47%E6%9C%8820%E6%97%A5-MRI%E8%AE%BA%E6%96%87%E5%A4%8D%E7%8E%B0/" class="article-date">
+  <time class="post-time" datetime="2026-07-26T14:38:58.000Z" itemprop="datePublished">
     <span class="post-month">7月</span><br/>
     <span class="post-day">26</span>
   </time>
@@ -88,7 +88,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2026/07/26/2026%E5%B9%B47%E6%9C%8826%E6%97%A5-nnNet%E7%BB%84%E4%BC%9A%E6%B1%87%E6%8A%A5/">2026年7月26日 nnNet组会汇报</a>
+      <a class="article-title" href="/2026/07/26/2026%E5%B9%B47%E6%9C%8820%E6%97%A5-MRI%E8%AE%BA%E6%96%87%E5%A4%8D%E7%8E%B0/">2026年7月20日 MRI论文复现</a>
     </h1>
   
 
@@ -107,9 +107,354 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2026/07/26/2026%E5%B9%B47%E6%9C%8826%E6%97%A5-nnNet%E7%BB%84%E4%BC%9A%E6%B1%87%E6%8A%A5/" data-id="cms1vppgf000blkv42d7razse" class="article-share-link">分享</a>
+      <a data-url="https://shakewely.github.io/2026/07/26/2026%E5%B9%B47%E6%9C%8820%E6%97%A5-MRI%E8%AE%BA%E6%96%87%E5%A4%8D%E7%8E%B0/" data-id="cms3c54xv0002eov462ih7lz4" class="article-share-link">分享</a>
       
       
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2026年7月26日-nnUNet组会汇报" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/07/26/2026%E5%B9%B47%E6%9C%8826%E6%97%A5-nnUNet%E7%BB%84%E4%BC%9A%E6%B1%87%E6%8A%A5/" class="article-date">
+  <time class="post-time" datetime="2026-07-26T14:14:03.000Z" itemprop="datePublished">
+    <span class="post-month">7月</span><br/>
+    <span class="post-day">26</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2026/07/26/2026%E5%B9%B47%E6%9C%8826%E6%97%A5-nnUNet%E7%BB%84%E4%BC%9A%E6%B1%87%E6%8A%A5/">2026年7月26日 nnUNet组会汇报</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="nnu-netself-configuring-method-for-deep-learning-based-biomedical-image-segmentation"><a class="markdownIt-Anchor" href="#nnu-netself-configuring-method-for-deep-learning-based-biomedical-image-segmentation"></a> nnU-Net：Self-configuring Method for Deep Learning-based Biomedical Image Segmentation</h1>
+<hr>
+<h1 id="0-研究背景和痛点why"><a class="markdownIt-Anchor" href="#0-研究背景和痛点why"></a> 0 研究背景和痛点（Why）</h1>
+<h2 id="背景"><a class="markdownIt-Anchor" href="#背景"></a> 背景</h2>
+<p>近年来，深度学习语义分割已经广泛应用于医学图像分析，例如：</p>
+<ul>
+<li>器官分割</li>
+<li>肿瘤检测</li>
+<li>病灶测量</li>
+<li>三维重建</li>
+</ul>
+<p>通过语义分割，可以完成：</p>
+<ul>
+<li>图像分析（Image Analysis）</li>
+<li>定量分析（Quantification）</li>
+</ul>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">MRI</span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">分割脑组织</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">计算脑区体积</span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">辅助疾病诊断</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="现有方法存在的问题"><a class="markdownIt-Anchor" href="#现有方法存在的问题"></a> 现有方法存在的问题</h2>
+<p>虽然 U-Net、V-Net 等模型已经取得很好效果，但是：</p>
+<blockquote>
+<p><strong>不同数据集几乎都需要重新设计整个训练流程。</strong></p>
+</blockquote>
+<p>主要包括：</p>
+<ul>
+<li>数据预处理</li>
+<li>网络结构</li>
+<li>Patch Size</li>
+<li>Batch Size</li>
+<li>Learning Rate</li>
+<li>Data Augmentation</li>
+<li>后处理</li>
+</ul>
+<p>这些设计高度依赖：</p>
+<ul>
+<li>数据集特点</li>
+<li>GPU显存</li>
+<li>医学经验</li>
+</ul>
+<p>因此：</p>
+<blockquote>
+<p><strong>一个新的医学分割任务往往需要大量人工调参。</strong></p>
+</blockquote>
+<hr>
+<h2 id="automl-为什么不能解决"><a class="markdownIt-Anchor" href="#automl-为什么不能解决"></a> AutoML 为什么不能解决？</h2>
+<p>AutoML 可以自动搜索网络。</p>
+<p>但是：</p>
+<ul>
+<li>搜索成本高</li>
+<li>计算资源巨大</li>
+<li>仍需要人工定义搜索空间</li>
+</ul>
+<p>因此，</p>
+<blockquote>
+<p>AutoML 并没有真正消除专家经验。</p>
+</blockquote>
+<hr>
+<h2 id="nnu-net-的目标"><a class="markdownIt-Anchor" href="#nnu-net-的目标"></a> nnU-Net 的目标</h2>
+<p>作者希望做到：</p>
+<blockquote>
+<p><strong>输入一个新的医学数据集，不需要任何人工配置，就能够自动训练出高性能分割模型。</strong></p>
+</blockquote>
+<hr>
+<h1 id="1-核心思想how"><a class="markdownIt-Anchor" href="#1-核心思想how"></a> 1 核心思想（How）</h1>
+<p>作者认为：</p>
+<p>整个分割流程其实包含三种类型的设计决策：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">设计参数</span><br><span class="line">│</span><br><span class="line">├── Fixed</span><br><span class="line">├── Rule-based</span><br><span class="line">└── Empirical</span><br></pre></td></tr></table></figure>
+<p>这就是 nnU-Net 最核心的思想。</p>
+<hr>
+<h2 id="1fixed-parameters"><a class="markdownIt-Anchor" href="#1fixed-parameters"></a> （1）Fixed Parameters</h2>
+<p>固定参数。</p>
+<p>作者发现：</p>
+<p>很多经验其实对于所有数据集都成立。</p>
+<p>例如：</p>
+<ul>
+<li>使用 U-Net</li>
+<li>Deep Supervision</li>
+<li>Instance Normalization</li>
+<li>LeakyReLU</li>
+</ul>
+<p>这些无需重新设计。</p>
+<p>因此：</p>
+<blockquote>
+<p>固定下来。</p>
+</blockquote>
+<hr>
+<h2 id="2rule-based-parameters"><a class="markdownIt-Anchor" href="#2rule-based-parameters"></a> （2）Rule-based Parameters</h2>
+<p>规则参数。</p>
+<p>作者提出两个概念：</p>
+<h3 id="dataset-fingerprint"><a class="markdownIt-Anchor" href="#dataset-fingerprint"></a> Dataset Fingerprint</h3>
+<p>数据指纹。</p>
+<p>包括：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">spacing</span><br><span class="line"></span><br><span class="line">image size</span><br><span class="line"></span><br><span class="line">image shape</span><br><span class="line"></span><br><span class="line">voxel数量</span><br><span class="line"></span><br><span class="line">类别比例</span><br><span class="line"></span><br><span class="line">模态(MRI/CT)</span><br></pre></td></tr></table></figure>
+<p>也就是：</p>
+<blockquote>
+<p>数据集有哪些特点。</p>
+</blockquote>
+<hr>
+<h3 id="pipeline-fingerprint"><a class="markdownIt-Anchor" href="#pipeline-fingerprint"></a> Pipeline Fingerprint</h3>
+<p>流水线指纹。</p>
+<p>包括：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Patch Size</span><br><span class="line"></span><br><span class="line">Batch Size</span><br><span class="line"></span><br><span class="line">Network Depth</span><br><span class="line"></span><br><span class="line">Pooling</span><br><span class="line"></span><br><span class="line">Kernel Size</span><br><span class="line"></span><br><span class="line">Resampling</span><br><span class="line"></span><br><span class="line">Normalization</span><br></pre></td></tr></table></figure>
+<p>也就是：</p>
+<blockquote>
+<p>如何训练这个模型。</p>
+</blockquote>
+<hr>
+<h3 id="二者关系"><a class="markdownIt-Anchor" href="#二者关系"></a> 二者关系</h3>
+<p>nnU-Net 建立：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Dataset Fingerprint</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">Heuristic Rules</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">Pipeline Fingerprint</span><br></pre></td></tr></table></figure>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">spacing很大</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">各向异性</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">使用2D卷积</span><br></pre></td></tr></table></figure>
+<p>或者：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">GPU显存小</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">Patch变小</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">Batch自动调整</span><br></pre></td></tr></table></figure>
+<p>所以：</p>
+<blockquote>
+<p>不再靠人工，而是靠规则自动决定。</p>
+</blockquote>
+<hr>
+<h2 id="3empirical-parameters"><a class="markdownIt-Anchor" href="#3empirical-parameters"></a> （3）Empirical Parameters</h2>
+<p>还有一些参数，</p>
+<p>无法直接写规则。</p>
+<p>例如：</p>
+<ul>
+<li>哪个模型最好</li>
+<li>是否需要Cascade</li>
+<li>后处理方式</li>
+</ul>
+<p>作者采用：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">训练</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">交叉验证</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">自动选择</span><br></pre></td></tr></table></figure>
+<p>因此称为：</p>
+<p>Empirical Parameters。</p>
+<hr>
+<h2 id="nnu-net-自动完成哪些事情"><a class="markdownIt-Anchor" href="#nnu-net-自动完成哪些事情"></a> nnU-Net 自动完成哪些事情？</h2>
+<p>整个流程：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">Dataset</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">Fingerprint</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">Preprocessing</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">Network</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">Training</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">Inference</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">Post-processing</span><br></pre></td></tr></table></figure>
+<p>包括：</p>
+<h3 id="preprocessing"><a class="markdownIt-Anchor" href="#preprocessing"></a> Preprocessing</h3>
+<p>自动：</p>
+<ul>
+<li>Resampling</li>
+<li>Cropping</li>
+<li>Normalization</li>
+</ul>
+<hr>
+<h3 id="network"><a class="markdownIt-Anchor" href="#network"></a> Network</h3>
+<p>自动决定：</p>
+<ul>
+<li>2D U-Net</li>
+<li>3D Full Resolution</li>
+<li>3D Cascade</li>
+</ul>
+<p>其中：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">2D</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">适合各向异性数据</span><br><span class="line"></span><br><span class="line">-------------------</span><br><span class="line"></span><br><span class="line">3D Full</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">适合一般3D数据</span><br><span class="line"></span><br><span class="line">-------------------</span><br><span class="line"></span><br><span class="line">Cascade</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">超大图像</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="training"><a class="markdownIt-Anchor" href="#training"></a> Training</h3>
+<p>自动：</p>
+<ul>
+<li>Patch Size</li>
+<li>Batch Size</li>
+<li>Learning Rate</li>
+<li>Data Augmentation</li>
+<li>Deep Supervision</li>
+</ul>
+<hr>
+<h3 id="post-processing"><a class="markdownIt-Anchor" href="#post-processing"></a> Post-processing</h3>
+<p>自动：</p>
+<ul>
+<li>Remove Small Components</li>
+<li>Keep Largest Component</li>
+</ul>
+<p>全部自动完成。</p>
+<hr>
+<h1 id="2-实验设计与结果results"><a class="markdownIt-Anchor" href="#2-实验设计与结果results"></a> 2 实验设计与结果（Results）</h1>
+<h2 id="数据集"><a class="markdownIt-Anchor" href="#数据集"></a> 数据集</h2>
+<p>作者测试：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">23 datasets</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">53 segmentation tasks</span><br></pre></td></tr></table></figure>
+<p>涵盖：</p>
+<ul>
+<li>MRI</li>
+<li>CT</li>
+<li>EM</li>
+<li>FM</li>
+</ul>
+<p>包括：</p>
+<ul>
+<li>Brain</li>
+<li>Liver</li>
+<li>Heart</li>
+<li>Tumor</li>
+<li>Lesion</li>
+<li>Cell</li>
+</ul>
+<p>几乎覆盖所有医学分割场景。</p>
+<hr>
+<h2 id="对比方法"><a class="markdownIt-Anchor" href="#对比方法"></a> 对比方法</h2>
+<p>与：</p>
+<ul>
+<li>各挑战赛冠军</li>
+<li>专门设计的方法</li>
+<li>人工调参模型</li>
+</ul>
+<p>进行比较。</p>
+<hr>
+<h2 id="实验结果"><a class="markdownIt-Anchor" href="#实验结果"></a> 实验结果</h2>
+<p>最终：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">53个任务</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">33个SOTA</span><br><span class="line"></span><br><span class="line">其余几乎全部进入Top排行榜</span><br></pre></td></tr></table></figure>
+<p>说明：</p>
+<blockquote>
+<p>即使没有针对任务专门设计，nnU-Net 依然能够超过大多数人工设计方法。</p>
+</blockquote>
+<hr>
+<h2 id="为什么效果这么好"><a class="markdownIt-Anchor" href="#为什么效果这么好"></a> 为什么效果这么好？</h2>
+<p>作者强调：</p>
+<p>并不是因为：</p>
+<ul>
+<li>新网络</li>
+<li>新Loss</li>
+<li>新Optimizer</li>
+</ul>
+<p>而是：</p>
+<blockquote>
+<p><strong>把多年人工调参经验进行了系统化总结。</strong></p>
+</blockquote>
+<p>因此：</p>
+<p>论文名字叫：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">nnU-Net</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">No-New-Net</span><br></pre></td></tr></table></figure>
+<p>意思就是：</p>
+<blockquote>
+<p><strong>没有提出新的网络，而是提出新的方法论。</strong></p>
+</blockquote>
+<hr>
+<h1 id="3-讨论与启发discussion"><a class="markdownIt-Anchor" href="#3-讨论与启发discussion"></a> 3 讨论与启发（Discussion）</h1>
+<h2 id="第一"><a class="markdownIt-Anchor" href="#第一"></a> 第一</h2>
+<p>论文最大的贡献不是：</p>
+<p>一个新的网络。</p>
+<p>而是：</p>
+<blockquote>
+<p>自动配置整个分割流程。</p>
+</blockquote>
+<p>这也是后来：</p>
+<p>Auto Configuration</p>
+<p>Auto Pipeline</p>
+<p>Medical AutoML</p>
+<p>发展的基础。</p>
+<hr>
+<h2 id="第二"><a class="markdownIt-Anchor" href="#第二"></a> 第二</h2>
+<p>作者认为：</p>
+<p>真正影响性能的，</p>
+<p>不是网络结构，</p>
+<p>而是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">数据</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">配置</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">训练流程</span><br></pre></td></tr></table></figure>
+<p>一句经典结论：</p>
+<blockquote>
+<p><strong>The exact architecture is not the most important determinant in getting a good solution.</strong></p>
+</blockquote>
+<p>即：</p>
+<blockquote>
+<p><strong>网络结构并不是决定模型性能最重要的因素。</strong></p>
+</blockquote>
+<hr>
+<h2 id="第三"><a class="markdownIt-Anchor" href="#第三"></a> 第三</h2>
+<p>nnU-Net 更像一个：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Framework</span><br><span class="line"></span><br><span class="line">而不是</span><br><span class="line"></span><br><span class="line">Network</span><br></pre></td></tr></table></figure>
+<p>任何新的：</p>
+<ul>
+<li>Transformer</li>
+<li>Attention</li>
+<li>Mamba</li>
+<li>Diffusion</li>
+</ul>
+<p>都可以直接放进去。</p>
+<p>因此，</p>
+<p>很多后续工作都是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Transformer</span><br><span class="line"></span><br><span class="line">+</span><br><span class="line"></span><br><span class="line">nnU-Net</span><br></pre></td></tr></table></figure>
+<p>而不是重新设计整个Pipeline。</p>
+<hr>
+<h2 id="第四局限性"><a class="markdownIt-Anchor" href="#第四局限性"></a> 第四（局限性）</h2>
+<p>虽然 nnU-Net 十分强大，但仍存在一些局限：</p>
+<ul>
+<li>默认以 Dice 作为优化目标，对于特殊评价指标的任务可能不是最优。</li>
+<li>某些特殊数据（如电子显微镜 EM）仍需要人工设计预处理或损失函数。</li>
+<li>启发式规则依赖已有经验，对于全新的数据类型可能需要扩展。</li>
+</ul>
+<p>作者提出，可以持续将新的经验融入规则库，使 nnU-Net 不断演进。</p>
+<hr>
+<h1 id="总结take-home-message"><a class="markdownIt-Anchor" href="#总结take-home-message"></a> 总结（Take-home Message）</h1>
+<p>可以用下面四句话概括整篇论文：</p>
+<ol>
+<li><strong>问题：</strong> 医学图像分割高度依赖人工经验，不同数据集需要重新设计整个训练流程。</li>
+<li><strong>方法：</strong> 将配置决策划分为固定参数（Fixed）、规则参数（Rule-based）和经验参数（Empirical），根据数据指纹自动生成完整训练流水线。</li>
+<li><strong>结果：</strong> 在 23 个数据集、53 个分割任务上取得了 33 个 SOTA，其余任务也达到或接近排行榜最佳水平。</li>
+<li><strong>意义：</strong> nnU-Net 的核心创新不是提出新的网络（No New Net），而是把医学图像分割中的专家经验系统化、自动化，建立了一套可直接迁移到新数据集的自配置框架。这也是它成为医学图像分割领域事实标准（de facto standard）的重要原因。</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/07/26/2026%E5%B9%B47%E6%9C%8826%E6%97%A5-nnUNet%E7%BB%84%E4%BC%9A%E6%B1%87%E6%8A%A5/" data-id="cms3c54yb0003eov46h48f9b6" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MRI/" rel="tag">MRI</a></li></ul>
+
     </footer>
   </div>
   
@@ -219,7 +564,7 @@
 <p>下面是一版更适合 <strong>15~20 分钟组会/论文汇报</strong> 的版本。</p>
 <hr>
 <p>能够针对任何新的分割任务自动完成配置的方法，包括预处理、网络结构、训练流程以及后处理。</p>
-<h2 id="数据集"><a class="markdownIt-Anchor" href="#数据集"></a> 数据集</h2>
+<h1 id="数据集"><a class="markdownIt-Anchor" href="#数据集"></a> 数据集</h1>
 <table>
 <thead>
 <tr>
@@ -372,10 +717,10 @@
 </ul>
 <p>随后，这个四通道张量会作为模型的输入，让网络综合四种模态的信息完成肿瘤分割。</p>
 </blockquote>
-<h2 id="数据指纹和预处理"><a class="markdownIt-Anchor" href="#数据指纹和预处理"></a> 数据指纹和预处理</h2>
-<h2 id="训练"><a class="markdownIt-Anchor" href="#训练"></a> 训练</h2>
+<h1 id="数据指纹和预处理"><a class="markdownIt-Anchor" href="#数据指纹和预处理"></a> 数据指纹和预处理</h1>
+<h1 id="训练"><a class="markdownIt-Anchor" href="#训练"></a> 训练</h1>
 <img src="/2026/07/26/2026%E5%B9%B47%E6%9C%8826%E6%97%A5-nnUNet-learn/image-20260726194106851.png" style="zoom:50%;">
-<h2 id="best-model"><a class="markdownIt-Anchor" href="#best-model"></a> Best model</h2>
+<h1 id="best-model"><a class="markdownIt-Anchor" href="#best-model"></a> Best model</h1>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
 <blockquote>
 <h1 id="它会评估什么what-it-evaluates"><a class="markdownIt-Anchor" href="#它会评估什么what-it-evaluates"></a> 它会评估什么？（What It Evaluates）</h1>
@@ -422,8 +767,8 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--disable_ensembling</span><br></pre></td></tr></table></figure>
 <p>这样只比较单个模型。</p>
 </blockquote>
-<h2 id="推理"><a class="markdownIt-Anchor" href="#推理"></a> 推理</h2>
-<h2 id="3-后处理postprocessing"><a class="markdownIt-Anchor" href="#3-后处理postprocessing"></a> 3. 后处理（Postprocessing）</h2>
+<h1 id="推理"><a class="markdownIt-Anchor" href="#推理"></a> 推理</h1>
+<h1 id="3-后处理postprocessing"><a class="markdownIt-Anchor" href="#3-后处理postprocessing"></a> 3. 后处理（Postprocessing）</h1>
 <p>最后，nnU-Net 会自动测试不同的后处理策略。</p>
 <p>文档中提到：</p>
 <blockquote>
@@ -442,6 +787,8 @@
       <a data-url="https://shakewely.github.io/2026/07/26/2026%E5%B9%B47%E6%9C%8826%E6%97%A5-nnUNet-learn/" data-id="cms1vppgh000flkv4depd3dab" class="article-share-link">分享</a>
       
       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MRI/" rel="tag">MRI</a></li></ul>
+
     </footer>
   </div>
   
@@ -1073,6 +1420,176 @@
 
 
   
+    <article id="post-2026年7月12日-MRI软件学习" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/" class="article-date">
+  <time class="post-time" datetime="2026-07-12T12:39:48.000Z" itemprop="datePublished">
+    <span class="post-month">7月</span><br/>
+    <span class="post-day">12</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/">2026年7月12日 mri报告</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="afni"><a class="markdownIt-Anchor" href="#afni"></a> AFNI</h1>
+<h2 id="1-介绍"><a class="markdownIt-Anchor" href="#1-介绍"></a> 1 介绍</h2>
+<p>主要用于 <strong>fMRI 数据预处理、统计分析与可视化</strong>。</p>
+<p>主要特点：</p>
+<ul>
+<li>支持 MRI、fMRI 数据分析</li>
+<li>支持 GUI 三维浏览</li>
+<li>可完成从原始数据到统计结果的完整分析流程</li>
+</ul>
+<h2 id="2-主要功能"><a class="markdownIt-Anchor" href="#2-主要功能"></a> 2  主要功能</h2>
+<p>AFNI 可以覆盖整个 fMRI 数据分析流程：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">原始 fMRI 数据</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">数据预处理</span><br><span class="line">(tcat、tshift、volreg、blur...)</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">个体水平分析</span><br><span class="line">(GLM、3dDeconvolve)</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">群体统计分析</span><br><span class="line">(3dttest++、3dMEMA...)</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">结果可视化</span><br><span class="line">(AFNI GUI)</span><br></pre></td></tr></table></figure>
+<p>常见功能包括：</p>
+<ul>
+<li>图像浏览与三维重建</li>
+<li>Slice Timing 校正</li>
+<li>头动校正</li>
+<li>空间标准化</li>
+<li>空间平滑</li>
+<li>ROI 提取</li>
+<li>时间序列分析</li>
+<li>GLM 建模</li>
+<li>群体统计分析</li>
+</ul>
+<h2 id="3-操作"><a class="markdownIt-Anchor" href="#3-操作"></a> 3 操作</h2>
+<h3 id="30-afni-标准分析流程"><a class="markdownIt-Anchor" href="#30-afni-标准分析流程"></a> 3.0 AFNI 标准分析流程</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">去前几个 TR</span><br><span class="line">      │</span><br><span class="line">      ▼</span><br><span class="line">Slice Timing 校正</span><br><span class="line">      │</span><br><span class="line">      ▼</span><br><span class="line">Head Motion 校正</span><br><span class="line">      │</span><br><span class="line">      ▼</span><br><span class="line">空间标准化</span><br><span class="line">      │</span><br><span class="line">      ▼</span><br><span class="line">空间平滑</span><br><span class="line">      │</span><br><span class="line">      ▼</span><br><span class="line">GLM 建模</span><br><span class="line">      │</span><br><span class="line">      ▼</span><br><span class="line">统计推断</span><br><span class="line">      │</span><br><span class="line">      ▼</span><br><span class="line">结果可视化</span><br></pre></td></tr></table></figure>
+<h3 id="31-安装afni"><a class="markdownIt-Anchor" href="#31-安装afni"></a> 3.1 安装afni</h3>
+<blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">afni -ver</span><br><span class="line">3dcalc -<span class="built_in">help</span></span><br><span class="line">afni </span><br></pre></td></tr></table></figure>
+</blockquote>
+<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260712204033515.png" alt="image-20260712204033515"></p>
+<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260712204153717.png" alt="image-20260712204153717"></p>
+<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260712204229210.png" alt="image-20260712204229210"></p>
+<h3 id="32-demo原始图像的3d重构"><a class="markdownIt-Anchor" href="#32-demo原始图像的3d重构"></a> 3.2 demo<strong>原始图像的3D重构</strong></h3>
+<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260712204817168.png" alt="image-20260712204817168"></p>
+<h3 id="33-自动化预处理脚本"><a class="markdownIt-Anchor" href="#33-自动化预处理脚本"></a> 3.3 <strong>自动化预处理脚本</strong></h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tcat (去前2TR) → outcount (异常检测) → tshift (层间校正)</span><br><span class="line">→ volreg (头动校正) → blur (平滑) → mask → scale</span><br><span class="line">→ 3dDeconvolve (GLM) → 3dClustSim → QC 报告</span><br></pre></td></tr></table></figure>
+<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260712205453869.png" alt="image-20260712205453869"></p>
+<h3 id="34-s时间校正lice-timing"><a class="markdownIt-Anchor" href="#34-s时间校正lice-timing"></a> 3.4 S时间校正lice Timing</h3>
+<p>MRI 一次扫描通常不是同时采集整个脑部，而是按照 slice 顺序逐层获取信号。因此<strong>同一个时间点的不同脑层实际上存在时间偏移</strong>，需要进行时间校正。</p>
+<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260712210219120.png" alt="image-20260712210219120"></p>
+<blockquote>
+<ul>
+<li>校正前：33 层 offset 各不相同（alt+z 交错采集，如 <code>0.000 1.030 0.061 ...</code>）</li>
+<li>校正后：无 time-offset 行 → 各层对齐到 TR 起点</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /opt/workspace</span><br><span class="line">bash day3/run_day3.sh</span><br></pre></td></tr></table></figure>
+<p>GUI 对比校正效果（推荐）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> day3/output/FT.day3.results</span><br><span class="line">afni pb00.FT.day3.r01.tcat+orig pb01.FT.day3.r01.tshift+orig &amp;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h3 id="35-头动校正motion-correction"><a class="markdownIt-Anchor" href="#35-头动校正motion-correction"></a> 3.5 头动校正（Motion Correction）</h3>
+<p>fMRI 扫描过程中，被试轻微移动会导致不同时间点<strong>脑结构位置发生变化</strong>，从而产生假激活信号。因此需要将所有时间点图像对齐到同一个参考空间。</p>
+<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260712210714513.png" alt="image-20260712210714513"></p>
+<h3 id="36-空间标准化spatial-normalization"><a class="markdownIt-Anchor" href="#36-空间标准化spatial-normalization"></a> 3.6 空间标准化（Spatial Normalization）</h3>
+<p>不同被试的大脑大小、形态存在差异，需要将个体脑图像转换到统一标准空间</p>
+<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260712211643098.png" alt="image-20260712211643098"></p>
+<h3 id="37-平空间平滑spatial-smoothing"><a class="markdownIt-Anchor" href="#37-平空间平滑spatial-smoothing"></a> 3.7  <strong>平空间平滑（Spatial Smoothing）</strong></h3>
+<p>fMRI 数据存在较高空间噪声，通过高斯滤波提高信噪比，同时满足统计分析中的空间连续性假设。</p>
+<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260712212425321.png" alt="image-20260712212425321"></p>
+<h3 id="38-个体建模求解-glm"><a class="markdownIt-Anchor" href="#38-个体建模求解-glm"></a> 3.8  <strong>个体建模求解</strong> (GLM）</h3>
+<p>分析实验刺激是否<strong>导致特定脑区 BOLD 信号变化</strong>。 使用一般线性模型（General Linear Model, GLM）建立刺激与脑活动之间的统计关系。</p>
+<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260712213026708.png" alt="image-20260712213026708"></p>
+<h3 id="39-群体统计分析group-analysis"><a class="markdownIt-Anchor" href="#39-群体统计分析group-analysis"></a> 3.9 群体统计分析（Group Analysis）</h3>
+<p>个体分析得到每个人的大脑激活模式后，需要进一步比较多个被试之间的共同规律，例如疾病组和健康组之间的差异。</p>
+<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260712213815039.png" alt="image-20260712213815039"></p>
+<h1 id="mrtrix3"><a class="markdownIt-Anchor" href="#mrtrix3"></a> MRtrix3</h1>
+<hr>
+<h2 id="1-介绍-2"><a class="markdownIt-Anchor" href="#1-介绍-2"></a> 1 介绍</h2>
+<p>专注于<strong>弥散磁共振成像（dMRI）</strong> 数据的分析与可视化。</p>
+<p>相比 AFNI 更关注：</p>
+<ul>
+<li>白质纤维</li>
+<li>神经束追踪</li>
+<li>大脑结构连接</li>
+</ul>
+<h2 id="2-主要功能-2"><a class="markdownIt-Anchor" href="#2-主要功能-2"></a> 2 主要功能</h2>
+<p>MRtrix3 主要完成：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">DWI 数据</span><br><span class="line">     │</span><br><span class="line">     ▼</span><br><span class="line">预处理</span><br><span class="line">     │</span><br><span class="line">     ▼</span><br><span class="line">扩散模型</span><br><span class="line">(DTI/CSD)</span><br><span class="line">     │</span><br><span class="line">     ▼</span><br><span class="line">纤维束追踪</span><br><span class="line">     │</span><br><span class="line">     ▼</span><br><span class="line">结构连接组</span><br></pre></td></tr></table></figure>
+<p>主要功能：</p>
+<ul>
+<li>DWI 去噪</li>
+<li>Gibbs 去除</li>
+<li>Eddy/Head Motion 校正</li>
+<li>Bias Field 校正</li>
+<li>Brain Mask</li>
+<li>DTI 建模</li>
+<li>CSD 建模</li>
+<li>Fiber Tracking</li>
+<li>Connectome 构建</li>
+</ul>
+<h2 id="3-操作-2"><a class="markdownIt-Anchor" href="#3-操作-2"></a> 3 操作</h2>
+<h3 id="30-标准流程"><a class="markdownIt-Anchor" href="#30-标准流程"></a> 3.0 标准流程</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">DWI 数据</span><br><span class="line">     │</span><br><span class="line">     ▼</span><br><span class="line">去噪</span><br><span class="line">     │</span><br><span class="line">     ▼</span><br><span class="line">运动/涡流校正</span><br><span class="line">     │</span><br><span class="line">     ▼</span><br><span class="line">DTI/CSD 建模</span><br><span class="line">     │</span><br><span class="line">     ▼</span><br><span class="line">纤维束追踪</span><br><span class="line">     │</span><br><span class="line">     ▼</span><br><span class="line">结构连接组分析</span><br></pre></td></tr></table></figure>
+<h3 id="31-安装"><a class="markdownIt-Anchor" href="#31-安装"></a> 3.1 安装</h3>
+<h3 id="32-查看数据"><a class="markdownIt-Anchor" href="#32-查看数据"></a> 3.2 查看数据</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mrview dwi.mif</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash MRtrix3_learn/day1/mrview.sh</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260712223235737.png" alt><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/qc_t1_from_dicom.png" alt="qc_t1_from_dicom"></p>
+</blockquote>
+<h3 id="33-dwi的预处理"><a class="markdownIt-Anchor" href="#33-dwi的预处理"></a> 3.3  DWI的预处理</h3>
+<p>涵盖<strong>去噪</strong>（<code>dwidenoise</code>）、<strong>Gibbs伪影去除</strong>、<strong>涡流校正和头动校正</strong>（<code>dwifslpreproc</code> 调用FSL）。<strong>B0场不均匀性校正（偏置场校正）</strong> 和<strong>大脑提取（剥颅骨）</strong>，得到高质量弥散数据, 为建模做最终准备。</p>
+<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/qc_dwi_before_after.png" alt="qc_dwi_before_after"></p>
+<h3 id="34-弥散张量和csd"><a class="markdownIt-Anchor" href="#34-弥散张量和csd"></a> 3.4 弥散张量和CSD</h3>
+<p>两种核心模型：<strong>弥散张量成像（DTI）</strong> 和<strong>约束球面反卷积（CSD）</strong>。</p>
+<p>CSD能解决纤维交叉问题，是MRtrix3的核心优势。</p>
+<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/qc_dti_csd.png" alt="qc_dti_csd"></p>
+<h3 id="35-纤维束追踪"><a class="markdownIt-Anchor" href="#35-纤维束追踪"></a> 3.5  纤维束追踪</h3>
+<p>纤维追踪算法（使用 <code>tckgen</code> 进行<strong>概率性追踪</strong>），生成上百万条模拟白质纤维轨迹，并介绍如何过滤和修剪纤维（<code>tcksift</code>）。</p>
+<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260715142658936.png" alt="image-20260715142658936"></p>
+<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260715143122056.png" alt="image-20260715143122056"></p>
+<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/qc_tdi_before_after.png" alt="qc_tdi_before_after"></p>
+<h3 id="36-大脑连接组"><a class="markdownIt-Anchor" href="#36-大脑连接组"></a> 3.6  大脑连接组</h3>
+<p>将追踪出的纤维束与脑区图谱（节点）结合，构建<strong>结构性连接矩阵（Connectome）</strong>，用于分析大脑网络属性（使用 <code>tck2connectome</code>）。</p>
+<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/qc_connectome.png" alt="qc_connectome"></p>
+<h1 id="uunet"><a class="markdownIt-Anchor" href="#uunet"></a> UUNet</h1>
+<h2 id="可视化"><a class="markdownIt-Anchor" href="#可视化"></a> 可视化</h2>
+<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260726142707360.png" alt="image-20260726142707360"></p>
+<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260726142320099.png" alt="image-20260726142320099"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/" data-id="cms3c54xk0000eov4e8pw6eyh" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MRI/" rel="tag">MRI</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
     <article id="post-2026年7月4日-MRI-基础" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2026/07/04/2026%E5%B9%B47%E6%9C%884%E6%97%A5-MRI-%E5%9F%BA%E7%A1%80/" class="article-date">
@@ -1537,7 +2054,6 @@ FreeSurfer        AFNI/FSL      MRtrix3/FSL
 <h2 id="2-预处理preprocessing"><a class="markdownIt-Anchor" href="#2-预处理preprocessing"></a> 2. 预处理（Preprocessing）</h2>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">原始 fMRI（4D NIfTI）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">tcat（去除前几个 TR）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">outcount（异常时间点检测）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">tshift（Slice Timing Correction）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">volreg（Motion Correction）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">blur（Spatial Smoothing）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">mask（Brain Mask）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">scale（Intensity Scaling）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">3dDeconvolve（GLM 建模）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">统计检验（t/F Statistic）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">3dClustSim（多重比较校正）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">Activation Map</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">QC Report</span><br></pre></td></tr></table></figure>
 <h1 id="深度学习任务"><a class="markdownIt-Anchor" href="#深度学习任务"></a> 深度学习任务</h1>
-<h2 id="常见任务总结"><a class="markdownIt-Anchor" href="#常见任务总结"></a> 常见任务总结</h2>
 <table>
 <thead>
 <tr>
@@ -1593,6 +2109,8 @@ FreeSurfer        AFNI/FSL      MRtrix3/FSL
       <a data-url="https://shakewely.github.io/2026/07/04/2026%E5%B9%B47%E6%9C%884%E6%97%A5-MRI-%E5%9F%BA%E7%A1%80/" data-id="cms1vppgg000dlkv43bzxbyv6" class="article-share-link">分享</a>
       
       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MRI/" rel="tag">MRI</a></li></ul>
+
     </footer>
   </div>
   
@@ -1654,717 +2172,6 @@ FreeSurfer        AFNI/FSL      MRtrix3/FSL
 
 
   
-    <article id="post-2026年6月26日-attention" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/" class="article-date">
-  <time class="post-time" datetime="2026-06-26T01:42:09.000Z" itemprop="datePublished">
-    <span class="post-month">6月</span><br/>
-    <span class="post-day">26</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/">2026年6月26日 attention</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="会议室讨论"><a class="markdownIt-Anchor" href="#会议室讨论"></a> 会议室讨论</h3>
-<ul>
-<li><strong>Query (Q) 是“提问者”</strong>：他负责去询问信息。</li>
-<li><strong>Key (K) 是“标签”</strong>：它定义了信息的内容。</li>
-<li><strong>Value (V) 是“内容”</strong>：它是实际的信息本身。</li>
-</ul>
-<p><img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260630224119046.png" alt="image-20260630224119046"></p>
-<h1 id="0-attention"><a class="markdownIt-Anchor" href="#0-attention"></a> 0 Attention</h1>
-<h2 id="self-attention"><a class="markdownIt-Anchor" href="#self-attention"></a> Self-Attention</h2>
-<h3 id="qk"><a class="markdownIt-Anchor" href="#qk"></a> QK</h3>
-<p><img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/1fd6e4e0c9694f09b643c923de8f9a79tplv-73owjymdk6-jj-mark-v100005o6Y6YeR5oqA5pyv56S-5Yy6IEAg6ZmI5aOu5a6e55qE5pCs56CW5pel6K6wq75.webp" alt="图1"></p>
-<h3 id="v"><a class="markdownIt-Anchor" href="#v"></a> @V</h3>
-<p><img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/faa6e8af5b4142109f1aca521019e099tplv-73owjymdk6-jj-mark-v100005o6Y6YeR5oqA5pyv56S-5Yy6IEAg6ZmI5aOu5a6e55qE5pCs56CW5pel6K6wq75.webp" alt="在这里插入图片描述"></p>
-<p>乘上 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi></mrow><annotation encoding="application/x-tex">V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span></span></span></span>（Value）代表的是：<strong>根据计算出的注意力权重（关注度），对所有词的语义特征进行“加权求和”，从而提炼出新的综合特征表示。</strong></p>
-<p>通过 <code>Attention @ V</code>，原本单一维度的“词”，被融汇了上下文中其他相关词的信息。</p>
-<ul>
-<li>比如原本“苹果”这个词的向量只代表水果，但在“苹果手机”的上下文中，通过注意力机制去乘以与“手机”相关的 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi></mrow><annotation encoding="application/x-tex">V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span></span></span></span> 向量后，它输出的新向量就带有了电子产品的语义特征。</li>
-</ul>
-<p>这就是注意力机制能够“结合上下文”更新词向量的终极奥秘</p>
-<h2 id="multi-head-attention"><a class="markdownIt-Anchor" href="#multi-head-attention"></a> Multi-Head Attention</h2>
-<p><img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/4ce41d8e06ae4eafbec145a851ed0445tplv-73owjymdk6-jj-mark-v100005o6Y6YeR5oqA5pyv56S-5Yy6IEAg6ZmI5aOu5a6e55qE5pCs56CW5pel6K6wq75.webp" alt="在这里插入图片描述"></p>
-<h2 id="cross-attention"><a class="markdownIt-Anchor" href="#cross-attention"></a> Cross-Attention</h2>
-<h2 id="flashattention"><a class="markdownIt-Anchor" href="#flashattention"></a> FlashAttention</h2>
-<blockquote>
-<p>transformer的并行到底体现在哪里？ - chouheiwa的回答 - 知乎<br>
-<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/656342880/answer/2052007560274784445">https://www.zhihu.com/question/656342880/answer/2052007560274784445</a></p>
-</blockquote>
-<h1 id="1-训练并行"><a class="markdownIt-Anchor" href="#1-训练并行"></a> 1 训练并行</h1>
-<h2 id="self-attention-怎么把单行道拆成一次矩阵乘"><a class="markdownIt-Anchor" href="#self-attention-怎么把单行道拆成一次矩阵乘"></a> Self-attention 怎么把单行道拆成一次矩阵乘</h2>
-<h2 id="训练能并行的真正钥匙因果掩码-teacher-forcing"><a class="markdownIt-Anchor" href="#训练能并行的真正钥匙因果掩码-teacher-forcing"></a> 训练能并行的真正钥匙：因果掩码 + teacher forcing</h2>
-<p>可以把训练时的 Transformer 想象成：</p>
-<blockquote>
-<p><strong>一次输入完整句子，然后让句子里的每一个位置都&quot;扮演&quot;一次推理过程。</strong></p>
-</blockquote>
-<p>也就是说，一次前向传播实际上<strong>同时模拟了多个不同长度的前缀</strong>：</p>
-<ul>
-<li>第 0 个位置相当于在做：<code>&lt;BOS&gt; → I</code></li>
-<li>第 1 个位置相当于在做：<code>&lt;BOS&gt; I → love</code></li>
-<li>第 2 个位置相当于在做：<code>&lt;BOS&gt; I love → AI</code></li>
-<li>第 3 个位置相当于在做：<code>&lt;BOS&gt; I love AI → !</code></li>
-</ul>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">          &lt;BOS&gt;    I    love    AI</span><br><span class="line"></span><br><span class="line">&lt;BOS&gt;       ✓      ×      ×      ×</span><br><span class="line"></span><br><span class="line">I           ✓      ✓      ×      ×</span><br><span class="line"></span><br><span class="line">love        ✓      ✓      ✓      ×</span><br><span class="line"></span><br><span class="line">AI          ✓      ✓      ✓      ✓</span><br></pre></td></tr></table></figure>
-<p><img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260630220924137.png" alt="image-20260630220924137"></p>
-<h2 id="注意力内部还能再榨多头并行和-flashattention"><a class="markdownIt-Anchor" href="#注意力内部还能再榨多头并行和-flashattention"></a> 注意力内部还能再榨：多头并行和 FlashAttention</h2>
-<h2 id="模型放不下单卡五个维度切着来"><a class="markdownIt-Anchor" href="#模型放不下单卡五个维度切着来"></a> 模型放不下单卡：五个维度切着来</h2>
-<p><img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/v2-5ca825b63ff1e7f8e3470b1a58f241b2_720w.webp" alt="img"></p>
-<h1 id="3-decoder-only推理"><a class="markdownIt-Anchor" href="#3-decoder-only推理"></a> 3 decoder only推理</h1>
-<h3 id="️-阶段一prefill-阶段算力密集型-compute-bound"><a class="markdownIt-Anchor" href="#️-阶段一prefill-阶段算力密集型-compute-bound"></a> 🛠️ 阶段一：Prefill 阶段（算力密集型 Compute-bound）</h3>
-<ul>
-<li><strong>特点：</strong> 输入是一整块文本（比如 2000 个词的 Prompt）。</li>
-<li><strong>GPU 状态：</strong> GPU 最擅长做<strong>大规模矩阵并行计算</strong>。因为一次性进来的 Token 很多，GPU 的计算单元（Tensor Cores）能被完全塞满，计算效率极高（速度非常快）。</li>
-<li><strong>缓存动作：</strong> 这一步是 KV Cache 的<strong>生产者</strong>，负责把算好的海量 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mo separator="true">,</mo><mi>V</mi></mrow><annotation encoding="application/x-tex">K, V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span></span></span></span> 写入显存。</li>
-</ul>
-<h3 id="阶段二decoding-阶段带宽内存密集型-memory-bound"><a class="markdownIt-Anchor" href="#阶段二decoding-阶段带宽内存密集型-memory-bound"></a> 🐌 阶段二：Decoding 阶段（带宽/内存密集型 Memory-bound）</h3>
-<ul>
-<li><strong>特点：</strong> 每次输入只有 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 个新词（比如每次生成一个字）。</li>
-<li><strong>GPU 状态：</strong> GPU 处于“吃不饱”的状态。因为只有一个 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Q</mi><mrow><mi>n</mi><mi>e</mi><mi>w</mi></mrow></msub></mrow><annotation encoding="application/x-tex">Q_{new}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">n</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.02691em;">w</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，计算量极小，但 GPU 必须频繁地、一次又一次地去显存里读取巨大的 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mo separator="true">,</mo><mi>V</mi></mrow><annotation encoding="application/x-tex">K, V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span></span></span></span> 缓存池（KV Cache）。<strong>读取显存的速度（显存带宽）成为了卡脖子的瓶颈</strong>。</li>
-<li><strong>缓存动作：</strong> 这一步是 KV Cache 的<strong>消费者与追加者</strong>。</li>
-</ul>
-<h2 id="1-prefill-阶段为什么必须从头算"><a class="markdownIt-Anchor" href="#1-prefill-阶段为什么必须从头算"></a> 1. Prefill 阶段：为什么必须从头算？</h2>
-<p>当你输入一个全新的 Prompt “人工智能”，此时模型的 <strong>KV Cache 是完全空的</strong>。</p>
-<p>模型为了能理解这 4 个字并预测第 5 个字（“改”），它必须首先计算出这 4 个字彼此之间的关联。因此，它会做一次<strong>并行的大计算</strong>：</p>
-<p><img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260714161204307.png" alt></p>
-<h1 id="3-推理优化"><a class="markdownIt-Anchor" href="#3-推理优化"></a> 3 推理优化</h1>
-<h2 id="1-为什么标准-attention-是内存瓶颈"><a class="markdownIt-Anchor" href="#1-为什么标准-attention-是内存瓶颈"></a> 1 为什么标准 Attention 是内存瓶颈？</h2>
-<p>1 来自qk矩阵的巨大</p>
-<blockquote>
-<p>矩阵大小是 O(T²)（T = 序列长度）。对于长上下文（T=8k~128k），这会占用海量显存（FP16 下 8k 序列一个 head 就需要 ~256MB</p>
-</blockquote>
-<p>2 显存读写频繁：</p>
-<blockquote>
-<p>需要多次 global memory 访问（写 scores → 读 scores 做 softmax → 写回）。</p>
-</blockquote>
-<p>2 IO 受限而非 Compute 受限</p>
-<blockquote>
-<p>现代 GPU 计算能力（TFLOPS）远超内存带宽（HBM），标准实现大量时间浪费在内存搬运上，而不是实际计算。</p>
-</blockquote>
-<h2 id="2-kv-cache"><a class="markdownIt-Anchor" href="#2-kv-cache"></a> 2 KV cache</h2>
-<p><strong>什么是KV Cache?</strong></p>
-<p>就是把之前的K V矩阵常驻在显存中</p>
-<blockquote></blockquote>
-<p><strong>为什么需要KV Cache？</strong></p>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/653658936/answer/107469197025">https://www.zhihu.com/question/653658936/answer/107469197025</a></p>
-</blockquote>
-<p>在自回归生成中，每个新Token的生成都需要所有历史Token的Key和Value。如果每次重新计算所有历史Token的K和V，计算量随序列长度二次增长 O(N2)。</p>
-<p>KV Cache的核心思想：<strong>用显存换计算</strong>——将之前计算好的K和V存储起来，新Token生成时只需计算当前Token的K和V，然后从Cache中读取历史K和V。</p>
-<p><img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260711165954796.png" alt="image-20260711165954796" style="zoom: 50%;"> <img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260714210803040.png" alt="image-20260714210803040"></p>
-<blockquote>
-<p>因为k和v是会在每一个新的q中重复使用, 但是q会变:推理过程中, 之前的q和kv的结果会cache, 但是之前的q不会, 而之前kv因为要和新的q计算, 所以就需要cache</p>
-</blockquote>
-<blockquote>
-<h2 id="1-为什么之前计算的结果无法被-cache图片红色框"><a class="markdownIt-Anchor" href="#1-为什么之前计算的结果无法被-cache图片红色框"></a> ❌ 1. 为什么“之前计算的结果”无法被 Cache？(图片红色框)</h2>
-<p>你可能觉得，既然 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Q</mi><mn>4</mn></msub></mrow><annotation encoding="application/x-tex">Q_4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">4</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 和 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mn>1</mn></msub><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><msub><mi>K</mi><mn>4</mn></msub></mrow><annotation encoding="application/x-tex">K_1..K_4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">.</span><span class="mord">.</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">4</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 已经算过一次注意力权重了，下一次 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Q</mi><mn>5</mn></msub></mrow><annotation encoding="application/x-tex">Q_5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">5</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 进来时，能不能复用一部分之前算出来的权重（结果）？</p>
-<p><strong>答案是：不能。因为每一轮的“总权重”必须重新做 Softmax 归一化。</strong></p>
-<p>我们用数字做个极简的对比：</p>
-<ul>
-<li>
-<p><strong>这一轮（生成第 5 个字）：</strong> 我们拿 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Q</mi><mn>4</mn></msub></mrow><annotation encoding="application/x-tex">Q_4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">4</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 去和 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mn>1</mn></msub><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><msub><mi>K</mi><mn>4</mn></msub></mrow><annotation encoding="application/x-tex">K_1..K_4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">.</span><span class="mord">.</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">4</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 算点积，假设算出来的原始得分是 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">[</mo><mn>10</mn><mo separator="true">,</mo><mn>5</mn><mo separator="true">,</mo><mn>2</mn><mo separator="true">,</mo><mn>8</mn><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">[10, 5, 2, 8]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">1</span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">5</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">8</span><span class="mclose">]</span></span></span></span>。</p>
-<p>经过 Softmax 归一化后，它们变成了比例（比如 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">[</mo><mn>0.8</mn><mo separator="true">,</mo><mn>0.1</mn><mo separator="true">,</mo><mn>0.02</mn><mo separator="true">,</mo><mn>0.08</mn><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">[0.8, 0.1, 0.02, 0.08]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">0</span><span class="mord">.</span><span class="mord">8</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">0</span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">0</span><span class="mord">8</span><span class="mclose">]</span></span></span></span>），和为 1。<strong>这就是这一轮的“结果”。</strong></p>
-</li>
-<li>
-<p><strong>下一轮（生成第 6 个字）：</strong></p>
-<p>新来的主角是 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Q</mi><mn>5</mn></msub></mrow><annotation encoding="application/x-tex">Q_5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">5</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>（代表第 5 个字“改”）。</p>
-<p><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Q</mi><mn>5</mn></msub></mrow><annotation encoding="application/x-tex">Q_5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">5</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 是一个<strong>全新</strong>的向量，它去和 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mn>1</mn></msub><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><msub><mi>K</mi><mn>5</mn></msub></mrow><annotation encoding="application/x-tex">K_1..K_5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">.</span><span class="mord">.</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">5</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 算点积。算出来的原始得分可能是 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">[</mo><mn>1</mn><mo separator="true">,</mo><mn>9</mn><mo separator="true">,</mo><mn>4</mn><mo separator="true">,</mo><mn>2</mn><mo separator="true">,</mo><mn>12</mn><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">[1, 9, 4, 2, 12]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">9</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">4</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mord">2</span><span class="mclose">]</span></span></span></span>。</p>
-<p>这时候，模型必须对这 5 个全新的数字<strong>整体重新做一次 Softmax 归一化</strong>。</p>
-</li>
-</ul>
-</blockquote>
-<blockquote>
-<p>在有了 KV Cache 的 Decoding 阶段，模型进入了高效循环。当要预测第 6 个字“变”时：</p>
-<ul>
-<li><strong>输入：</strong> 模型的输入端<strong>只被喂进了单个 Token —— “改”</strong>。</li>
-<li><strong>投影：</strong> 既然输入只有“改”，那么模型在这一层经过权重矩阵投影时，就<strong>只能产生一个 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Q</mi><mn>5</mn></msub></mrow><annotation encoding="application/x-tex">Q_5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">5</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>、一个 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mn>5</mn></msub></mrow><annotation encoding="application/x-tex">K_5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">5</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>、和一个 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>V</mi><mn>5</mn></msub></mrow><annotation encoding="application/x-tex">V_5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.22222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">5</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span></strong>。这三个向量都属于“改”。</li>
-<li><strong>结论：</strong> 从物理产生上，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Q</mi><mn>5</mn></msub></mrow><annotation encoding="application/x-tex">Q_5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">5</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 就是“改”的查询向量。</li>
-</ul>
-</blockquote>
-<p><img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260711171142696.png" alt="image-20260711171142696"></p>
-<p><strong>怎么实现KV Cache?</strong></p>
-<p>简单来说,</p>
-<hr>
-<p><strong>Cache了什么</strong></p>
-<p>cache了一次自回归过程的k v向量</p>
-<blockquote>
-<p>当输入一个词（Token）时，它首先会被转化为一个高维的稠密向量（Embedding）。但这个向量只是静态的词义，缺乏上下文。</p>
-<p>为了让词与词之间产生联系，模型会利用<strong>三个不同的权重矩阵</strong>（<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>W</mi><mi>Q</mi></msub><mo separator="true">,</mo><msub><mi>W</mi><mi>K</mi></msub><mo separator="true">,</mo><msub><mi>W</mi><mi>V</mi></msub></mrow><annotation encoding="application/x-tex">W_Q, W_K, W_V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.969438em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.328331em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">Q</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">K</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.22222em;">V</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，这些是模型训练好后固定不变的参数），将这个词的 Embedding 投影到三个不同的向量空间。</p>
-<p>这三个空间对应的就是 <strong>Query（查询）</strong>、<strong>Key（键）</strong> 和 <strong>Value（值）</strong>。</p>
-</blockquote>
-<img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260711095445312.png" alt="image-20260711095445312" style="zoom: 50%;"> 
-<img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260711095526589.png" alt="image-20260711095526589" style="zoom:50%;"> 
-<hr>
-<p><strong>什么样的特殊情况能复用？（前缀对齐）</strong></p>
-<p>如果你的新 Prompt 不是“乱序”的，而是<strong>保持相同的前缀</strong>，那么情况就完全不同了。</p>
-<ul>
-<li>假设你已经对模型输入过： <code>Prompt 1: &quot;人工智能的未来发展空间是什么？&quot;</code> （模型缓存了这一串的 KV）</li>
-<li>半小时后，你输入了一个新的 Prompt： <code>Prompt 2: &quot;人工智能的未来发展空间对就业有什么影响？&quot;</code></li>
-</ul>
-<p>这时候，<strong>“人工智能的未来发展空间”</strong> 这一段完全相同的前缀，它们的绝对位置和上下文是完全一致的！</p>
-<hr>
-<p><strong>为什么K2融合了K1的信息?</strong></p>
-<blockquote>
-<p>在计算 K$的时候，不是直接拿第 2 个字“工”的向量乘以权重矩阵 W_K吗？既然是只乘了“工”字，为什么会融合“人”的信息呢？</p>
-</blockquote>
-<img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260711103218294.png" alt="image-20260711103218294" style="zoom: 50%;"> 
-<hr>
-<p><strong>为啥kvcache要使用K1呢? V1我能理解但是K1和K2… Kn有什么区别呢? 对于Qn? 是因为使用了V1 所以要使用K1 吗</strong></p>
-<blockquote>
-<p>：“既然最后要乘以 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>V</mi><mn>1</mn></msub><mo separator="true">,</mo><msub><mi>V</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">V_1, V_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.22222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.22222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，那我就直接用 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi></mrow><annotation encoding="application/x-tex">V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span></span></span></span> 就行了，为什么中间还要强行塞一个 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mn>1</mn></msub><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><msub><mi>K</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">K_1..K_n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">.</span><span class="mord">.</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 进来计算呢？”</p>
-</blockquote>
-<p>因为我们要用 V_1（也就是“人”这个字的内容），我们才必须先用 K_1$来算出“我们需要多少比例的 V_1</p>
-<p><img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260715101728659.png" alt="image-20260715101728659"></p>
-<hr>
-<p><strong><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mn>1</mn></msub><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><msub><mi>K</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">K_1..K_n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">.</span><span class="mord">.</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 彼此有什么区别？（对于最新的 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Q</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">Q_n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 而言）</strong></p>
-<p>对于同一个最新的 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Q</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">Q_n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 而言，<strong>每一个 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mi>i</mi></msub></mrow><annotation encoding="application/x-tex">K_i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 代表了历史中每一个不同位置的 Token “自荐”时的不同侧重点。</strong></p>
-<p>继续以我们之前堆叠后的状态为例。假设最新生成的 Token 是 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Q</mi><mn>5</mn></msub></mrow><annotation encoding="application/x-tex">Q_5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">5</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>（“改”），它要去探测历史：</p>
-<ul>
-<li>
-<p><strong><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">K_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>（“人”的 Key）：</strong> 它的向量内部在呐喊：<code>“我是句子的开头，我是主语‘人’！”</code></p>
-</li>
-<li>
-<p><strong><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">K_2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>（“工”的 Key）：</strong> 它的向量在呐喊：<code>“我紧跟在‘人’后面，我们组成了‘人工’，代表科技和非自然！”</code></p>
-</li>
-<li>
-<p><strong><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mn>3</mn></msub></mrow><annotation encoding="application/x-tex">K_3</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">3</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>（“智”的 Key）：</strong> 它的向量在呐喊：<code>“我是‘智能’的核心，代表智慧和算法！”</code></p>
-</li>
-<li>
-<p><strong><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mn>4</mn></msub></mrow><annotation encoding="application/x-tex">K_4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">4</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>（“能”的 Key）：</strong> 它的向量在呐喊：<code>“我是‘智能’的结尾，我可以和‘改’组成‘智能改变未来’！”</code></p>
-</li>
-<li>
-<p><img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260715102226200.png" alt="image-20260715102226200"></p>
-</li>
-</ul>
-<p><strong>正因为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mn>1</mn></msub><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><msub><mi>K</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">K_1..K_n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">.</span><span class="mord">.</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 每一个向量内部蕴含的“位置信息”、“语法成分标签”和“上下文特征”截然不同，对于同一个 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Q</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">Q_n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 来说，算出来的注意力得分才会千差万别。</strong></p>
-<hr>
-<p><strong>K 1到底是什么</strong></p>
-<p>单独来说</p>
-<img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260715102840204.png" alt="image-20260715102840204" style="zoom:50%;"> 
-<p>但是上下文变长时</p>
-<blockquote>
-<p>对于同一个模型、同一个输入序列，在<strong>某一次特定的前向传播</strong>中，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">K_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 的数值确实是完全固定的。</p>
-</blockquote>
-<hr>
-<p><strong>每一个 Block 都有自己独立的 KV Cache 账本</strong></p>
-<img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260715103420773.png" alt="image-20260715103420773" style="zoom: 67%;"> 
-<hr>
-<p><strong>Transformer 是多层堆叠是怎么样的? 每一层的输入输出是什么?</strong></p>
-<p><strong>encoder:</strong></p>
-<p>b1 输入是embed的x0,   之后<strong>转成qkv</strong> -&gt; 输出x1(shape相同)<br>
-b2 输入将x1<strong>转qkv</strong>, --&gt;输出x2<br>
-…<br>
-bn</p>
-<hr>
-<p><strong>decoder:</strong></p>
-<p>把输入的x 作为decoder的q矩阵, 不再单独转q</p>
-<hr>
-<blockquote>
-<p>⚙️ 内部加工过程（Layer 内部发生了什么？）</p>
-<p>当 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mrow><mi>i</mi><mi>n</mi></mrow></msub></mrow><annotation encoding="application/x-tex">X_{in}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 进入第 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span> 层后，会发生以下两步关键转换：</p>
-<h4 id="第一步self-attention-空间整合横向互动"><a class="markdownIt-Anchor" href="#第一步self-attention-空间整合横向互动"></a> 第一步：Self-Attention 空间整合（横向互动）</h4>
-<ol>
-<li>模型利用权重矩阵把 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mrow><mi>i</mi><mi>n</mi></mrow></msub></mrow><annotation encoding="application/x-tex">X_{in}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 投影出我们上一问提到的 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi><mo separator="true">,</mo><mi>K</mi><mo separator="true">,</mo><mi>V</mi></mrow><annotation encoding="application/x-tex">Q, K, V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">Q</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span></span></span></span>。</li>
-<li><strong>核心动作：</strong> 拿着当前 Token 的 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi></mrow><annotation encoding="application/x-tex">Q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">Q</span></span></span></span>，去和历史所有 Token 的 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi></mrow><annotation encoding="application/x-tex">K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span></span></span></span> 做点积，算权重，然后对 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi></mrow><annotation encoding="application/x-tex">V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span></span></span></span> 加权求和。</li>
-<li><strong>结果：</strong> 这一步实现了“信息在不同 Token 之间的横向流动”。比如“工”字在这一步融合了“人”字的信息。</li>
-</ol>
-<h4 id="第二步ffn-mlp-维度特征提取纵向挖掘"><a class="markdownIt-Anchor" href="#第二步ffn-mlp-维度特征提取纵向挖掘"></a> 第二步：FFN / MLP 维度特征提取（纵向挖掘）</h4>
-<ol>
-<li>经过注意力机制融合后的向量，会进入一个前馈神经网络（通常是一个两层的全连接层）。</li>
-<li><strong>核心动作：</strong> 此时 Token 之间不再互相关注了，而是<strong>每个 Token 各自独立地</strong>进行非线性变换。它把维度放大（比如从 4096 升到 11008 维），再缩小回来。</li>
-<li><strong>结果：</strong> 这一步用来<strong>记忆知识、抽取高阶特征</strong>（类似专家系统在深度剖析这个词当前代表的含义）。</li>
-</ol>
-<h3 id="每一层的输出output-matrixx_out"><a class="markdownIt-Anchor" href="#每一层的输出output-matrixx_out"></a> 🔹 每一层的输出（Output Matrix：<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mrow><mi>o</mi><mi>u</mi><mi>t</mi></mrow></msub></mrow><annotation encoding="application/x-tex">X_{out}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">u</span><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>）</h3>
-<ul>
-<li><strong>数学形式：</strong> 形状与输入完全一致，依然是 <code>[Batch_Size, Sequence_Length, Hidden_Dim]</code>。</li>
-<li><strong>语义内涵：</strong> * 经过当前层的“横向融合（Attention）”和“纵向深挖（FFN）”后，每个 Token 位置上的向量被赋予了<strong>更新、更抽象、更深刻的上下文语义</strong>。
-<ul>
-<li>这个 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mrow><mi>o</mi><mi>u</mi><mi>t</mi></mrow></msub></mrow><annotation encoding="application/x-tex">X_{out}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">u</span><span class="mord mathnormal mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 随即作为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>X</mi><mrow><mi>i</mi><mi>n</mi></mrow></msub></mrow><annotation encoding="application/x-tex">X_{in}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">n</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，毫无保留地送入第 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">N+1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 层。</li>
-</ul>
-</li>
-</ul>
-</blockquote>
-<blockquote>
-<h2 id="存什么-不存什么"><a class="markdownIt-Anchor" href="#存什么-不存什么"></a> 存什么、不存什么</h2>
-<p>在你代码里，attention 算到这一步：</p>
-<p>00_1self_attention.pyLines 121-121</p>
-<p>​        q, k, v = qkv.chunk(3, dim=-1)  <em># 各 (B, n_heads, T, head_dim)</em></p>
-<p>会缓存的：</p>
-<ul>
-<li><code>k</code>：形状 <code>(B, n_heads, T, head_dim)</code></li>
-<li><code>v</code>：形状 <code>(B, n_heads, T, head_dim)</code></li>
-<li>每一层各自一份（第 1 层、第 2 层……的 K/V 互不共用）</li>
-</ul>
-<p>一般不缓存的：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">不存</th>
-<th style="text-align:left">原因</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"><code>q</code></td>
-<td style="text-align:left">每步只对新 token 现算</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>attn_scores</code> / <code>attn_weights</code></td>
-<td style="text-align:left">中间量，用完即丢</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>x</code> 隐状态</td>
-<td style="text-align:left">不是 KV cache 本体（有的框架另存 hidden state，那是另一回事）</td>
-</tr>
-<tr>
-<td style="text-align:left"><code>out</code>（attention 输出）</td>
-<td style="text-align:left">每步重算</td>
-</tr>
-</tbody>
-</table>
-</blockquote>
-<hr>
-<h2 id="3-上下文窗口"><a class="markdownIt-Anchor" href="#3-上下文窗口"></a> 3 上下文窗口</h2>
-<img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260713144921784.png" alt="image-20260713144921784" style="zoom:67%;"> 
-<p><img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260713145050573.png" alt="image-20260713145050573"></p>
-<blockquote>
-<h2 id="上下文窗口长度的决定因素"><a class="markdownIt-Anchor" href="#上下文窗口长度的决定因素"></a> 🧭 上下文窗口长度的决定因素</h2>
-<p>所以，你问的“上下文窗口的长度就是这个的运行因素吗？”答案是绝对的“是”。大模型厂商宣称的“支持 100k 还是 1M 上下文”，本质上是在向这两个极限发起挑战。</p>
-<p>为了让上下文窗口变得极长，技术界在 2024~2026 年间普及了以下几种续命技术：</p>
-<ol>
-<li>
-<p><strong>GQA（Grouped-Query Attention，分组查询注意力）：</strong></p>
-<p>让多个不同的 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Q</mi></mrow><annotation encoding="application/x-tex">Q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">Q</span></span></span></span> 共享同一个 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi></mrow><annotation encoding="application/x-tex">K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span></span></span></span> 和 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi></mrow><annotation encoding="application/x-tex">V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span></span></span></span>。这样可以把 KV Cache 的体积直接<strong>压缩到原来的 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi mathvariant="normal">/</mi><mn>4</mn></mrow><annotation encoding="application/x-tex">1/4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mord">/</span><span class="mord">4</span></span></span></span> 甚至 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mi mathvariant="normal">/</mi><mn>8</mn></mrow><annotation encoding="application/x-tex">1/8</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mord">/</span><span class="mord">8</span></span></span></span></strong>，大大缓解了显存压力。</p>
-</li>
-<li>
-<p><strong>PagedAttention（如 vLLM 框架）：</strong></p>
-<p>像操作系统的虚拟内存一样，把显存切成一块块小碎块（Pages）来动态管理 KV Cache。不再为每个请求预留连续的巨大显存，解决了显存碎片化问题，让吞吐量提升数倍。</p>
-</li>
-<li>
-<p><strong>RoPE（旋转位置编码）的外推与插值：</strong></p>
-<p>不仅要显存放得下，还要模型在面对第 100,000 个位置的词时，数学上不会“算糊涂”。科学家们通过修改位置编码的数学公式，让模型能理解超长距离的位置依赖。</p>
-</li>
-</ol>
-</blockquote>
-<h2 id="4-串行工程优化"><a class="markdownIt-Anchor" href="#4-串行工程优化"></a> 4 串行工程优化</h2>
-<img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/v2-3741879221a5167b8ca683a2c453ffab_720w.webp" alt="img" style="zoom: 80%;">
-<h2 id="5-pagedattention"><a class="markdownIt-Anchor" href="#5-pagedattention"></a> 5 PagedAttention</h2>
-<blockquote>
-<h2 id="1-传统-kv-cache-的痛点巨大的显存浪费"><a class="markdownIt-Anchor" href="#1-传统-kv-cache-的痛点巨大的显存浪费"></a> 🪨 1. 传统 KV Cache 的痛点：巨大的显存浪费</h2>
-<p>在传统的推理框架中，模型必须为每一个请求（Request）在显存中开辟一块<strong>连续</strong>的物理空间，用来存放该请求源源不断产生的 KV Cache。</p>
-<p>因为模型在生成前<strong>根本不知道用户最终会生成多长的文本</strong>（比如可能生成 10 个字，也可能生成 2048 个字），为了防止中途显存溢出，传统的做法是<strong>按照最大长度（Max Sequence Length）预先分配一整块连续显存</strong>。</p>
-<p>这就导致了三个极其致命的显存浪费（通常浪费高达 <strong>60% - 80%</strong>）：</p>
-<ol>
-<li><strong>未用预留浪费（Reservation）：</strong> 如果模型为用户预留了 2048 个 Token 的空间，但用户聊了 10 个字就结束了，剩下的 2038 个 Token 空间的显存就被白白浪费了，别人也用不了。</li>
-<li><strong>动态成长浪费（Internal Fragmentation）：</strong> 随着文本一步步生成，显存从前往后慢慢填满，那些还没用到的空间只能空置。</li>
-<li><strong>内存碎片（External Fragmentation）：</strong> 不同的请求频繁启动和结束，显存被切割得支离破碎，明明总剩余显存还够，却因为找不到一块<strong>连续</strong>的显存，导致新请求无法启动。</li>
-</ol>
-<h2 id="2-pagedattention-的降维打击像操作系统一样分页"><a class="markdownIt-Anchor" href="#2-pagedattention-的降维打击像操作系统一样分页"></a> 💡 2. PagedAttention 的降维打击：像操作系统一样分页</h2>
-<p>PagedAttention 的核心思想是：<strong>打破“连续性”的诅咒。</strong></p>
-<p>它允许将每个请求的 KV Cache 存放在<strong>不连续的物理显存</strong>中。</p>
-<h3 id="核心机制物理块physical-blocks与虚拟映射"><a class="markdownIt-Anchor" href="#核心机制物理块physical-blocks与虚拟映射"></a> 核心机制：物理块（Physical Blocks）与虚拟映射</h3>
-<ol>
-<li><strong>KV 块（KV Blocks）：</strong> PagedAttention 把每个请求的 KV Cache 划分为固定大小的“块”（Block），每个块默认可以容纳固定数量（例如 16 个）Token 的 KV 向量。</li>
-<li><strong>逻辑内存 vs 物理内存：</strong>
-<ul>
-<li><strong>逻辑块（Logical Blocks）：</strong> 在模型眼里，它看到的依然是连续的一串字（<code>Block 0: 0~15字</code> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> <code>Block 1: 16~31字</code> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> <code>Block 2: 32~47字</code>）。</li>
-<li><strong>物理块（Physical Blocks）：</strong> 在实际的显卡内存里，这些块被分散在天南海北、任意不连续的空闲位置。</li>
-</ul>
-</li>
-<li><strong>块表（Block Table）：</strong> 框架维护了一个映射表（类似操作系统的页表 Page Table）。当模型需要计算第 35 个字的 Attention 时，它通过块表查到逻辑上的 <code>Block 2</code> 对应的物理显存地址是 <code>Physical Block 104</code>，然后直接去那里读取数据。</li>
-</ol>
-</blockquote>
-<hr>
-<h2 id="kv-cache量化"><a class="markdownIt-Anchor" href="#kv-cache量化"></a> KV cache量化</h2>
-<p><img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260715114839995.png" alt="image-20260715114839995"></p>
-<p><img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260715115455860.png" alt="image-20260715115455860"></p>
-<blockquote>
-<h2 id="4-主流的-kv-cache-量化技术方案"><a class="markdownIt-Anchor" href="#4-主流的-kv-cache-量化技术方案"></a> 4. 主流的 KV Cache 量化技术方案</h2>
-<p>为了解决精度损失问题，业界演进出了几种不同的量化粒度：</p>
-<h3 id="1-按-token-量化per-token-quantization"><a class="markdownIt-Anchor" href="#1-按-token-量化per-token-quantization"></a> ① 按 Token 量化（Per-Token Quantization）</h3>
-<ul>
-<li><strong>原理</strong>：对每一个 Token 向量，独立计算一组缩放因子 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi></mrow><annotation encoding="application/x-tex">S</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">S</span></span></span></span>。</li>
-<li><strong>特点</strong>：实现简单，对吞吐量友好，但在面对离群值通道时，精度保护不够。</li>
-</ul>
-<h3 id="2-按通道按头量化per-channel-per-head-quantization"><a class="markdownIt-Anchor" href="#2-按通道按头量化per-channel-per-head-quantization"></a> ② 按通道/按头量化（Per-Channel / Per-Head Quantization）</h3>
-<ul>
-<li><strong>原理</strong>：针对 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi><mo separator="true">,</mo><mi>V</mi></mrow><annotation encoding="application/x-tex">K, V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span></span></span></span> 矩阵的不同维度（如每个 Attention Head 内部的 Channel）分别计算缩放因子。</li>
-<li><strong>特点</strong>：精度保留极好，能完美避开离群值的干扰，但硬件计算对齐稍微复杂一点。</li>
-</ul>
-<h3 id="3-fp8-kv-cachehopper-blackwell-架构新宠"><a class="markdownIt-Anchor" href="#3-fp8-kv-cachehopper-blackwell-架构新宠"></a> ③ FP8 KV Cache（Hopper / Blackwell 架构新宠）</h3>
-<p>随着 NVIDIA H100 等新一代 GPU 硬件原生支持 <strong>FP8（8位浮点数，如 E4M3 和 E5M2 格式）</strong>，FP8 KV Cache 正在迅速取代 INT8。</p>
-<ul>
-<li><strong>优势</strong>：它既有低精度的带宽优势，又保留了浮点数对大范围数值（离群值）的容忍度。在 vLLM 等主流框架中，开启 FP8 KV Cache 几乎可以做到<strong>几乎无损的精度保留</strong>。</li>
-</ul>
-<h3 id="4-极致压缩int4-量化如-kivi-算法"><a class="markdownIt-Anchor" href="#4-极致压缩int4-量化如-kivi-算法"></a> ④ 极致压缩：INT4 量化（如 KIVI 算法）</h3>
-<p>2024 年底至 2026 年，像 <strong>KIVI</strong> 这样的算法把 KV Cache 卷到了 <strong>INT4</strong>。</p>
-<ul>
-<li><strong>核心思路</strong>：因为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi></mrow><annotation encoding="application/x-tex">K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span></span></span></span> 向量对离群值极度敏感，而 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi></mrow><annotation encoding="application/x-tex">V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span></span></span></span> 向量相对平缓。KIVI 对 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi></mrow><annotation encoding="application/x-tex">K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span></span></span></span> 采用 Group-wise 细粒度量化，对 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>V</mi></mrow><annotation encoding="application/x-tex">V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span></span></span></span> 采用 Channel-wise 量化。在 Llama 等模型上，成功在 4-bit 精度下实现了近乎无损的超长文本生成。</li>
-</ul>
-</blockquote>
-<h1 id="4-结构优化"><a class="markdownIt-Anchor" href="#4-结构优化"></a> 4 结构优化</h1>
-<h2 id="1-gqa-grouped-query-attention"><a class="markdownIt-Anchor" href="#1-gqa-grouped-query-attention"></a> 1 GQA (Grouped Query Attention)</h2>
-<img src="/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/image-20260714115618909.png" alt="image-20260714115618909" style="zoom:67%;">
-<blockquote>
-<p>假设模型总维度是 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>D</mi><mrow><mi>m</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>l</mi></mrow></msub><mo>=</mo><mn>4096</mn></mrow><annotation encoding="application/x-tex">D_{model} = 4096</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.02778em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">4</span><span class="mord">0</span><span class="mord">9</span><span class="mord">6</span></span></span></span>，每个头维度 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>=</mo><mn>128</mn></mrow><annotation encoding="application/x-tex">D = 128</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">2</span><span class="mord">8</span></span></span></span>，则总头数为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4096</mn><mi mathvariant="normal">/</mi><mn>128</mn><mo>=</mo><mn>32</mn></mrow><annotation encoding="application/x-tex">4096 / 128 = 32</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">4</span><span class="mord">0</span><span class="mord">9</span><span class="mord">6</span><span class="mord">/</span><span class="mord">1</span><span class="mord">2</span><span class="mord">8</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span><span class="mord">2</span></span></span></span> 个。</p>
-<h4 id="如果是-mha-multi-head-attention"><a class="markdownIt-Anchor" href="#如果是-mha-multi-head-attention"></a> 如果是 MHA (Multi-Head Attention)：</h4>
-<ul>
-<li><strong>计算矩阵：</strong>
-<ul>
-<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>W</mi><mi>Q</mi></msub><mo>∈</mo><msup><mi mathvariant="double-struck">R</mi><mrow><msub><mi>D</mi><mrow><mi>m</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>l</mi></mrow></msub><mo>×</mo><mn>4096</mn></mrow></msup></mrow><annotation encoding="application/x-tex">W_Q \in \mathbb{R}^{D_{model} \times 4096}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.969438em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.328331em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">Q</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8413309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord"><span class="mord mathbb">R</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3487714285714287em;margin-left:-0.02778em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15122857142857138em;"><span></span></span></span></span></span></span><span class="mbin mtight">×</span><span class="mord mtight">4</span><span class="mord mtight">0</span><span class="mord mtight">9</span><span class="mord mtight">6</span></span></span></span></span></span></span></span></span></span></span></span> (32 个头，每个 128)</li>
-<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>W</mi><mi>K</mi></msub><mo>∈</mo><msup><mi mathvariant="double-struck">R</mi><mrow><msub><mi>D</mi><mrow><mi>m</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>l</mi></mrow></msub><mo>×</mo><mn>4096</mn></mrow></msup></mrow><annotation encoding="application/x-tex">W_K \in \mathbb{R}^{D_{model} \times 4096}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">K</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8413309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord"><span class="mord mathbb">R</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3487714285714287em;margin-left:-0.02778em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15122857142857138em;"><span></span></span></span></span></span></span><span class="mbin mtight">×</span><span class="mord mtight">4</span><span class="mord mtight">0</span><span class="mord mtight">9</span><span class="mord mtight">6</span></span></span></span></span></span></span></span></span></span></span></span> (32 个头，每个 128)</li>
-<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>W</mi><mi>V</mi></msub><mo>∈</mo><msup><mi mathvariant="double-struck">R</mi><mrow><msub><mi>D</mi><mrow><mi>m</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>l</mi></mrow></msub><mo>×</mo><mn>4096</mn></mrow></msup></mrow><annotation encoding="application/x-tex">W_V \in \mathbb{R}^{D_{model} \times 4096}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.22222em;">V</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8413309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord"><span class="mord mathbb">R</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3487714285714287em;margin-left:-0.02778em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15122857142857138em;"><span></span></span></span></span></span></span><span class="mbin mtight">×</span><span class="mord mtight">4</span><span class="mord mtight">0</span><span class="mord mtight">9</span><span class="mord mtight">6</span></span></span></span></span></span></span></span></span></span></span></span> (32 个头，每个 128)</li>
-</ul>
-</li>
-<li><strong>缓存大小：</strong> 你需要存 32 个 K 和 32 个 V，一共 64 个向量。</li>
-</ul>
-<h4 id="如果是-gqa-h_kv-4"><a class="markdownIt-Anchor" href="#如果是-gqa-h_kv-4"></a> 如果是 GQA (<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mrow><mi>k</mi><mi>v</mi></mrow></msub><mo>=</mo><mn>4</mn></mrow><annotation encoding="application/x-tex">H_{kv} = 4</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.08125em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.03148em;">k</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">v</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">4</span></span></span></span>)：</h4>
-<ul>
-<li><strong>计算矩阵：</strong>
-<ul>
-<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>W</mi><mi>Q</mi></msub><mo>∈</mo><msup><mi mathvariant="double-struck">R</mi><mrow><msub><mi>D</mi><mrow><mi>m</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>l</mi></mrow></msub><mo>×</mo><mn>4096</mn></mrow></msup></mrow><annotation encoding="application/x-tex">W_Q \in \mathbb{R}^{D_{model} \times 4096}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.969438em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.328331em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">Q</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8413309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord"><span class="mord mathbb">R</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3487714285714287em;margin-left:-0.02778em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15122857142857138em;"><span></span></span></span></span></span></span><span class="mbin mtight">×</span><span class="mord mtight">4</span><span class="mord mtight">0</span><span class="mord mtight">9</span><span class="mord mtight">6</span></span></span></span></span></span></span></span></span></span></span></span> (仍然是 32 个头)</li>
-<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>W</mi><mi>K</mi></msub><mo>∈</mo><msup><mi mathvariant="double-struck">R</mi><mrow><msub><mi>D</mi><mrow><mi>m</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>l</mi></mrow></msub><mo>×</mo><mn>512</mn></mrow></msup></mrow><annotation encoding="application/x-tex">W_K \in \mathbb{R}^{D_{model} \times 512}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.07153em;">K</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8413309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord"><span class="mord mathbb">R</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3487714285714287em;margin-left:-0.02778em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15122857142857138em;"><span></span></span></span></span></span></span><span class="mbin mtight">×</span><span class="mord mtight">5</span><span class="mord mtight">1</span><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span> (<strong>只有 4 个头</strong>，即 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><mo>×</mo><mn>128</mn><mo>=</mo><mn>512</mn></mrow><annotation encoding="application/x-tex">4 \times 128 = 512</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">4</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">2</span><span class="mord">8</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">5</span><span class="mord">1</span><span class="mord">2</span></span></span></span>)</li>
-<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>W</mi><mi>V</mi></msub><mo>∈</mo><msup><mi mathvariant="double-struck">R</mi><mrow><msub><mi>D</mi><mrow><mi>m</mi><mi>o</mi><mi>d</mi><mi>e</mi><mi>l</mi></mrow></msub><mo>×</mo><mn>512</mn></mrow></msup></mrow><annotation encoding="application/x-tex">W_V \in \mathbb{R}^{D_{model} \times 512}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.22222em;">V</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">∈</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8413309999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord"><span class="mord mathbb">R</span></span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8413309999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">D</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3487714285714287em;margin-left:-0.02778em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">m</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">d</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15122857142857138em;"><span></span></span></span></span></span></span><span class="mbin mtight">×</span><span class="mord mtight">5</span><span class="mord mtight">1</span><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span> (<strong>只有 4 个头</strong>)</li>
-</ul>
-</li>
-<li><strong>实际操作：</strong> 当计算 Attention 时，模型会将 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>W</mi><mi>Q</mi></msub></mrow><annotation encoding="application/x-tex">W_Q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.969438em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.13889em;">W</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.328331em;"><span style="top:-2.5500000000000003em;margin-left:-0.13889em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">Q</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span> 输出的 32 个头，<strong>每 8 个一组</strong>，分别去乘以对应的那 1 个 K 和 1 个 V。</li>
-</ul>
-<h3 id="3-为什么这样可以实现关键逻辑"><a class="markdownIt-Anchor" href="#3-为什么这样可以实现关键逻辑"></a> 3. 为什么这样可以实现？（关键逻辑）</h3>
-<p>你可能会问：<strong>共享了 K 和 V，模型不会变笨吗？</strong></p>
-<p>研究发现：</p>
-<ol>
-<li><strong>信息的冗余性：</strong> 在 Transformer 中，不同头捕捉到的特征往往高度重合。让多个头共享 KV，损失的信息量远小于节省的显存带来的收益。</li>
-<li><strong>Q 的多样性保留：</strong> 因为 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>H</mi><mi>q</mi></msub></mrow><annotation encoding="application/x-tex">H_q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.969438em;vertical-align:-0.286108em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.08125em;">H</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.15139200000000003em;"><span style="top:-2.5500000000000003em;margin-left:-0.08125em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight" style="margin-right:0.03588em;">q</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span></span></span></span>（查询头）的数量依然保持为 32 个，每一个“查询者”依然拥有独特的视角去理解问题。只要“查询者”足够多，模型就依然能捕捉到细微的语义差别。</li>
-</ol>
-</blockquote>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2026/06/26/2026%E5%B9%B46%E6%9C%8826%E6%97%A5-attention/" data-id="cms1vppge0009lkv41gx22e9u" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2026年6月16日-cuda编程2附录" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2%E9%99%84%E5%BD%95/" class="article-date">
-  <time class="post-time" datetime="2026-06-16T09:03:59.000Z" itemprop="datePublished">
-    <span class="post-month">6月</span><br/>
-    <span class="post-day">16</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2%E9%99%84%E5%BD%95/">2026年6月16日 cuda编程2附录</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="1-归约算法"><a class="markdownIt-Anchor" href="#1-归约算法"></a> 1 归约算法</h1>
-<p>没问题！既然前缀和看懂了，那我们用同样接地气的方式，把归约算法（Reduction）也彻底拉下神坛。</p>
-<p>如果说前缀和是“排队买票”，那么归约算法就是“全校拉力赛选拔冠军”<strong>或者</strong>“全班合买一份大礼物凑钱”。</p>
-<p>我们用“凑钱买礼物”来打比方：</p>
-<h2 id="什么是归约"><a class="markdownIt-Anchor" href="#什么是归约"></a> 什么是归约？</h2>
-<p>假设你们班有 8 个同学（编号 0 到 7），每个人兜里有一点零钱：</p>
-<ul>
-<li><strong>输入数组</strong>：<code>[3, 1, 7, 0, 4, 1, 6, 3]</code> （单位：元）</li>
-</ul>
-<p>现在的任务是：<strong>把这 8 个人的钱全部加起来，算出总共凑了多少钱。</strong></p>
-<ul>
-<li><strong>串行思维（CPU）</strong>：班长拿着一个存钱罐，从 0 号同学开始收起：“3块，加 1 块是 4 块，再加 7 块是 11 块……” 班长一个人挨个收、挨个加，走完 8 个人，算出总数。</li>
-<li><strong>并行思维（GPU）</strong>：GPU 认为班长一个人收太慢了。GPU 有的是人（成百上千的线程），那怎么让大家<strong>同时</strong>干活，把钱凑到一起呢？</li>
-</ul>
-<p>这就需要用到<strong>树状折半归约</strong>。</p>
-<h2 id="gpu-的并行解法打擂台式的折半合并"><a class="markdownIt-Anchor" href="#gpu-的并行解法打擂台式的折半合并"></a> GPU 的并行解法：打擂台式的折半合并</h2>
-<p>GPU 决定不设班长，让同学们两两配对，同时把钱加起来。</p>
-<p>8 个同学（8 个线程）同时在教室里坐好。</p>
-<h3 id="第一轮全班对半分后半部分把钱给前半部分"><a class="markdownIt-Anchor" href="#第一轮全班对半分后半部分把钱给前半部分"></a> 第一轮：全班对半分，后半部分把钱给前半部分</h3>
-<p>全班 8 个人，对半分就是前 4 个和后 4 个。</p>
-<ul>
-<li>0 号和 4 号配对：4 号把钱（4元）丢给 0 号。0 号算出：<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mo>+</mo><mn>4</mn><mo>=</mo><mn mathvariant="bold">7</mn></mrow><annotation encoding="application/x-tex">3 + 4 = \mathbf{7}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">3</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">4</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">7</span></span></span></span></span></li>
-<li>1 号和 5 号配对：5 号把钱（1元）丢给 1 号。1 号算出：<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>+</mo><mn>1</mn><mo>=</mo><mn mathvariant="bold">2</mn></mrow><annotation encoding="application/x-tex">1 + 1 = \mathbf{2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">2</span></span></span></span></span></li>
-<li>2 号和 6 号配对：6 号把钱（6元）丢给 2 号。2 号算出：<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>7</mn><mo>+</mo><mn>6</mn><mo>=</mo><mn mathvariant="bold">13</mn></mrow><annotation encoding="application/x-tex">7 + 6 = \mathbf{13}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">7</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">6</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">1</span><span class="mord mathbf">3</span></span></span></span></span></li>
-<li>3 号和 7 号配对：7 号把钱（3元）丢给 3 号。3 号算出：<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>+</mo><mn>3</mn><mo>=</mo><mn mathvariant="bold">3</mn></mrow><annotation encoding="application/x-tex">0 + 3 = \mathbf{3}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">3</span></span></span></span></span></li>
-</ul>
-<p><strong>这一轮只花了“一次相加”的时间</strong>（因为 4 对人是同时加的）。</p>
-<p>此时，钱全部集中到了前 4 个人（0, 1, 2, 3 号）手里，数组变成了：</p>
-<p><code>[7, 2, 13, 3,  x, x, x, x]</code> （后半部分任务完成，可以下班了）。</p>
-<h3 id="第二轮剩下的人继续对半分"><a class="markdownIt-Anchor" href="#第二轮剩下的人继续对半分"></a> 第二轮：剩下的人继续对半分</h3>
-<p>现在只有 4 个人手里有钱了，继续对半分（前 2 个和后 2 个）。</p>
-<ul>
-<li>0 号和 2 号配对：2 号把钱（13元）丢给 0 号。0 号算出：<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>7</mn><mo>+</mo><mn>13</mn><mo>=</mo><mn mathvariant="bold">20</mn></mrow><annotation encoding="application/x-tex">7 + 13 = \mathbf{2 0}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">7</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">3</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">2</span><span class="mord mathbf">0</span></span></span></span></span></li>
-<li>1 号和 3 号配对：3 号把钱（3元）丢给 1 号。1 号算出：<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>+</mo><mn>3</mn><mo>=</mo><mn mathvariant="bold">5</mn></mrow><annotation encoding="application/x-tex">2 + 3 = \mathbf{5}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">5</span></span></span></span></span></li>
-</ul>
-<p><strong>又只花了“一次相加”的时间</strong>。</p>
-<p>此时，钱全部集中到了前 2 个人（0, 1 号）手里，数组变成了：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[20, 5,  x, x,  x, x, x, x]</span><br></pre></td></tr></table></figure>
-<h3 id="第三轮决胜局"><a class="markdownIt-Anchor" href="#第三轮决胜局"></a> 第三轮：决胜局</h3>
-<p>现在只剩 0 号和 1 号了。</p>
-<ul>
-<li>0 号和 1 号配对：1 号把钱（5元）丢给 0 号。0 号算出：<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>20</mn><mo>+</mo><mn>5</mn><mo>=</mo><mn mathvariant="bold">25</mn></mrow><annotation encoding="application/x-tex">20 + 5 = \mathbf{2 5}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">2</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">5</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">2</span><span class="mord mathbf">5</span></span></span></span></span></li>
-</ul>
-<p><strong>最后花了一次相加的时间</strong>。</p>
-<p>大功告成！全班的总金额 <code>25</code> 元，现在端端正正地坐在 <strong>0 号位置</strong>上。</p>
-<h2 id="为什么这叫归约"><a class="markdownIt-Anchor" href="#为什么这叫归约"></a> 为什么这叫“归约”？</h2>
-<p>在这个过程中，原本 8 个分散的数据，经过三轮“折半合并”，最终“归纳约束”成了一个单一的总和数字。</p>
-<p>如果用图看，它就像一棵倒过来的二叉树，或者像世界杯淘汰赛：</p>
-<h3 id="它的威力在哪里"><a class="markdownIt-Anchor" href="#它的威力在哪里"></a> 它的威力在哪里？</h3>
-<ul>
-<li>如果有 <strong>100 万</strong>个数据。</li>
-<li><strong>CPU（班长）</strong>：要加 <strong>1,000,000 次</strong>。</li>
-<li><strong>GPU（全班齐动员）</strong>：第一轮 50 万人同时加，第二轮 25 万人同时加……对半折叠，只需要 <strong>20 轮</strong>。</li>
-</ul>
-<p>100 万次串行相加 vs 20 次并行折叠，这就是为什么 GPU 算大数组总和、最大值、最小值会快得飞起。</p>
-<h2 id="回头看代码你就彻底通了"><a class="markdownIt-Anchor" href="#回头看代码你就彻底通了"></a> 回头看代码，你就彻底通了</h2>
-<p>现在你再看最开始的那段 CUDA 核心代码：</p>
-<p>Code snippet</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// stride 就是步长（也就是每次对半分的那个分界线）</span><br><span class="line">for (unsigned int stride = blockDim.x / 2; stride &gt; 0; stride &gt;&gt;= 1) &#123;</span><br><span class="line">    if (tid &lt; stride) &#123;</span><br><span class="line">        // 前半部分的同学（tid &lt; stride），把后半部分对应位置的钱拿过来加掉</span><br><span class="line">        sdata[tid] += sdata[tid + stride];</span><br><span class="line">    &#125;</span><br><span class="line">    __syncthreads(); // 每一轮加完，大家大喊一声“我加完了！”，等所有人都好了再进入下一轮</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<ul>
-<li><code>stride &gt;&gt;= 1</code>：就是每轮把干活的人数砍掉一半（8 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> 4 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> 2 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> 1）。</li>
-<li><code>if (tid &lt; stride)</code>：就是只让前半部分的同学干活，后半部分的同学把钱丢过去之后就可以原地休息了。</li>
-</ul>
-<p>是不是比死记硬背代码好懂多了？</p>
-<h1 id="1-前缀和算法"><a class="markdownIt-Anchor" href="#1-前缀和算法"></a> 1 前缀和算法</h1>
-<p>没关系，前缀和（Scan）算法第一次看确实容易绕晕，因为它和我们习惯的串行思维完全不同。</p>
-<p>我们用一个最接地气的<strong>排队买票</strong>例子，彻底拆解它的原理。</p>
-<h2 id="什么是前缀和用买票类比"><a class="markdownIt-Anchor" href="#什么是前缀和用买票类比"></a> 什么是前缀和？（用买票类比）</h2>
-<p>假设有 4 个人排队买电影票，每个人想买的张数不一样：</p>
-<ul>
-<li><strong>输入数组 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi></mrow><annotation encoding="application/x-tex">A</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal">A</span></span></span></span></strong>：<code>[2, 3, 1, 4]</code> （分别代表甲、乙、丙、丁要买的票数）</li>
-</ul>
-<p>现在我们要计算每个人排队时，<strong>在自己之前，前面一共卖出了多少张票</strong>。这样大家就能知道自己买完票后，票根上的序号是多少。</p>
-<ul>
-<li><strong>独占式前缀和（Exclusive Scan）</strong>：不包含自己，只算前面的人。
-<ul>
-<li>甲前面没人 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> <code>0</code></li>
-<li>乙前面有甲 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> <code>2</code></li>
-<li>丙前面有甲+乙 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>+</mo><mn>3</mn><mo>=</mo></mrow><annotation encoding="application/x-tex">2 + 3 =</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span></span></span></span> <code>5</code></li>
-<li>丁前面有甲+乙+丙 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>+</mo><mn>3</mn><mo>+</mo><mn>1</mn><mo>=</mo></mrow><annotation encoding="application/x-tex">2 + 3 + 1 =</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">3</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span></span></span></span> <code>6</code></li>
-<li><strong>输出数组 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>B</mi></mrow><annotation encoding="application/x-tex">B</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.05017em;">B</span></span></span></span></strong>：<code>[0, 2, 5, 6]</code></li>
-</ul>
-</li>
-</ul>
-<p>在 CPU 里，我们用一个 <code>for</code> 循环，一边走一边累加，一眨眼就建好了。<strong>但是在 GPU 里，有几千个线程同时在跑，它们不能像排队一样“一个接一个”地去加，否则并行就变成了串行。</strong></p>
-<p>那 GPU 怎么同时算出这个结果呢？这就需要用到 <strong>Blelloch 算法</strong>。</p>
-<h2 id="gpu-的并行解法blelloch-算法"><a class="markdownIt-Anchor" href="#gpu-的并行解法blelloch-算法"></a> GPU 的并行解法：Blelloch 算法</h2>
-<p>为了让成百上千个线程同时干活，算法把过程分成了两步：<strong>上划阶段（算总和）</strong> 和 <strong>下划阶段（发结果）</strong>。</p>
-<p>我们以 8 个数字 <code>[3, 1, 7, 0, 4, 1, 6, 3]</code> 为例：</p>
-<h3 id="第一步up-sweep上划阶段-画一棵倒过来的树"><a class="markdownIt-Anchor" href="#第一步up-sweep上划阶段-画一棵倒过来的树"></a> 第一步：Up-Sweep（上划阶段）—— 画一棵倒过来的树</h3>
-<p>这一步的目的和“归约”一样，把数据两两相加，一层一层往上报，直到算出总和。</p>
-<ul>
-<li><strong>第一层</strong>：两两相加
-<ul>
-<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mo>+</mo><mn>1</mn><mo>=</mo><mn mathvariant="bold">4</mn></mrow><annotation encoding="application/x-tex">3+1=\mathbf{4}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">3</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">4</span></span></span></span></span></li>
-<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>7</mn><mo>+</mo><mn>0</mn><mo>=</mo><mn mathvariant="bold">7</mn></mrow><annotation encoding="application/x-tex">7+0=\mathbf{7}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">7</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">7</span></span></span></span></span></li>
-<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><mo>+</mo><mn>1</mn><mo>=</mo><mn mathvariant="bold">5</mn></mrow><annotation encoding="application/x-tex">4+1=\mathbf{5}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">4</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">5</span></span></span></span></span></li>
-<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>6</mn><mo>+</mo><mn>3</mn><mo>=</mo><mn mathvariant="bold">9</mn></mrow><annotation encoding="application/x-tex">6+3=\mathbf{9}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">6</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">9</span></span></span></span></span></li>
-<li>现在的数组变成：<code>[3, 4, 7, 7, 4, 5, 6, 9]</code>（加粗的位置更新了）</li>
-</ul>
-</li>
-<li><strong>第二层</strong>：跨步增大，继续两两相加
-<ul>
-<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><mo>+</mo><mn>7</mn><mo>=</mo><mn mathvariant="bold">11</mn></mrow><annotation encoding="application/x-tex">4+7=\mathbf{11}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">4</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">7</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">1</span><span class="mord mathbf">1</span></span></span></span></span></li>
-<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>5</mn><mo>+</mo><mn>9</mn><mo>=</mo><mn mathvariant="bold">14</mn></mrow><annotation encoding="application/x-tex">5+9=\mathbf{14}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">5</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">9</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">1</span><span class="mord mathbf">4</span></span></span></span></span></li>
-</ul>
-</li>
-<li><strong>第三层</strong>：最后一加
-<ul>
-<li><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>11</mn><mo>+</mo><mn>14</mn><mo>=</mo><mn mathvariant="bold">25</mn></mrow><annotation encoding="application/x-tex">11+14=\mathbf{25}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">4</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">2</span><span class="mord mathbf">5</span></span></span></span></span>（这是整个数组的总和）</li>
-</ul>
-</li>
-</ul>
-<p>此时，数组的最后一个位置变成了 <code>25</code>。</p>
-<h3 id="第二步down-sweep下划阶段-把结果分发下去"><a class="markdownIt-Anchor" href="#第二步down-sweep下划阶段-把结果分发下去"></a> 第二步：Down-Sweep（下划阶段）—— 把结果分发下去</h3>
-<p>这是最巧妙的一步。我们<strong>先把顶端的总和清零（变成 0）</strong>，然后从上往下走。</p>
-<p>每遇到一个节点，做两件事：</p>
-<ol>
-<li><strong>把自己的值传给左子节点。</strong></li>
-<li><strong>把自己原来的值和左子节点的值相加，传给右子节点。</strong></li>
-</ol>
-<p>我们来看看这个神奇的过程：</p>
-<ul>
-<li><strong>顶层</strong>：把最后的 <code>25</code> 变成 <code>0</code>。</li>
-<li><strong>往下走第一层</strong>：
-<ul>
-<li>原来左边是 <code>11</code>，右边是 <code>14</code>。</li>
-<li>按照规则：旧的 <code>0</code> 给左边；左边的 <code>11</code> 加上旧的 <code>0</code> 变成 <code>11</code> 给右边。</li>
-<li>现在的顶层两节点变成：<code>[11, 0]</code> （对应原来的 11 和 14 位置）。</li>
-</ul>
-</li>
-<li><strong>继续往下走</strong>：重复这个“左传，加右”的操作。</li>
-</ul>
-<p>当这个过程一直推导到最底层时，你会发现，原本的数组魔术般地变成了：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[0, 3, 4, 11, 11, 15, 16, 22]</span><br></pre></td></tr></table></figure>
-<p>这就是原数组 <code>[3, 1, 7, 0, 4, 1, 6, 3]</code> 的<strong>独占前缀和</strong>！</p>
-<ul>
-<li>第 0 个数前面总和是 <code>0</code></li>
-<li>第 1 个数前面总和是 <code>3</code></li>
-<li>第 2 个数前面总和是 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mo>+</mo><mn>1</mn><mo>=</mo><mn mathvariant="bold">4</mn></mrow><annotation encoding="application/x-tex">3+1 = \mathbf{4}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">3</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">4</span></span></span></span></span></li>
-<li>第 3 个数前面总和是 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mo>+</mo><mn>1</mn><mo>+</mo><mn>7</mn><mo>=</mo><mn mathvariant="bold">11</mn></mrow><annotation encoding="application/x-tex">3+1+7 = \mathbf{11}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">3</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">7</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord"><span class="mord mathbf">1</span><span class="mord mathbf">1</span></span></span></span></span></li>
-<li>……以此类推。</li>
-</ul>
-<h2 id="为什么要大费周章这么做"><a class="markdownIt-Anchor" href="#为什么要大费周章这么做"></a> 为什么要大费周章这么做？</h2>
-<p>你可能会问：“又是上划又是下划，这不比 CPU 的 <code>for</code> 循环复杂多了吗？”</p>
-<p>对单线程来说是的。但对 GPU 来说：</p>
-<ol>
-<li><strong>树的每一层，所有节点都是并行计算的</strong>。原本需要 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span> 次的串行相加，现在只需要 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo><mi>log</mi><mo>⁡</mo></mo><mn>2</mn></msub><mi>N</mi></mrow><annotation encoding="application/x-tex">\log_2 N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.93858em;vertical-align:-0.24414em;"></span><span class="mop"><span class="mop">lo<span style="margin-right:0.01389em;">g</span></span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.20696799999999996em;"><span style="top:-2.4558600000000004em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.24414em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span> 层的计算。</li>
-<li>处理 100 万个数据，CPU 的 <code>for</code> 循环要走 100 万步；而 GPU 只需要上划 20 层，下划 20 层，总共 <strong>40 步</strong>就能搞定。</li>
-</ol>
-<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
-<ul>
-<li><strong>前缀和</strong>就是求“当前元素之前所有元素的累加和”。</li>
-<li>GPU 不能用 <code>for</code> 循环硬干，所以用<strong>树状结构</strong>。</li>
-<li><strong>Up-Sweep</strong> 像拼图一样把局部和合并上去。</li>
-<li><strong>Down-Sweep</strong> 利用“左传、加右”的数学规律把偏移量完美分发下来。</li>
-</ul>
-<p>这个算法理解了之后，再看刚才代码里的 <code>sdata[bi] += sdata[ai]</code> 交换逻辑，是不是就清晰多了？</p>
-<h2 id="1-核心概念什么是双调序列"><a class="markdownIt-Anchor" href="#1-核心概念什么是双调序列"></a> 1. 核心概念：什么是“双调序列”？</h2>
-<p>在学算法之前，先记住一个定义：</p>
-<blockquote>
-<p><strong>双调序列（Bitonic Sequence）</strong>：一个数组，它满足<strong>先单调递增，后单调递减</strong>（或者先递减后递增）。它就像一座“山峰”或者一个“山谷”。</p>
-<ul>
-<li>比如 <code>[1, 4, 9, 8, 5, 2]</code> 就是一个标准的双调序列（先升到 9，再降到 2）。</li>
-<li>甚至把这个序列循环位移，比如 <code>[5, 2, 1, 4, 9, 8]</code>（先降到 1，再升到 9），它依然算双调序列。</li>
-</ul>
-</blockquote>
-<h3 id="为什么双调序列这么重要"><a class="markdownIt-Anchor" href="#为什么双调序列这么重要"></a> 为什么双调序列这么重要？</h3>
-<p>因为数学家 Batcher 证明了一个定理（<strong>双调合并定理</strong>）：</p>
-<p>如果你把一个双调序列<strong>对半分开</strong>，让前半部分的每一个元素和后半部分对应位置的元素进行比较（小的放前面，大的放后面），那么：</p>
-<ol>
-<li>得到的前半部分和后半部分，<strong>各自依然是双调序列</strong>。</li>
-<li><strong>前半部分的所有元素，都绝对小于后半部分的所有元素。</strong></li>
-</ol>
-<p>这就太厉害了！这意味着只要数据变成了“双调序列”，GPU 只需要<strong>无脑地对半分、两两比较</strong>，就能把数据切成“小的一堆”和“大的一堆”，一直切下去，整个数组就排好序了。这个过程叫做 <strong>Bitonic Merge（双调合并）</strong>。</p>
-<h2 id="2-核心矛盾现实数据不是双调的怎么办"><a class="markdownIt-Anchor" href="#2-核心矛盾现实数据不是双调的怎么办"></a> 2. 核心矛盾：现实数据不是双调的怎么办？</h2>
-<p>你肯定会问：“人家给我的初始数组是乱序的（比如 <code>[4, 2, 7, 1]</code>），根本不是什么先升后降的山峰，怎么用这个定理呢？”</p>
-<p>双调排序的精妙解法：<strong>农村包围城市，从小山峰拼成大山峰！</strong></p>
-<ul>
-<li><strong>2 个元素</strong>：任意两个数，一定能组成一个双调序列（一个升，一个降，或者直接看作双调）。</li>
-<li><strong>第 1 阶段（制造小山峰）</strong>：把每 2 个元素排成一升一降。比如 <code>[4, 2]</code> 变成升序 <code>[2, 4]</code>，<code>[7, 1]</code> 变成降序 <code>[7, 1]</code>。拼起来就是 <code>[2, 4, 7, 1]</code>。看！这不就组成了长度为 4 的“先升后降”的双调小山峰了吗？</li>
-<li><strong>第 2 阶段（制造中山峰）</strong>：对这个长度为 4 的双调序列进行“双调合并”，把它变成一个长度为 4 的纯升序序列。同时把隔壁 4 个元素变成纯降序序列。两边一拼，又变成了一个长度为 8 的双调大山峰！</li>
-<li><strong>最终阶段</strong>：当全班 100 万个数据变成了一座超级大山峰时，执行最后一次总合并，全变成升序，大功告成！</li>
-</ul>
-<h2 id="3-图解执行过程以-8-个数字为例"><a class="markdownIt-Anchor" href="#3-图解执行过程以-8-个数字为例"></a> 3. 图解执行过程（以 8 个数字为例）</h2>
-<p>我们来看看乱序数组 <code>[3, 7, 4, 8, 6, 2, 1, 5]</code> 是如何一步步被驯服的。</p>
-<p>双调排序要求数组长度必须是 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mn>2</mn><mi>n</mi></msup></mrow><annotation encoding="application/x-tex">2^n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.664392em;vertical-align:0em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.664392em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathnormal mtight">n</span></span></span></span></span></span></span></span></span></span></span>。</p>
-<h3 id="阶段一两两成组构建长度为-4-的双调序列"><a class="markdownIt-Anchor" href="#阶段一两两成组构建长度为-4-的双调序列"></a> 阶段一：两两成组，构建长度为 4 的双调序列</h3>
-<ul>
-<li>线程同时干活：
-<ul>
-<li>把前两个 <code>[3, 7]</code> 变成<strong>升序</strong> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> <code>[3, 7]</code></li>
-<li>把次两个 <code>[4, 8]</code> 变成<strong>降序</strong> <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> <code>[8, 4]</code></li>
-</ul>
-</li>
-<li>此时前 4 个数合并成了 <code>[3, 7, 8, 4]</code>（完美的山峰：3到8升，8到4降）。</li>
-<li>同理，后 4 个数 <code>[6, 2, 1, 5]</code> 经过一升一降的处理，变成了 <code>[2, 6, 5, 1]</code>（也是完美的山峰）。</li>
-</ul>
-<h3 id="阶段二四四成组构建长度为-8-的双调序列"><a class="markdownIt-Anchor" href="#阶段二四四成组构建长度为-8-的双调序列"></a> 阶段二：四四成组，构建长度为 8 的双调序列</h3>
-<p>现在我们手头有两个长度为 4 的双调山峰了。</p>
-<ul>
-<li><strong>左边 4 个数 <code>[3, 7, 8, 4]</code></strong>：我们要把它合并成一个<strong>纯升序</strong>序列。
-<ul>
-<li>根据刚才的定理，跨步为 2 对半分比较：3和8比，7和4比。</li>
-<li>经过两轮无脑两两比较，它变成了纯升序：<code>[3, 4, 7, 8]</code>。</li>
-</ul>
-</li>
-<li><strong>右边 4 个数 <code>[2, 6, 5, 1]</code></strong>：我们要把它合并成一个<strong>纯降序</strong>序列。
-<ul>
-<li>经过无脑两两比较，它变成了纯降序：<code>[6, 5, 2, 1]</code>。</li>
-</ul>
-</li>
-<li><strong>合龙！</strong> 现在把左边（升）和右边（降）拼起来：<code>[3, 4, 7, 8, 6, 5, 2, 1]</code>。</li>
-<li><strong>看奇迹！</strong> 整个 8 个数字的数组，现在变成了一座覆盖全体的、完美的、先升后降的<strong>超级大山峰</strong>！</li>
-</ul>
-<h3 id="阶段三终极大合并bitonic-merge"><a class="markdownIt-Anchor" href="#阶段三终极大合并bitonic-merge"></a> 阶段三：终极大合并（Bitonic Merge）</h3>
-<p>既然全数组已经是一座大山峰了，我们只需要对它进行最后的折半清洗：</p>
-<ol>
-<li><strong>跨步为 4 比较</strong>（0和4比，1和5比…）：小的放左，大的放右。
-<ul>
-<li>数组变成：<code>[3, 4, 2, 1 | 6, 5, 7, 8]</code> （左边全部小于右边！）</li>
-</ul>
-</li>
-<li><strong>跨步为 2 比较</strong>：
-<ul>
-<li>数组变成：<code>[2, 1, 3, 4 | 6, 5, 7, 8]</code></li>
-</ul>
-</li>
-<li><strong>跨步为 1 比较</strong>（相邻比较）：
-<ul>
-<li>数组变成：<code>[1, 2, 3, 4 | 5, 6, 7, 8]</code></li>
-</ul>
-</li>
-</ol>
-<p><strong>全部排好序了！</strong></p>
-<h2 id="4-为什么它是-gpu-的最爱"><a class="markdownIt-Anchor" href="#4-为什么它是-gpu-的最爱"></a> 4. 为什么它是 GPU 的最爱？</h2>
-<p>看完过程，你发现规律了吗？</p>
-<ol>
-<li><strong>没有任何未知的跳转</strong>：第几步该哪个位置和哪个位置比，在数组长度确定的那一刻就固定了。</li>
-<li><strong>完美并行</strong>：每一轮比较中，所有的两两比较都是互相独立的！比如 0和4比 的时候，1和5比 可以在另一个线程同时进行，不需要等待。</li>
-<li><strong>硬件友好</strong>：当跨步很小（比如在 32 以内）时，所有的比较和交换都可以通过 <strong>Warp Shuffle（线程束洗牌指令）</strong> 直接在寄存器里完成，根本不需要读写昂贵的内存。</li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2026/06/16/2026%E5%B9%B46%E6%9C%8816%E6%97%A5-cuda%E7%BC%96%E7%A8%8B2%E9%99%84%E5%BD%95/" data-id="cms1vppgb0004lkv45oj4fp6z" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -2409,7 +2216,7 @@ bn</p>
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>181</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>183</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>45</strong><br>标签</div></a>
     </div>

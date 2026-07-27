@@ -43,7 +43,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>181</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>183</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>45</strong><br>标签</div></a>
     </div>
@@ -70,6 +70,141 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-2025年8月6日-MLOps" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/08/06/2025%E5%B9%B48%E6%9C%886%E6%97%A5-MLOps/" class="article-date">
+  <time class="post-time" datetime="2025-08-06T01:27:38.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">06</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/08/06/2025%E5%B9%B48%E6%9C%886%E6%97%A5-MLOps/">2025年8月6日  MLOps</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/08/06/2025%E5%B9%B48%E6%9C%886%E6%97%A5-MLOps/" data-id="cme10nnyw00056cv4gv372xw4" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2025年8月5日-模型迭代管理" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/08/05/2025%E5%B9%B48%E6%9C%885%E6%97%A5-%E6%A8%A1%E5%9E%8B%E8%BF%AD%E4%BB%A3%E7%AE%A1%E7%90%86/" class="article-date">
+  <time class="post-time" datetime="2025-08-05T05:40:19.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">05</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/08/05/2025%E5%B9%B48%E6%9C%885%E6%97%A5-%E6%A8%A1%E5%9E%8B%E8%BF%AD%E4%BB%A3%E7%AE%A1%E7%90%86/">2025年8月5日 模型迭代管理</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="模型迭代规范操作流程"><a class="markdownIt-Anchor" href="#模型迭代规范操作流程"></a> ✅ 模型迭代规范操作流程</h2>
+<h1 id="模型迭代操作规范"><a class="markdownIt-Anchor" href="#模型迭代操作规范"></a> 模型迭代操作规范</h1>
+<h2 id="1-命名规范"><a class="markdownIt-Anchor" href="#1-命名规范"></a> 1. 命名规范</h2>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>命名格式</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>模型文件</td>
+<td><code>&#123;model_name&#125;_v&#123;version&#125;_&#123;remark&#125;.pt</code></td>
+<td><code>yolov5s_v1.2_pruned.pt</code></td>
+</tr>
+<tr>
+<td>日志</td>
+<td><code>&#123;task&#125;_&#123;model&#125;_&#123;version&#125;.log</code></td>
+<td><code>train_yolov5s_v1.2.log</code></td>
+</tr>
+<tr>
+<td>config</td>
+<td><code>&#123;model&#125;_v&#123;version&#125;_config.yaml/json</code></td>
+<td><code>resnet50_v2.0_config.yaml</code></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="2-迭代流程规范"><a class="markdownIt-Anchor" href="#2-迭代流程规范"></a> 2. 迭代流程规范</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">mermaidCopyEditgraph LR</span><br><span class="line">A[定义目标/问题] --&gt; B[准备数据集]</span><br><span class="line">B --&gt; C[设定baseline模型]</span><br><span class="line">C --&gt; D[模型训练]</span><br><span class="line">D --&gt; E[评估与记录]</span><br><span class="line">E --&gt; F&#123;是否满足要求&#125;</span><br><span class="line">F -- 否 --&gt; G[修改策略/调参]</span><br><span class="line">G --&gt; D</span><br><span class="line">F -- 是 --&gt; H[保存版本 + 文档记录]</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="3-文件管理结构建议"><a class="markdownIt-Anchor" href="#3-文件管理结构建议"></a> 3. 文件管理结构建议</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">pgsqlCopyEditproject/</span><br><span class="line">├── data/</span><br><span class="line">├── configs/</span><br><span class="line">│   └── yolov5s_v1.1.yaml</span><br><span class="line">├── logs/</span><br><span class="line">│   └── train_yolov5s_v1.1.log</span><br><span class="line">├── models/</span><br><span class="line">│   └── yolov5s_v1.1_best.pt</span><br><span class="line">├── notebooks/</span><br><span class="line">├── results/</span><br><span class="line">├── version.md</span><br><span class="line">└── train.py</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="4-版本记录文档versionmd格式"><a class="markdownIt-Anchor" href="#4-版本记录文档versionmd格式"></a> 4. 版本记录文档（<a target="_blank" rel="noopener" href="http://version.md">version.md</a>）格式</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">markdownCopyEdit## v1.2 - 2025/08/05</span><br><span class="line">- 剪枝比例：30%，加速推理约1.5倍</span><br><span class="line">- 精度变化：mAP50从0.91 -&gt; 0.895</span><br><span class="line">- 参数量：7.2M -&gt; 4.3M</span><br><span class="line">- 模型文件：models/yolov5s_v1.2_pruned.pt</span><br><span class="line">- 日志文件：logs/train_yolov5s_v1.2.log</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line"># 模型名称：YOLOv5s_v1.2_pruned</span><br><span class="line"></span><br><span class="line">## 📌 基本信息</span><br><span class="line">- **任务类型**：目标检测</span><br><span class="line">- **模型版本**：v1.2</span><br><span class="line">- **训练日期**：2025-08-05</span><br><span class="line">- **基础模型**：YOLOv5s</span><br><span class="line">- **改动摘要**：剪枝30%，量化未启用</span><br><span class="line"></span><br><span class="line">## ⚙️ 训练配置</span><br><span class="line">- **数据集路径**：`data/dataset-v2/`</span><br><span class="line">- **配置文件**：`configs/yolov5s_v1.2.yaml`</span><br><span class="line">- **输入尺寸**：640×640</span><br><span class="line">- **批大小（batch size）**：32</span><br><span class="line">- **学习率（lr）**：0.01</span><br><span class="line">- **训练轮数（epochs）**：300</span><br><span class="line">- **设备**：1× RTX 3090, 24GB</span><br><span class="line"></span><br><span class="line">## 📊 结果指标</span><br><span class="line">| 指标项   | 值        |</span><br><span class="line">|----------|-----------|</span><br><span class="line">| mAP@0.5  | 0.895     |</span><br><span class="line">| mAP@0.5:0.95 | 0.667 |</span><br><span class="line">| Params   | 4.3M      |</span><br><span class="line">| FPS（640）| 118 fps   |</span><br><span class="line"></span><br><span class="line">## 📁 模型文件</span><br><span class="line">- `models/yolov5s_v1.2_pruned.pt`  </span><br><span class="line">- `logs/train_yolov5s_v1.2.log`</span><br><span class="line"></span><br><span class="line">## 🧪 复现实验步骤</span><br><span class="line">```bash</span><br><span class="line"># 安装环境</span><br><span class="line">conda create -n yolo_env python=3.9</span><br><span class="line">pip install -r requirements.txt</span><br><span class="line"></span><br><span class="line"># 训练</span><br><span class="line">python train.py --cfg configs/yolov5s_v1.2.yaml --weights yolov5s.pt --data data.yaml --epochs 300 --img 640</span><br><span class="line"></span><br><span class="line"># 测试</span><br><span class="line">python val.py --weights yolov5s_v1.2_pruned.pt --data data.yaml --img 640</span><br><span class="line"></span><br><span class="line"># 模型名称：YOLOv5s_v1.2_pruned</span><br><span class="line"></span><br><span class="line">## 📌 基本信息</span><br><span class="line">- **任务类型**：目标检测</span><br><span class="line">- **模型版本**：v1.2</span><br><span class="line">- **训练日期**：2025-08-05</span><br><span class="line">- **基础模型**：YOLOv5s</span><br><span class="line">- **改动摘要**：剪枝30%，量化未启用</span><br><span class="line"></span><br><span class="line">## ⚙️ 训练配置</span><br><span class="line">- **数据集路径**：`data/dataset-v2/`</span><br><span class="line">- **配置文件**：`configs/yolov5s_v1.2.yaml`</span><br><span class="line">- **输入尺寸**：640×640</span><br><span class="line">- **批大小（batch size）**：32</span><br><span class="line">- **学习率（lr）**：0.01</span><br><span class="line">- **训练轮数（epochs）**：300</span><br><span class="line">- **设备**：1× RTX 3090, 24GB</span><br><span class="line"></span><br><span class="line">## 📊 结果指标</span><br><span class="line">| 指标项   | 值        |</span><br><span class="line">|----------|-----------|</span><br><span class="line">| mAP@0.5  | 0.895     |</span><br><span class="line">| mAP@0.5:0.95 | 0.667 |</span><br><span class="line">| Params   | 4.3M      |</span><br><span class="line">| FPS（640）| 118 fps   |</span><br><span class="line"></span><br><span class="line">## 📁 模型文件</span><br><span class="line">- `models/yolov5s_v1.2_pruned.pt`  </span><br><span class="line">- `logs/train_yolov5s_v1.2.log`</span><br><span class="line"></span><br><span class="line">## 🧪 复现实验步骤</span><br><span class="line">```bash</span><br><span class="line"># 安装环境</span><br><span class="line">conda create -n yolo_env python=3.9</span><br><span class="line">pip install -r requirements.txt</span><br><span class="line"></span><br><span class="line"># 训练</span><br><span class="line">python train.py --cfg configs/yolov5s_v1.2.yaml --weights yolov5s.pt --data data.yaml --epochs 300 --img 640</span><br><span class="line"></span><br><span class="line"># 测试</span><br><span class="line">python val.py --weights yolov5s_v1.2_pruned.pt --data data.yaml --img 640</span><br><span class="line">│       └── confusion_matrix.png</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/08/05/2025%E5%B9%B48%E6%9C%885%E6%97%A5-%E6%A8%A1%E5%9E%8B%E8%BF%AD%E4%BB%A3%E7%AE%A1%E7%90%86/" data-id="cme10nnyn00016cv4f48f25xn" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-2025年7月29日-llm3" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -1127,392 +1262,6 @@
 
 
   
-    <article id="post-效果对比" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/06/27/%E6%95%88%E6%9E%9C%E5%AF%B9%E6%AF%94/" class="article-date">
-  <time class="post-time" datetime="2025-06-27T10:39:55.926Z" itemprop="datePublished">
-    <span class="post-month">6月</span><br/>
-    <span class="post-day">27</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>[!info]</p>
-<p>非常好，这里我给你总结一个<strong>通用的“对比试验”流程</strong>，不只适用于这次的 <strong>字幕翻译对比</strong>，也适用于你以后做任何 A/B 测试、模型对比、工具对比时使用。</p>
-<hr>
-<h2 id="对比试验-一般流程"><a class="markdownIt-Anchor" href="#对比试验-一般流程"></a> ✅ <strong>对比试验 — 一般流程</strong></h2>
-<hr>
-<h2 id="1️⃣-明确目的"><a class="markdownIt-Anchor" href="#1️⃣-明确目的"></a> 1️⃣ <strong>明确目的</strong></h2>
-<ul>
-<li>你要比较什么？
-<ul>
-<li>👉 两个（或多个）方案/工具/模型</li>
-</ul>
-</li>
-<li>想验证什么？
-<ul>
-<li>👉 哪个更准确、更快、更省事、更稳定</li>
-</ul>
-</li>
-</ul>
-<hr>
-<h2 id="2️⃣-确定对比指标"><a class="markdownIt-Anchor" href="#2️⃣-确定对比指标"></a> 2️⃣ <strong>确定对比指标</strong></h2>
-<ul>
-<li>常用指标：
-<ul>
-<li>准确性</li>
-<li>自然度</li>
-<li>速度</li>
-<li>易用性</li>
-<li>输出格式</li>
-<li>资源占用（CPU/GPU/RAM）</li>
-</ul>
-</li>
-<li>用表格列出来</li>
-</ul>
-<hr>
-<h2 id="3️⃣-准备统一的输入"><a class="markdownIt-Anchor" href="#3️⃣-准备统一的输入"></a> 3️⃣ <strong>准备统一的输入</strong></h2>
-<ul>
-<li>样本要可控、代表性强</li>
-<li>文件格式一致</li>
-<li>大小覆盖典型场景（短/长/简单/复杂）</li>
-<li>数量合适（一般 3~5 个就够）</li>
-</ul>
-<hr>
-<h2 id="4️⃣-执行试验"><a class="markdownIt-Anchor" href="#4️⃣-执行试验"></a> 4️⃣ <strong>执行试验</strong></h2>
-<ul>
-<li>用同样的输入，分别跑每个方案
-<ul>
-<li>保证参数一致（同一个模型/同样 chunk）</li>
-<li>记录运行环境（GPU/CPU/网速）</li>
-</ul>
-</li>
-<li>保存原始输出</li>
-</ul>
-<hr>
-<h2 id="5️⃣-收集结果"><a class="markdownIt-Anchor" href="#5️⃣-收集结果"></a> 5️⃣ <strong>收集结果</strong></h2>
-<ul>
-<li>每个样本、每个方案一一对应</li>
-<li>命名清晰（A_short_Buzz.srt / A_short_Hgface.srt）</li>
-<li>保留日志（耗时、错误）</li>
-</ul>
-<hr>
-<h2 id="6️⃣-对比分析"><a class="markdownIt-Anchor" href="#6️⃣-对比分析"></a> 6️⃣ <strong>对比分析</strong></h2>
-<ul>
-<li>使用对比工具（Diffchecker、Notepad++、Excel）</li>
-<li>核查：
-<ul>
-<li>相同之处（共性）</li>
-<li>不同之处（误差、漏译）</li>
-</ul>
-</li>
-<li>人工或自动统计准确率</li>
-</ul>
-<hr>
-<h2 id="7️⃣-记录并评分"><a class="markdownIt-Anchor" href="#7️⃣-记录并评分"></a> 7️⃣ <strong>记录并评分</strong></h2>
-<ul>
-<li>用表格记录每个指标打分（1~5）</li>
-<li>标记特别差或特别好的点</li>
-<li>可以加截图举例</li>
-</ul>
-<hr>
-<h2 id="8️⃣-得出结论"><a class="markdownIt-Anchor" href="#8️⃣-得出结论"></a> 8️⃣ <strong>得出结论</strong></h2>
-<ul>
-<li>汇总：
-<ul>
-<li>哪个方案总体更好</li>
-<li>哪个场景适合哪个方案</li>
-</ul>
-</li>
-<li>写一段总结</li>
-</ul>
-<hr>
-<h2 id="9️⃣-可选做复验证"><a class="markdownIt-Anchor" href="#9️⃣-可选做复验证"></a> 9️⃣ <strong>可选：做复验证</strong></h2>
-<ul>
-<li>用别的文件再跑一轮</li>
-<li>检查结果是否一致</li>
-<li>如果一致，结论更可信</li>
-</ul>
-<hr>
-<h2 id="10️⃣-归档"><a class="markdownIt-Anchor" href="#10️⃣-归档"></a> 10️⃣ <strong>归档</strong></h2>
-<ul>
-<li>保存：
-<ul>
-<li>输入文件</li>
-<li>输出文件</li>
-<li>对比表</li>
-<li>报告文档</li>
-</ul>
-</li>
-<li>方便以后复查</li>
-</ul>
-<hr>
-<h2 id="总结一图流"><a class="markdownIt-Anchor" href="#总结一图流"></a> 📌 <strong>总结：一图流</strong></h2>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">复制编辑</span><br><span class="line">目的明确 → 确定指标 → 准备输入 → 执行试验 → 收集结果 → 对比分析 → 记录评分 → 总结结论 → 可重复验证 → 归档</span><br></pre></td></tr></table></figure>
-<hr>
-<h2 id="专注要点"><a class="markdownIt-Anchor" href="#专注要点"></a> 🎯 <strong>专注要点</strong></h2>
-<p>✔ 输入一致<br>
-✔ 参数一致<br>
-✔ 对比维度明确<br>
-✔ 可重复、可复现<br>
-✔ 有记录、有报告</p>
-<hr>
-<h2 id="️-如果需要我可以帮你做"><a class="markdownIt-Anchor" href="#️-如果需要我可以帮你做"></a> 🗂️ <strong>如果需要，我可以帮你做：</strong></h2>
-<p>✅ 通用对比表格（Excel、Notion、Markdown 版）<br>
-✅ 可复用试验报告模板<br>
-✅ 自动批处理脚本（一次跑完多文件）</p>
-</blockquote>
-<h3 id="step-1️⃣-选定实验文件"><a class="markdownIt-Anchor" href="#step-1️⃣-选定实验文件"></a> <strong>Step 1️⃣ 选定实验文件</strong></h3>
-<p>至少准备：</p>
-<ul>
-<li>短文件 1~2 个（30 秒 ~ 1 分钟）</li>
-<li>长文件 1<s>2 个（5</s>10 分钟）</li>
-<li>尽量有口音、重复词、停顿，增加难度</li>
-</ul>
-<h3 id="step-4️⃣-对比重点"><a class="markdownIt-Anchor" href="#step-4️⃣-对比重点"></a> <strong>Step 4️⃣ 对比重点</strong></h3>
-<table>
-<thead>
-<tr>
-<th>维度</th>
-<th>具体看什么</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>翻译准确性</td>
-<td>有无漏译、误译</td>
-</tr>
-<tr>
-<td>语义自然度</td>
-<td>是否直译生硬</td>
-</tr>
-<tr>
-<td>专有名词</td>
-<td>是否翻译一致</td>
-</tr>
-<tr>
-<td>句式流畅</td>
-<td>是否有不通顺</td>
-</tr>
-<tr>
-<td>长句子处理</td>
-<td>是否断句合理</td>
-</tr>
-<tr>
-<td>分段完整性</td>
-<td>Buzz 常自动分段，Hgface 默认整段</td>
-</tr>
-</tbody>
-</table>
-<h3 id="step-6️⃣-做表格记录"><a class="markdownIt-Anchor" href="#step-6️⃣-做表格记录"></a> <strong>Step 6️⃣ 做表格记录</strong></h3>
-<table>
-<thead>
-<tr>
-<th>文件</th>
-<th>长短</th>
-<th>Hgface 翻译评分 (1~5)</th>
-<th>Buzz 翻译评分 (1~5)</th>
-<th>差异点</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>A</td>
-<td>短</td>
-<td>4</td>
-<td>5</td>
-<td>Buzz 句式更口语</td>
-</tr>
-<tr>
-<td>B</td>
-<td>长</td>
-<td>3</td>
-<td>4</td>
-<td>Hgface 连贯度差</td>
-</tr>
-<tr>
-<td>C</td>
-<td>短+口音</td>
-<td>2</td>
-<td>3</td>
-<td>都识别漏词</td>
-</tr>
-<tr>
-<td>D</td>
-<td>长+专业</td>
-<td>3</td>
-<td>4</td>
-<td>Buzz 漏翻术语</td>
-</tr>
-</tbody>
-</table>
-<blockquote>
-<p>[!info]</p>
-</blockquote>
-<blockquote>
-<blockquote>
-<p>[!important]<br>
-这是一个重要提醒（Important）</p>
-</blockquote>
-</blockquote>
-<blockquote>
-<p>[!warning]</p>
-</blockquote>
-<blockquote>
-<p>[!note]<br>
-这是一个笔记（Note）</p>
-</blockquote>
-<blockquote>
-<p>[!tip]<br>
-这是一个小提示（Tip）</p>
-</blockquote>
-<blockquote>
-<p>[!info]<br>
-这是信息（Info）</p>
-</blockquote>
-<blockquote>
-<p>[!warning]<br>
-这是一个警告（Warning）</p>
-</blockquote>
-<blockquote>
-<p>[!important]<br>
-这是一个重要提醒（Important）</p>
-</blockquote>
-<blockquote>
-<p>[!caution]<br>
-这是一个小心（Caution）</p>
-</blockquote>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/06/27/%E6%95%88%E6%9E%9C%E5%AF%B9%E6%AF%94/" data-id="cmdahfjap0006l4v45wmbb66i" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2025年6月24日-openai-python" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/06/24/2025%E5%B9%B46%E6%9C%8824%E6%97%A5-openai-python/" class="article-date">
-  <time class="post-time" datetime="2025-06-24T02:58:07.000Z" itemprop="datePublished">
-    <span class="post-month">6月</span><br/>
-    <span class="post-day">24</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/06/24/2025%E5%B9%B46%E6%9C%8824%E6%97%A5-openai-python/">2025年6月24日 openai_python</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id><a class="markdownIt-Anchor" href="#"></a> </h1>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://platform.openai.com/docs">https://platform.openai.com/docs</a></p>
-<p><a target="_blank" rel="noopener" href="https://github.com/openai/openai-python/blob/main/api.md">https://github.com/openai/openai-python/blob/main/api.md</a></p>
-</blockquote>
-<blockquote>
-<p>[!warning]</p>
-</blockquote>
-<blockquote>
-<table>
-<thead>
-<tr>
-<th></th>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody>
-</table>
-</blockquote>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/06/24/2025%E5%B9%B46%E6%9C%8824%E6%97%A5-openai-python/" data-id="cmcabapwh00046wv4445fhvb7" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -1557,7 +1306,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>181</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>183</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>45</strong><br>标签</div></a>
     </div>

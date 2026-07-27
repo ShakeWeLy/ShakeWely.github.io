@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2026年7月26日 nnUNet组会汇报 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="nnU-Net：Self-configuring Method for Deep Learning-based Biomedical Image Segmentation   0 研究背景和痛点（Why）  背景 近年来，深度学习语义分割已经广泛应用于医学图像分析，例如：  器官分割 肿瘤检测 病灶测量 三维重建  通过语义分割，可以完成：  图像分析（Image Analysis） 定量分析（">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2026年7月26日 nnUNet组会汇报">
+<meta property="og:url" content="https://shakewely.github.io/2026/07/26/2026%E5%B9%B47%E6%9C%8826%E6%97%A5-nnUNet%E7%BB%84%E4%BC%9A%E6%B1%87%E6%8A%A5/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="nnU-Net：Self-configuring Method for Deep Learning-based Biomedical Image Segmentation   0 研究背景和痛点（Why）  背景 近年来，深度学习语义分割已经广泛应用于医学图像分析，例如：  器官分割 肿瘤检测 病灶测量 三维重建  通过语义分割，可以完成：  图像分析（Image Analysis） 定量分析（">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-07-26T14:14:03.000Z">
+<meta property="article:modified_time" content="2026-07-26T14:37:31.413Z">
+<meta property="article:author" content="Weakliy">
+<meta property="article:tag" content="MRI">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>183</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>45</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2026年7月26日-nnUNet组会汇报" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/07/26/2026%E5%B9%B47%E6%9C%8826%E6%97%A5-nnUNet%E7%BB%84%E4%BC%9A%E6%B1%87%E6%8A%A5/" class="article-date">
+  <time class="post-time" datetime="2026-07-26T14:14:03.000Z" itemprop="datePublished">
+    <span class="post-month">7月</span><br/>
+    <span class="post-day">26</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2026年7月26日 nnUNet组会汇报
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="nnu-netself-configuring-method-for-deep-learning-based-biomedical-image-segmentation"><a class="markdownIt-Anchor" href="#nnu-netself-configuring-method-for-deep-learning-based-biomedical-image-segmentation"></a> nnU-Net：Self-configuring Method for Deep Learning-based Biomedical Image Segmentation</h1>
+<hr>
+<h1 id="0-研究背景和痛点why"><a class="markdownIt-Anchor" href="#0-研究背景和痛点why"></a> 0 研究背景和痛点（Why）</h1>
+<h2 id="背景"><a class="markdownIt-Anchor" href="#背景"></a> 背景</h2>
+<p>近年来，深度学习语义分割已经广泛应用于医学图像分析，例如：</p>
+<ul>
+<li>器官分割</li>
+<li>肿瘤检测</li>
+<li>病灶测量</li>
+<li>三维重建</li>
+</ul>
+<p>通过语义分割，可以完成：</p>
+<ul>
+<li>图像分析（Image Analysis）</li>
+<li>定量分析（Quantification）</li>
+</ul>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">MRI</span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">分割脑组织</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">计算脑区体积</span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">辅助疾病诊断</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="现有方法存在的问题"><a class="markdownIt-Anchor" href="#现有方法存在的问题"></a> 现有方法存在的问题</h2>
+<p>虽然 U-Net、V-Net 等模型已经取得很好效果，但是：</p>
+<blockquote>
+<p><strong>不同数据集几乎都需要重新设计整个训练流程。</strong></p>
+</blockquote>
+<p>主要包括：</p>
+<ul>
+<li>数据预处理</li>
+<li>网络结构</li>
+<li>Patch Size</li>
+<li>Batch Size</li>
+<li>Learning Rate</li>
+<li>Data Augmentation</li>
+<li>后处理</li>
+</ul>
+<p>这些设计高度依赖：</p>
+<ul>
+<li>数据集特点</li>
+<li>GPU显存</li>
+<li>医学经验</li>
+</ul>
+<p>因此：</p>
+<blockquote>
+<p><strong>一个新的医学分割任务往往需要大量人工调参。</strong></p>
+</blockquote>
+<hr>
+<h2 id="automl-为什么不能解决"><a class="markdownIt-Anchor" href="#automl-为什么不能解决"></a> AutoML 为什么不能解决？</h2>
+<p>AutoML 可以自动搜索网络。</p>
+<p>但是：</p>
+<ul>
+<li>搜索成本高</li>
+<li>计算资源巨大</li>
+<li>仍需要人工定义搜索空间</li>
+</ul>
+<p>因此，</p>
+<blockquote>
+<p>AutoML 并没有真正消除专家经验。</p>
+</blockquote>
+<hr>
+<h2 id="nnu-net-的目标"><a class="markdownIt-Anchor" href="#nnu-net-的目标"></a> nnU-Net 的目标</h2>
+<p>作者希望做到：</p>
+<blockquote>
+<p><strong>输入一个新的医学数据集，不需要任何人工配置，就能够自动训练出高性能分割模型。</strong></p>
+</blockquote>
+<hr>
+<h1 id="1-核心思想how"><a class="markdownIt-Anchor" href="#1-核心思想how"></a> 1 核心思想（How）</h1>
+<p>作者认为：</p>
+<p>整个分割流程其实包含三种类型的设计决策：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">设计参数</span><br><span class="line">│</span><br><span class="line">├── Fixed</span><br><span class="line">├── Rule-based</span><br><span class="line">└── Empirical</span><br></pre></td></tr></table></figure>
+<p>这就是 nnU-Net 最核心的思想。</p>
+<hr>
+<h2 id="1fixed-parameters"><a class="markdownIt-Anchor" href="#1fixed-parameters"></a> （1）Fixed Parameters</h2>
+<p>固定参数。</p>
+<p>作者发现：</p>
+<p>很多经验其实对于所有数据集都成立。</p>
+<p>例如：</p>
+<ul>
+<li>使用 U-Net</li>
+<li>Deep Supervision</li>
+<li>Instance Normalization</li>
+<li>LeakyReLU</li>
+</ul>
+<p>这些无需重新设计。</p>
+<p>因此：</p>
+<blockquote>
+<p>固定下来。</p>
+</blockquote>
+<hr>
+<h2 id="2rule-based-parameters"><a class="markdownIt-Anchor" href="#2rule-based-parameters"></a> （2）Rule-based Parameters</h2>
+<p>规则参数。</p>
+<p>作者提出两个概念：</p>
+<h3 id="dataset-fingerprint"><a class="markdownIt-Anchor" href="#dataset-fingerprint"></a> Dataset Fingerprint</h3>
+<p>数据指纹。</p>
+<p>包括：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">spacing</span><br><span class="line"></span><br><span class="line">image size</span><br><span class="line"></span><br><span class="line">image shape</span><br><span class="line"></span><br><span class="line">voxel数量</span><br><span class="line"></span><br><span class="line">类别比例</span><br><span class="line"></span><br><span class="line">模态(MRI/CT)</span><br></pre></td></tr></table></figure>
+<p>也就是：</p>
+<blockquote>
+<p>数据集有哪些特点。</p>
+</blockquote>
+<hr>
+<h3 id="pipeline-fingerprint"><a class="markdownIt-Anchor" href="#pipeline-fingerprint"></a> Pipeline Fingerprint</h3>
+<p>流水线指纹。</p>
+<p>包括：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Patch Size</span><br><span class="line"></span><br><span class="line">Batch Size</span><br><span class="line"></span><br><span class="line">Network Depth</span><br><span class="line"></span><br><span class="line">Pooling</span><br><span class="line"></span><br><span class="line">Kernel Size</span><br><span class="line"></span><br><span class="line">Resampling</span><br><span class="line"></span><br><span class="line">Normalization</span><br></pre></td></tr></table></figure>
+<p>也就是：</p>
+<blockquote>
+<p>如何训练这个模型。</p>
+</blockquote>
+<hr>
+<h3 id="二者关系"><a class="markdownIt-Anchor" href="#二者关系"></a> 二者关系</h3>
+<p>nnU-Net 建立：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Dataset Fingerprint</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">Heuristic Rules</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">Pipeline Fingerprint</span><br></pre></td></tr></table></figure>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">spacing很大</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">各向异性</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">使用2D卷积</span><br></pre></td></tr></table></figure>
+<p>或者：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">GPU显存小</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">Patch变小</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">Batch自动调整</span><br></pre></td></tr></table></figure>
+<p>所以：</p>
+<blockquote>
+<p>不再靠人工，而是靠规则自动决定。</p>
+</blockquote>
+<hr>
+<h2 id="3empirical-parameters"><a class="markdownIt-Anchor" href="#3empirical-parameters"></a> （3）Empirical Parameters</h2>
+<p>还有一些参数，</p>
+<p>无法直接写规则。</p>
+<p>例如：</p>
+<ul>
+<li>哪个模型最好</li>
+<li>是否需要Cascade</li>
+<li>后处理方式</li>
+</ul>
+<p>作者采用：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">训练</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">交叉验证</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">自动选择</span><br></pre></td></tr></table></figure>
+<p>因此称为：</p>
+<p>Empirical Parameters。</p>
+<hr>
+<h2 id="nnu-net-自动完成哪些事情"><a class="markdownIt-Anchor" href="#nnu-net-自动完成哪些事情"></a> nnU-Net 自动完成哪些事情？</h2>
+<p>整个流程：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">Dataset</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">Fingerprint</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">Preprocessing</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">Network</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">Training</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">Inference</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">Post-processing</span><br></pre></td></tr></table></figure>
+<p>包括：</p>
+<h3 id="preprocessing"><a class="markdownIt-Anchor" href="#preprocessing"></a> Preprocessing</h3>
+<p>自动：</p>
+<ul>
+<li>Resampling</li>
+<li>Cropping</li>
+<li>Normalization</li>
+</ul>
+<hr>
+<h3 id="network"><a class="markdownIt-Anchor" href="#network"></a> Network</h3>
+<p>自动决定：</p>
+<ul>
+<li>2D U-Net</li>
+<li>3D Full Resolution</li>
+<li>3D Cascade</li>
+</ul>
+<p>其中：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">2D</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">适合各向异性数据</span><br><span class="line"></span><br><span class="line">-------------------</span><br><span class="line"></span><br><span class="line">3D Full</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">适合一般3D数据</span><br><span class="line"></span><br><span class="line">-------------------</span><br><span class="line"></span><br><span class="line">Cascade</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">超大图像</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="training"><a class="markdownIt-Anchor" href="#training"></a> Training</h3>
+<p>自动：</p>
+<ul>
+<li>Patch Size</li>
+<li>Batch Size</li>
+<li>Learning Rate</li>
+<li>Data Augmentation</li>
+<li>Deep Supervision</li>
+</ul>
+<hr>
+<h3 id="post-processing"><a class="markdownIt-Anchor" href="#post-processing"></a> Post-processing</h3>
+<p>自动：</p>
+<ul>
+<li>Remove Small Components</li>
+<li>Keep Largest Component</li>
+</ul>
+<p>全部自动完成。</p>
+<hr>
+<h1 id="2-实验设计与结果results"><a class="markdownIt-Anchor" href="#2-实验设计与结果results"></a> 2 实验设计与结果（Results）</h1>
+<h2 id="数据集"><a class="markdownIt-Anchor" href="#数据集"></a> 数据集</h2>
+<p>作者测试：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">23 datasets</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">53 segmentation tasks</span><br></pre></td></tr></table></figure>
+<p>涵盖：</p>
+<ul>
+<li>MRI</li>
+<li>CT</li>
+<li>EM</li>
+<li>FM</li>
+</ul>
+<p>包括：</p>
+<ul>
+<li>Brain</li>
+<li>Liver</li>
+<li>Heart</li>
+<li>Tumor</li>
+<li>Lesion</li>
+<li>Cell</li>
+</ul>
+<p>几乎覆盖所有医学分割场景。</p>
+<hr>
+<h2 id="对比方法"><a class="markdownIt-Anchor" href="#对比方法"></a> 对比方法</h2>
+<p>与：</p>
+<ul>
+<li>各挑战赛冠军</li>
+<li>专门设计的方法</li>
+<li>人工调参模型</li>
+</ul>
+<p>进行比较。</p>
+<hr>
+<h2 id="实验结果"><a class="markdownIt-Anchor" href="#实验结果"></a> 实验结果</h2>
+<p>最终：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">53个任务</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">33个SOTA</span><br><span class="line"></span><br><span class="line">其余几乎全部进入Top排行榜</span><br></pre></td></tr></table></figure>
+<p>说明：</p>
+<blockquote>
+<p>即使没有针对任务专门设计，nnU-Net 依然能够超过大多数人工设计方法。</p>
+</blockquote>
+<hr>
+<h2 id="为什么效果这么好"><a class="markdownIt-Anchor" href="#为什么效果这么好"></a> 为什么效果这么好？</h2>
+<p>作者强调：</p>
+<p>并不是因为：</p>
+<ul>
+<li>新网络</li>
+<li>新Loss</li>
+<li>新Optimizer</li>
+</ul>
+<p>而是：</p>
+<blockquote>
+<p><strong>把多年人工调参经验进行了系统化总结。</strong></p>
+</blockquote>
+<p>因此：</p>
+<p>论文名字叫：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">nnU-Net</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">No-New-Net</span><br></pre></td></tr></table></figure>
+<p>意思就是：</p>
+<blockquote>
+<p><strong>没有提出新的网络，而是提出新的方法论。</strong></p>
+</blockquote>
+<hr>
+<h1 id="3-讨论与启发discussion"><a class="markdownIt-Anchor" href="#3-讨论与启发discussion"></a> 3 讨论与启发（Discussion）</h1>
+<h2 id="第一"><a class="markdownIt-Anchor" href="#第一"></a> 第一</h2>
+<p>论文最大的贡献不是：</p>
+<p>一个新的网络。</p>
+<p>而是：</p>
+<blockquote>
+<p>自动配置整个分割流程。</p>
+</blockquote>
+<p>这也是后来：</p>
+<p>Auto Configuration</p>
+<p>Auto Pipeline</p>
+<p>Medical AutoML</p>
+<p>发展的基础。</p>
+<hr>
+<h2 id="第二"><a class="markdownIt-Anchor" href="#第二"></a> 第二</h2>
+<p>作者认为：</p>
+<p>真正影响性能的，</p>
+<p>不是网络结构，</p>
+<p>而是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">数据</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">配置</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">训练流程</span><br></pre></td></tr></table></figure>
+<p>一句经典结论：</p>
+<blockquote>
+<p><strong>The exact architecture is not the most important determinant in getting a good solution.</strong></p>
+</blockquote>
+<p>即：</p>
+<blockquote>
+<p><strong>网络结构并不是决定模型性能最重要的因素。</strong></p>
+</blockquote>
+<hr>
+<h2 id="第三"><a class="markdownIt-Anchor" href="#第三"></a> 第三</h2>
+<p>nnU-Net 更像一个：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Framework</span><br><span class="line"></span><br><span class="line">而不是</span><br><span class="line"></span><br><span class="line">Network</span><br></pre></td></tr></table></figure>
+<p>任何新的：</p>
+<ul>
+<li>Transformer</li>
+<li>Attention</li>
+<li>Mamba</li>
+<li>Diffusion</li>
+</ul>
+<p>都可以直接放进去。</p>
+<p>因此，</p>
+<p>很多后续工作都是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Transformer</span><br><span class="line"></span><br><span class="line">+</span><br><span class="line"></span><br><span class="line">nnU-Net</span><br></pre></td></tr></table></figure>
+<p>而不是重新设计整个Pipeline。</p>
+<hr>
+<h2 id="第四局限性"><a class="markdownIt-Anchor" href="#第四局限性"></a> 第四（局限性）</h2>
+<p>虽然 nnU-Net 十分强大，但仍存在一些局限：</p>
+<ul>
+<li>默认以 Dice 作为优化目标，对于特殊评价指标的任务可能不是最优。</li>
+<li>某些特殊数据（如电子显微镜 EM）仍需要人工设计预处理或损失函数。</li>
+<li>启发式规则依赖已有经验，对于全新的数据类型可能需要扩展。</li>
+</ul>
+<p>作者提出，可以持续将新的经验融入规则库，使 nnU-Net 不断演进。</p>
+<hr>
+<h1 id="总结take-home-message"><a class="markdownIt-Anchor" href="#总结take-home-message"></a> 总结（Take-home Message）</h1>
+<p>可以用下面四句话概括整篇论文：</p>
+<ol>
+<li><strong>问题：</strong> 医学图像分割高度依赖人工经验，不同数据集需要重新设计整个训练流程。</li>
+<li><strong>方法：</strong> 将配置决策划分为固定参数（Fixed）、规则参数（Rule-based）和经验参数（Empirical），根据数据指纹自动生成完整训练流水线。</li>
+<li><strong>结果：</strong> 在 23 个数据集、53 个分割任务上取得了 33 个 SOTA，其余任务也达到或接近排行榜最佳水平。</li>
+<li><strong>意义：</strong> nnU-Net 的核心创新不是提出新的网络（No New Net），而是把医学图像分割中的专家经验系统化、自动化，建立了一套可直接迁移到新数据集的自配置框架。这也是它成为医学图像分割领域事实标准（de facto standard）的重要原因。</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/07/26/2026%E5%B9%B47%E6%9C%8826%E6%97%A5-nnUNet%E7%BB%84%E4%BC%9A%E6%B1%87%E6%8A%A5/" data-id="cms3c54yb0003eov46h48f9b6" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MRI/" rel="tag">MRI</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2026/07/26/2026%E5%B9%B47%E6%9C%8820%E6%97%A5-MRI%E8%AE%BA%E6%96%87%E5%A4%8D%E7%8E%B0/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          2026年7月20日 MRI论文复现
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2026/07/26/2026%E5%B9%B47%E6%9C%8826%E6%97%A5-nnUNet-learn/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2026年7月26日 nnUNet learn</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>183</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>45</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2025 - 2026 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
