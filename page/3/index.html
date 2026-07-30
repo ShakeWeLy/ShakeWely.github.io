@@ -43,7 +43,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>183</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>184</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>45</strong><br>标签</div></a>
     </div>
@@ -70,6 +70,347 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-2026年6月6日-pyd源码编译" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/06/06/2026%E5%B9%B46%E6%9C%886%E6%97%A5-pyd%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91/" class="article-date">
+  <time class="post-time" datetime="2026-06-06T03:00:54.000Z" itemprop="datePublished">
+    <span class="post-month">6月</span><br/>
+    <span class="post-day">06</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2026/06/06/2026%E5%B9%B46%E6%9C%886%E6%97%A5-pyd%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91/">2026年6月6日 pyd源码编译</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="1-生成-pyd-的一般流程"><a class="markdownIt-Anchor" href="#1-生成-pyd-的一般流程"></a> 1 生成 <code>.pyd</code> 的一般流程</h1>
+<p>Fairino SDK 的 <code>setup.py</code> 走的是 <strong>Cython 编译</strong> 路线：把 <code>Robot.py</code> 转成 C 代码，再编译成 Windows 扩展模块 <code>.pyd</code>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># setup.py</span><br><span class="line"># python3 setup.py build_ext --inplace</span><br><span class="line"># python setup.py build_ext --inplace                   (python3.12之前的使用)</span><br><span class="line"># python setup.py build_ext --inplace  --compiler=msvc  (python3.12使用)</span><br><span class="line">from distutils.core import setup                   #  (python3.12之前的使用)</span><br><span class="line"># from setuptools import setup                         #  (python3.12使用)</span><br><span class="line">from Cython.Build import cythonize</span><br><span class="line">setup(name=&#x27;Robot&#x27;, ext_modules=cythonize(&#x27;Robot.py&#x27;))</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="整体链路"><a class="markdownIt-Anchor" href="#整体链路"></a> 整体链路</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Robot.py  →  Cython  →  Robot.c  →  C 编译器(MSVC)  →  Robot.cp312-win_amd64.pyd</span><br></pre></td></tr></table></figure>
+<p><code>.pyd</code> 不是单独“生成”的文件，而是 <strong>针对特定 Python 版本 + 平台</strong> 编译出来的二进制，所以 cp310 / cp312 不能混用。</p>
+<hr>
+<h3 id="实际操作步骤"><a class="markdownIt-Anchor" href="#实际操作步骤"></a> 实际操作步骤</h3>
+<p><strong>1. 准备环境（在目标 conda 环境里做）</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">conda activate cvdet   <span class="comment"># 你要编译给哪个 Python 用，就 activate 哪个</span></span><br><span class="line">pip install cython setuptools</span><br></pre></td></tr></table></figure>
+<p>Windows 上还需要 <strong>C 编译器</strong>：</p>
+<ul>
+<li>Python 3.12：需要 <strong>Visual Studio Build Tools</strong>（MSVC）</li>
+<li>官方注释里也写了 3.12 要加 <code>--compiler=msvc</code></li>
+</ul>
+<p><strong>2. 进入源码目录</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> F:\_Work\fairino-python-sdk-master\fairino</span><br></pre></td></tr></table></figure>
+<p>目录里必须有 <code>Robot.py</code> 和 <code>setup.py</code>（你当前目录里 <code>Robot.py</code> 已被删掉，编译前需要放回来）。</p>
+<p><strong>3. 执行编译</strong></p>
+<p>Python 3.12（你的 <code>cvdet</code> 环境）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python setup.py build_ext --inplace --compiler=msvc</span><br></pre></td></tr></table></figure>
+<p>Python 3.11 及更早：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python setup.py build_ext --inplace</span><br></pre></td></tr></table></figure>
+<p><code>--inplace</code> 表示编译结果直接输出到当前 <code>fairino/</code> 目录，而不是只放在 <code>build/</code> 里。</p>
+<p><strong>4. 编译产物</strong></p>
+<p>成功后在 <code>fairino/</code> 下会看到：</p>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Robot.cp312-win_amd64.pyd</code></td>
+<td>最终可用的扩展模块</td>
+</tr>
+<tr>
+<td><code>Robot.c</code></td>
+<td>Cython 生成的中间 C 文件（可删）</td>
+</tr>
+<tr>
+<td><code>build/</code></td>
+<td>临时编译目录（可删）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>5. 使用</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> fairino <span class="keyword">import</span> Robot</span><br><span class="line">robot = Robot.RPC(<span class="string">&quot;192.168.58.2&quot;</span>)</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="python-312-的注意点"><a class="markdownIt-Anchor" href="#python-312-的注意点"></a> Python 3.12 的注意点</h3>
+<p>注释里提到 3.12 可能需要改 <code>setup.py</code>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 3.12 建议改成：</span></span><br><span class="line"><span class="keyword">from</span> setuptools <span class="keyword">import</span> setup</span><br><span class="line"><span class="keyword">from</span> Cython.Build <span class="keyword">import</span> cythonize</span><br><span class="line"></span><br><span class="line">setup(name=<span class="string">&#x27;Robot&#x27;</span>, ext_modules=cythonize(<span class="string">&#x27;Robot.py&#x27;</span>))</span><br></pre></td></tr></table></figure>
+<p>因为 Python 3.12 移除了 <code>distutils</code>，继续用 <code>from distutils.core import setup</code> 可能报错。你仓库里自带的 <code>Robot.cp312-win_amd64.pyd</code> 说明官方已经用 3.12 编译过了，<strong>一般可以直接用，不必自己重编</strong>。</p>
+<hr>
+<h3 id="什么时候需要自己编译"><a class="markdownIt-Anchor" href="#什么时候需要自己编译"></a> 什么时候需要自己编译？</h3>
+<table>
+<thead>
+<tr>
+<th>情况</th>
+<th>是否需要自己编译</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>已有匹配版本的 <code>.pyd</code>（如 cp312）</td>
+<td>不需要，直接用</td>
+</tr>
+<tr>
+<td>Python 版本变了（3.10 → 3.12）</td>
+<td>需要重新编译</td>
+</tr>
+<tr>
+<td>修改了 <code>Robot.py</code> 源码</td>
+<td>需要重新编译</td>
+</tr>
+<tr>
+<td>从 Linux 换到 Windows</td>
+<td>需要重新编译（平台不同）</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="和-pip-install-的关系"><a class="markdownIt-Anchor" href="#和-pip-install-的关系"></a> 和 <code>pip install</code> 的关系</h3>
+<p><code>setup.py</code> 也可以用来安装到 site-packages：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> fairino</span><br><span class="line">pip install .</span><br></pre></td></tr></table></figure>
+<p>这样会把 <code>.pyd</code> 装进 <code>cvdet</code> 的 <code>site-packages/fairino/</code>，之后任意脚本都能 <code>from fairino import Robot</code>，不必再写 <code>sys.path</code>。</p>
+<hr>
+<h3 id="一句话总结"><a class="markdownIt-Anchor" href="#一句话总结"></a> 一句话总结</h3>
+<p><strong>生成 <code>.pyd</code> 的流程 = 在目标 Python 环境里安装 Cython + 编译器 → 进入 <code>fairino/</code> → 运行 <code>python setup.py build_ext --inplace</code> → 得到对应版本的 <code>Robot.cpXXX-win_amd64.pyd</code>。</strong></p>
+<p>你现在的 <code>cvdet</code>（Python 3.12）已经有现成的 <code>Robot.cp312-win_amd64.pyd</code>，直接 import 即可；只有换 Python 版本或改源码时才需要重新走编译流程。</p>
+<h1 id="2-如何使用编译后得类比如cnde_pkgrobotpy-40-60"><a class="markdownIt-Anchor" href="#2-如何使用编译后得类比如cnde_pkgrobotpy-40-60"></a> 2 如何使用编译后得类比如CNDE_PKG@Robot.py (40-60)</h1>
+<h2 id="核心结论"><a class="markdownIt-Anchor" href="#核心结论"></a> 核心结论</h2>
+<p><strong>编译后的 <code>.pyd</code> 几乎只对外暴露 <code>RPC</code>，<code>CNDE_PKG</code> 等内部类无法直接 import。</strong></p>
+<p>实测 <code>dir(Robot)</code> 只有：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="string">&#x27;RPC&#x27;</span>, <span class="string">&#x27;__builtins__&#x27;</span>, <span class="string">&#x27;__doc__&#x27;</span>, <span class="string">&#x27;__file__&#x27;</span>, ...]</span><br></pre></td></tr></table></figure>
+<p>因此这样写会失败：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> fairino <span class="keyword">import</span> Robot</span><br><span class="line">pkg = Robot.CNDE_PKG()          <span class="comment"># AttributeError</span></span><br><span class="line"><span class="keyword">from</span> fairino.Robot <span class="keyword">import</span> RobotState  <span class="comment"># ImportError</span></span><br></pre></td></tr></table></figure>
+<p>Cython 编译时，像 <code>CNDE_PKG</code>、<code>FRCNDEClient</code>、<code>CNDEPkgToFrame</code> 等都被编译进二进制内部，<strong>没有导出到模块命名空间</strong>。这是正常现象，不是用法错误。</p>
+<hr>
+<h2 id="两种使用场景"><a class="markdownIt-Anchor" href="#两种使用场景"></a> 两种使用场景</h2>
+<h3 id="场景-1正常控制机器人推荐用-pyd"><a class="markdownIt-Anchor" href="#场景-1正常控制机器人推荐用-pyd"></a> 场景 1：正常控制机器人（推荐，用 <code>.pyd</code>）</h3>
+<p><code>CNDE_PKG</code> 是 CNDE 协议底层数据结构，SDK 内部由 <code>FRCNDEClient</code> 使用。应用层应通过 <strong><code>RPC</code> 的 CNDE 公共接口</strong>，不必自己操作 <code>CNDE_PKG</code>：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> fairino <span class="keyword">import</span> Robot</span><br><span class="line"></span><br><span class="line">robot = Robot.RPC(<span class="string">&quot;192.168.58.2&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># CNDE 在 RPC 初始化时会自动连接 20005 端口</span></span><br><span class="line">config = robot.CNDEGetConfig()</span><br><span class="line"><span class="built_in">print</span>(config)</span><br><span class="line"></span><br><span class="line">robot.CNDESetStateConfig(states=[...], period=<span class="number">100</span>)  <span class="comment"># 需 RobotState 枚举</span></span><br><span class="line">robot.CNDEAddState(state)</span><br><span class="line">robot.CNDESendStart()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读状态数据（已解析好的结构体）</span></span><br><span class="line">pkg = robot.robot_state_pkg</span><br><span class="line"><span class="built_in">print</span>(pkg.frame_cnt)</span><br><span class="line"></span><br><span class="line">robot.CloseRPC()</span><br></pre></td></tr></table></figure>
+<p>官方示例见 <code>windows/example/TestCNDE_Quick.py</code>，走的是这条路径。</p>
+<p>注意：示例里 <code>from fairino.Robot import RobotState</code> <strong>在 <code>.pyd</code> 下不可用</strong>。若需要 <code>RobotState</code> 枚举，要么改用源码版 <code>Robot.py</code>，要么从文档/源码里复制枚举定义。</p>
+<hr>
+<h3 id="场景-2必须直接使用-cnde_pkg需源码"><a class="markdownIt-Anchor" href="#场景-2必须直接使用-cnde_pkg需源码"></a> 场景 2：必须直接使用 <code>CNDE_PKG</code>（需源码）</h3>
+<p>若你要自己组包/解包 CNDE 帧，需要能访问 <code>CNDE_PKG</code>、<code>CNDEPkgToFrame</code> 等，应 <strong>用 <code>Robot.py</code> 源码，而不是 <code>.pyd</code></strong>：</p>
+<p><strong>做法 A：临时去掉 pyd，让 Python 加载 <code>.py</code></strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fairino/</span><br><span class="line">├── Robot.py                      ← 保留</span><br><span class="line">└── Robot.cp312-win_amd64.pyd     ← 重命名或移走</span><br></pre></td></tr></table></figure>
+<p><strong>做法 B：把 CNDE 相关代码复制到你的项目</strong></p>
+<p>从 <code>Robot.py</code> 复制这些部分到例如 <code>cnde_utils.py</code>：</p>
+<ul>
+<li>常量：<code>CNDE_FRAME_HEAD</code>、<code>CNDE_FRAME_TYPE_*</code> 等</li>
+<li>类：<code>CNDE_PKG</code></li>
+<li>函数：<code>Int16ToByte</code>、<code>CNDEPkgToFrame</code>、<code>FrameToCNDEPkg</code></li>
+</ul>
+<p>然后这样用：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> cnde_utils <span class="keyword">import</span> CNDE_PKG, CNDEPkgToFrame, CNDE_FRAME_TYPE_OUTPUT_START</span><br><span class="line"></span><br><span class="line">pkg = CNDE_PKG()</span><br><span class="line">pkg.<span class="built_in">type</span> = CNDE_FRAME_TYPE_OUTPUT_START</span><br><span class="line">pkg.count = <span class="number">1</span></span><br><span class="line">frame_bytes = CNDEPkgToFrame(pkg)</span><br><span class="line"></span><br><span class="line">recv = CNDE_PKG()</span><br><span class="line">ret = FrameToCNDEPkg(frame_bytes, recv)</span><br><span class="line"><span class="built_in">print</span>(ret, recv.<span class="built_in">type</span>, recv.data)</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="对比"><a class="markdownIt-Anchor" href="#对比"></a> 对比</h2>
+<table>
+<thead>
+<tr>
+<th>需求</th>
+<th>用 <code>.pyd</code></th>
+<th>用 <code>Robot.py</code> 源码</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Robot.RPC()</code> 控制机器人</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><code>robot.CNDEGetConfig()</code> 等</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><code>Robot.CNDE_PKG()</code></td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><code>from fairino.Robot import RobotState</code></td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>性能 / 源码保护</td>
+<td>更好</td>
+<td>较慢，源码可见</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="建议"><a class="markdownIt-Anchor" href="#建议"></a> 建议</h2>
+<ul>
+<li><strong>一般开发</strong>：继续用 <code>.pyd</code> + <code>RPC</code> 公共接口，不要直接碰 <code>CNDE_PKG</code>。</li>
+<li><strong>要做 CNDE 协议底层开发</strong>：去掉 <code>.pyd</code> 改用 <code>Robot.py</code>，或把 <code>CNDE_PKG</code> 相关代码单独抽出来。</li>
+</ul>
+<p>如果你说一下具体目标（例如“自己发 CNDE 帧”还是“读机器人状态”），我可以帮你写对应的完整示例脚本。</p>
+<h1 id="3-为啥编译后的-pyd-几乎只对外暴露-rpccnde_pkg-等内部类无法直接-import-哪里做了限制吗"><a class="markdownIt-Anchor" href="#3-为啥编译后的-pyd-几乎只对外暴露-rpccnde_pkg-等内部类无法直接-import-哪里做了限制吗"></a> 3 为啥编译后的 .pyd 几乎只对外暴露 RPC，CNDE_PKG 等内部类无法直接 import。, 哪里做了限制吗</h1>
+<h2 id="结论不是源码里做了导出限制"><a class="markdownIt-Anchor" href="#结论不是源码里做了导出限制"></a> 结论：不是源码里做了“导出限制”</h2>
+<p><code>Robot.py</code> 里<strong>没有</strong> <code>__all__</code>、也没有 <code># cython: ...</code> 之类的隐藏配置。<br>
+按 Cython 的默认规则，<strong>模块顶层的 <code>class</code>、<code>def</code>、常量都会进 <code>Robot</code> 模块的命名空间</strong>。</p>
+<p>真正的原因是：你手里的 <strong><code>Robot.cp312-win_amd64.pyd</code> 根本不是完整编译产物</strong>，而是一个约 <strong>35KB 的精简 stub</strong>。</p>
+<hr>
+<h2 id="证据对比"><a class="markdownIt-Anchor" href="#证据对比"></a> 证据对比</h2>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>大小</th>
+<th>含 <code>CNDE_PKG</code></th>
+<th>含 <code>GetSDKVersion</code></th>
+<th>含 <code>RobotState</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>fairino/Robot.cp312-win_amd64.pyd</code></td>
+<td><strong>35 KB</strong></td>
+<td>❌</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td><code>windows/libfairino/Robot.cp310-win_amd64.pyd</code></td>
+<td><strong>4.2 MB</strong></td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><code>windows/fairino/Robot.py</code> 源码</td>
+<td>662 KB</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+</tbody>
+</table>
+<p>完整编译生成的 <code>Robot.c</code>（cp310）里，CNDE_PKG 是<strong>明确写入模块字典</strong>的：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// windows/libfairino/Robot.c 初始化模块时</span></span><br><span class="line">PyDict_SetItem(__pyx_d, <span class="string">&quot;CNDE_PKG&quot;</span>, ...);   <span class="comment">// 会导出</span></span><br><span class="line">PyDict_SetItem(__pyx_d, <span class="string">&quot;RPC&quot;</span>, ...);        <span class="comment">// 也会导出</span></span><br></pre></td></tr></table></figure>
+<p>而 cp312 的 <code>.pyd</code> 二进制里搜不到 <code>CNDE_PKG</code>、<code>GetSDKVersion</code> 等字符串，说明<strong>这些代码根本没编进去</strong>。</p>
+<hr>
+<h2 id="cp312-这个-pyd-实际是什么"><a class="markdownIt-Anchor" href="#cp312-这个-pyd-实际是什么"></a> cp312 这个 <code>.pyd</code> 实际是什么</h2>
+<p>实测：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> fairino <span class="keyword">import</span> Robot</span><br><span class="line"></span><br><span class="line"><span class="built_in">dir</span>(Robot)</span><br><span class="line"><span class="comment"># [&#x27;RPC&#x27;, &#x27;xmlrpc&#x27;, ...]   只有 2 个有效名字</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">type</span>(Robot.RPC)</span><br><span class="line"><span class="comment"># cython_function_or_method   ← 不是 class RPC</span></span><br><span class="line"></span><br><span class="line">obj = Robot.RPC(<span class="string">&quot;192.168.58.2&quot;</span>)</span><br><span class="line"><span class="built_in">type</span>(obj)</span><br><span class="line"><span class="comment"># xmlrpc.client.ServerProxy   ← 直接返回 XML-RPC 代理，不是 SDK 的 RPC 类</span></span><br></pre></td></tr></table></figure>
+<p>也就是说，这个 cp312 文件本质上只是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Robot.RPC(ip)  →  xmlrpc.client.ServerProxy(&quot;http://ip:20003&quot;)</span><br></pre></td></tr></table></figure>
+<p><strong>不是</strong> <code>Robot.py</code> 里那个有 CNDE、UDP、重连、状态包等逻辑的 <code>class RPC</code>（2200+ 行那个）。</p>
+<p>所以不是“编译后故意隐藏内部类”，而是 <strong>cp312 版本只编/只发了一个极简 wrapper，完整 SDK 逻辑缺失</strong>。</p>
+<hr>
+<h2 id="源码里并没有限制完整编译会全部导出"><a class="markdownIt-Anchor" href="#源码里并没有限制完整编译会全部导出"></a> 源码里并没有限制，完整编译会全部导出</h2>
+<p><code>Robot.py</code> 顶层定义都会暴露，例如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">CNDE_PKG</span>: ...          <span class="comment"># 第 41 行</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">CNDEPkgToFrame</span>(<span class="params">...</span>): ... <span class="comment"># 第 74 行</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">RobotState</span>(enum.Enum): ...  <span class="comment"># 第 962 行</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">RPC</span>(): ...             <span class="comment"># 第 2212 行</span></span><br></pre></td></tr></table></figure>
+<p>用源码时可以直接：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> fairino.Robot <span class="keyword">import</span> CNDE_PKG, RobotState, CNDEPkgToFrame</span><br></pre></td></tr></table></figure>
+<p>完整编译的 cp310 <code>.pyd</code> 同样可以这样 import（已验证二进制中含这些符号）。</p>
+<hr>
+<h2 id="你该怎么选"><a class="markdownIt-Anchor" href="#你该怎么选"></a> 你该怎么选</h2>
+<p><strong>方案 A：需要 <code>CNDE_PKG</code> 等内部 API → 用源码</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fairino/</span><br><span class="line">├── Robot.py          ← 保留</span><br><span class="line">└── Robot.cp312-...pyd  ← 移走或删除，避免优先加载 pyd</span><br></pre></td></tr></table></figure>
+<p><strong>方案 B：继续用 <code>.pyd</code> → 自己完整编译</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">conda activate cvdet</span><br><span class="line"><span class="built_in">cd</span> F:\_Work\fairino-python-sdk-master\fairino</span><br><span class="line"><span class="comment"># 把 Robot.py 放回来</span></span><br><span class="line">pip install cython setuptools</span><br><span class="line">python setup.py build_ext --inplace --compiler=msvc</span><br></pre></td></tr></table></figure>
+<p>正常编出来的 <code>.pyd</code> 应该是 <strong>几 MB 级别</strong>（类似 cp310 的 4.2MB），而不是 35KB。编完后：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">dir</span>(Robot)          <span class="comment"># 会有大量名字</span></span><br><span class="line">Robot.CNDE_PKG      <span class="comment"># 可用</span></span><br><span class="line"><span class="keyword">from</span> fairino.Robot <span class="keyword">import</span> RobotState  <span class="comment"># 可用</span></span><br></pre></td></tr></table></figure>
+<p><strong>方案 C：换 Python 3.10 环境，直接用官方预编译的</strong></p>
+<p><code>windows/libfairino/Robot.cp310-win_amd64.pyd</code> 是完整版。</p>
+<hr>
+<h2 id="一句话"><a class="markdownIt-Anchor" href="#一句话"></a> 一句话</h2>
+<p><strong>没有在某处写“只导出 RPC”的限制</strong>；<br>
+你当前的 cp312 <code>.pyd</code> 是<strong>不完整的 stub</strong>，只实现了 <code>xmlrpc</code> 连接，所以看不到 <code>CNDE_PKG</code>。<br>
+要用的话：要么退回 <code>Robot.py</code> 源码，要么在 Python 3.12 下<strong>重新完整编译</strong>出几 MB 级别的 <code>.pyd</code>。</p>
+<h1 id="重新编译"><a class="markdownIt-Anchor" href="#重新编译"></a> 重新编译</h1>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">/LIBPATH:F:\Pydata\anacondai\envs\cvdet\PCbuild\amd64 &quot;/LIBPATH:C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.51.36231\ATLMFC\lib\x64&quot; &quot;/LIBPATH:C:\Program Files\Microsoft Visual Studio\18\Community\VC\Tools\MSVC\14.51.36231\lib\x64&quot; &quot;/LIBPATH:C:\Program Files (x86)\Windows Kits\NETFXSDK\4.8\lib\um\x64&quot; &quot;/LIBPATH:C:\Program Files (x86)\Windows Kits\10\lib\10.0.26100.0\ucrt\x64&quot; &quot;/LIBPATH:C:\Program Files (x86)\Windows Kits\10\\lib\10.0.26100.0\\um\x64&quot; /EXPORT:PyInit_Robot build\temp.win-amd64-cpython-312\Release\Robot.obj /OUT:build\lib.win-amd64-cpython-312\Robot.cp312-win_amd64.pyd /IMPLIB:build\temp.win-amd64-cpython-312\Release\Robot.cp312-win_amd64.lib</span><br><span class="line">  正在创建库 build\temp.win-amd64-cpython-312\Release\Robot.cp312-win_amd64.lib 和对象 build\temp.win-amd64-cpython-312\Release\Robot.cp312-win_amd64.exp</span><br><span class="line">正在生成代码</span><br><span class="line">已完成代码的生成</span><br><span class="line">copying build\lib.win-amd64-cpython-312\Robot.cp312-win_amd64.pyd -&gt; </span><br><span class="line">(cvdet) </span><br></pre></td></tr></table></figure>
+<p>编译已经<strong>成功完成</strong>（<code>last_exit_code: 0</code>）。</p>
+<h2 id="终端输出含义"><a class="markdownIt-Anchor" href="#终端输出含义"></a> 终端输出含义</h2>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">python setup.py build_ext --inplace --compiler=msvc</span><br><span class="line">running build_ext</span><br><span class="line">building &#x27;Robot&#x27; extension</span><br><span class="line">...</span><br><span class="line">正在生成代码</span><br><span class="line">已完成代码的生成</span><br><span class="line">copying build\lib.win-amd64-cpython-312\Robot.cp312-win_amd64.pyd -&gt;</span><br></pre></td></tr></table></figure>
+<p>流程是：</p>
+<ol>
+<li>Cython 把 <code>Robot.py</code> 转成 <code>Robot.c</code></li>
+<li>MSVC 编译、链接成 <code>Robot.cp312-win_amd64.pyd</code></li>
+<li><code>--inplace</code> 把产物复制到当前 <code>fairino/</code> 目录</li>
+</ol>
+<h2 id="验证结果完整版-pyd"><a class="markdownIt-Anchor" href="#验证结果完整版-pyd"></a> 验证结果（完整版 pyd）</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>之前 stub</th>
+<th>现在编译后</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>文件大小</td>
+<td>35 KB</td>
+<td><strong>4.4 MB</strong></td>
+</tr>
+<tr>
+<td><code>CNDE_PKG</code></td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td><code>RPC</code> 类型</td>
+<td>cyfunction</td>
+<td><strong>class</strong></td>
+</tr>
+<tr>
+<td>模块导出数</td>
+<td>2</td>
+<td><strong>149</strong></td>
+</tr>
+<tr>
+<td><code>GetCurToolCoord</code></td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+</tbody>
+</table>
+<p>现在是完整 SDK，可以正常运行 <code>02_read.py</code> 里的 <code>GetCurToolCoord()</code>。</p>
+<h2 id="下一步"><a class="markdownIt-Anchor" href="#下一步"></a> 下一步</h2>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">conda activate cvdet</span><br><span class="line"><span class="built_in">cd</span> F:/_Work/fairino-python-sdk-master</span><br><span class="line">python 02_read.py</span><br></pre></td></tr></table></figure>
+<p>注意：<code>GetCurToolCoord()</code> 读的是 CNDE 状态包里的 <code>toolCoord</code>，需要机器人已连接且 CNDE 数据在更新；若全是 0，等连接稳定后再读，或确认机器人已上电使能。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/06/06/2026%E5%B9%B46%E6%9C%886%E6%97%A5-pyd%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91/" data-id="cmq6neg340002dwv4ey819sni" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-2026年6月5日-lerobo" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -2309,280 +2650,6 @@ embed就是将文本转换为向量, 使得语义相近的物体在高维空间�
 
 
   
-    <article id="post-2026年5月14日-ModelExecutoPool" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2026/05/14/2026%E5%B9%B45%E6%9C%8814%E6%97%A5-ModelExecutoPool/" class="article-date">
-  <time class="post-time" datetime="2026-05-14T05:20:04.000Z" itemprop="datePublished">
-    <span class="post-month">5月</span><br/>
-    <span class="post-day">14</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2026/05/14/2026%E5%B9%B45%E6%9C%8814%E6%97%A5-ModelExecutoPool/">2026年5月14日 ModelExecutoPool</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="为什么联合模型很常见"><a class="markdownIt-Anchor" href="#为什么联合模型很常见"></a> 为什么联合模型很常见</h1>
-<p>因为：</p>
-<h2 id="backbone-最贵"><a class="markdownIt-Anchor" href="#backbone-最贵"></a> backbone 最贵</h2>
-<p>YOLO 里真正吃显存的是：</p>
-<ul>
-<li>backbone</li>
-<li>feature maps</li>
-<li>intermediate tensors</li>
-</ul>
-<p>而不是最后几个类别。</p>
-<p>所以：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">4类 vs 40类</span><br></pre></td></tr></table></figure>
-<p>显存可能差距没你想象大。</p>
-<p>但：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">两个完整YOLO</span><br></pre></td></tr></table></figure>
-<p>差距会很大。</p>
-<hr>
-<h1 id="工业里经常这样做"><a class="markdownIt-Anchor" href="#工业里经常这样做"></a> 工业里经常这样做</h1>
-<p>例如：</p>
-<h2 id="安防"><a class="markdownIt-Anchor" href="#安防"></a> 安防</h2>
-<p>一个模型：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">person</span><br><span class="line">helmet</span><br><span class="line">vest</span><br><span class="line">smoke</span><br><span class="line">fire</span><br><span class="line">phone</span><br></pre></td></tr></table></figure>
-<p>不同业务：</p>
-<ul>
-<li>安全帽检测</li>
-<li>抽烟检测</li>
-<li>打电话检测</li>
-</ul>
-<p>只是：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">target_classes</span><br></pre></td></tr></table></figure>
-<p>不同。</p>
-<hr>
-<h2 id="零售"><a class="markdownIt-Anchor" href="#零售"></a> 零售</h2>
-<p>统一：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">drink</span><br><span class="line">snack</span><br><span class="line">fruit</span><br><span class="line">vegetable</span><br></pre></td></tr></table></figure>
-<p>而不是：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fruit.pt</span><br><span class="line">drink.pt</span><br><span class="line">vegetable.pt</span><br></pre></td></tr></table></figure>
-<hr>
-<h1 id="什么时候才拆模型"><a class="markdownIt-Anchor" href="#什么时候才拆模型"></a> 什么时候才拆模型</h1>
-<p>通常是：</p>
-<h2 id="1-任务差异太大"><a class="markdownIt-Anchor" href="#1-任务差异太大"></a> 1. 任务差异太大</h2>
-<p>例如：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">OCR</span><br><span class="line">人脸</span><br><span class="line">目标检测</span><br><span class="line">分割</span><br></pre></td></tr></table></figure>
-<p>网络结构都不同。</p>
-<hr>
-<h2 id="2-类别冲突严重"><a class="markdownIt-Anchor" href="#2-类别冲突严重"></a> 2. 类别冲突严重</h2>
-<p>例如：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">工业缺陷A</span><br><span class="line">工业缺陷B</span><br></pre></td></tr></table></figure>
-<p>数据分布差太远。</p>
-<blockquote>
-<h1 id="数据分布差远是什么意思"><a class="markdownIt-Anchor" href="#数据分布差远是什么意思"></a> 数据分布差远是什么意思?</h1>
-<p>“数据分布差太远” 本质是在说：</p>
-<blockquote>
-<p>两类任务看到的“图像规律”差异太大，硬塞进一个模型后，模型会互相干扰。</p>
-</blockquote>
-<p>不是类别名字不同，而是：</p>
-<ul>
-<li>视觉特征</li>
-<li>拍摄方式</li>
-<li>尺度</li>
-<li>背景</li>
-<li>光照</li>
-<li>纹理</li>
-<li>目标大小</li>
-<li>数据量</li>
-<li>标注风格</li>
-</ul>
-<p>这些统计规律差很多。</p>
-<hr>
-<p>比如：</p>
-<h1 id="可以很容易合并的"><a class="markdownIt-Anchor" href="#可以很容易合并的"></a> 可以很容易合并的</h1>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">apple</span><br><span class="line">banana</span><br><span class="line">orange</span><br><span class="line">cabbage</span><br><span class="line">carrot</span><br></pre></td></tr></table></figure>
-<p>虽然：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fruit + vegetable</span><br></pre></td></tr></table></figure>
-<p>不是一个业务。</p>
-<p>但图像分布很接近：</p>
-<ul>
-<li>都是自然物体</li>
-<li>都在桌子/货架</li>
-<li>尺寸接近</li>
-<li>RGB自然场景</li>
-<li>相似拍摄角度</li>
-</ul>
-<p>YOLO backbone 学到的特征能共享。</p>
-<p>所以：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">一个模型</span><br></pre></td></tr></table></figure>
-<p>通常没问题。</p>
-<hr>
-<h1 id="典型数据分布差远"><a class="markdownIt-Anchor" href="#典型数据分布差远"></a> 典型“数据分布差远”</h1>
-<p>例如：</p>
-<h2 id="场景1水果检测"><a class="markdownIt-Anchor" href="#场景1水果检测"></a> 场景1：水果检测</h2>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">苹果</span><br><span class="line">香蕉</span><br><span class="line">橙子</span><br></pre></td></tr></table></figure>
-<p>图片：</p>
-<ul>
-<li>彩色</li>
-<li>自然场景</li>
-<li>圆润纹理</li>
-<li>大目标</li>
-</ul>
-<hr>
-<h2 id="场景2工业裂纹检测"><a class="markdownIt-Anchor" href="#场景2工业裂纹检测"></a> 场景2：工业裂纹检测</h2>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">metal crack</span><br><span class="line">scratch</span><br><span class="line">hole</span><br></pre></td></tr></table></figure>
-<p>图片：</p>
-<ul>
-<li>灰度</li>
-<li>高噪声</li>
-<li>微小目标</li>
-<li>纹理极细</li>
-<li>高分辨率局部</li>
-</ul>
-<hr>
-<p>你如果硬训练：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fruit + crack</span><br></pre></td></tr></table></figure>
-<p>可能会出现：</p>
-<ul>
-<li>backbone 特征学习冲突</li>
-<li>小目标能力下降</li>
-<li>对纹理不敏感</li>
-<li>检测头被干扰</li>
-</ul>
-<p>最后：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">两个都变差</span><br></pre></td></tr></table></figure>
-<hr>
-<h1 id="再比如一个经典冲突"><a class="markdownIt-Anchor" href="#再比如一个经典冲突"></a> 再比如一个经典冲突</h1>
-<h2 id="白天道路检测"><a class="markdownIt-Anchor" href="#白天道路检测"></a> 白天道路检测</h2>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">car</span><br><span class="line">person</span><br><span class="line">traffic light</span><br></pre></td></tr></table></figure>
-<hr>
-<h2 id="红外夜视检测"><a class="markdownIt-Anchor" href="#红外夜视检测"></a> 红外夜视检测</h2>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">human heat source</span><br></pre></td></tr></table></figure>
-<p>图像统计完全不同：</p>
-<table>
-<thead>
-<tr>
-<th>项目</th>
-<th>白天RGB</th>
-<th>红外</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>通道</td>
-<td>RGB</td>
-<td>单通道</td>
-</tr>
-<tr>
-<td>纹理</td>
-<td>丰富</td>
-<td>模糊</td>
-</tr>
-<tr>
-<td>颜色</td>
-<td>彩色</td>
-<td>热度</td>
-</tr>
-<tr>
-<td>边缘</td>
-<td>清晰</td>
-<td>弱</td>
-</tr>
-<tr>
-<td>分布</td>
-<td>自然图像</td>
-<td>热成像</td>
-</tr>
-</tbody>
-</table>
-<p>这就叫：</p>
-<blockquote>
-<p>domain gap（领域分布差异）</p>
-</blockquote>
-<hr>
-<h1 id="为什么会互相干扰"><a class="markdownIt-Anchor" href="#为什么会互相干扰"></a> 为什么会互相干扰</h1>
-<p>因为 CNN / Transformer backbone 容量有限。</p>
-<p>它会尝试学：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">什么特征最重要</span><br></pre></td></tr></table></figure>
-<p>但：</p>
-<p>水果任务需要：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">颜色</span><br><span class="line">形状</span><br><span class="line">轮廓</span><br></pre></td></tr></table></figure>
-<p>裂纹任务需要：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">细纹理</span><br><span class="line">局部高频</span><br></pre></td></tr></table></figure>
-<p>优化方向不同。</p>
-<p>于是：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">梯度冲突</span><br></pre></td></tr></table></figure>
-<p>就出现了。</p>
-<h1 id="工业里怎么判断该不该合并"><a class="markdownIt-Anchor" href="#工业里怎么判断该不该合并"></a> 工业里怎么判断该不该合并</h1>
-<p>通常看：</p>
-<h1 id="1-图像来源是否接近"><a class="markdownIt-Anchor" href="#1-图像来源是否接近"></a> 1. 图像来源是否接近</h1>
-<p>例如：</p>
-<ul>
-<li>同摄像头</li>
-<li>同分辨率</li>
-<li>同场景</li>
-</ul>
-<p>更容易合并。</p>
-<hr>
-<h1 id="2-目标尺度是否接近"><a class="markdownIt-Anchor" href="#2-目标尺度是否接近"></a> 2. 目标尺度是否接近</h1>
-<p>例如：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">人脸 + 全身人</span><br></pre></td></tr></table></figure>
-<p>还行。</p>
-<p>但：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">卫星小车 + 超大建筑</span><br></pre></td></tr></table></figure>
-<p>可能冲突。</p>
-<hr>
-<h1 id="3-特征是否接近"><a class="markdownIt-Anchor" href="#3-特征是否接近"></a> 3. 特征是否接近</h1>
-<p>例如：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">水果 + 蔬菜</span><br></pre></td></tr></table></figure>
-<p>接近。</p>
-<p>但：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">二维码 + 裂纹</span><br></pre></td></tr></table></figure>
-<p>差太远。</p>
-<hr>
-<h1 id="4-一个模型训练后是否明显掉点"><a class="markdownIt-Anchor" href="#4-一个模型训练后是否明显掉点"></a> 4. 一个模型训练后是否明显掉点</h1>
-<p>这是最真实指标。</p>
-<p>很多时候：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">理论能合</span><br></pre></td></tr></table></figure>
-<p>但：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mAP暴跌</span><br></pre></td></tr></table></figure>
-<p>那就该拆。</p>
-</blockquote>
-<hr>
-<h2 id="3-模型太大"><a class="markdownIt-Anchor" href="#3-模型太大"></a> 3. 模型太大</h2>
-<p>例如：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">一个模型500类</span><br></pre></td></tr></table></figure>
-<p>精度下降明显。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2026/05/14/2026%E5%B9%B45%E6%9C%8814%E6%97%A5-ModelExecutoPool/" data-id="cmptvn9ro00059sv45jad3h1r" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl/" rel="tag">dl</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -2627,7 +2694,7 @@ embed就是将文本转换为向量, 使得语义相近的物体在高维空间�
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>183</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>184</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>45</strong><br>标签</div></a>
     </div>

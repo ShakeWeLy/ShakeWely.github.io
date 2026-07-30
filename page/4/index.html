@@ -43,7 +43,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>183</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>184</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>45</strong><br>标签</div></a>
     </div>
@@ -70,6 +70,280 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-2026年5月14日-ModelExecutoPool" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/05/14/2026%E5%B9%B45%E6%9C%8814%E6%97%A5-ModelExecutoPool/" class="article-date">
+  <time class="post-time" datetime="2026-05-14T05:20:04.000Z" itemprop="datePublished">
+    <span class="post-month">5月</span><br/>
+    <span class="post-day">14</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2026/05/14/2026%E5%B9%B45%E6%9C%8814%E6%97%A5-ModelExecutoPool/">2026年5月14日 ModelExecutoPool</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="为什么联合模型很常见"><a class="markdownIt-Anchor" href="#为什么联合模型很常见"></a> 为什么联合模型很常见</h1>
+<p>因为：</p>
+<h2 id="backbone-最贵"><a class="markdownIt-Anchor" href="#backbone-最贵"></a> backbone 最贵</h2>
+<p>YOLO 里真正吃显存的是：</p>
+<ul>
+<li>backbone</li>
+<li>feature maps</li>
+<li>intermediate tensors</li>
+</ul>
+<p>而不是最后几个类别。</p>
+<p>所以：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">4类 vs 40类</span><br></pre></td></tr></table></figure>
+<p>显存可能差距没你想象大。</p>
+<p>但：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">两个完整YOLO</span><br></pre></td></tr></table></figure>
+<p>差距会很大。</p>
+<hr>
+<h1 id="工业里经常这样做"><a class="markdownIt-Anchor" href="#工业里经常这样做"></a> 工业里经常这样做</h1>
+<p>例如：</p>
+<h2 id="安防"><a class="markdownIt-Anchor" href="#安防"></a> 安防</h2>
+<p>一个模型：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">person</span><br><span class="line">helmet</span><br><span class="line">vest</span><br><span class="line">smoke</span><br><span class="line">fire</span><br><span class="line">phone</span><br></pre></td></tr></table></figure>
+<p>不同业务：</p>
+<ul>
+<li>安全帽检测</li>
+<li>抽烟检测</li>
+<li>打电话检测</li>
+</ul>
+<p>只是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">target_classes</span><br></pre></td></tr></table></figure>
+<p>不同。</p>
+<hr>
+<h2 id="零售"><a class="markdownIt-Anchor" href="#零售"></a> 零售</h2>
+<p>统一：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">drink</span><br><span class="line">snack</span><br><span class="line">fruit</span><br><span class="line">vegetable</span><br></pre></td></tr></table></figure>
+<p>而不是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">fruit.pt</span><br><span class="line">drink.pt</span><br><span class="line">vegetable.pt</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="什么时候才拆模型"><a class="markdownIt-Anchor" href="#什么时候才拆模型"></a> 什么时候才拆模型</h1>
+<p>通常是：</p>
+<h2 id="1-任务差异太大"><a class="markdownIt-Anchor" href="#1-任务差异太大"></a> 1. 任务差异太大</h2>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">OCR</span><br><span class="line">人脸</span><br><span class="line">目标检测</span><br><span class="line">分割</span><br></pre></td></tr></table></figure>
+<p>网络结构都不同。</p>
+<hr>
+<h2 id="2-类别冲突严重"><a class="markdownIt-Anchor" href="#2-类别冲突严重"></a> 2. 类别冲突严重</h2>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">工业缺陷A</span><br><span class="line">工业缺陷B</span><br></pre></td></tr></table></figure>
+<p>数据分布差太远。</p>
+<blockquote>
+<h1 id="数据分布差远是什么意思"><a class="markdownIt-Anchor" href="#数据分布差远是什么意思"></a> 数据分布差远是什么意思?</h1>
+<p>“数据分布差太远” 本质是在说：</p>
+<blockquote>
+<p>两类任务看到的“图像规律”差异太大，硬塞进一个模型后，模型会互相干扰。</p>
+</blockquote>
+<p>不是类别名字不同，而是：</p>
+<ul>
+<li>视觉特征</li>
+<li>拍摄方式</li>
+<li>尺度</li>
+<li>背景</li>
+<li>光照</li>
+<li>纹理</li>
+<li>目标大小</li>
+<li>数据量</li>
+<li>标注风格</li>
+</ul>
+<p>这些统计规律差很多。</p>
+<hr>
+<p>比如：</p>
+<h1 id="可以很容易合并的"><a class="markdownIt-Anchor" href="#可以很容易合并的"></a> 可以很容易合并的</h1>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">apple</span><br><span class="line">banana</span><br><span class="line">orange</span><br><span class="line">cabbage</span><br><span class="line">carrot</span><br></pre></td></tr></table></figure>
+<p>虽然：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fruit + vegetable</span><br></pre></td></tr></table></figure>
+<p>不是一个业务。</p>
+<p>但图像分布很接近：</p>
+<ul>
+<li>都是自然物体</li>
+<li>都在桌子/货架</li>
+<li>尺寸接近</li>
+<li>RGB自然场景</li>
+<li>相似拍摄角度</li>
+</ul>
+<p>YOLO backbone 学到的特征能共享。</p>
+<p>所以：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">一个模型</span><br></pre></td></tr></table></figure>
+<p>通常没问题。</p>
+<hr>
+<h1 id="典型数据分布差远"><a class="markdownIt-Anchor" href="#典型数据分布差远"></a> 典型“数据分布差远”</h1>
+<p>例如：</p>
+<h2 id="场景1水果检测"><a class="markdownIt-Anchor" href="#场景1水果检测"></a> 场景1：水果检测</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">苹果</span><br><span class="line">香蕉</span><br><span class="line">橙子</span><br></pre></td></tr></table></figure>
+<p>图片：</p>
+<ul>
+<li>彩色</li>
+<li>自然场景</li>
+<li>圆润纹理</li>
+<li>大目标</li>
+</ul>
+<hr>
+<h2 id="场景2工业裂纹检测"><a class="markdownIt-Anchor" href="#场景2工业裂纹检测"></a> 场景2：工业裂纹检测</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">metal crack</span><br><span class="line">scratch</span><br><span class="line">hole</span><br></pre></td></tr></table></figure>
+<p>图片：</p>
+<ul>
+<li>灰度</li>
+<li>高噪声</li>
+<li>微小目标</li>
+<li>纹理极细</li>
+<li>高分辨率局部</li>
+</ul>
+<hr>
+<p>你如果硬训练：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fruit + crack</span><br></pre></td></tr></table></figure>
+<p>可能会出现：</p>
+<ul>
+<li>backbone 特征学习冲突</li>
+<li>小目标能力下降</li>
+<li>对纹理不敏感</li>
+<li>检测头被干扰</li>
+</ul>
+<p>最后：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">两个都变差</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="再比如一个经典冲突"><a class="markdownIt-Anchor" href="#再比如一个经典冲突"></a> 再比如一个经典冲突</h1>
+<h2 id="白天道路检测"><a class="markdownIt-Anchor" href="#白天道路检测"></a> 白天道路检测</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">car</span><br><span class="line">person</span><br><span class="line">traffic light</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="红外夜视检测"><a class="markdownIt-Anchor" href="#红外夜视检测"></a> 红外夜视检测</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">human heat source</span><br></pre></td></tr></table></figure>
+<p>图像统计完全不同：</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>白天RGB</th>
+<th>红外</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>通道</td>
+<td>RGB</td>
+<td>单通道</td>
+</tr>
+<tr>
+<td>纹理</td>
+<td>丰富</td>
+<td>模糊</td>
+</tr>
+<tr>
+<td>颜色</td>
+<td>彩色</td>
+<td>热度</td>
+</tr>
+<tr>
+<td>边缘</td>
+<td>清晰</td>
+<td>弱</td>
+</tr>
+<tr>
+<td>分布</td>
+<td>自然图像</td>
+<td>热成像</td>
+</tr>
+</tbody>
+</table>
+<p>这就叫：</p>
+<blockquote>
+<p>domain gap（领域分布差异）</p>
+</blockquote>
+<hr>
+<h1 id="为什么会互相干扰"><a class="markdownIt-Anchor" href="#为什么会互相干扰"></a> 为什么会互相干扰</h1>
+<p>因为 CNN / Transformer backbone 容量有限。</p>
+<p>它会尝试学：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">什么特征最重要</span><br></pre></td></tr></table></figure>
+<p>但：</p>
+<p>水果任务需要：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">颜色</span><br><span class="line">形状</span><br><span class="line">轮廓</span><br></pre></td></tr></table></figure>
+<p>裂纹任务需要：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">细纹理</span><br><span class="line">局部高频</span><br></pre></td></tr></table></figure>
+<p>优化方向不同。</p>
+<p>于是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">梯度冲突</span><br></pre></td></tr></table></figure>
+<p>就出现了。</p>
+<h1 id="工业里怎么判断该不该合并"><a class="markdownIt-Anchor" href="#工业里怎么判断该不该合并"></a> 工业里怎么判断该不该合并</h1>
+<p>通常看：</p>
+<h1 id="1-图像来源是否接近"><a class="markdownIt-Anchor" href="#1-图像来源是否接近"></a> 1. 图像来源是否接近</h1>
+<p>例如：</p>
+<ul>
+<li>同摄像头</li>
+<li>同分辨率</li>
+<li>同场景</li>
+</ul>
+<p>更容易合并。</p>
+<hr>
+<h1 id="2-目标尺度是否接近"><a class="markdownIt-Anchor" href="#2-目标尺度是否接近"></a> 2. 目标尺度是否接近</h1>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">人脸 + 全身人</span><br></pre></td></tr></table></figure>
+<p>还行。</p>
+<p>但：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">卫星小车 + 超大建筑</span><br></pre></td></tr></table></figure>
+<p>可能冲突。</p>
+<hr>
+<h1 id="3-特征是否接近"><a class="markdownIt-Anchor" href="#3-特征是否接近"></a> 3. 特征是否接近</h1>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">水果 + 蔬菜</span><br></pre></td></tr></table></figure>
+<p>接近。</p>
+<p>但：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">二维码 + 裂纹</span><br></pre></td></tr></table></figure>
+<p>差太远。</p>
+<hr>
+<h1 id="4-一个模型训练后是否明显掉点"><a class="markdownIt-Anchor" href="#4-一个模型训练后是否明显掉点"></a> 4. 一个模型训练后是否明显掉点</h1>
+<p>这是最真实指标。</p>
+<p>很多时候：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">理论能合</span><br></pre></td></tr></table></figure>
+<p>但：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mAP暴跌</span><br></pre></td></tr></table></figure>
+<p>那就该拆。</p>
+</blockquote>
+<hr>
+<h2 id="3-模型太大"><a class="markdownIt-Anchor" href="#3-模型太大"></a> 3. 模型太大</h2>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">一个模型500类</span><br></pre></td></tr></table></figure>
+<p>精度下降明显。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/05/14/2026%E5%B9%B45%E6%9C%8814%E6%97%A5-ModelExecutoPool/" data-id="cmptvn9ro00059sv45jad3h1r" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl/" rel="tag">dl</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-2026年5月8日-Agent框架-自研" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -3039,80 +3313,6 @@
 
 
   
-    <article id="post-2026年3月6日-agent协议a2a" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2026/03/05/2026%E5%B9%B43%E6%9C%886%E6%97%A5-agent%E5%8D%8F%E8%AE%AEa2a/" class="article-date">
-  <time class="post-time" datetime="2026-03-05T08:57:42.000Z" itemprop="datePublished">
-    <span class="post-month">3月</span><br/>
-    <span class="post-day">05</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2026/03/05/2026%E5%B9%B43%E6%9C%886%E6%97%A5-agent%E5%8D%8F%E8%AE%AEa2a/">2026年3月6日 agent协议a2a</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>agent</p>
-</blockquote>
-<p><img src="/2026/03/05/2026%E5%B9%B43%E6%9C%886%E6%97%A5-agent%E5%8D%8F%E8%AE%AEa2a/image-20260305165857458.png" alt></p>
-<img src="/2026/03/05/2026%E5%B9%B43%E6%9C%886%E6%97%A5-agent%E5%8D%8F%E8%AE%AEa2a/image-20260305171231672.png" alt="image-20260305171231672" style="zoom:67%;">
-<h1 id="a2a"><a class="markdownIt-Anchor" href="#a2a"></a> A2A</h1>
-<h2 id="1-what"><a class="markdownIt-Anchor" href="#1-what"></a> 1 what</h2>
-<h3 id="2-why"><a class="markdownIt-Anchor" href="#2-why"></a> 2 why</h3>
-<h3 id="4-快速入门"><a class="markdownIt-Anchor" href="#4-快速入门"></a> 4 快速入门</h3>
-<h1 id="核心"><a class="markdownIt-Anchor" href="#核心"></a> 核心</h1>
-<p>agent card</p>
-<img src="/2026/03/05/2026%E5%B9%B43%E6%9C%886%E6%97%A5-agent%E5%8D%8F%E8%AE%AEa2a/image-20260305205850905.png" alt="image-20260305205850905" style="zoom:33%;">
-<p>四种不同通讯方式</p>
-<h1 id="example"><a class="markdownIt-Anchor" href="#example"></a> example</h1>
-<h2 id="医疗agent"><a class="markdownIt-Anchor" href="#医疗agent"></a> 医疗agent</h2>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">    %% 用户层</span><br><span class="line">    User[用户/客户端]</span><br><span class="line">    </span><br><span class="line">    %% 主协调器层</span><br><span class="line">    subgraph OrchestratorLayer [主协调器层 - BeeAI Framework]</span><br><span class="line">        Concierge[&quot;&lt;b&gt;Healthcare Concierge Agent&lt;/b&gt;&lt;br/&gt;医疗健康协调Agent&lt;br/&gt;&lt;br/&gt;框架: BeeAI RequirementAgent&lt;br/&gt;模型: Gemini 2.5 Flash&lt;br/&gt;端口: 9996&lt;br/&gt;&lt;br/&gt;功能: 路由和协调其他Agent&lt;br/&gt;工具: HandoffTool&quot;]</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">    %% A2A Agent服务器层</span><br><span class="line">    subgraph A2AAgents [A2A Agent服务器层]</span><br><span class="line">        direction TB</span><br><span class="line">        </span><br><span class="line">        PolicyAgent[&quot;&lt;b&gt;Policy Agent&lt;/b&gt;&lt;br/&gt;保险政策Agent&lt;br/&gt;&lt;br/&gt;框架: A2A SDK&lt;br/&gt;模型: Anthropic Claude Haiku&lt;br/&gt;端口: 9999&lt;br/&gt;&lt;br/&gt;功能: 回答保险覆盖问题&lt;br/&gt;数据源: PDF文档RAG&quot;]</span><br><span class="line">        </span><br><span class="line">        ResearchAgent[&quot;&lt;b&gt;Research Agent&lt;/b&gt;&lt;br/&gt;健康研究Agent&lt;br/&gt;&lt;br/&gt;框架: Google ADK&lt;br/&gt;模型: Gemini 3 Pro Preview&lt;br/&gt;端口: 9998&lt;br/&gt;&lt;br/&gt;功能: 提供健康信息研究&lt;br/&gt;工具: Google Search&quot;]</span><br><span class="line">        </span><br><span class="line">        ProviderAgent[&quot;&lt;b&gt;Provider Agent&lt;/b&gt;&lt;br/&gt;医疗提供者Agent&lt;br/&gt;&lt;br/&gt;框架: LangChain + LangGraph&lt;br/&gt;模型: GPT-OSS-20B&lt;br/&gt;端口: 9997&lt;br/&gt;&lt;br/&gt;功能: 查找医疗提供者&lt;br/&gt;数据源: MCP Server&quot;]</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">    %% 数据源和工具层</span><br><span class="line">    subgraph DataLayer [数据源和工具层]</span><br><span class="line">        direction LR</span><br><span class="line">        </span><br><span class="line">        PDF[&quot;&lt;b&gt;Policy PDF&lt;/b&gt;&lt;br/&gt;2026AnthemgHIPSBC.pdf&lt;br/&gt;&lt;br/&gt;保险政策文档&quot;]</span><br><span class="line">        </span><br><span class="line">        GoogleSearch[&quot;&lt;b&gt;Google Search Tool&lt;/b&gt;&lt;br/&gt;网络搜索工具&lt;br/&gt;&lt;br/&gt;实时健康信息&quot;]</span><br><span class="line">        </span><br><span class="line">        MCPServer[&quot;&lt;b&gt;FastMCP Server&lt;/b&gt;&lt;br/&gt;MCP协议服务器&lt;br/&gt;&lt;br/&gt;数据: doctors.json&lt;br/&gt;协议: stdio&quot;]</span><br><span class="line">    end</span><br><span class="line"></span><br><span class="line">    %% 连接关系</span><br><span class="line">    User --&gt;|&quot;A2A协议&lt;br/&gt;JSON-RPC&quot;| Concierge</span><br><span class="line">    </span><br><span class="line">    Concierge --&gt;|&quot;HandoffTool&lt;br/&gt;A2A协议&quot;| PolicyAgent</span><br><span class="line">    Concierge --&gt;|&quot;HandoffTool&lt;br/&gt;A2A协议&quot;| ResearchAgent</span><br><span class="line">    Concierge --&gt;|&quot;HandoffTool&lt;br/&gt;A2A协议&quot;| ProviderAgent</span><br><span class="line">    </span><br><span class="line">    PolicyAgent --&gt;|&quot;读取&quot;| PDF</span><br><span class="line">    ResearchAgent --&gt;|&quot;调用&quot;| GoogleSearch</span><br><span class="line">    </span><br><span class="line">    ProviderAgent --&gt;|&quot;MCP协议&lt;br/&gt;stdio传输&quot;| MCPServer</span><br><span class="line"></span><br><span class="line">    %% 样式定义</span><br><span class="line">    classDef orchestrator fill:#e1bee7,stroke:#4a148c,stroke-width:3px;</span><br><span class="line">    classDef agent fill:#bbdefb,stroke:#01579b,stroke-width:2px;</span><br><span class="line">    classDef datasource fill:#fff9c4,stroke:#f57f17,stroke-width:2px;</span><br><span class="line">    classDef user fill:#c8e6c9,stroke:#1b5e20,stroke-width:2px;</span><br><span class="line">    </span><br><span class="line">    class Concierge orchestrator;</span><br><span class="line">    class PolicyAgent,ResearchAgent,ProviderAgent agent;</span><br><span class="line">    class PDF,GoogleSearch,MCPServer datasource;</span><br><span class="line">    class User user;</span><br></pre></td></tr></table></figure>
-<p><img src="/2026/03/05/2026%E5%B9%B43%E6%9C%886%E6%97%A5-agent%E5%8D%8F%E8%AE%AEa2a/image-20260305170140704.png" alt></p>
-<h1 id="project"><a class="markdownIt-Anchor" href="#project"></a> project</h1>
-<p>多智能体协调,</p>
-<p>然别帮你干</p>
-<p>创建agent的agent</p>
-<blockquote>
-<p>或许这样就能解决上下文了</p>
-</blockquote>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2026/03/05/2026%E5%B9%B43%E6%9C%886%E6%97%A5-agent%E5%8D%8F%E8%AE%AEa2a/" data-id="cmme79ecr000l8wv48t52822y" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/agent/" rel="tag">agent</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -3157,7 +3357,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>183</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>184</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>45</strong><br>标签</div></a>
     </div>

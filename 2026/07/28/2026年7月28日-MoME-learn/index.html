@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2026年7月28日 MoME learn | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="MoME汇报  nnUnet&#96;汇报  0 研究背景和痛点  *As different types of* *lesions exhibit distinct characteristics on different imaging* *modalities, segmentation methods are typically developed* *in a task-specific ma">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2026年7月28日 MoME learn">
+<meta property="og:url" content="https://shakewely.github.io/2026/07/28/2026%E5%B9%B47%E6%9C%8828%E6%97%A5-MoME-learn/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="MoME汇报  nnUnet&#96;汇报  0 研究背景和痛点  *As different types of* *lesions exhibit distinct characteristics on different imaging* *modalities, segmentation methods are typically developed* *in a task-specific ma">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2026-07-28T14:30:44.000Z">
+<meta property="article:modified_time" content="2026-07-29T07:37:42.869Z">
+<meta property="article:author" content="Weakliy">
+<meta name="twitter:card" content="summary">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>184</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>45</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2026年7月28日-MoME-learn" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/07/28/2026%E5%B9%B47%E6%9C%8828%E6%97%A5-MoME-learn/" class="article-date">
+  <time class="post-time" datetime="2026-07-28T14:30:44.000Z" itemprop="datePublished">
+    <span class="post-month">7月</span><br/>
+    <span class="post-day">28</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2026年7月28日 MoME learn
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="mome汇报"><a class="markdownIt-Anchor" href="#mome汇报"></a> <code>MoME</code>汇报</h1>
+<h1 id="nnunet汇报"><a class="markdownIt-Anchor" href="#nnunet汇报"></a> nnUnet`汇报</h1>
+<h2 id="0-研究背景和痛点"><a class="markdownIt-Anchor" href="#0-研究背景和痛点"></a> 0 研究背景和痛点</h2>
+<blockquote>
+<p><em><strong>*As different types of*</strong></em> <em><strong>*lesions exhibit distinct characteristics on different imaging*</strong></em> <em><strong>*modalities, segmentation methods are typically developed*</strong></em> <em><strong>*in a task-specific manner, where each segmentation model*</strong></em> <em><strong>*is tailored to a specific lesion type and modality.*</strong></em></p>
+<p><em><strong>*use of task-specific models requires predetermination*</strong></em> <em><strong>*of the  lesion type  and  imaging  modality, which  compli*</strong></em><em><strong>*cates their deployment in real-world scenarios.*</strong></em></p>
+<p><em><strong>*a universal foundation model for brain lesion*</strong></em> <em><strong>*segmentation on*</strong></em> *<strong>*<em>magnetic resonance imaging*</em>*</strong> <em><strong>*(MRI),which*</strong></em> <em><strong>*can automatically segment different types of brain lesions*</strong></em> ****given input of various MRI modalities. ****</p>
+<p><em><strong>*a novel*</strong></em> *<strong>*<em>Mixture of Modality Experts*</em>*</strong> <em><strong>*(MoME)framework with multiple*</strong></em> <em><strong>*expert networks attending to different imaging modalities.*</strong></em></p>
+</blockquote>
+<blockquote>
+<p>Since brain lesions tend to manifest with different characteristics due to various patient-dependent pathological alterations, the segmentation of different types of brain lesions requires the use of different <strong>magnetic resonance imaging</strong> (MRI) modalities</p>
+<p>used standalone or as a combination [12],[13],  [14],  which  increases the  complexity  of segmentation model development.</p>
+<p>for  different  types  of  brain lesions,  different task-specific models need to be developed. Fig. 1a) compelled to manually choose</p>
+</blockquote>
+<blockquote>
+<p>1 propose a novel  task-agnostic  universal  foundational  model  (Fig.  1b), which is capable of automatically segmenting various types of brain lesions regardless of the input MRI modality. The model can also be extended to handle heterogeneous inputs with multiple modalities.</p>
+<p>2 Foundation models, due to the complexity of medical<br>
+imaging data and tasks, the segmentation accuracy of such a<br>
+universal model is often limited focusing on narrower scopes are explored, which are designed for  a  particular  modality  or  a  particular  organ/task   most existing foundation  models  may  not  be  directly  applicable  to  brain lesion  segmentation  requires the capability of han dling the diversity of input imaging modalities, which is not<br>
+addressed by many of the existing foundation models.</p>
+</blockquote>
+<blockquote>
+<p>Unlike anatomical structure segmentation, brain lesion segmentation deals with a broader variations of data distributions, in terms of different lesion types, varying spatial locations, scattering of multiple lesions, and irregular shapes [1], [32], which poses substantial challenges for developing segmentation foundation models.</p>
+</blockquote>
+<h2 id="1-核心方法"><a class="markdownIt-Anchor" href="#1-核心方法"></a> 1 核心方法</h2>
+<blockquote>
+<p>1 <em><strong>*A hierarchical gating network is proposed to combine the*</strong></em> <em><strong>*expert predictions and foster expertise collaboration.*</strong></em></p>
+<p>*<strong>\2 <em>to avoid the degeneration of each expert  network,*</em></strong> <em><strong>*we introduce a curriculum learning strategy during training*</strong></em> <em><strong>*to preserve the specialisation of each expert.*</strong></em></p>
+<p>3 <em><strong>*to handle the combination of multiple input modalities,we propose MoME+,which uses a soft dispatch network*</strong></em> <em><strong>*for  input  modality  routing.*</strong></em></p>
+</blockquote>
+<blockquote>
+<p>MoME is developed to be task-agnostic and capable of handling diverse imaging modalities and accommodating various types of brain lesions. Each expert specialises in processing certain image modalities.</p>
+<p>• To explore collaboration among the experts, a hierarchical gating network is designed to combine expert predictions and facilitate collaborative expertise exploration layer by layer. Additionally, to keep the  specialisability of each expert, an anti-degeneration strategy based on curriculum learning is developed.</p>
+<p>• We conducted comprehensive experiments on nine brain imaging  datasets  comprising  a  total  number  of  6,585 annotated 3D images, with five MRI modalities and eight lesion types. The results show that MoME outperforms competing  foundation  models  in  multiple  aspects  and provides improved generalisation onto unseen datasets.</p>
+</blockquote>
+<blockquote>
+<p>The MoME model has been extended to MoME+ to handle combined multiple modalities as input. \</p>
+<p>develop a novel dispatch network with a soft assignment strategy and prior constraints, and employ random dropout of modalities during  training  to  mimic  the  heterogeneous  input.</p>
+<p>include new experimental results for handling missing modalities, investigate strategies of  decoder  sharing  for  multiple  experts  to  improve  model efficiency, as well as extend the illustration and discussion.</p>
+</blockquote>
+<blockquote>
+<p>1 the definition of experts in  the  MoE  model  could  be  carefully  tailored  to  specific tasks and data domains. Brain lesion  segmentation involves multiple imaging modalities. Several studies have shown that utilising the modality information benefits the  segmentation performance  [46],  [47].  There  is  potential  to  leverage  the characteristics of each modality to define the expert for each modality under the MoE framework.</p>
+<p>2   modality  missing  problem,  Consequently, numerous input-specific segmentation models need to be trained, dedicated to each modality combination [14], [53]. Wang et al. proposed non-dedicated training, which results in <strong>N</strong> models and reduces the model complexity [12]. The non-dedicated training approach, while requiring fewer models for training, may compromise performance to some extent compared to dedicated training</p>
+</blockquote>
+<h3 id="11-mome"><a class="markdownIt-Anchor" href="#11-mome"></a> 1.1 MoME</h3>
+<p>是什么? 是模态个数N的N个专家网络</p>
+<p>为什么? 每一个专家被设计为专门处理某一模态的任务</p>
+<p>怎么做? 3D网络, 图片输入给所有专家, 之后会在进行G网络处理(each expert network and the gating network using the nnU-Net architecture)</p>
+<blockquote>
+<p>1 The single input image will go through all expert networks, with their outputs ensembled by the gating network to form the final output.</p>
+</blockquote>
+<h3 id="12-hierarchical-gating-network"><a class="markdownIt-Anchor" href="#12-hierarchical-gating-network"></a> 1.2  <strong>Hierarchical Gating Network</strong></h3>
+<p>是什么? 是对每一个专家的在某一个分辨率下的输出进行加权求和</p>
+<p>为什么? 因为其他模态的对目标模态具有互补(provide  complementary  information  that  both  contribute  to lesion segmentation.)</p>
+<p>怎么做?  加权求和. 推理阶段只输出最高分辨率的(each expert network and the gating network using the nnU-Net architecture)</p>
+<blockquote>
+<p>1 Following the specialisation of  expert  networks,  we  propose  a  gating  network  <strong>G</strong> that facilitates the collaboration and conducts voxel-wise weighted ensemble  among  the  expert  outputs.  Note  that  different imaging modalities can be correlated while providing complementary information.</p>
+</blockquote>
+<h3 id="12-alleviate-expert-degeneration"><a class="markdownIt-Anchor" href="#12-alleviate-expert-degeneration"></a> 1.2  **Alleviate Expert Degeneration</h3>
+<p>是什么? 训练过程中, 专家网络可能出现退化现象, 具体来说就是(where each expert no longer focuses on a specific modality and their activation becomes imbalanced, reducing the capability of the whole model to handle diverse modalities)</p>
+<p>为什么?</p>
+<p>怎么做?    a  curriculum  learning , 训练过程中从整个网络, 逐步走向个体优化.</p>
+<p>具体来说?  a dynamic loss function: <strong>f</strong> epoch  is a dynamic weight that evolves with the  epoch  iteration.  <strong>f</strong> epoch   is  designed  as  <strong>f</strong> epoch    = **(**1 − epochcurrent **/<strong>epoch total</strong>)**2 ,</p>
+<p>resolution level loss: the combination of the soft Dice loss and cross-entropy loss 并对每一个分辨率进行加权(kl)求和</p>
+<p>专家loss: 同样原理, 不是直接e=(专家ouput), 只是变成了o=(e乘上g=(Gating network))</p>
+<h3 id="14-extended-for-multiple"><a class="markdownIt-Anchor" href="#14-extended-for-multiple"></a> 1.4  **Extended for Multiple **</h3>
+<blockquote>
+<p>To  address  the  mismatch  between the  number  of  available  input  images  and  the  number  of expert networks, and to leverage information from available modalities to infer channels for missing modalities, we develop an additional dispatch network <strong>D</strong> , which generates a <strong>N</strong> × <strong>N</strong> dispatch matrix, and then dispatches the input images to the<strong>N</strong> expert networks.</p>
+</blockquote>
+<p>是什么?  解决部分模态丢失</p>
+<p>为什么?  模态信息输入可能少于设定的N</p>
+<p>怎么做? a   <strong>N</strong> × <strong>N</strong>  trainable  network D.  (In this way, the dispatch network <strong>D</strong> learns to leverage the available modalities and perform a weighted combination of them to compensate for the missing modalities [55]. )( utilises three layers of fully connected  layers  to  achieve  its  lightweight  task, the numbers of channels are 4,  8, and  16  sequentially, )</p>
+<p>1.输入全部模态的iamge Xi; 如果丢失则为zero</p>
+<p>2.D为受限制的网络: ( D⋆i,j in the matrix D⋆ denotes the weight of the input image Xj contributing to the output image S i  ): 当有模态输入的时候, 输入自身输入, 没有模态数据的时候, 会进行而外的Dij(learned)处理输出混合数据</p>
+<p>3.loss函数: (Additionally, the modality available information <em><strong>*<em>c*</em>*</strong> is treated as prior information embedded into the bottleneck of the gating network. Specifically, before embedding, we expand <em><strong>*<em>c*</em>*</strong> into a one-hot tensor of shape R</em></em>N<strong>×</strong>d**3, where <strong>d</strong>3  matches the shape of the 3D feature map at the bottleneck layer of the gating network.)</p>
+<p>4.训练策略: 随机丢弃模态.</p>
+<h2 id="2-实验设计与结果"><a class="markdownIt-Anchor" href="#2-实验设计与结果"></a> 2 实验设计与结果</h2>
+<blockquote>
+<p><em><strong>*evaluated  the  proposed*</strong></em> <em><strong>*method on nine brain lesion datasets, encompassing five*</strong></em> <em><strong>*imaging modalities and eight lesion types.The results show*</strong></em> <em><strong>*that our model outperforms state-of-the-art universal mod*</strong></em><em><strong>*els for brain lesion segmentation and achieves promising*</strong></em> <em><strong>*generalisation performance onto unseen datasets.*</strong></em></p>
+</blockquote>
+<blockquote>
+<p>demonstrate promising segmentation performance that is agnostic against modalities  and  modality  combinations.  Since  only  a  single universal model is needed, it eases model management and deployment,  making  it  applicable  to  a  broader  range  of scenarios.</p>
+</blockquote>
+<h3 id="21-dataset-and-task-description"><a class="markdownIt-Anchor" href="#21-dataset-and-task-description"></a> 2.1 <strong>Dataset and Task Description</strong></h3>
+<blockquote>
+<p>We  curated  six publicly  available brain  lesion  segmentation  datasets  (MSSEG  [60],  OASIS  [61],  ISLES2022  [62], BraTS2021   [63],  WMH2017   [33],   and  ATLAS2 .0   [64]) and   three   in-house   datasets   (Tumour1,1    Tumour21 ,   and WMHsMix2 ), amounting to a total number of 6,585 3D images with brain lesion annotations. The dataset detail is reported in Table I. All images  were rigidly registered to the MNI152 template using ANTs [65]. Brain masks were applied to the images for skull removal.</p>
+<p>For assessing the extended multi-input MoME+ model, we used the BraTS2021 dataset, which contains T1w, T1ce,  T2w,  and  FLAIR  modalities,  and  simulated  different scenarios  of  missing  modalities.</p>
+<p>For  heterogeneous  multi-modality  input,  the  competing foundational  models  cannot  be  applied.  We  compared  theMoME+ model with 2<strong>N</strong> − 1 dedicated nnU-Nets, each trained for one combination of modalities.</p>
+</blockquote>
+<h3 id="22-competing-task-specific-and-foundation-models"><a class="markdownIt-Anchor" href="#22-competing-task-specific-and-foundation-models"></a> 2.2  <strong>Competing Task-Specific and Foundation Models</strong></h3>
+<h3 id="23-performance-on-seen-datasets"><a class="markdownIt-Anchor" href="#23-performance-on-seen-datasets"></a> 2.3   <strong>Performance on Seen Datasets</strong></h3>
+<blockquote>
+<p>compares the  average Dice  score  and Hausdorff distance  (HD)  (mm) reports the overall GPU memory usage and GPU hours for training each model.</p>
+<p>report the Dice score with different levels of averaging: across the  14  seen tasks (task-level), across 6 seen datasets (dataset-level), and across 1,230 test images (image-level).</p>
+<p>achieving 2% to4% higher Dice  score than nnU-Net, Multi-Talent, Hermes, and nnU-Net ResEnc <a target="_blank" rel="noopener" href="http://XL.It">XL.It</a> outperforms SAM-Med3D by a large margin of 7% to  15%. T</p>
+<p>The performance of MoME is comparable to task-specific nnU-Nets. However, the latter requires the training of 14 separate models, and its total amount of GPU memory consumption is about three times that of MoME.</p>
+<p>seven out of the eight. the Dice metric is lowest for T1w images, likely<br>
+because detecting lesions is more challenging on T1w, where<br>
+lesions do not manifest as clearly as on FLAIR and T2w.</p>
+<p>It shows that MoME achieves a more<br>
+discriminative clustering for images of different modalities and<br>
+lesion types compared to the single nnU-Net, which may be<br>
+relevant to its improved performance.</p>
+</blockquote>
+<h3 id="24-generalisation-to-unseen-datasets"><a class="markdownIt-Anchor" href="#24-generalisation-to-unseen-datasets"></a> 2.4   <strong>Generalisation to Unseen Datasets</strong></h3>
+<blockquote>
+<p>On  two  unseen  datasets  (Tumour1  and Tumour2), it even exceeds the task-specific nnU-Nets, which can be considered the upper-bound benchmark  as they had access to the training data from the unseen datasets. On the other unseen dataset (WMHsMix), MoME still performs relatively well and achieves an average Dice  score of 0 .7015, where  the  dataset  contains  diverse  WMH  lesions  of  five diseases</p>
+</blockquote>
+<h3 id="25-summary-of-mome-results"><a class="markdownIt-Anchor" href="#25-summary-of-mome-results"></a> 2.5 <strong>Summary of MoME Results</strong></h3>
+<h3 id="26-消融实验"><a class="markdownIt-Anchor" href="#26-消融实验"></a> 2.6 消融实验</h3>
+<blockquote>
+<p>For the modality experts,✘****/*<em><strong>✔ denotes randomly initialised experts versus  specialised experts based on the imaging modality; for the hierarchical gating,  ✘</strong></em>*/*<em><strong>✔ denotes  the  basic  gating  without  hierarchical structure versus our hierarchical gating; and for the curriculum learning, ✘</strong></em>*/****✔ denotes the application of Eq. (4) versus Eq. (2) during model training. When the three contributions are sequentially removed, even though the number of model parameters remains constant in this ablation  study, the  segmentation performance tends to decrease gradually, confirming the  benefits  of  these  contributions.  This  indicates  that  the improvement in MoME is not solely due to the larger model size, but also due to the modality-based expert design and the training  strategy, which better balances expert collaboration and specialisation within the MoME framework.</p>
+</blockquote>
+<blockquote>
+<p>We investigated the issue of expert degeneration by comparing the expert output, weighted by gating, without and with the proposed curriculum learning strategy.</p>
+<p>without an anti-degeneration strategy, T2w and FLAIR experts lose their acquired modality knowledge,with the anti-degeneration  strategy, expert degeneration is effectively avoided.</p>
+<p>each expert is activated according to its specialised modality or related modalities</p>
+<p>some modality experts exhibit a strong relationship and can be activated in tandem, such  as  T1w  and  T1ce,</p>
+</blockquote>
+<h2 id="3-讨论与启发"><a class="markdownIt-Anchor" href="#3-讨论与启发"></a> 3 讨论与启发</h2>
+<blockquote></blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/07/28/2026%E5%B9%B47%E6%9C%8828%E6%97%A5-MoME-learn/" data-id="cms7o1cc40001ccv4fv2015ue" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2026/07/27/2026%E5%B9%B47%E6%9C%8827%E6%97%A5-%E4%B8%AA%E4%BA%BA%E6%80%9D%E8%80%83/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2026年7月27日 个人思考</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>184</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>45</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2025 - 2026 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

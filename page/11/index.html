@@ -43,7 +43,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>183</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>184</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>45</strong><br>标签</div></a>
     </div>
@@ -70,6 +70,124 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-2025年5月13日-TensorRT3infer" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/05/13/2025%E5%B9%B45%E6%9C%8813%E6%97%A5-TensorRT3infer/" class="article-date">
+  <time class="post-time" datetime="2025-05-13T09:08:00.000Z" itemprop="datePublished">
+    <span class="post-month">5月</span><br/>
+    <span class="post-day">13</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/05/13/2025%E5%B9%B45%E6%9C%8813%E6%97%A5-TensorRT3infer/">2025年5月13日 TensorRT3infer</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="tensorrt-进行推理的流程"><a class="markdownIt-Anchor" href="#tensorrt-进行推理的流程"></a> TensorRT 进行推理的流程</h2>
+<blockquote>
+<h2 id="一般使用-tensorrt-进行推理的流程7-步"><a class="markdownIt-Anchor" href="#一般使用-tensorrt-进行推理的流程7-步"></a> ✅ 一般使用 TensorRT 进行推理的流程（7 步）</h2>
+<h3 id="1-准备模型通常为-onnx-格式"><a class="markdownIt-Anchor" href="#1-准备模型通常为-onnx-格式"></a> 🔹 1. <strong>准备模型（通常为 ONNX 格式）</strong></h3>
+<ul>
+<li>训练好的模型需导出为 <code>ONNX</code> 格式。</li>
+<li>常见工具：
+<ul>
+<li>PyTorch: <code>torch.onnx.export()</code></li>
+<li>TensorFlow → ONNX: 使用 <code>tf2onnx</code> 或 <code>onnx-tf</code></li>
+<li>HuggingFace 模型: 直接支持 ONNX 导出</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="2-构建-tensorrt-引擎engine-文件"><a class="markdownIt-Anchor" href="#2-构建-tensorrt-引擎engine-文件"></a> 🔹 2. <strong>构建 TensorRT 引擎（<code>.engine</code> 文件）</strong></h3>
+<p>你可以使用：</p>
+<ul>
+<li>
+<p><strong>trtexec 命令行工具（推荐）</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">bash</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">trtexec --onnx=model.onnx --saveEngine=model.engine --fp16</span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p><strong>TensorRT Python API（更灵活）</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑builder = trt.Builder(logger)</span><br><span class="line">network = builder.create_network(...)</span><br><span class="line">parser = trt.OnnxParser(network, logger)</span><br><span class="line">parser.parse_from_file(&quot;model.onnx&quot;)</span><br><span class="line">engine = builder.build_cuda_engine(network)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<blockquote>
+<p>注意：此步骤可选，如果你已经有 <code>.engine</code> 文件，就无需重复构建。</p>
+</blockquote>
+<hr>
+<h3 id="3-加载引擎文件并反序列化为可执行模型"><a class="markdownIt-Anchor" href="#3-加载引擎文件并反序列化为可执行模型"></a> 🔹 3. <strong>加载引擎文件并反序列化为可执行模型</strong></h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cpp复制编辑std::ifstream engineFile(&quot;model.engine&quot;, std::ios::binary);</span><br><span class="line">IRuntime* runtime = createInferRuntime(logger);</span><br><span class="line">ICudaEngine* engine = runtime-&gt;deserializeCudaEngine(data, size, nullptr);</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="4-创建执行上下文iexecutioncontext"><a class="markdownIt-Anchor" href="#4-创建执行上下文iexecutioncontext"></a> 🔹 4. <strong>创建执行上下文（IExecutionContext）</strong></h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cpp</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">IExecutionContext* context = engine-&gt;createExecutionContext();</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="5-准备输入数据并分配-gpu-内存"><a class="markdownIt-Anchor" href="#5-准备输入数据并分配-gpu-内存"></a> 🔹 5. <strong>准备输入数据并分配 GPU 内存</strong></h3>
+<ul>
+<li>你需要知道输入 tensor 的 shape（通常是 <code>[1, 3, H, W]</code>）</li>
+<li>分配输入/输出的 GPU 内存（<code>cudaMalloc</code>）</li>
+<li>把输入数据拷贝到 GPU（<code>cudaMemcpy</code>）</li>
+</ul>
+<hr>
+<h3 id="6-执行推理inference"><a class="markdownIt-Anchor" href="#6-执行推理inference"></a> 🔹 6. <strong>执行推理（Inference）</strong></h3>
+<ul>
+<li>使用 <code>enqueueV2</code>（异步）或 <code>executeV2</code>（同步）进行推理：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cpp</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">context-&gt;enqueueV2(buffers, stream, nullptr);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>注意：<code>buffers</code> 是输入/输出 tensor 指针数组。</li>
+</ul>
+<hr>
+<h3 id="7-获取并处理输出结果"><a class="markdownIt-Anchor" href="#7-获取并处理输出结果"></a> 🔹 7. <strong>获取并处理输出结果</strong></h3>
+<ul>
+<li>将输出结果从 GPU 拷贝到 Host：</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cpp</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">cudaMemcpy(output_host, output_device, size, cudaMemcpyDeviceToHost);</span><br></pre></td></tr></table></figure>
+<ul>
+<li>通常后处理包括：
+<ul>
+<li>分类任务：取最大值 <code>argmax</code></li>
+<li>检测任务：解析 bbox、类别置信度、NMS 等</li>
+<li>分割任务：取最大通道作为 mask</li>
+</ul>
+</li>
+</ul>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/05/13/2025%E5%B9%B45%E6%9C%8813%E6%97%A5-TensorRT3infer/" data-id="cmanj8o27000slcv4fgyigr7f" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/TensorRT/" rel="tag">TensorRT</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-2025年5月9日-anchor" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -2720,135 +2838,6 @@ docker-compose up -d</p>
 
 
   
-    <article id="post-2025年4月16日-TensorRT2export汇总" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/03/16/2025%E5%B9%B44%E6%9C%8816%E6%97%A5-TensorRT2export%E6%B1%87%E6%80%BB/" class="article-date">
-  <time class="post-time" datetime="2025-03-16T09:30:04.000Z" itemprop="datePublished">
-    <span class="post-month">3月</span><br/>
-    <span class="post-day">16</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/03/16/2025%E5%B9%B44%E6%9C%8816%E6%97%A5-TensorRT2export%E6%B1%87%E6%80%BB/">2023年11月16日 TensorRT推理汇总</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>去</p>
-<h3 id><a class="markdownIt-Anchor" href="#"></a> </h3>
-<h1 id="流程"><a class="markdownIt-Anchor" href="#流程"></a> 流程</h1>
-<p><strong>“ONNX → TensorRT Engine → 加载引擎文件并反序列化为可执行模型 → 分配输入输出 → 推理执行 → 拷出结果 → 后处理”</strong></p>
-<blockquote>
-<ol>
-<li>？反序列化为可执行模型</li>
-<li>？？ 创建执行上下文（IExecutionContext）</li>
-</ol>
-</blockquote>
-<h2 id="1-exe-导出"><a class="markdownIt-Anchor" href="#1-exe-导出"></a> 1 Exe 导出</h2>
-<p><strong>加上 <code>--verbose</code></strong> 运行 <code>trtexec</code></p>
-<p>模型汇总</p>
-<table>
-<thead>
-<tr>
-<th>格式</th>
-<th>文件扩展名</th>
-<th>内容</th>
-<th>用途</th>
-<th>生成方式</th>
-<th>可直接推理？</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>WTS</td>
-<td><code>.wts</code></td>
-<td>网络结构各层的权重（文本或二进制）</td>
-<td>通常用于从 PyTorch 到 TensorRT 的自定义转换流程，如通过 C++ 的 API 加载</td>
-<td>通常通过 PyTorch 脚本导出</td>
-<td>❌</td>
-</tr>
-<tr>
-<td>TRT Engine</td>
-<td><code>.trt</code> / <code>.engine</code></td>
-<td>已优化的推理引擎（含网络结构 + 权重 + TensorRT 优化）</td>
-<td>TensorRT 的最终部署格式</td>
-<td>使用 <code>trtexec</code> 或 TensorRT API 编译 <code>.onnx</code> 或 <code>.wts</code> 模型生成</td>
-<td>✅</td>
-</tr>
-</tbody>
-</table>
-<h1 id="问题汇总"><a class="markdownIt-Anchor" href="#问题汇总"></a> 问题汇总</h1>
-<h3 id="️-自定义层问题"><a class="markdownIt-Anchor" href="#️-自定义层问题"></a> ⚠️ 自定义层问题</h3>
-<h4 id="1-eyelike动态形状"><a class="markdownIt-Anchor" href="#1-eyelike动态形状"></a> 1 EyeLike动态形状</h4>
-<p><code>EyeLike</code> 是 ONNX 中一个用于生成单位矩阵的操作。该错误说明：</p>
-<ul>
-<li>你模型中的某个节点使用了 <code>EyeLike</code> 操作；</li>
-<li>但这个操作的输入张量是动态维度（即维度在推理时不固定）；</li>
-<li>而 TensorRT <strong>不支持对动态维度使用 EyeLike</strong>。</li>
-</ul>
-<p><strong>EyeLike 操作</strong>：这是一个自定义层或特殊层，在某些情况下，TensorRT 不支持动态形状。</p>
-<p><strong>动态形状问题</strong>：TensorRT 不支持动态形状的输入（<code>EyeLike</code> 操作的输入是动态形状），这导致了错误。</p>
-<blockquote>
-<p>使用batch 大小不需要变化的minShapes时没用的！</p>
-</blockquote>
-<h3 id="️-动态输入尺寸问题"><a class="markdownIt-Anchor" href="#️-动态输入尺寸问题"></a> ⚠️ 动态输入尺寸问题：</h3>
-<h4 id="1-onnx参数dynamictrue"><a class="markdownIt-Anchor" href="#1-onnx参数dynamictrue"></a> 1 ONNX参数dynamic=True</h4>
-<p>你导出的 ONNX 模型使用了 <strong>动态输入尺寸</strong>（<code>dynamic=True</code>），导致 <code>trtexec</code> 在构建 TensorRT 引擎时需要你<strong>明确地指定输入尺寸 profile</strong>，否则就会报错。</p>
-<p>解决：</p>
-<blockquote>
-<p>trtexec <br>
-–onnx=best_dynamic.onnx <br>
-–saveEngine=best.engine <br>
-–fp16 <br>
-–minShapes=images:1x3x640x640 <br>
-–optShapes=images:8x3x640x640 <br>
-–maxShapes=images:16x3x640x640</p>
-</blockquote>
-<h3 id="️-量化问题"><a class="markdownIt-Anchor" href="#️-量化问题"></a> ⚠️  量化问题</h3>
-<h4 id="1-int64数据"><a class="markdownIt-Anchor" href="#1-int64数据"></a> 1 INT64数据</h4>
-<p>你的 ONNX 模型中包含了一些 <strong><code>INT64</code> 类型的权重或常量</strong>，而 TensorRT <strong>原生只支持 <code>INT32</code> 及以下的整数类型</strong>，因此它尝试<strong>自动将 <code>INT64</code> 转换为 <code>INT32</code></strong>。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">onnx2trt_utils.cpp:374: Your ONNX model has been generated with INT64 weights, while TensorRT does not natively support INT64. Attempting to cast down to INT32.</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="️错误"><a class="markdownIt-Anchor" href="#️错误"></a> ⚠️错误</h3>
-<p>[05/13/2025-15:25:59] [TRT] [E] 1: [defaultAllocator.cpp::nvinfer1::internal::DefaultAllocator::deallocate::61] Error Code 1: Cuda Runtime (invalid argument)</p>
-<h1 id="success"><a class="markdownIt-Anchor" href="#success"></a> success！</h1>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">trtexec --onnx=F:\Pydata\DL_NEW\fuxian\ultralytics\runs\detect\wire-Ghost-C3ghost-GSCSP-CBAM3\weights\best_simplify_dynamic=False.onnx --saveEngine=best_int8.trt --int8 --verbose  --minShapes=images:1x3x640x640 --optShapes=images:8x3x640x640 --maxShapes=images:16x3x640x640trtexec ^</span><br><span class="line">--onnx=F:\Pydata\DL_NEW\fuxian\ultralytics\runs\detect\wire-Ghost-C3ghost-GSCSP-CBAM3\weights\best_simplify_dynamic.onnx ^</span><br><span class="line">--saveEngine=best_int8.trt ^</span><br><span class="line">--int8 ^</span><br><span class="line">--verbose ^</span><br><span class="line">--minShapes=images:1x3x640x640 ^</span><br><span class="line">--optShapes=images:8x3x640x640 ^</span><br><span class="line">--maxShapes=images:16x3x640x640</span><br></pre></td></tr></table></figure>
-<p><img src="/2025/03/16/2025%E5%B9%B44%E6%9C%8816%E6%97%A5-TensorRT2export%E6%B1%87%E6%80%BB/C:%5CUsers%5Cadmin%5CAppData%5CRoaming%5CTypora%5Ctypora-user-images%5Cimage-20250513135551397.png" alt="image-20250513135551397"></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/03/16/2025%E5%B9%B44%E6%9C%8816%E6%97%A5-TensorRT2export%E6%B1%87%E6%80%BB/" data-id="cmanj8o27000plcv44xiw84f2" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/TensorRT/" rel="tag">TensorRT</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -2893,7 +2882,7 @@ docker-compose up -d</p>
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>183</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>184</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>45</strong><br>标签</div></a>
     </div>

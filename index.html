@@ -43,7 +43,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>183</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>184</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>45</strong><br>标签</div></a>
     </div>
@@ -70,6 +70,224 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-2026年7月28日-MoME-learn" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/07/28/2026%E5%B9%B47%E6%9C%8828%E6%97%A5-MoME-learn/" class="article-date">
+  <time class="post-time" datetime="2026-07-28T14:30:44.000Z" itemprop="datePublished">
+    <span class="post-month">7月</span><br/>
+    <span class="post-day">28</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2026/07/28/2026%E5%B9%B47%E6%9C%8828%E6%97%A5-MoME-learn/">2026年7月28日 MoME learn</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="mome汇报"><a class="markdownIt-Anchor" href="#mome汇报"></a> <code>MoME</code>汇报</h1>
+<h1 id="nnunet汇报"><a class="markdownIt-Anchor" href="#nnunet汇报"></a> nnUnet`汇报</h1>
+<h2 id="0-研究背景和痛点"><a class="markdownIt-Anchor" href="#0-研究背景和痛点"></a> 0 研究背景和痛点</h2>
+<blockquote>
+<p><em><strong>*As different types of*</strong></em> <em><strong>*lesions exhibit distinct characteristics on different imaging*</strong></em> <em><strong>*modalities, segmentation methods are typically developed*</strong></em> <em><strong>*in a task-specific manner, where each segmentation model*</strong></em> <em><strong>*is tailored to a specific lesion type and modality.*</strong></em></p>
+<p><em><strong>*use of task-specific models requires predetermination*</strong></em> <em><strong>*of the  lesion type  and  imaging  modality, which  compli*</strong></em><em><strong>*cates their deployment in real-world scenarios.*</strong></em></p>
+<p><em><strong>*a universal foundation model for brain lesion*</strong></em> <em><strong>*segmentation on*</strong></em> *<strong>*<em>magnetic resonance imaging*</em>*</strong> <em><strong>*(MRI),which*</strong></em> <em><strong>*can automatically segment different types of brain lesions*</strong></em> ****given input of various MRI modalities. ****</p>
+<p><em><strong>*a novel*</strong></em> *<strong>*<em>Mixture of Modality Experts*</em>*</strong> <em><strong>*(MoME)framework with multiple*</strong></em> <em><strong>*expert networks attending to different imaging modalities.*</strong></em></p>
+</blockquote>
+<blockquote>
+<p>Since brain lesions tend to manifest with different characteristics due to various patient-dependent pathological alterations, the segmentation of different types of brain lesions requires the use of different <strong>magnetic resonance imaging</strong> (MRI) modalities</p>
+<p>used standalone or as a combination [12],[13],  [14],  which  increases the  complexity  of segmentation model development.</p>
+<p>for  different  types  of  brain lesions,  different task-specific models need to be developed. Fig. 1a) compelled to manually choose</p>
+</blockquote>
+<blockquote>
+<p>1 propose a novel  task-agnostic  universal  foundational  model  (Fig.  1b), which is capable of automatically segmenting various types of brain lesions regardless of the input MRI modality. The model can also be extended to handle heterogeneous inputs with multiple modalities.</p>
+<p>2 Foundation models, due to the complexity of medical<br>
+imaging data and tasks, the segmentation accuracy of such a<br>
+universal model is often limited focusing on narrower scopes are explored, which are designed for  a  particular  modality  or  a  particular  organ/task   most existing foundation  models  may  not  be  directly  applicable  to  brain lesion  segmentation  requires the capability of han dling the diversity of input imaging modalities, which is not<br>
+addressed by many of the existing foundation models.</p>
+</blockquote>
+<blockquote>
+<p>Unlike anatomical structure segmentation, brain lesion segmentation deals with a broader variations of data distributions, in terms of different lesion types, varying spatial locations, scattering of multiple lesions, and irregular shapes [1], [32], which poses substantial challenges for developing segmentation foundation models.</p>
+</blockquote>
+<h2 id="1-核心方法"><a class="markdownIt-Anchor" href="#1-核心方法"></a> 1 核心方法</h2>
+<blockquote>
+<p>1 <em><strong>*A hierarchical gating network is proposed to combine the*</strong></em> <em><strong>*expert predictions and foster expertise collaboration.*</strong></em></p>
+<p>*<strong>\2 <em>to avoid the degeneration of each expert  network,*</em></strong> <em><strong>*we introduce a curriculum learning strategy during training*</strong></em> <em><strong>*to preserve the specialisation of each expert.*</strong></em></p>
+<p>3 <em><strong>*to handle the combination of multiple input modalities,we propose MoME+,which uses a soft dispatch network*</strong></em> <em><strong>*for  input  modality  routing.*</strong></em></p>
+</blockquote>
+<blockquote>
+<p>MoME is developed to be task-agnostic and capable of handling diverse imaging modalities and accommodating various types of brain lesions. Each expert specialises in processing certain image modalities.</p>
+<p>• To explore collaboration among the experts, a hierarchical gating network is designed to combine expert predictions and facilitate collaborative expertise exploration layer by layer. Additionally, to keep the  specialisability of each expert, an anti-degeneration strategy based on curriculum learning is developed.</p>
+<p>• We conducted comprehensive experiments on nine brain imaging  datasets  comprising  a  total  number  of  6,585 annotated 3D images, with five MRI modalities and eight lesion types. The results show that MoME outperforms competing  foundation  models  in  multiple  aspects  and provides improved generalisation onto unseen datasets.</p>
+</blockquote>
+<blockquote>
+<p>The MoME model has been extended to MoME+ to handle combined multiple modalities as input. \</p>
+<p>develop a novel dispatch network with a soft assignment strategy and prior constraints, and employ random dropout of modalities during  training  to  mimic  the  heterogeneous  input.</p>
+<p>include new experimental results for handling missing modalities, investigate strategies of  decoder  sharing  for  multiple  experts  to  improve  model efficiency, as well as extend the illustration and discussion.</p>
+</blockquote>
+<blockquote>
+<p>1 the definition of experts in  the  MoE  model  could  be  carefully  tailored  to  specific tasks and data domains. Brain lesion  segmentation involves multiple imaging modalities. Several studies have shown that utilising the modality information benefits the  segmentation performance  [46],  [47].  There  is  potential  to  leverage  the characteristics of each modality to define the expert for each modality under the MoE framework.</p>
+<p>2   modality  missing  problem,  Consequently, numerous input-specific segmentation models need to be trained, dedicated to each modality combination [14], [53]. Wang et al. proposed non-dedicated training, which results in <strong>N</strong> models and reduces the model complexity [12]. The non-dedicated training approach, while requiring fewer models for training, may compromise performance to some extent compared to dedicated training</p>
+</blockquote>
+<h3 id="11-mome"><a class="markdownIt-Anchor" href="#11-mome"></a> 1.1 MoME</h3>
+<p>是什么? 是模态个数N的N个专家网络</p>
+<p>为什么? 每一个专家被设计为专门处理某一模态的任务</p>
+<p>怎么做? 3D网络, 图片输入给所有专家, 之后会在进行G网络处理(each expert network and the gating network using the nnU-Net architecture)</p>
+<blockquote>
+<p>1 The single input image will go through all expert networks, with their outputs ensembled by the gating network to form the final output.</p>
+</blockquote>
+<h3 id="12-hierarchical-gating-network"><a class="markdownIt-Anchor" href="#12-hierarchical-gating-network"></a> 1.2  <strong>Hierarchical Gating Network</strong></h3>
+<p>是什么? 是对每一个专家的在某一个分辨率下的输出进行加权求和</p>
+<p>为什么? 因为其他模态的对目标模态具有互补(provide  complementary  information  that  both  contribute  to lesion segmentation.)</p>
+<p>怎么做?  加权求和. 推理阶段只输出最高分辨率的(each expert network and the gating network using the nnU-Net architecture)</p>
+<blockquote>
+<p>1 Following the specialisation of  expert  networks,  we  propose  a  gating  network  <strong>G</strong> that facilitates the collaboration and conducts voxel-wise weighted ensemble  among  the  expert  outputs.  Note  that  different imaging modalities can be correlated while providing complementary information.</p>
+</blockquote>
+<h3 id="12-alleviate-expert-degeneration"><a class="markdownIt-Anchor" href="#12-alleviate-expert-degeneration"></a> 1.2  **Alleviate Expert Degeneration</h3>
+<p>是什么? 训练过程中, 专家网络可能出现退化现象, 具体来说就是(where each expert no longer focuses on a specific modality and their activation becomes imbalanced, reducing the capability of the whole model to handle diverse modalities)</p>
+<p>为什么?</p>
+<p>怎么做?    a  curriculum  learning , 训练过程中从整个网络, 逐步走向个体优化.</p>
+<p>具体来说?  a dynamic loss function: <strong>f</strong> epoch  is a dynamic weight that evolves with the  epoch  iteration.  <strong>f</strong> epoch   is  designed  as  <strong>f</strong> epoch    = **(**1 − epochcurrent **/<strong>epoch total</strong>)**2 ,</p>
+<p>resolution level loss: the combination of the soft Dice loss and cross-entropy loss 并对每一个分辨率进行加权(kl)求和</p>
+<p>专家loss: 同样原理, 不是直接e=(专家ouput), 只是变成了o=(e乘上g=(Gating network))</p>
+<h3 id="14-extended-for-multiple"><a class="markdownIt-Anchor" href="#14-extended-for-multiple"></a> 1.4  **Extended for Multiple **</h3>
+<blockquote>
+<p>To  address  the  mismatch  between the  number  of  available  input  images  and  the  number  of expert networks, and to leverage information from available modalities to infer channels for missing modalities, we develop an additional dispatch network <strong>D</strong> , which generates a <strong>N</strong> × <strong>N</strong> dispatch matrix, and then dispatches the input images to the<strong>N</strong> expert networks.</p>
+</blockquote>
+<p>是什么?  解决部分模态丢失</p>
+<p>为什么?  模态信息输入可能少于设定的N</p>
+<p>怎么做? a   <strong>N</strong> × <strong>N</strong>  trainable  network D.  (In this way, the dispatch network <strong>D</strong> learns to leverage the available modalities and perform a weighted combination of them to compensate for the missing modalities [55]. )( utilises three layers of fully connected  layers  to  achieve  its  lightweight  task, the numbers of channels are 4,  8, and  16  sequentially, )</p>
+<p>1.输入全部模态的iamge Xi; 如果丢失则为zero</p>
+<p>2.D为受限制的网络: ( D⋆i,j in the matrix D⋆ denotes the weight of the input image Xj contributing to the output image S i  ): 当有模态输入的时候, 输入自身输入, 没有模态数据的时候, 会进行而外的Dij(learned)处理输出混合数据</p>
+<p>3.loss函数: (Additionally, the modality available information <em><strong>*<em>c*</em>*</strong> is treated as prior information embedded into the bottleneck of the gating network. Specifically, before embedding, we expand <em><strong>*<em>c*</em>*</strong> into a one-hot tensor of shape R</em></em>N<strong>×</strong>d**3, where <strong>d</strong>3  matches the shape of the 3D feature map at the bottleneck layer of the gating network.)</p>
+<p>4.训练策略: 随机丢弃模态.</p>
+<h2 id="2-实验设计与结果"><a class="markdownIt-Anchor" href="#2-实验设计与结果"></a> 2 实验设计与结果</h2>
+<blockquote>
+<p><em><strong>*evaluated  the  proposed*</strong></em> <em><strong>*method on nine brain lesion datasets, encompassing five*</strong></em> <em><strong>*imaging modalities and eight lesion types.The results show*</strong></em> <em><strong>*that our model outperforms state-of-the-art universal mod*</strong></em><em><strong>*els for brain lesion segmentation and achieves promising*</strong></em> <em><strong>*generalisation performance onto unseen datasets.*</strong></em></p>
+</blockquote>
+<blockquote>
+<p>demonstrate promising segmentation performance that is agnostic against modalities  and  modality  combinations.  Since  only  a  single universal model is needed, it eases model management and deployment,  making  it  applicable  to  a  broader  range  of scenarios.</p>
+</blockquote>
+<h3 id="21-dataset-and-task-description"><a class="markdownIt-Anchor" href="#21-dataset-and-task-description"></a> 2.1 <strong>Dataset and Task Description</strong></h3>
+<blockquote>
+<p>We  curated  six publicly  available brain  lesion  segmentation  datasets  (MSSEG  [60],  OASIS  [61],  ISLES2022  [62], BraTS2021   [63],  WMH2017   [33],   and  ATLAS2 .0   [64]) and   three   in-house   datasets   (Tumour1,1    Tumour21 ,   and WMHsMix2 ), amounting to a total number of 6,585 3D images with brain lesion annotations. The dataset detail is reported in Table I. All images  were rigidly registered to the MNI152 template using ANTs [65]. Brain masks were applied to the images for skull removal.</p>
+<p>For assessing the extended multi-input MoME+ model, we used the BraTS2021 dataset, which contains T1w, T1ce,  T2w,  and  FLAIR  modalities,  and  simulated  different scenarios  of  missing  modalities.</p>
+<p>For  heterogeneous  multi-modality  input,  the  competing foundational  models  cannot  be  applied.  We  compared  theMoME+ model with 2<strong>N</strong> − 1 dedicated nnU-Nets, each trained for one combination of modalities.</p>
+</blockquote>
+<h3 id="22-competing-task-specific-and-foundation-models"><a class="markdownIt-Anchor" href="#22-competing-task-specific-and-foundation-models"></a> 2.2  <strong>Competing Task-Specific and Foundation Models</strong></h3>
+<h3 id="23-performance-on-seen-datasets"><a class="markdownIt-Anchor" href="#23-performance-on-seen-datasets"></a> 2.3   <strong>Performance on Seen Datasets</strong></h3>
+<blockquote>
+<p>compares the  average Dice  score  and Hausdorff distance  (HD)  (mm) reports the overall GPU memory usage and GPU hours for training each model.</p>
+<p>report the Dice score with different levels of averaging: across the  14  seen tasks (task-level), across 6 seen datasets (dataset-level), and across 1,230 test images (image-level).</p>
+<p>achieving 2% to4% higher Dice  score than nnU-Net, Multi-Talent, Hermes, and nnU-Net ResEnc <a target="_blank" rel="noopener" href="http://XL.It">XL.It</a> outperforms SAM-Med3D by a large margin of 7% to  15%. T</p>
+<p>The performance of MoME is comparable to task-specific nnU-Nets. However, the latter requires the training of 14 separate models, and its total amount of GPU memory consumption is about three times that of MoME.</p>
+<p>seven out of the eight. the Dice metric is lowest for T1w images, likely<br>
+because detecting lesions is more challenging on T1w, where<br>
+lesions do not manifest as clearly as on FLAIR and T2w.</p>
+<p>It shows that MoME achieves a more<br>
+discriminative clustering for images of different modalities and<br>
+lesion types compared to the single nnU-Net, which may be<br>
+relevant to its improved performance.</p>
+</blockquote>
+<h3 id="24-generalisation-to-unseen-datasets"><a class="markdownIt-Anchor" href="#24-generalisation-to-unseen-datasets"></a> 2.4   <strong>Generalisation to Unseen Datasets</strong></h3>
+<blockquote>
+<p>On  two  unseen  datasets  (Tumour1  and Tumour2), it even exceeds the task-specific nnU-Nets, which can be considered the upper-bound benchmark  as they had access to the training data from the unseen datasets. On the other unseen dataset (WMHsMix), MoME still performs relatively well and achieves an average Dice  score of 0 .7015, where  the  dataset  contains  diverse  WMH  lesions  of  five diseases</p>
+</blockquote>
+<h3 id="25-summary-of-mome-results"><a class="markdownIt-Anchor" href="#25-summary-of-mome-results"></a> 2.5 <strong>Summary of MoME Results</strong></h3>
+<h3 id="26-消融实验"><a class="markdownIt-Anchor" href="#26-消融实验"></a> 2.6 消融实验</h3>
+<blockquote>
+<p>For the modality experts,✘****/*<em><strong>✔ denotes randomly initialised experts versus  specialised experts based on the imaging modality; for the hierarchical gating,  ✘</strong></em>*/*<em><strong>✔ denotes  the  basic  gating  without  hierarchical structure versus our hierarchical gating; and for the curriculum learning, ✘</strong></em>*/****✔ denotes the application of Eq. (4) versus Eq. (2) during model training. When the three contributions are sequentially removed, even though the number of model parameters remains constant in this ablation  study, the  segmentation performance tends to decrease gradually, confirming the  benefits  of  these  contributions.  This  indicates  that  the improvement in MoME is not solely due to the larger model size, but also due to the modality-based expert design and the training  strategy, which better balances expert collaboration and specialisation within the MoME framework.</p>
+</blockquote>
+<blockquote>
+<p>We investigated the issue of expert degeneration by comparing the expert output, weighted by gating, without and with the proposed curriculum learning strategy.</p>
+<p>without an anti-degeneration strategy, T2w and FLAIR experts lose their acquired modality knowledge,with the anti-degeneration  strategy, expert degeneration is effectively avoided.</p>
+<p>each expert is activated according to its specialised modality or related modalities</p>
+<p>some modality experts exhibit a strong relationship and can be activated in tandem, such  as  T1w  and  T1ce,</p>
+</blockquote>
+<h2 id="3-讨论与启发"><a class="markdownIt-Anchor" href="#3-讨论与启发"></a> 3 讨论与启发</h2>
+<blockquote></blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/07/28/2026%E5%B9%B47%E6%9C%8828%E6%97%A5-MoME-learn/" data-id="cms7o1cc40001ccv4fv2015ue" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2026年7月27日-个人思考" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/07/27/2026%E5%B9%B47%E6%9C%8827%E6%97%A5-%E4%B8%AA%E4%BA%BA%E6%80%9D%E8%80%83/" class="article-date">
+  <time class="post-time" datetime="2026-07-27T15:13:36.000Z" itemprop="datePublished">
+    <span class="post-month">7月</span><br/>
+    <span class="post-day">27</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2026/07/27/2026%E5%B9%B47%E6%9C%8827%E6%97%A5-%E4%B8%AA%E4%BA%BA%E6%80%9D%E8%80%83/">2026年7月27日 个人思考</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>wok, 身边同龄人都在学习, 都在赚钱, 都在上进, 但是我却依旧还在自我内耗, 自我消费(无聊时打游戏, 没事干刷抖音, 悠闲时还看浏览器);</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/07/27/2026%E5%B9%B47%E6%9C%8827%E6%97%A5-%E4%B8%AA%E4%BA%BA%E6%80%9D%E8%80%83/" data-id="cms7o1cbp0000ccv4he4o7xvr" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-2026年7月20日-MRI论文复现" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -1093,333 +1311,6 @@
 
 
   
-    <article id="post-2026年7月12日-mri报告" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-mri%E6%8A%A5%E5%91%8A/" class="article-date">
-  <time class="post-time" datetime="2026-07-12T12:39:48.000Z" itemprop="datePublished">
-    <span class="post-month">7月</span><br/>
-    <span class="post-day">12</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-mri%E6%8A%A5%E5%91%8A/">2026年7月12日 mri报告</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="afni"><a class="markdownIt-Anchor" href="#afni"></a> AFNI</h1>
-<h2 id="1-介绍"><a class="markdownIt-Anchor" href="#1-介绍"></a> 1 介绍</h2>
-<h2 id="2-作用"><a class="markdownIt-Anchor" href="#2-作用"></a> 2 作用</h2>
-<h2 id="3-操作"><a class="markdownIt-Anchor" href="#3-操作"></a> 3 操作</h2>
-<h3 id="31-安装afni"><a class="markdownIt-Anchor" href="#31-安装afni"></a> 3.1 安装afni</h3>
-<blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">afni -ver</span><br><span class="line">3dcalc -<span class="built_in">help</span></span><br><span class="line">afni </span><br></pre></td></tr></table></figure>
-</blockquote>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-mri%E6%8A%A5%E5%91%8A/image-20260712204033515.png" alt="image-20260712204033515"></p>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-mri%E6%8A%A5%E5%91%8A/image-20260712204153717.png" alt="image-20260712204153717"></p>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-mri%E6%8A%A5%E5%91%8A/image-20260712204229210.png" alt="image-20260712204229210"></p>
-<h3 id="32-原始图像的3d重构"><a class="markdownIt-Anchor" href="#32-原始图像的3d重构"></a> 3.2 <strong>原始图像的3D重构</strong></h3>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-mri%E6%8A%A5%E5%91%8A/image-20260712204817168.png" alt="image-20260712204817168"></p>
-<blockquote>
-<h1 id="day-1-总结afni-入门"><a class="markdownIt-Anchor" href="#day-1-总结afni-入门"></a> Day 1 总结：AFNI 入门</h1>
-<h2 id="目标"><a class="markdownIt-Anchor" href="#目标"></a> 目标</h2>
-<p>在 Windows 上通过 Docker 搭建 AFNI 环境，完成从合成数据到真实 fMRI 数据的第一个处理流程。</p>
-<hr>
-<h2 id="一-环境搭建"><a class="markdownIt-Anchor" href="#一-环境搭建"></a> 一、环境搭建</h2>
-<table>
-<thead>
-<tr>
-<th>项目</th>
-<th>内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>运行方式</td>
-<td>Docker 容器 <code>afni/afni_make_build</code>（AFNI 26.1.04）</td>
-</tr>
-<tr>
-<td>工作目录</td>
-<td><code>F:\MRI_learn</code> → 容器内 <code>/opt/workspace</code></td>
-</tr>
-<tr>
-<td>启动脚本</td>
-<td><code>run-afni.sh</code>（CLI）、<code>run-afni-gui.sh</code>（GUI）、<code>run-afni.bat</code></td>
-</tr>
-<tr>
-<td>示例数据</td>
-<td><code>AFNI_data6.gz</code>（933 MB）→ 解压为 <code>AFNI_data6/</code></td>
-</tr>
-</tbody>
-</table>
-<p><strong>容器内代理（Windows 7890 端口）：</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">curl -x http://host.docker.internal:7890 ...</span><br><span class="line">curl --socks5-hostname host.docker.internal:7890 ...</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p>容器内不能用 <code>127.0.0.1:7890</code>，那是容器自身。</p>
-</blockquote>
-<hr>
-<h2 id="二-示例-1合成数据first_afni_examplesh"><a class="markdownIt-Anchor" href="#二-示例-1合成数据first_afni_examplesh"></a> 二、示例 1：合成数据（<code>first_afni_example.sh</code>）</h2>
-<p><strong>目的：</strong> 理解 <code>3dcalc</code> 体素运算，不依赖真实扫描数据。</p>
-<p><strong>流程：</strong></p>
-<ol>
-<li>用坐标表达式生成两个球形 ROI（左 / 右）</li>
-<li><code>3dcalc -expr 'a+2*b'</code> 合并</li>
-<li><code>3dinfo</code> 查看数据集属性</li>
-<li><code>3dBrickStat</code> 统计非零体素</li>
-</ol>
-<p><strong>输出：</strong> <code>day1/output/</code></p>
-<ul>
-<li><code>ball_left+orig</code>、<code>ball_right+orig</code>、<code>combined+orig</code></li>
-</ul>
-<p><strong>核心概念：</strong></p>
-<ul>
-<li>AFNI 数据格式：<code>.HEAD</code>（元数据）+ <code>.BRIK</code>（体素数据）</li>
-<li><code>jRandomDataset:64,64,32,1</code> 可快速生成指定尺寸的空白体积</li>
-<li><code>step()</code> 函数用于构造球形 / 掩膜</li>
-</ul>
-<hr>
-<h2 id="三-示例-2真实-fmri-数据second_afni_examplesh"><a class="markdownIt-Anchor" href="#三-示例-2真实-fmri-数据second_afni_examplesh"></a> 三、示例 2：真实 fMRI 数据（<code>second_afni_example.sh</code>）</h2>
-<p><strong>数据来源：</strong> <code>AFNI_data6/roi_demo/</code>（官方 ROI 教程）</p>
-<p><strong>流程：</strong></p>
-<table>
-<thead>
-<tr>
-<th>步骤</th>
-<th>命令</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td><code>3dinfo</code></td>
-<td>查看 T1 解剖（256³）与功能数据（80×80×33）</td>
-</tr>
-<tr>
-<td>2</td>
-<td><code>3dresample</code></td>
-<td>解剖 ROI → EPI 空间对齐</td>
-</tr>
-<tr>
-<td>3</td>
-<td><code>3dmaskave</code></td>
-<td>提取 ROI 内 450 TR 的 BOLD 时间序列</td>
-</tr>
-<tr>
-<td>4</td>
-<td><code>3dcalc</code></td>
-<td><code>step(a)*b</code>：掩膜 × 功能统计图</td>
-</tr>
-<tr>
-<td>5</td>
-<td><code>3dROIstats</code></td>
-<td>多个 ROI 的 F 统计均值</td>
-</tr>
-</tbody>
-</table>
-<p><strong>输出：</strong> <code>day1/output_real/</code></p>
-<ul>
-<li><code>anat_roi_resam+orig</code> — 重采样 ROI 掩膜</li>
-<li><code>epi_avg.1D</code> — ROI 内 BOLD 时间序列</li>
-<li><code>func_in_roi+orig</code> — ROI 内功能激活图</li>
-</ul>
-<hr>
-<h2 id="四-day-1-学到的-afni-命令"><a class="markdownIt-Anchor" href="#四-day-1-学到的-afni-命令"></a> 四、Day 1 学到的 AFNI 命令</h2>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">afni -ver          # 查看版本</span><br><span class="line">3dcalc             # 体素级计算器（最常用）</span><br><span class="line">3dinfo             # 数据集信息</span><br><span class="line">3dresample         # 重采样 / 空间对齐</span><br><span class="line">3dmaskave          # 掩膜内时间序列均值</span><br><span class="line">3dROIstats         # 多 ROI 统计</span><br><span class="line">3dBrickStat        # 体素统计</span><br><span class="line">1dplot             # 绘制 1D 时间序列</span><br><span class="line">afni               # GUI 查看数据</span><br></pre></td></tr></table></figure>
-<hr>
-<h2 id="五-目录结构"><a class="markdownIt-Anchor" href="#五-目录结构"></a> 五、目录结构</h2>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">MRI_learn/</span><br><span class="line">├── run-afni.sh / run-afni-gui.sh / run-afni.bat   # 启动容器</span><br><span class="line">├── AFNI_data6/                                     # 官方教程数据</span><br><span class="line">│   ├── roi_demo/                                   # Day1 使用</span><br><span class="line">│   ├── FT_analysis/                                # 完整预处理（Day2?）</span><br><span class="line">│   └── ...</span><br><span class="line">└── day1/</span><br><span class="line">    ├── first_afni_example.sh                       # 示例 1 脚本</span><br><span class="line">    ├── second_afni_example.sh                      # 示例 2 脚本</span><br><span class="line">    ├── output/                                     # 合成数据结果</span><br><span class="line">    └── output_real/                                # 真实数据结果</span><br></pre></td></tr></table></figure>
-<hr>
-<h2 id="六-关键收获"><a class="markdownIt-Anchor" href="#六-关键收获"></a> 六、关键收获</h2>
-<ol>
-<li><strong>AFNI 是命令行工具链</strong>，<code>3dcalc</code> 类似「体素计算器」，可写数学表达式处理 3D 数据。</li>
-<li><strong>空间对齐很重要</strong>：解剖 ROI 需 <code>3dresample</code> 到 EPI 空间才能用于功能分析。</li>
-<li><strong>数据格式</strong>：<code>+orig</code> 为 AFNI 原生格式；<code>.BRIK.gz</code> 为压缩体素，AFNI 可直接读取。</li>
-<li><strong>GUI 查看</strong>：<code>afni anat+orig func+orig &amp;</code> 可同时加载解剖 underlay 与功能 overlay。</li>
-</ol>
-<hr>
-<h2 id="七-day-2-可继续方向"><a class="markdownIt-Anchor" href="#七-day-2-可继续方向"></a> 七、Day 2 可继续方向</h2>
-<ul>
-<li><code>AFNI_data6/FT_analysis/</code> — 被试 FT 完整预处理（对齐、去卷积、统计）</li>
-<li><code>3dDeconvolve</code> — fMRI 一般线性模型（GLM）</li>
-<li><code>whereami</code> — 基于图谱的 ROI 提取</li>
-<li>组水平分析：<code>AFNI_data6/group_results/</code></li>
-</ul>
-</blockquote>
-<h3 id="33-自动化预处理脚本"><a class="markdownIt-Anchor" href="#33-自动化预处理脚本"></a> 3.3 <strong>自动化预处理脚本</strong></h3>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tcat (去前2TR) → outcount (异常检测) → tshift (层间校正)</span><br><span class="line">→ volreg (头动校正) → blur (平滑) → mask → scale</span><br><span class="line">→ 3dDeconvolve (GLM) → 3dClustSim → QC 报告</span><br></pre></td></tr></table></figure>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-mri%E6%8A%A5%E5%91%8A/image-20260712205453869.png" alt="image-20260712205453869"></p>
-<h3 id="34-时间序列"><a class="markdownIt-Anchor" href="#34-时间序列"></a> 3.4 时间序列</h3>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-mri%E6%8A%A5%E5%91%8A/image-20260712210219120.png" alt="image-20260712210219120"></p>
-<blockquote>
-<h2 id="状态总结"><a class="markdownIt-Anchor" href="#状态总结"></a> 状态总结</h2>
-<table>
-<thead>
-<tr>
-<th>天数</th>
-<th>状态</th>
-<th>说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><strong>Day1</strong></td>
-<td>✅ 已完成</td>
-<td><code>day1/output/</code> 和 <code>day1/output_real/</code> 有输出</td>
-</tr>
-<tr>
-<td><strong>Day2</strong></td>
-<td>⚠️ 脚本已写好，<strong>未运行</strong></td>
-<td>无 <code>day2/output/</code> 目录</td>
-</tr>
-<tr>
-<td><strong>Day3</strong></td>
-<td>✅ 刚创建并验证通过</td>
-<td>专注 Slice Timing 时间校正</td>
-</tr>
-</tbody>
-</table>
-<h3 id="day2-与时间校正的关系"><a class="markdownIt-Anchor" href="#day2-与时间校正的关系"></a> Day2 与时间校正的关系</h3>
-<p>Day2 <strong>流水线里已包含</strong> <code>tshift</code>（见 <code>proc.FT.day2</code> 第 115–120 行），流程是：</p>
-<p><code>tcat → **tshift** → volreg → blur → mask → scale → GLM</code></p>
-<p>但 Day2 侧重完整预处理 + GLM，<strong>没有单独讲解</strong>时间校正原理。Day3 就是补这一块。</p>
-<hr>
-<h2 id="day3-已创建内容"><a class="markdownIt-Anchor" href="#day3-已创建内容"></a> Day3 已创建内容</h2>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">day3/</span><br><span class="line">├── README.txt</span><br><span class="line">├── 01_explore_slice_timing.sh   # 查看层间采集时间偏移</span><br><span class="line">├── 02_tcat_prepare.sh           # 去掉前 2 TR</span><br><span class="line">├── 03_run_tshift.sh             # 3dTshift 时间校正</span><br><span class="line">├── 04_compare_before_after.sh   # 校正前后对比</span><br><span class="line">└── run_day3.sh                  # 一键运行</span><br></pre></td></tr></table></figure>
-<p><strong>已验证结果</strong>（Docker 内跑通）：</p>
-<ul>
-<li>校正前：33 层 offset 各不相同（alt+z 交错采集，如 <code>0.000 1.030 0.061 ...</code>）</li>
-<li>校正后：无 time-offset 行 → 各层对齐到 TR 起点</li>
-<li>输出在 <code>day3/output/FT.day3.results/</code></li>
-</ul>
-<hr>
-<h2 id="运行方式"><a class="markdownIt-Anchor" href="#运行方式"></a> 运行方式</h2>
-<p>你终端里正在启动 GUI 容器，进入后执行：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /opt/workspace</span><br><span class="line">bash day3/run_day3.sh</span><br></pre></td></tr></table></figure>
-<p>GUI 对比校正效果（推荐）：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> day3/output/FT.day3.results</span><br><span class="line">afni pb00.FT.day3.r01.tcat+orig pb01.FT.day3.r01.tshift+orig &amp;</span><br></pre></td></tr></table></figure>
-<ul>
-<li>控制器 <strong>[A]</strong>：校正前（tcat）</li>
-<li>控制器 <strong>[B]</strong>：校正后（tshift）</li>
-<li><code>jump-to-xyz: 19.3 78 -5.7</code>，切换 slice 4，看 Graph 底部 <code>at</code> 时间从 <code>0.121</code> 变为 <code>0</code></li>
-</ul>
-<hr>
-<p>如果要继续 Day2 完整预处理 + GLM，在容器内运行 <code>bash day2/run_day2.sh</code>（约 15–30 分钟）。需要的话我可以帮你跑 Day2。</p>
-</blockquote>
-<h3 id="35-头动校正"><a class="markdownIt-Anchor" href="#35-头动校正"></a> 3.5 头动校正</h3>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-mri%E6%8A%A5%E5%91%8A/image-20260712210714513.png" alt="image-20260712210714513"></p>
-<h3 id="36-空间标准化"><a class="markdownIt-Anchor" href="#36-空间标准化"></a> 3.6 <strong>空间标准化</strong></h3>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-mri%E6%8A%A5%E5%91%8A/image-20260712211643098.png" alt="image-20260712211643098"></p>
-<h3 id="37-平滑去噪"><a class="markdownIt-Anchor" href="#37-平滑去噪"></a> 3.7  <strong>平滑去噪</strong></h3>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-mri%E6%8A%A5%E5%91%8A/image-20260712212425321.png" alt="image-20260712212425321"></p>
-<h3 id="38-个体建模求解"><a class="markdownIt-Anchor" href="#38-个体建模求解"></a> 3.8  <strong>个体建模求解</strong></h3>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-mri%E6%8A%A5%E5%91%8A/image-20260712213026708.png" alt="image-20260712213026708"></p>
-<h3 id="39-群体统计推断"><a class="markdownIt-Anchor" href="#39-群体统计推断"></a> 3.9 <strong>群体统计推断</strong></h3>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-mri%E6%8A%A5%E5%91%8A/image-20260712213815039.png" alt="image-20260712213815039"></p>
-<h1 id="mrtrix3"><a class="markdownIt-Anchor" href="#mrtrix3"></a> MRtrix3</h1>
-<hr>
-<h2 id="1-介绍-2"><a class="markdownIt-Anchor" href="#1-介绍-2"></a> 1 介绍</h2>
-<p>专注于<strong>弥散磁共振成像（dMRI）</strong> 数据的分析与可视化。</p>
-<p>覆盖的核心工具链包括：</p>
-<ul>
-<li><strong>预处理</strong>：去噪、头动校正、涡流校正、偏置场校正</li>
-<li><strong>建模</strong>：弥散张量（DTI）和约束球面反卷积（CSD）</li>
-<li><strong>追踪</strong>：概率性纤维追踪</li>
-<li><strong>高级分析</strong>：大脑结构连接组构建</li>
-</ul>
-<h2 id="2-作用-2"><a class="markdownIt-Anchor" href="#2-作用-2"></a> 2 作用</h2>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">层面</th>
-<th style="text-align:left">具体作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left"><strong>科研产出</strong></td>
-<td style="text-align:left">帮助研究者完成<strong>白质纤维束重建</strong>，进而计算各向异性分数（FA）、平均弥散率（MD）等定量指标，或构建<strong>结构连接矩阵</strong>用于脑网络（图论）分析，服务于论文发表。</td>
-</tr>
-<tr>
-<td style="text-align:left"><strong>方法优势</strong></td>
-<td style="text-align:left">MRtrix3 的核心算法 <strong>CSD（约束球面反卷积）</strong> 能够解决传统DTI无法处理的<strong>纤维交叉</strong>问题（大脑中约90%的白质体素存在交叉纤维），使纤维追踪结果更接近真实解剖结构。</td>
-</tr>
-<tr>
-<td style="text-align:left"><strong>临床/认知应用</strong></td>
-<td style="text-align:left">通过连接组分析，可探索大脑结构连通性与<strong>认知功能、疾病（如阿尔茨海默病、精神分裂症、脑外伤）</strong> 之间的关联，为生物标志物的发现提供依据。</td>
-</tr>
-</tbody>
-</table>
-<hr>
-<p>简而言之：<strong>这套教程教你怎么把弥散数据变成可视化的神经纤维通路和脑区连接图，从而回答“大脑哪些区域之间通过白质相连”这类结构性问题。</strong></p>
-<p>需要我把这7集的操作流程整理成一张完整的分析管道图吗？</p>
-<h2 id="3-操作-2"><a class="markdownIt-Anchor" href="#3-操作-2"></a> 3 操作</h2>
-<h2 id="31-安装"><a class="markdownIt-Anchor" href="#31-安装"></a> 3.1 安装</h2>
-<h2 id="32-查看数据"><a class="markdownIt-Anchor" href="#32-查看数据"></a> 3.2 查看数据</h2>
-<blockquote>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash MRtrix3_learn/day1/mrview.sh</span><br></pre></td></tr></table></figure>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-mri%E6%8A%A5%E5%91%8A/image-20260712223235737.png" alt><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-mri%E6%8A%A5%E5%91%8A/qc_t1_from_dicom.png" alt="qc_t1_from_dicom"></p>
-</blockquote>
-<h2 id="33-dwi的预处理"><a class="markdownIt-Anchor" href="#33-dwi的预处理"></a> 3.3  DWI的预处理</h2>
-<blockquote>
-<p>涵盖<strong>去噪</strong>（<code>dwidenoise</code>）、<strong>Gibbs伪影去除</strong>、<strong>涡流校正和头动校正</strong>（<code>dwifslpreproc</code> 调用FSL）。<strong>B0场不均匀性校正（偏置场校正）</strong> 和<strong>大脑提取（剥颅骨）</strong>，为建模做最终准备。</p>
-</blockquote>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-mri%E6%8A%A5%E5%91%8A/qc_dwi_before_after.png" alt="qc_dwi_before_after"></p>
-<h2 id="34-弥散张量和csd"><a class="markdownIt-Anchor" href="#34-弥散张量和csd"></a> 3.4 弥散张量和CSD</h2>
-<blockquote>
-<p>两种核心模型：<strong>弥散张量成像（DTI）</strong> 和<strong>约束球面反卷积（CSD）</strong>。CSD能解决纤维交叉问题，是MRtrix3的核心优势。</p>
-</blockquote>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-mri%E6%8A%A5%E5%91%8A/qc_dti_csd.png" alt="qc_dti_csd"></p>
-<h2 id="35-纤维束追踪"><a class="markdownIt-Anchor" href="#35-纤维束追踪"></a> 3.5  纤维束追踪</h2>
-<blockquote>
-<p>纤维追踪算法（使用 <code>tckgen</code> 进行<strong>概率性追踪</strong>），生成上百万条模拟白质纤维轨迹，并介绍如何过滤和修剪纤维（<code>tcksift</code>）。</p>
-</blockquote>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-mri%E6%8A%A5%E5%91%8A/image-20260715142658936.png" alt="image-20260715142658936"></p>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-mri%E6%8A%A5%E5%91%8A/image-20260715143122056.png" alt="image-20260715143122056"></p>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-mri%E6%8A%A5%E5%91%8A/qc_tdi_before_after.png" alt="qc_tdi_before_after"></p>
-<h2 id="36-大脑连接组"><a class="markdownIt-Anchor" href="#36-大脑连接组"></a> 3.6  大脑连接组</h2>
-<blockquote>
-<p>将追踪出的纤维束与脑区图谱（节点）结合，构建<strong>结构性连接矩阵（Connectome）</strong>，用于分析大脑网络属性（使用 <code>tck2connectome</code>）。</p>
-</blockquote>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-mri%E6%8A%A5%E5%91%8A/qc_connectome.png" alt="qc_connectome"></p>
-<h1 id="uunet"><a class="markdownIt-Anchor" href="#uunet"></a> UUNet</h1>
-<h2 id="可视化"><a class="markdownIt-Anchor" href="#可视化"></a> 可视化</h2>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-mri%E6%8A%A5%E5%91%8A/image-20260726142707360.png" alt="image-20260726142707360"></p>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-mri%E6%8A%A5%E5%91%8A/image-20260726142320099.png" alt="image-20260726142320099"></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-mri%E6%8A%A5%E5%91%8A/" data-id="cms1vppgd0008lkv4bekz9xqz" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
     <article id="post-2026年7月12日-MRI软件学习" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/" class="article-date">
@@ -2120,58 +2011,6 @@ FreeSurfer        AFNI/FSL      MRtrix3/FSL
 
 
   
-    <article id="post-2026年7月4日-MRI-afni" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2026/07/04/2026%E5%B9%B47%E6%9C%884%E6%97%A5-MRI-afni/" class="article-date">
-  <time class="post-time" datetime="2026-07-04T01:18:50.000Z" itemprop="datePublished">
-    <span class="post-month">7月</span><br/>
-    <span class="post-day">04</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2026/07/04/2026%E5%B9%B47%E6%9C%884%E6%97%A5-MRI-afni/">2026年7月4日 MRI_afni</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><img src="/2026/07/04/2026%E5%B9%B47%E6%9C%884%E6%97%A5-MRI-afni/image-20260704104816518.png" alt="image-20260704104816518"></p>
-<p><img src="/2026/07/04/2026%E5%B9%B47%E6%9C%884%E6%97%A5-MRI-afni/image-20260704103348715.png" alt="image-20260704103348715"></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2026/07/04/2026%E5%B9%B47%E6%9C%884%E6%97%A5-MRI-afni/" data-id="cms1vppgg000elkv4d7cf0p4e" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MRI/" rel="tag">MRI</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -2216,7 +2055,7 @@ FreeSurfer        AFNI/FSL      MRtrix3/FSL
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>183</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>184</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>45</strong><br>标签</div></a>
     </div>
