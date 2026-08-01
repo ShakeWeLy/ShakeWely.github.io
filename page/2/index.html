@@ -43,7 +43,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>184</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>185</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>45</strong><br>标签</div></a>
     </div>
@@ -70,6 +70,536 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-2026年7月4日-MRI-基础" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/07/04/2026%E5%B9%B47%E6%9C%884%E6%97%A5-MRI-%E5%9F%BA%E7%A1%80/" class="article-date">
+  <time class="post-time" datetime="2026-07-04T02:49:54.000Z" itemprop="datePublished">
+    <span class="post-month">7月</span><br/>
+    <span class="post-day">04</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2026/07/04/2026%E5%B9%B47%E6%9C%884%E6%97%A5-MRI-%E5%9F%BA%E7%A1%80/">2026年7月4日 MRI-基础</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="mri磁共振成像"><a class="markdownIt-Anchor" href="#mri磁共振成像"></a> <strong>MRI（磁共振成像）</strong></h1>
+<p><strong>核心成像原理</strong></p>
+<ul>
+<li>磁场对齐：人体内富含氢原子，在强磁场（如 1.5T/3.0T）中顺着磁场方向排列。</li>
+<li>射频脉冲激发：发射特定频率无线电波，氢原子吸收能量发生共振。</li>
+<li>信号释放（弛豫）：切断脉冲后氢原子恢复初始状态，释放电磁信号。</li>
+<li>图像重建：计算机收集信号并重建出图像。</li>
+</ul>
+<h3 id="2-常见mri"><a class="markdownIt-Anchor" href="#2-常见mri"></a> 2. 常见MRI</h3>
+<pre><code>                MRI
+                 │
+  ┌──────────────┼──────────────┐
+  │              │              │
+  T1/T2 MRI      fMRI          Diffusion MRI
+ (结构MRI)      (功能MRI)        (扩散MRI)
+      │              │              │
+      │              │              │
+FreeSurfer        AFNI/FSL      MRtrix3/FSL
+</code></pre>
+<h4 id="1结构成像structural-mri"><a class="markdownIt-Anchor" href="#1结构成像structural-mri"></a> （1）结构成像（Structural MRI）</h4>
+<p>主要观察脑组织的解剖结构。</p>
+<ul>
+<li>
+<p><strong>T1 加权像（T1WI）</strong>\</p>
+<p>看的是&quot;<strong>静止水分子的磁化恢复过程</strong>&quot;。</p>
+<ul>
+<li>解剖结构最清晰</li>
+<li>灰质、白质对比明显</li>
+<li>常用于脑萎缩、皮层厚度、体积测量（如 ADNI 最常见）</li>
+<li><strong>T1 + Gadolinium:</strong> 注射钆造影剂（Gadolinium）后的 T1,注射造影剂后<strong>活跃肿瘤变亮</strong></li>
+</ul>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>组织</th>
+<th>恢复速度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>脂肪</td>
+<td>快</td>
+</tr>
+<tr>
+<td>白质</td>
+<td>较快</td>
+</tr>
+<tr>
+<td>灰质</td>
+<td>较慢</td>
+</tr>
+<tr>
+<td>脑脊液(CSF)</td>
+<td>非常慢</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+</li>
+<li>
+<p><strong>T2 加权像（T2WI）</strong></p>
+<p><strong>T2 测的是氢核横向失相。</strong></p>
+<ul>
+<li>水信号亮</li>
+<li>易观察水肿、炎症、囊肿等病变</li>
+</ul>
+</li>
+<li>
+<p><strong>FLAIR（Fluid Attenuated Inversion Recovery）</strong></p>
+<ul>
+<li>在 <strong>T2 基础上抑制脑脊液（CSF）信号</strong></li>
+<li>更容易发现脑室周围白质病变、脑梗死、脱髓鞘病灶等</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h4 id="2功能生理成像functional-physiological-mri"><a class="markdownIt-Anchor" href="#2功能生理成像functional-physiological-mri"></a> （2）功能/生理成像（Functional &amp; Physiological MRI）</h4>
+<p>主要观察脑组织的功能活动或微观特性。</p>
+<h5 id="1-dwidiffusion-weighted-imaging弥散加权成像"><a class="markdownIt-Anchor" href="#1-dwidiffusion-weighted-imaging弥散加权成像"></a> ① DWI（Diffusion Weighted Imaging，弥散加权成像）</h5>
+<p>研究<strong>水分子的扩散速度</strong>。</p>
+<p>特点：</p>
+<ul>
+<li>通常使用 <strong>3 个扩散梯度方向</strong></li>
+<li>计算 <strong>ADC（Apparent Diffusion Coefficient）</strong></li>
+<li>常用于急性脑梗死、肿瘤等疾病诊断</li>
+</ul>
+<blockquote>
+<p><strong>关注的是：水分子扩散有多快？</strong></p>
+</blockquote>
+<p>↓</p>
+<h5 id="2-dtidiffusion-tensor-imaging弥散张量成像"><a class="markdownIt-Anchor" href="#2-dtidiffusion-tensor-imaging弥散张量成像"></a> ② DTI（Diffusion Tensor Imaging，弥散张量成像）</h5>
+<p>研究<strong>水分子扩散方向</strong>。</p>
+<p>特点：</p>
+<ul>
+<li>至少 <strong>6 个扩散方向</strong>（实际研究一般 30～64 个以上）</li>
+<li>建立水分子扩散的三维张量（Tensor）</li>
+<li>可计算：
+<ul>
+<li><strong>FA（Fractional Anisotropy）</strong>：各向异性程度</li>
+<li><strong>MD（Mean Diffusivity）</strong>：平均扩散率</li>
+</ul>
+</li>
+<li>能进行：
+<ul>
+<li>白质纤维束追踪（Fiber Tractography）</li>
+<li>神经连接分析（Structural Connectivity）</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><strong>关注的是：水分子主要朝哪个方向扩散？</strong></p>
+</blockquote>
+<p>因此：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">MRI</span><br><span class="line"> └── Diffusion MRI（扩散MRI）</span><br><span class="line">      ├── DWI（扩散速度）</span><br><span class="line">      └── DTI（扩散方向 + 白质纤维）</span><br></pre></td></tr></table></figure>
+<hr>
+<h5 id="3-fmrifunctional-mri功能磁共振"><a class="markdownIt-Anchor" href="#3-fmrifunctional-mri功能磁共振"></a> ③ fMRI（Functional MRI，功能磁共振）</h5>
+<p>通过<strong>血氧变化（BOLD）<strong>研究</strong>脑区是否正在工作</strong>。</p>
+<p>原理：</p>
+<ul>
+<li>基于 <strong>BOLD（Blood Oxygen Level Dependent）</strong> 信号</li>
+<li>神经元活动增强 → 局部血流增加 → 血氧变化 → MRI 检测到信号变化</li>
+</ul>
+<p>主要应用：</p>
+<ul>
+<li>脑功能定位</li>
+<li>静息态功能连接（rs-fMRI）</li>
+<li>脑网络分析</li>
+</ul>
+<blockquote>
+<p><strong>关注的是：哪些脑区正在活动？</strong></p>
+</blockquote>
+<hr>
+<blockquote>
+<ul>
+<li>
+<p><strong>T1/T2（结构像）</strong>：利用氢质子的**纵向弛豫（T1）<strong>或</strong>横向弛豫（T2）**时间差异成像。它们看的是组织的“化学成分”和“水分多少”。</p>
+</li>
+<li>
+<p><strong>DWI/DTI（弥散像）</strong>：利用氢质子的**微观随机运动（布朗运动）**来成像。它们看的是水分子的“位移范围”。</p>
+</li>
+</ul>
+<p>为了让你一目了然，我们先给这四者做一个<strong>终极定位</strong>，再详细拆解：</p>
+<ul>
+<li><strong>MRI（常规磁共振）</strong>：看<strong>解剖结构</strong>（大脑长什么样，有没有长肿瘤）。</li>
+<li><strong>fMRI（任务态功能磁共振）</strong>：看<strong>大脑功能动态</strong>（你动手指或看东西时，哪些脑区被“点亮”）。</li>
+<li><strong>静息态fMRI（rs-fMRI）</strong>：看<strong>大脑功能网络</strong>（你躺着发呆时，哪些脑区之间在“打电话”）</li>
+</ul>
+</blockquote>
+<h4 id="3-常规-mri-与-fmri-的本质区别结构-vs-功能"><a class="markdownIt-Anchor" href="#3-常规-mri-与-fmri-的本质区别结构-vs-功能"></a> 3. 常规 MRI 与 fMRI 的本质区别（结构 vs 功能）</h4>
+<ul>
+<li><strong>常规 MRI（如T1/T2加权像）</strong>：拍的是**“照片”<strong>。它利用氢质子在磁场中的弛豫时间不同，区分脑灰质、白质、脑脊液和肿瘤。它回答的问题是：</strong>“这里有什么？”**（解剖位置、大小、形态）。</li>
+<li><strong>fMRI（功能性MRI）</strong>：拍的是**“电影”<strong>（动态变化）。它不直接看脑组织本身，而是看</strong>血氧水平依赖（BOLD）信号**。原理是：脑区被激活时，局部耗氧增加，血流会过度补偿，导致脱氧血红蛋白减少，磁化率改变，信号增强。它回答的问题是：<strong>“这个脑区在工作吗？”</strong></li>
+</ul>
+<h4 id="4-任务态-fmri-与-静息态-fmri-的区别做任务-vs-发呆"><a class="markdownIt-Anchor" href="#4-任务态-fmri-与-静息态-fmri-的区别做任务-vs-发呆"></a> 4. 任务态 fMRI 与 静息态 fMRI 的区别（“做任务” vs “发呆”）</h4>
+<p>这两者都是fMRI，都测BOLD信号，但实验设计完全不同：</p>
+<ul>
+<li><strong>任务态 fMRI（Task-fMRI）</strong>：
+<ul>
+<li><strong>操作</strong>：让受试者在扫描仪里执行特定任务（如手指敲击、看恐怖图片、做数学题）。</li>
+<li><strong>分析</strong>：对比“任务期”和“休息期”的BOLD信号差异，找出<strong>与任务正相关的脑区</strong>。</li>
+<li><strong>回答的问题</strong>：<strong>“哪个脑区负责这个特定功能？”</strong>（例如，运动皮层、视觉皮层、语言中枢的定位）。常用于<strong>术前功能区定位</strong>，防止手术损伤重要区域。</li>
+</ul>
+</li>
+<li><strong>静息态 fMRI（Resting-state fMRI， rs-fMRI）</strong>：
+<ul>
+<li><strong>操作</strong>：让受试者<strong>闭眼放空、不做任何任务</strong>，仅维持清醒状态扫描（通常5-10分钟）。</li>
+<li><strong>分析</strong>：不找“激活”点，而是分析全脑各个脑区的BOLD信号在<strong>时间上的同步性（低频振荡）</strong>。如果两个不相邻的脑区，信号波形几乎完全同步（正相关），就认为它们之间存在<strong>功能连接</strong>。</li>
+<li><strong>回答的问题</strong>：<strong>“大脑的各个功能模块是如何协同工作的？”</strong>。它发现了著名的<strong>默认模式网络（DMN）</strong>——即大脑在无所事事时，反而活跃度最高的内省、回忆、展望区域。</li>
+</ul>
+</li>
+</ul>
+<h1 id="数据结构"><a class="markdownIt-Anchor" href="#数据结构"></a> 数据结构</h1>
+<p>最常见的是下面几种。</p>
+<table>
+<thead>
+<tr>
+<th>格式</th>
+<th>扩展名</th>
+<th>是否常见</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>DICOM</strong></td>
+<td><code>.dcm</code></td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>医院原始 MRI 数据</td>
+</tr>
+<tr>
+<td><strong>NIfTI</strong></td>
+<td><code>.nii</code>、<code>.nii.gz</code></td>
+<td>⭐⭐⭐⭐⭐</td>
+<td>科研最常用格式</td>
+</tr>
+<tr>
+<td>Analyze</td>
+<td><code>.hdr</code> + <code>.img</code></td>
+<td>⭐⭐</td>
+<td>NIfTI 前身</td>
+</tr>
+<tr>
+<td>MINC</td>
+<td><code>.mnc</code></td>
+<td>⭐</td>
+<td>加拿大 MNI 开发</td>
+</tr>
+<tr>
+<td>NRRD</td>
+<td><code>.nrrd</code></td>
+<td>⭐⭐</td>
+<td>ITK、3D Slicer 常用</td>
+</tr>
+<tr>
+<td>MGH/MGZ</td>
+<td><code>.mgh</code> <code>.mgz</code></td>
+<td>⭐⭐</td>
+<td>FreeSurfer 使用</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="1-dicom医院格式"><a class="markdownIt-Anchor" href="#1-dicom医院格式"></a> 1. DICOM（医院格式）</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">001.dcm</span><br><span class="line">002.dcm</span><br><span class="line">003.dcm</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>医院扫描完成后通常得到的是：</p>
+<p>一张 MRI 切片 = 一个 DICOM 文件。</p>
+<p>例如</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Patient/</span><br><span class="line">    IM0001.dcm</span><br><span class="line">    IM0002.dcm</span><br><span class="line">    ...</span><br><span class="line">    IM0180.dcm</span><br></pre></td></tr></table></figure>
+<p>特点：</p>
+<ul>
+<li>保存影像</li>
+<li>保存患者信息</li>
+<li>保存扫描参数</li>
+<li>保存设备型号</li>
+</ul>
+<p>里面有很多 Metadata：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">PatientName</span><br><span class="line">PatientID</span><br><span class="line">Age</span><br><span class="line">Sex</span><br><span class="line">Scanner</span><br><span class="line">TE</span><br><span class="line">TR</span><br><span class="line">FlipAngle</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>医院几乎都是 DICOM。</p>
+<hr>
+<h3 id="2-nifti科研标准"><a class="markdownIt-Anchor" href="#2-nifti科研标准"></a> 2. NIfTI（科研标准）</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brain.nii</span><br></pre></td></tr></table></figure>
+<p>或者</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brain.nii.gz</span><br></pre></td></tr></table></figure>
+<p>这是 ADNI、FSL、AFNI、SPM 最常见的格式。</p>
+<p>一个 <code>.nii</code> 文件就包含：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">整个三维 MRI</span><br></pre></td></tr></table></figure>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">256 × 256 × 170</span><br></pre></td></tr></table></figure>
+<p>直接就是一个 3D Volume。</p>
+<p>而不是很多张图片。</p>
+<hr>
+<p>NIfTI 里面包含：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Header</span><br><span class="line">+</span><br><span class="line">Voxel Data</span><br></pre></td></tr></table></figure>
+<p>Header：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">尺寸</span><br><span class="line">spacing</span><br><span class="line">方向</span><br><span class="line">数据类型</span><br><span class="line">affine矩阵</span><br></pre></td></tr></table></figure>
+<p>Voxel：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[x,y,z]</span><br></pre></td></tr></table></figure>
+<p>每一个 voxel 一个灰度值。</p>
+<img src="/2026/07/04/2026%E5%B9%B47%E6%9C%884%E6%97%A5-MRI-%E5%9F%BA%E7%A1%80/image-20260726151545978.png" alt="image-20260726151545978" style="zoom: 67%;"> 
+<hr>
+<h3 id="3-niigz"><a class="markdownIt-Anchor" href="#3-niigz"></a> 3. <code>.nii.gz</code></h3>
+<p>其实就是</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">nii</span><br><span class="line">+</span><br><span class="line">gzip压缩</span><br></pre></td></tr></table></figure>
+<p>例如</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">brain.nii</span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">gzip</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">brain.nii.gz</span><br></pre></td></tr></table></figure>
+<p>读取时：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> nibabel <span class="keyword">as</span> nib</span><br><span class="line"></span><br><span class="line">img = nib.load(<span class="string">&quot;brain.nii.gz&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>不用手动解压。</p>
+<p>ADNI 大多数下载下来都是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nii.gz</span><br></pre></td></tr></table></figure>
+<hr>
+<h2 id="adni-下载下来是什么"><a class="markdownIt-Anchor" href="#adni-下载下来是什么"></a> ADNI 下载下来是什么？</h2>
+<p>ADNI 官网通常提供：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DICOM</span><br></pre></td></tr></table></figure>
+<p>或者已经转换好的</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NIfTI (.nii)</span><br></pre></td></tr></table></figure>
+<p>很多论文都会先：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">DICOM</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">dcm2niix</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">NIfTI</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">FSL/SPM/AFNI</span><br></pre></td></tr></table></figure>
+<p>因此科研流程通常是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">MRI Scanner</span><br><span class="line">      │</span><br><span class="line">      ▼</span><br><span class="line">DICOM (.dcm)</span><br><span class="line">      │</span><br><span class="line">      ▼</span><br><span class="line">dcm2niix</span><br><span class="line">      │</span><br><span class="line">      ▼</span><br><span class="line">NIfTI (.nii/.nii.gz)</span><br><span class="line">      │</span><br><span class="line">      ▼</span><br><span class="line">Preprocessing</span><br><span class="line">（SPM/FSL/AFNI）</span><br><span class="line">      │</span><br><span class="line">      ▼</span><br><span class="line">Machine Learning / Deep Learning</span><br></pre></td></tr></table></figure>
+<hr>
+<h1 id="数据维度"><a class="markdownIt-Anchor" href="#数据维度"></a> 数据维度</h1>
+<p>NIfTI 不只是 3D，还可以表示不同维度的数据：</p>
+<table>
+<thead>
+<tr>
+<th>数据</th>
+<th>维度</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>结构 MRI（T1/T2）</td>
+<td><strong>3D</strong></td>
+<td><code>256×256×170</code></td>
+</tr>
+<tr>
+<td>fMRI</td>
+<td><strong>4D</strong></td>
+<td><code>64×64×40×240</code>（240 个时间点）</td>
+</tr>
+<tr>
+<td>DTI</td>
+<td><strong>4D</strong></td>
+<td><code>128×128×70×64</code>（64 个扩散方向）</td>
+</tr>
+<tr>
+<td>分割标签</td>
+<td><strong>3D</strong></td>
+<td>每个 voxel 是类别编号</td>
+</tr>
+<tr>
+<td>概率图</td>
+<td><strong>3D</strong></td>
+<td>每个 voxel 是概率值</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h1 id="数据处理"><a class="markdownIt-Anchor" href="#数据处理"></a> 数据处理</h1>
+<h2 id="1-预处理preprocessing"><a class="markdownIt-Anchor" href="#1-预处理preprocessing"></a> 1. 预处理（Preprocessing）</h2>
+<p>预处理（Preprocessing）是指对原始 MRI 数据进行标准化处理，以减少不同扫描设备、受试者和采集条件带来的差异，为后续分析和模型训练提供统一的数据。</p>
+<p>典型流程如下：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">原始MRI（DICOM/NIfTI）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">格式转换（DICOM → NIfTI）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">质量检查（Quality Control）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">Bias Field Correction（偏置场校正）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">Skull Stripping（去颅骨）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">Spatial Registration（空间配准）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">Spatial Normalization（空间标准化）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">Resampling（重采样）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">Intensity Normalization（强度归一化）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">ROI 提取 / 特征提取 / 深度学习</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="1格式转换format-conversion"><a class="markdownIt-Anchor" href="#1格式转换format-conversion"></a> （1）格式转换（Format Conversion）</h3>
+<p>将医院采集的 <strong>DICOM（<code>.dcm</code>）</strong> 转换为科研常用的 <strong>NIfTI（<code>.nii</code> / <code>.nii.gz</code>）</strong>。</p>
+<p>常用工具：</p>
+<ul>
+<li>dcm2niix</li>
+<li>MRIConvert</li>
+</ul>
+<hr>
+<h3 id="2质量检查quality-controlqc"><a class="markdownIt-Anchor" href="#2质量检查quality-controlqc"></a> （2）质量检查（Quality Control，QC）</h3>
+<p>检查 MRI 是否存在：</p>
+<ul>
+<li>图像缺失</li>
+<li>运动伪影（Motion Artifact）</li>
+<li>扫描错误</li>
+<li>信噪比过低</li>
+</ul>
+<p>低质量图像通常需要剔除。</p>
+<hr>
+<h3 id="3偏置场校正bias-field-correction"><a class="markdownIt-Anchor" href="#3偏置场校正bias-field-correction"></a> （3）偏置场校正（Bias Field Correction）</h3>
+<p>由于 <strong>MRI 磁场不均匀</strong>，同一种组织可能出现亮度渐变。</p>
+<p>例如：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">真实组织</span><br><span class="line"></span><br><span class="line">████████████</span><br><span class="line"></span><br><span class="line">采集后</span><br><span class="line"></span><br><span class="line">███▆▅▄▃▂</span><br></pre></td></tr></table></figure>
+<p>偏置场校正用于消除这种低频亮度变化。</p>
+<p>常用算法：</p>
+<ul>
+<li>N3</li>
+<li>N4 Bias Field Correction（最常用）</li>
+</ul>
+<hr>
+<h3 id="4去颅骨skull-stripping"><a class="markdownIt-Anchor" href="#4去颅骨skull-stripping"></a> （4）去颅骨（Skull Stripping）</h3>
+<p>去除脑组织以外的区域，例如：</p>
+<ul>
+<li>头皮</li>
+<li>头骨</li>
+<li>眼球</li>
+<li>脂肪</li>
+</ul>
+<p>仅保留脑组织（Brain Extraction）。</p>
+<p>常用工具：</p>
+<ul>
+<li>BET（FSL）</li>
+<li>HD-BET</li>
+<li>SynthStrip</li>
+<li>FreeSurfer</li>
+</ul>
+<hr>
+<h3 id="5空间配准registration"><a class="markdownIt-Anchor" href="#5空间配准registration"></a> （5）空间配准（Registration）</h3>
+<p>将不同时间、不同受试者或不同模态的 <strong>MRI 对齐</strong>。</p>
+<p>包括：</p>
+<ul>
+<li>刚性配准（Rigid）</li>
+<li>仿射配准（Affine）</li>
+<li>非线性配准（Non-linear）</li>
+</ul>
+<p>常见配准目标：</p>
+<ul>
+<li>同一患者不同时间扫描</li>
+<li>T1 与 PET 配准</li>
+<li>T1 与 DTI 配准</li>
+</ul>
+<hr>
+<h3 id="6空间标准化spatial-normalization"><a class="markdownIt-Anchor" href="#6空间标准化spatial-normalization"></a> （6）空间标准化（Spatial Normalization）</h3>
+<p>将所有脑部映射到统一标准空间（Template）。</p>
+<p>最常见的是：</p>
+<ul>
+<li>MNI152 标准脑</li>
+</ul>
+<p>这样不同受试者的大脑位置具有<strong>一致的空间坐标</strong>，方便群体分析。</p>
+<hr>
+<h3 id="7重采样resampling"><a class="markdownIt-Anchor" href="#7重采样resampling"></a> （7）重采样（Resampling）</h3>
+<p>统一<strong>图像分辨率</strong>（Voxel Spacing）。</p>
+<p>例如：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">原始：</span><br><span class="line"></span><br><span class="line">0.94 × 0.94 × 1.20 mm</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">统一：</span><br><span class="line"></span><br><span class="line">1 × 1 × 1 mm</span><br></pre></td></tr></table></figure>
+<p>这样所有样本具有一致尺寸。</p>
+<hr>
+<h3 id="8强度归一化intensity-normalization"><a class="markdownIt-Anchor" href="#8强度归一化intensity-normalization"></a> （8）强度归一化（Intensity Normalization）</h3>
+<p>由于不同 MRI 设备没有<strong>统一的灰度标准</strong>，同一种组织在不同扫描中的灰度可能不同。</p>
+<p>常见方法：</p>
+<ul>
+<li>Min-Max Normalization</li>
+<li>Z-score Normalization</li>
+<li>White Matter Normalization</li>
+</ul>
+<p>目的：</p>
+<p>提高不同数据之间的一致性。</p>
+<hr>
+<h3 id="9roi-提取region-of-interest"><a class="markdownIt-Anchor" href="#9roi-提取region-of-interest"></a> （9）ROI 提取（Region of Interest）</h3>
+<p>根据研究目标提取特定脑区。</p>
+<p>例如阿尔茨海默病研究常关注：</p>
+<ul>
+<li>海马（Hippocampus）</li>
+<li>杏仁核（Amygdala）</li>
+<li>皮层（Cortex）</li>
+<li>脑室（Ventricle）</li>
+</ul>
+<p>ROI 可用于：</p>
+<ul>
+<li>体积计算</li>
+<li>厚度分析</li>
+<li>深度学习输入</li>
+</ul>
+<hr>
+<h2 id="2-预处理preprocessing"><a class="markdownIt-Anchor" href="#2-预处理preprocessing"></a> 2. 预处理（Preprocessing）</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">原始 fMRI（4D NIfTI）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">tcat（去除前几个 TR）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">outcount（异常时间点检测）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">tshift（Slice Timing Correction）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">volreg（Motion Correction）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">blur（Spatial Smoothing）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">mask（Brain Mask）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">scale（Intensity Scaling）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">3dDeconvolve（GLM 建模）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">统计检验（t/F Statistic）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">3dClustSim（多重比较校正）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">Activation Map</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">QC Report</span><br></pre></td></tr></table></figure>
+<h1 id="深度学习任务"><a class="markdownIt-Anchor" href="#深度学习任务"></a> 深度学习任务</h1>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>输入</th>
+<th>输出</th>
+<th>常用模型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>分类（Classification）</td>
+<td>T1 MRI</td>
+<td>AD / MCI / CN</td>
+<td>ResNet、DenseNet、ViT、Swin</td>
+</tr>
+<tr>
+<td>分割（Segmentation）</td>
+<td>MRI</td>
+<td>海马、脑室、白质等</td>
+<td>U-Net、V-Net、nnU-Net</td>
+</tr>
+<tr>
+<td>检测（Detection）</td>
+<td>MRI</td>
+<td>病灶位置</td>
+<td>Faster R-CNN、YOLO（较少用于脑MRI）</td>
+</tr>
+<tr>
+<td>配准（Registration）</td>
+<td>两幅 MRI</td>
+<td>对齐后的图像</td>
+<td>VoxelMorph</td>
+</tr>
+<tr>
+<td>重建（Reconstruction）</td>
+<td>欠采样 MRI</td>
+<td>完整 MRI</td>
+<td>AutoEncoder、GAN、Diffusion</td>
+</tr>
+<tr>
+<td>多模态融合</td>
+<td>MRI + PET + 临床信息</td>
+<td>疾病诊断</td>
+<td>Transformer、多模态网络</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/07/04/2026%E5%B9%B47%E6%9C%884%E6%97%A5-MRI-%E5%9F%BA%E7%A1%80/" data-id="cms1vppgg000dlkv43bzxbyv6" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MRI/" rel="tag">MRI</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-2026年7月4日-MRI-afni" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -4046,188 +4576,6 @@ threadIdx.x、threadIdx.y、threadIdx.z分别表示<strong>当前线程所处的
 
 
   
-    <article id="post-2026年6月9日-推理优化" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2026/06/09/2026%E5%B9%B46%E6%9C%889%E6%97%A5-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/" class="article-date">
-  <time class="post-time" datetime="2026-06-09T14:40:02.000Z" itemprop="datePublished">
-    <span class="post-month">6月</span><br/>
-    <span class="post-day">09</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2026/06/09/2026%E5%B9%B46%E6%9C%889%E6%97%A5-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/">2026年6月9日 推理优化</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="fruit-项目-ai-推理性能优化全景备忘录"><a class="markdownIt-Anchor" href="#fruit-项目-ai-推理性能优化全景备忘录"></a> Fruit 项目 AI 推理性能优化全景备忘录</h1>
-<p>本策划文档系统性汇总了 Fruit 项目在 <strong>AI 模型推理与数据流</strong> 上的全量优化项。涵盖已完成的基线构筑、刚刚定位并待实施的运行期重构，以及未来的模型层深度榨干方案。</p>
-<hr>
-<h2 id="一-已完成的基础优化第一阶段稳固基线"><a class="markdownIt-Anchor" href="#一-已完成的基础优化第一阶段稳固基线"></a> 一、 已完成的基础优化（第一阶段：稳固基线）</h2>
-<p><em>核心目标：消除高额的硬件连接与线程冷启动固定开销。</em></p>
-<h3 id="1-摄像头常驻打开"><a class="markdownIt-Anchor" href="#1-摄像头常驻打开"></a> 1. 摄像头常驻打开</h3>
-<ul>
-<li><strong>内容简介</strong>：将视频流拉取模块改为常驻守护线程，避免每次 API 请求时重新初始化硬件驱动和建立视频流连接，彻底消除了秒级的硬件唤醒延迟。</li>
-</ul>
-<h3 id="2-模型启动期预热-warmup"><a class="markdownIt-Anchor" href="#2-模型启动期预热-warmup"></a> 2. 模型启动期预热 (Warmup)</h3>
-<ul>
-<li><strong>内容简介</strong>：在系统初始化（<code>main.py</code>）阶段，使用哑数据（Dummy Data）提前触发 GPU 前向传播。规避了首次真实请求时，CUDA 引擎初始化和算子动态加载带来的首帧高延迟。</li>
-</ul>
-<h3 id="3-推理线程常驻"><a class="markdownIt-Anchor" href="#3-推理线程常驻"></a> 3. 推理线程常驻</h3>
-<ul>
-<li><strong>内容简介</strong>：构建长寿命的常驻推理线程池，避免在高频 API 请求下频繁创建、销毁 Python 线程所导致的系统上下文切换与 CPU 损耗。</li>
-</ul>
-<h3 id="4-模型推理复用池-model-hub"><a class="markdownIt-Anchor" href="#4-模型推理复用池-model-hub"></a> 4. 模型推理复用池 (Model Hub)</h3>
-<ul>
-<li><strong>内容简介</strong>：设计跨路径的模型单例复用机制。当不同的检测路径（<code>detection_path</code>）调用相同的底层模型时，共享内存与显存中的同一个模型实例，大幅降低了多路并发时的总显存占用。</li>
-</ul>
-<hr>
-<h2 id="二-刚刚发现并确认的优化第二阶段精细重构"><a class="markdownIt-Anchor" href="#二-刚刚发现并确认的优化第二阶段精细重构"></a> 二、 刚刚发现并确认的优化（第二阶段：精细重构）</h2>
-<p><em>核心目标：消灭运行期（Runtime）热路径上的对象重建、串行阻塞、无谓渲染与轮询抖动。</em></p>
-<h3 id="5-消除每请求配置更新与-processor-重建p0"><a class="markdownIt-Anchor" href="#5-消除每请求配置更新与-processor-重建p0"></a> 5. 消除每请求配置更新与 Processor 重建【P0】</h3>
-<ul>
-<li><strong>内容简介</strong>：重构 <code>target_detection.py</code>，绕过会触发文件锁（I/O 竞争）与重算相机内参的 <code>update_detector_config</code> 重型方法。改为在运行期<strong>原地（In-place）动态修改</strong> <code>target_classes</code> 属性，让“模型预热”的成果真正留存。</li>
-</ul>
-<h3 id="6-位置检测降帧与多帧-batch-推理优化p0"><a class="markdownIt-Anchor" href="#6-位置检测降帧与多帧-batch-推理优化p0"></a> 6. 位置检测降帧与多帧 Batch 推理优化【P0】</h3>
-<ul>
-<li><strong>内容简介</strong>：针对水果位置检测（Position）无需滑动窗口计数的特性，将 <code>reading_frames_count</code> 降为 <code>1</code>，消灭串行循环；或在必须多帧时，解耦深度配准逻辑，利用 YOLO 原生 Batch 一次性前向推理，将多帧延迟缩减至接近单帧。</li>
-</ul>
-<h3 id="7-帧获取由-sleep-轮询改为-condition-唤醒机制p2"><a class="markdownIt-Anchor" href="#7-帧获取由-sleep-轮询改为-condition-唤醒机制p2"></a> 7. 帧获取由 Sleep 轮询改为 Condition 唤醒机制【P2】</h3>
-<ul>
-<li><strong>内容简介</strong>：废除 <code>_get_last_frame</code> 中固定的 <code>time.sleep(0.05)</code> 盲等轮询。在 <code>annotated_hub</code> 写入新帧时引入 <code>threading.Condition</code> 信号通知（<code>notify_all</code>），让推理线程在帧就绪的瞬间被精准唤醒，消除几十毫秒的随机等待延迟。</li>
-</ul>
-<h3 id="8-生产路径按需-plot-与去除深度图拼接p1"><a class="markdownIt-Anchor" href="#8-生产路径按需-plot-与去除深度图拼接p1"></a> 8. 生产路径按需 <code>plot()</code> 与去除深度图拼接【P1】</h3>
-<ul>
-<li><strong>内容简介</strong>：将耗费大量 CPU 算力的实例分割 <code>plot()</code> 遮罩渲染和左右深度伪彩图拼接做“按需门控”机制。前 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">N-1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 帧纯做矩阵计算，仅在最后一帧或显式开启 Debug 存图时才执行图像可视化绘制。</li>
-</ul>
-<h3 id="9-禁用-inarea-推理的控制台-verbose-打印p1"><a class="markdownIt-Anchor" href="#9-禁用-inarea-推理的控制台-verbose-打印p1"></a> 9. 禁用 InArea 推理的控制台 verbose 打印【P1】</h3>
-<ul>
-<li><strong>内容简介</strong>：将 <code>FruitInAreaFrameProcessor</code> 内部调用模型时的 <code>verbose=True</code> 显式改为 <code>False</code>。消灭高频热路径上往控制台（stdout）打印文本引起的同步 I/O 阻塞。</li>
-</ul>
-<h3 id="10-限制-max_det-固定-imgsz-与本地-half-推理p2"><a class="markdownIt-Anchor" href="#10-限制-max_det-固定-imgsz-与本地-half-推理p2"></a> 10. 限制 <code>max_det</code>、固定 <code>imgsz</code> 与本地 <code>half</code> 推理【P2】</h3>
-<ul>
-<li><strong>内容简介</strong>：在 Object Detection 架构 Schema 中沉入新参数：位置场景限制 <code>max_det=1</code> 以断崖式降低 NMS（非极大值抑制）计算耗时；固定 <code>imgsz</code> 规避隐式 letterbox 尺寸缩放；本地 <code>.pt</code> 跑测时开启 <code>half=True</code>（FP16）使 GPU 吞吐翻倍。</li>
-</ul>
-<hr>
-<h2 id="三-未完成的进阶优化第三阶段模型与引擎深度挖掘"><a class="markdownIt-Anchor" href="#三-未完成的进阶优化第三阶段模型与引擎深度挖掘"></a> 三、 未完成的进阶优化（第三阶段：模型与引擎深度挖掘）</h2>
-<p><em>核心目标：通过重构编译配置、量化、任务裁剪，将 TensorRT 推理性能榨干到极致。</em></p>
-<h3 id="11-引擎导出参数调优零训练成本最快见效"><a class="markdownIt-Anchor" href="#11-引擎导出参数调优零训练成本最快见效"></a> 11. 引擎导出参数调优（零训练成本，最快见效）</h3>
-<ul>
-<li><strong>内容简介</strong>：在 <code>ultralytics</code> 导出 <code>.engine</code> 时进行定制：
-<ul>
-<li><strong>矩形输入</strong>：将默认 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>640</mn><mo>×</mo><mn>640</mn></mrow><annotation encoding="application/x-tex">640 \times 640</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">6</span><span class="mord">4</span><span class="mord">0</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">6</span><span class="mord">4</span><span class="mord">0</span></span></span></span> 的方形编译改为匹配相机的矩形 <code>imgsz=(480, 640)</code>，直接<strong>减少约 33% 像素</strong>的计算量。</li>
-<li><strong>静态 Shape</strong>：若锁定 Batch 帧数，导出时固定 <code>batch=3</code>（单帧则固定 <code>batch=1</code>），利用静态 Shape 让 TensorRT 针对性挑选最优算子（Tactic Selection），消除动态 Shape 的 Profile 消耗。</li>
-<li><strong>启用简化</strong>：开启 <code>simplify=True</code> 融合多余的 ONNX 算子。</li>
-</ul>
-</li>
-</ul>
-<h3 id="12-int8-训练后量化-ptq-qat"><a class="markdownIt-Anchor" href="#12-int8-训练后量化-ptq-qat"></a> 12. INT8 训练后量化 (PTQ / QAT)</h3>
-<ul>
-<li><strong>内容简介</strong>：在 FP16 基础上推进 <strong>INT8 量化</strong>，预期可为 Orin/GPU 带来 1.5~2 倍的吞吐飞跃。收集产线几百张真实图片作为标定集（Calibration Dataset）进行 PTQ 导出；若精度（质心坐标）抖动超出预期，则引入量化感知训练（QAT）进行精度补偿。</li>
-</ul>
-<h3 id="13-端到端-nms-编译进引擎消除-host-传输瓶颈"><a class="markdownIt-Anchor" href="#13-端到端-nms-编译进引擎消除-host-传输瓶颈"></a> 13. 端到端 NMS 编译进引擎（消除 Host 传输瓶颈）</h3>
-<ul>
-<li><strong>内容简介</strong>：导出时设置 <code>nms=True</code>，利用 TensorRT 的 <code>EfficientNMS_TRT</code> 插件将检测框解码与 NMS 过滤完全融进 GPU 内部。使得模型直接输出过滤后的最终边界框，免除了大张量回传（GPU <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>→</mo></mrow><annotation encoding="application/x-tex">\rightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">→</span></span></span></span> CPU）与在 Python 层跑 NMS 的严重耗时。</li>
-</ul>
-<h3 id="14-任务模型选型降级head-结构裁剪"><a class="markdownIt-Anchor" href="#14-任务模型选型降级head-结构裁剪"></a> 14. 任务模型选型降级（Head 结构裁剪）</h3>
-<ul>
-<li><strong>内容简介</strong>：严格按业务“取什么信息”匹配最轻量的 Model Head。
-<ul>
-<li>评估 Line2 主链路，由于其仅提取 BBox 中心点，可将 <strong>Segment（分割）模型降级为 Detect（检测）模型</strong>，彻底砍掉 Proto Mask 分支与 Mask 上采样计算。</li>
-<li>严格控制 OBB（定向边界框）模型的使用范围，仅在需要旋转角度的路径上保留。</li>
-</ul>
-</li>
-</ul>
-<h3 id="15-模型容量缩减-剪枝与蒸馏"><a class="markdownIt-Anchor" href="#15-模型容量缩减-剪枝与蒸馏"></a> 15. 模型容量缩减、剪枝与蒸馏</h3>
-<ul>
-<li><strong>内容简介</strong>：针对水果定位等相对单一的工业场景，优先采用 Nano/Small 级别的小模型。进一步优化可采用结构化剪枝（Structured Pruning）剔除冗余通道，或通过大模型（Teacher）蒸馏小模型（Student）的方式，在保障精度的前提下极速瘦身。</li>
-</ul>
-<h3 id="16-图像预处理全面移至-gpu-cuda-preprocess"><a class="markdownIt-Anchor" href="#16-图像预处理全面移至-gpu-cuda-preprocess"></a> 16. 图像预处理全面移至 GPU (CUDA Preprocess)</h3>
-<ul>
-<li><strong>内容简介</strong>：将目前在 CPU（NumPy）上执行的图像 <code>resize</code>、归一化、色彩通道转换等预处理操作，改写为 GPU Tensor 操作（或利用 TensorRT 内部算子）。配合常驻 Hub 连续内存中的 Pinned Memory 传输，彻底释放 CPU 压力，实现全链路全加速。</li>
-</ul>
-<h1 id="现场"><a class="markdownIt-Anchor" href="#现场"></a> 现场</h1>
-<p><img src="/2026/06/09/2026%E5%B9%B46%E6%9C%889%E6%97%A5-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/image-20260610164954378.png" alt="image-20260610164954378"></p>
-<h1 id="stream流唤醒机制"><a class="markdownIt-Anchor" href="#stream流唤醒机制"></a> stream流唤醒机制</h1>
-<p>之前, 固定0.05秒取出新帧-&gt;20fps<br>
-推理三帧: 串行执行 , 取帧-&gt;推理-&gt;取帧-&gt;推理-&gt;取帧-&gt;推理 (每帧耗时约#0 | 耗时: 39.02ms)<br>
-<strong>如果推理时间小于50ms, 那么下一次推理还是用的旧的相同帧</strong></p>
-<p>现在frame_id 唤醒机制, 20fps-&gt;0.05秒取一新帧; 60 pfs -&gt;0.05/3秒取新帧<br>
-推理三帧: 串行执行, 且帧不同导致时间: 50ms+50+50+推理等操作, 时间花在等帧**(采帧阶段就花了约 25ms，且这段时间 Infer 线程完全空闲。)**<br>
-如果fps=60: 时间: 50+推理等操作; 取帧花费时间减少</p>
-<p><img src="/2026/06/09/2026%E5%B9%B46%E6%9C%889%E6%97%A5-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/image-20260610151724731.png" alt="image-20260610151724731"></p>
-<p><img src="/2026/06/09/2026%E5%B9%B46%E6%9C%889%E6%97%A5-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/image-20260610151745867.png" alt="image-20260610151745867"></p>
-<p>对比汇总</p>
-<ol>
-<li>GPU 推理：逐帧 ~49ms → batch ~24ms，省约 25ms</li>
-<li>0.05s 会存在帧重复</li>
-<li>batch推理在拉流fps高的时候有效(避免白等)</li>
-<li>onnx会有30ms提升</li>
-</ol>
-<h3 id="pt"><a class="markdownIt-Anchor" href="#pt"></a> pt</h3>
-<p><img src="/2026/06/09/2026%E5%B9%B46%E6%9C%889%E6%97%A5-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/image-20260610162129050.png" alt></p>
-<h3 id="half-pt"><a class="markdownIt-Anchor" href="#half-pt"></a> half pt</h3>
-<p><img src="/2026/06/09/2026%E5%B9%B46%E6%9C%889%E6%97%A5-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/image-20260610161721061.png" alt="image-20260610161721061"></p>
-<h3 id="onnx"><a class="markdownIt-Anchor" href="#onnx"></a> onnx</h3>
-<p><img src="/2026/06/09/2026%E5%B9%B46%E6%9C%889%E6%97%A5-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/image-20260610161840987.png" alt="image-20260610161840987"></p>
-<h3 id="trt"><a class="markdownIt-Anchor" href="#trt"></a> trt:</h3>
-<p><img src="/2026/06/09/2026%E5%B9%B46%E6%9C%889%E6%97%A5-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/image-20260610161258506.png" alt="image-20260610161258506"></p>
-<h1 id="帮我creattask-异步协议图片-防止波动带来的干扰"><a class="markdownIt-Anchor" href="#帮我creattask-异步协议图片-防止波动带来的干扰"></a> 帮我creattask 异步协议图片, 防止波动带来的干扰</h1>
-<p><img src="/2026/06/09/2026%E5%B9%B46%E6%9C%889%E6%97%A5-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/d542c25b1bf18817b7fe42c721f22dc0.png" alt="d542c25b1bf18817b7fe42c721f22dc0"></p>
-<blockquote>
-<p><img src="/2026/06/09/2026%E5%B9%B46%E6%9C%889%E6%97%A5-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/image-20260610163813318.png" alt="image-20260610163813318"></p>
-<p>减少2~5秒以及大波动</p>
-</blockquote>
-<h3 id="plot是不是也可以推理后保存-减少api延迟-同时还能保存现场结果"><a class="markdownIt-Anchor" href="#plot是不是也可以推理后保存-减少api延迟-同时还能保存现场结果"></a> plot是不是也可以推理后保存, 减少api延迟, 同时还能保存现场结果</h3>
-<p><img src="/2026/06/09/2026%E5%B9%B46%E6%9C%889%E6%97%A5-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/image-20260610171343825.png" alt="image-20260610171343825"></p>
-<blockquote>
-<p>确实和不plot的耗时接近, 就是更容易导致硬件波动</p>
-<p>同时copy到CPU的yolo result耗时也很低, 正常情况不到0.8ms</p>
-</blockquote>
-<h2 id="查数据cpu"><a class="markdownIt-Anchor" href="#查数据cpu"></a> 查数据CPU</h2>
-<p>1ms左右</p>
-<p><img src="/2026/06/09/2026%E5%B9%B46%E6%9C%889%E6%97%A5-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/image-20260610164137544.png" alt="image-20260610164137544"></p>
-<h2 id="不plot"><a class="markdownIt-Anchor" href="#不plot"></a> 不plot</h2>
-<p><img src="/2026/06/09/2026%E5%B9%B46%E6%9C%889%E6%97%A5-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/image-20260610164317918.png" alt="image-20260610164317918"></p>
-<blockquote>
-<p>减少10~15ms左右</p>
-</blockquote>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2026/06/09/2026%E5%B9%B46%E6%9C%889%E6%97%A5-%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/" data-id="cmqdpw1ot0002rgv43xhk7kvu" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DL/" rel="tag">DL</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -4272,7 +4620,7 @@ threadIdx.x、threadIdx.y、threadIdx.z分别表示<strong>当前线程所处的
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>184</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>185</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>45</strong><br>标签</div></a>
     </div>
