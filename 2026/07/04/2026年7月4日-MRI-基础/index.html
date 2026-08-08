@@ -14,7 +14,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://shakewely.github.io/2026/07/04/2026%E5%B9%B47%E6%9C%884%E6%97%A5-MRI-%E5%9F%BA%E7%A1%80/image-20260726151545978.png">
 <meta property="article:published_time" content="2026-07-04T02:49:54.000Z">
-<meta property="article:modified_time" content="2026-07-26T14:36:57.258Z">
+<meta property="article:modified_time" content="2026-08-08T08:38:43.673Z">
 <meta property="article:author" content="Weakliy">
 <meta property="article:tag" content="MRI">
 <meta name="twitter:card" content="summary">
@@ -350,7 +350,6 @@ FreeSurfer        AFNI/FSL      MRtrix3/FSL
 <hr>
 <h3 id="2-nifti科研标准"><a class="markdownIt-Anchor" href="#2-nifti科研标准"></a> 2. NIfTI（科研标准）</h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brain.nii</span><br></pre></td></tr></table></figure>
-<p>或者</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brain.nii.gz</span><br></pre></td></tr></table></figure>
 <p>这是 ADNI、FSL、AFNI、SPM 最常见的格式。</p>
 <p>一个 <code>.nii</code> 文件就包含：</p>
@@ -367,6 +366,19 @@ FreeSurfer        AFNI/FSL      MRtrix3/FSL
 <p>Voxel：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[x,y,z]</span><br></pre></td></tr></table></figure>
 <p>每一个 voxel 一个灰度值。</p>
+<h4 id="header"><a class="markdownIt-Anchor" href="#header"></a> Header</h4>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[jiangyi@idp01 3subs]$ mrinfo sub001_shcl_T1w.nii.gz </span><br><span class="line">************************************************</span><br><span class="line">Image name:          &quot;sub001_shcl_T1w.nii.gz&quot;</span><br><span class="line">************************************************</span><br><span class="line">  Dimensions:        208 x 300 x 320</span><br><span class="line">  Voxel size:        0.8 x 0.8 x 0.8</span><br><span class="line">  Data strides:      [ 1 2 3 ]</span><br><span class="line">  Format:            NIfTI-1.1 (GZip compressed)</span><br><span class="line">  Data type:         unsigned 16 bit integer (little endian)</span><br><span class="line">  Intensity scaling: offset = 0, multiplier = 1</span><br><span class="line">  Transform:                    1           0           0       -82.8</span><br><span class="line">                                0      0.9997     0.02482      -122.3</span><br><span class="line">                                0    -0.02482      0.9997      -134.2</span><br><span class="line">  comments:          TE=3.4;Time=124752.593</span><br></pre></td></tr></table></figure>
+<p><strong>intensity</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Intensity scaling: offset = 0, multiplier = 1</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">存储值  ──× multiplier + offset──&gt;  实际影像强度</span><br></pre></td></tr></table></figure>
+<p><strong>为什么需要这个机制？</strong></p>
+<p>因为 MRI 图像的数据可能不是直接用 <code>float32</code> 保存的。例如某个 MRI 原始强度可能是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">0</span><br><span class="line">125.3</span><br><span class="line">842.7</span><br><span class="line">1523.6</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>如果直接保存成 <code>float32</code>，当然可以，但文件会比较大。</p>
+<p>于是可以把它压缩成整数：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">原始/实际值       存储值</span><br><span class="line">0.0       →       0</span><br><span class="line">125.3     →       1253</span><br><span class="line">842.7     →       8427</span><br><span class="line">1523.6    →       15236</span><br></pre></td></tr></table></figure>
+<p>然后在 NIfTI header 里记录：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">multiplier = 0.1</span><br><span class="line">offset = 0</span><br></pre></td></tr></table></figure>
 <img src="/2026/07/04/2026%E5%B9%B47%E6%9C%884%E6%97%A5-MRI-%E5%9F%BA%E7%A1%80/image-20260726151545978.png" alt="image-20260726151545978" style="zoom: 67%;"> 
 <hr>
 <h3 id="3-niigz"><a class="markdownIt-Anchor" href="#3-niigz"></a> 3. <code>.nii.gz</code></h3>
@@ -537,8 +549,1117 @@ FreeSurfer        AFNI/FSL      MRtrix3/FSL
 <li>深度学习输入</li>
 </ul>
 <hr>
-<h2 id="2-预处理preprocessing"><a class="markdownIt-Anchor" href="#2-预处理preprocessing"></a> 2. 预处理（Preprocessing）</h2>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">原始 fMRI（4D NIfTI）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">tcat（去除前几个 TR）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">outcount（异常时间点检测）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">tshift（Slice Timing Correction）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">volreg（Motion Correction）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">blur（Spatial Smoothing）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">mask（Brain Mask）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">scale（Intensity Scaling）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">3dDeconvolve（GLM 建模）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">统计检验（t/F Statistic）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">3dClustSim（多重比较校正）</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">Activation Map</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">QC Report</span><br></pre></td></tr></table></figure>
+<h2 id="2-预处理评估"><a class="markdownIt-Anchor" href="#2-预处理评估"></a> 2. 预处理评估</h2>
+<p><strong>fMRI（尤其 resting-state fMRI）预处理结果是有评估标准的</strong>，但是不像分类任务有一个固定 accuracy，而是通过多个 QC（Quality Control）指标综合判断。</p>
+<p>对于你现在的 <strong>猕猴 rs-fMRI + AFNI 预处理</strong>，通常从以下几个方面评价：</p>
+<hr>
+<h3 id="21-头动motion-quality最重要指标之一"><a class="markdownIt-Anchor" href="#21-头动motion-quality最重要指标之一"></a> 2.1. 头动（Motion Quality）——最重要指标之一</h3>
+<p>因为 fMRI 对运动非常敏感。</p>
+<p>常用指标：</p>
+<h4 id="1-framewise-displacement-fd"><a class="markdownIt-Anchor" href="#1-framewise-displacement-fd"></a> (1) Framewise Displacement (FD)</h4>
+<p>衡量每个 TR 相对于前一个 TR 的头动。</p>
+<p>常见标准：</p>
+<table>
+<thead>
+<tr>
+<th>FD</th>
+<th>评价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&lt; 0.2 mm</td>
+<td>很好</td>
+</tr>
+<tr>
+<td>0.2–0.5 mm</td>
+<td>可以接受</td>
+</tr>
+<tr>
+<td>&gt;0.5 mm</td>
+<td>需要谨慎</td>
+</tr>
+<tr>
+<td>&gt;1 mm</td>
+<td>通常剔除</td>
+</tr>
+</tbody>
+</table>
+<p>很多人脑 rs-fMRI 研究：</p>
+<ul>
+<li>FD &gt; 0.5 mm 的 volume censor</li>
+<li>平均 FD 作为组间协变量</li>
+</ul>
+<p>你的结果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">motion limit              : 0.2</span><br><span class="line">average motion (per TR)   : 0.0086</span><br><span class="line">max motion displacement   : 0.0395</span><br><span class="line">TRs censored              : 0</span><br></pre></td></tr></table></figure>
+<p>非常好。</p>
+<p>相当于：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">平均 FD ≈ 0.009 mm</span><br><span class="line">最大 FD ≈ 0.04 mm</span><br></pre></td></tr></table></figure>
+<p>对于猴子来说也是非常低的。</p>
+<hr>
+<h3 id="22-censor比例scrubbing"><a class="markdownIt-Anchor" href="#22-censor比例scrubbing"></a> 2.2. Censor比例（Scrubbing）</h3>
+<p>看多少时间点因为质量问题被删除。</p>
+<p>你的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">TRs censored : 0</span><br><span class="line">fraction censored : 0</span><br></pre></td></tr></table></figure>
+<p>评价：</p>
+<table>
+<thead>
+<tr>
+<th>censor比例</th>
+<th>评价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&lt; 5%</td>
+<td>很好</td>
+</tr>
+<tr>
+<td>5-20%</td>
+<td>可以接受</td>
+</tr>
+<tr>
+<td>&gt;20%</td>
+<td>数据质量下降</td>
+</tr>
+</tbody>
+</table>
+<p>你的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0%</span><br></pre></td></tr></table></figure>
+<p>很好。</p>
+<hr>
+<h3 id="23-outlier检测"><a class="markdownIt-Anchor" href="#23-outlier检测"></a> 2.3. Outlier检测</h3>
+<p>AFNI 使用：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3dToutcount</span><br></pre></td></tr></table></figure>
+<p>检查异常 voxel。</p>
+<p>你的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">average outlier frac : 0.000317</span><br><span class="line">num TRs above limit : 0</span><br></pre></td></tr></table></figure>
+<p>说明：</p>
+<p>没有明显异常 volume。</p>
+<p>一般：</p>
+<table>
+<thead>
+<tr>
+<th>outlier fraction</th>
+<th>评价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&lt;1%</td>
+<td>很好</td>
+</tr>
+<tr>
+<td>1-5%</td>
+<td>可接受</td>
+</tr>
+<tr>
+<td>&gt;5%</td>
+<td>有问题</td>
+</tr>
+</tbody>
+</table>
+<p>你的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0.03%</span><br></pre></td></tr></table></figure>
+<p>非常好。</p>
+<hr>
+<h3 id="24-tsnrtemporal-signal-to-noise-ratio"><a class="markdownIt-Anchor" href="#24-tsnrtemporal-signal-to-noise-ratio"></a> 2.4. TSNR（Temporal Signal-to-Noise Ratio）</h3>
+<p>衡量时间稳定性：</p>
+<p>[<br>
+TSNR=\frac{mean(signal)}{std(signal)}<br>
+]</p>
+<p>一般：</p>
+<table>
+<thead>
+<tr>
+<th>TSNR</th>
+<th>评价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&lt;50</td>
+<td>较差</td>
+</tr>
+<tr>
+<td>50-100</td>
+<td>一般</td>
+</tr>
+<tr>
+<td>100-200</td>
+<td>较好</td>
+</tr>
+<tr>
+<td>&gt;200</td>
+<td>很好</td>
+</tr>
+</tbody>
+</table>
+<p>你的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">TSNR average = 225</span><br></pre></td></tr></table></figure>
+<p>属于较高。</p>
+<p>不过注意：</p>
+<p>不同扫描仪、序列、猴子脑都会影响 TSNR。</p>
+<p>所以最好：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">subject之间比较</span><br></pre></td></tr></table></figure>
+<p>而不是套固定阈值。</p>
+<hr>
+<h3 id="25-配准质量registration-quality"><a class="markdownIt-Anchor" href="#25-配准质量registration-quality"></a> 2.5. 配准质量（Registration Quality）</h3>
+<p>对于猴子数据，这个比人脑更重要。</p>
+<p>需要检查：</p>
+<h4 id="t1-epi"><a class="markdownIt-Anchor" href="#t1-epi"></a> T1 ↔ EPI</h4>
+<p>也就是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">结构像</span><br><span class="line"> ↓</span><br><span class="line">功能像空间</span><br></pre></td></tr></table></figure>
+<p>常见指标：</p>
+<p>Dice coefficient：</p>
+<p>[<br>
+Dice=\frac{2|A∩B|}{|A|+|B|}<br>
+]</p>
+<p>经验：</p>
+<table>
+<thead>
+<tr>
+<th>Dice</th>
+<th>评价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&gt;0.8</td>
+<td>很好</td>
+</tr>
+<tr>
+<td>0.6-0.8</td>
+<td>可以</td>
+</tr>
+<tr>
+<td>&lt;0.6</td>
+<td>需要检查</td>
+</tr>
+</tbody>
+</table>
+<p>你的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">anat/EPI mask Dice = 0.699</span><br></pre></td></tr></table></figure>
+<p>属于：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">可接受</span><br></pre></td></tr></table></figure>
+<p>但对于猴子，我会建议人工检查。</p>
+<hr>
+<h4 id="anatomy-template"><a class="markdownIt-Anchor" href="#anatomy-template"></a> Anatomy ↔ Template</h4>
+<p>你的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">anat/template Dice =0.808</span><br></pre></td></tr></table></figure>
+<p>很好。</p>
+<p>说明：</p>
+<p>猴子个体 T1 到模板空间：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">比较成功</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="26-空间平滑spatial-smoothness"><a class="markdownIt-Anchor" href="#26-空间平滑spatial-smoothness"></a> 2.6. 空间平滑（Spatial Smoothness）</h3>
+<p>检查：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FWHM</span><br></pre></td></tr></table></figure>
+<p>一般：</p>
+<p>human rs-fMRI:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">4-8 mm</span><br></pre></td></tr></table></figure>
+<p>比较常见。</p>
+<p>但是：</p>
+<p>猴子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1.5 mm voxel</span><br></pre></td></tr></table></figure>
+<p>通常不会像人脑那样大幅 smoothing。</p>
+<p>你的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FWHM = 0 0 0</span><br></pre></td></tr></table></figure>
+<p>需要确认。</p>
+<p>可能原因：</p>
+<ol>
+<li>没有执行 blur</li>
+</ol>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3dBlurToFWHM</span><br></pre></td></tr></table></figure>
+<p>没有运行。</p>
+<ol>
+<li>AFNI summary 没有正确估计</li>
+</ol>
+<p>看：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">blur estimates (ACF)</span><br></pre></td></tr></table></figure>
+<p>即可。</p>
+<hr>
+<h3 id="27-temporal-signal-quality"><a class="markdownIt-Anchor" href="#27-temporal-signal-quality"></a> 2.7. Temporal Signal Quality</h3>
+<p>还会看：</p>
+<h4 id="dvars"><a class="markdownIt-Anchor" href="#dvars"></a> DVARS</h4>
+<p>表示相邻 volume 信号变化。</p>
+<h4 id="global-signal"><a class="markdownIt-Anchor" href="#global-signal"></a> Global signal</h4>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GS variance</span><br></pre></td></tr></table></figure>
+<h4 id="gcor"><a class="markdownIt-Anchor" href="#gcor"></a> GCOR</h4>
+<p>你的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">GCOR=0.0059</span><br></pre></td></tr></table></figure>
+<p>较低。</p>
+<p>通常：</p>
+<p>过高可能说明：</p>
+<ul>
+<li>motion残留</li>
+<li>生理噪声</li>
+<li>global artifact</li>
+</ul>
+<hr>
+<h3 id="28-对你这个数据的总体评价"><a class="markdownIt-Anchor" href="#28-对你这个数据的总体评价"></a> 2.8. 对你这个数据的总体评价</h3>
+<p>按照常见 rs-fMRI QC：</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>你的结果</th>
+<th>评价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TR数量</td>
+<td>296</td>
+<td>可以</td>
+</tr>
+<tr>
+<td>扫描时间</td>
+<td>9.8 min</td>
+<td>很好</td>
+</tr>
+<tr>
+<td>平均FD</td>
+<td>0.0086</td>
+<td>优秀</td>
+</tr>
+<tr>
+<td>最大FD</td>
+<td>0.0395</td>
+<td>优秀</td>
+</tr>
+<tr>
+<td>Censor</td>
+<td>0%</td>
+<td>优秀</td>
+</tr>
+<tr>
+<td>Outlier</td>
+<td>0</td>
+<td>优秀</td>
+</tr>
+<tr>
+<td>TSNR</td>
+<td>225</td>
+<td>很好</td>
+</tr>
+<tr>
+<td>Anat/EPI Dice</td>
+<td>0.699</td>
+<td>可接受，需要检查</td>
+</tr>
+<tr>
+<td>Anat/template Dice</td>
+<td>0.808</td>
+<td>很好</td>
+</tr>
+</tbody>
+</table>
+<p>所以：</p>
+<blockquote>
+<p><strong>这个数据的时间质量（motion、noise）非常好，主要需要确认空间配准质量。</strong></p>
+</blockquote>
+<hr>
+<p>对于你后续做：</p>
+<ul>
+<li>resting-state functional connectivity (FC)</li>
+<li>ALFF/fALFF</li>
+<li>ReHo</li>
+<li>ICA</li>
+<li>seed-based FC</li>
+<li>DTI tractography</li>
+</ul>
+<p>真正影响结果最大的通常不是 motion，而是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">个体T1</span><br><span class="line"> ↓</span><br><span class="line">EPI</span><br><span class="line"> ↓</span><br><span class="line">猴子标准atlas</span><br></pre></td></tr></table></figure>
+<p>这个空间链路。</p>
+<p>你现在的下一步建议是：</p>
+<ol>
+<li>在 AFNI/SUMA 里检查：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">anat_final</span><br><span class="line">+</span><br><span class="line">epi_final</span><br><span class="line">+</span><br><span class="line">template</span><br></pre></td></tr></table></figure>
+<p>overlay 是否重合。</p>
+<ol>
+<li>查看：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">@ss_review_driver</span><br></pre></td></tr></table></figure>
+<p>生成的 QC 页面。</p>
+<ol>
+<li>对多个猴子 subject 比较：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">FD</span><br><span class="line">TSNR</span><br><span class="line">Dice</span><br></pre></td></tr></table></figure>
+<p>而不是只看单个 subject。</p>
+<p>对于猴子影像，<strong>QC报告 + 配准可视化通常比单个数字更重要。</strong></p>
+<h2 id="3-纤维束追踪"><a class="markdownIt-Anchor" href="#3-纤维束追踪"></a> 3 纤维束追踪</h2>
+<p>你这份是 <strong>MRtrix3 DWI（扩散MRI）纤维束追踪（tractography）结果摘要</strong>。和 rs-fMRI 不一样，DWI 的质量评价重点不是 motion / TSNR，而是：</p>
+<ol>
+<li><strong>扩散数据质量（FA、MD等指标）</strong></li>
+<li><strong>FOD建模质量</strong></li>
+<li><strong>纤维追踪参数是否合理</strong></li>
+<li><strong>生成的streamlines是否符合解剖规律</strong></li>
+<li><strong>是否进行了定量分析（connectome / tract metrics）</strong></li>
+</ol>
+<p>我们逐项看。</p>
+<hr>
+<h2 id="1-fa-md-指标"><a class="markdownIt-Anchor" href="#1-fa-md-指标"></a> 1. FA / MD 指标</h2>
+<p>你的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">fa:</span><br><span class="line">mean     0.230415</span><br><span class="line">median   0.169518</span><br><span class="line">std      0.172394</span><br><span class="line">min      0.00576064</span><br><span class="line">max      0.976811</span><br><span class="line">count    74797</span><br></pre></td></tr></table></figure>
+<p>FA：</p>
+<p>Fractional Anisotropy（分数各向异性）</p>
+<p>范围：</p>
+<p>[<br>
+0 \le FA \le 1<br>
+]</p>
+<p>代表水分子扩散方向性：</p>
+<table>
+<thead>
+<tr>
+<th>FA</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>完全随机扩散（灰质、CSF）</td>
+</tr>
+<tr>
+<td>0.2-0.4</td>
+<td>白质常见范围</td>
+</tr>
+<tr>
+<td>&gt;0.6</td>
+<td>高度一致纤维束</td>
+</tr>
+<tr>
+<td>接近1</td>
+<td>非常强方向性（极少见）</td>
+</tr>
+</tbody>
+</table>
+<p>你的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mean FA = 0.23</span><br><span class="line">median FA =0.17</span><br></pre></td></tr></table></figure>
+<p>对于<strong>猴子全脑 mask</strong>：</p>
+<p>这个值是合理的。</p>
+<p>原因：</p>
+<p>你的统计应该包含：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">白质</span><br><span class="line">+</span><br><span class="line">灰质边界</span><br><span class="line">+</span><br><span class="line">部分CSF</span><br></pre></td></tr></table></figure>
+<p>不是纯白质。</p>
+<p>如果只看：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">white matter mask</span><br></pre></td></tr></table></figure>
+<p>通常 FA 会更高：</p>
+<p>猴子：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0.3-0.6</span><br></pre></td></tr></table></figure>
+<p>左右。</p>
+<hr>
+<p>MD：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mean MD = 0.000831 mm²/s</span><br><span class="line">median =0.000629</span><br></pre></td></tr></table></figure>
+<p>Mean diffusivity：</p>
+<p>平均扩散率。</p>
+<p>典型单位：</p>
+<p>[<br>
+10^{-3} mm^2/s<br>
+]</p>
+<p>所以：</p>
+<p>你的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0.831 ×10^-3 mm²/s</span><br></pre></td></tr></table></figure>
+<p>非常正常。</p>
+<p>大致：</p>
+<table>
+<thead>
+<tr>
+<th>组织</th>
+<th>MD</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>白质</td>
+<td>0.6-0.9 ×10^-3</td>
+</tr>
+<tr>
+<td>灰质</td>
+<td>0.8-1.0 ×10^-3</td>
+</tr>
+<tr>
+<td>CSF</td>
+<td>&gt;2 ×10^-3</td>
+</tr>
+</tbody>
+</table>
+<p>所以：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">FA正常</span><br><span class="line">MD正常</span><br></pre></td></tr></table></figure>
+<p>说明扩散模型没有明显异常。</p>
+<hr>
+<h1 id="2-fiber-tracking-参数分析"><a class="markdownIt-Anchor" href="#2-fiber-tracking-参数分析"></a> 2. Fiber tracking 参数分析</h1>
+<p>你的 command：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tckgen fod_wm_norm.mif tracks_200000.tck</span><br></pre></td></tr></table></figure>
+<p>核心：</p>
+<p>使用：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">iFOD2</span><br></pre></td></tr></table></figure>
+<p>算法。</p>
+<hr>
+<h2 id="ifod2是什么"><a class="markdownIt-Anchor" href="#ifod2是什么"></a> iFOD2是什么？</h2>
+<p>MRtrix默认推荐算法。</p>
+<p>全称：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">second-order Integration over Fiber Orientation Distributions</span><br></pre></td></tr></table></figure>
+<p>相比传统：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Deterministic tracking</span><br></pre></td></tr></table></figure>
+<p>它：</p>
+<ul>
+<li>使用 FOD 分布</li>
+<li>支持 crossing fibers</li>
+<li>概率追踪</li>
+</ul>
+<p>适合：</p>
+<p>猴子脑这种：</p>
+<ul>
+<li>体积小</li>
+<li>纤维交叉多</li>
+</ul>
+<p>的数据。</p>
+<hr>
+<h1 id="3-fod-cutoff"><a class="markdownIt-Anchor" href="#3-fod-cutoff"></a> 3. FOD cutoff</h1>
+<p>你的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-cutoff 0.05</span><br></pre></td></tr></table></figure>
+<p>这是重要参数。</p>
+<p>意思：</p>
+<p>当 FOD amplitude：</p>
+<p>&lt;0.05</p>
+<p>停止追踪。</p>
+<p>经验：</p>
+<table>
+<thead>
+<tr>
+<th>cutoff</th>
+<th>效果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0.02-0.04</td>
+<td>容易产生假纤维</td>
+</tr>
+<tr>
+<td>0.05</td>
+<td>常用</td>
+</tr>
+<tr>
+<td>0.08-0.1</td>
+<td>更严格</td>
+</tr>
+</tbody>
+</table>
+<p>你的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0.05</span><br></pre></td></tr></table></figure>
+<p>合理。</p>
+<hr>
+<h1 id="4-seed策略"><a class="markdownIt-Anchor" href="#4-seed策略"></a> 4. seed策略</h1>
+<p>你的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-seed_image seed_wm.mif</span><br></pre></td></tr></table></figure>
+<p>说明：</p>
+<p>不是全脑随机seed。</p>
+<p>而是在：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">white matter mask</span><br></pre></td></tr></table></figure>
+<p>里面播种。</p>
+<p>优点：</p>
+<p>减少：</p>
+<ul>
+<li>CSF streamlines</li>
+<li>灰质噪声</li>
+</ul>
+<p>这是比较标准的方法。</p>
+<hr>
+<h1 id="5-生成数量"><a class="markdownIt-Anchor" href="#5-生成数量"></a> 5. 生成数量</h1>
+<p>你的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-select 200000</span><br></pre></td></tr></table></figure>
+<p>最终：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">count: 200000</span><br></pre></td></tr></table></figure>
+<p>即：</p>
+<p>20万条streamlines。</p>
+<p>常见：</p>
+<table>
+<thead>
+<tr>
+<th>规模</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>100k</td>
+<td>快速分析</td>
+</tr>
+<tr>
+<td>1M</td>
+<td>connectome</td>
+</tr>
+<tr>
+<td>10M</td>
+<td>高精度结构连接</td>
+</tr>
+</tbody>
+</table>
+<p>20万：</p>
+<p>对于猴子脑：</p>
+<p>完全可以。</p>
+<p>因为猴脑比人大很多小：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">200k-1M</span><br></pre></td></tr></table></figure>
+<p>都常见。</p>
+<hr>
+<h1 id="6-长度限制"><a class="markdownIt-Anchor" href="#6-长度限制"></a> 6. 长度限制</h1>
+<p>你的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-minlength 3</span><br><span class="line">-maxlength 150</span><br></pre></td></tr></table></figure>
+<p>单位：</p>
+<p>mm</p>
+<p>也就是说：</p>
+<p>丢弃：</p>
+<p>&lt;3mm</p>
+<p>或者：</p>
+<blockquote>
+<p>150mm</p>
+</blockquote>
+<p>对于猴子：</p>
+<p>合理。</p>
+<p>猴脑：</p>
+<p>最长连接：</p>
+<p>几十到100mm左右。</p>
+<hr>
+<h1 id="7-最大转角"><a class="markdownIt-Anchor" href="#7-最大转角"></a> 7. 最大转角</h1>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">max_angle:45</span><br></pre></td></tr></table></figure>
+<p>表示：</p>
+<p>两个step之间最大转角。</p>
+<p>经验：</p>
+<table>
+<thead>
+<tr>
+<th>angle</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>30°</td>
+<td>严格</td>
+</tr>
+<tr>
+<td>45°</td>
+<td>常用</td>
+</tr>
+<tr>
+<td>60°</td>
+<td>容易弯曲</td>
+</tr>
+</tbody>
+</table>
+<p>你的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">45°</span><br></pre></td></tr></table></figure>
+<p>标准。</p>
+<hr>
+<h1 id="8-step-size"><a class="markdownIt-Anchor" href="#8-step-size"></a> 8. step size</h1>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">step_size:0.531 mm</span><br></pre></td></tr></table></figure>
+<p>MRtrix默认：</p>
+<p>通常：</p>
+<p>voxel size ×0.5</p>
+<p>例如：</p>
+<p>如果DWI：</p>
+<p>1mm voxel：</p>
+<p>step:</p>
+<p>0.5mm</p>
+<p>所以：</p>
+<p>正常。</p>
+<hr>
+<h1 id="9-lmax"><a class="markdownIt-Anchor" href="#9-lmax"></a> 9. lmax</h1>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lmax:8</span><br></pre></td></tr></table></figure>
+<p>这是球谐阶数。</p>
+<p>FOD：</p>
+<p>[<br>
+l=8<br>
+]</p>
+<p>表示角度分辨率。</p>
+<p>通常：</p>
+<table>
+<thead>
+<tr>
+<th>lmax</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>6</td>
+<td>低</td>
+</tr>
+<tr>
+<td>8</td>
+<td>常用</td>
+</tr>
+<tr>
+<td>10-12</td>
+<td>高角分辨率</td>
+</tr>
+</tbody>
+</table>
+<p>你的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">8</span><br></pre></td></tr></table></figure>
+<p>合理。</p>
+<hr>
+<h1 id="10-一个容易忽略的问题200000条-真实纤维数量"><a class="markdownIt-Anchor" href="#10-一个容易忽略的问题200000条-真实纤维数量"></a> 10. 一个容易忽略的问题：200000条 ≠ 真实纤维数量</h1>
+<p><code>tckgen</code>生成的是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">streamlines</span><br></pre></td></tr></table></figure>
+<p>不是：</p>
+<p>真实axon数量。</p>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">10000条streamlines</span><br></pre></td></tr></table></figure>
+<p>不代表：</p>
+<p>10000根神经纤维。</p>
+<p>它只是：</p>
+<p>数学采样。</p>
+<hr>
+<h1 id="纤维追踪有没有评价标准"><a class="markdownIt-Anchor" href="#纤维追踪有没有评价标准"></a> 纤维追踪有没有评价标准？</h1>
+<p>有，但和fMRI不同。</p>
+<p>主要看：</p>
+<hr>
+<h2 id="1-fod质量"><a class="markdownIt-Anchor" href="#1-fod质量"></a> ① FOD质量</h2>
+<p>检查：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fod_wm_norm.mif</span><br></pre></td></tr></table></figure>
+<p>是否：</p>
+<ul>
+<li>白质区域连续</li>
+<li>crossing fiber明显</li>
+<li>没有大量噪声</li>
+</ul>
+<p>工具：</p>
+<p>MRview:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mrview fod_wm_norm.mif</span><br></pre></td></tr></table></figure>
+<p>打开：</p>
+<p>FOD glyph。</p>
+<hr>
+<h2 id="2-streamline可视化"><a class="markdownIt-Anchor" href="#2-streamline可视化"></a> ② Streamline可视化</h2>
+<p>最重要。</p>
+<p>检查：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tracks_200000.tck</span><br></pre></td></tr></table></figure>
+<p>例如：</p>
+<p>mrview：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mrview dwi.mif \</span><br><span class="line">-track.load tracks_200000.tck</span><br></pre></td></tr></table></figure>
+<p>看：</p>
+<p>正常：</p>
+<ul>
+<li>胼胝体</li>
+<li>皮质脊髓束</li>
+<li>视辐射</li>
+<li>前额叶连接</li>
+</ul>
+<p>应该连续。</p>
+<p>异常：</p>
+<ul>
+<li>飘到脑外</li>
+<li>大量短纤维</li>
+<li>穿过CSF</li>
+</ul>
+<hr>
+<h2 id="3-sift-sift2校正"><a class="markdownIt-Anchor" href="#3-sift-sift2校正"></a> ③ SIFT / SIFT2校正</h2>
+<p>这是很多研究会做的。</p>
+<p>问题：</p>
+<p>tractography存在：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">long fibers bias</span><br></pre></td></tr></table></figure>
+<p>MRtrix：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tcksift2</span><br></pre></td></tr></table></figure>
+<p>调整streamline权重。</p>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tcksift2 tracks.tck fod.mif weights.txt</span><br></pre></td></tr></table></figure>
+<p>如果后续做：</p>
+<p>connectome：</p>
+<p>建议做。</p>
+<hr>
+<h2 id="4-解剖合理性"><a class="markdownIt-Anchor" href="#4-解剖合理性"></a> ④ 解剖合理性</h2>
+<p>比如：</p>
+<p>计算：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tck2connectome</span><br></pre></td></tr></table></figure>
+<p>生成：</p>
+<p>脑区连接矩阵。</p>
+<p>然后看：</p>
+<ul>
+<li>是否符合已知猴脑网络</li>
+<li>是否出现异常连接</li>
+</ul>
+<hr>
+<h1 id="综合评价你的dwi结果"><a class="markdownIt-Anchor" href="#综合评价你的dwi结果"></a> 综合评价你的DWI结果</h1>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>结果</th>
+<th>评价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FA mean</td>
+<td>0.23</td>
+<td>正常</td>
+</tr>
+<tr>
+<td>MD</td>
+<td>0.83×10^-3</td>
+<td>正常</td>
+</tr>
+<tr>
+<td>算法</td>
+<td>iFOD2</td>
+<td>推荐</td>
+</tr>
+<tr>
+<td>FOD</td>
+<td>WM normalized</td>
+<td>合理</td>
+</tr>
+<tr>
+<td>seed</td>
+<td>white matter</td>
+<td>合理</td>
+</tr>
+<tr>
+<td>streamlines</td>
+<td>200k</td>
+<td>适合猴脑</td>
+</tr>
+<tr>
+<td>cutoff</td>
+<td>0.05</td>
+<td>标准</td>
+</tr>
+<tr>
+<td>max angle</td>
+<td>45°</td>
+<td>标准</td>
+</tr>
+<tr>
+<td>min/max length</td>
+<td>3-150mm</td>
+<td>合理</td>
+</tr>
+<tr>
+<td>lmax</td>
+<td>8</td>
+<td>合理</td>
+</tr>
+</tbody>
+</table>
+<p>整体：</p>
+<blockquote>
+<p><strong>这是一套比较标准的 MRtrix3 猕猴 DWI tractography 参数，暂时没有明显异常。</strong></p>
+</blockquote>
+<p>下一步建议不是继续调参数，而是做两个 QC：</p>
+<ol>
+<li><strong>mrview 可视化检查 tck 是否贴合白质</strong></li>
+<li><strong>使用 tck2connectome + 猴子atlas生成结构连接矩阵</strong></li>
+</ol>
+<p>因为最终科研价值通常来自：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">DWI</span><br><span class="line"> ↓</span><br><span class="line">FOD</span><br><span class="line"> ↓</span><br><span class="line">tractography</span><br><span class="line"> ↓</span><br><span class="line">connectome</span><br><span class="line"> ↓</span><br><span class="line">网络分析</span><br></pre></td></tr></table></figure>
+<p>而不是单纯生成 <code>.tck</code> 文件。你后面如果要和 rs-fMRI 联合分析，这一步会和 resting-state FC 做结构-功能连接（structural-functional coupling）。</p>
+<blockquote>
+<p>纤维束追踪（tractography）属于 <strong>DTI / dMRI（diffusion MRI）分析流程</strong>，它的质量评价标准和 rs-fMRI 不一样。核心不是看运动和 TSNR，而是看：</p>
+<ol>
+<li><strong>扩散数据质量</strong></li>
+<li><strong>张量/纤维模型质量</strong></li>
+<li><strong>空间配准质量</strong></li>
+<li><strong>追踪结果合理性</strong></li>
+</ol>
+<p>对于你现在的<strong>猕猴 DTI 数据 + MRtrix3</strong>流程，可以按下面评估。</p>
+<hr>
+<h3 id="1-原始-dwi-数据质量"><a class="markdownIt-Anchor" href="#1-原始-dwi-数据质量"></a> 1. 原始 DWI 数据质量</h3>
+<p>首先检查 diffusion acquisition：</p>
+<p>常见字段：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">b-value</span><br><span class="line">b-vector</span><br><span class="line">number of directions</span><br><span class="line">voxel size</span><br><span class="line">number of shells</span><br></pre></td></tr></table></figure>
+<p>例如：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">b=0</span><br><span class="line">b=1000</span><br><span class="line">b=3000</span><br><span class="line">64 directions</span><br></pre></td></tr></table></figure>
+<p>方向数量影响纤维估计：</p>
+<table>
+<thead>
+<tr>
+<th>方向数</th>
+<th>评价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&lt;30</td>
+<td>较差</td>
+</tr>
+<tr>
+<td>30-60</td>
+<td>一般</td>
+</tr>
+<tr>
+<td>60-100</td>
+<td>较好</td>
+</tr>
+<tr>
+<td>&gt;100</td>
+<td>优秀</td>
+</tr>
+</tbody>
+</table>
+<p>猴子脑比较小，通常需要更高空间分辨率，所以方向数和b值很关键。</p>
+<hr>
+<h3 id="2-头动和eddy-correction"><a class="markdownIt-Anchor" href="#2-头动和eddy-correction"></a> 2. 头动和eddy correction</h3>
+<p>DTI 对运动也非常敏感。</p>
+<p>典型 MRtrix/FSL 流程：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">raw DWI</span><br><span class="line"> |</span><br><span class="line"> |-- dwidenoise</span><br><span class="line"> |</span><br><span class="line"> |-- mrdegibbs</span><br><span class="line"> |</span><br><span class="line"> |-- topup</span><br><span class="line"> |</span><br><span class="line"> |-- eddy</span><br><span class="line"> |</span><br><span class="line"> |-- bias correction</span><br><span class="line"> |</span><br><span class="line"> |-- response estimation</span><br><span class="line"> |</span><br><span class="line"> |-- FOD</span><br><span class="line"> |</span><br><span class="line"> |-- tractography</span><br></pre></td></tr></table></figure>
+<p>重点看：</p>
+<h4 id="eddy-qc"><a class="markdownIt-Anchor" href="#eddy-qc"></a> Eddy QC</h4>
+<p>检查：</p>
+<ul>
+<li>motion correction</li>
+<li>eddy current correction</li>
+<li>susceptibility distortion correction</li>
+</ul>
+<p>FSL 会输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eddy_quad</span><br></pre></td></tr></table></figure>
+<p>里面有：</p>
+<ul>
+<li>average movement</li>
+<li>outlier slices</li>
+<li>residuals</li>
+</ul>
+<p>标准：</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>建议</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>平均运动 &lt;1 mm</td>
+<td>很好</td>
+</tr>
+<tr>
+<td>outlier &lt;5%</td>
+<td>较好</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h3 id="3-diffusion-tensor指标评价"><a class="markdownIt-Anchor" href="#3-diffusion-tensor指标评价"></a> 3. Diffusion tensor指标评价</h3>
+<p>如果使用 DTI model：</p>
+<p>会生成：</p>
+<h4 id="fafractional-anisotropy"><a class="markdownIt-Anchor" href="#fafractional-anisotropy"></a> FA（Fractional Anisotropy）</h4>
+<p>最经典指标。</p>
+<p>范围：</p>
+<p>[<br>
+0-1<br>
+]</p>
+<p>表示方向性：</p>
+<table>
+<thead>
+<tr>
+<th>FA</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>各向同性</td>
+</tr>
+<tr>
+<td>1</td>
+<td>高度方向性</td>
+</tr>
+</tbody>
+</table>
+<p>白质：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FA ≈ 0.3-0.8</span><br></pre></td></tr></table></figure>
+<p>例如：</p>
+<p>胼胝体：</p>
+<p>FA高</p>
+<p>灰质：</p>
+<p>FA低</p>
+<p>检查：</p>
+<ul>
+<li>FA map 是否连续</li>
+<li>白质是否清晰</li>
+</ul>
+<hr>
+<h4 id="mdmean-diffusivity"><a class="markdownIt-Anchor" href="#mdmean-diffusivity"></a> MD（Mean Diffusivity）</h4>
+<p>平均扩散率：</p>
+<p>表示水分子扩散程度。</p>
+<p>异常区域可能：</p>
+<ul>
+<li>水肿</li>
+<li>损伤</li>
+<li>脱髓鞘</li>
+</ul>
+<hr>
+<h3 id="4-fod质量mrtrix重点"><a class="markdownIt-Anchor" href="#4-fod质量mrtrix重点"></a> 4. FOD质量（MRtrix重点）</h3>
+<p>现在更推荐：</p>
+<h4 id="csd-constrained-spherical-deconvolution"><a class="markdownIt-Anchor" href="#csd-constrained-spherical-deconvolution"></a> CSD (Constrained Spherical Deconvolution)</h4>
+<p>流程：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">DWI</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">Response function</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">FOD</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">tractography</span><br></pre></td></tr></table></figure>
+<p>检查：</p>
+<h4 id="fod-overlay"><a class="markdownIt-Anchor" href="#fod-overlay"></a> FOD overlay</h4>
+<p>看：</p>
+<ul>
+<li>corpus callosum</li>
+<li>internal capsule</li>
+<li>optic tract</li>
+</ul>
+<p>是否：</p>
+<ul>
+<li>连续</li>
+<li>方向正确</li>
+</ul>
+<p>如果 FOD 出现：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">断裂</span><br><span class="line">异常尖峰</span><br><span class="line">随机方向</span><br></pre></td></tr></table></figure>
+<p>说明模型不好。</p>
+<hr>
+<h3 id="5-tractography质量评价"><a class="markdownIt-Anchor" href="#5-tractography质量评价"></a> 5. Tractography质量评价</h3>
+<p>纤维追踪不是简单看数量。</p>
+<p>需要看：</p>
+<h4 id="1-anatomical-plausibility"><a class="markdownIt-Anchor" href="#1-anatomical-plausibility"></a> (1) Anatomical plausibility</h4>
+<p>最重要。</p>
+<p>例如：</p>
+<p>追踪：</p>
+<h5 id="corpus-callosum"><a class="markdownIt-Anchor" href="#corpus-callosum"></a> Corpus callosum</h5>
+<p>应该：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">左右半球连接</span><br></pre></td></tr></table></figure>
+<h5 id="corticospinal-tract"><a class="markdownIt-Anchor" href="#corticospinal-tract"></a> Corticospinal tract</h5>
+<p>应该：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">motor cortex</span><br><span class="line"> ↓</span><br><span class="line">internal capsule</span><br><span class="line"> ↓</span><br><span class="line">brainstem</span><br></pre></td></tr></table></figure>
+<p>如果出现：</p>
+<ul>
+<li>穿过脑室</li>
+<li>穿过灰质随机连接</li>
+<li>大量短纤维</li>
+</ul>
+<p>说明有问题。</p>
+<hr>
+<h4 id="2-streamline数量"><a class="markdownIt-Anchor" href="#2-streamline数量"></a> (2) Streamline数量</h4>
+<p>例如：</p>
+<p>MRtrix：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tckgen</span><br></pre></td></tr></table></figure>
+<p>输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">10 million streamlines</span><br></pre></td></tr></table></figure>
+<p>但是：</p>
+<p>streamline多 ≠ 好。</p>
+<p>因为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">100 million错误纤维</span><br><span class="line">&lt;</span><br><span class="line">1 million合理纤维</span><br></pre></td></tr></table></figure>
+<p>通常需要：</p>
+<p>SIFT / SIFT2 校正：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">tcksift2</span><br></pre></td></tr></table></figure>
+<hr>
+<h4 id="3-length-distribution"><a class="markdownIt-Anchor" href="#3-length-distribution"></a> (3) Length distribution</h4>
+<p>检查纤维长度。</p>
+<p>异常：</p>
+<p>大量：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;5 mm</span><br></pre></td></tr></table></figure>
+<p>可能是假纤维。</p>
+<hr>
+<h4 id="4-endpoint-distribution"><a class="markdownIt-Anchor" href="#4-endpoint-distribution"></a> (4) Endpoint distribution</h4>
+<p>检查终点。</p>
+<p>正常：</p>
+<p>终点应该集中：</p>
+<ul>
+<li>cortex</li>
+<li>subcortical structures</li>
+</ul>
+<p>异常：</p>
+<p>大量：</p>
+<ul>
+<li>white matter内部结束</li>
+</ul>
+<hr>
+<h3 id="6-配准质量猴子最关键"><a class="markdownIt-Anchor" href="#6-配准质量猴子最关键"></a> 6. 配准质量（猴子最关键）</h3>
+<p>和 fMRI 类似。</p>
+<p>DTI：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">DWI native space</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">T1</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">Monkey template</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">Atlas</span><br></pre></td></tr></table></figure>
+<p>需要检查：</p>
+<h4 id="fa-t1"><a class="markdownIt-Anchor" href="#fa-t1"></a> FA ↔ T1</h4>
+<h4 id="fa-atlas"><a class="markdownIt-Anchor" href="#fa-atlas"></a> FA ↔ atlas</h4>
+<p>例如：</p>
+<p>把：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Juna.Chimpanzee atlas</span><br><span class="line">Macaque template</span><br></pre></td></tr></table></figure>
+<p>overlay。</p>
+<p>评价：</p>
+<ul>
+<li>白质边界是否匹配</li>
+<li>corpus callosum 是否正确</li>
+<li>brainstem 是否对齐</li>
+</ul>
+<hr>
+<h3 id="7-定量评价指标"><a class="markdownIt-Anchor" href="#7-定量评价指标"></a> 7. 定量评价指标</h3>
+<p>如果做论文，一般报告：</p>
+<h4 id="tensor-metrics"><a class="markdownIt-Anchor" href="#tensor-metrics"></a> Tensor metrics</h4>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mean FA</span><br><span class="line">mean MD</span><br></pre></td></tr></table></figure>
+<h4 id="tract-metrics"><a class="markdownIt-Anchor" href="#tract-metrics"></a> Tract metrics</h4>
+<p>例如：</p>
+<p>某条纤维：</p>
+<p>Corpus callosum:</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FA</td>
+</tr>
+<tr>
+<td>MD</td>
+</tr>
+<tr>
+<td>volume</td>
+</tr>
+<tr>
+<td>streamline count</td>
+</tr>
+<tr>
+<td>length</td>
+</tr>
+</tbody>
+</table>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CST:</span><br><span class="line">FA = 0.52</span><br><span class="line">MD = 0.72×10^-3 mm²/s</span><br><span class="line">volume = xxx mm3</span><br></pre></td></tr></table></figure>
+<hr>
+<h3 id="8-一个完整的-mrtrix3-qc流程"><a class="markdownIt-Anchor" href="#8-一个完整的-mrtrix3-qc流程"></a> 8. 一个完整的 MRtrix3 QC流程</h3>
+<p>你的猴子数据可以这样：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">DICOM</span><br><span class="line"> |</span><br><span class="line"> ↓</span><br><span class="line">BIDS dwi/</span><br><span class="line"> |</span><br><span class="line"> ↓</span><br><span class="line">dwidenoise</span><br><span class="line"> |</span><br><span class="line"> ↓</span><br><span class="line">mrdegibbs</span><br><span class="line"> |</span><br><span class="line"> ↓</span><br><span class="line">topup/eddy</span><br><span class="line"> |</span><br><span class="line"> ↓</span><br><span class="line">bias correction</span><br><span class="line"> |</span><br><span class="line"> ↓</span><br><span class="line">brain mask</span><br><span class="line"> |</span><br><span class="line"> ↓</span><br><span class="line">DTIFIT / DTI metrics</span><br><span class="line"> |</span><br><span class="line"> ↓</span><br><span class="line">response function</span><br><span class="line"> |</span><br><span class="line"> ↓</span><br><span class="line">FOD estimation</span><br><span class="line"> |</span><br><span class="line"> ↓</span><br><span class="line">tckgen</span><br><span class="line"> |</span><br><span class="line"> ↓</span><br><span class="line">tcksift2</span><br><span class="line"> |</span><br><span class="line"> ↓</span><br><span class="line">tract analysis</span><br><span class="line"> |</span><br><span class="line"> ↓</span><br><span class="line">QC</span><br></pre></td></tr></table></figure>
+<p>QC：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">✓ motion</span><br><span class="line">✓ FA map</span><br><span class="line">✓ FOD visualization</span><br><span class="line">✓ registration</span><br><span class="line">✓ tract anatomy</span><br><span class="line">✓ streamline statistics</span><br></pre></td></tr></table></figure>
+<hr>
+<p>结合你目前的任务：</p>
+<blockquote>
+<p>猕猴标准图谱 → rs-fMRI → DTI追踪</p>
+</blockquote>
+<p>我建议优先级：</p>
+<ol>
+<li><strong>先确认 atlas 配准</strong></li>
+</ol>
+<p>因为后面：</p>
+<ul>
+<li>functional connectivity</li>
+<li>tractography</li>
+</ul>
+<p>都依赖这个空间。</p>
+<ol>
+<li>DTI先做：</li>
+</ol>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">FA map</span><br><span class="line">↓</span><br><span class="line">FOD</span><br><span class="line">↓</span><br><span class="line">whole brain tractography</span><br><span class="line">↓</span><br><span class="line">几个经典bundle验证</span><br></pre></td></tr></table></figure>
+<p>推荐先追：</p>
+<ul>
+<li>Corpus callosum（胼胝体）</li>
+<li>Corticospinal tract（皮质脊髓束）</li>
+<li>Arcuate fasciculus（弓状束，如果猴子适用）</li>
+<li>Optic radiation（视辐射）</li>
+</ul>
+<p>这几个是判断猴子 DTI 流程是否正确的经典 sanity check。</p>
+</blockquote>
 <h1 id="深度学习任务"><a class="markdownIt-Anchor" href="#深度学习任务"></a> 深度学习任务</h1>
 <table>
 <thead>
