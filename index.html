@@ -43,7 +43,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>185</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>184</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>45</strong><br>标签</div></a>
     </div>
@@ -1604,7 +1604,7 @@ relevant to its improved performance.</p>
 <h3 id="33-自动化预处理脚本"><a class="markdownIt-Anchor" href="#33-自动化预处理脚本"></a> 3.3 <strong>自动化预处理脚本</strong></h3>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tcat (去前2TR) → outcount (异常检测) → tshift (层间校正)</span><br><span class="line">→ volreg (头动校正) → blur (平滑) → mask → scale</span><br><span class="line">→ 3dDeconvolve (GLM) → 3dClustSim → QC 报告</span><br></pre></td></tr></table></figure>
 <p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260712205453869.png" alt="image-20260712205453869"></p>
-<h3 id="34-s时间校正lice-timing"><a class="markdownIt-Anchor" href="#34-s时间校正lice-timing"></a> 3.4 S时间校正lice Timing</h3>
+<h3 id="34-时间校正lice-timing"><a class="markdownIt-Anchor" href="#34-时间校正lice-timing"></a> 3.4 时间校正lice Timing</h3>
 <p>MRI 一次扫描通常不是同时采集整个脑部，而是按照 slice 顺序逐层获取信号。因此<strong>同一个时间点的不同脑层实际上存在时间偏移</strong>，需要进行时间校正。</p>
 <p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260712210219120.png" alt="image-20260712210219120"></p>
 <blockquote>
@@ -1617,14 +1617,38 @@ relevant to its improved performance.</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> day3/output/FT.day3.results</span><br><span class="line">afni pb00.FT.day3.r01.tcat+orig pb01.FT.day3.r01.tshift+orig &amp;</span><br></pre></td></tr></table></figure>
 </blockquote>
 <h3 id="35-头动校正motion-correction"><a class="markdownIt-Anchor" href="#35-头动校正motion-correction"></a> 3.5 头动校正（Motion Correction）</h3>
-<p>fMRI 扫描过程中，被试轻微移动会导致不同时间点<strong>脑结构位置发生变化</strong>，从而产生假激活信号。因此需要将所有时间点图像对齐到同一个参考空间。</p>
+<p>fMRI 扫描过程中，被试轻微移动会导致不同</p>
+<p>时间点<strong>脑结构位置发生变化</strong>，从而产生假激活信号。因此需要将所有时间点图像对齐到同一个参考空间。</p>
+<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260811171217183.png" alt="image-20260811171217183"></p>
 <p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260712210714513.png" alt="image-20260712210714513"></p>
-<h3 id="36-空间标准化spatial-normalization"><a class="markdownIt-Anchor" href="#36-空间标准化spatial-normalization"></a> 3.6 空间标准化（Spatial Normalization）</h3>
-<p>不同被试的大脑大小、形态存在差异，需要将个体脑图像转换到统一标准空间</p>
+<p>就是6Dxyz rx ry rz 的轴, 看那个位置的变化比较大</p>
+<blockquote>
+<p>图中可见红色变化很大</p>
+</blockquote>
+<h3 id="36-空间配准和标准化spatial-normalization"><a class="markdownIt-Anchor" href="#36-空间配准和标准化spatial-normalization"></a> 3.6 空间配准和标准化（Spatial Normalization）</h3>
+<p><strong>不同被试</strong>的大脑大小、形态存在差异，需要将个体脑图像转换到统一标准空间</p>
+<p>功能像 --&gt;结构像配准 --&gt; 标准空间配准</p>
+<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260811170407027.png" alt="image-20260811170407027"></p>
+<p>标准空间:<br>
+<img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260811171009516.png" alt="image-20260811171009516"></p>
 <p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260712211643098.png" alt="image-20260712211643098"></p>
 <h3 id="37-平空间平滑spatial-smoothing"><a class="markdownIt-Anchor" href="#37-平空间平滑spatial-smoothing"></a> 3.7  <strong>平空间平滑（Spatial Smoothing）</strong></h3>
+<ol>
+<li>相邻体素的噪音进行平滑, 提高信噪比</li>
+<li>激活脑区变大</li>
+</ol>
 <p>fMRI 数据存在较高空间噪声，通过高斯滤波提高信噪比，同时满足统计分析中的空间连续性假设。</p>
+<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260811173042402.png" alt="image-20260811173042402"></p>
 <p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260712212425321.png" alt="image-20260712212425321"></p>
+<p><strong>对比:</strong></p>
+<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260811173240945.png" alt></p>
+<h3 id="37-时间序列标准化"><a class="markdownIt-Anchor" href="#37-时间序列标准化"></a> 3.7 时间序列标准化</h3>
+<p>比较的是变化百分比而不是变化值大小</p>
+<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260811173438686.png" alt="image-20260811173438686"></p>
+<p>对比</p>
+<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260811173831028.png" alt="image-20260811173831028"></p>
+<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260811173929639.png" alt="image-20260811173929639"></p>
+<h3 id="38-一般线性回归"><a class="markdownIt-Anchor" href="#38-一般线性回归"></a> 3.8 一般线性回归</h3>
 <h3 id="38-个体建模求解-glm"><a class="markdownIt-Anchor" href="#38-个体建模求解-glm"></a> 3.8  <strong>个体建模求解</strong> (GLM）</h3>
 <p>分析实验刺激是否<strong>导致特定脑区 BOLD 信号变化</strong>。 使用一般线性模型（General Linear Model, GLM）建立刺激与脑活动之间的统计关系。</p>
 <p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260712213026708.png" alt="image-20260712213026708"></p>
@@ -1747,7 +1771,7 @@ relevant to its improved performance.</p>
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>185</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>184</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>45</strong><br>标签</div></a>
     </div>
