@@ -43,9 +43,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>184</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>186</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>45</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>46</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -70,6 +70,241 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-2026年8月15日-nnModel详解01-Unet" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A301-Unet/" class="article-date">
+  <time class="post-time" datetime="2026-08-15T05:57:35.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">15</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A301-Unet/">2026年8月15日 nnModel详解01-Unet</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="0-前置"><a class="markdownIt-Anchor" href="#0-前置"></a> 0 前置</h1>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/AggressiveYu/article/details/151256739">https://blog.csdn.net/AggressiveYu/article/details/151256739</a></p>
+</blockquote>
+<h2 id="1-是什么"><a class="markdownIt-Anchor" href="#1-是什么"></a> 1 是什么</h2>
+<p>Unet是一个U形的深度学习网络, 主要由卷积层, 下采样, 上采样和连接组成</p>
+<h2 id="2-为什么"><a class="markdownIt-Anchor" href="#2-为什么"></a> 2 为什么</h2>
+<p>1 为图像分割而生</p>
+<p>2 不想传统分类模型得出结论,而是需要与原图一直的mask分割掩码图</p>
+<p>3</p>
+<h1 id="1-网络结构"><a class="markdownIt-Anchor" href="#1-网络结构"></a> 1 网络结构</h1>
+<p>整个像一个英文字母“U”。<strong>左侧的编码器（收缩路径）</strong> 和 <strong>右侧的解码器（扩张路径）</strong>。</p>
+<p><img src="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A301-Unet/654d5ae1ea484485b34f47a6bb59701e.png" alt="img"></p>
+<p>三大核心组件:</p>
+<ol>
+<li>左侧的encoder: 负责特征提取</li>
+<li>右侧的decoder:  利用特征</li>
+<li>中间的跳跃连接:</li>
+</ol>
+<h2 id="11-encoder"><a class="markdownIt-Anchor" href="#11-encoder"></a> 1.1 encoder</h2>
+<p>负责特征提取:</p>
+<p>主要是由:</p>
+<ol>
+<li>两个3X3的卷积层和激活函数组成</li>
+<li>一个2X2的最大池化层, stride=2, size减半</li>
+</ol>
+<p><strong>目的:</strong></p>
+<ol>
+<li>提取特征,</li>
+<li>高级语义信息</li>
+</ol>
+<p><strong>实现:</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Encoder</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, in_channels, out_channels</span>):</span><br><span class="line">        <span class="built_in">super</span>(Encoder, self).__init__()</span><br><span class="line">        self.doownConv1 = Conv(in_channels, out_channels, kernel_size=<span class="number">3</span>, padding=<span class="number">1</span>)</span><br><span class="line">        self.doownConv2 = Conv(out_channels, out_channels, kernel_size=<span class="number">3</span>, padding=<span class="number">1</span>)</span><br><span class="line">        self.maxpool = nn.MaxPool2d(kernel_size=<span class="number">2</span>, stride=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        convOuput = self.doownConv2((self.doownConv1(x)))</span><br><span class="line">        <span class="built_in">print</span>(convOuput.shape)</span><br><span class="line">        x = self.maxpool(convOuput)</span><br><span class="line">        <span class="built_in">print</span>(x.shape)</span><br><span class="line">        <span class="keyword">return</span> x, convOuput</span><br></pre></td></tr></table></figure>
+<h2 id="12-decoder"><a class="markdownIt-Anchor" href="#12-decoder"></a> 1.2 decoder</h2>
+<p>将编码器提取的高级但粗糙的特征图<strong>恢复到原始图像的尺寸</strong>，并在此过程中实现像素级的精确定位。</p>
+<p>主要由:</p>
+<ol>
+<li>2x2的上采样, 转置卷积</li>
+<li>3x3的卷积层+激活函数</li>
+<li>跳跃连接进行concat</li>
+</ol>
+<p><strong>目的</strong></p>
+<ol>
+<li>恢复分辨率</li>
+<li>类似任务头</li>
+</ol>
+<p><strong>实现</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Decoder</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, in_channels, out_channels</span>):</span><br><span class="line">        <span class="built_in">super</span>(Decoder, self).__init__()</span><br><span class="line">        self.upTranConv = nn.ConvTranspose2d(in_channels, out_channels, kernel_size=<span class="number">2</span>, stride=<span class="number">2</span>, padding=<span class="number">0</span>)</span><br><span class="line">        self.upConv1 = Conv(out_channels*<span class="number">2</span>, out_channels, kernel_size=<span class="number">3</span>, padding=<span class="number">1</span>)</span><br><span class="line">        self.upConv2 = Conv(out_channels, out_channels, kernel_size=<span class="number">3</span>, padding=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, encoderOutput</span>):</span><br><span class="line">        x = self.upTranConv(x)</span><br><span class="line">        x = torch.cat((x, encoderOutput), dim=<span class="number">1</span>)</span><br><span class="line">        x = self.upConv2(self.upConv1(x))</span><br><span class="line">        <span class="keyword">return</span> x</span><br></pre></td></tr></table></figure>
+<blockquote>
+<h3 id="121-转置卷积"><a class="markdownIt-Anchor" href="#121-转置卷积"></a> 1.2.1  转置卷积</h3>
+<p>普通卷积是通过滑动窗口把大图“变小/提炼”；转置卷积则是通过<strong>插值填充（Padding）</strong> 和 <strong>重叠累加</strong> 把小图“放大”。</p>
+<p>第一步:  插值和填空</p>
+<ol>
+<li>stride: 对像素的相邻元素之间进行填充0. stride-1</li>
+<li>padding: 普通卷积是整体边缘填充0; 转置卷积是裁剪去padding个0</li>
+</ol>
+<p>第二步: 移动</p>
+<ol>
+<li>用卷积核（Kernel）按 <code>stride=1</code> 进行标准的 2D 卷积运算。</li>
+</ol>
+</blockquote>
+<h2 id="13-跳跃连接-skip-connections-u-net-的精髓"><a class="markdownIt-Anchor" href="#13-跳跃连接-skip-connections-u-net-的精髓"></a> 1.3 跳跃连接 (Skip Connections) - U-Net 的精髓</h2>
+<p><strong>Encoder中、下采样之前的特征图</strong>，直接“跳跃”到Decoder中，与<strong>对应层级上采样之后的特征图进行拼接</strong>。</p>
+<p><strong>为什么:</strong></p>
+<ol>
+<li>获取来自<strong>高分辨率</strong>的encoder的特征和局部细节</li>
+<li>获取来自decoder的<strong>高纬度特征</strong>和全局细节</li>
+</ol>
+<h2 id="14-完整代码"><a class="markdownIt-Anchor" href="#14-完整代码"></a> 1.4 完整代码</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> torch <span class="keyword">import</span> nn</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Conv</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, in_channels, out_channels, kernel_size, padding</span>):</span><br><span class="line">        <span class="built_in">super</span>(Conv, self).__init__()</span><br><span class="line">        self.conv = nn.Conv2d(in_channels, out_channels, kernel_size=kernel_size, padding=padding)</span><br><span class="line">        self.relu = nn.ReLU()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        x = self.relu(self.conv(x))</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">concatNet</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, in_channels, out_channels</span>):</span><br><span class="line">        <span class="built_in">super</span>(concatNet, self).__init__()</span><br><span class="line">        self.linear = nn.Linear(in_channels, out_channels)</span><br><span class="line">        self.relu = nn.ReLU()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        x = self.relu(self.linear(x))</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Encoder</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, in_channels, out_channels</span>):</span><br><span class="line">        <span class="built_in">super</span>(Encoder, self).__init__()</span><br><span class="line">        self.doownConv1 = Conv(in_channels, out_channels, kernel_size=<span class="number">3</span>, padding=<span class="number">1</span>)</span><br><span class="line">        self.doownConv2 = Conv(out_channels, out_channels, kernel_size=<span class="number">3</span>, padding=<span class="number">1</span>)</span><br><span class="line">        self.maxpool = nn.MaxPool2d(kernel_size=<span class="number">2</span>, stride=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        convOuput = self.doownConv2((self.doownConv1(x)))</span><br><span class="line">        <span class="comment"># print(convOuput.shape)</span></span><br><span class="line">        x = self.maxpool(convOuput)</span><br><span class="line">        <span class="comment"># print(x.shape)</span></span><br><span class="line">        <span class="keyword">return</span> x, convOuput</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Decoder</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, in_channels, out_channels</span>):</span><br><span class="line">        <span class="built_in">super</span>(Decoder, self).__init__()</span><br><span class="line">        self.upTranConv = nn.ConvTranspose2d(in_channels, out_channels, kernel_size=<span class="number">2</span>, stride=<span class="number">2</span>, padding=<span class="number">0</span>)</span><br><span class="line">        self.upConv1 = Conv(out_channels*<span class="number">2</span>, out_channels, kernel_size=<span class="number">3</span>, padding=<span class="number">1</span>)</span><br><span class="line">        self.upConv2 = Conv(out_channels, out_channels, kernel_size=<span class="number">3</span>, padding=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, encoderOutput</span>):</span><br><span class="line">        x = self.upTranConv(x)</span><br><span class="line">        x = torch.cat((x, encoderOutput), dim=<span class="number">1</span>)</span><br><span class="line">        x = self.upConv2(self.upConv1(x))</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Unet</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, in_channels, out_channels</span>):</span><br><span class="line">        <span class="built_in">super</span>(Unet, self).__init__()</span><br><span class="line">        self.encoder1 = Encoder(in_channels, <span class="number">64</span>)</span><br><span class="line">        self.encoder2 = Encoder(<span class="number">64</span>, <span class="number">128</span>)</span><br><span class="line">        self.encoder3 = Encoder(<span class="number">128</span>, <span class="number">256</span>)</span><br><span class="line">        self.encoder4 = Encoder(<span class="number">256</span>, <span class="number">512</span>)</span><br><span class="line"></span><br><span class="line">        self.bottleConv1 = Conv(<span class="number">512</span>, <span class="number">1024</span>, kernel_size=<span class="number">3</span>, padding=<span class="number">1</span>)</span><br><span class="line">        self.bottleConv2 = Conv(<span class="number">1024</span>, <span class="number">1024</span>, kernel_size=<span class="number">3</span>, padding=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        self.decoder1 = Decoder(<span class="number">1024</span>, <span class="number">512</span>)</span><br><span class="line">        self.decoder2 = Decoder(<span class="number">512</span>, <span class="number">256</span>)</span><br><span class="line">        self.decoder3 = Decoder(<span class="number">256</span>, <span class="number">128</span>)</span><br><span class="line">        self.decoder4 = Decoder(<span class="number">128</span>, <span class="number">64</span>)</span><br><span class="line"></span><br><span class="line">        self.outputConv = Conv(<span class="number">64</span>, out_channels, kernel_size=<span class="number">1</span>, padding=<span class="number">0</span>)</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        x, encoderOutput1 = self.encoder1(x)</span><br><span class="line">        x, encoderOutput2 = self.encoder2(x)</span><br><span class="line">        x, encoderOutput3 = self.encoder3(x)</span><br><span class="line">        x, encoderOutput4 = self.encoder4(x)</span><br><span class="line"></span><br><span class="line">        x = self.bottleConv2(self.bottleConv1(x))</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;shape of x: &quot;</span>, x.shape)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;shape of encoderOutput4: &quot;</span>, encoderOutput4.shape)</span><br><span class="line">        x = self.decoder1(x, encoderOutput4)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;shape of x: &quot;</span>, x.shape)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;shape of encoderOutput3: &quot;</span>, encoderOutput3.shape)</span><br><span class="line">        x = self.decoder2(x, encoderOutput3)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;shape of x: &quot;</span>, x.shape)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;shape of encoderOutput2: &quot;</span>, encoderOutput2.shape)</span><br><span class="line">        x = self.decoder3(x, encoderOutput2)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;shape of x: &quot;</span>, x.shape)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;shape of encoderOutput1: &quot;</span>, encoderOutput1.shape)</span><br><span class="line">        x = self.decoder4(x, encoderOutput1)</span><br><span class="line"></span><br><span class="line">        x = self.outputConv(x)</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    model = Unet(in_channels=<span class="number">3</span>, out_channels=<span class="number">2</span>)</span><br><span class="line">    dummy_input = torch.randn(<span class="number">1</span>, <span class="number">3</span>, <span class="number">256</span>, <span class="number">256</span>)</span><br><span class="line">    output = model(dummy_input)</span><br><span class="line">    <span class="built_in">print</span>(output.shape)</span><br></pre></td></tr></table></figure>
+<h1 id="2-训练"><a class="markdownIt-Anchor" href="#2-训练"></a> 2 训练</h1>
+<h2 id="21-数据标签"><a class="markdownIt-Anchor" href="#21-数据标签"></a> 2.1 数据标签</h2>
+<p>U-Net 处理的是<strong>像素级的预测</strong>，因此其数据标签不是简单的分类标签（如 class_id），而是<strong>与输入图像空间尺寸（H, W）完全一致的掩码图（Mask/Ground Truth）</strong>。</p>
+<ul>
+<li><strong>二分类分割（Binary Segmentation）</strong>：如背景 vs 前景（肿瘤、车道线、建筑物）。
+<ul>
+<li><strong>标签形状</strong>：<code>[H, W]</code> 或 <code>[1, H, W]</code></li>
+<li><strong>像素取值</strong>：<code>0</code>（背景）和 <code>1</code>（目标）的二值图（非 0 即 255 的单通道图片转化而来）。</li>
+</ul>
+</li>
+<li><strong>多类别语义分割（Multi-Class Segmentation）</strong>：如背景、器官A、器官B、器官C（共 N 类）。
+<ul>
+<li><strong>标签形状</strong>：<code>[H, W]</code></li>
+<li><strong>像素取值</strong>：每个像素位置的值为类别的类别索引号，取值范围为 <code>[0, N-1]</code>（例如 0 代表背景，1 代表肝脏，2 代表肾脏）。</li>
+</ul>
+</li>
+<li><strong>多标签/多重重叠分割（Multi-Label Segmentation）</strong>：一个像素可以同时属于多个类。
+<ul>
+<li><strong>标签形状</strong>：<code>[N, H, W]</code>（<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span> 为类别数）</li>
+<li><strong>像素取值</strong>：每个通道是一个独立的二值 Mask（取值为 0 或 1）。</li>
+</ul>
+</li>
+</ul>
+<h2 id="22-损失函数"><a class="markdownIt-Anchor" href="#22-损失函数"></a> 2.2 损失函数</h2>
+<table>
+<thead>
+<tr>
+<th><strong>损失函数</strong></th>
+<th><strong>适用场景</strong></th>
+<th><strong>说明与公式特点</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>BCEWithLogitsLoss</strong> <em>(Binary Cross Entropy)</em></td>
+<td><strong>二分类 / 多标签</strong></td>
+<td>将每个像素看作独立的二分类。内置 Sigmoid 激活函数，数值稳定性高。</td>
+</tr>
+<tr>
+<td><strong>CrossEntropyLoss</strong></td>
+<td><strong>多类别</strong></td>
+<td>将每个像素看作多分类问题。内置 Softmax 激活函数。输入模型预测 <code>[B, C, H, W]</code>，标签为 <code>[B, H, W]</code>（元素值为类索引）。</td>
+</tr>
+</tbody>
+</table>
+<h4 id="dice-lossdice-损失"><a class="markdownIt-Anchor" href="#dice-lossdice-损失"></a> Dice Loss（Dice 损失）</h4>
+<p>基于 Dice 相似系数（Dice Coefficient），直接优化模型预测区域与 Ground Truth 的交并重叠度。</p>
+<p><img src="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A301-Unet/image-20260815170625820.png" alt="image-20260815170625820"></p>
+<h1 id="3-改进思路"><a class="markdownIt-Anchor" href="#3-改进思路"></a> 3 改进思路</h1>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/684221454">https://zhuanlan.zhihu.com/p/684221454</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/1886374767931655663">https://zhuanlan.zhihu.com/p/1886374767931655663</a></p>
+</blockquote>
+<h2 id="0-改进方向"><a class="markdownIt-Anchor" href="#0-改进方向"></a> 0 改进方向</h2>
+<ol>
+<li>替换卷积结构</li>
+<li>降低复杂度</li>
+<li>模型结构</li>
+</ol>
+<img src="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A301-Unet/image-20260815171529814.png" alt="image-20260815171529814" style="zoom:50%;">
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A301-Unet/" data-id="cmsu5vdrg0001kwv41yo74hml" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nn/" rel="tag">nn</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2026年8月13日-vlagent总结" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/08/13/2026%E5%B9%B48%E6%9C%8813%E6%97%A5-vlagent%E6%80%BB%E7%BB%93/" class="article-date">
+  <time class="post-time" datetime="2026-08-13T14:33:00.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">13</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2026/08/13/2026%E5%B9%B48%E6%9C%8813%E6%97%A5-vlagent%E6%80%BB%E7%BB%93/">2026年8月13日 vlagent总结</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="vad"><a class="markdownIt-Anchor" href="#vad"></a> VAD</h2>
+<p><img src="/2026/08/13/2026%E5%B9%B48%E6%9C%8813%E6%97%A5-vlagent%E6%80%BB%E7%BB%93/image-20260813223313686.png" alt="image-20260813223313686"></p>
+<h2 id="asr"><a class="markdownIt-Anchor" href="#asr"></a> ASR</h2>
+<h3 id="1-api-key"><a class="markdownIt-Anchor" href="#1-api-key"></a> 1 api key</h3>
+<h3 id="2"><a class="markdownIt-Anchor" href="#2"></a> 2</h3>
+<h2 id="agent"><a class="markdownIt-Anchor" href="#agent"></a> Agent</h2>
+<h2 id="tts"><a class="markdownIt-Anchor" href="#tts"></a> TTS</h2>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/08/13/2026%E5%B9%B48%E6%9C%8813%E6%97%A5-vlagent%E6%80%BB%E7%BB%93/" data-id="cmsu5vdra0000kwv4d5dihdmc" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-2026年8月1日-第一份工作总结" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -1453,280 +1688,6 @@ relevant to its improved performance.</p>
 
 
   
-    <article id="post-2026年7月14日-vlm" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2026/07/14/2026%E5%B9%B47%E6%9C%8814%E6%97%A5-vlm/" class="article-date">
-  <time class="post-time" datetime="2026-07-14T13:18:57.000Z" itemprop="datePublished">
-    <span class="post-month">7月</span><br/>
-    <span class="post-day">14</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2026/07/14/2026%E5%B9%B47%E6%9C%8814%E6%97%A5-vlm/">2026年7月14日 vlm</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="怎么融合文本语义和图像语义"><a class="markdownIt-Anchor" href="#怎么融合文本语义和图像语义"></a> 怎么融合文本语义和图像语义</h1>
-<h2 id="1-经典-vlm-的三剑客架构"><a class="markdownIt-Anchor" href="#1-经典-vlm-的三剑客架构"></a> 1. 经典 VLM 的三剑客架构</h2>
-<p>绝大多数主流 VLM 都采用三阶段结构来连接视觉和语言：</p>
-<ol>
-<li><strong>Vision Encoder（视觉编码器）：</strong> 比如 ViT (Vision Transformer)。它的任务是把一张图片切成很多小方块（Patches），提取高维的空间视觉特征。</li>
-<li><strong>Projector（多模态投影层）：</strong> 这是一个“桥梁”（通常是 1~2 层 MLP 线性层，或者是 Q-Former 结构）。<strong>它的作用是进行“格式转换”</strong>，把视觉向量的维度硬生生转换成和 LLM 文本 Embedding 完全一样的维度。</li>
-<li><strong>LLM Backbone（语言模型基座）：</strong> 比如 Llama 或 Qwen。它负责接收转换后的图像特征和文本，进行最后的推理。</li>
-</ol>
-<h2 id="2-q-former"><a class="markdownIt-Anchor" href="#2-q-former"></a> 2 Q-Former</h2>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/24626046588">https://zhuanlan.zhihu.com/p/24626046588</a></p>
-</blockquote>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> torch.nn <span class="keyword">as</span> nn</span><br><span class="line"><span class="keyword">import</span> torch.nn.functional <span class="keyword">as</span> F</span><br><span class="line"><span class="keyword">from</span> transformers <span class="keyword">import</span> BertModel, BertConfig</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">QFormer</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, image_feature_dim=<span class="number">768</span>, num_query_tokens=<span class="number">32</span>, hidden_dim=<span class="number">768</span></span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 初始化可学习的查询向量（Query Embeddings）</span></span><br><span class="line">        self.query_tokens = nn.Parameter(torch.randn(<span class="number">1</span>, num_query_tokens, hidden_dim))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Transformer 编码器（基于 BertConfig 的双流 Transformer）</span></span><br><span class="line">        self.config = BertConfig(hidden_size=hidden_dim, num_hidden_layers=<span class="number">6</span>, num_attention_heads=<span class="number">8</span>)</span><br><span class="line">        self.transformer = BertModel(self.config)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 线性投影层，用于调整视觉特征的维度</span></span><br><span class="line">        self.image_proj = nn.Linear(image_feature_dim, hidden_dim)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, image_features</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        image_features: (batch_size, num_patches, image_feature_dim)  -&gt;  ViT/CLIP 提取的视觉特征</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        batch_size = image_features.shape[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 投影图像特征(来自vit)，使其维度匹配 Transformer</span></span><br><span class="line">        image_features = self.image_proj(image_features)  <span class="comment"># (batch, num_patches, hidden_dim)</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 复制查询向量，并拼接到图像特征前面</span></span><br><span class="line">        query_tokens = self.query_tokens.expand(batch_size, -<span class="number">1</span>, -<span class="number">1</span>)  <span class="comment"># (batch, num_queries, hidden_dim)</span></span><br><span class="line">        input_tokens = torch.cat([query_tokens, image_features], dim=<span class="number">1</span>)  <span class="comment"># (batch, num_queries + num_patches, hidden_dim)</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 输入 Transformer</span></span><br><span class="line">        outputs = self.transformer(inputs_embeds=input_tokens)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 只返回查询向量的输出（用于文本生成）</span></span><br><span class="line">        query_outputs = outputs.last_hidden_state[:, :query_tokens.shape[<span class="number">1</span>], :]  <span class="comment"># (batch, num_queries, hidden_dim)</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> query_outputs</span><br></pre></td></tr></table></figure>
-<h2 id="3-视觉token"><a class="markdownIt-Anchor" href="#3-视觉token"></a> 3 视觉token</h2>
-<p>输入序列 = [BOS] + [256个视觉 Tokens] + [5个文本 Tokens]</p>
-<p>文本 Token 产生它的 <strong>Query (Q)</strong>。比如第 258 个 Token（“猫”字）的 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Q</mi><mtext>猫</mtext></msub></mrow><annotation encoding="application/x-tex">Q_{猫}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord cjk_fallback mtight">猫</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 诞生了：</p>
-<ul>
-<li><strong>它会去和谁算注意力？</strong> 它不仅会去和前后相邻的文本 Token 的 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>K</mi></mrow><annotation encoding="application/x-tex">K</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">K</span></span></span></span> 做计算，还会<strong>横向跨越物理边界，去和那 256 个视觉 Token 的 K 算点积！</strong></li>
-</ul>
-<p class="katex-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>Attention</mtext><mo stretchy="false">(</mo><msub><mi>Q</mi><mtext>猫</mtext></msub><mo separator="true">,</mo><msub><mi>K</mi><mtext>所有</mtext></msub><mo stretchy="false">)</mo><mo>→</mo><mtext>与那 256 个代表图片区域的 Key 逐一计算相似度</mtext></mrow><annotation encoding="application/x-tex">\text{Attention}(Q_{猫}, K_{所有}) \rightarrow \text{与那 256 个代表图片区域的 Key 逐一计算相似度}
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord text"><span class="mord">Attention</span></span><span class="mopen">(</span><span class="mord"><span class="mord mathnormal">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord cjk_fallback mtight">猫</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">K</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.32833099999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord cjk_fallback mtight">所</span><span class="mord cjk_fallback mtight">有</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8777699999999999em;vertical-align:-0.19444em;"></span><span class="mord text"><span class="mord cjk_fallback">与那</span><span class="mord"> 256 </span><span class="mord cjk_fallback">个代表图片区域的</span><span class="mord"> Key </span><span class="mord cjk_fallback">逐一计算相似度</span></span></span></span></span></span></p>
-<ul>
-<li><strong>神奇的结果：</strong> * 模型发现，图片中左下角第 42 号和 43 号“网格（视觉 Token）”的 Key 向量，与文本“猫”的 Query 向量极其匹配，点积权重极高。
-<ul>
-<li>于是，在加权求和（Weight <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>×</mo><mi>V</mi></mrow><annotation encoding="application/x-tex">\times V</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord">×</span><span class="mord mathnormal" style="margin-right:0.22222em;">V</span></span></span></span>）阶段，“猫”这个字后续的特征向量里，就<strong>物理融入了图片左下角那个毛茸茸区域的视觉 V 值</strong>。</li>
-<li><strong>语义融合完成！</strong> “猫”这个抽象的文字，在这一层里找到了它在物理世界（图片中）的对应实体。</li>
-</ul>
-</li>
-</ul>
-<blockquote>
-<p><img src="/2026/07/14/2026%E5%B9%B47%E6%9C%8814%E6%97%A5-vlm/image-20260714214149300.png" alt="image-20260714214149300"></p>
-</blockquote>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2026/07/14/2026%E5%B9%B47%E6%9C%8814%E6%97%A5-vlm/" data-id="cms1vppgf000alkv4ffp4d8rv" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2026年7月12日-MRI软件学习" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/" class="article-date">
-  <time class="post-time" datetime="2026-07-12T12:39:48.000Z" itemprop="datePublished">
-    <span class="post-month">7月</span><br/>
-    <span class="post-day">12</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/">2026年7月12日 mri报告</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="afni"><a class="markdownIt-Anchor" href="#afni"></a> AFNI</h1>
-<h2 id="1-介绍"><a class="markdownIt-Anchor" href="#1-介绍"></a> 1 介绍</h2>
-<p>主要用于 <strong>fMRI 数据预处理、统计分析与可视化</strong>。</p>
-<p>主要特点：</p>
-<ul>
-<li>支持 MRI、fMRI 数据分析</li>
-<li>支持 GUI 三维浏览</li>
-<li>可完成从原始数据到统计结果的完整分析流程</li>
-</ul>
-<h2 id="2-主要功能"><a class="markdownIt-Anchor" href="#2-主要功能"></a> 2  主要功能</h2>
-<p>AFNI 可以覆盖整个 fMRI 数据分析流程：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">原始 fMRI 数据</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">数据预处理</span><br><span class="line">(tcat、tshift、volreg、blur...)</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">个体水平分析</span><br><span class="line">(GLM、3dDeconvolve)</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">群体统计分析</span><br><span class="line">(3dttest++、3dMEMA...)</span><br><span class="line">        │</span><br><span class="line">        ▼</span><br><span class="line">结果可视化</span><br><span class="line">(AFNI GUI)</span><br></pre></td></tr></table></figure>
-<p>常见功能包括：</p>
-<ul>
-<li>图像浏览与三维重建</li>
-<li>Slice Timing 校正</li>
-<li>头动校正</li>
-<li>空间标准化</li>
-<li>空间平滑</li>
-<li>ROI 提取</li>
-<li>时间序列分析</li>
-<li>GLM 建模</li>
-<li>群体统计分析</li>
-</ul>
-<h2 id="3-操作"><a class="markdownIt-Anchor" href="#3-操作"></a> 3 操作</h2>
-<h3 id="30-afni-标准分析流程"><a class="markdownIt-Anchor" href="#30-afni-标准分析流程"></a> 3.0 AFNI 标准分析流程</h3>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">去前几个 TR</span><br><span class="line">      │</span><br><span class="line">      ▼</span><br><span class="line">Slice Timing 校正</span><br><span class="line">      │</span><br><span class="line">      ▼</span><br><span class="line">Head Motion 校正</span><br><span class="line">      │</span><br><span class="line">      ▼</span><br><span class="line">空间标准化</span><br><span class="line">      │</span><br><span class="line">      ▼</span><br><span class="line">空间平滑</span><br><span class="line">      │</span><br><span class="line">      ▼</span><br><span class="line">GLM 建模</span><br><span class="line">      │</span><br><span class="line">      ▼</span><br><span class="line">统计推断</span><br><span class="line">      │</span><br><span class="line">      ▼</span><br><span class="line">结果可视化</span><br></pre></td></tr></table></figure>
-<h3 id="31-安装afni"><a class="markdownIt-Anchor" href="#31-安装afni"></a> 3.1 安装afni</h3>
-<blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">afni -ver</span><br><span class="line">3dcalc -<span class="built_in">help</span></span><br><span class="line">afni </span><br></pre></td></tr></table></figure>
-</blockquote>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260712204033515.png" alt="image-20260712204033515"></p>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260712204153717.png" alt="image-20260712204153717"></p>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260712204229210.png" alt="image-20260712204229210"></p>
-<h3 id="32-demo原始图像的3d重构"><a class="markdownIt-Anchor" href="#32-demo原始图像的3d重构"></a> 3.2 demo<strong>原始图像的3D重构</strong></h3>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260712204817168.png" alt="image-20260712204817168"></p>
-<h3 id="33-自动化预处理脚本"><a class="markdownIt-Anchor" href="#33-自动化预处理脚本"></a> 3.3 <strong>自动化预处理脚本</strong></h3>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tcat (去前2TR) → outcount (异常检测) → tshift (层间校正)</span><br><span class="line">→ volreg (头动校正) → blur (平滑) → mask → scale</span><br><span class="line">→ 3dDeconvolve (GLM) → 3dClustSim → QC 报告</span><br></pre></td></tr></table></figure>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260712205453869.png" alt="image-20260712205453869"></p>
-<h3 id="34-时间校正lice-timing"><a class="markdownIt-Anchor" href="#34-时间校正lice-timing"></a> 3.4 时间校正lice Timing</h3>
-<p>MRI 一次扫描通常不是同时采集整个脑部，而是按照 slice 顺序逐层获取信号。因此<strong>同一个时间点的不同脑层实际上存在时间偏移</strong>，需要进行时间校正。</p>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260712210219120.png" alt="image-20260712210219120"></p>
-<blockquote>
-<ul>
-<li>校正前：33 层 offset 各不相同（alt+z 交错采集，如 <code>0.000 1.030 0.061 ...</code>）</li>
-<li>校正后：无 time-offset 行 → 各层对齐到 TR 起点</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /opt/workspace</span><br><span class="line">bash day3/run_day3.sh</span><br></pre></td></tr></table></figure>
-<p>GUI 对比校正效果（推荐）：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> day3/output/FT.day3.results</span><br><span class="line">afni pb00.FT.day3.r01.tcat+orig pb01.FT.day3.r01.tshift+orig &amp;</span><br></pre></td></tr></table></figure>
-</blockquote>
-<h3 id="35-头动校正motion-correction"><a class="markdownIt-Anchor" href="#35-头动校正motion-correction"></a> 3.5 头动校正（Motion Correction）</h3>
-<p>fMRI 扫描过程中，被试轻微移动会导致不同</p>
-<p>时间点<strong>脑结构位置发生变化</strong>，从而产生假激活信号。因此需要将所有时间点图像对齐到同一个参考空间。</p>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260811171217183.png" alt="image-20260811171217183"></p>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260712210714513.png" alt="image-20260712210714513"></p>
-<p>就是6Dxyz rx ry rz 的轴, 看那个位置的变化比较大</p>
-<blockquote>
-<p>图中可见红色变化很大</p>
-</blockquote>
-<h3 id="36-空间配准和标准化spatial-normalization"><a class="markdownIt-Anchor" href="#36-空间配准和标准化spatial-normalization"></a> 3.6 空间配准和标准化（Spatial Normalization）</h3>
-<p><strong>不同被试</strong>的大脑大小、形态存在差异，需要将个体脑图像转换到统一标准空间</p>
-<p>功能像 --&gt;结构像配准 --&gt; 标准空间配准</p>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260811170407027.png" alt="image-20260811170407027"></p>
-<p>标准空间:<br>
-<img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260811171009516.png" alt="image-20260811171009516"></p>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260712211643098.png" alt="image-20260712211643098"></p>
-<h3 id="37-平空间平滑spatial-smoothing"><a class="markdownIt-Anchor" href="#37-平空间平滑spatial-smoothing"></a> 3.7  <strong>平空间平滑（Spatial Smoothing）</strong></h3>
-<ol>
-<li>相邻体素的噪音进行平滑, 提高信噪比</li>
-<li>激活脑区变大</li>
-</ol>
-<p>fMRI 数据存在较高空间噪声，通过高斯滤波提高信噪比，同时满足统计分析中的空间连续性假设。</p>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260811173042402.png" alt="image-20260811173042402"></p>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260712212425321.png" alt="image-20260712212425321"></p>
-<p><strong>对比:</strong></p>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260811173240945.png" alt></p>
-<h3 id="37-时间序列标准化"><a class="markdownIt-Anchor" href="#37-时间序列标准化"></a> 3.7 时间序列标准化</h3>
-<p>比较的是变化百分比而不是变化值大小</p>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260811173438686.png" alt="image-20260811173438686"></p>
-<p>对比</p>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260811173831028.png" alt="image-20260811173831028"></p>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260811173929639.png" alt="image-20260811173929639"></p>
-<h3 id="38-一般线性回归"><a class="markdownIt-Anchor" href="#38-一般线性回归"></a> 3.8 一般线性回归</h3>
-<h3 id="38-个体建模求解-glm"><a class="markdownIt-Anchor" href="#38-个体建模求解-glm"></a> 3.8  <strong>个体建模求解</strong> (GLM）</h3>
-<p>分析实验刺激是否<strong>导致特定脑区 BOLD 信号变化</strong>。 使用一般线性模型（General Linear Model, GLM）建立刺激与脑活动之间的统计关系。</p>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260712213026708.png" alt="image-20260712213026708"></p>
-<h3 id="39-群体统计分析group-analysis"><a class="markdownIt-Anchor" href="#39-群体统计分析group-analysis"></a> 3.9 群体统计分析（Group Analysis）</h3>
-<p>个体分析得到每个人的大脑激活模式后，需要进一步比较多个被试之间的共同规律，例如疾病组和健康组之间的差异。</p>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260712213815039.png" alt="image-20260712213815039"></p>
-<h1 id="mrtrix3"><a class="markdownIt-Anchor" href="#mrtrix3"></a> MRtrix3</h1>
-<hr>
-<h2 id="1-介绍-2"><a class="markdownIt-Anchor" href="#1-介绍-2"></a> 1 介绍</h2>
-<p>专注于<strong>弥散磁共振成像（dMRI）</strong> 数据的分析与可视化。</p>
-<p>相比 AFNI 更关注：</p>
-<ul>
-<li>白质纤维</li>
-<li>神经束追踪</li>
-<li>大脑结构连接</li>
-</ul>
-<h2 id="2-主要功能-2"><a class="markdownIt-Anchor" href="#2-主要功能-2"></a> 2 主要功能</h2>
-<p>MRtrix3 主要完成：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">DWI 数据</span><br><span class="line">     │</span><br><span class="line">     ▼</span><br><span class="line">预处理</span><br><span class="line">     │</span><br><span class="line">     ▼</span><br><span class="line">扩散模型</span><br><span class="line">(DTI/CSD)</span><br><span class="line">     │</span><br><span class="line">     ▼</span><br><span class="line">纤维束追踪</span><br><span class="line">     │</span><br><span class="line">     ▼</span><br><span class="line">结构连接组</span><br></pre></td></tr></table></figure>
-<p>主要功能：</p>
-<ul>
-<li>DWI 去噪</li>
-<li>Gibbs 去除</li>
-<li>Eddy/Head Motion 校正</li>
-<li>Bias Field 校正</li>
-<li>Brain Mask</li>
-<li>DTI 建模</li>
-<li>CSD 建模</li>
-<li>Fiber Tracking</li>
-<li>Connectome 构建</li>
-</ul>
-<h2 id="3-操作-2"><a class="markdownIt-Anchor" href="#3-操作-2"></a> 3 操作</h2>
-<h3 id="30-标准流程"><a class="markdownIt-Anchor" href="#30-标准流程"></a> 3.0 标准流程</h3>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">DWI 数据</span><br><span class="line">     │</span><br><span class="line">     ▼</span><br><span class="line">去噪</span><br><span class="line">     │</span><br><span class="line">     ▼</span><br><span class="line">运动/涡流校正</span><br><span class="line">     │</span><br><span class="line">     ▼</span><br><span class="line">DTI/CSD 建模</span><br><span class="line">     │</span><br><span class="line">     ▼</span><br><span class="line">纤维束追踪</span><br><span class="line">     │</span><br><span class="line">     ▼</span><br><span class="line">结构连接组分析</span><br></pre></td></tr></table></figure>
-<h3 id="31-安装"><a class="markdownIt-Anchor" href="#31-安装"></a> 3.1 安装</h3>
-<h3 id="32-查看数据"><a class="markdownIt-Anchor" href="#32-查看数据"></a> 3.2 查看数据</h3>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mrview dwi.mif</span><br></pre></td></tr></table></figure>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash MRtrix3_learn/day1/mrview.sh</span><br></pre></td></tr></table></figure>
-<blockquote>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260712223235737.png" alt><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/qc_t1_from_dicom.png" alt="qc_t1_from_dicom"></p>
-</blockquote>
-<h3 id="33-dwi的预处理"><a class="markdownIt-Anchor" href="#33-dwi的预处理"></a> 3.3  DWI的预处理</h3>
-<p>涵盖<strong>去噪</strong>（<code>dwidenoise</code>）、<strong>Gibbs伪影去除</strong>、<strong>涡流校正和头动校正</strong>（<code>dwifslpreproc</code> 调用FSL）。<strong>B0场不均匀性校正（偏置场校正）</strong> 和<strong>大脑提取（剥颅骨）</strong>，得到高质量弥散数据, 为建模做最终准备。</p>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/qc_dwi_before_after.png" alt="qc_dwi_before_after"></p>
-<h3 id="34-弥散张量和csd"><a class="markdownIt-Anchor" href="#34-弥散张量和csd"></a> 3.4 弥散张量和CSD</h3>
-<p>两种核心模型：<strong>弥散张量成像（DTI）</strong> 和<strong>约束球面反卷积（CSD）</strong>。</p>
-<p>CSD能解决纤维交叉问题，是MRtrix3的核心优势。</p>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/qc_dti_csd.png" alt="qc_dti_csd"></p>
-<h3 id="35-纤维束追踪"><a class="markdownIt-Anchor" href="#35-纤维束追踪"></a> 3.5  纤维束追踪</h3>
-<p>纤维追踪算法（使用 <code>tckgen</code> 进行<strong>概率性追踪</strong>），生成上百万条模拟白质纤维轨迹，并介绍如何过滤和修剪纤维（<code>tcksift</code>）。</p>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/qc_tdi_before_after.png" alt="qc_tdi_before_after"></p>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260715142658936.png" alt="image-20260715142658936"></p>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260715143122056.png" alt="image-20260715143122056"></p>
-<h3 id="36-大脑连接组"><a class="markdownIt-Anchor" href="#36-大脑连接组"></a> 3.6  大脑连接组</h3>
-<p>将追踪出的纤维束与脑区图谱（节点）结合，构建<strong>结构性连接矩阵（Connectome）</strong>，用于分析大脑网络属性（使用 <code>tck2connectome</code>）。</p>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/qc_connectome.png" alt="qc_connectome"></p>
-<h1 id="uunet"><a class="markdownIt-Anchor" href="#uunet"></a> UUNet</h1>
-<h2 id="可视化"><a class="markdownIt-Anchor" href="#可视化"></a> 可视化</h2>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260726142707360.png" alt="image-20260726142707360"></p>
-<p><img src="/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/image-20260726142320099.png" alt="image-20260726142320099"></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2026/07/12/2026%E5%B9%B47%E6%9C%8812%E6%97%A5-MRI%E8%BD%AF%E4%BB%B6%E5%AD%A6%E4%B9%A0/" data-id="cms3c54xk0000eov4e8pw6eyh" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MRI/" rel="tag">MRI</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -1771,9 +1732,9 @@ relevant to its improved performance.</p>
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>184</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>186</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>45</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>46</strong><br>标签</div></a>
     </div>
 
 

@@ -43,9 +43,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>184</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>186</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>45</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>46</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -70,6 +70,222 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-2026年1月27日-torch介绍0" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/01/27/2026%E5%B9%B41%E6%9C%8827%E6%97%A5-torch%E4%BB%8B%E7%BB%8D0/" class="article-date">
+  <time class="post-time" datetime="2026-01-27T05:36:46.000Z" itemprop="datePublished">
+    <span class="post-month">1月</span><br/>
+    <span class="post-day">27</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2026/01/27/2026%E5%B9%B41%E6%9C%8827%E6%97%A5-torch%E4%BB%8B%E7%BB%8D0/">2026年1月27日 torch介绍0</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/647001891">https://zhuanlan.zhihu.com/p/647001891</a></li>
+</ol>
+</blockquote>
+<h1 id="pytorch"><a class="markdownIt-Anchor" href="#pytorch"></a> Pytorch</h1>
+<h1 id="1-介绍"><a class="markdownIt-Anchor" href="#1-介绍"></a> 1 介绍</h1>
+<p>PyTorch 是一个开源的深度学习框架，以其灵活性和动态计算图而广受欢迎。</p>
+<p>PyTorch 主要有以下几个基础概念：张量（Tensor）、自动求导（Autograd）、神经网络模块（nn.Module）、优化器（optim）等。</p>
+<ul>
+<li><strong>张量（Tensor）</strong>：PyTorch 的核心数据结构，支持多维数组，并可以在 CPU 或 GPU 上进行加速计算。</li>
+<li><strong>自动求导（Autograd）</strong>：PyTorch 提供了自动求导功能，可以轻松计算模型的梯度，便于进行反向传播和优化。</li>
+<li><strong>神经网络（nn.Module）</strong>：PyTorch 提供了简单且强大的 API 来构建神经网络模型，可以方便地进行前向传播和模型定义。</li>
+<li><strong>优化器（Optimizers）</strong>：使用优化器（如 Adam、SGD 等）来更新模型的参数，使得损失最小化。</li>
+<li><strong>设备（Device）</strong>：可以将模型和张量移动到 GPU 上以加速计算。</li>
+</ul>
+<hr>
+<h2 id="pytorch-架构总览"><a class="markdownIt-Anchor" href="#pytorch-架构总览"></a> PyTorch 架构总览</h2>
+<p>PyTorch 采用模块化设计，由多个相互协作的核心组件构成。理解这些组件的作用和相互关系，是掌握 PyTorch 的关键。</p>
+<h3 id="pytorch-架构图"><a class="markdownIt-Anchor" href="#pytorch-架构图"></a> PyTorch 架构图</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">┌─────────────────────────────────────────────────────────────┐</span><br><span class="line">│                    PyTorch 生态系统                          │</span><br><span class="line">├─────────────────────────────────────────────────────────────┤</span><br><span class="line">│  torchvision  │  torchtext  │  torchaudio  │  其他专业库     │</span><br><span class="line">├─────────────────────────────────────────────────────────────┤</span><br><span class="line">│                     PyTorch 核心                            │</span><br><span class="line">├───────────────┬─────────────────┬───────────────────────────┤</span><br><span class="line">│   torch.nn    │   torch.optim   │      torch.utils          │</span><br><span class="line">│   (神经网络)   │   (优化器)      │      (工具函数)           │</span><br><span class="line">├───────────────┼─────────────────┼───────────────────────────┤</span><br><span class="line">│               │                 │   torch.utils.data        │</span><br><span class="line">│  torch 核心   │  autograd       │   (数据加载)              │</span><br><span class="line">│  (张量计算)   │  (自动微分)     │                           │</span><br><span class="line">└───────────────┴─────────────────┴───────────────────────────┘</span><br></pre></td></tr></table></figure>
+<h2 id="1-分层架构"><a class="markdownIt-Anchor" href="#1-分层架构"></a> 1. 分层架构</h2>
+<p>PyTorch 采用<strong>分层架构</strong>设计，从上层到底层依次为：</p>
+<p><strong>1、Python API（顶层）</strong></p>
+<ul>
+<li><code>torch</code>：核心张量计算（类似NumPy，支持GPU）。</li>
+<li><code>torch.nn</code>：神经网络层、损失函数等。</li>
+<li><code>torch.autograd</code>：自动微分（反向传播）。</li>
+<li>开发者直接调用的接口，简单易用。</li>
+</ul>
+<p><strong>2、C++核心（中层）</strong></p>
+<ul>
+<li><strong>ATen</strong>：张量运算核心库（400+操作）。</li>
+<li><strong>JIT</strong>：即时编译优化模型。</li>
+<li><strong>Autograd引擎</strong>：自动微分的底层实现。</li>
+<li>高性能计算，连接Python与底层硬件。</li>
+</ul>
+<p><strong>3、基础库（底层）</strong></p>
+<ul>
+<li><strong>TH/THNN</strong>：C语言实现的基础张量和神经网络操作。</li>
+<li><strong>THC/THCUNN</strong>：对应的CUDA（GPU）版本。</li>
+<li>直接操作硬件（CPU/GPU），极致优化速度。</li>
+</ul>
+<p><img src="/2026/01/27/2026%E5%B9%B41%E6%9C%8827%E6%97%A5-torch%E4%BB%8B%E7%BB%8D0/image-20260127140243046.png" alt="image-20260127140243046"></p>
+<h3 id="2pytorch-的双层架构"><a class="markdownIt-Anchor" href="#2pytorch-的双层架构"></a> 2.PyTorch 的“双层”架构</h3>
+<p>PyTorch 的设计哲学是：<strong>用 Python 保证易用性，用 C++ 保证高性能。</strong></p>
+<ul>
+<li><strong>Python 层（Frontend）：</strong> 也就是我们直接接触的 API。它负责逻辑组织、用户交互和提供灵活的开发体验。</li>
+<li><strong>C++ 层（Backend）：</strong> 核心库被称为 <strong>LibTorch</strong>。它包含了张量运算（Tensor library）、自动求导引擎（Autograd）以及对硬件（如 CPU、GPU）的底层调用。</li>
+</ul>
+<h3 id="3-python-和-c-是如何通信的"><a class="markdownIt-Anchor" href="#3-python-和-c-是如何通信的"></a> 3. Python 和 C++ 是如何通信的？</h3>
+<p>PyTorch 使用了像 <strong>pybind11</strong> 这样的工具，在 Python 和 C++ 之间架起了一座桥梁。当你执行 <code>a + b</code>（两个张量相加）时：</p>
+<ol>
+<li>Python 调用指令。</li>
+<li>通过桥梁进入底层的 C++ 实现。</li>
+<li>C++ 调度 CUDA 核心或 CPU 指令完成运算。</li>
+<li>结果返回给 Python。</li>
+</ol>
+<h3 id="4-什么时候你会接触到-c-部分"><a class="markdownIt-Anchor" href="#4-什么时候你会接触到-c-部分"></a> 4. 什么时候你会接触到 C++ 部分？</h3>
+<p>普通用户通常不需要碰 C++，但在以下场景中它是必不可少的：</p>
+<ul>
+<li><strong>部署（Deployment）：</strong> 在嵌入式设备或对延迟要求极高的服务器上，开发者会直接使用 <strong>LibTorch</strong>（PyTorch 的 C++ 版本）来加载模型，完全脱离 Python 环境。</li>
+<li><strong>自定义算子：</strong> 如果你发明了一种极其复杂的数学运算，且 Python 实现太慢，你可以用 C++ 编写该算子并将其作为插件引入 PyTorch。</li>
+</ul>
+<h1 id="2-特征"><a class="markdownIt-Anchor" href="#2-特征"></a> 2 特征</h1>
+<h2 id="1-动态计算图"><a class="markdownIt-Anchor" href="#1-动态计算图"></a> 1 动态计算图</h2>
+<blockquote>
+<p>import torch</p>
+<p>def dynamic_model(x):<br>
+# 这里的 Python 逻辑直接决定了计算图的结构<br>
+if x.sum() &gt; 0:<br>
+out = x * 2  # 动态生成分支 A 的路径<br>
+else:<br>
+out = x + 5  # 动态生成分支 B 的路径</p>
+<pre><code># 甚至可以用循环，循环多少次，计算图就自动延伸多少个节点
+for i in range(int(torch.randint(1, 5, (1,)))):
+    out = out + i
+return out
+</code></pre>
+<p>x = torch.randn(2, 2, requires_grad=True)<br>
+y = dynamic_model(x)<br>
+y.backward(torch.ones_like(y)) # 自动求导引擎会沿着刚才“长”出来的路径反向走回去</p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/01/27/2026%E5%B9%B41%E6%9C%8827%E6%97%A5-torch%E4%BB%8B%E7%BB%8D0/" data-id="cml627031000h4kv49ygcaqvd" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl-pyhton/" rel="tag">dl,pyhton</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2026年1月24日-agent开发杂谈" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/01/24/2026%E5%B9%B41%E6%9C%8824%E6%97%A5-agent%E5%BC%80%E5%8F%91%E6%9D%82%E8%B0%88/" class="article-date">
+  <time class="post-time" datetime="2026-01-24T06:12:01.000Z" itemprop="datePublished">
+    <span class="post-month">1月</span><br/>
+    <span class="post-day">24</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2026/01/24/2026%E5%B9%B41%E6%9C%8824%E6%97%A5-agent%E5%BC%80%E5%8F%91%E6%9D%82%E8%B0%88/">2026年1月24日 agent开发杂谈</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="自进化"><a class="markdownIt-Anchor" href="#自进化"></a> 自进化</h1>
+<p>自我进化用一句来讲，大概是这样：</p>
+<blockquote>
+<p>真实任务里的经验，怎么变成下一次任务可复用、可验证、可治理的能力。</p>
+</blockquote>
+<h3 id="策略"><a class="markdownIt-Anchor" href="#策略"></a> 策略</h3>
+<p><strong>上下文进化</strong>：将执行经验、用户偏好或环境约束写回本地记忆文件、会话索引或技能目录，在下一次任务触发时通过检索提取并拼接入上下文。</p>
+<p><strong>技能进化</strong>：把经验外化成结构化的 <a target="_blank" rel="noopener" href="http://SKILL.md">SKILL.md</a>、技能包或工作流脚本。系统依据执行报错或反馈信号，自动修改技能代码，在测试集中跑通后覆盖老版本，失败则触发版本回滚。</p>
+<p><strong>群体智能进化</strong>：多个 Agent、多台机器、多个用户的本地经验接入云端共享层。系统在服务端完成轨迹去重、冲突合并、安全脱敏与质量验证，最后将提纯后的技能或记忆分发回所有终端。</p>
+<p><strong>策略进化</strong>：将真实的交互轨迹与成败反馈收集起来，直接修改 Agent 的核心调度代码、工作流拓扑，甚至转化为强化学习（RL）的标量奖励来更新大模型的底层参数。</p>
+<h4 id="1-上下文进化"><a class="markdownIt-Anchor" href="#1-上下文进化"></a> 1 上下文进化</h4>
+<p>典型的上下文资产包括：</p>
+<ul>
+<li>跨会话记忆✅</li>
+<li>会话检索</li>
+<li>用户画像✅</li>
+<li>项目级上下文</li>
+<li>技能目录的动态装载</li>
+<li>失败后的反思记录</li>
+</ul>
+<p><strong>触发时机</strong></p>
+<p>执行反馈与用户纠正产生分叉，一部分写入策展记忆，一部分沉淀为 Skills。当新任务到来，系统通过 session_search 将历史记忆与技能一并汇入下一轮上下文。</p>
+<h4 id="2-技能进化"><a class="markdownIt-Anchor" href="#2-技能进化"></a> 2. 技能进化</h4>
+<p>系统依据执行报错或反馈信号，自动修改技能代码，在测试集中跑通后覆盖老版本，失败则触发版本回滚。</p>
+<p>所以当我们发现某类经验开始重复出现，就不应该继续把它留在记忆层，而应该上升成技能资产。</p>
+<p>允许 agent 自己创建、编辑、补丁、删文件、写附属文件。</p>
+<p><strong>自动复盘机制。</strong></p>
+<p>第一层是 nudge。memory 按用户回合数触发，skills 按工具迭代次数触发。达到阈值以后，系统会在主任务完成后，后台 fork 一个 review agent，让它复查当前会话，看有没有东西值得落 memory 或 patch/create skill。[run_agent.py] run_agent.py#L2448-L2547  [run_agent.py] run_agent.py#L11586-L11612</p>
+<p>第二层是 guidance。系统提示里直接写明：</p>
+<ul>
+<li>复杂任务、踩坑任务、发现可复用流程，要考虑存技能</li>
+<li>技能用着发现过时或不完整，要立刻 patch</li>
+</ul>
+<h4 id="3-多agent-skill共享层"><a class="markdownIt-Anchor" href="#3-多agent-skill共享层"></a> 3 多agent skill共享层</h4>
+<h4 id="4-微调模型"><a class="markdownIt-Anchor" href="#4-微调模型"></a> 4 微调模型</h4>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/01/24/2026%E5%B9%B41%E6%9C%8824%E6%97%A5-agent%E5%BC%80%E5%8F%91%E6%9D%82%E8%B0%88/" data-id="cml62702z000e4kv41i3l8wwf" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-2026年1月24日-模型训练和数据杂谈" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -1820,276 +2036,6 @@
 
 
   
-    <article id="post-2025年9月3日-认知" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/09/03/2025%E5%B9%B49%E6%9C%883%E6%97%A5-%E8%AE%A4%E7%9F%A5/" class="article-date">
-  <time class="post-time" datetime="2025-09-03T01:19:30.000Z" itemprop="datePublished">
-    <span class="post-month">9月</span><br/>
-    <span class="post-day">03</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/09/03/2025%E5%B9%B49%E6%9C%883%E6%97%A5-%E8%AE%A4%E7%9F%A5/">2025年9月3日 认知</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>对我们来说，什么是最宝贵的？它是否值得我们用一生去坚守?</p>
-<p>你认为，对你来说什么是有价值的，是值得坚持的，什么又是最宝贵的呢？</p>
-<h2 id="价值观探索的多维度方法"><a class="markdownIt-Anchor" href="#价值观探索的多维度方法"></a> 🌟 价值观探索的多维度方法</h2>
-<h3 id="1️⃣-回溯反思法"><a class="markdownIt-Anchor" href="#1️⃣-回溯反思法"></a> 1️⃣ 回溯反思法</h3>
-<p>通过回顾过去的经历，我们可以发现那些指引我们的隐形价值观：</p>
-<ul>
-<li><strong>列出你感到最自豪的3个人生时刻</strong>：详细写下为什么这些时刻让你感到满足，其中体现了你看重什么</li>
-<li><strong>回忆5次最难的决定</strong>：分析什么因素最终让你做出了选择，背后是什么价值观在权衡</li>
-<li><strong>思考什么让你愤怒或不平</strong>：我们强烈的负面情绪往往源于价值观被侵犯</li>
-</ul>
-<h3 id="2️⃣-情境测试法"><a class="markdownIt-Anchor" href="#2️⃣-情境测试法"></a> 2️⃣ 情境测试法</h3>
-<p>当面临假设情境时，我们的价值排序会清晰显现：</p>
-<ul>
-<li>“如果只剩下一年生命，你会如何度过？”——这会暴露你最深层的优先项</li>
-<li>“如果你有无限资源，你会解决什么世界问题？”——这反映你的理想和关怀</li>
-<li>“你希望别人在你的葬礼上如何纪念你？”——这揭示你希望活出的生命品质</li>
-</ul>
-<h3 id="3️⃣-日常观察法"><a class="markdownIt-Anchor" href="#3️⃣-日常观察法"></a> 3️⃣ 日常观察法</h3>
-<p>价值观渗透在我们最平凡的选择中：</p>
-<ul>
-<li>检查你的银行账单和时间支出：<strong>你的资源流向哪里，你的价值就住在哪里</strong></li>
-<li>注意什么新闻让你感动或愤怒：这些强烈情绪指向你关心的价值议题</li>
-<li>观察你羡慕什么样的人：羡慕是价值观的镜子，映照出我们内心渴望的品质</li>
-</ul>
-<h2 id="价值观分类与排序工具"><a class="markdownIt-Anchor" href="#价值观分类与排序工具"></a> 📊 价值观分类与排序工具</h2>
-<p>这里有一个实用的价值观清单，可以帮助你更好地识别和排序自己的核心价值观：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">个人成长类价值观</th>
-<th style="text-align:left">人际关系类价值观</th>
-<th style="text-align:left">社会贡献类价值观</th>
-<th style="text-align:left">生活品质类价值观</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">知识与智慧</td>
-<td style="text-align:left">真诚与诚实</td>
-<td style="text-align:left">公平与正义</td>
-<td style="text-align:left">健康与活力</td>
-</tr>
-<tr>
-<td style="text-align:left">创造力</td>
-<td style="text-align:left">爱与亲密</td>
-<td style="text-align:left">帮助他人</td>
-<td style="text-align:left">安全感</td>
-</tr>
-<tr>
-<td style="text-align:left">成就感</td>
-<td style="text-align:left">忠诚</td>
-<td style="text-align:left">环境保护</td>
-<td style="text-align:left">自由与独立</td>
-</tr>
-<tr>
-<td style="text-align:left">勇气</td>
-<td style="text-align:left">尊重</td>
-<td style="text-align:left">社会责任</td>
-<td style="text-align:left">平静与和谐</td>
-</tr>
-</tbody>
-</table>
-<p><strong>实践建议</strong>：从每个类别中选择1-2个对你最重要的价值观，然后尝试将所有选择排序，找出你的top 5核心价值观</p>
-<blockquote>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">个人成长类价值观</th>
-<th style="text-align:left">人际关系类价值观</th>
-<th style="text-align:left">社会贡献类价值观</th>
-<th style="text-align:left">生活品质类价值观</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">知识与智慧</td>
-<td style="text-align:left">真诚与诚实</td>
-<td style="text-align:left">公平</td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left">爱与亲密</td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-</tr>
-<tr>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left">自由与独立</td>
-</tr>
-<tr>
-<td style="text-align:left">勇气</td>
-<td style="text-align:left"></td>
-<td style="text-align:left"></td>
-<td style="text-align:left">平静与和谐</td>
-</tr>
-</tbody>
-</table>
-</blockquote>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/09/03/2025%E5%B9%B49%E6%9C%883%E6%97%A5-%E8%AE%A4%E7%9F%A5/" data-id="cmg5tcxzf0001k0v4h8gianju" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2025年8月8日-vlm" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/08/08/2025%E5%B9%B48%E6%9C%888%E6%97%A5-vlm/" class="article-date">
-  <time class="post-time" datetime="2025-08-08T01:48:16.000Z" itemprop="datePublished">
-    <span class="post-month">8月</span><br/>
-    <span class="post-day">08</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/08/08/2025%E5%B9%B48%E6%9C%888%E6%97%A5-vlm/">2025年8月8日-vlm</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="movegen"><a class="markdownIt-Anchor" href="#movegen"></a> MoveGen</h2>
-<p>AE</p>
-<p><img src="/2025/08/08/2025%E5%B9%B48%E6%9C%888%E6%97%A5-vlm/image-20260122165625755.png" alt="image-20260122165625755"></p>
-<blockquote>
-<p>实现极致压缩</p>
-</blockquote>
-<p>TAE</p>
-<p>3D conv</p>
-<p>3D = 1D+2D</p>
-<p>CVIVIT</p>
-<p>cross attention</p>
-<p>causal attention</p>
-<img src="/2025/08/08/2025%E5%B9%B48%E6%9C%888%E6%97%A5-vlm/image-20260122171010112.png" alt="image-20260122171010112" style="zoom:50%;">
-<img src="/2025/08/08/2025%E5%B9%B48%E6%9C%888%E6%97%A5-vlm/image-20260122171024895.png" alt="image-20260122171024895" style="zoom:33%;">
-<p>DIT</p>
-<p>DDPM</p>
-<p>adaptive layer norm</p>
-<h1 id="任务"><a class="markdownIt-Anchor" href="#任务"></a> 任务</h1>
-<p><img src="/2025/08/08/2025%E5%B9%B48%E6%9C%888%E6%97%A5-vlm/ca214dcc555fde779a1c3904b64aa2d7.png" alt="task"></p>
-<h2 id="下游任务"><a class="markdownIt-Anchor" href="#下游任务"></a> 下游任务</h2>
-<p>图像-文本的下游任务主要分为4类：</p>
-<p><img src="/2025/08/08/2025%E5%B9%B48%E6%9C%888%E6%97%A5-vlm/image-20250808113047965.png" alt="image-20250808113047965"></p>
-<ul>
-<li><strong>闭集分类</strong>：限定<strong>选项/类别</strong>的 VQA视觉问答、Image-Text Matching图文匹配、NLVR2两图一文匹配、VCR视觉常识推理、Visual Entailment视觉蕴涵–&gt;<strong>分类</strong><img src="/2025/08/08/2025%E5%B9%B48%E6%9C%888%E6%97%A5-vlm/image-20250808113055059.png" alt="image-20250808113055059"></li>
-<li><strong>开放文本序列生成</strong>：<strong>开放文本生成</strong>的 Visual Captioning视觉描述、Paragreph Captioning段落描述、Open-ended VQA开放域VQA–&gt;<strong>clip</strong><img src="/2025/08/08/2025%E5%B9%B48%E6%9C%888%E6%97%A5-vlm/image-20250808113112005.png" alt="image-20250808113112005"></li>
-<li><strong>方框/遮罩定位</strong>：Groundded Captioning定位描述、REC指向性表达理解(bounding box)、RES指向性表达分割(segment mask)–&gt;<strong>detection</strong><img src="/2025/08/08/2025%E5%B9%B48%E6%9C%888%E6%97%A5-vlm/image-20250808113138901.png" alt="image-20250808113138901"></li>
-<li><strong>像素预测</strong>：T2I文生图、I2I基于文本的图像编辑–&gt;<strong>segment</strong><img src="/2025/08/08/2025%E5%B9%B48%E6%9C%888%E6%97%A5-vlm/image-20250808113143731.png" alt="image-20250808113143731"></li>
-</ul>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_54338498/article/details/135258723">https://blog.csdn.net/weixin_54338498/article/details/135258723</a></p>
-</blockquote>
-<h1 id="原理"><a class="markdownIt-Anchor" href="#原理"></a> 原理</h1>
-<h2 id="vlms的分类"><a class="markdownIt-Anchor" href="#vlms的分类"></a> VLMs的分类：</h2>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://2048ai.net/6801fcf4e98581517972bb6a.html?dp_token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6OTk5MjM2LCJleHAiOjE3NTUyMjcyMTgsImlhdCI6MTc1NDYyMjQxOCwidXNlcm5hbWUiOiJMaV94dXJ1byJ9.9bm2V70dZNVYMoVZoxCETNrk3tZqIhEGz1CzYPWXD7o&amp;spm=1001.2101.3001.6650.5&amp;utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Eactivity-5-141557711-blog-149836506.235%5Ev43%5Epc_blog_bottom_relevance_base5&amp;depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromBaidu%7Eactivity-5-141557711-blog-149836506.235%5Ev43%5Epc_blog_bottom_relevance_base5&amp;utm_relevant_index=5">综述</a></p>
-</blockquote>
-<p>根据VLM的输入处理和输出生成能力将其分为三个不同的组：</p>
-<ul>
-<li><strong>视觉语言理解模型：<strong>专门为视觉信息与语言的解释和理解而设计的模型. 比如</strong>CLIP</strong></li>
-<li>**多模态输入文本生成模型：**擅长利用多模态输入（如图像、视频和文本）来生成文本内容</li>
-<li>**多模态输入多模态输出模型：**不仅接受多模态输入，还能产生多模态的输出</li>
-</ul>
-<blockquote>
-<p><img src="/2025/08/08/2025%E5%B9%B48%E6%9C%888%E6%97%A5-vlm/5433afcee5b24dedbf8c14cb95c74a29.png" alt="5433afcee5b24dedbf8c14cb95c74a29"></p>
-</blockquote>
-<h1 id="模型结构"><a class="markdownIt-Anchor" href="#模型结构"></a> 模型结构</h1>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_54338498/article/details/135258723?spm=1001.2101.3001.6650.6">https://blog.csdn.net/weixin_54338498/article/details/135258723?spm=1001.2101.3001.6650.6</a></p>
-<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/667865945">https://zhuanlan.zhihu.com/p/667865945</a></p>
-</blockquote>
-<p><img src="/2025/08/08/2025%E5%B9%B48%E6%9C%888%E6%97%A5-vlm/57d55cc697da1d6ebcd4579eccfc046e.png" alt="img"></p>
-<h2 id="1llava"><a class="markdownIt-Anchor" href="#1llava"></a> 1.LLaVA</h2>
-<blockquote>
-<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.c/p/713126534">详解视觉语言模型原理及代码，以DeepSeek-VL为例</a></p>
-</blockquote>
-<p>通过建立统一的多模态表示空间，将不同模态的信息转换为统一的token表示，然后在同一个架构中进行联合建模和推理。既然大语言模型擅长处理token序列，那么就把所有模态的信息都转换成token。</p>
-<p>视觉token：将图像切分为固定大小的patches（如16×16像素块），每个patch编码为一个视觉token<br>
-语言token：保持传统的subword tokenization，每个词汇对应一个语言token<br>
-统一建模：将视觉token和语言token拼接成统一序列，用同一个Transformer架构处理</p>
-<h4 id="视觉编码编码器"><a class="markdownIt-Anchor" href="#视觉编码编码器"></a> 视觉编码编码器</h4>
-<p>视觉编码器用于将图像转换为向量表示，在DeepSeek-VL中，图像被视觉编码器转换为576个向量（图像的token embedding）。VLM的视觉编码器<strong>直接使其他模型预训练好的参数</strong>，普遍使用的视觉编码器结构为<a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=246602978&amp;content_type=Article&amp;match_order=1&amp;q=ViT&amp;zhida_source=entity">ViT</a>（Vision Transformer），但可能是不同方式训练出来的，例如DeepSeek-VL使用的是Siglip和<a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=246602978&amp;content_type=Article&amp;match_order=1&amp;q=SAM&amp;zhida_source=entity">SAM</a>训练出来的ViT，而Qwen-VL使用的是OpenCLIP的ViT。</p>
-<h4 id="视觉适配器"><a class="markdownIt-Anchor" href="#视觉适配器"></a> 视觉适配器</h4>
-<p>视觉适配器用于将用于将ViT的输出图像的token embeeding映射到与文本embedding相同的空间，便于让LLM理解图像中的内容。常见的结构有多层MLP、cross attention等。</p>
-<h4 id="llm"><a class="markdownIt-Anchor" href="#llm"></a> LLM</h4>
-<p>LLM是VLM的核心，视觉编码器和适配器最终产出的图像的token embedding都是要输入到LLM进行理解的，并由LLM输出关于图像的回答。</p>
-<h3 id="训练阶段"><a class="markdownIt-Anchor" href="#训练阶段"></a> 训练阶段</h3>
-<p><img src="/2025/08/08/2025%E5%B9%B48%E6%9C%888%E6%97%A5-vlm/image-20250808101530719.png" alt="image-20250808101530719"></p>
-<h2 id="2flamingo"><a class="markdownIt-Anchor" href="#2flamingo"></a> 2.Flamingo</h2>
-<p>GPT-4V的核心创新在于彻底打破了模态边界，实现了真正的统一多模态架构。不同于传统的&quot;视觉编码器+语言解码器&quot;拼接方式，GPT-4V将视觉和语言信息在同一个Transformer中进行统一处理。</p>
-<h2 id="3gpt-v"><a class="markdownIt-Anchor" href="#3gpt-v"></a> 3.GPT-V</h2>
-<h2 id="4-sora"><a class="markdownIt-Anchor" href="#4-sora"></a> 4. Sora</h2>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/08/08/2025%E5%B9%B48%E6%9C%888%E6%97%A5-vlm/" data-id="cmeaspt2h0000egv4grgfe104" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/VLM/" rel="tag">VLM</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -2134,9 +2080,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>184</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>186</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>45</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>46</strong><br>标签</div></a>
     </div>
 
 

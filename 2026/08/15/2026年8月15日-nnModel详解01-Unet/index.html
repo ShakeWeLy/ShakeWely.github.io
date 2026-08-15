@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2026年8月15日 nnModel详解01-Unet | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="0 前置  https:&#x2F;&#x2F;blog.csdn.net&#x2F;AggressiveYu&#x2F;article&#x2F;details&#x2F;151256739   1 是什么 Unet是一个U形的深度学习网络, 主要由卷积层, 下采样, 上采样和连接组成  2 为什么 1 为图像分割而生 2 不想传统分类模型得出结论,而是需要与原图一直的mask分割掩码图 3  1 网络结构 整个像一个英文字母“U”。左侧的编码器（收缩">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2026年8月15日 nnModel详解01-Unet">
+<meta property="og:url" content="https://shakewely.github.io/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A301-Unet/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="0 前置  https:&#x2F;&#x2F;blog.csdn.net&#x2F;AggressiveYu&#x2F;article&#x2F;details&#x2F;151256739   1 是什么 Unet是一个U形的深度学习网络, 主要由卷积层, 下采样, 上采样和连接组成  2 为什么 1 为图像分割而生 2 不想传统分类模型得出结论,而是需要与原图一直的mask分割掩码图 3  1 网络结构 整个像一个英文字母“U”。左侧的编码器（收缩">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A301-Unet/654d5ae1ea484485b34f47a6bb59701e.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A301-Unet/image-20260815170625820.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A301-Unet/image-20260815171529814.png">
+<meta property="article:published_time" content="2026-08-15T05:57:35.000Z">
+<meta property="article:modified_time" content="2026-08-15T09:15:31.849Z">
+<meta property="article:author" content="Weakliy">
+<meta property="article:tag" content="nn">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shakewely.github.io/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A301-Unet/654d5ae1ea484485b34f47a6bb59701e.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>186</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>46</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2026年8月15日-nnModel详解01-Unet" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A301-Unet/" class="article-date">
+  <time class="post-time" datetime="2026-08-15T05:57:35.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">15</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2026年8月15日 nnModel详解01-Unet
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="0-前置"><a class="markdownIt-Anchor" href="#0-前置"></a> 0 前置</h1>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/AggressiveYu/article/details/151256739">https://blog.csdn.net/AggressiveYu/article/details/151256739</a></p>
+</blockquote>
+<h2 id="1-是什么"><a class="markdownIt-Anchor" href="#1-是什么"></a> 1 是什么</h2>
+<p>Unet是一个U形的深度学习网络, 主要由卷积层, 下采样, 上采样和连接组成</p>
+<h2 id="2-为什么"><a class="markdownIt-Anchor" href="#2-为什么"></a> 2 为什么</h2>
+<p>1 为图像分割而生</p>
+<p>2 不想传统分类模型得出结论,而是需要与原图一直的mask分割掩码图</p>
+<p>3</p>
+<h1 id="1-网络结构"><a class="markdownIt-Anchor" href="#1-网络结构"></a> 1 网络结构</h1>
+<p>整个像一个英文字母“U”。<strong>左侧的编码器（收缩路径）</strong> 和 <strong>右侧的解码器（扩张路径）</strong>。</p>
+<p><img src="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A301-Unet/654d5ae1ea484485b34f47a6bb59701e.png" alt="img"></p>
+<p>三大核心组件:</p>
+<ol>
+<li>左侧的encoder: 负责特征提取</li>
+<li>右侧的decoder:  利用特征</li>
+<li>中间的跳跃连接:</li>
+</ol>
+<h2 id="11-encoder"><a class="markdownIt-Anchor" href="#11-encoder"></a> 1.1 encoder</h2>
+<p>负责特征提取:</p>
+<p>主要是由:</p>
+<ol>
+<li>两个3X3的卷积层和激活函数组成</li>
+<li>一个2X2的最大池化层, stride=2, size减半</li>
+</ol>
+<p><strong>目的:</strong></p>
+<ol>
+<li>提取特征,</li>
+<li>高级语义信息</li>
+</ol>
+<p><strong>实现:</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Encoder</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, in_channels, out_channels</span>):</span><br><span class="line">        <span class="built_in">super</span>(Encoder, self).__init__()</span><br><span class="line">        self.doownConv1 = Conv(in_channels, out_channels, kernel_size=<span class="number">3</span>, padding=<span class="number">1</span>)</span><br><span class="line">        self.doownConv2 = Conv(out_channels, out_channels, kernel_size=<span class="number">3</span>, padding=<span class="number">1</span>)</span><br><span class="line">        self.maxpool = nn.MaxPool2d(kernel_size=<span class="number">2</span>, stride=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        convOuput = self.doownConv2((self.doownConv1(x)))</span><br><span class="line">        <span class="built_in">print</span>(convOuput.shape)</span><br><span class="line">        x = self.maxpool(convOuput)</span><br><span class="line">        <span class="built_in">print</span>(x.shape)</span><br><span class="line">        <span class="keyword">return</span> x, convOuput</span><br></pre></td></tr></table></figure>
+<h2 id="12-decoder"><a class="markdownIt-Anchor" href="#12-decoder"></a> 1.2 decoder</h2>
+<p>将编码器提取的高级但粗糙的特征图<strong>恢复到原始图像的尺寸</strong>，并在此过程中实现像素级的精确定位。</p>
+<p>主要由:</p>
+<ol>
+<li>2x2的上采样, 转置卷积</li>
+<li>3x3的卷积层+激活函数</li>
+<li>跳跃连接进行concat</li>
+</ol>
+<p><strong>目的</strong></p>
+<ol>
+<li>恢复分辨率</li>
+<li>类似任务头</li>
+</ol>
+<p><strong>实现</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Decoder</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, in_channels, out_channels</span>):</span><br><span class="line">        <span class="built_in">super</span>(Decoder, self).__init__()</span><br><span class="line">        self.upTranConv = nn.ConvTranspose2d(in_channels, out_channels, kernel_size=<span class="number">2</span>, stride=<span class="number">2</span>, padding=<span class="number">0</span>)</span><br><span class="line">        self.upConv1 = Conv(out_channels*<span class="number">2</span>, out_channels, kernel_size=<span class="number">3</span>, padding=<span class="number">1</span>)</span><br><span class="line">        self.upConv2 = Conv(out_channels, out_channels, kernel_size=<span class="number">3</span>, padding=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, encoderOutput</span>):</span><br><span class="line">        x = self.upTranConv(x)</span><br><span class="line">        x = torch.cat((x, encoderOutput), dim=<span class="number">1</span>)</span><br><span class="line">        x = self.upConv2(self.upConv1(x))</span><br><span class="line">        <span class="keyword">return</span> x</span><br></pre></td></tr></table></figure>
+<blockquote>
+<h3 id="121-转置卷积"><a class="markdownIt-Anchor" href="#121-转置卷积"></a> 1.2.1  转置卷积</h3>
+<p>普通卷积是通过滑动窗口把大图“变小/提炼”；转置卷积则是通过<strong>插值填充（Padding）</strong> 和 <strong>重叠累加</strong> 把小图“放大”。</p>
+<p>第一步:  插值和填空</p>
+<ol>
+<li>stride: 对像素的相邻元素之间进行填充0. stride-1</li>
+<li>padding: 普通卷积是整体边缘填充0; 转置卷积是裁剪去padding个0</li>
+</ol>
+<p>第二步: 移动</p>
+<ol>
+<li>用卷积核（Kernel）按 <code>stride=1</code> 进行标准的 2D 卷积运算。</li>
+</ol>
+</blockquote>
+<h2 id="13-跳跃连接-skip-connections-u-net-的精髓"><a class="markdownIt-Anchor" href="#13-跳跃连接-skip-connections-u-net-的精髓"></a> 1.3 跳跃连接 (Skip Connections) - U-Net 的精髓</h2>
+<p><strong>Encoder中、下采样之前的特征图</strong>，直接“跳跃”到Decoder中，与<strong>对应层级上采样之后的特征图进行拼接</strong>。</p>
+<p><strong>为什么:</strong></p>
+<ol>
+<li>获取来自<strong>高分辨率</strong>的encoder的特征和局部细节</li>
+<li>获取来自decoder的<strong>高纬度特征</strong>和全局细节</li>
+</ol>
+<h2 id="14-完整代码"><a class="markdownIt-Anchor" href="#14-完整代码"></a> 1.4 完整代码</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> torch <span class="keyword">import</span> nn</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Conv</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, in_channels, out_channels, kernel_size, padding</span>):</span><br><span class="line">        <span class="built_in">super</span>(Conv, self).__init__()</span><br><span class="line">        self.conv = nn.Conv2d(in_channels, out_channels, kernel_size=kernel_size, padding=padding)</span><br><span class="line">        self.relu = nn.ReLU()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        x = self.relu(self.conv(x))</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">concatNet</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, in_channels, out_channels</span>):</span><br><span class="line">        <span class="built_in">super</span>(concatNet, self).__init__()</span><br><span class="line">        self.linear = nn.Linear(in_channels, out_channels)</span><br><span class="line">        self.relu = nn.ReLU()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        x = self.relu(self.linear(x))</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Encoder</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, in_channels, out_channels</span>):</span><br><span class="line">        <span class="built_in">super</span>(Encoder, self).__init__()</span><br><span class="line">        self.doownConv1 = Conv(in_channels, out_channels, kernel_size=<span class="number">3</span>, padding=<span class="number">1</span>)</span><br><span class="line">        self.doownConv2 = Conv(out_channels, out_channels, kernel_size=<span class="number">3</span>, padding=<span class="number">1</span>)</span><br><span class="line">        self.maxpool = nn.MaxPool2d(kernel_size=<span class="number">2</span>, stride=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        convOuput = self.doownConv2((self.doownConv1(x)))</span><br><span class="line">        <span class="comment"># print(convOuput.shape)</span></span><br><span class="line">        x = self.maxpool(convOuput)</span><br><span class="line">        <span class="comment"># print(x.shape)</span></span><br><span class="line">        <span class="keyword">return</span> x, convOuput</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Decoder</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, in_channels, out_channels</span>):</span><br><span class="line">        <span class="built_in">super</span>(Decoder, self).__init__()</span><br><span class="line">        self.upTranConv = nn.ConvTranspose2d(in_channels, out_channels, kernel_size=<span class="number">2</span>, stride=<span class="number">2</span>, padding=<span class="number">0</span>)</span><br><span class="line">        self.upConv1 = Conv(out_channels*<span class="number">2</span>, out_channels, kernel_size=<span class="number">3</span>, padding=<span class="number">1</span>)</span><br><span class="line">        self.upConv2 = Conv(out_channels, out_channels, kernel_size=<span class="number">3</span>, padding=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, encoderOutput</span>):</span><br><span class="line">        x = self.upTranConv(x)</span><br><span class="line">        x = torch.cat((x, encoderOutput), dim=<span class="number">1</span>)</span><br><span class="line">        x = self.upConv2(self.upConv1(x))</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Unet</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, in_channels, out_channels</span>):</span><br><span class="line">        <span class="built_in">super</span>(Unet, self).__init__()</span><br><span class="line">        self.encoder1 = Encoder(in_channels, <span class="number">64</span>)</span><br><span class="line">        self.encoder2 = Encoder(<span class="number">64</span>, <span class="number">128</span>)</span><br><span class="line">        self.encoder3 = Encoder(<span class="number">128</span>, <span class="number">256</span>)</span><br><span class="line">        self.encoder4 = Encoder(<span class="number">256</span>, <span class="number">512</span>)</span><br><span class="line"></span><br><span class="line">        self.bottleConv1 = Conv(<span class="number">512</span>, <span class="number">1024</span>, kernel_size=<span class="number">3</span>, padding=<span class="number">1</span>)</span><br><span class="line">        self.bottleConv2 = Conv(<span class="number">1024</span>, <span class="number">1024</span>, kernel_size=<span class="number">3</span>, padding=<span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        self.decoder1 = Decoder(<span class="number">1024</span>, <span class="number">512</span>)</span><br><span class="line">        self.decoder2 = Decoder(<span class="number">512</span>, <span class="number">256</span>)</span><br><span class="line">        self.decoder3 = Decoder(<span class="number">256</span>, <span class="number">128</span>)</span><br><span class="line">        self.decoder4 = Decoder(<span class="number">128</span>, <span class="number">64</span>)</span><br><span class="line"></span><br><span class="line">        self.outputConv = Conv(<span class="number">64</span>, out_channels, kernel_size=<span class="number">1</span>, padding=<span class="number">0</span>)</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x</span>):</span><br><span class="line">        x, encoderOutput1 = self.encoder1(x)</span><br><span class="line">        x, encoderOutput2 = self.encoder2(x)</span><br><span class="line">        x, encoderOutput3 = self.encoder3(x)</span><br><span class="line">        x, encoderOutput4 = self.encoder4(x)</span><br><span class="line"></span><br><span class="line">        x = self.bottleConv2(self.bottleConv1(x))</span><br><span class="line"></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;shape of x: &quot;</span>, x.shape)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;shape of encoderOutput4: &quot;</span>, encoderOutput4.shape)</span><br><span class="line">        x = self.decoder1(x, encoderOutput4)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;shape of x: &quot;</span>, x.shape)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;shape of encoderOutput3: &quot;</span>, encoderOutput3.shape)</span><br><span class="line">        x = self.decoder2(x, encoderOutput3)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;shape of x: &quot;</span>, x.shape)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;shape of encoderOutput2: &quot;</span>, encoderOutput2.shape)</span><br><span class="line">        x = self.decoder3(x, encoderOutput2)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;shape of x: &quot;</span>, x.shape)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;shape of encoderOutput1: &quot;</span>, encoderOutput1.shape)</span><br><span class="line">        x = self.decoder4(x, encoderOutput1)</span><br><span class="line"></span><br><span class="line">        x = self.outputConv(x)</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    model = Unet(in_channels=<span class="number">3</span>, out_channels=<span class="number">2</span>)</span><br><span class="line">    dummy_input = torch.randn(<span class="number">1</span>, <span class="number">3</span>, <span class="number">256</span>, <span class="number">256</span>)</span><br><span class="line">    output = model(dummy_input)</span><br><span class="line">    <span class="built_in">print</span>(output.shape)</span><br></pre></td></tr></table></figure>
+<h1 id="2-训练"><a class="markdownIt-Anchor" href="#2-训练"></a> 2 训练</h1>
+<h2 id="21-数据标签"><a class="markdownIt-Anchor" href="#21-数据标签"></a> 2.1 数据标签</h2>
+<p>U-Net 处理的是<strong>像素级的预测</strong>，因此其数据标签不是简单的分类标签（如 class_id），而是<strong>与输入图像空间尺寸（H, W）完全一致的掩码图（Mask/Ground Truth）</strong>。</p>
+<ul>
+<li><strong>二分类分割（Binary Segmentation）</strong>：如背景 vs 前景（肿瘤、车道线、建筑物）。
+<ul>
+<li><strong>标签形状</strong>：<code>[H, W]</code> 或 <code>[1, H, W]</code></li>
+<li><strong>像素取值</strong>：<code>0</code>（背景）和 <code>1</code>（目标）的二值图（非 0 即 255 的单通道图片转化而来）。</li>
+</ul>
+</li>
+<li><strong>多类别语义分割（Multi-Class Segmentation）</strong>：如背景、器官A、器官B、器官C（共 N 类）。
+<ul>
+<li><strong>标签形状</strong>：<code>[H, W]</code></li>
+<li><strong>像素取值</strong>：每个像素位置的值为类别的类别索引号，取值范围为 <code>[0, N-1]</code>（例如 0 代表背景，1 代表肝脏，2 代表肾脏）。</li>
+</ul>
+</li>
+<li><strong>多标签/多重重叠分割（Multi-Label Segmentation）</strong>：一个像素可以同时属于多个类。
+<ul>
+<li><strong>标签形状</strong>：<code>[N, H, W]</code>（<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span> 为类别数）</li>
+<li><strong>像素取值</strong>：每个通道是一个独立的二值 Mask（取值为 0 或 1）。</li>
+</ul>
+</li>
+</ul>
+<h2 id="22-损失函数"><a class="markdownIt-Anchor" href="#22-损失函数"></a> 2.2 损失函数</h2>
+<table>
+<thead>
+<tr>
+<th><strong>损失函数</strong></th>
+<th><strong>适用场景</strong></th>
+<th><strong>说明与公式特点</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>BCEWithLogitsLoss</strong> <em>(Binary Cross Entropy)</em></td>
+<td><strong>二分类 / 多标签</strong></td>
+<td>将每个像素看作独立的二分类。内置 Sigmoid 激活函数，数值稳定性高。</td>
+</tr>
+<tr>
+<td><strong>CrossEntropyLoss</strong></td>
+<td><strong>多类别</strong></td>
+<td>将每个像素看作多分类问题。内置 Softmax 激活函数。输入模型预测 <code>[B, C, H, W]</code>，标签为 <code>[B, H, W]</code>（元素值为类索引）。</td>
+</tr>
+</tbody>
+</table>
+<h4 id="dice-lossdice-损失"><a class="markdownIt-Anchor" href="#dice-lossdice-损失"></a> Dice Loss（Dice 损失）</h4>
+<p>基于 Dice 相似系数（Dice Coefficient），直接优化模型预测区域与 Ground Truth 的交并重叠度。</p>
+<p><img src="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A301-Unet/image-20260815170625820.png" alt="image-20260815170625820"></p>
+<h1 id="3-改进思路"><a class="markdownIt-Anchor" href="#3-改进思路"></a> 3 改进思路</h1>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/684221454">https://zhuanlan.zhihu.com/p/684221454</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/1886374767931655663">https://zhuanlan.zhihu.com/p/1886374767931655663</a></p>
+</blockquote>
+<h2 id="0-改进方向"><a class="markdownIt-Anchor" href="#0-改进方向"></a> 0 改进方向</h2>
+<ol>
+<li>替换卷积结构</li>
+<li>降低复杂度</li>
+<li>模型结构</li>
+</ol>
+<img src="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A301-Unet/image-20260815171529814.png" alt="image-20260815171529814" style="zoom:50%;">
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A301-Unet/" data-id="cmsu5vdrg0001kwv41yo74hml" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nn/" rel="tag">nn</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2026/08/13/2026%E5%B9%B48%E6%9C%8813%E6%97%A5-vlagent%E6%80%BB%E7%BB%93/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2026年8月13日 vlagent总结</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>186</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>46</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2025 - 2026 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

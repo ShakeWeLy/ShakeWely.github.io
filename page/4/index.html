@@ -43,9 +43,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>184</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>186</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>45</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>46</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -70,6 +70,704 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-2026年5月16日-TFLOPS" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/" class="article-date">
+  <time class="post-time" datetime="2026-05-16T01:59:02.000Z" itemprop="datePublished">
+    <span class="post-month">5月</span><br/>
+    <span class="post-day">16</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/">2026年5月16日 TFLOPS</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="前言"><a class="markdownIt-Anchor" href="#前言"></a> 前言</h1>
+<p>相机延迟高, 怎么优化</p>
+<h1 id="前置知识"><a class="markdownIt-Anchor" href="#前置知识"></a> 前置知识</h1>
+<h2 id="1-tflops"><a class="markdownIt-Anchor" href="#1-tflops"></a> 1 TFLOPS</h2>
+<blockquote>
+<p><strong>FP32（单精度，常说的理论算力）</strong>：≈ <strong>12.7 TFLOPS</strong></p>
+<p>“12.7 TFLOPS” ≈ 每秒 <strong>12.7 万亿次浮点运算</strong></p>
+<p><strong>Tensor Core（AI训练常用）</strong>：</p>
+<ul>
+<li>FP16 / Tensor TFLOPS：约 <strong>50~100+ TFLOPS（视稀疏性和模式）</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Model</th>
+<th style="text-align:left">size (pixels)</th>
+<th style="text-align:left">mAPval 50-95</th>
+<th style="text-align:left">Speed CPU ONNX (ms)</th>
+<th style="text-align:left">Speed T4 TensorRT10 (ms)</th>
+<th style="text-align:left">params (M)</th>
+<th style="text-align:left">FLOPs (B)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><a target="_blank" rel="noopener" href="https://github.com/ultralytics/assets/releases/download/v8.4.0/yolo11n.pt">YOLO11n</a></td>
+<td style="text-align:left">640</td>
+<td style="text-align:left">39.5</td>
+<td style="text-align:left">56.1 ± 0.8</td>
+<td style="text-align:left">1.5 ± 0.0</td>
+<td style="text-align:left">2.6</td>
+<td style="text-align:left">6.5GFLOPs</td>
+</tr>
+<tr>
+<td style="text-align:left"><a target="_blank" rel="noopener" href="https://github.com/ultralytics/assets/releases/download/v8.4.0/yolo11s.pt">YOLO11s</a></td>
+<td style="text-align:left">640</td>
+<td style="text-align:left">47.0</td>
+<td style="text-align:left">90.0 ± 1.2</td>
+<td style="text-align:left">2.5 ± 0.0</td>
+<td style="text-align:left">9.4</td>
+<td style="text-align:left">21.5GFLOPs</td>
+</tr>
+</tbody>
+</table>
+<p>实际可能:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">4 TFLOPs effective</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">4 / 0.0215 ≈ 186 FPS</span><br></pre></td></tr></table></figure>
+<p>在 3060 上：</p>
+<table>
+<thead>
+<tr>
+<th>情况</th>
+<th>FPS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PyTorch 未优化</td>
+<td>30–60 FPS</td>
+</tr>
+<tr>
+<td>TensorRT / ONNX</td>
+<td>60–120 FPS</td>
+</tr>
+<tr>
+<td>极致优化（FP16 + fuse）</td>
+<td>100–150 FP</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><strong>AI 里真正速度还取决于：</strong></p>
+<ul>
+<li>CUDA 核心利用率</li>
+<li>显存带宽（3060 是 192-bit）</li>
+<li>Tensor Core 是否启用（混合精度</li>
+</ul>
+<h3 id="fps模型计算量gpu算力"><a class="markdownIt-Anchor" href="#fps模型计算量gpu算力"></a> FPS≈模型计算量GPU算力</h3>
+<p>例如：</p>
+<ul>
+<li>GPU：12 TFLOPS</li>
+<li>模型：120 GFLOPs/帧</li>
+</ul>
+<p>那么理论：</p>
+<p>FPS≈12×1012120×109=100FPS\approx\frac{12\times10<sup>{12}}{120\times10</sup>{9}}=100FPS≈120×10912×1012=100</p>
+<p>理论上约：</p>
+<ul>
+<li>100 FPS</li>
+</ul>
+<h3 id="flops-实际速度"><a class="markdownIt-Anchor" href="#flops-实际速度"></a> FLOPs ≠ 实际速度</h3>
+<p>有些模型：</p>
+<ul>
+<li>FLOPs 很低</li>
+<li>但 FPS 不高</li>
+</ul>
+<p>因为：</p>
+<ul>
+<li>内存访问特别碎</li>
+<li>depthwise conv 很多</li>
+<li>小 kernel 太多</li>
+<li>GPU 利用率低</li>
+</ul>
+<p>例如：</p>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>FLOPs低</th>
+<th>但速度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MobileNet</td>
+<td>✅</td>
+<td>不一定快</td>
+</tr>
+<tr>
+<td>EfficientNet</td>
+<td>✅</td>
+<td>经常偏慢</td>
+</tr>
+<tr>
+<td>YOLO</td>
+<td>FLOPs不算低</td>
+<td>但非常快</td>
+</tr>
+</tbody>
+</table>
+<h4 id="推理时间真正近似公式"><a class="markdownIt-Anchor" href="#推理时间真正近似公式"></a> 推理时间真正近似公式</h4>
+<p>更接近：</p>
+<p>推理时间= 计算时间 + 显存访问时间 + 调度开销 + 数据传输时间推理时间</p>
+<h2 id="2-模型计算量"><a class="markdownIt-Anchor" href="#2-模型计算量"></a> 2 模型计算量</h2>
+<h3 id="怎么知道模型计算量"><a class="markdownIt-Anchor" href="#怎么知道模型计算量"></a> 怎么知道模型计算量</h3>
+<h3 id="模型预热"><a class="markdownIt-Anchor" href="#模型预热"></a> 模型预热</h3>
+<h1 id="参数量-vs-flops"><a class="markdownIt-Anchor" href="#参数量-vs-flops"></a> 参数量 vs FLOPs</h1>
+<p>很多人会混淆。</p>
+<h2 id="params参数量"><a class="markdownIt-Anchor" href="#params参数量"></a> Params（参数量）</h2>
+<p>表示：</p>
+<ul>
+<li>模型大小</li>
+<li>占多少显存</li>
+</ul>
+<p>例如：</p>
+<ul>
+<li>7M 参数<br>
+≈ 28MB FP32</li>
+</ul>
+<hr>
+<h2 id="flops计算量"><a class="markdownIt-Anchor" href="#flops计算量"></a> FLOPs（计算量）</h2>
+<p>表示：</p>
+<ul>
+<li>推理需要算多少次</li>
+</ul>
+<p>决定：</p>
+<ul>
+<li>推理耗时</li>
+<li>GPU压力</li>
+</ul>
+<h1 id="问题分析"><a class="markdownIt-Anchor" href="#问题分析"></a> 问题分析</h1>
+<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260516210324515.png" alt="image-20260516210324515"></p>
+<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260516210345208.png" alt="image-20260516210345208"></p>
+<p>结论可以分三块说：<strong>你们在比的不是同一个计时范围</strong>、<strong>拍照路径和执行线程和视频不一样</strong>、<strong>前几帧变慢是正常现象</strong>。</p>
+<hr>
+<h2 id="1-为什么-ai_inference_single-比-ultralytics-的-speed-大很多"><a class="markdownIt-Anchor" href="#1-为什么-ai_inference_single-比-ultralytics-的-speed-大很多"></a> 1. 为什么 <code>[AI_INFERENCE_SINGLE]</code> 比 Ultralytics 的 <code>Speed:</code> 大很多？</h2>
+<p><code>[AI_INFERENCE_SINGLE]</code> 包的是<strong>整段</strong> <code>process_frame</code> + <code>_apply_fps_overlay</code>，而日志里 Ultralytics 的<br>
+<code>Speed: … preprocess … inference … postprocess</code> 一般指 <strong><code>model(...)</code>（predict）内部</strong>拆的三段。</p>
+<p>以 <code>FruitInAreaFrameProcessor</code> 为例，YOLO 打完成绩之后你还有一大段工作在<strong>同一次计时里</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 1. 推理</span><br><span class="line">yolo_result = self.model(frame, conf=self.conf, device=self.device, verbose=True)</span><br><span class="line"></span><br><span class="line"># 2. 检查区域</span><br><span class="line">self._areas_detected = DetectUtils.check_yolo_result_in_areas(yolo_result, self.area_lists, self.target_classes)</span><br><span class="line">...</span><br><span class="line"># 4. 画框</span><br><span class="line">result_frame = yolo_result[0].plot()</span><br><span class="line">from app.core.utils.drawing_utils import DrawingUtils</span><br><span class="line">result_frame = DrawingUtils.draw_area(result_frame, self.area_lists, (0, 255, 0))</span><br><span class="line">cv2.putText(result_frame, message, (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)</span><br></pre></td></tr></table></figure>
+<p>你日志里是 <code>480x640</code>、多类、十多颗水果，<strong>分割模型</strong>在 <code>results[0].plot()</code> 里要把每个实例的 mask 叠到图上，多半是<strong>纯 CPU/OpenCV</strong>，很容易比 predict 本身的几十毫秒再长出一大截。<strong>所以 889ms vs 里外合计约 129ms：差的主要是「YOLO predict 之外的 plot/画框/叠加」</strong>，而不是表格里那一行 inference 变慢了。</p>
+<p>外层还有 <code>start_processing_single_frame</code> 里对 <strong><code>_apply_fps_overlay</code></strong>（若 <code>settings.ai_draw_fps</code> 为真则会 <code>copy</code> + <code>addWeighted</code>）等，也都在同一计时窗里。</p>
+<hr>
+<h2 id="2-为什么拍照多帧检测和视频流里看到的延迟感觉差很多"><a class="markdownIt-Anchor" href="#2-为什么拍照多帧检测和视频流里看到的延迟感觉差很多"></a> 2. 为什么「拍照多帧检测」和视频流里看到的延迟感觉差很多？</h2>
+<p><strong>拍照路径</strong>：<code>stream_process_multiple_frames</code> 里<strong>每一帧</strong>都是**「新建一个线程池 → 扔一次 <code>start_processing_single_frame</code> → shutdown**」：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">with ThreadPoolExecutor(max_workers=1) as executor:</span><br><span class="line">    future = executor.submit(</span><br><span class="line">        self.processor.start_processing_single_frame,</span><br><span class="line">        frame_data, self.debug, processed_photo_path if i == frame_count - 1 else &quot;&quot;</span><br><span class="line">    )</span><br><span class="line">    try:</span><br><span class="line">        future.result(timeout=timeout_seconds)</span><br></pre></td></tr></table></figure>
+<p>你贴的日志里也印证了这一点：第 1/2/3 帧分别是 <strong><code>ThreadPoolExecutor-0_0</code></strong>、<strong><code>-1_0</code></strong>、<strong><code>-2_0</code></strong>，也就是每轮都是<strong>不同的 worker 上下文</strong>。再配合上面说的「predict 只占一部分」以及首帧预处理在 Ultralytics 里也会偏高（见你第一帧 <code>preprocess 25.8ms</code> vs 后面的 <code>~0.9ms</code>），体感就会和「稳定在 ~14ms inference」的那段视频日志差很远。</p>
+<p><strong>视频连续检测</strong>：走的是 <code>start_processing</code> 的那种<strong>长期循环</strong>，同一条链路反复跑，<code>model</code>/<code>plot</code>/<code>cuDNN</code>/缓存都更容易进入稳态；你在 <code>test_120fps.mp4</code> 那一段里看到的 <strong><code>~13–16ms inference</code></strong>，就是这类稳态。</p>
+<blockquote>
+<ol>
+<li>不要使用三个线程</li>
+</ol>
+</blockquote>
+<hr>
+<h2 id="3-为什么视频前几帧也很大-后面突然变小"><a class="markdownIt-Anchor" href="#3-为什么视频前几帧也很大-后面突然变小"></a> 3. 为什么视频前几帧也很大、后面突然变小？</h2>
+<p>这和你日志里的曲线一致：<strong>第 1 帧 ~92ms → 中间的 ~43–46ms → 再往后的 ~13–16ms</strong>。常见原因包括：</p>
+<ul>
+<li><strong>CUDA / cuDNN</strong> 首轮选算法、建缓存、allocator 铺开；</li>
+<li><strong>Ultralytics 内部</strong>预处理/后处理在第一两次路径上会触发的初始化（你已有「首帧 preprocess 明显更高」的现象）；</li>
+<li>若当时是<strong>刚拉起读流/刚切源</strong>，还有可能叠上 <strong>解码/缓冲区</strong>尚未稳定。</li>
+</ul>
+<p>所以「前几张大、后面稳定在十几毫秒」是预期行为，不是问题特有的异常。</p>
+<hr>
+<p><strong>若要验证</strong>：在同一个 <code>process_frame</code> 里用 <code>time.perf_counter()</code> 分别包住 <code>model(...)</code>、<code>plot()</code>、<code>draw_area</code>，你会很快看到_gap 主要是在哪一段；结构上也可以考虑拍照路径<strong>不要每帧新开 <code>ThreadPoolExecutor</code></strong>（复用线程池或直接在当前线程推理），能减少线程与调度带来的不确定性。</p>
+<h2 id="4-占用细节"><a class="markdownIt-Anchor" href="#4-占用细节"></a> 4. 占用细节</h2>
+<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260516211414299.png" alt="image-20260516211414299"></p>
+<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260516211511866.png" alt="image-20260516211511866"></p>
+<h3 id="1拍照多帧threadpoolexecutor-3_0-4_0-5_0约-211247"><a class="markdownIt-Anchor" href="#1拍照多帧threadpoolexecutor-3_0-4_0-5_0约-211247"></a> 1）拍照多帧（<code>ThreadPoolExecutor-3_0 / 4_0 / 5_0</code>，约 21:12:47）</h3>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>情况</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Ultralytics</strong></td>
+<td>每帧 <code>preprocess + inference + postprocess</code> ≈ <strong>86～88 ms</strong></td>
+</tr>
+<tr>
+<td><strong><code>model=</code>（perf_counter）</strong></td>
+<td><strong>85～91 ms</strong>，和 Ultralytics 同一量级</td>
+</tr>
+<tr>
+<td><strong><code>plot</code></strong></td>
+<td><strong>≈5 ms</strong></td>
+</tr>
+<tr>
+<td><strong><code>draw_area</code></strong></td>
+<td><strong>≈0.05 ms</strong>，可忽略</td>
+</tr>
+<tr>
+<td><strong><code>[AI_INFERENCE_SINGLE]</code></strong></td>
+<td><strong>～95～100 ms</strong>，比 <code>model+plot+draw</code> 多出一截（约 <strong>3～10 ms</strong>：<code>putText</code>、区域校验、<code>_apply_fps_overlay</code> 若为开、线程调度等都算在内）</td>
+</tr>
+</tbody>
+</table>
+<p>说明：<strong>这轮请求时 GPU/CUDA 已经热好</strong>，首帧没有再出现 <strong><code>model≈1248 ms</code></strong>；差异主要来自整条 <code>process_frame</code> 里 <strong><code>model(...)</code></strong>，不是 <code>plot</code>/<code>draw_area</code>。</p>
+<hr>
+<h3 id="2本地视频-processorthreadwebcam约-211146"><a class="markdownIt-Anchor" href="#2本地视频-processorthreadwebcam约-211146"></a> 2）本地视频、<code>ProcessorThreadWebcam</code>（约 21:11:46）</h3>
+<table>
+<thead>
+<tr>
+<th>帧序</th>
+<th>Ultralytics inference</th>
+<th><strong><code>model=</code> 墙钟</strong></th>
+<th><strong><code>plot</code></strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>第 1 帧</td>
+<td><strong>94.8 ms</strong></td>
+<td><strong>102 ms</strong></td>
+<td><strong>12.9 ms</strong></td>
+</tr>
+<tr>
+<td>之后几帧</td>
+<td><strong>～13～20 ms</strong></td>
+<td><strong>～24～29 ms</strong></td>
+<td><strong>～5～12 ms</strong></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li><strong>warmup</strong>：第 1 帧 GPU/CUDA、cudnn、缓存等最重，和你们之前「视频前几帧慢」一致。</li>
+<li><strong>为什么 <code>model=</code> 常比 Ultralytics 的 <code>inference</code> 再高 ~10 ms？</strong><br>
+<code>perf_counter</code> 包住的是<strong>整段</strong> <code>model(...)</code> 返回：里面除了「纯 kernel 推理」，往往还有同步、解码型后处理等在 Python/C++ 边界上的墙钟开销；Ultralytics 打在日志里的那一段 <strong>不见得等于</strong>你在 Python 侧量的整段耗时，所以会看到 <strong>Ultra ~14–20 ms、你却量到 ~23–29 ms</strong>，这是正常现象。</li>
+<li><strong><code>plot</code></strong> 仍会占几毫秒～十几毫秒，仍远小于 <strong><code>model</code>。</strong></li>
+</ul>
+<hr>
+<h3 id="3两段合在一起说明什么"><a class="markdownIt-Anchor" href="#3两段合在一起说明什么"></a> 3）两段合在一起说明什么？</h3>
+<ul>
+<li><strong>同一次进程里</strong>：若先有「冷线程 / 首次 CUDA」路径，会出现 <strong><code>model</code> 一秒钟级</strong> spike（你更早那次的 <strong>1248 ms</strong>）；<strong>同一进程稍后</strong>再在 <code>ThreadPoolExecutor</code> 里跑，<code>model</code> 就只 <strong>～90 ms</strong>。<br>
+本质是 <strong>谁在什么线程上、第几次碰 GPU</strong>，不是 <code>plot</code>。</li>
+<li><strong>固定 <code>ProcessorThreadWebcam</code> 线程</strong>持续跑：<strong>首帧大一点，后面 <code>model</code> 明显低于拍照路径里重复的 ~80 ms</strong>，是因为 Ultralytics 内部计时和你们外层墙钟口径不同 + 流水线是否持续喂帧；你这两段里都说明 <strong>瓶颈仍在 <code>model(...)</code></strong>。</li>
+</ul>
+<p>若要<strong>压掉拍照首帧 ~1 s</strong>：在应用启动或首次检测前，<strong>在同一个最终用于推理的线程上做一次 warmup</strong>，或 <strong><code>stream_process_multiple_frames</code> 里复用单个 <code>ThreadPoolExecutor</code>/<code>ProcessPoolExecutor</code></strong>，避免每次都是「从未跑过 CUDA 的工作线程」。需要的话可以再改 detector 那一段具体代码方案。</p>
+<blockquote>
+<ol>
+<li>全局模型warm up</li>
+<li>线程专属的模型warm up(因为已经load一次模型了)</li>
+<li>复用单一线程</li>
+<li>单针plot似乎压力更小? 少5ms</li>
+</ol>
+</blockquote>
+<h1 id="拍照使用同一个线程使用"><a class="markdownIt-Anchor" href="#拍照使用同一个线程使用"></a> 拍照使用同一个线程使用</h1>
+<h2 id="1-问题"><a class="markdownIt-Anchor" href="#1-问题"></a> 1 问题</h2>
+<p>旧的</p>
+<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260516213326744.png" alt="image-20260516213326744"></p>
+<p>新的</p>
+<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260516213427846.png" alt="image-20260516213427846"></p>
+<p><strong>with ThreadPoolExecutor(max_workers=1) as inference_executor:</strong></p>
+<h1 id="推理线程长期存在"><a class="markdownIt-Anchor" href="#推理线程长期存在"></a> 推理线程长期存在</h1>
+<h2 id="问题-线程内首帧延迟高"><a class="markdownIt-Anchor" href="#问题-线程内首帧延迟高"></a> 问题: 线程内首帧延迟高</h2>
+<p><strong>非模型预热问题</strong></p>
+<p>旧:</p>
+<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260516215657748.png" alt="image-20260516215657748"></p>
+<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260516215724436.png" alt="image-20260516215724436"></p>
+<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260516215937263.png" alt="image-20260516215937263"></p>
+<h2 id="线程复用"><a class="markdownIt-Anchor" href="#线程复用"></a> 线程复用</h2>
+<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260516222340412.png" alt></p>
+<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260516222407252.png" alt="image-20260516222407252"></p>
+<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260516222432052.png" alt="image-20260516222432052"></p>
+<p>1min after…</p>
+<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260516222514195.png" alt="image-20260516222514195"></p>
+<p>5min after</p>
+<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260516223303305.png" alt="image-20260516223303305"></p>
+<p>30min after</p>
+<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260516230213453.png" alt="image-20260516230213453"></p>
+<p><strong>「1 = 全局第一次推理的典型冷启动；2、3 = 已在同一进程内热过 GPU，首帧只剩「单次会话级」 warmup，所以会小一个数量级」。</strong></p>
+<h1 id="多个线程同一个模型"><a class="markdownIt-Anchor" href="#多个线程同一个模型"></a> 多个线程同一个模型</h1>
+<h2 id="问题"><a class="markdownIt-Anchor" href="#问题"></a> 问题</h2>
+<p>第一个</p>
+<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260521102420714.png" alt="image-20260521102420714"></p>
+<p>第二个</p>
+<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260521102448559.png" alt="image-20260521102448559"></p>
+<blockquote>
+<p>wsp1的延迟变高了12ms</p>
+<img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260521102521087.png" alt="image-20260521102521087" style="zoom:33%;"> 
+</blockquote>
+<h3 id><a class="markdownIt-Anchor" href="#"></a> </h3>
+<h2 id="detector复用"><a class="markdownIt-Anchor" href="#detector复用"></a> detector复用</h2>
+<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260521102353265.png" alt="image-20260521102353265"></p>
+<p>第二个</p>
+<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260521102337884.png" alt="image-20260521102337884"></p>
+<blockquote>
+<p>wsp1 基本还是维持在和原来的20mns左右</p>
+<img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260521102648033.png" alt="image-20260521102648033" style="zoom:50%;"> 
+</blockquote>
+<h2 id="模型复用"><a class="markdownIt-Anchor" href="#模型复用"></a> 模型复用</h2>
+<p>第一个</p>
+<img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260521111449158.png" alt="image-20260521111449158">
+<p>第二个</p>
+<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260521111538273.png" alt="image-20260521111538273"></p>
+<h3 id="使用复用"><a class="markdownIt-Anchor" href="#使用复用"></a> 使用复用</h3>
+<img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260521103854051.png" alt="image-20260521103854051" style="zoom: 67%;"> 
+<h3 id="不用复用"><a class="markdownIt-Anchor" href="#不用复用"></a> 不用复用</h3>
+<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260521104529419.png" alt="image-20260521104529419"></p>
+<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260521104636740.png" alt="image-20260521104636740"></p>
+<h3 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h3>
+<p>1 共享model大约减少10ms推理延迟(一帧)</p>
+<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260521110801124.png" alt="image-20260521110801124"></p>
+<table>
+<thead>
+<tr>
+<th>测试组别</th>
+<th>运行阶段</th>
+<th>运行对象</th>
+<th>耗时区间 (ms)</th>
+<th>平均耗时 (ms)</th>
+<th>核心特征</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>第1组</td>
+<td>空载前置</td>
+<td>W1</td>
+<td>32~49</td>
+<td>41</td>
+<td>三组里空载最优，延迟最低</td>
+</tr>
+<tr>
+<td>第1组</td>
+<td>稳态运行</td>
+<td>W2</td>
+<td>61~108</td>
+<td>85</td>
+<td>首帧 147ms，预热后快速收敛稳定</td>
+</tr>
+<tr>
+<td>第1组</td>
+<td>后置回归</td>
+<td>W1</td>
+<td>47~68</td>
+<td>57</td>
+<td>降速幅度最小，恢复性最好</td>
+</tr>
+<tr>
+<td>第2组</td>
+<td>空载前置</td>
+<td>W1</td>
+<td>43~64</td>
+<td>50</td>
+<td>性能平稳，资源充足</td>
+</tr>
+<tr>
+<td>第2组</td>
+<td>稳态运行</td>
+<td>W2</td>
+<td>56~122</td>
+<td>100</td>
+<td>初始化极端卡顿，整体耗时更高</td>
+</tr>
+<tr>
+<td>第2组</td>
+<td>后置回归</td>
+<td>W1</td>
+<td>64~111</td>
+<td>85</td>
+<td>延迟大幅抬升，稳定性变差</td>
+</tr>
+</tbody>
+</table>
+<p>2 减少模型预热时间</p>
+<table>
+<thead>
+<tr>
+<th>组别</th>
+<th>模式</th>
+<th>workspace</th>
+<th>冷启动 (ms)</th>
+<th>热启动 (ms)</th>
+<th>提升倍数</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>第 1 组</td>
+<td>共享流</td>
+<td>wk1</td>
+<td>936.17</td>
+<td>42.48</td>
+<td><strong>22 倍</strong></td>
+</tr>
+<tr>
+<td>第 1 组</td>
+<td>共享流</td>
+<td>wk2</td>
+<td>163.17</td>
+<td>85.21</td>
+<td><strong>1.9 倍</strong></td>
+</tr>
+<tr>
+<td>第 1 组</td>
+<td>共享流</td>
+<td>wk3</td>
+<td>236.28</td>
+<td>121.76</td>
+<td><strong>1.9 倍</strong></td>
+</tr>
+<tr>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>第 2 组</td>
+<td>独立流</td>
+<td>wk1</td>
+<td>928.42</td>
+<td>75.65</td>
+<td><strong>12 倍</strong></td>
+</tr>
+<tr>
+<td>第 2 组</td>
+<td>独立流</td>
+<td>wk2</td>
+<td>612.52</td>
+<td>63.94</td>
+<td><strong>9.6 倍</strong></td>
+</tr>
+<tr>
+<td>第 2 组</td>
+<td>独立流</td>
+<td>wk3</td>
+<td>1109.33</td>
+<td>239.68</td>
+<td><strong>4.6 倍</strong></td>
+</tr>
+<tr>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>第 3 组</td>
+<td>独立流</td>
+<td>wk1</td>
+<td>366.76</td>
+<td>187.96</td>
+<td><strong>2.0 倍</strong></td>
+</tr>
+<tr>
+<td>第 3 组</td>
+<td>独立流</td>
+<td>wk2</td>
+<td>263.21</td>
+<td>115.09</td>
+<td><strong>2.3 倍</strong></td>
+</tr>
+<tr>
+<td>第 3 组</td>
+<td>独立流</td>
+<td>wk3</td>
+<td>942.00</td>
+<td>79.93</td>
+<td><strong>11.8 倍</strong></td>
+</tr>
+<tr>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>第 4 组</td>
+<td>共享流</td>
+<td>wk1</td>
+<td>870.81</td>
+<td>48.76</td>
+<td><strong>17.9 倍</strong></td>
+</tr>
+<tr>
+<td>第 4 组</td>
+<td>共享流</td>
+<td>wk2</td>
+<td>146.99</td>
+<td>83.51</td>
+<td><strong>1.8 倍</strong></td>
+</tr>
+<tr>
+<td>第 4 组</td>
+<td>共享流</td>
+<td>wk3</td>
+<td>224.31</td>
+<td>123.87</td>
+<td><strong>1.8 倍</strong></td>
+</tr>
+</tbody>
+</table>
+<p>3 虽然手动单独了复用</p>
+<p>但是同一进程稍后GPU似乎本来就会复用? 所以降低不是很多</p>
+<h1 id="目标数量"><a class="markdownIt-Anchor" href="#目标数量"></a> 目标数量</h1>
+<h2 id="问题检测目标多的时候-plot时间长"><a class="markdownIt-Anchor" href="#问题检测目标多的时候-plot时间长"></a> 问题:检测目标多的时候, plot时间长</h2>
+<p>少</p>
+<p><img src="/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/image-20260520141834237.png" alt="image-20260520141834237"></p>
+<p>多</p>
+<h2 id="总结-2"><a class="markdownIt-Anchor" href="#总结-2"></a> 总结</h2>
+<p>生产环境不plot</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/05/16/2026%E5%B9%B45%E6%9C%8816%E6%97%A5-TFLOPS/" data-id="cmptvn9rp00069sv414vn0tt0" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96/" rel="tag">推理优化</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2026年5月15日-uv汇总" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/05/15/2026%E5%B9%B45%E6%9C%8815%E6%97%A5-uv%E6%B1%87%E6%80%BB/" class="article-date">
+  <time class="post-time" datetime="2026-05-15T14:18:40.000Z" itemprop="datePublished">
+    <span class="post-month">5月</span><br/>
+    <span class="post-day">15</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2026/05/15/2026%E5%B9%B45%E6%9C%8815%E6%97%A5-uv%E6%B1%87%E6%80%BB/">2026年5月15日 uv汇总</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="uv-init-之后python版本是多少"><a class="markdownIt-Anchor" href="#uv-init-之后python版本是多少"></a> uv init 之后python版本是多少</h2>
+<p><code>uv init</code> 本身不会“固定”一个 Python 版本，它会：</p>
+<ol>
+<li>使用你当前环境找到的 Python</li>
+<li>生成 <code>pyproject.toml</code></li>
+<li>自动写一个 <code>requires-python</code></li>
+</ol>
+<p>例如你当前机器默认是 Python 3.12：</p>
+<h2 id="我现在uv-build-之后只能安装在固定python版本吗"><a class="markdownIt-Anchor" href="#我现在uv-build-之后只能安装在固定python版本吗"></a> 我现在uv build 之后只能安装在固定python版本吗?</h2>
+<p>不是。<code>uv build</code> 构建出来的包，是否“只能安装在固定 Python 版本”，取决于你项目里声明的 Python 兼容范围，而不是 <code>uv build</code> 本身</p>
+<h2 id="uv-sync-干什么的"><a class="markdownIt-Anchor" href="#uv-sync-干什么的"></a> uv sync 干什么的</h2>
+<p><code>uv sync</code> 的核心作用一句话概括就是：</p>
+<blockquote>
+<p><strong>把你的项目环境“同步”成 pyproject.toml + uv.lock 里定义的状态</strong></p>
+</blockquote>
+<p>它做的不是“随便装点包”，而是<strong>严格对齐依赖环境</strong>。</p>
+<h2 id="uv-add-做了什么"><a class="markdownIt-Anchor" href="#uv-add-做了什么"></a> uv add 做了什么</h2>
+<p>执行：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uv add fastapi</span><br></pre></td></tr></table></figure>
+<p>它会自动做 4 件事：</p>
+<p>① 修改 pyproject.toml</p>
+<p>自动写入：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[project]</span><br><span class="line">dependencies = [</span><br><span class="line">  &quot;fastapi&gt;=0.0.0&quot;</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<p>（具体版本可能带约束）</p>
+<hr>
+<p>② 更新 uv.lock</p>
+<p>生成或更新锁文件：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fastapi==0.110.0</span><br></pre></td></tr></table></figure>
+<p>👉 锁死真实安装版本</p>
+<hr>
+<p>③ 安装到当前环境</p>
+<p>等价于：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install fastapi</span><br></pre></td></tr></table></figure>
+<p>但 uv 更快 + 更严格</p>
+<hr>
+<p>④ 解析依赖树</p>
+<p>会自动处理：</p>
+<ul>
+<li>fastapi 依赖的 starlette</li>
+<li>pydantic</li>
+<li>anyio</li>
+</ul>
+<p>全部一起算好版本</p>
+<p>uv init test 会创建venv吗</p>
+<p>不会。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uv init test</span><br></pre></td></tr></table></figure>
+<p>👉 <strong>只做“项目初始化”，不会创建 venv。</strong></p>
+<hr>
+<h2 id="uv-init-做了什么"><a class="markdownIt-Anchor" href="#uv-init-做了什么"></a> uv init 做了什么</h2>
+<p>执行后主要生成：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">test/</span><br><span class="line"> ├── pyproject.toml</span><br><span class="line"> ├── README.md</span><br><span class="line"> └── .gitignore</span><br></pre></td></tr></table></figure>
+<p>它的作用是：</p>
+<blockquote>
+<p>创建一个“Python 项目结构”，不是运行环境</p>
+</blockquote>
+<h2 id="uv-add-会自动创建环境吗"><a class="markdownIt-Anchor" href="#uv-add-会自动创建环境吗"></a> uv add 会自动创建环境吗</h2>
+<p>会的——<strong>在大多数情况下，<code>uv add</code> 会自动帮你创建 <code>.venv</code>，但有前提条件。</strong></p>
+<p>可以这样理解：</p>
+<blockquote>
+<p><code>uv add</code> = “加依赖 + 安装 +（必要时）自动创建虚拟环境”</p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/05/15/2026%E5%B9%B45%E6%9C%8815%E6%97%A5-uv%E6%B1%87%E6%80%BB/" data-id="cmptvn9rn00049sv4go9n2etx" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-2026年5月14日-ModelExecutoPool" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -3213,106 +3911,6 @@
 
 
   
-    <article id="post-2026年3月11日-知识图谱" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2026/03/11/2026%E5%B9%B43%E6%9C%8811%E6%97%A5-%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/" class="article-date">
-  <time class="post-time" datetime="2026-03-11T02:36:11.000Z" itemprop="datePublished">
-    <span class="post-month">3月</span><br/>
-    <span class="post-day">11</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2026/03/11/2026%E5%B9%B43%E6%9C%8811%E6%97%A5-%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/">2026年3月11日 知识图谱</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2026/03/11/2026%E5%B9%B43%E6%9C%8811%E6%97%A5-%E7%9F%A5%E8%AF%86%E5%9B%BE%E8%B0%B1/" data-id="cmmuaf4q3000258v477f87p8c" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2026年3月11日-agent项目harness" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2026/03/11/2026%E5%B9%B43%E6%9C%8811%E6%97%A5-agent%E9%A1%B9%E7%9B%AEharness/" class="article-date">
-  <time class="post-time" datetime="2026-03-11T01:18:51.000Z" itemprop="datePublished">
-    <span class="post-month">3月</span><br/>
-    <span class="post-day">11</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2026/03/11/2026%E5%B9%B43%E6%9C%8811%E6%97%A5-agent%E9%A1%B9%E7%9B%AEharness/">2026年3月11日 agent项目</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>tips</p>
-<p><img src="/2026/03/11/2026%E5%B9%B43%E6%9C%8811%E6%97%A5-agent%E9%A1%B9%E7%9B%AEharness/image-20260311091914839.png" alt="image-20260311091914839"></p>
-<h3 id="cot"><a class="markdownIt-Anchor" href="#cot"></a> cot</h3>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br></pre></td><td class="code"><pre><span class="line"># 豆包内置的完整 CoT (思维链) 思考流程</span><br><span class="line"># 执行时机：回答任意用户问题时自动触发</span><br><span class="line">def internal_cot_process(user_question):</span><br><span class="line">    # 步骤1：核心目标识别</span><br><span class="line">    step1 = &#123;</span><br><span class="line">        &quot;action&quot;: &quot;理解用户真实需求&quot;,</span><br><span class="line">        &quot;sub_steps&quot;: [</span><br><span class="line">            &quot;判断需求类型：知识/推理/创作/代码/情绪支持等&quot;,</span><br><span class="line">            &quot;提取显性约束：格式/语言/长度/禁忌要求&quot;,</span><br><span class="line">            &quot;挖掘隐性需求：用户未明说但潜在需要的（如新手需通俗解释）&quot;</span><br><span class="line">        ],</span><br><span class="line">        &quot;output&quot;: &quot;明确核心目标：xxx&quot;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    # 步骤2：问题拆解与信息校验</span><br><span class="line">    step2 = &#123;</span><br><span class="line">        &quot;action&quot;: &quot;拆解问题并校验信息&quot;,</span><br><span class="line">        &quot;sub_steps&quot;: [</span><br><span class="line">            &quot;复杂问题拆分为可执行的子问题（如编程问题拆为：环境→逻辑→代码→测试）&quot;,</span><br><span class="line">            &quot;标记关键信息：用户提供的已知条件/数据&quot;,</span><br><span class="line">            &quot;标记缺失信息：需要追问或说明的模糊点&quot;,</span><br><span class="line">            &quot;标记歧义点：可能产生误解的表述并统一口径&quot;</span><br><span class="line">        ],</span><br><span class="line">        &quot;output&quot;: &quot;拆解结果：[子问题1, 子问题2, ...]；信息校验：[关键/缺失/歧义]&quot;)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    # 步骤3：知识检索与可信度验证</span><br><span class="line">    step3 = &#123;</span><br><span class="line">        &quot;action&quot;: &quot;调用知识库并验证准确性&quot;,</span><br><span class="line">        &quot;sub_steps&quot;: [</span><br><span class="line">            &quot;检索匹配的专业知识/通用常识&quot;,</span><br><span class="line">            &quot;对不确定的信息标记「待验证」，不编造&quot;,</span><br><span class="line">            &quot;优先使用行业通用结论/官方文档内容&quot;</span><br><span class="line">        ],</span><br><span class="line">        &quot;output&quot;: &quot;检索结果：[准确内容/不确定/无相关知识]&quot;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    # 步骤4：分步推理（CoT 核心）</span><br><span class="line">    step4 = &#123;</span><br><span class="line">        &quot;action&quot;: &quot;逐步骤逻辑推导&quot;,</span><br><span class="line">        &quot;sub_steps&quot;: [</span><br><span class="line">            &quot;先输出结论框架（如：先给代码→再解释→最后总结）&quot;,</span><br><span class="line">            &quot;单步只执行一个逻辑动作：定义→分析→计算→推导→验证&quot;,</span><br><span class="line">            &quot;推理过程可追溯，不跳步（如数学题分步列公式，编程题分步写逻辑）&quot;,</span><br><span class="line">            &quot;对中间结果自查：是否矛盾/是否符合常识&quot;</span><br><span class="line">        ],</span><br><span class="line">        &quot;output&quot;: &quot;分步推理结果：[步骤1结论, 步骤2结论, ..., 最终结论]&quot;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    # 步骤5：安全合规校验</span><br><span class="line">    step5 = &#123;</span><br><span class="line">        &quot;action&quot;: &quot;内容安全与合规检查&quot;,</span><br><span class="line">        &quot;sub_steps&quot;: [</span><br><span class="line">            &quot;校验是否含违规/敏感/误导性内容&quot;,</span><br><span class="line">            &quot;校验是否存在事实错误/编造信息&quot;,</span><br><span class="line">            &quot;校验是否符合用户场景的适配性（如新手避免专业术语堆砌）&quot;</span><br><span class="line">        ],</span><br><span class="line">        &quot;output&quot;: &quot;合规结果：通过/需调整（调整点：xxx）&quot;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    # 步骤6：输出组织与优化</span><br><span class="line">    step6 = &#123;</span><br><span class="line">        &quot;action&quot;: &quot;结构化输出最终回答&quot;,</span><br><span class="line">        &quot;sub_steps&quot;: [</span><br><span class="line">            &quot;按「核心答案→详细解释→总结」的逻辑组织语言&quot;,</span><br><span class="line">            &quot;优先提供可直接复用的内容（如代码/模板）&quot;,</span><br><span class="line">            &quot;语言适配用户水平：新手通俗化，专业用户精准化&quot;,</span><br><span class="line">            &quot;格式适配要求：代码块/列表/分段等&quot;</span><br><span class="line">        ],</span><br><span class="line">        &quot;output&quot;: &quot;最终面向用户的回答内容&quot;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    # 执行全流程</span><br><span class="line">    execute_steps = [step1, step2, step3, step4, step5, step6]</span><br><span class="line">    return execute_steps</span><br><span class="line"></span><br><span class="line"># 极简版 Cot 执行口诀（内置快捷调用）</span><br><span class="line">simple_cot = &quot;先理解 → 再拆解 → 分步推理 → 验证 → 安全检查 → 清晰输出&quot;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2026/03/11/2026%E5%B9%B43%E6%9C%8811%E6%97%A5-agent%E9%A1%B9%E7%9B%AEharness/" data-id="cmptvn9ri00019sv46j3k6imi" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -3357,9 +3955,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>184</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>186</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>45</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>46</strong><br>标签</div></a>
     </div>
 
 
