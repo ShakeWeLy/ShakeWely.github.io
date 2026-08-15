@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2026年8月15日 nnModel详解03-Deeplab | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="0 前置  论文1： Semantic Image Segmentation with Deep Convolutional Nets and Fully Connected CRFs 于2014年12月22日提交到Arvix https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;1412.7062 论文2： DeepLab: Semantic Image Segmentation with Deep C">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2026年8月15日 nnModel详解03-Deeplab">
+<meta property="og:url" content="https://shakewely.github.io/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A303-Deeplab/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="0 前置  论文1： Semantic Image Segmentation with Deep Convolutional Nets and Fully Connected CRFs 于2014年12月22日提交到Arvix https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;1412.7062 论文2： DeepLab: Semantic Image Segmentation with Deep C">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A303-Deeplab/640.webp">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A303-Deeplab/0121a7eb9dadef5bb1682af8cb3ee671.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A303-Deeplab/image-20260815225542288.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A303-Deeplab/image-20260815225742442.png">
+<meta property="article:published_time" content="2026-08-15T14:44:12.000Z">
+<meta property="article:modified_time" content="2026-08-15T15:05:14.551Z">
+<meta property="article:author" content="Weakliy">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shakewely.github.io/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A303-Deeplab/640.webp">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>189</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>46</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2026年8月15日-nnModel详解03-Deeplab" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A303-Deeplab/" class="article-date">
+  <time class="post-time" datetime="2026-08-15T14:44:12.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">15</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2026年8月15日 nnModel详解03-Deeplab
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="0-前置"><a class="markdownIt-Anchor" href="#0-前置"></a> 0 前置</h1>
+<blockquote>
+<p>论文1：</p>
+<p>Semantic Image Segmentation with Deep Convolutional Nets and Fully Connected CRFs</p>
+<p>于2014年12月22日提交到Arvix</p>
+<p><a href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/1412.7062">https://arxiv.org/abs/1412.7062</a></p>
+<p>论文2：</p>
+<p>DeepLab: Semantic Image Segmentation with Deep Convolutional Nets, Atrous Convolution, and Fully Connected CRFs</p>
+<p>于2016年6月2日提交到Arxiv</p>
+<p><a href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/1606.00915">https://arxiv.org/abs/1606.0091</a></p>
+<p>主要贡献：</p>
+<ul>
+<li>使用了空洞卷积；</li>
+<li>提出了在空间维度上实现金字塔型的空洞池化atrous spatial pyramid pooling(ASPP)；</li>
+<li>使用了全连接条件随机场。</li>
+</ul>
+</blockquote>
+<h2 id="1-是什么"><a class="markdownIt-Anchor" href="#1-是什么"></a> 1 是什么</h2>
+<p>使用用大量空洞卷积, 在增大感受野的同时避免降低图像分辨率的操作，这样更容易恢复到原始分辨率大小。</p>
+<h2 id="2-为什么"><a class="markdownIt-Anchor" href="#2-为什么"></a> 2 为什么</h2>
+<p>因为传统的增大感受也都是通过加大conv的stride或者pool来实现的, 这会导致图像分辨率下降, pool更是会丢失图像细节</p>
+<h1 id="1-主要改进"><a class="markdownIt-Anchor" href="#1-主要改进"></a> 1 主要改进</h1>
+<h2 id="11-空洞卷积"><a class="markdownIt-Anchor" href="#11-空洞卷积"></a> 1.1 空洞卷积</h2>
+<p><img src="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A303-Deeplab/640.webp" alt="Image"></p>
+<h2 id="12-条件随机场crf"><a class="markdownIt-Anchor" href="#12-条件随机场crf"></a> 1.2 条件随机场CRF</h2>
+<h4 id="是什么"><a class="markdownIt-Anchor" href="#是什么"></a> 是什么</h4>
+<h4 id="为什么"><a class="markdownIt-Anchor" href="#为什么"></a> 为什么</h4>
+<p>虽然使用空洞卷积，但仍然存在着池化操作，并且卷积本身就会让边缘信息弱化一些，使用传统的CRF条件随机场能让模糊的边界信息更清晰，使图像更加精细化，相当于网络中的Decoder部分的功能。</p>
+<h1 id="2-网络结构"><a class="markdownIt-Anchor" href="#2-网络结构"></a> 2 网络结构</h1>
+<h2 id="21-细节"><a class="markdownIt-Anchor" href="#21-细节"></a> 2.1 细节</h2>
+<p>1 基于VGG改写</p>
+<p>2 去掉全连接</p>
+<p>3 依旧是FCN网络主结构</p>
+<p><img src="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A303-Deeplab/0121a7eb9dadef5bb1682af8cb3ee671.png" alt="在这里插入图片描述"></p>
+<h1 id="4-deeplab_v2"><a class="markdownIt-Anchor" href="#4-deeplab_v2"></a> 4 <strong>Deeplab_v2</strong></h1>
+<h2 id="41-主要改进"><a class="markdownIt-Anchor" href="#41-主要改进"></a> 4.1 主要改进</h2>
+<ol>
+<li>ASPP模块</li>
+<li>vgg替换为restnet</li>
+</ol>
+<h2 id="42-aspp"><a class="markdownIt-Anchor" href="#42-aspp"></a> 4.2 ASPP</h2>
+<img src="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A303-Deeplab/image-20260815225542288.png" alt="image-20260815225542288" style="zoom:50%;">
+<h2 id="43-网络结构"><a class="markdownIt-Anchor" href="#43-网络结构"></a> 4.3 网络结构</h2>
+<p><img src="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A303-Deeplab/image-20260815225742442.png" alt="image-20260815225742442"></p>
+<h1 id="5-deeplabv3"><a class="markdownIt-Anchor" href="#5-deeplabv3"></a> 5 <strong>deeplabv3</strong></h1>
+<h2 id="41-主要改进-2"><a class="markdownIt-Anchor" href="#41-主要改进-2"></a> 4.1 主要改进</h2>
+<ol>
+<li>ASPP模块进行了额外的特征融合</li>
+<li>vgg替换为了Xception</li>
+<li>移除CRF</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A303-Deeplab/" data-id="cmsujpixj000160v44iln7qch" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2%E6%B1%87%E6%80%BB/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2026年8月15日 语义分割汇总</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>189</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>46</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2025 - 2026 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

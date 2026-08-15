@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2026年8月15日 nnModel详解02-FCN | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="0 前置  https:&#x2F;&#x2F;blog.csdn.net&#x2F;wzk4869&#x2F;article&#x2F;details&#x2F;129702031 https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;27794982   1 是什么 FCN主要实现采用CNN的方法, 实现对图像进行像素级的分类. 经典的CNN图像分类是在卷积层后添加全连接网络+Softmax输出固定长度的特征向量, 进行分类 而FCN并没有采用全">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2026年8月15日 nnModel详解02-FCN">
+<meta property="og:url" content="https://shakewely.github.io/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A302-FCN/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="0 前置  https:&#x2F;&#x2F;blog.csdn.net&#x2F;wzk4869&#x2F;article&#x2F;details&#x2F;129702031 https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;27794982   1 是什么 FCN主要实现采用CNN的方法, 实现对图像进行像素级的分类. 经典的CNN图像分类是在卷积层后添加全连接网络+Softmax输出固定长度的特征向量, 进行分类 而FCN并没有采用全">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A302-FCN/image-20260815205413260.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A302-FCN/image-20260815205644720.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A302-FCN/v2-e0912566ad8ec451955e2c017e722516_b.webp">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A302-FCN/image-20260815210313638.png">
+<meta property="article:published_time" content="2026-08-15T12:15:10.000Z">
+<meta property="article:modified_time" content="2026-08-15T14:43:43.204Z">
+<meta property="article:author" content="Weakliy">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shakewely.github.io/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A302-FCN/image-20260815205413260.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>189</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>46</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2026年8月15日-nnModel详解02-FCN" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A302-FCN/" class="article-date">
+  <time class="post-time" datetime="2026-08-15T12:15:10.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">15</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2026年8月15日 nnModel详解02-FCN
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="0-前置"><a class="markdownIt-Anchor" href="#0-前置"></a> 0 前置</h1>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/wzk4869/article/details/129702031">https://blog.csdn.net/wzk4869/article/details/129702031</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/27794982">https://zhuanlan.zhihu.com/p/27794982</a></p>
+</blockquote>
+<h2 id="1-是什么"><a class="markdownIt-Anchor" href="#1-是什么"></a> 1 是什么</h2>
+<p>FCN主要实现采用CNN的方法, 实现对图像进行像素级的分类.</p>
+<p>经典的CNN图像分类是在卷积层后添加全连接网络+Softmax输出固定长度的特征向量, 进行分类<br>
+而FCN并没有采用全连接的方式, 而是使用对最后一层卷积的特征向量进行反卷积操作, 生成与输入图像相同尺寸(任意)的图像, 从而对每一个像素进行预测.</p>
+<p>这种操作, 既保留的全局的空间信息, 又对每一个像素进行了分类</p>
+<h2 id="2-为什么"><a class="markdownIt-Anchor" href="#2-为什么"></a> 2 为什么</h2>
+<p><strong>语义分割的主要矛盾:</strong> 既需要全局信息的搞基语义信息进行语义分类, 有需要低级的是视觉信息进行准确分割</p>
+<h2 id="3-怎么做"><a class="markdownIt-Anchor" href="#3-怎么做"></a> 3 怎么做</h2>
+<ol>
+<li>用全卷积替代了全连接</li>
+<li>为了弥补下采样操作造成的损失，使用了<strong>反转卷积</strong>的操作来恢复信息</li>
+<li>用<strong>下采样之前的特征图与上采样之后的图片进行融合</strong>这样可以指引上采样过程恢复到比较好的效果。即高低通道特征融合。恢复低级视觉信息。</li>
+</ol>
+<h1 id="1-网络结构"><a class="markdownIt-Anchor" href="#1-网络结构"></a> 1 网络结构</h1>
+<img src="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A302-FCN/image-20260815205413260.png" alt="image-20260815205413260" style="zoom: 80%;">
+<img src="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A302-FCN/image-20260815205644720.png" alt="image-20260815205644720" style="zoom:67%;">
+<h2 id="11卷积部分"><a class="markdownIt-Anchor" href="#11卷积部分"></a> 1.1卷积部分</h2>
+<p>FCN输入的图像是H*W大小，第一层pooling后变为原图大小的1/4，第二层变为原图大小的1/8，第五层变为原图大小的1/16，第八层变为原图大小的1/32（勘误：其实真正代码当中第一层是1/2，以此类推）。</p>
+<p>经过多次卷积和pooling以后，得到的图像越来越小，分辨率越来越低。其中图像到 H/32∗W/32 的时候图片是最小的一层时，所产生图叫做heatmap热图 , 也就是我们需要的<strong>高维特征图</strong></p>
+<h2 id="12-反卷积部分"><a class="markdownIt-Anchor" href="#12-反卷积部分"></a> 1.2 反卷积部分</h2>
+<p>得到高维特征的heatmap之后就是最重要的一步也是最后的一步对原图像进行<strong>upsampling</strong>，把图像进行放大、放大、放大，到原图像的大小。</p>
+<p>最后的输出是1000张heatmap经过upsampling变为原图大小的图片，为了对每个像素进行分类预测label成最后已经进行语义分割的图像，</p>
+<blockquote>
+<p>为什么是1000张?</p>
+<p>最大数值描述（概率）作为该像素的分类</p>
+</blockquote>
+<h2 id="13-反卷积"><a class="markdownIt-Anchor" href="#13-反卷积"></a> 1.3 反卷积</h2>
+<p><img src="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A302-FCN/v2-e0912566ad8ec451955e2c017e722516_b.webp" alt="动图"></p>
+<h2 id="14-skip-layer"><a class="markdownIt-Anchor" href="#14-skip-layer"></a> 1.4 skip layer</h2>
+<p>限于精度问题不能够很好地还原图像当中的特征，因此在这里向前迭代。把conv中的卷积核对上一次upsampling之后的图进行反卷积补充细节（相当于一个差值过程）</p>
+<img src="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A302-FCN/image-20260815210313638.png" alt="image-20260815210313638" style="zoom: 67%;">
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A302-FCN/" data-id="cmsujpix0000060v43pe04p70" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2%E6%B1%87%E6%80%BB/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          2026年8月15日 语义分割汇总
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A301-Unet/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2026年8月15日 nnModel详解01-Unet</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>189</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>46</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2025 - 2026 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

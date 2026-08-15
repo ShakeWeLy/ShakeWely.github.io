@@ -43,7 +43,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>186</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>189</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>46</strong><br>标签</div></a>
     </div>
@@ -70,6 +70,267 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-2026年8月15日-nnModel详解03-Deeplab" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A303-Deeplab/" class="article-date">
+  <time class="post-time" datetime="2026-08-15T14:44:12.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">15</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A303-Deeplab/">2026年8月15日 nnModel详解03-Deeplab</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="0-前置"><a class="markdownIt-Anchor" href="#0-前置"></a> 0 前置</h1>
+<blockquote>
+<p>论文1：</p>
+<p>Semantic Image Segmentation with Deep Convolutional Nets and Fully Connected CRFs</p>
+<p>于2014年12月22日提交到Arvix</p>
+<p><a href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/1412.7062">https://arxiv.org/abs/1412.7062</a></p>
+<p>论文2：</p>
+<p>DeepLab: Semantic Image Segmentation with Deep Convolutional Nets, Atrous Convolution, and Fully Connected CRFs</p>
+<p>于2016年6月2日提交到Arxiv</p>
+<p><a href="https://link.zhihu.com/?target=https%3A//arxiv.org/abs/1606.00915">https://arxiv.org/abs/1606.0091</a></p>
+<p>主要贡献：</p>
+<ul>
+<li>使用了空洞卷积；</li>
+<li>提出了在空间维度上实现金字塔型的空洞池化atrous spatial pyramid pooling(ASPP)；</li>
+<li>使用了全连接条件随机场。</li>
+</ul>
+</blockquote>
+<h2 id="1-是什么"><a class="markdownIt-Anchor" href="#1-是什么"></a> 1 是什么</h2>
+<p>使用用大量空洞卷积, 在增大感受野的同时避免降低图像分辨率的操作，这样更容易恢复到原始分辨率大小。</p>
+<h2 id="2-为什么"><a class="markdownIt-Anchor" href="#2-为什么"></a> 2 为什么</h2>
+<p>因为传统的增大感受也都是通过加大conv的stride或者pool来实现的, 这会导致图像分辨率下降, pool更是会丢失图像细节</p>
+<h1 id="1-主要改进"><a class="markdownIt-Anchor" href="#1-主要改进"></a> 1 主要改进</h1>
+<h2 id="11-空洞卷积"><a class="markdownIt-Anchor" href="#11-空洞卷积"></a> 1.1 空洞卷积</h2>
+<p><img src="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A303-Deeplab/640.webp" alt="Image"></p>
+<h2 id="12-条件随机场crf"><a class="markdownIt-Anchor" href="#12-条件随机场crf"></a> 1.2 条件随机场CRF</h2>
+<h4 id="是什么"><a class="markdownIt-Anchor" href="#是什么"></a> 是什么</h4>
+<h4 id="为什么"><a class="markdownIt-Anchor" href="#为什么"></a> 为什么</h4>
+<p>虽然使用空洞卷积，但仍然存在着池化操作，并且卷积本身就会让边缘信息弱化一些，使用传统的CRF条件随机场能让模糊的边界信息更清晰，使图像更加精细化，相当于网络中的Decoder部分的功能。</p>
+<h1 id="2-网络结构"><a class="markdownIt-Anchor" href="#2-网络结构"></a> 2 网络结构</h1>
+<h2 id="21-细节"><a class="markdownIt-Anchor" href="#21-细节"></a> 2.1 细节</h2>
+<p>1 基于VGG改写</p>
+<p>2 去掉全连接</p>
+<p>3 依旧是FCN网络主结构</p>
+<p><img src="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A303-Deeplab/0121a7eb9dadef5bb1682af8cb3ee671.png" alt="在这里插入图片描述"></p>
+<h1 id="4-deeplab_v2"><a class="markdownIt-Anchor" href="#4-deeplab_v2"></a> 4 <strong>Deeplab_v2</strong></h1>
+<h2 id="41-主要改进"><a class="markdownIt-Anchor" href="#41-主要改进"></a> 4.1 主要改进</h2>
+<ol>
+<li>ASPP模块</li>
+<li>vgg替换为restnet</li>
+</ol>
+<h2 id="42-aspp"><a class="markdownIt-Anchor" href="#42-aspp"></a> 4.2 ASPP</h2>
+<img src="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A303-Deeplab/image-20260815225542288.png" alt="image-20260815225542288" style="zoom:50%;">
+<h2 id="43-网络结构"><a class="markdownIt-Anchor" href="#43-网络结构"></a> 4.3 网络结构</h2>
+<p><img src="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A303-Deeplab/image-20260815225742442.png" alt="image-20260815225742442"></p>
+<h1 id="5-deeplabv3"><a class="markdownIt-Anchor" href="#5-deeplabv3"></a> 5 <strong>deeplabv3</strong></h1>
+<h2 id="41-主要改进-2"><a class="markdownIt-Anchor" href="#41-主要改进-2"></a> 4.1 主要改进</h2>
+<ol>
+<li>ASPP模块进行了额外的特征融合</li>
+<li>vgg替换为了Xception</li>
+<li>移除CRF</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A303-Deeplab/" data-id="cmsujpixj000160v44iln7qch" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2026年8月15日-语义分割汇总" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2%E6%B1%87%E6%80%BB/" class="article-date">
+  <time class="post-time" datetime="2026-08-15T12:15:40.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">15</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2%E6%B1%87%E6%80%BB/">2026年8月15日 语义分割汇总</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="0-前置"><a class="markdownIt-Anchor" href="#0-前置"></a> 0 前置</h1>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/27794982">https://zhuanlan.zhihu.com/p/27794982</a></p>
+</blockquote>
+<h2 id="1-是什么"><a class="markdownIt-Anchor" href="#1-是什么"></a> 1 是什么</h2>
+<p>语义分割是指对图片的像素进行分类. 有别于<code>实例分割</code>, 语义分割不能区分同一类的不同个体</p>
+<ul>
+<li><strong>实例分割</strong>：实例分割就是对同一类的不同对象也要进行分割，比如说，语义分割会将车分为一类，人分为另一类。但是，实例分割不同的是，它会将车继续进行分类，每一辆车都是一个实例类别。</li>
+<li><strong>全景分割</strong>：简单地来讲，全景分割是实例分割与语义分割的结合。<strong>全景分割中的每一个像素点都会分成对应的语义标签和实例标签</strong>。如果一种类别里有多个实例，会用不同的颜色进行区分，我们可以知道哪个像素属于哪个类中的哪个实例。</li>
+</ul>
+<p><img src="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2%E6%B1%87%E6%80%BB/image-20260815202736295.png" alt="image-20260815202736295"></p>
+<h2 id="2-为什么"><a class="markdownIt-Anchor" href="#2-为什么"></a> 2 为什么</h2>
+<h2 id="3-有哪些方法"><a class="markdownIt-Anchor" href="#3-有哪些方法"></a> 3 有哪些方法</h2>
+<p>传统的的语义分割采用CNN的全连接, 所以采用<strong>图像块分类</strong>; 但后来基本采用了不带全连接的 <strong>完全卷积网络</strong>. 使得分割图谱可以生成任意大小的图像，且与图像块分类方法相比，也提高了处理速度。</p>
+<p>除此之外, <strong>在分割问题中很难使用CNN网络的另一个问题是存在池化层。</strong> 因为池化层会聚合背景, <strong>丢弃位置信息</strong>, 增大下一次卷积的感受野. 然而，语义分割方法需对类别图谱进行精确调整，因此需保留池化层中所舍弃的<strong>位置信息</strong>。</p>
+<blockquote>
+<p><strong>池化层放大感受野的代价</strong>：通过把特征图缩小（例如 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>256</mn><mo>×</mo><mn>256</mn><mo>→</mo><mn>128</mn><mo>×</mo><mn>128</mn></mrow><annotation encoding="application/x-tex">256 \times 256 \rightarrow 128 \times 128</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">2</span><span class="mord">5</span><span class="mord">6</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span><span class="mord">5</span><span class="mord">6</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord">2</span><span class="mord">8</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">2</span><span class="mord">8</span></span></span></span>）来让后面的 3x3 卷积看清更大的范围，代价是<strong>丢失了 75% 的空间细节</strong>，导致边界模糊。</p>
+</blockquote>
+<p>所以产生了两种不同的方法</p>
+<h3 id="31-encoder-decoder结构"><a class="markdownIt-Anchor" href="#31-encoder-decoder结构"></a> 3.1 <strong>encoder-decoder结构</strong></h3>
+<p>编码器使用池化层逐渐缩减输入数据的空间维度，而解码器通过反卷积层等网络层逐步恢复目标的细节和相应的空间维度。从编码器到解码器之间，通常存在直接的信息连接，来帮助解码器更好地恢复目标细节。在这种方法中，一种典型结构为U-Net网络。</p>
+<p><img src="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2%E6%B1%87%E6%80%BB/image-20260815203311651.png" alt="image-20260815203311651"></p>
+<h3 id="32-空洞卷积结构"><a class="markdownIt-Anchor" href="#32-空洞卷积结构"></a> 3.2  空洞卷积结构</h3>
+<p>不采用池化操作</p>
+<p><img src="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2%E6%B1%87%E6%80%BB/image-20260815203333886.png" alt="image-20260815203333886"></p>
+<h3 id="33-条件随机场conditional-random-fieldcrf"><a class="markdownIt-Anchor" href="#33-条件随机场conditional-random-fieldcrf"></a> 3.3 条件随机场(Conditional Random Field，CRF)</h3>
+<p>**通常在后期处理中用于改进分割效果。**CRF方法是一种基于底层图像像素强度进行“平滑”分割的图模型，在运行时会将像素强度相似的点标记为同一类别。加入条件随机场方法可以提高1~2%的最终评分值。</p>
+<p><img src="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2%E6%B1%87%E6%80%BB/image-20260815203836432.png" alt="image-20260815203836432"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2%E6%B1%87%E6%80%BB/" data-id="cmsujpiy2000260v40z707xne" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/dl/" rel="tag">dl</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
+  
+    <article id="post-2026年8月15日-nnModel详解02-FCN" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A302-FCN/" class="article-date">
+  <time class="post-time" datetime="2026-08-15T12:15:10.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">15</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A302-FCN/">2026年8月15日 nnModel详解02-FCN</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="0-前置"><a class="markdownIt-Anchor" href="#0-前置"></a> 0 前置</h1>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/wzk4869/article/details/129702031">https://blog.csdn.net/wzk4869/article/details/129702031</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/27794982">https://zhuanlan.zhihu.com/p/27794982</a></p>
+</blockquote>
+<h2 id="1-是什么"><a class="markdownIt-Anchor" href="#1-是什么"></a> 1 是什么</h2>
+<p>FCN主要实现采用CNN的方法, 实现对图像进行像素级的分类.</p>
+<p>经典的CNN图像分类是在卷积层后添加全连接网络+Softmax输出固定长度的特征向量, 进行分类<br>
+而FCN并没有采用全连接的方式, 而是使用对最后一层卷积的特征向量进行反卷积操作, 生成与输入图像相同尺寸(任意)的图像, 从而对每一个像素进行预测.</p>
+<p>这种操作, 既保留的全局的空间信息, 又对每一个像素进行了分类</p>
+<h2 id="2-为什么"><a class="markdownIt-Anchor" href="#2-为什么"></a> 2 为什么</h2>
+<p><strong>语义分割的主要矛盾:</strong> 既需要全局信息的搞基语义信息进行语义分类, 有需要低级的是视觉信息进行准确分割</p>
+<h2 id="3-怎么做"><a class="markdownIt-Anchor" href="#3-怎么做"></a> 3 怎么做</h2>
+<ol>
+<li>用全卷积替代了全连接</li>
+<li>为了弥补下采样操作造成的损失，使用了<strong>反转卷积</strong>的操作来恢复信息</li>
+<li>用<strong>下采样之前的特征图与上采样之后的图片进行融合</strong>这样可以指引上采样过程恢复到比较好的效果。即高低通道特征融合。恢复低级视觉信息。</li>
+</ol>
+<h1 id="1-网络结构"><a class="markdownIt-Anchor" href="#1-网络结构"></a> 1 网络结构</h1>
+<img src="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A302-FCN/image-20260815205413260.png" alt="image-20260815205413260" style="zoom: 80%;">
+<img src="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A302-FCN/image-20260815205644720.png" alt="image-20260815205644720" style="zoom:67%;">
+<h2 id="11卷积部分"><a class="markdownIt-Anchor" href="#11卷积部分"></a> 1.1卷积部分</h2>
+<p>FCN输入的图像是H*W大小，第一层pooling后变为原图大小的1/4，第二层变为原图大小的1/8，第五层变为原图大小的1/16，第八层变为原图大小的1/32（勘误：其实真正代码当中第一层是1/2，以此类推）。</p>
+<p>经过多次卷积和pooling以后，得到的图像越来越小，分辨率越来越低。其中图像到 H/32∗W/32 的时候图片是最小的一层时，所产生图叫做heatmap热图 , 也就是我们需要的<strong>高维特征图</strong></p>
+<h2 id="12-反卷积部分"><a class="markdownIt-Anchor" href="#12-反卷积部分"></a> 1.2 反卷积部分</h2>
+<p>得到高维特征的heatmap之后就是最重要的一步也是最后的一步对原图像进行<strong>upsampling</strong>，把图像进行放大、放大、放大，到原图像的大小。</p>
+<p>最后的输出是1000张heatmap经过upsampling变为原图大小的图片，为了对每个像素进行分类预测label成最后已经进行语义分割的图像，</p>
+<blockquote>
+<p>为什么是1000张?</p>
+<p>最大数值描述（概率）作为该像素的分类</p>
+</blockquote>
+<h2 id="13-反卷积"><a class="markdownIt-Anchor" href="#13-反卷积"></a> 1.3 反卷积</h2>
+<p><img src="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A302-FCN/v2-e0912566ad8ec451955e2c017e722516_b.webp" alt="动图"></p>
+<h2 id="14-skip-layer"><a class="markdownIt-Anchor" href="#14-skip-layer"></a> 1.4 skip layer</h2>
+<p>限于精度问题不能够很好地还原图像当中的特征，因此在这里向前迭代。把conv中的卷积核对上一次upsampling之后的图进行反卷积补充细节（相当于一个差值过程）</p>
+<img src="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A302-FCN/image-20260815210313638.png" alt="image-20260815210313638" style="zoom: 67%;">
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A302-FCN/" data-id="cmsujpix0000060v43pe04p70" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-2026年8月15日-nnModel详解01-Unet" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -1027,667 +1288,6 @@ relevant to its improved performance.</p>
 
 
   
-    <article id="post-2026年7月26日-nnUNet-learn" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2026/07/26/2026%E5%B9%B47%E6%9C%8826%E6%97%A5-nnUNet-learn/" class="article-date">
-  <time class="post-time" datetime="2026-07-26T11:27:42.000Z" itemprop="datePublished">
-    <span class="post-month">7月</span><br/>
-    <span class="post-day">26</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2026/07/26/2026%E5%B9%B47%E6%9C%8826%E6%97%A5-nnUNet-learn/">2026年7月26日 nnUNet learn</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="nnunet汇报"><a class="markdownIt-Anchor" href="#nnunet汇报"></a> nnUnet`汇报</h1>
-<h2 id="0-研究背景和痛点"><a class="markdownIt-Anchor" href="#0-研究背景和痛点"></a> 0 研究背景和痛点</h2>
-<blockquote>
-<p><em><strong>*While semantic segmentation algorithms enable image analysis and quantification in many applications, the*</strong></em> <em><strong>*design of respective specialized solutions is non-trivial and highly dependent on dataset properties and hardware conditions.*</strong></em></p>
-<p>Despite the recent success of deep learning-based segmentation methods, their applicability to specific image analysis problems of end-users is often limited.</p>
-<p>The task-specific design and configuration of a method requires high levels of expertise and experience, with small errors leading to large drops in performance1</p>
-<p>this process can be cumbersome and successful configurations from one dataset rarely translate to another.</p>
-<p>Purely empirical optimization of the co-dependent design choices in this high-dimensional space,amplifies both the number of required training cases, as well as compute resources,</p>
-<p>the application of AutoML to new datasets comes with its own set of required expert choices,</p>
-</blockquote>
-<ol>
-<li>针对具体任务设计相应的专用解决方案并不是一件简单的事情，而且高度依赖于数据集特性以及硬件条件。</li>
-</ol>
-<h2 id="1-核心方法"><a class="markdownIt-Anchor" href="#1-核心方法"></a> 1 核心方法</h2>
-<blockquote>
-<p><em><strong>*The key design choices in this process are modeled as*</strong></em> <em><strong>*a set of fixed parameters, interdependent rules and empirical decisions.*</strong></em></p>
-<p><em><strong>*automatically configures itself,including preprocess*</strong></em><em><strong>*ing, network architecture, training and post-processing for any new task.*</strong></em></p>
-<ol>
-<li>
-<p>Collect design decisions that do not require adaptation between datasets and identify a robust common configuration  (‘fixed parameters’).</p>
-</li>
-<li>
-<p>For as many of the remaining decisions as possible, formulate explicit dependencies between specific dataset properties(‘dataset fingerprint’) and design choices (‘pipeline fingerprint’) in the form of heuristic rules to allow for almost-instant adaptation on application (‘rule-based parameters’).</p>
-</li>
-<li>
-<p>Learn only the remaining decisions empirically from the data(‘empirical parameters’).</p>
-</li>
-</ol>
-<p>The  automatic  configuration  of nnU-Net is  based  on  distilling  domain  knowledge  into  three  parameter groups: fixed, rule-based and empirical parameters.</p>
-<p>First, we collect all design choices that do not require adaptation between datasets (such as setting the architecture template to‘U-Net-like’) and optimize their joint configuration for robust generalization on our development datasets. Second, for as many of the remaining decisions as possible, we formulate explicit dependencies between the‘dataset fingerprint’, a standardized dataset representation comprising key properties such as image size, voxel spacing information or class ratios, and the‘pipeline fingerprint’, which we define as the entirety of choices being made during method design. The dependencies are modeled in the form of interdependent heuristic rules that allow for almost-instant execution upon application.</p>
-<p>By default,nnU-Net generates three different U-Net15 configurations: a two-dimensional (2D)U-Net,a 3D U-Net that operates at full image resolution and a 3D U-Net cascade in which the first U-Net operates on downsampled images, and the second is trained to refine the segmentation maps created by the former at full resolution.</p>
-</blockquote>
-<h2 id="2-实验设计与结果"><a class="markdownIt-Anchor" href="#2-实验设计与结果"></a> 2 实验设计与结果</h2>
-<blockquote>
-<p>The general applicability of nnU-Net’s automated configuration is  demonstrated in  13  additional  datasets. Altogether, we report results on 53 segmentation tasks, covering an unprecedented diversity of target structures, image types and image properties. As an open source tool, nnU-Net can simply be trained out-of-the box to generate state-of-the-art segmentations.</p>
-<p>nnU-Net  is  a  deep  learning-based  segmentation  method  that automatically  configures  itself,  including  preprocessing,  network architecture, training and post-processing for any new task in the biomedical domain. Exemplary segmentation results generated by nnU-Net for a variety of datasets are shown in Fig. 1</p>
-<p>applying it to 11 international biomedical image segmentation challenges comprising 23 different datasets and 53 segmentation tasks6,14,16–24   (<a target="_blank" rel="noopener" href="https://cremi.org/">https://cremi.org/</a>). This selection comprised a variety of organs, organ substructures, tumors, lesions and cellular structures in 2D as well as 3D images acquired by magnetic resonance imaging (MRI), computed tomography (CT), electron microscopy (EM) and fluorescence microscopy (FM).</p>
-<p>Despite its generic nature, nnU-Net outperforms most existing segmentation solutions, even though the latter were specifically optimized for the respective task. Overall, nnU-Net sets a new state of the art in 33 of 53 target structures and otherwise shows performances on par with or close to the top leaderboard entries.</p>
-<p>We extracted the data fingerprints of 23 biomedical segmentation datasets.</p>
-<p>pipeline settings either directly or indirectly depend on the data fingerprint under potentially complex relations.</p>
-<p>The original nnU-Net configuration showed the best generalization and ranked first when results from all datasets were aggregated.</p>
-<p>nnU-Net was developed with a focus on the Dice coefficient as performance metric.</p>
-</blockquote>
-<h2 id="3-讨论与启发"><a class="markdownIt-Anchor" href="#3-讨论与启发"></a> 3 讨论与启发</h2>
-<blockquote>
-<p>Novel ideas can easily be integrated into nnU-Net and thus tested across multiple datasets without having to manually reconfigure the entire pipeline for each dataset.</p>
-<p>To demonstrate the benefits of this approach, and also to support some of the core design choices made in nnU-Net, we systematically tested the performance of common pipeline variations by systematically modifying some of nnU-Net’s fixed parameters. The following variations were evaluated across ten different datasets and were compared against our default nnU-Net configuration, which served as a baseline in these experiments (Fig. 6</p>
-<p>nnU-Net sets a new state of the art for the majority of tasks on which it was evaluated, outperforming all respective specialized processing pipelines.</p>
-<p>The strong performance of nnU-Net is not achieved by a new network architecture,loss function or training scheme (hence the name nnU-Net,‘no new net’),but by systematizing the complex process of manual method configuration, which was previously addressed either by cumbersome manual tuning or purely empirical approaches with practical limitations.</p>
-<p>performance lies in the distillation of knowledge from a large pool  of datasets into a set of robust design choices that translates into powerful inductive biases when applied to a new dataset, a</p>
-<p>nnU-Net is a new segmentation tool that can be applied out-of-the-box, without requiring any user intervention, to a large range of biomedical imaging datasets and is thus ideal for users who require access to semantic segmentation methods and do not have the expertise, time, data or computing resources required to adapt existing solutions to their problem</p>
-<p>There are several possible reasons for why performance improvements based on architectural extensions proposed by the literature may not translate to all datasets in the domain.</p>
-<p>that“the exact architecture is not the most important determinant in getting a good solution” (ref. 10) and is supported by nnU-Net’s state-of-the-art results based on a strong method configuration in combination with a simple U-Net architecture.</p>
-<p>compared to nnU-Net, for which, due to the underlying use of guiding principles, each design decision can be traced back either to certain dataset properties or a limited set of empirical experiments.</p>
-<p>For example, nnU-Net was developed with a focus on the Dice coefficient as performance metric. Some tasks, however, might require highly domain-specific target metrics for evaluation,  which  could  influence  method  design.</p>
-<p>Also,  dataset properties that are yet unconsidered could exist, which may cause suboptimal segmentation performance. One example is the synaptic cleft segmentation task of the CREMI challenge (<a target="_blank" rel="noopener" href="https://cremi.org">https://cremi.org</a>). While nnU-Net’s performance is highly competitive (rank 6 of 39),</p>
-<p>manual adaptation of the loss function, as well as EM-specific preprocessing,  may be  necessary to  surpass  state-of-the-art  performance34. In principle, there are two means of handling cases that are not yet sufficiently covered by nnU-Net. For potentially recurring cases, nnU-Net’s heuristics could be extended accordingly;</p>
-</blockquote>
-<p>你的框架已经很好了，但是现在的问题是<strong>摘录原文太多，缺少汇报逻辑</strong>。论文汇报一般不是翻译论文，而是回答四个问题：</p>
-<ol>
-<li>为什么提出 nnU-Net？</li>
-<li>它到底做了什么？</li>
-<li>为什么有效？</li>
-<li>它有哪些局限？</li>
-</ol>
-<p>下面是一版更适合 <strong>15~20 分钟组会/论文汇报</strong> 的版本。</p>
-<hr>
-<p>能够针对任何新的分割任务自动完成配置的方法，包括预处理、网络结构、训练流程以及后处理。</p>
-<h1 id="数据集"><a class="markdownIt-Anchor" href="#数据集"></a> 数据集</h1>
-<table>
-<thead>
-<tr>
-<th>模态</th>
-<th>最适合观察</th>
-<th>图像特点</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>FLAIR</td>
-<td>水肿（Edema）</td>
-<td>抑制脑脊液，水肿突出</td>
-</tr>
-<tr>
-<td>T1w</td>
-<td>解剖结构</td>
-<td>灰白质对比清晰</td>
-</tr>
-<tr>
-<td>T1Gd (t1gd)</td>
-<td>强化肿瘤</td>
-<td>注射造影剂后活跃肿瘤变亮</td>
-</tr>
-<tr>
-<td>T2w</td>
-<td>液体、水肿</td>
-<td>水和脑脊液高信号</td>
-</tr>
-</tbody>
-</table>
-<p><img src="/2026/07/26/2026%E5%B9%B47%E6%9C%8826%E6%97%A5-nnUNet-learn/image-20260726192750657.png" alt="image-20260726192750657"></p>
-<p><img src="/2026/07/26/2026%E5%B9%B47%E6%9C%8826%E6%97%A5-nnUNet-learn/image-20260726193033277.png" alt="image-20260726193033277"></p>
-<blockquote>
-<p>这几句话是在说明 <strong>nnU-Net 多通道（Multi-channel）输入数据的组织规则</strong>。对于 BraTS 这样的 MRI 数据集尤其重要。</p>
-<hr>
-<h3 id="1-multi-channel-inputs"><a class="markdownIt-Anchor" href="#1-multi-channel-inputs"></a> 1. Multi-channel inputs</h3>
-<blockquote>
-<p><strong>多通道输入</strong></p>
-</blockquote>
-<p>这里的 <strong>Channel（通道）</strong> 不是 RGB 的 R/G/B，而是<strong>不同模态（Modality）的医学图像</strong>。</p>
-<p>例如 BraTS：</p>
-<table>
-<thead>
-<tr>
-<th>Channel</th>
-<th>MRI 模态</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>0</td>
-<td>FLAIR</td>
-</tr>
-<tr>
-<td>1</td>
-<td>T1w</td>
-</tr>
-<tr>
-<td>2</td>
-<td>T1Gd (T1ce)</td>
-</tr>
-<tr>
-<td>3</td>
-<td>T2w</td>
-</tr>
-</tbody>
-</table>
-<p>所以一个病例（Case）实际上有四个输入。</p>
-<hr>
-<h3 id="2-each-non-rgb-input-channel-is-stored-in-a-separate-file"><a class="markdownIt-Anchor" href="#2-each-non-rgb-input-channel-is-stored-in-a-separate-file"></a> 2. Each non-RGB input channel is stored in a separate file.</h3>
-<blockquote>
-<p><strong>每个非 RGB 输入通道都必须单独存放在一个文件中。</strong></p>
-</blockquote>
-<p>例如一个病例：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Case001_0000.nii.gz   ← FLAIR</span><br><span class="line">Case001_0001.nii.gz   ← T1</span><br><span class="line">Case001_0002.nii.gz   ← T1Gd</span><br><span class="line">Case001_0003.nii.gz   ← T2</span><br></pre></td></tr></table></figure>
-<p>而<strong>不是</strong>：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Case001.nii.gz</span><br></pre></td></tr></table></figure>
-<p>里面放四个模态。</p>
-<p>nnU-Net 默认要求：</p>
-<blockquote>
-<p><strong>一个通道 = 一个文件</strong></p>
-</blockquote>
-<hr>
-<h3 id="3-all-channels-for-a-case-must-share-geometry-and-be-aligned"><a class="markdownIt-Anchor" href="#3-all-channels-for-a-case-must-share-geometry-and-be-aligned"></a> 3. All channels for a case must share geometry and be aligned.</h3>
-<blockquote>
-<p><strong>同一个病例的所有通道必须具有相同的几何信息，并且彼此已经配准（Aligned）。</strong></p>
-</blockquote>
-<p>这是最重要的一条。</p>
-<p>例如：</p>
-<p>FLAIR：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">240 × 240 × 155</span><br></pre></td></tr></table></figure>
-<p>T1：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">240 × 240 × 155</span><br></pre></td></tr></table></figure>
-<p>T2：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">240 × 240 × 155</span><br></pre></td></tr></table></figure>
-<p>不仅尺寸相同，还要求：</p>
-<ul>
-<li>Spacing（体素间距）相同</li>
-<li>Origin（原点）相同</li>
-<li>Direction（坐标方向）相同</li>
-</ul>
-<p>也就是说：</p>
-<p><strong>第 (100,120,80) 个体素，在四个模态中必须对应同一个解剖位置。</strong></p>
-<p>例如：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">FLAIR</span><br><span class="line">        肿瘤</span><br><span class="line">         ●</span><br><span class="line"></span><br><span class="line">T1</span><br><span class="line">        肿瘤</span><br><span class="line">         ●</span><br><span class="line"></span><br><span class="line">T2</span><br><span class="line">        肿瘤</span><br><span class="line">         ●</span><br></pre></td></tr></table></figure>
-<p>如果没有配准：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">FLAIR</span><br><span class="line">         ●</span><br><span class="line"></span><br><span class="line">T1</span><br><span class="line">      ●</span><br><span class="line"></span><br><span class="line">T2</span><br><span class="line">            ●</span><br></pre></td></tr></table></figure>
-<p>同一个体素位置实际上对应不同组织，网络就无法学习正确的特征。</p>
-<hr>
-<h3 id="4-channel-order-must-be-consistent-across-all-cases"><a class="markdownIt-Anchor" href="#4-channel-order-must-be-consistent-across-all-cases"></a> 4. Channel order must be consistent across all cases.</h3>
-<blockquote>
-<p><strong>所有病例的通道顺序必须保持一致。</strong></p>
-</blockquote>
-<p>例如你定义了：</p>
-<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;channel_names&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;0&quot;</span><span class="punctuation">:</span> <span class="string">&quot;FLAIR&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;1&quot;</span><span class="punctuation">:</span> <span class="string">&quot;T1w&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;2&quot;</span><span class="punctuation">:</span> <span class="string">&quot;t1gd&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;3&quot;</span><span class="punctuation">:</span> <span class="string">&quot;T2w&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-<p>那么所有病例都必须遵循：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">0000 → FLAIR</span><br><span class="line">0001 → T1</span><br><span class="line">0002 → T1Gd</span><br><span class="line">0003 → T2</span><br></pre></td></tr></table></figure>
-<p>不能出现：</p>
-<p>Case001：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">0000 = FLAIR</span><br><span class="line">0001 = T1</span><br><span class="line">0002 = T1Gd</span><br><span class="line">0003 = T2</span><br></pre></td></tr></table></figure>
-<p>而 Case002：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">0000 = T2</span><br><span class="line">0001 = FLAIR</span><br><span class="line">0002 = T1</span><br><span class="line">0003 = T1Gd</span><br></pre></td></tr></table></figure>
-<p>虽然文件数量一样，但语义已经完全乱了，模型会把不同模态当成同一种输入，训练效果会很差。</p>
-<hr>
-<h3 id="5-the-same-naming-convention-also-applies-at-inference-time"><a class="markdownIt-Anchor" href="#5-the-same-naming-convention-also-applies-at-inference-time"></a> 5. The same naming convention also applies at inference time.</h3>
-<blockquote>
-<p><strong>推理（Inference）时也必须使用相同的命名规则。</strong></p>
-</blockquote>
-<p>训练时：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">imagesTr/</span><br><span class="line"></span><br><span class="line">BraTS_001_0000.nii.gz</span><br><span class="line">BraTS_001_0001.nii.gz</span><br><span class="line">BraTS_001_0002.nii.gz</span><br><span class="line">BraTS_001_0003.nii.gz</span><br></pre></td></tr></table></figure>
-<p>预测时（<code>imagesTs</code>）：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">imagesTs/</span><br><span class="line"></span><br><span class="line">Test001_0000.nii.gz</span><br><span class="line">Test001_0001.nii.gz</span><br><span class="line">Test001_0002.nii.gz</span><br><span class="line">Test001_0003.nii.gz</span><br></pre></td></tr></table></figure>
-<p>不能写成：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Test001_FLAIR.nii.gz</span><br><span class="line">Test001_T1.nii.gz</span><br></pre></td></tr></table></figure>
-<p>或者</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Test001.nii.gz</span><br></pre></td></tr></table></figure>
-<p>因为 nnU-Net 是通过文件名后缀 <code>_0000</code>、<code>_0001</code>、<code>_0002</code>、<code>_0003</code> 来识别每个通道的。</p>
-<hr>
-<h3 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h3>
-<p>对于一个包含四种 MRI 模态的病例，nnU-Net 期望的数据组织方式如下：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">BraTS_001_0000.nii.gz   ← FLAIR</span><br><span class="line">BraTS_001_0001.nii.gz   ← T1w</span><br><span class="line">BraTS_001_0002.nii.gz   ← T1Gd</span><br><span class="line">BraTS_001_0003.nii.gz   ← T2w</span><br><span class="line">BraTS_001.nii.gz        ← 分割标签（仅训练集）</span><br></pre></td></tr></table></figure>
-<p>训练时，nnU-Net 会自动将这四个文件按通道顺序读取，并堆叠成一个四维张量：</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">(C, Z, Y, X)</span><br><span class="line">=</span><br><span class="line">(4, 155, 240, 240)</span><br></pre></td></tr></table></figure>
-<p>其中：</p>
-<ul>
-<li><code>C=4</code>：四个 MRI 模态（四个输入通道）</li>
-<li><code>Z</code>：切片数（深度）</li>
-<li><code>Y</code>、<code>X</code>：每张切片的高和宽</li>
-</ul>
-<p>随后，这个四通道张量会作为模型的输入，让网络综合四种模态的信息完成肿瘤分割。</p>
-</blockquote>
-<h1 id="数据指纹和预处理"><a class="markdownIt-Anchor" href="#数据指纹和预处理"></a> 数据指纹和预处理</h1>
-<h1 id="训练"><a class="markdownIt-Anchor" href="#训练"></a> 训练</h1>
-<img src="/2026/07/26/2026%E5%B9%B47%E6%9C%8826%E6%97%A5-nnUNet-learn/image-20260726194106851.png" style="zoom:50%;">
-<h1 id="best-model"><a class="markdownIt-Anchor" href="#best-model"></a> Best model</h1>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-<blockquote>
-<h1 id="它会评估什么what-it-evaluates"><a class="markdownIt-Anchor" href="#它会评估什么what-it-evaluates"></a> 它会评估什么？（What It Evaluates）</h1>
-<p>运行该命令后，nnU-Net 不只是简单比较单个模型，而是会自动测试三类方案。</p>
-<h2 id="1-单个模型individual-configurations"><a class="markdownIt-Anchor" href="#1-单个模型individual-configurations"></a> 1. 单个模型（Individual Configurations）</h2>
-<p>首先分别计算每个模型的验证集性能，例如：</p>
-<table>
-<thead>
-<tr>
-<th>配置</th>
-<th>Dice</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>2d</td>
-<td>0.895</td>
-</tr>
-<tr>
-<td>3d_fullres</td>
-<td>0.912</td>
-</tr>
-<tr>
-<td>3d_lowres</td>
-<td>0.903</td>
-</tr>
-</tbody>
-</table>
-<p>这一步就是比较每个模型单独使用时的效果。</p>
-<hr>
-<h2 id="2-模型集成pairwise-ensembles"><a class="markdownIt-Anchor" href="#2-模型集成pairwise-ensembles"></a> 2. 模型集成（Pairwise Ensembles）</h2>
-<p>接着，它会尝试<strong>两两组合模型</strong>进行集成（Ensemble）。</p>
-<p>例如：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2d + 3d_fullres</span><br></pre></td></tr></table></figure>
-<p>或者：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3d_fullres + 3d_lowres</span><br></pre></td></tr></table></figure>
-<p>甚至：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">2d + 3d_lowres</span><br></pre></td></tr></table></figure>
-<p>nnU-Net 会将两个模型输出的**预测概率图（Probability Maps）**进行融合，再计算最终分割结果。</p>
-<p>例如：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">2d 输出：</span><br><span class="line"></span><br><span class="line">背景：0.1</span><br><span class="line">肿瘤：0.9</span><br><span class="line"></span><br><span class="line">3D 输出：</span><br><span class="line"></span><br><span class="line">背景：0.2</span><br><span class="line">肿瘤：0.8</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">平均概率</span><br><span class="line"></span><br><span class="line">背景：0.15</span><br><span class="line">肿瘤：0.85</span><br></pre></td></tr></table></figure>
-<p>很多情况下，两个模型互补后，Dice 会比任何单个模型更高。</p>
-<p>如果<strong>不想进行模型集成</strong>，可以使用：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">--disable_ensembling</span><br></pre></td></tr></table></figure>
-<p>这样只比较单个模型。</p>
-</blockquote>
-<h1 id="推理"><a class="markdownIt-Anchor" href="#推理"></a> 推理</h1>
-<h1 id="3-后处理postprocessing"><a class="markdownIt-Anchor" href="#3-后处理postprocessing"></a> 3. 后处理（Postprocessing）</h1>
-<p>最后，nnU-Net 会自动测试不同的后处理策略。</p>
-<p>文档中提到：</p>
-<blockquote>
-<p><strong>connected-component removal</strong></p>
-</blockquote>
-<p>即<strong>连通域去除（Connected Component Removal）</strong>。</p>
-<p>例如，模型预测出了很多孤立的小噪点：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">□□□□□</span><br><span class="line"></span><br><span class="line">□□■□□</span><br><span class="line"></span><br><span class="line">□□□□□</span><br><span class="line"></span><br><span class="line">□□□□■</span><br><span class="line"></span><br><span class="line">□□□□□□□□</span><br></pre></td></tr></table></figure>
-<p>后处理会删除这些过小的连通区域，只保留真正的大目标：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">□□□□□</span><br><span class="line"></span><br><span class="line">□□□□□</span><br><span class="line"></span><br><span class="line">□□□□□</span><br><span class="line"></span><br><span class="line">□□□□□</span><br><span class="line"></span><br><span class="line">□□□□□□□□</span><br></pre></td></tr></table></figure>
-<p>这样通常能够减少误检，提高 Dice 分数。</p>
-<p>按我们前面核对过的实现，笔记建议改成下面这样（已纠错并补全）。</p>
-<hr>
-<h2 id="mome-mome-结构笔记修订版"><a class="markdownIt-Anchor" href="#mome-mome-结构笔记修订版"></a> MoME / MoME+ 结构笔记（修订版）</h2>
-<h3 id="输入"><a class="markdownIt-Anchor" href="#输入"></a> 输入</h3>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>MoME</th>
-<th>MoME+</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>输入</td>
-<td><strong>单模态</strong>一张图</td>
-<td><strong>多模态</strong>（可缺），最多 T1/T1ce/T2/FLAIR</td>
-</tr>
-<tr>
-<td>进 Expert</td>
-<td><strong>同一张图送给所有 Expert</strong></td>
-<td>先经 <strong>Dispatch</strong>，再 <strong>每通道进对应 Expert</strong></td>
-</tr>
-<tr>
-<td>缺模态</td>
-<td>不适用（样本本身单模态）</td>
-<td>soft Dispatch 用已有模态 <strong>体素加权</strong> 补缺失通道</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>多模态并不是「原始模态直接只进指定 Expert」而不经处理；有模态时对应通道原样进对应 Expert，缺失通道是补全后再进。</li>
-<li>MoME 的「所有 Expert 同吃一张图」依赖各 Expert <strong>预训练专长</strong>，差异不在输入，而在权重。</li>
-</ul>
-<hr>
-<h3 id="expert"><a class="markdownIt-Anchor" href="#expert"></a> Expert</h3>
-<ul>
-<li>每个 Expert 对应一种 MRI 模态（MoME：T1/T1ce/T2/FLAIR/<strong>DWI</strong> 共 5；MoME+：前 4 种）。</li>
-<li>结构均为 <strong>nnU-Net</strong>（独立 UNet 实例并列，非一个大网络内切块）。</li>
-<li>先在对应模态上 <strong>预训练</strong>，再与融合/门控联合微调。</li>
-<li>输出：多尺度分割预测（深监督）；浅层 encoder 特征另供 Gating 使用。</li>
-</ul>
-<hr>
-<h3 id="dispatch仅-mome"><a class="markdownIt-Anchor" href="#dispatch仅-mome"></a> Dispatch（仅 MoME+）</h3>
-<ul>
-<li>实现类：<strong><code>ClsDispatchNet</code></strong>（小 MLP），不是 3D Conv 版 <code>DispatchNetwork</code>。</li>
-<li>输入：模态可用性向量 (\mathbf{m})。</li>
-<li>输出：(N\times N) soft 分配矩阵 → 对多通道图像做 (\tilde{x}<em>i=\sum_j W</em>{ij}x_j)。</li>
-<li>先验：<strong>有模态 → 行锁 one-hot（保真）</strong>；<strong>无模态 → 用可用模态 soft 加权补通道</strong>。</li>
-<li>本质：强度空间的可学习线性混合，非生成式补全。</li>
-</ul>
-<hr>
-<h3 id="gatinghierarchical-gating"><a class="markdownIt-Anchor" href="#gatinghierarchical-gating"></a> Gating（Hierarchical Gating）</h3>
-<p><strong>不要写「每一层 Decoder 都做特征融合」</strong>——实现不是这样。</p>
-<p>更准确：</p>
-<ul>
-<li>另有一个 <strong>nnU-Net 门控网络</strong>（与 Expert 并列）。</li>
-<li>输入：原图 + 各 Expert <strong>第一层 encoder 浅层特征</strong>。</li>
-<li>在 <strong>多个分辨率</strong> 上输出 voxel-wise 门控图。</li>
-<li>融合对象：各 Expert <strong>同尺度分割输出</strong>（软加权求和），不是 Decoder 中间特征逐层融合。</li>
-<li>不是选一个最好 Expert（硬路由），而是全体参与、互补融合。</li>
-</ul>
-<hr>
-<h3 id="loss-训练要点可补"><a class="markdownIt-Anchor" href="#loss-训练要点可补"></a> Loss / 训练要点（可补）</h3>
-<ul>
-<li>Dice + CE + 深监督（跟 nnU-Net）。</li>
-<li>课程学习：(L=(1-r)^2 L_{\text{expert}}+(1-(1-r)^2)L_{\text{fusion}})，(r=\text{epoch}/N)。<br>
-<strong>早期偏 Expert 专精，后期偏融合协作</strong>（方向勿写反）。</li>
-<li>(L_{\text{expert}})：打在对应模态 Expert <strong>原始输出</strong>上（不乘 gate）。<br>
-(L_{\text{fusion}})：打在门控加权后的最终输出上。</li>
-</ul>
-<hr>
-<h3 id="评估可补"><a class="markdownIt-Anchor" href="#评估可补"></a> 评估（可补）</h3>
-<ul>
-<li>主指标：<strong>Dice</strong>；按 image / task / dataset 及模态、病灶类型分组报告。</li>
-</ul>
-<hr>
-<h3 id="一句话总览"><a class="markdownIt-Anchor" href="#一句话总览"></a> 一句话总览</h3>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MoME:   单图 → 全体 Expert(同输入) → Hierarchical Gating(多尺度输出加权)</span><br><span class="line">MoME+:  多通道(可缺) → Dispatch补通道 → 各Expert吃对应通道 → Gating融合</span><br></pre></td></tr></table></figure>
-<hr>
-<h3 id="你原笔记对照改法"><a class="markdownIt-Anchor" href="#你原笔记对照改法"></a> 你原笔记对照改法</h3>
-<table>
-<thead>
-<tr>
-<th>原文</th>
-<th>建议</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>单模态送入所有 Expert</td>
-<td>保留 ✓</td>
-</tr>
-<tr>
-<td>多模态送入指定 Expert</td>
-<td>改为：Dispatch 后各通道进对应 Expert；缺则 soft 补全后再进</td>
-</tr>
-<tr>
-<td>Expert 学一种模态 + nnU-Net</td>
-<td>保留 ✓；可补预训练</td>
-</tr>
-<tr>
-<td>每一层 Decoder 做 voxel-wise 融合</td>
-<td>改为：多尺度上对 Expert <strong>输出</strong>做门控加权，非 Decoder 内特征融合</td>
-</tr>
-</tbody>
-</table>
-<ol>
-<li><strong>完成猴脑 MRI 数据分析 pipeline</strong>：基于标准脑图谱完成配准，并使用 AFNI 进行 rs-fMRI 分析，使用 MRtrix3 完成 DTI 纤维追踪与结构连接分析</li>
-<li><strong>继续深入学习MRI相关知识:</strong> 深入学习 MRI 成像原理与神经影像分析方法; 提升 AFNI、MRtrix3、3D Slicer 等工具使用能力; 持续阅读相关领域论文等等</li>
-<li><strong>探索深度学习与神经影像结合:</strong> 学习更多学习医学影像深度学习方法和应用</li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2026/07/26/2026%E5%B9%B47%E6%9C%8826%E6%97%A5-nnUNet-learn/" data-id="cms1vppgh000flkv4depd3dab" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MRI/" rel="tag">MRI</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2026年7月15日-agent-memory" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2026/07/15/2026%E5%B9%B47%E6%9C%8815%E6%97%A5-agent-memory/" class="article-date">
-  <time class="post-time" datetime="2026-07-15T12:34:30.000Z" itemprop="datePublished">
-    <span class="post-month">7月</span><br/>
-    <span class="post-day">15</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2026/07/15/2026%E5%B9%B47%E6%9C%8815%E6%97%A5-agent-memory/">2026年7月15日 agent memory</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="1-trading-agent"><a class="markdownIt-Anchor" href="#1-trading-agent"></a> 1 trading agent</h1>
-<h2 id="1-memory"><a class="markdownIt-Anchor" href="#1-memory"></a> 1 memory</h2>
-<ol>
-<li>内存上下文context</li>
-<li>持久性(偏好)memoru</li>
-</ol>
-<h3 id="11-workmemory"><a class="markdownIt-Anchor" href="#11-workmemory"></a> 1.1 WorkMemory</h3>
-<p>session中的上下文, 但是不会包含上一个</p>
-<p><img src="/2026/07/15/2026%E5%B9%B47%E6%9C%8815%E6%97%A5-agent-memory/image-20260716085253601.png" alt="image-20260716085253601"></p>
-<h3 id="12-persistentmemory-的-4-种-memory_type"><a class="markdownIt-Anchor" href="#12-persistentmemory-的-4-种-memory_type"></a> 1.2 PersistentMemory 的 4 种 <code>memory_type</code></h3>
-<p>由agent触发写入</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">类型</th>
-<th style="text-align:left">含义（约定用法）</th>
-<th style="text-align:left">典型内容</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">user</td>
-<td style="text-align:left">人的偏好/习惯</td>
-<td style="text-align:left">语言、风险偏好、报告格式</td>
-</tr>
-<tr>
-<td style="text-align:left">feedback</td>
-<td style="text-align:left">对 agent 行为的纠错/反馈</td>
-<td style="text-align:left">「别用某某数据源」「回测要写 attribution」</td>
-</tr>
-<tr>
-<td style="text-align:left">project</td>
-<td style="text-align:left">项目/标的上下文（默认）</td>
-<td style="text-align:left">BTC 策略约定、当前研究主题</td>
-</tr>
-<tr>
-<td style="text-align:left">reference</td>
-<td style="text-align:left">可复用的参考知识</td>
-<td style="text-align:left">公式、口径、外部资料摘要</td>
-</tr>
-</tbody>
-</table>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">class WorkspaceMemory:</span><br><span class="line">    &quot;&quot;&quot;Shared workspace state between tools during a single agent run.</span><br><span class="line"></span><br><span class="line">    Attributes:</span><br><span class="line">        run_dir: Current run directory path.</span><br><span class="line">        counters: Tool invocation counters.</span><br><span class="line">    &quot;&quot;&quot;</span><br><span class="line"></span><br><span class="line">    run_dir: Optional[str] = None</span><br><span class="line">    counters: Dict[str, int] = field(default_factory=dict)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<h3 id="13-上下文压缩"><a class="markdownIt-Anchor" href="#13-上下文压缩"></a> 1.3 上下文压缩:</h3>
-<hr>
-<p><strong>自动检测+agent触发</strong></p>
-<p>每轮 <code>stream_chat</code> 之前按 token 压力逐级升级（默认阈值 <code>TOKEN_THRESHOLD=40000</code>，估算约 <code>len(json)//4</code>）：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">层</th>
-<th style="text-align:left">触发</th>
-<th style="text-align:left">做法</th>
-<th style="text-align:left">成本</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">L1 microcompact</td>
-<td style="text-align:left"><code>&gt; 0.5 × 阈值</code></td>
-<td style="text-align:left">只动 <code>role=tool</code>：保留最近 3 条，更早的改成 <code>&quot;[cleared]&quot;</code></td>
-<td style="text-align:left">无 API</td>
-</tr>
-<tr>
-<td style="text-align:left">L2 context_collapse</td>
-<td style="text-align:left"><code>&gt; 0.7 × 阈值</code></td>
-<td style="text-align:left">除最近 6 条外，长文本（&gt;2400）保留头 900 + 尾 500，中间折叠</td>
-<td style="text-align:left">无 API</td>
-</tr>
-<tr>
-<td style="text-align:left">L3 auto_compact</td>
-<td style="text-align:left"><code>&gt; 阈值</code></td>
-<td style="text-align:left">LLM 结构化摘要，保留约 20k token 的尾部消息</td>
-<td style="text-align:left">调一次 <code>llm.chat</code></td>
-</tr>
-<tr>
-<td style="text-align:left">L4 compact 工具</td>
-<td style="text-align:left">模型主动调 <code>compact</code></td>
-<td style="text-align:left">走同一套 <code>_auto_compact</code>，可带 <code>focus_topic</code></td>
-<td style="text-align:left">同 L3</td>
-</tr>
-<tr>
-<td style="text-align:left">L5 迭代更新</td>
-<td style="text-align:left">本轮已压缩过</td>
-<td style="text-align:left">用 <code>_previous_summary</code> + 新 turns 做 update，不从零摘要</td>
-<td style="text-align:left">同 L3</td>
-</tr>
-</tbody>
-</table>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">L3 重建后的 messages：</span><br><span class="line"></span><br><span class="line">[system 原样]</span><br><span class="line"></span><br><span class="line">[user: 摘要 + WorkspaceMemory.to_summary() + &quot;**Continue from the summary**…&quot;]</span><br><span class="line"></span><br><span class="line">[tail: 按 20k token 预算留下的最近消息]</span><br><span class="line"></span><br><span class="line">→ _fix_tool_pairs 修孤儿 tool_call/tool_result</span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p><strong>同时workmemory会</strong></p>
-<p>L3 压缩后的 handoff——旧对话被摘要掉后，把这份短状态再贴回去，避免丢掉 <strong><code>run_dir</code> / 工具使用痕迹, 让模型知道当前工作目录、已经调过哪些工具几次</strong></p>
-<h2 id="2-loop"><a class="markdownIt-Anchor" href="#2-loop"></a> 2 loop</h2>
-<h3 id="21-loop上下文"><a class="markdownIt-Anchor" href="#21-loop上下文"></a> 2.1 loop上下文</h3>
-<p>直接tool拼接</p>
-<h3 id="22-停止"><a class="markdownIt-Anchor" href="#22-停止"></a> 2.2 停止</h3>
-<p>无tool调用,</p>
-<h3 id="23-同session不同loop"><a class="markdownIt-Anchor" href="#23-同session不同loop"></a> 2.3 同session不同loop</h3>
-<p>只包含上一次的last message, 不含tool use</p>
-<h2 id="3-session"><a class="markdownIt-Anchor" href="#3-session"></a> 3 session</h2>
-<p>包含: 每次发消息写一条 user；跑完写一条 assistant（最终总结文本，不含中间 tool_calls）</p>
-<p>喂给下一轮 LLM 时：<code>_convert_messages_to_history</code> 只留 user/assistant 文本，约 12k 字符预算，丢掉 tool 轨迹。</p>
-<p>边界： 换一个新 session / 新开聊天 → 这份 history 不会自动带过去，只拿上面这份精简 history。</p>
-<h3 id="31-载入"><a class="markdownIt-Anchor" href="#31-载入"></a> 3.1 载入</h3>
-<p>agent tool选择载入</p>
-<h1 id="2-nanobot"><a class="markdownIt-Anchor" href="#2-nanobot"></a> 2 Nanobot</h1>
-<p>1 memory</p>
-<h2 id="2-loop-2"><a class="markdownIt-Anchor" href="#2-loop-2"></a> 2 loop</h2>
-<h3 id="21-loop上下文-2"><a class="markdownIt-Anchor" href="#21-loop上下文-2"></a> 2.1 loop上下文</h3>
-<p>直接tool拼接</p>
-<h3 id="22-停止-2"><a class="markdownIt-Anchor" href="#22-停止-2"></a> 2.2 停止</h3>
-<p>无tool调用,</p>
-<h3 id="23-同session不同loop-2"><a class="markdownIt-Anchor" href="#23-同session不同loop-2"></a> 2.3 同session不同loop</h3>
-<p>直接暴力拼接,</p>
-<h2 id="4-scheduler"><a class="markdownIt-Anchor" href="#4-scheduler"></a> 4 scheduler</h2>
-<p>agent设置定时任务, scheduler触发定时任务: agent.run?or agent.dream.run</p>
-<img src="/2026/07/15/2026%E5%B9%B47%E6%9C%8815%E6%97%A5-agent-memory/image-20260716151044407.png" alt="image-20260716151044407" style="zoom:67%;"> 
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">用户: &quot;每20分钟提醒我休息&quot;</span><br><span class="line">  ↓</span><br><span class="line">Agent 调 cron(action=&quot;add&quot;, message=&quot;...&quot;, every_seconds=1200)</span><br><span class="line">  ↓</span><br><span class="line">写入 workspace/cron/jobs.json</span><br><span class="line">  ↓</span><br><span class="line">[gateway 常驻运行中]</span><br><span class="line">  ↓</span><br><span class="line">CronService 定时器到期</span><br><span class="line">  ↓</span><br><span class="line">on_cron_job(job)</span><br><span class="line">  ↓</span><br><span class="line">agent.process_direct(&quot;The scheduled time has arrived... Reminder: ...&quot;)</span><br><span class="line">  ↓</span><br><span class="line">完整 AgentLoop (BUILD → RUN → SAVE → RESPOND)</span><br><span class="line">  ↓</span><br><span class="line">deliver=True → 发到原 channel</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2026/07/15/2026%E5%B9%B47%E6%9C%8815%E6%97%A5-agent-memory/" data-id="cms1vppgg000clkv4hli0150f" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
-    <article id="post-2026年7月14日-vla" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2026/07/14/2026%E5%B9%B47%E6%9C%8814%E6%97%A5-vla/" class="article-date">
-  <time class="post-time" datetime="2026-07-14T13:51:26.000Z" itemprop="datePublished">
-    <span class="post-month">7月</span><br/>
-    <span class="post-day">14</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2026/07/14/2026%E5%B9%B47%E6%9C%8814%E6%97%A5-vla/">2026年7月14日 vla</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">+--------------------------------------------------------+</span><br><span class="line">|  输入 (Prompts)                                        |</span><br><span class="line">|  - 图像 Token: 机器人眼睛(摄像头)实时拍到的画面         |</span><br><span class="line">|  - 文本 Token: &quot;把红色的苹果放进篮子里&quot;                 |</span><br><span class="line">+--------------------------------------------------------+</span><br><span class="line">                           │</span><br><span class="line">                           ▼</span><br><span class="line">+--------------------------------------------------------+</span><br><span class="line">|  VLA 模型 (Transformer 基座)                            |</span><br><span class="line">|  - 像阅读文字一样，同时阅读“画面”和“指令”               |</span><br><span class="line">+--------------------------------------------------------+</span><br><span class="line">                           │ (自回归预测下一个 Token)</span><br><span class="line">                           ▼</span><br><span class="line">+--------------------------------------------------------+</span><br><span class="line">|  输出 (Tokens)                                         |</span><br><span class="line">|  - 模型输出: &quot;&lt;action_128&gt; &lt;action_95&gt; &lt;action_200&gt;...&quot;|</span><br><span class="line">|    (本质上就是普通的文本词片)                           |</span><br><span class="line">+--------------------------------------------------------+</span><br><span class="line">                           │</span><br><span class="line">                           ▼</span><br><span class="line">+--------------------------------------------------------+</span><br><span class="line">|  机器人的翻译官 (Controller / Driver)                  |</span><br><span class="line">|  - 收到 Token，查表翻译回物理数值:                     |</span><br><span class="line">|    [Δx = 0cm, Δy = -2.5cm, Δz = +5cm...]               |</span><br><span class="line">|  - 驱动电机执行该动作                                  |</span><br><span class="line">+--------------------------------------------------------+</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2026/07/14/2026%E5%B9%B47%E6%9C%8814%E6%97%A5-vla/" data-id="cms1vppgd0007lkv47qmdc93e" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -1732,7 +1332,7 @@ relevant to its improved performance.</p>
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>186</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>189</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>46</strong><br>标签</div></a>
     </div>
