@@ -43,7 +43,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>189</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>190</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>46</strong><br>标签</div></a>
     </div>
@@ -70,6 +70,155 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-2026年8月16日-nnModel详解04-SAM" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/" class="article-date">
+  <time class="post-time" datetime="2026-08-16T03:05:47.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">16</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/">2026年8月16日-nnModel详解04-SAM</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>参考:<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/667801207">https://zhuanlan.zhihu.com/p/667801207</a></p>
+</blockquote>
+<h1 id="0-前置"><a class="markdownIt-Anchor" href="#0-前置"></a> 0 前置</h1>
+<h2 id="11-主要贡献"><a class="markdownIt-Anchor" href="#11-主要贡献"></a> 1.1 主要贡献</h2>
+<ol>
+<li>prompt输入</li>
+<li>解决歧义的问题: 能够对含糊的指令做出响应，产生多个可能的分割结果</li>
+<li>数据标注策略</li>
+<li>多模态输入</li>
+</ol>
+<img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/90144dd101d45703c81f15be0e69a031.png" alt="image-20240809000450713" style="zoom:50%;">
+<img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-eb3d36b9589b8d9ab634a40486c64038_1440w.jpg" alt="img" style="zoom:50%;">
+<img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-b3b898759f0e9bba7c9bc7a8d50d2239_r.jpg" alt="img" style="zoom:50%;">
+<h2 id="12-整体结构"><a class="markdownIt-Anchor" href="#12-整体结构"></a> 1.2 整体结构</h2>
+<img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/image-20260816113220260.png" alt="image-20260816113220260" style="zoom:50%;">
+<p>SAM的内部结构。模型由3个主要部分组成：提示词编码器、图像编码器和一个轻量级的掩码解码器。</p>
+<h1 id="2-细节"><a class="markdownIt-Anchor" href="#2-细节"></a> 2 细节</h1>
+<h2 id="21-prompt"><a class="markdownIt-Anchor" href="#21-prompt"></a> 2.1 prompt</h2>
+<h3 id="1-prompt处理"><a class="markdownIt-Anchor" href="#1-prompt处理"></a> 1 prompt处理</h3>
+<p>这里的提示信息可以是mask、points、box或者是text，</p>
+<p>如果是mask的话则使用卷积来进行表示，<br>
+如果是其余的三种提示词则使用位置编码的形式来进行表示，其中text可以通过clip一类的模型获取词嵌入</p>
+<p><img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/cba841f470aeedd426d117d0e8b47bfa.png" alt="image-20240808233331811"></p>
+<h3 id="2-encoder"><a class="markdownIt-Anchor" href="#2-encoder"></a> 2 encoder</h3>
+<img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-451e76db9dce6cfece36621e66887697_1440w.jpg" alt="img" style="zoom: 50%;">
+<p>首先，mask提示允许我们直接在原像上指示感兴趣区域来引导模型。这些mask通过卷积操作被转换为与图像嵌入空间相匹配的特征，然后与图像嵌入相加结合，为模型提供分割的精确位置信息。如果没有使用mask提示，则用一组可学习向量(no_mask_embed, 1×256) expand为256×64×64后替代。</p>
+<p>而文本提示，利用了CLIP的文本编码器，将描述性的语言输入转换为模型可以理解的嵌入向量。比如输入“黑耳朵的猫”，文本编码器就能将这些词转换为一个强大的特征描述，引导模型聚焦于具有这些特征的图像区域。</p>
+<h2 id="22-图像"><a class="markdownIt-Anchor" href="#22-图像"></a> 2.2 图像</h2>
+<h3 id="1-图像预处理"><a class="markdownIt-Anchor" href="#1-图像预处理"></a> 1 图像预处理</h3>
+<img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-b01690c25be5f84e309aaa59a4716f7d_r.jpg" alt="img" style="zoom: 25%;">
+<p>首先，我们以保持图像的宽高比的方式将图像最长边放缩到1024。</p>
+<p>接下来是颜色归一化。通过从每个像素中减去平均值并除以标准差，颜色归一化的目的是为了统一不同图像的颜色范围，减少照明条件和设备差异对模型训练的影响，从而提高模型的泛化能力和加快训练速度。</p>
+<p>最后，我们会应用填充（Padding），以确保所有的图像都有相同的维度即1024*1024.</p>
+<img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-74a646d339bfd3119e0a0941f09f3b48_1440w.jpg" alt="img" style="zoom:50%;">
+<h3 id="2-image-encoder"><a class="markdownIt-Anchor" href="#2-image-encoder"></a> 2 image encoder</h3>
+<img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-e12c8423d16455c4c6f7b13c66a287a9_r.jpg" alt="img" style="zoom:33%;">
+<p>这部分使用VIT, 主要是SAM理解图像的重要部分</p>
+<p><strong>2.1 path embedding</strong></p>
+<p>使用一个kernel size且stride为16的卷积核, 将1024的图像提取为64x64x768的深度特征向量;</p>
+<p>并加上位置标明</p>
+<p><strong>2.2 element-wise add</strong></p>
+<p><strong>2.3 transformer</strong></p>
+<p>使用了12个Transformer块来处理这些向量，每个块都在维持序列信息的同时，增强了特征的表示。</p>
+<p><strong>2.4 降维</strong></p>
+<h2 id="23-mask-decoder"><a class="markdownIt-Anchor" href="#23-mask-decoder"></a> 2.3 mask decoder</h2>
+<h3 id="1-decoder"><a class="markdownIt-Anchor" href="#1-decoder"></a> 1 decoder</h3>
+<p>Mask decoder的职责是整合来自图像嵌入的丰富视觉信息和提示词编码器提供的表征信息，其最终目的是解码出精确的语义分割掩码。</p>
+<img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-344f1213619746c6bdecefed384c666e_1440w.jpg" alt="img" style="zoom:50%;">
+<p>mage embedding。它不仅包含了原始图像的信息，还融入了稠密的prompt掩码信息。通过这样的融合，我们得到了一个增强的图像表征，它更全面地捕捉了图像内容和用户指示的分割意图。</p>
+<p>tokens不只是承载了稀疏的prompt掩码信息，它们还包括用于未来预测的特殊token——一个预测交并比（IOU）的token和四个预测掩码的token。<br>
+mask tokens的角色是作为预测具体分割掩码的占位符，之所以有四个，是因为SAM模型的灵活性允许它在模糊语义下生成多达三个掩码，或者在需要时只生成一个特定掩码。</p>
+<h3 id="2-attention"><a class="markdownIt-Anchor" href="#2-attention"></a> 2 attention</h3>
+<p>mask decoder的内部机制，以及数据是如何在这一复杂结构中流动和转换的。</p>
+<p><img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-8d8a254ed2dd8e09f06943064b58d0c9_1440w.jpg" alt="img"></p>
+<p>首先，tokens被送入mask decoder，并进行<strong>自我注意力</strong>（self-attention）处理。自我注意力机制的作用是让模型学会在tokens内部寻找和放大重要的关系</p>
+<p>经过自我注意力处理的tokens作为查询（query），与图像嵌入的键（key）和值（value）结合进行图像到token的注意力（token to image attention）操作(<strong>不再是自注意力机制</strong>)<br>
+目的是将经过<strong>提示词处理的信息与原始图像的丰富上下文信息结合</strong>起来，从而为解码过程引入了视觉信息。</p>
+<p>结果通过一个多层感知器（MLP）层，产生新的特征表征。</p>
+<p>最后, 这些新特征表征随后被用作键K和值V，图像嵌入作为查询Q，执行另一轮图像到token的注意力（image to token attention）操作，进一步精炼模型对图像的理解。</p>
+<blockquote>
+<p>这里有点精妙的, 既把prompt作为Q, 又让image作为Q; 既融合和自注意力, 有又prompt和image的注意力</p>
+</blockquote>
+<h3 id="3-output"><a class="markdownIt-Anchor" href="#3-output"></a> 3 output</h3>
+<p>在模型的输出阶段，有两个分支。</p>
+<p>一分支通过两次转置卷积操作，将维度从256×64×64提升至32×256×256，这样做是为了将特征映射回原始图像的尺寸。</p>
+<p>另一分支则使用前面MLP的输出作为查询，执行token到图像的注意力（token to image attention）操作，生成两个输出流：一个是IoU输出token（1×256），它经过一个MLP层后，可以预测每个预测掩码与真实掩码间的交并比（IoU）；另一个输出是每个掩码的输出token（4×256），经过四个MLP层后得到(1+3)×32的张量。</p>
+<h2 id="24-output"><a class="markdownIt-Anchor" href="#24-output"></a> 2.4 output</h2>
+<h3 id="1-mask-postprocess"><a class="markdownIt-Anchor" href="#1-mask-postprocess"></a> 1 mask postprocess</h3>
+<img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-368b731f213aa3c4724e1bd7e2aa25c2_1440w.jpg" alt="img" style="zoom:33%;">
+<h3 id="2-anything"><a class="markdownIt-Anchor" href="#2-anything"></a> 2 anything</h3>
+<p><img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-058439b4335f20de64ddbc3e4fb740eb_1440w.jpg" alt="img"></p>
+<p>预先在图像上均匀分布32×32个点; 点是并行处理, 每个点的处理都是独立的, 每个点都独立地引导SAM去理解和解析图像的不同部分.  最后，去重保留剩下的mask，作为模型的最终输出。</p>
+<img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-0a40ecc546a9749ee00749a1eb9f37ab_r.jpg" alt="img" style="zoom:50%;">
+<h1 id="3-训练与推理"><a class="markdownIt-Anchor" href="#3-训练与推理"></a> 3 训练与推理</h1>
+<h2 id="31-模型参数"><a class="markdownIt-Anchor" href="#31-模型参数"></a> 3.1 模型参数</h2>
+<p>不同参数主要在image encoder上, 其次是mask decoder，而prompt encoder参数量最少。</p>
+<h2 id="32-训练数据"><a class="markdownIt-Anchor" href="#32-训练数据"></a> 3.2 训练数据</h2>
+<img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-60a38f496f476f527ec9e2530e4514d6_1440w.jpg" alt="img" style="zoom:50%;">
+<p><img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-7102f6210b480d347fd8e13bbb66bbbd_1440w.jpg" alt="img"></p>
+<p>SA-1B数据集的制作过程可以分为三个主要阶段。首先是辅助人工阶段，在这个阶段，使用公开的数据集训练了一个SAM模型。然后，标注员基于SAM预测的掩码进行修改，这个过程经过了5次的迭代，以确保数据的准确性。接下来是半自动阶段，主要用于标注传统语义分割不太关注的物体。同样，这个阶段也经过了5次的迭代，以提高数据的质量。最后是全自动阶段，采用了一系列技巧，如数据增强、更大的掩码解码器、更长时间的训练等，以进一步提升SAM生成的掩码的质量。</p>
+<h2 id="33-模型训练"><a class="markdownIt-Anchor" href="#33-模型训练"></a> 3.3 模型训练</h2>
+<img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-3b0dc1d7ad297a6f473d24f7eca06ba5_1440w.jpg" alt="img" style="zoom: 50%;">
+<p>采用了“通过在每个掩码上随机采样提示词进行11轮模拟交互设置”的方法来自动化构造提示词。</p>
+<p>随后，每一种构造的提示词都会与原图一起被送入解码器。解码器对每种提示进行处理，生成相应的掩码logits。每个掩码logits都会与真实的掩码标签进行比较，计算出一个损失值。</p>
+<p>这个损失值是模型学习过程中的关键反馈，它告诉模型预测的掩码与实际标注之间的相似度。通过这样的训练过程，SAM模型逐步学会如何更准确地预测掩码，即使在缺乏确切指示的情况下也能做出正确的分割。这种训练方法不仅提高了模型对用户输入的敏感性，也增强了模型处理不确定性的能力。</p>
+<h2 id="324-损失函数"><a class="markdownIt-Anchor" href="#324-损失函数"></a> 3.24 损失函数</h2>
+<h3 id="1-focal-loss"><a class="markdownIt-Anchor" href="#1-focal-loss"></a> 1. focal loss</h3>
+<img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-015a4fbf8e4a0f43d8ec188618ac270e_r.jpg" alt="img" style="zoom:50%;">
+<p>在图中，我们研究单个样本。横坐标表示预测正确的概率（前景预测为前景的概率，背景预测为背景的概率），纵轴表示在不同概率下的损失值。我们首先看到了交叉熵损失（Cross Entropy Loss，CE），它是常用的分类损失函数。然后，我们引入了焦点损失（Focal Loss，FL），其中γ表示一个控制焦点损失下沉程度的超参数。</p>
+<p>当γ等于0时，焦点损失等同于交叉熵损失，如图中最上面的蓝色曲线所示。但随着γ的增加，曲线逐渐下沉, 这种下降导致GT值在高位时(&gt;0.6), 此时的 Loss 被<strong>剧烈压低</strong>（衰减了约 99%），使得大量容易分类的背景样本产生的梯度被大幅抑制, loss下降不会那么明显;<br>
+而小于0.6部分loss值受到抑制较小，保留了大部分 Loss, 梯度会更加明显, 而这一部分往往都是难样本所在位置</p>
+<p>因此，焦点损失的关键在于它能够聚焦于难以分类的样本，帮助模型更好地应对类别不平衡问题，从而提高了模型的性能。</p>
+<img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-8fa930fa1505880c607c10245113cf78_1440w.jpg" alt="img" style="zoom:33%;">
+<h3 id="2-dice-loss"><a class="markdownIt-Anchor" href="#2-dice-loss"></a> 2 dice loss</h3>
+<img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-bb84a25acadaa3033756150cb6fc86e5_1440w.jpg" alt="img" style="zoom:33%;">
+<h2 id="35-多模态"><a class="markdownIt-Anchor" href="#35-多模态"></a> 3.5 多模态</h2>
+<h3 id="1-clip"><a class="markdownIt-Anchor" href="#1-clip"></a> 1  clip</h3>
+<p>实现文本和图片的嵌入到特征空间, 实现对齐. 从而衡量文本和图像的相似性</p>
+<p>在训练过程中，我们使用CLIP的图像编码器（CLIP image encoder）来获得图像嵌入（image embeddings）。然后，将这些图像嵌入作为文本的提示词（prompt）</p>
+<p>在SAM的推理阶段，当用户提供一个文本输入，比如&quot;cat&quot;，SAM会使用CLIP的文本编码器（CLIP text encoder）来生成文本嵌入（text embeddings）。然后，将这些文本嵌入作为文本提示词传递给SAM的提示词编码器</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/" data-id="cmsvp7so40000egv43g1b16rp" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-2026年8月15日-nnModel详解03-Deeplab" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -105,6 +254,11 @@
       
         <h1 id="0-前置"><a class="markdownIt-Anchor" href="#0-前置"></a> 0 前置</h1>
 <blockquote>
+<p>参考:</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/passer__/article/details/127973143">https://blog.csdn.net/passer__/article/details/127973143</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/rulixiang/deeplab-pytorch/blob/master/v1/test_deeplabv1.py">https://github.com/rulixiang/deeplab-pytorch/blob/master/v1/test_deeplabv1.py</a></p>
+</blockquote>
+<blockquote>
 <p>论文1：</p>
 <p>Semantic Image Segmentation with Deep Convolutional Nets and Fully Connected CRFs</p>
 <p>于2014年12月22日提交到Arvix</p>
@@ -137,6 +291,7 @@
 <p>2 去掉全连接</p>
 <p>3 依旧是FCN网络主结构</p>
 <p><img src="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A303-Deeplab/0121a7eb9dadef5bb1682af8cb3ee671.png" alt="在这里插入图片描述"></p>
+<img src="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A303-Deeplab/6f2fe514d12679287f006c0f78508800.png" alt="在这里插入图片描述" style="zoom:67%;">
 <h1 id="4-deeplab_v2"><a class="markdownIt-Anchor" href="#4-deeplab_v2"></a> 4 <strong>Deeplab_v2</strong></h1>
 <h2 id="41-主要改进"><a class="markdownIt-Anchor" href="#41-主要改进"></a> 4.1 主要改进</h2>
 <ol>
@@ -943,351 +1098,6 @@ relevant to its improved performance.</p>
 
 
   
-    <article id="post-2026年7月26日-nnUNet组会汇报" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2026/07/26/2026%E5%B9%B47%E6%9C%8826%E6%97%A5-nnUNet%E7%BB%84%E4%BC%9A%E6%B1%87%E6%8A%A5/" class="article-date">
-  <time class="post-time" datetime="2026-07-26T14:14:03.000Z" itemprop="datePublished">
-    <span class="post-month">7月</span><br/>
-    <span class="post-day">26</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2026/07/26/2026%E5%B9%B47%E6%9C%8826%E6%97%A5-nnUNet%E7%BB%84%E4%BC%9A%E6%B1%87%E6%8A%A5/">2026年7月26日 nnUNet组会汇报</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="nnu-netself-configuring-method-for-deep-learning-based-biomedical-image-segmentation"><a class="markdownIt-Anchor" href="#nnu-netself-configuring-method-for-deep-learning-based-biomedical-image-segmentation"></a> nnU-Net：Self-configuring Method for Deep Learning-based Biomedical Image Segmentation</h1>
-<hr>
-<h1 id="0-研究背景和痛点why"><a class="markdownIt-Anchor" href="#0-研究背景和痛点why"></a> 0 研究背景和痛点（Why）</h1>
-<h2 id="背景"><a class="markdownIt-Anchor" href="#背景"></a> 背景</h2>
-<p>近年来，深度学习语义分割已经广泛应用于医学图像分析，例如：</p>
-<ul>
-<li>器官分割</li>
-<li>肿瘤检测</li>
-<li>病灶测量</li>
-<li>三维重建</li>
-</ul>
-<p>通过语义分割，可以完成：</p>
-<ul>
-<li>图像分析（Image Analysis）</li>
-<li>定量分析（Quantification）</li>
-</ul>
-<p>例如：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">MRI</span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">分割脑组织</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">计算脑区体积</span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">辅助疾病诊断</span><br></pre></td></tr></table></figure>
-<hr>
-<h2 id="现有方法存在的问题"><a class="markdownIt-Anchor" href="#现有方法存在的问题"></a> 现有方法存在的问题</h2>
-<p>虽然 U-Net、V-Net 等模型已经取得很好效果，但是：</p>
-<blockquote>
-<p><strong>不同数据集几乎都需要重新设计整个训练流程。</strong></p>
-</blockquote>
-<p>主要包括：</p>
-<ul>
-<li>数据预处理</li>
-<li>网络结构</li>
-<li>Patch Size</li>
-<li>Batch Size</li>
-<li>Learning Rate</li>
-<li>Data Augmentation</li>
-<li>后处理</li>
-</ul>
-<p>这些设计高度依赖：</p>
-<ul>
-<li>数据集特点</li>
-<li>GPU显存</li>
-<li>医学经验</li>
-</ul>
-<p>因此：</p>
-<blockquote>
-<p><strong>一个新的医学分割任务往往需要大量人工调参。</strong></p>
-</blockquote>
-<hr>
-<h2 id="automl-为什么不能解决"><a class="markdownIt-Anchor" href="#automl-为什么不能解决"></a> AutoML 为什么不能解决？</h2>
-<p>AutoML 可以自动搜索网络。</p>
-<p>但是：</p>
-<ul>
-<li>搜索成本高</li>
-<li>计算资源巨大</li>
-<li>仍需要人工定义搜索空间</li>
-</ul>
-<p>因此，</p>
-<blockquote>
-<p>AutoML 并没有真正消除专家经验。</p>
-</blockquote>
-<hr>
-<h2 id="nnu-net-的目标"><a class="markdownIt-Anchor" href="#nnu-net-的目标"></a> nnU-Net 的目标</h2>
-<p>作者希望做到：</p>
-<blockquote>
-<p><strong>输入一个新的医学数据集，不需要任何人工配置，就能够自动训练出高性能分割模型。</strong></p>
-</blockquote>
-<hr>
-<h1 id="1-核心思想how"><a class="markdownIt-Anchor" href="#1-核心思想how"></a> 1 核心思想（How）</h1>
-<p>作者认为：</p>
-<p>整个分割流程其实包含三种类型的设计决策：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">设计参数</span><br><span class="line">│</span><br><span class="line">├── Fixed</span><br><span class="line">├── Rule-based</span><br><span class="line">└── Empirical</span><br></pre></td></tr></table></figure>
-<p>这就是 nnU-Net 最核心的思想。</p>
-<hr>
-<h2 id="1fixed-parameters"><a class="markdownIt-Anchor" href="#1fixed-parameters"></a> （1）Fixed Parameters</h2>
-<p>固定参数。</p>
-<p>作者发现：</p>
-<p>很多经验其实对于所有数据集都成立。</p>
-<p>例如：</p>
-<ul>
-<li>使用 U-Net</li>
-<li>Deep Supervision</li>
-<li>Instance Normalization</li>
-<li>LeakyReLU</li>
-</ul>
-<p>这些无需重新设计。</p>
-<p>因此：</p>
-<blockquote>
-<p>固定下来。</p>
-</blockquote>
-<hr>
-<h2 id="2rule-based-parameters"><a class="markdownIt-Anchor" href="#2rule-based-parameters"></a> （2）Rule-based Parameters</h2>
-<p>规则参数。</p>
-<p>作者提出两个概念：</p>
-<h3 id="dataset-fingerprint"><a class="markdownIt-Anchor" href="#dataset-fingerprint"></a> Dataset Fingerprint</h3>
-<p>数据指纹。</p>
-<p>包括：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">spacing</span><br><span class="line"></span><br><span class="line">image size</span><br><span class="line"></span><br><span class="line">image shape</span><br><span class="line"></span><br><span class="line">voxel数量</span><br><span class="line"></span><br><span class="line">类别比例</span><br><span class="line"></span><br><span class="line">模态(MRI/CT)</span><br></pre></td></tr></table></figure>
-<p>也就是：</p>
-<blockquote>
-<p>数据集有哪些特点。</p>
-</blockquote>
-<hr>
-<h3 id="pipeline-fingerprint"><a class="markdownIt-Anchor" href="#pipeline-fingerprint"></a> Pipeline Fingerprint</h3>
-<p>流水线指纹。</p>
-<p>包括：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Patch Size</span><br><span class="line"></span><br><span class="line">Batch Size</span><br><span class="line"></span><br><span class="line">Network Depth</span><br><span class="line"></span><br><span class="line">Pooling</span><br><span class="line"></span><br><span class="line">Kernel Size</span><br><span class="line"></span><br><span class="line">Resampling</span><br><span class="line"></span><br><span class="line">Normalization</span><br></pre></td></tr></table></figure>
-<p>也就是：</p>
-<blockquote>
-<p>如何训练这个模型。</p>
-</blockquote>
-<hr>
-<h3 id="二者关系"><a class="markdownIt-Anchor" href="#二者关系"></a> 二者关系</h3>
-<p>nnU-Net 建立：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Dataset Fingerprint</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">Heuristic Rules</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">Pipeline Fingerprint</span><br></pre></td></tr></table></figure>
-<p>例如：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">spacing很大</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">各向异性</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">使用2D卷积</span><br></pre></td></tr></table></figure>
-<p>或者：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">GPU显存小</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">Patch变小</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">Batch自动调整</span><br></pre></td></tr></table></figure>
-<p>所以：</p>
-<blockquote>
-<p>不再靠人工，而是靠规则自动决定。</p>
-</blockquote>
-<hr>
-<h2 id="3empirical-parameters"><a class="markdownIt-Anchor" href="#3empirical-parameters"></a> （3）Empirical Parameters</h2>
-<p>还有一些参数，</p>
-<p>无法直接写规则。</p>
-<p>例如：</p>
-<ul>
-<li>哪个模型最好</li>
-<li>是否需要Cascade</li>
-<li>后处理方式</li>
-</ul>
-<p>作者采用：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">训练</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">交叉验证</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">自动选择</span><br></pre></td></tr></table></figure>
-<p>因此称为：</p>
-<p>Empirical Parameters。</p>
-<hr>
-<h2 id="nnu-net-自动完成哪些事情"><a class="markdownIt-Anchor" href="#nnu-net-自动完成哪些事情"></a> nnU-Net 自动完成哪些事情？</h2>
-<p>整个流程：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">Dataset</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">Fingerprint</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">Preprocessing</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">Network</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">Training</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">Inference</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">Post-processing</span><br></pre></td></tr></table></figure>
-<p>包括：</p>
-<h3 id="preprocessing"><a class="markdownIt-Anchor" href="#preprocessing"></a> Preprocessing</h3>
-<p>自动：</p>
-<ul>
-<li>Resampling</li>
-<li>Cropping</li>
-<li>Normalization</li>
-</ul>
-<hr>
-<h3 id="network"><a class="markdownIt-Anchor" href="#network"></a> Network</h3>
-<p>自动决定：</p>
-<ul>
-<li>2D U-Net</li>
-<li>3D Full Resolution</li>
-<li>3D Cascade</li>
-</ul>
-<p>其中：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">2D</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">适合各向异性数据</span><br><span class="line"></span><br><span class="line">-------------------</span><br><span class="line"></span><br><span class="line">3D Full</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">适合一般3D数据</span><br><span class="line"></span><br><span class="line">-------------------</span><br><span class="line"></span><br><span class="line">Cascade</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">超大图像</span><br></pre></td></tr></table></figure>
-<hr>
-<h3 id="training"><a class="markdownIt-Anchor" href="#training"></a> Training</h3>
-<p>自动：</p>
-<ul>
-<li>Patch Size</li>
-<li>Batch Size</li>
-<li>Learning Rate</li>
-<li>Data Augmentation</li>
-<li>Deep Supervision</li>
-</ul>
-<hr>
-<h3 id="post-processing"><a class="markdownIt-Anchor" href="#post-processing"></a> Post-processing</h3>
-<p>自动：</p>
-<ul>
-<li>Remove Small Components</li>
-<li>Keep Largest Component</li>
-</ul>
-<p>全部自动完成。</p>
-<hr>
-<h1 id="2-实验设计与结果results"><a class="markdownIt-Anchor" href="#2-实验设计与结果results"></a> 2 实验设计与结果（Results）</h1>
-<h2 id="数据集"><a class="markdownIt-Anchor" href="#数据集"></a> 数据集</h2>
-<p>作者测试：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">23 datasets</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">53 segmentation tasks</span><br></pre></td></tr></table></figure>
-<p>涵盖：</p>
-<ul>
-<li>MRI</li>
-<li>CT</li>
-<li>EM</li>
-<li>FM</li>
-</ul>
-<p>包括：</p>
-<ul>
-<li>Brain</li>
-<li>Liver</li>
-<li>Heart</li>
-<li>Tumor</li>
-<li>Lesion</li>
-<li>Cell</li>
-</ul>
-<p>几乎覆盖所有医学分割场景。</p>
-<hr>
-<h2 id="对比方法"><a class="markdownIt-Anchor" href="#对比方法"></a> 对比方法</h2>
-<p>与：</p>
-<ul>
-<li>各挑战赛冠军</li>
-<li>专门设计的方法</li>
-<li>人工调参模型</li>
-</ul>
-<p>进行比较。</p>
-<hr>
-<h2 id="实验结果"><a class="markdownIt-Anchor" href="#实验结果"></a> 实验结果</h2>
-<p>最终：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">53个任务</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">33个SOTA</span><br><span class="line"></span><br><span class="line">其余几乎全部进入Top排行榜</span><br></pre></td></tr></table></figure>
-<p>说明：</p>
-<blockquote>
-<p>即使没有针对任务专门设计，nnU-Net 依然能够超过大多数人工设计方法。</p>
-</blockquote>
-<hr>
-<h2 id="为什么效果这么好"><a class="markdownIt-Anchor" href="#为什么效果这么好"></a> 为什么效果这么好？</h2>
-<p>作者强调：</p>
-<p>并不是因为：</p>
-<ul>
-<li>新网络</li>
-<li>新Loss</li>
-<li>新Optimizer</li>
-</ul>
-<p>而是：</p>
-<blockquote>
-<p><strong>把多年人工调参经验进行了系统化总结。</strong></p>
-</blockquote>
-<p>因此：</p>
-<p>论文名字叫：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">nnU-Net</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">No-New-Net</span><br></pre></td></tr></table></figure>
-<p>意思就是：</p>
-<blockquote>
-<p><strong>没有提出新的网络，而是提出新的方法论。</strong></p>
-</blockquote>
-<hr>
-<h1 id="3-讨论与启发discussion"><a class="markdownIt-Anchor" href="#3-讨论与启发discussion"></a> 3 讨论与启发（Discussion）</h1>
-<h2 id="第一"><a class="markdownIt-Anchor" href="#第一"></a> 第一</h2>
-<p>论文最大的贡献不是：</p>
-<p>一个新的网络。</p>
-<p>而是：</p>
-<blockquote>
-<p>自动配置整个分割流程。</p>
-</blockquote>
-<p>这也是后来：</p>
-<p>Auto Configuration</p>
-<p>Auto Pipeline</p>
-<p>Medical AutoML</p>
-<p>发展的基础。</p>
-<hr>
-<h2 id="第二"><a class="markdownIt-Anchor" href="#第二"></a> 第二</h2>
-<p>作者认为：</p>
-<p>真正影响性能的，</p>
-<p>不是网络结构，</p>
-<p>而是：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">数据</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">配置</span><br><span class="line"></span><br><span class="line">↓</span><br><span class="line"></span><br><span class="line">训练流程</span><br></pre></td></tr></table></figure>
-<p>一句经典结论：</p>
-<blockquote>
-<p><strong>The exact architecture is not the most important determinant in getting a good solution.</strong></p>
-</blockquote>
-<p>即：</p>
-<blockquote>
-<p><strong>网络结构并不是决定模型性能最重要的因素。</strong></p>
-</blockquote>
-<hr>
-<h2 id="第三"><a class="markdownIt-Anchor" href="#第三"></a> 第三</h2>
-<p>nnU-Net 更像一个：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Framework</span><br><span class="line"></span><br><span class="line">而不是</span><br><span class="line"></span><br><span class="line">Network</span><br></pre></td></tr></table></figure>
-<p>任何新的：</p>
-<ul>
-<li>Transformer</li>
-<li>Attention</li>
-<li>Mamba</li>
-<li>Diffusion</li>
-</ul>
-<p>都可以直接放进去。</p>
-<p>因此，</p>
-<p>很多后续工作都是：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Transformer</span><br><span class="line"></span><br><span class="line">+</span><br><span class="line"></span><br><span class="line">nnU-Net</span><br></pre></td></tr></table></figure>
-<p>而不是重新设计整个Pipeline。</p>
-<hr>
-<h2 id="第四局限性"><a class="markdownIt-Anchor" href="#第四局限性"></a> 第四（局限性）</h2>
-<p>虽然 nnU-Net 十分强大，但仍存在一些局限：</p>
-<ul>
-<li>默认以 Dice 作为优化目标，对于特殊评价指标的任务可能不是最优。</li>
-<li>某些特殊数据（如电子显微镜 EM）仍需要人工设计预处理或损失函数。</li>
-<li>启发式规则依赖已有经验，对于全新的数据类型可能需要扩展。</li>
-</ul>
-<p>作者提出，可以持续将新的经验融入规则库，使 nnU-Net 不断演进。</p>
-<hr>
-<h1 id="总结take-home-message"><a class="markdownIt-Anchor" href="#总结take-home-message"></a> 总结（Take-home Message）</h1>
-<p>可以用下面四句话概括整篇论文：</p>
-<ol>
-<li><strong>问题：</strong> 医学图像分割高度依赖人工经验，不同数据集需要重新设计整个训练流程。</li>
-<li><strong>方法：</strong> 将配置决策划分为固定参数（Fixed）、规则参数（Rule-based）和经验参数（Empirical），根据数据指纹自动生成完整训练流水线。</li>
-<li><strong>结果：</strong> 在 23 个数据集、53 个分割任务上取得了 33 个 SOTA，其余任务也达到或接近排行榜最佳水平。</li>
-<li><strong>意义：</strong> nnU-Net 的核心创新不是提出新的网络（No New Net），而是把医学图像分割中的专家经验系统化、自动化，建立了一套可直接迁移到新数据集的自配置框架。这也是它成为医学图像分割领域事实标准（de facto standard）的重要原因。</li>
-</ol>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2026/07/26/2026%E5%B9%B47%E6%9C%8826%E6%97%A5-nnUNet%E7%BB%84%E4%BC%9A%E6%B1%87%E6%8A%A5/" data-id="cms3c54yb0003eov46h48f9b6" class="article-share-link">分享</a>
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MRI/" rel="tag">MRI</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -1332,7 +1142,7 @@ relevant to its improved performance.</p>
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>189</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>190</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>46</strong><br>标签</div></a>
     </div>

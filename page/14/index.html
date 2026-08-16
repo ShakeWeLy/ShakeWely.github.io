@@ -43,7 +43,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>189</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>190</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>46</strong><br>标签</div></a>
     </div>
@@ -70,6 +70,131 @@
 </div>
 
         <section id="main">
+  
+    <article id="post-2025年3月3日-目标追踪-单目标Siam" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA-%E5%8D%95%E7%9B%AE%E6%A0%87Siam/" class="article-date">
+  <time class="post-time" datetime="2025-03-03T04:40:32.000Z" itemprop="datePublished">
+    <span class="post-month">3月</span><br/>
+    <span class="post-day">03</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA-%E5%8D%95%E7%9B%AE%E6%A0%87Siam/">2025年3月3日 目标追踪</a>
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="介绍"><a class="markdownIt-Anchor" href="#介绍"></a> 介绍</h1>
+<p>参考:<a target="_blank" rel="noopener" href="https://blog.csdn.net/Lison_Zhu/article/details/100772541%5Chttps://blog.csdn.net/Yaoyao2024/article/details/136625461">https://blog.csdn.net/Lison_Zhu/article/details/100772541\https://blog.csdn.net/Yaoyao2024/article/details/136625461</a></p>
+<h2 id="方法"><a class="markdownIt-Anchor" href="#方法"></a> 方法</h2>
+<p><img src="/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA-%E5%8D%95%E7%9B%AE%E6%A0%87Siam/image-20250303124416382.png" alt="image-20250303124416382"></p>
+<p>（1）运动模型：如何产生众多的候选样本。</p>
+<p>（2）特征提取：利用何种特征表示目标。</p>
+<p>（3）观测模型：如何为众多候选样本进行评分。</p>
+<p>（4）模型更新：如何更新观测模型使其适应目标的变化。</p>
+<p>（5）集成方法：如何融合多个决策获得一个更优的决策结果。</p>
+<p>**运动模型（Motion Model）：**生成候选样本的速度与质量直接决定了跟踪系统表现的优劣。常用的有两种方法：粒子滤波（Particle Filter）和滑动窗口（Sliding Window）。粒子滤波是一种序贯贝叶斯推断方法，通过递归的方式推断目标的隐含状态。而滑动窗口是一种穷举搜索方法，它列出目标附近的所有可能的样本作为候选样本。</p>
+<p><strong>特征提取（Feature Extractor）:</strong> 鉴别性的特征表示是目标跟踪的关键之一。常用的特征被分为两种类型：手工设计的特征（Hand-crafted feature）和深度特征（Deep feature）。常用的手工设计的特征有灰度特征（Gray），方向梯度直方图（HOG），哈尔特征（Haar-like），尺度不变特征（SIFT）等。与人为设计的特征不同，深度特征是通过大量的训练样本学习出来的特征，它比手工设计的特征更具有鉴别性。因此，利用深度特征的跟踪方法通常很轻松就能获得一个不错的效果。</p>
+<p>**观测模型（Observation Model）😗*大多数的跟踪方法主要集中在这一块的设计上。根据不同的思路，观测模型可分为两类：生成式模型（Generative Model）和判别式模型（Discriminative Model）. 生成式模型通常寻找与目标模板最相似的候选作为跟踪结果，这一过程可以视为模板匹配。常用的理论方法包括：子空间，稀疏表示，字典学习等。而判别式模型通过训练一个分类器去区分目标与背景，选择置信度最高的候选样本作为预测结果。判别式方法已经成为目标跟踪中的主流方法，因为有大量的机器学习方法可以利用。常用的理论方法包括：逻辑回归，岭回归，支持向量机，多示例学习，相关滤波等。</p>
+<p><strong>模型更新（Model Update）:</strong> 模型更新主要是更新观测模型，以适应目标表观的变化，防止跟踪过程发生漂移。模型更新没有一个统一的标准，通常认为目标的表观连续变化，所以常常会每一帧都更新一次模型。但也有人认为目标过去的表观对跟踪很重要，连续更新可能会丢失过去的表观信息，引入过多的噪音，因此利用长短期更新相结合的方式来解决这一问题。</p>
+<p><strong>集成方法（Ensemble Method）:</strong> 集成方法有利于提高模型的预测精度，也常常被视为一种提高跟踪准确率的有效手段。可以把集成方法笼统的划分为两类：在多个预测结果中选一个最好的，或是利用所有的预测加权平均。</p>
+<h2 id="分类"><a class="markdownIt-Anchor" href="#分类"></a> 分类</h2>
+<h2 id="挑战"><a class="markdownIt-Anchor" href="#挑战"></a> 挑战</h2>
+<img src="/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA-%E5%8D%95%E7%9B%AE%E6%A0%87Siam/image-20250303124957636.png" alt="image-20250303124957636" style="zoom:67%;">
+<h2 id="视觉目标跟踪方法"><a class="markdownIt-Anchor" href="#视觉目标跟踪方法"></a> <strong>视觉目标跟踪方法</strong></h2>
+<p>视觉目标跟踪方法根据观测模型是生成式模型或判别式模型可以被分为生成式方法（Generative Method）和判别式方法（Discriminative Method）。</p>
+<p>前几年最火的生成式跟踪方法大概是稀疏编码（Sparse Coding）了, 而近来判别式跟踪方法逐渐占据了主流地位，以相关滤波（Correlation Filter）和深度学习（Deep Learning）为代表的判别式方法也取得了令人满意的效果。</p>
+<h3 id="生成式模型"><a class="markdownIt-Anchor" href="#生成式模型"></a> 生成式模型</h3>
+<p>在当前帧对目标区域建模，下一帧寻找与模型最相似的区域就是预测位置，与传统的盲搜不同，它利用<strong>相邻帧之间目标位置变化不大</strong>的特点，采用<strong>迭代逼近</strong>的方式提高算法的搜索速度</p>
+<h3 id="判别式模型"><a class="markdownIt-Anchor" href="#判别式模型"></a> 判别式模型</h3>
+<p><img src="/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA-%E5%8D%95%E7%9B%AE%E6%A0%87Siam/image-20250303131015672.png" alt="image-20250303131015672"></p>
+<h3 id="深度学习方法"><a class="markdownIt-Anchor" href="#深度学习方法"></a> 深度学习方法</h3>
+<p>如基于卷积神经网络（CNN）和<strong>孪生网络</strong>的跟踪器，其实也可以归类为判别式方法，因为它们通常涉及到<strong>训练一个能够区分目标和背景的网络</strong>。</p>
+<h2 id="发展"><a class="markdownIt-Anchor" href="#发展"></a> 发展</h2>
+<img src="/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA-%E5%8D%95%E7%9B%AE%E6%A0%87Siam/image-20250303125749159.png" style="zoom:50%;">
+<h1 id="基于孪生网络的单目标跟踪siamfc"><a class="markdownIt-Anchor" href="#基于孪生网络的单目标跟踪siamfc"></a> 基于孪生网络的单目标跟踪SiamFC</h1>
+<p>参考:<a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43913124/article/details/123403727">https://blog.csdn.net/weixin_43913124/article/details/123403727</a> \https://github.com/rafellerc/Pytorch-SiamFC <a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_43913124/article/details/123545157">https://blog.csdn.net/weixin_43913124/article/details/123545157</a></p>
+<img src="https://i-blog.csdnimg.cn/blog_migrate/60f706a822f46b296fa249f17e0d0554.png" alt="结构图2" style="zoom:50%;">
+<h2 id="0-siamfc"><a class="markdownIt-Anchor" href="#0-siamfc"></a> 0 SiamFC</h2>
+<p>Siamese跟踪器<strong>将视觉目标跟踪问题表述为通过学习目标模板和搜索区域的特征表示之间的相互关联来学习通用的相似性映射</strong></p>
+<p><img src="/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA-%E5%8D%95%E7%9B%AE%E6%A0%87Siam/image-20250303140047653.png" alt="image-20250303140047653"></p>
+<p><strong>AlexNet</strong></p>
+<p><img src="/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA-%E5%8D%95%E7%9B%AE%E6%A0%87Siam/image-20250303141401445.png" alt="image-20250303141401445"></p>
+<img src="/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA-%E5%8D%95%E7%9B%AE%E6%A0%87Siam/image-20250303141444947.png" alt="image-20250303141444947" style="zoom:50%;">
+<p>Logistic<strong>损失函数</strong></p>
+<h2 id="1-siamrpn"><a class="markdownIt-Anchor" href="#1-siamrpn"></a> 1 SiamRPN</h2>
+<p>参考:<a target="_blank" rel="noopener" href="https://blog.csdn.net/fzp95/article/details/80982201">https://blog.csdn.net/fzp95/article/details/80982201</a></p>
+<p><strong>RPN</strong></p>
+<p>网络只需要把这些可能含有物体的区域选取出来就可以了，这些被选取出来的区域又叫做ROI （Region of Interests），即感兴趣的区域</p>
+<p>RPN同时也会在feature map上框定这些ROI感兴趣区域的大致位置</p>
+<p><strong>网络结构</strong></p>
+<img src="/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA-%E5%8D%95%E7%9B%AE%E6%A0%87Siam/image-20250303141905683.png" alt="image-20250303141905683" style="zoom:67%;">
+<p><strong>损失函数</strong></p>
+<p><img src="/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA-%E5%8D%95%E7%9B%AE%E6%A0%87Siam/image-20250303142721363.png" alt="image-20250303142721363"></p>
+<h3 id="11-dasiamrpn"><a class="markdownIt-Anchor" href="#11-dasiamrpn"></a> 1.1 <a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/56254712/bo-li.info/DaSiamRPN">DaSiamRPN</a></h3>
+<ul>
+<li>基于SiamRPN，主要是提出更好的使用数据，利用更好的训练方式让tracker变得更鲁邦</li>
+<li>有了更好的分数作为指导后，算法可以扩展到Long-term</li>
+</ul>
+<h3 id="12-vot2018-entry-siamrpn"><a class="markdownIt-Anchor" href="#12-vot2018-entry-siamrpn"></a> 1.2 <a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=100630994&amp;content_type=Article&amp;match_order=1&amp;q=VOT2018&amp;zhida_source=entity">VOT2018</a> entry SiamRPN</h3>
+<ul>
+<li>基于DaSiamRPN，想通过增强backbone来提升性能，但没能实现，最终通过加厚alexnet提升性能。加厚虽然临时的提升了网络的性能，但网络依然很浅，同时还极大的增加了模型参数量以及计算量。（模型加厚一倍，实际上模型和计算量增加四倍）</li>
+</ul>
+<h2 id="2-siamrpn"><a class="markdownIt-Anchor" href="#2-siamrpn"></a> 2 SiamRPN++</h2>
+<p>参考:<a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_63294504/article/details/145073446%5Chttps://zhuanlan.zhihu.com/p/56254712">https://blog.csdn.net/m0_63294504/article/details/145073446\https://zhuanlan.zhihu.com/p/56254712</a></p>
+<p><strong>打破了<strong><strong>Siamese</strong></strong>网络在目标跟踪时无法使用深度复杂网络</strong>**(VGG****、<strong><strong>ResNet</strong></strong>、**<strong>MobileNet)<strong><strong>的限制</strong></strong>原因来自于对严格平移不变性的破坏</strong></p>
+<p>入了一种**简单而有效的采样策略****(<strong><strong>说白了就是增加了随机平移</strong></strong>shft)**来打破Siamese跟踪器的空间不变性限制 <a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_63294504/article/details/145072710?spm=1001.2014.3001.5501">什么是卷积网络中的平移不变性？平移shft在数据增强中的意义-CSDN博客</a></p>
+<p>提出了一种<strong>分层特征强化结构</strong>用于相互关联操作</p>
+<p>要贡献如下:</p>
+<p>1.我们对Siamese跟踪器进行了深入的分析，并证明了当使用深度网络时，准确性的降低来自于严格的平移不变性的破坏。</p>
+<p>2.我们提出了一种简单而有效的采样策略来打破空间不变性的限制，成功地训练了由ResNet架构驱动的Siamese跟踪器。</p>
+<p>3.我们提出了一种分层特征聚合结构，用于相互关联操作，这有助于跟踪器从多层学习的特征中预测相似的映射。</p>
+<p>4.我们提出了一种深度可分离相关结构，以增强相互关联，从而产生与不同语义相关的多个相似映射。<br>
+————————————————</p>
+<p><img src="/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA-%E5%8D%95%E7%9B%AE%E6%A0%87Siam/image-20250303144709836.png" alt="image-20250303144709836"></p>
+<h2 id="3-网络更新"><a class="markdownIt-Anchor" href="#3-网络更新"></a> 3 网络更新</h2>
+<h2 id="4-模板更新"><a class="markdownIt-Anchor" href="#4-模板更新"></a> 4 模板更新</h2>
+<h2 id="5-回归更新"><a class="markdownIt-Anchor" href="#5-回归更新"></a> 5 回归更新</h2>
+<h1 id="基于相关滤波_pass"><a class="markdownIt-Anchor" href="#基于相关滤波_pass"></a> 基于相关滤波_pass</h1>
+<h1 id="基于深度学习的目标检测与再识别detection-based-tracking"><a class="markdownIt-Anchor" href="#基于深度学习的目标检测与再识别detection-based-tracking"></a> <strong>基于深度学习的目标检测与再识别（Detection-based Tracking）</strong></h1>
+<p>这类方法利用目标检测器（如Faster R-CNN、YOLO）在每一帧中检测目标，并使用Re-ID（再识别）模型或光流估计方法进行目标匹配。</p>
+<h1 id="基于视觉transformervit-vision-transformer"><a class="markdownIt-Anchor" href="#基于视觉transformervit-vision-transformer"></a> <strong>基于视觉Transformer（ViT, Vision Transformer）</strong></h1>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2025/03/03/2025%E5%B9%B43%E6%9C%883%E6%97%A5-%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA-%E5%8D%95%E7%9B%AE%E6%A0%87Siam/" data-id="cmanj8o24000flcv42ogd545d" class="article-share-link">分享</a>
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/model%E3%80%81tracking/" rel="tag">model、tracking</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+
   
     <article id="post-2025年2月19日-CRNN模型" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
@@ -1244,201 +1369,6 @@ FBNet 使用了一种基于梯度优化的搜索方法，即将 NAS 搜索过程
 
 
   
-    <article id="post-2025年2月2日-agent框架-langchain" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2025/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6-langchain/" class="article-date">
-  <time class="post-time" datetime="2025-02-02T01:28:02.000Z" itemprop="datePublished">
-    <span class="post-month">2月</span><br/>
-    <span class="post-day">02</span>
-  </time>
-</a>
-   
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2025/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6-langchain/">2025年2月2日 agent框架 langchain</a>
-    </h1>
-  
-
-        <div>
-          
-          
-              
-
-          
-        </div>
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <blockquote>
-<p>1</p>
-</blockquote>
-<h1 id="1-初步认识"><a class="markdownIt-Anchor" href="#1-初步认识"></a> 1 初步认识</h1>
-<h2 id="11-什么是langchain"><a class="markdownIt-Anchor" href="#11-什么是langchain"></a> 1.1 什么是LangChain</h2>
-<p>LangChain是2022年10月（ChatGPT在2022年11月30问世，比ChatGPT还早），由哈佛大学的Harrison Chase（哈里森·蔡斯）发起研发的一个<strong>用于开发基于大语言模型（LLM） 应用程序的开源框架</strong>，它的核心目标是简化AI应用的构建过程，让开发者能像搭积木一样，快速组合各种模块来实现复杂功能，如：搭建智能体（Agent）、问答系统（QA）、对话机器人、知识库等。</p>
-<img src="/2025/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6-langchain/image-20260202093124649.png" alt="image-20260202093124649" style="zoom: 50%;">
-<img src="/2025/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6-langchain/image-20260202093135846.png" alt="image-20260202093135846" style="zoom: 50%;">
-<h2 id="12-为什么使用langchain"><a class="markdownIt-Anchor" href="#12-为什么使用langchain"></a> 1.2 为什么使用LangChain</h2>
-<p>接对接大模型和使用LangChain的对比：</p>
-<table>
-<thead>
-<tr>
-<th>对比维度</th>
-<th>直接调用大模型API</th>
-<th>使用 LangChain 开发</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>开发模式</td>
-<td>相对直接，但复杂功能需大量自定义代码</td>
-<td>模块化组装，提供大量预制组件和链，简化复杂逻辑</td>
-</tr>
-<tr>
-<td>多模型支持</td>
-<td>通常需为不同供应商的API编写适配代码</td>
-<td>统一接口，轻松切换或组合不同模型（如OpenA)等）</td>
-</tr>
-<tr>
-<td>外部数据集成</td>
-<td>需自行实现数据加载、处理、向量化与检索逻辑</td>
-<td>内置RAG（检索增强生成） 等强大支持，可轻松连接PDF、数据库、API等外部数据源</td>
-</tr>
-<tr>
-<td>上下文管理</td>
-<td>需手动管理对话历史，易超出Token限制</td>
-<td>内置Memory组件，灵活管理短期和长期记忆，维持连贯对话</td>
-</tr>
-<tr>
-<td>复杂任务自动化</td>
-<td>实现多步骤推理或工具调用逻辑复杂</td>
-<td>通过Agents，让模型能自主决策、调用工具（如计算器、搜索引擎）完成任务</td>
-</tr>
-<tr>
-<td>生产部署与调试</td>
-<td>缺乏标准化工具，监控和调试较困难</td>
-<td>提供LangSmith等平台，用于监控、追踪和调试应用性能</td>
-</tr>
-</tbody>
-</table>
-<h2 id="13-langchain架构设计宏观"><a class="markdownIt-Anchor" href="#13-langchain架构设计宏观"></a> 1.3 LangChain架构设计（宏观）</h2>
-<p><img src="/2025/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6-langchain/image-20260202093350460.png" alt="image-20260202093350460"></p>
-<h1 id="二-langchain使用"><a class="markdownIt-Anchor" href="#二-langchain使用"></a> 二、LangChain使用</h1>
-<h3 id="21-简单demo"><a class="markdownIt-Anchor" href="#21-简单demo"></a> 2.1 简单demo</h3>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
-<h1 id="三-langchain核心组件之model-io"><a class="markdownIt-Anchor" href="#三-langchain核心组件之model-io"></a> 三、LangChain核心组件之Model I/O</h1>
-<h2 id="31-model-io"><a class="markdownIt-Anchor" href="#31-model-io"></a> 3.1 Model I/O</h2>
-<p>Model I/O 是应用程序与大模型进行交互的组件，<strong>它与大模型的关系类似于JDBC与数据库的关系</strong>，本质上都是<strong>为了解耦应用逻辑与底层实现，提供标准化的交互接口</strong>，使应用程序无需关注大模型底层的实现，可与各种大模型进行交互。Model I/O 包括输入<strong>提示(Format)、调用模型(Predict)、输出解析(Parse)</strong>。分别对应着Prompt Template（提示词模版），Model （大模型）和Output Parser（输出解析器）。</p>
-<p><img src="/2025/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6-langchain/v2-1a9371d4a94f4fbca2e0e1f7119060cc_1440w.jpg" alt="img"></p>
-<p>说白了，Model I/O 就是LangChain 提供了一系列与大模型交互的API。</p>
-<h2 id="32-大模型分类按功能"><a class="markdownIt-Anchor" href="#32-大模型分类按功能"></a> 3.2 大模型分类（按功能）</h2>
-<p><strong>1、LLMs（大语言模型）</strong></p>
-<p>也叫非对话模型，<strong>是许多语言模型应用程序的支柱</strong>，通用的文本生成，能够完成一次性的文本生成任务，如写作、翻译等</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">llm_model = OpenAI()</span><br><span class="line">llm_model.invoke(&quot;什么是LangChain?&quot;)</span><br></pre></td></tr></table></figure>
-<p><strong>2、Chat Models（对话模型）</strong></p>
-<p>专门为<strong>多轮对话场景</strong>优化的语言模型。与LLMs处理纯字符串不同，Chat Models的输入和输出都是<strong>结构化的消息对象</strong>，能更好地理解和维护对话的上下文</p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># 创建ChatOpenAI模型实例</span><br><span class="line">chat_model = ChatOpenAI(</span><br><span class="line">    model_name=&quot;DeepSeek-R1-Online-0120&quot;,   # 模型名称</span><br><span class="line">    base_url=&quot;http://xxx/openapi/&quot;,  # 与模型交互的地址</span><br><span class="line">    api_key=&quot;xxxxxxxxxxxxxx&quot;  #秘钥，在太极上申请的，生产环境需要放在配置文件中</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"># 调用模型</span><br><span class="line">response = chat_model.invoke(&quot;用简单一句话概括一下什么是反洗钱？&quot;)</span><br><span class="line"># 打印模型响应内容</span><br><span class="line">print(response)</span><br></pre></td></tr></table></figure>
-<p><img src="/2025/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6-langchain/v2-c968b15405a4c1d773fdc43d69e205a9_1440w.jpg" alt="img"></p>
-<p><strong>3、Embedding Model（嵌入模型）</strong></p>
-<p>它的核心任务是<strong>将文字、图片等非结构化数据，转换成高维空间中的数值向量</strong>。并且能够将<strong>语义相近的内容在向量空间中的位置也映射得更近</strong></p>
-<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># 我这里使用的嵌入模型是自己本地部署的，OpenAI的类为OpenAIEmbeddings</span><br><span class="line">embeddings_model = OllamaEmbeddings(</span><br><span class="line">    model=&quot;nomic-embed-text&quot;,</span><br><span class="line">    base_url=&quot;http://xxx&quot;,</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">vector = embeddings_model.embed_query(&quot;hello world&quot;)</span><br><span class="line">print(f&quot;嵌入向量长度: &#123;len(vector)&#125;&quot;)</span><br><span class="line">print(f&quot;前20个值: &#123;vector[:20]&#125;&quot;)</span><br></pre></td></tr></table></figure>
-<h2 id="33-message消息"><a class="markdownIt-Anchor" href="#33-message消息"></a> 3.3 Message（消息）</h2>
-<h2 id="34-prompt-template提示词模版"><a class="markdownIt-Anchor" href="#34-prompt-template提示词模版"></a> 3.4 Prompt Template（提示词模版）</h2>
-<h1 id="四-langchain核心组件之chains"><a class="markdownIt-Anchor" href="#四-langchain核心组件之chains"></a> 四、LangChain核心组件之Chains</h1>
-<p>**3、LCEL（LangChain Expression Language）：**是 LangChain 框架中用于构建和组合Chain的一种声明式、模块化且高效的语言。类似于Linux中的管道符 | ，将提示模板、语言模型、输出解析器等组件灵活地组合成可执行的工作流。</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">json_parser = JsonOutputParser()</span><br><span class="line">prompt_template = PromptTemplate(</span><br><span class="line">    template=<span class="string">&quot;用简单的一句话描述一下什么是&#123;name&#125;？请按照以下格式输出：&#123;format_instructions&#125;&quot;</span>,</span><br><span class="line">    input_variables=[<span class="string">&quot;name&quot;</span>],</span><br><span class="line">    <span class="comment"># 告诉大模型，按照json格式输出</span></span><br><span class="line">    partial_variables=&#123;<span class="string">&quot;format_instructions&quot;</span>: json_parser.get_format_instructions()&#125;</span><br><span class="line">)</span><br><span class="line"><span class="comment"># 使用管道符构建chain</span></span><br><span class="line">chain = prompt_template | chat_model | json_parser</span><br><span class="line">response = chain.invoke(&#123;<span class="string">&quot;name&quot;</span>: <span class="string">&quot;反洗钱&quot;</span>&#125;)</span><br><span class="line"><span class="built_in">print</span>(response)</span><br></pre></td></tr></table></figure>
-<p>除了上述的chain之外，LangChain还提供了以下类型的chain，大家感兴趣可以参考：<a href="https://link.zhihu.com/?target=https%3A//python.langchain.com.cn/docs/modules/chains/">Chains</a></p>
-<ol>
-<li><strong>LLMMathChain（数学链）</strong>：将用户问题转换为数学问题，然后再转换为可以使用Python的numexpr库执行的表达式。</li>
-<li><strong>RouterChain（路由链）</strong>：根据输入内容分析并决定调用哪个专用的子链处理。可以自动分析用户的需求，然后路由到最适合的链中执行，并返回最终结果。</li>
-<li><strong>StuffDocumentsChain（文档链）</strong>：将多个文档内容合并 （“填充”或“塞入”）到单个提示词中，然后调用大模型进行处理。</li>
-</ol>
-<h1 id="五-langchain核心组件之memory"><a class="markdownIt-Anchor" href="#五-langchain核心组件之memory"></a> 五、LangChain核心组件之Memory</h1>
-<h2 id="51-memory记忆概述"><a class="markdownIt-Anchor" href="#51-memory记忆概述"></a> 5.1 Memory（记忆）概述</h2>
-<p>我们知道，<strong>大模型本身都不会记忆任何上下文信息</strong>，那为什么我们常用的大模型应用能够清楚的知道我们之前的对话内容（与AI应用可以进行多轮对话）？并且有一定的记忆能力，这就需要额外的模块去保存我们和大模型进行对话的上下文信息，然后在下一次对话前将历史的记录全部发送给大模型，提供给大模型参考以便能够更准确的回答当前的提问。<br>
-在LangChain中，这个用于存储用户和模型交互的历史信息的组件叫Memory，它能够让应用记住用户之前说了什么，从而实现对话的上下文感知能力，为构建真正智能和上下文感知的链式对话系统提供了基础。</p>
-<h2 id="52-memory的原理"><a class="markdownIt-Anchor" href="#52-memory的原理"></a> 5.2 Memory的原理</h2>
-<p><img src="/2025/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6-langchain/image-20260202110040308.png" alt="image-20260202110040308"></p>
-<p>STEP 1：用户输入问题<br>
-STEP2：从Memory中读取历史消息<br>
-STEP3：构建新的提示词，包含历史消息和当前的提问<br>
-STEP4：发送给大模型处理<br>
-STEP5：解析大模型输出，并返回用户<br>
-STEP6：将历史对话和当前对话一起保存在Memory中，以便下一次使用</p>
-<h2 id="53-memory组件使用"><a class="markdownIt-Anchor" href="#53-memory组件使用"></a> 5.3 Memory组件使用</h2>
-<p>LangChain中提供了一系列的Memory用于保存历史上下文，不同的Memory保存的内容也不一样，常用的使用方式如下：</p>
-<p>**1、ChatMessageHistory：**用于存储和管理对话消息的基础类，它直接操作消息对象（如HumanMessage, AIMessage 等），是其它记忆组件的底层存储工具。特点：轻量、无需额外依赖、数据不会持久化（程序重启后丢失）</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建Memory</span></span><br><span class="line">history = ChatMessageHistory()</span><br><span class="line"><span class="comment"># 添加用户消息</span></span><br><span class="line">history.add_user_message(<span class="string">&quot;你好，我是RiskHelper&quot;</span>)</span><br><span class="line"><span class="comment"># 添加AI消息</span></span><br><span class="line">history.add_ai_message(<span class="string">&quot;我是DeepSeek大模型&quot;</span>)</span><br><span class="line"><span class="comment"># 添加用户消息</span></span><br><span class="line">history.add_user_message(<span class="string">&quot;我是谁？&quot;</span>)</span><br><span class="line"><span class="comment"># 通过将history.messages 直接传入大模型，大模型能够看到完整的对话上下文，从而实现有记忆的连续对话</span></span><br><span class="line">response = chat_model.invoke(history.messages)</span><br><span class="line"><span class="built_in">print</span>(response.content)</span><br></pre></td></tr></table></figure>
-<p><strong>2、ConversationBufferMemory</strong>：是LangChain中最基础、最直接的记忆组件，<strong>按顺序完整地记录用户与AI之间的每一轮对话</strong>，并将这些历史信息提供给模型，以实现连贯的多轮对话。<strong>他能保存全部的上下文信息，对话连贯性最强，但是会消耗大量的Token，且随着对话的进行，会占用大量的内存资源</strong>。它适用于短对话，需要保存完整的上下文信息的复杂任务。</p>
-<p><strong>3、ConversationBufferWindowMemory：只保留最近 K 轮对话，解决ConversationBufferMemory占用内存多、tokken消耗大问题</strong>，平衡连贯性与资源消耗。随之带来的问题是会丢失早期上下文，不适合复杂场景</p>
-<p>**4、ConversationSummaryMemory：**它是 LangChain 中一种智能的记忆管理组件，它通过自动生成对话摘要来解决长对话上下文管理的问题。与简单截断历史的记忆类型不同，<strong>它使用大模型来提炼对话精髓，实现长期记忆</strong>。核心思想是：<strong>不存储原始对话记录，而是存储对话的智能摘要</strong>。当新的对话发生时，系统会将现有摘要与最新对话结合，生成更新的摘要。</p>
-<p><strong>5、ConversationSummaryBufferMemory：<strong>是LangChain中一种非常实用的混合型记忆组件，它巧妙地</strong>将对话摘要与原始对话缓冲区结合起来，旨在解决长对话场景下既要保持上下文连贯性又要控制资源消耗的核心矛盾</strong>。其核心创新在于采用了分层记忆管理策略，在对话连贯性和资源消耗之间找到平衡点</p>
-<p>**6、ConversationEntityMemory：**一种基于实体的对话记忆机制，它能够智能地识别、存储和利用对话中出现的实体信息（如人名、地点、产品等）及其属性/关系，并结构化存储，使 AI 具备更强的上下文理解和记忆能力，能够解决信息过载问题。<br>
-<strong>7、ConversationKGMemory：</strong> 一种基于知识图谱的先进记忆组件，它将对话内容组织成结构化的知识图谱，实现更加语义化和关联性的记忆管理。<br>
-**8、VectorStoreRetrieverMemory：**一种基于向量数据库的先进记忆组件，它利用语义相似度检索技术，从大量历史对话中智能召回与当前对话最相关的记忆片段。</p>
-<h1 id="六-langchain核心组件之tools"><a class="markdownIt-Anchor" href="#六-langchain核心组件之tools"></a> 六、LangChain核心组件之Tools</h1>
-<h2 id="61-tools概述"><a class="markdownIt-Anchor" href="#61-tools概述"></a> 6.1 Tools概述</h2>
-<h1 id="七-langchain核心组件之agent"><a class="markdownIt-Anchor" href="#七-langchain核心组件之agent"></a> 七、LangChain核心组件之Agent</h1>
-<h2 id="71-agent智能体"><a class="markdownIt-Anchor" href="#71-agent智能体"></a> 7.1 Agent（智能体）</h2>
-<h1 id="八-langchain核心组件之retrieval"><a class="markdownIt-Anchor" href="#八-langchain核心组件之retrieval"></a> 八、LangChain核心组件之Retrieval</h1>
-<h2 id="81-retrieval检索"><a class="markdownIt-Anchor" href="#81-retrieval检索"></a> 8.1 Retrieval（检索）</h2>
-<h1 id="2-进阶"><a class="markdownIt-Anchor" href="#2-进阶"></a> 2 进阶</h1>
-<blockquote>
-<p>s</p>
-</blockquote>
-<h2 id="提问"><a class="markdownIt-Anchor" href="#提问"></a> 提问</h2>
-<h3 id="为什么使用管道操作符"><a class="markdownIt-Anchor" href="#为什么使用管道操作符"></a> 为什么使用管道操作符？</h3>
-<ol>
-<li>
-<p>代码更简洁：链式调用，易读</p>
-</li>
-<li>
-<p>自动处理数据传递：组件间自动传递数据</p>
-</li>
-<li>
-<p>支持异步和流式处理：可统一处理异步调用</p>
-</li>
-<li>
-<p>易于组合：可灵活组合不同组件</p>
-</li>
-</ol>
-<h2 id="函数"><a class="markdownIt-Anchor" href="#函数"></a> 函数</h2>
-<p><code>create_agent</code></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">docs_agent = create_agent(</span><br><span class="line">    model=configurable_model,</span><br><span class="line">    tools=[</span><br><span class="line">        SearchDocsByLangChain,</span><br><span class="line">        search_support_articles,</span><br><span class="line">        get_article_content,</span><br><span class="line">        check_links,</span><br><span class="line">    ],</span><br><span class="line">    system_prompt=docs_agent_prompt,</span><br><span class="line">    middleware=[</span><br><span class="line">        guardrails_middleware,</span><br><span class="line">        model_fallback_middleware,</span><br><span class="line">    ],</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
-<ul>
-<li><code>middleware</code>：为智能体的运行流程添加 “拦截 / 处理逻辑”，是这段代码的核心关注点。</li>
-</ul>
-<p><strong>middleware</strong>:</p>
-<ol>
-<li></li>
-</ol>
-<p><code>init_chat_model</code></p>
-<p><code>AgentState</code></p>
-<p><code>@tool</code></p>
-<h4 id="messagesplaceholder"><a class="markdownIt-Anchor" href="#messagesplaceholder"></a> MessagesPlaceholder</h4>
-<p>是 LangChain 中的占位符，用于在提示词模板中动态插入消息历史（对话历史）。它允许在运行时将消息列表插入到提示词中。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://shakewely.github.io/2025/02/02/2025%E5%B9%B42%E6%9C%882%E6%97%A5-agent%E6%A1%86%E6%9E%B6-langchain/" data-id="cml62702g00054kv42ysk9znh" class="article-share-link">分享</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-
-
-  
 
 
   <nav id="page-nav">
@@ -1483,7 +1413,7 @@ STEP6：将历史对话和当前对话一起保存在Memory中，以便下一次
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>189</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>190</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>46</strong><br>标签</div></a>
     </div>

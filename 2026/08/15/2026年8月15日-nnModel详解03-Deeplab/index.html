@@ -5,19 +5,20 @@
   
   <title>2026年8月15日 nnModel详解03-Deeplab | Weakliy_Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="0 前置  论文1： Semantic Image Segmentation with Deep Convolutional Nets and Fully Connected CRFs 于2014年12月22日提交到Arvix https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;1412.7062 论文2： DeepLab: Semantic Image Segmentation with Deep C">
+  <meta name="description" content="0 前置  参考: https:&#x2F;&#x2F;blog.csdn.net&#x2F;passer__&#x2F;article&#x2F;details&#x2F;127973143 https:&#x2F;&#x2F;github.com&#x2F;rulixiang&#x2F;deeplab-pytorch&#x2F;blob&#x2F;master&#x2F;v1&#x2F;test_deeplabv1.py   论文1： Semantic Image Segmentation with Deep Convoluti">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2026年8月15日 nnModel详解03-Deeplab">
 <meta property="og:url" content="https://shakewely.github.io/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A303-Deeplab/index.html">
 <meta property="og:site_name" content="Weakliy_Blog">
-<meta property="og:description" content="0 前置  论文1： Semantic Image Segmentation with Deep Convolutional Nets and Fully Connected CRFs 于2014年12月22日提交到Arvix https:&#x2F;&#x2F;arxiv.org&#x2F;abs&#x2F;1412.7062 论文2： DeepLab: Semantic Image Segmentation with Deep C">
+<meta property="og:description" content="0 前置  参考: https:&#x2F;&#x2F;blog.csdn.net&#x2F;passer__&#x2F;article&#x2F;details&#x2F;127973143 https:&#x2F;&#x2F;github.com&#x2F;rulixiang&#x2F;deeplab-pytorch&#x2F;blob&#x2F;master&#x2F;v1&#x2F;test_deeplabv1.py   论文1： Semantic Image Segmentation with Deep Convoluti">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://shakewely.github.io/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A303-Deeplab/640.webp">
 <meta property="og:image" content="https://shakewely.github.io/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A303-Deeplab/0121a7eb9dadef5bb1682af8cb3ee671.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A303-Deeplab/6f2fe514d12679287f006c0f78508800.png">
 <meta property="og:image" content="https://shakewely.github.io/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A303-Deeplab/image-20260815225542288.png">
 <meta property="og:image" content="https://shakewely.github.io/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A303-Deeplab/image-20260815225742442.png">
 <meta property="article:published_time" content="2026-08-15T14:44:12.000Z">
-<meta property="article:modified_time" content="2026-08-15T15:05:14.551Z">
+<meta property="article:modified_time" content="2026-08-16T03:00:44.305Z">
 <meta property="article:author" content="Weakliy">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://shakewely.github.io/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A303-Deeplab/640.webp">
@@ -52,7 +53,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>189</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>190</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>46</strong><br>标签</div></a>
     </div>
@@ -112,6 +113,11 @@
       
         <h1 id="0-前置"><a class="markdownIt-Anchor" href="#0-前置"></a> 0 前置</h1>
 <blockquote>
+<p>参考:</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/passer__/article/details/127973143">https://blog.csdn.net/passer__/article/details/127973143</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/rulixiang/deeplab-pytorch/blob/master/v1/test_deeplabv1.py">https://github.com/rulixiang/deeplab-pytorch/blob/master/v1/test_deeplabv1.py</a></p>
+</blockquote>
+<blockquote>
 <p>论文1：</p>
 <p>Semantic Image Segmentation with Deep Convolutional Nets and Fully Connected CRFs</p>
 <p>于2014年12月22日提交到Arvix</p>
@@ -144,6 +150,7 @@
 <p>2 去掉全连接</p>
 <p>3 依旧是FCN网络主结构</p>
 <p><img src="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A303-Deeplab/0121a7eb9dadef5bb1682af8cb3ee671.png" alt="在这里插入图片描述"></p>
+<img src="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A303-Deeplab/6f2fe514d12679287f006c0f78508800.png" alt="在这里插入图片描述" style="zoom:67%;">
 <h1 id="4-deeplab_v2"><a class="markdownIt-Anchor" href="#4-deeplab_v2"></a> 4 <strong>Deeplab_v2</strong></h1>
 <h2 id="41-主要改进"><a class="markdownIt-Anchor" href="#41-主要改进"></a> 4.1 主要改进</h2>
 <ol>
@@ -173,6 +180,15 @@
   
     
 <nav id="article-nav">
+  
+    <a href="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          2026年8月16日-nnModel详解04-SAM
+        
+      </div>
+    </a>
   
   
     <a href="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-%E8%AF%AD%E4%B9%89%E5%88%86%E5%89%B2%E6%B1%87%E6%80%BB/" id="article-nav-older" class="article-nav-link-wrap">
@@ -226,7 +242,7 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>189</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>190</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
       <a href="/tags"><div><strong>46</strong><br>标签</div></a>
     </div>

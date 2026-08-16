@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2026年8月16日-nnModel详解04-SAM | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="参考:https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;667801207   0 前置  1.1 主要贡献  prompt输入 解决歧义的问题: 能够对含糊的指令做出响应，产生多个可能的分割结果 数据标注策略 多模态输入      1.2 整体结构  SAM的内部结构。模型由3个主要部分组成：提示词编码器、图像编码器和一个轻量级的掩码解码器。  2 细节  2.1 prompt  1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2026年8月16日-nnModel详解04-SAM">
+<meta property="og:url" content="https://shakewely.github.io/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="参考:https:&#x2F;&#x2F;zhuanlan.zhihu.com&#x2F;p&#x2F;667801207   0 前置  1.1 主要贡献  prompt输入 解决歧义的问题: 能够对含糊的指令做出响应，产生多个可能的分割结果 数据标注策略 多模态输入      1.2 整体结构  SAM的内部结构。模型由3个主要部分组成：提示词编码器、图像编码器和一个轻量级的掩码解码器。  2 细节  2.1 prompt  1">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/90144dd101d45703c81f15be0e69a031.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-eb3d36b9589b8d9ab634a40486c64038_1440w.jpg">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-b3b898759f0e9bba7c9bc7a8d50d2239_r.jpg">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/image-20260816113220260.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/cba841f470aeedd426d117d0e8b47bfa.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-451e76db9dce6cfece36621e66887697_1440w.jpg">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-b01690c25be5f84e309aaa59a4716f7d_r.jpg">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-74a646d339bfd3119e0a0941f09f3b48_1440w.jpg">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-e12c8423d16455c4c6f7b13c66a287a9_r.jpg">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-344f1213619746c6bdecefed384c666e_1440w.jpg">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-8d8a254ed2dd8e09f06943064b58d0c9_1440w.jpg">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-368b731f213aa3c4724e1bd7e2aa25c2_1440w.jpg">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-058439b4335f20de64ddbc3e4fb740eb_1440w.jpg">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-0a40ecc546a9749ee00749a1eb9f37ab_r.jpg">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-60a38f496f476f527ec9e2530e4514d6_1440w.jpg">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-7102f6210b480d347fd8e13bbb66bbbd_1440w.jpg">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-3b0dc1d7ad297a6f473d24f7eca06ba5_1440w.jpg">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-015a4fbf8e4a0f43d8ec188618ac270e_r.jpg">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-8fa930fa1505880c607c10245113cf78_1440w.jpg">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-bb84a25acadaa3033756150cb6fc86e5_1440w.jpg">
+<meta property="article:published_time" content="2026-08-16T03:05:47.000Z">
+<meta property="article:modified_time" content="2026-08-16T06:25:31.890Z">
+<meta property="article:author" content="Weakliy">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shakewely.github.io/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/90144dd101d45703c81f15be0e69a031.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>190</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>46</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2026年8月16日-nnModel详解04-SAM" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/" class="article-date">
+  <time class="post-time" datetime="2026-08-16T03:05:47.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">16</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2026年8月16日-nnModel详解04-SAM
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>参考:<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/667801207">https://zhuanlan.zhihu.com/p/667801207</a></p>
+</blockquote>
+<h1 id="0-前置"><a class="markdownIt-Anchor" href="#0-前置"></a> 0 前置</h1>
+<h2 id="11-主要贡献"><a class="markdownIt-Anchor" href="#11-主要贡献"></a> 1.1 主要贡献</h2>
+<ol>
+<li>prompt输入</li>
+<li>解决歧义的问题: 能够对含糊的指令做出响应，产生多个可能的分割结果</li>
+<li>数据标注策略</li>
+<li>多模态输入</li>
+</ol>
+<img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/90144dd101d45703c81f15be0e69a031.png" alt="image-20240809000450713" style="zoom:50%;">
+<img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-eb3d36b9589b8d9ab634a40486c64038_1440w.jpg" alt="img" style="zoom:50%;">
+<img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-b3b898759f0e9bba7c9bc7a8d50d2239_r.jpg" alt="img" style="zoom:50%;">
+<h2 id="12-整体结构"><a class="markdownIt-Anchor" href="#12-整体结构"></a> 1.2 整体结构</h2>
+<img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/image-20260816113220260.png" alt="image-20260816113220260" style="zoom:50%;">
+<p>SAM的内部结构。模型由3个主要部分组成：提示词编码器、图像编码器和一个轻量级的掩码解码器。</p>
+<h1 id="2-细节"><a class="markdownIt-Anchor" href="#2-细节"></a> 2 细节</h1>
+<h2 id="21-prompt"><a class="markdownIt-Anchor" href="#21-prompt"></a> 2.1 prompt</h2>
+<h3 id="1-prompt处理"><a class="markdownIt-Anchor" href="#1-prompt处理"></a> 1 prompt处理</h3>
+<p>这里的提示信息可以是mask、points、box或者是text，</p>
+<p>如果是mask的话则使用卷积来进行表示，<br>
+如果是其余的三种提示词则使用位置编码的形式来进行表示，其中text可以通过clip一类的模型获取词嵌入</p>
+<p><img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/cba841f470aeedd426d117d0e8b47bfa.png" alt="image-20240808233331811"></p>
+<h3 id="2-encoder"><a class="markdownIt-Anchor" href="#2-encoder"></a> 2 encoder</h3>
+<img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-451e76db9dce6cfece36621e66887697_1440w.jpg" alt="img" style="zoom: 50%;">
+<p>首先，mask提示允许我们直接在原像上指示感兴趣区域来引导模型。这些mask通过卷积操作被转换为与图像嵌入空间相匹配的特征，然后与图像嵌入相加结合，为模型提供分割的精确位置信息。如果没有使用mask提示，则用一组可学习向量(no_mask_embed, 1×256) expand为256×64×64后替代。</p>
+<p>而文本提示，利用了CLIP的文本编码器，将描述性的语言输入转换为模型可以理解的嵌入向量。比如输入“黑耳朵的猫”，文本编码器就能将这些词转换为一个强大的特征描述，引导模型聚焦于具有这些特征的图像区域。</p>
+<h2 id="22-图像"><a class="markdownIt-Anchor" href="#22-图像"></a> 2.2 图像</h2>
+<h3 id="1-图像预处理"><a class="markdownIt-Anchor" href="#1-图像预处理"></a> 1 图像预处理</h3>
+<img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-b01690c25be5f84e309aaa59a4716f7d_r.jpg" alt="img" style="zoom: 25%;">
+<p>首先，我们以保持图像的宽高比的方式将图像最长边放缩到1024。</p>
+<p>接下来是颜色归一化。通过从每个像素中减去平均值并除以标准差，颜色归一化的目的是为了统一不同图像的颜色范围，减少照明条件和设备差异对模型训练的影响，从而提高模型的泛化能力和加快训练速度。</p>
+<p>最后，我们会应用填充（Padding），以确保所有的图像都有相同的维度即1024*1024.</p>
+<img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-74a646d339bfd3119e0a0941f09f3b48_1440w.jpg" alt="img" style="zoom:50%;">
+<h3 id="2-image-encoder"><a class="markdownIt-Anchor" href="#2-image-encoder"></a> 2 image encoder</h3>
+<img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-e12c8423d16455c4c6f7b13c66a287a9_r.jpg" alt="img" style="zoom:33%;">
+<p>这部分使用VIT, 主要是SAM理解图像的重要部分</p>
+<p><strong>2.1 path embedding</strong></p>
+<p>使用一个kernel size且stride为16的卷积核, 将1024的图像提取为64x64x768的深度特征向量;</p>
+<p>并加上位置标明</p>
+<p><strong>2.2 element-wise add</strong></p>
+<p><strong>2.3 transformer</strong></p>
+<p>使用了12个Transformer块来处理这些向量，每个块都在维持序列信息的同时，增强了特征的表示。</p>
+<p><strong>2.4 降维</strong></p>
+<h2 id="23-mask-decoder"><a class="markdownIt-Anchor" href="#23-mask-decoder"></a> 2.3 mask decoder</h2>
+<h3 id="1-decoder"><a class="markdownIt-Anchor" href="#1-decoder"></a> 1 decoder</h3>
+<p>Mask decoder的职责是整合来自图像嵌入的丰富视觉信息和提示词编码器提供的表征信息，其最终目的是解码出精确的语义分割掩码。</p>
+<img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-344f1213619746c6bdecefed384c666e_1440w.jpg" alt="img" style="zoom:50%;">
+<p>mage embedding。它不仅包含了原始图像的信息，还融入了稠密的prompt掩码信息。通过这样的融合，我们得到了一个增强的图像表征，它更全面地捕捉了图像内容和用户指示的分割意图。</p>
+<p>tokens不只是承载了稀疏的prompt掩码信息，它们还包括用于未来预测的特殊token——一个预测交并比（IOU）的token和四个预测掩码的token。<br>
+mask tokens的角色是作为预测具体分割掩码的占位符，之所以有四个，是因为SAM模型的灵活性允许它在模糊语义下生成多达三个掩码，或者在需要时只生成一个特定掩码。</p>
+<h3 id="2-attention"><a class="markdownIt-Anchor" href="#2-attention"></a> 2 attention</h3>
+<p>mask decoder的内部机制，以及数据是如何在这一复杂结构中流动和转换的。</p>
+<p><img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-8d8a254ed2dd8e09f06943064b58d0c9_1440w.jpg" alt="img"></p>
+<p>首先，tokens被送入mask decoder，并进行<strong>自我注意力</strong>（self-attention）处理。自我注意力机制的作用是让模型学会在tokens内部寻找和放大重要的关系</p>
+<p>经过自我注意力处理的tokens作为查询（query），与图像嵌入的键（key）和值（value）结合进行图像到token的注意力（token to image attention）操作(<strong>不再是自注意力机制</strong>)<br>
+目的是将经过<strong>提示词处理的信息与原始图像的丰富上下文信息结合</strong>起来，从而为解码过程引入了视觉信息。</p>
+<p>结果通过一个多层感知器（MLP）层，产生新的特征表征。</p>
+<p>最后, 这些新特征表征随后被用作键K和值V，图像嵌入作为查询Q，执行另一轮图像到token的注意力（image to token attention）操作，进一步精炼模型对图像的理解。</p>
+<blockquote>
+<p>这里有点精妙的, 既把prompt作为Q, 又让image作为Q; 既融合和自注意力, 有又prompt和image的注意力</p>
+</blockquote>
+<h3 id="3-output"><a class="markdownIt-Anchor" href="#3-output"></a> 3 output</h3>
+<p>在模型的输出阶段，有两个分支。</p>
+<p>一分支通过两次转置卷积操作，将维度从256×64×64提升至32×256×256，这样做是为了将特征映射回原始图像的尺寸。</p>
+<p>另一分支则使用前面MLP的输出作为查询，执行token到图像的注意力（token to image attention）操作，生成两个输出流：一个是IoU输出token（1×256），它经过一个MLP层后，可以预测每个预测掩码与真实掩码间的交并比（IoU）；另一个输出是每个掩码的输出token（4×256），经过四个MLP层后得到(1+3)×32的张量。</p>
+<h2 id="24-output"><a class="markdownIt-Anchor" href="#24-output"></a> 2.4 output</h2>
+<h3 id="1-mask-postprocess"><a class="markdownIt-Anchor" href="#1-mask-postprocess"></a> 1 mask postprocess</h3>
+<img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-368b731f213aa3c4724e1bd7e2aa25c2_1440w.jpg" alt="img" style="zoom:33%;">
+<h3 id="2-anything"><a class="markdownIt-Anchor" href="#2-anything"></a> 2 anything</h3>
+<p><img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-058439b4335f20de64ddbc3e4fb740eb_1440w.jpg" alt="img"></p>
+<p>预先在图像上均匀分布32×32个点; 点是并行处理, 每个点的处理都是独立的, 每个点都独立地引导SAM去理解和解析图像的不同部分.  最后，去重保留剩下的mask，作为模型的最终输出。</p>
+<img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-0a40ecc546a9749ee00749a1eb9f37ab_r.jpg" alt="img" style="zoom:50%;">
+<h1 id="3-训练与推理"><a class="markdownIt-Anchor" href="#3-训练与推理"></a> 3 训练与推理</h1>
+<h2 id="31-模型参数"><a class="markdownIt-Anchor" href="#31-模型参数"></a> 3.1 模型参数</h2>
+<p>不同参数主要在image encoder上, 其次是mask decoder，而prompt encoder参数量最少。</p>
+<h2 id="32-训练数据"><a class="markdownIt-Anchor" href="#32-训练数据"></a> 3.2 训练数据</h2>
+<img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-60a38f496f476f527ec9e2530e4514d6_1440w.jpg" alt="img" style="zoom:50%;">
+<p><img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-7102f6210b480d347fd8e13bbb66bbbd_1440w.jpg" alt="img"></p>
+<p>SA-1B数据集的制作过程可以分为三个主要阶段。首先是辅助人工阶段，在这个阶段，使用公开的数据集训练了一个SAM模型。然后，标注员基于SAM预测的掩码进行修改，这个过程经过了5次的迭代，以确保数据的准确性。接下来是半自动阶段，主要用于标注传统语义分割不太关注的物体。同样，这个阶段也经过了5次的迭代，以提高数据的质量。最后是全自动阶段，采用了一系列技巧，如数据增强、更大的掩码解码器、更长时间的训练等，以进一步提升SAM生成的掩码的质量。</p>
+<h2 id="33-模型训练"><a class="markdownIt-Anchor" href="#33-模型训练"></a> 3.3 模型训练</h2>
+<img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-3b0dc1d7ad297a6f473d24f7eca06ba5_1440w.jpg" alt="img" style="zoom: 50%;">
+<p>采用了“通过在每个掩码上随机采样提示词进行11轮模拟交互设置”的方法来自动化构造提示词。</p>
+<p>随后，每一种构造的提示词都会与原图一起被送入解码器。解码器对每种提示进行处理，生成相应的掩码logits。每个掩码logits都会与真实的掩码标签进行比较，计算出一个损失值。</p>
+<p>这个损失值是模型学习过程中的关键反馈，它告诉模型预测的掩码与实际标注之间的相似度。通过这样的训练过程，SAM模型逐步学会如何更准确地预测掩码，即使在缺乏确切指示的情况下也能做出正确的分割。这种训练方法不仅提高了模型对用户输入的敏感性，也增强了模型处理不确定性的能力。</p>
+<h2 id="324-损失函数"><a class="markdownIt-Anchor" href="#324-损失函数"></a> 3.24 损失函数</h2>
+<h3 id="1-focal-loss"><a class="markdownIt-Anchor" href="#1-focal-loss"></a> 1. focal loss</h3>
+<img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-015a4fbf8e4a0f43d8ec188618ac270e_r.jpg" alt="img" style="zoom:50%;">
+<p>在图中，我们研究单个样本。横坐标表示预测正确的概率（前景预测为前景的概率，背景预测为背景的概率），纵轴表示在不同概率下的损失值。我们首先看到了交叉熵损失（Cross Entropy Loss，CE），它是常用的分类损失函数。然后，我们引入了焦点损失（Focal Loss，FL），其中γ表示一个控制焦点损失下沉程度的超参数。</p>
+<p>当γ等于0时，焦点损失等同于交叉熵损失，如图中最上面的蓝色曲线所示。但随着γ的增加，曲线逐渐下沉, 这种下降导致GT值在高位时(&gt;0.6), 此时的 Loss 被<strong>剧烈压低</strong>（衰减了约 99%），使得大量容易分类的背景样本产生的梯度被大幅抑制, loss下降不会那么明显;<br>
+而小于0.6部分loss值受到抑制较小，保留了大部分 Loss, 梯度会更加明显, 而这一部分往往都是难样本所在位置</p>
+<p>因此，焦点损失的关键在于它能够聚焦于难以分类的样本，帮助模型更好地应对类别不平衡问题，从而提高了模型的性能。</p>
+<img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-8fa930fa1505880c607c10245113cf78_1440w.jpg" alt="img" style="zoom:33%;">
+<h3 id="2-dice-loss"><a class="markdownIt-Anchor" href="#2-dice-loss"></a> 2 dice loss</h3>
+<img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-bb84a25acadaa3033756150cb6fc86e5_1440w.jpg" alt="img" style="zoom:33%;">
+<h2 id="35-多模态"><a class="markdownIt-Anchor" href="#35-多模态"></a> 3.5 多模态</h2>
+<h3 id="1-clip"><a class="markdownIt-Anchor" href="#1-clip"></a> 1  clip</h3>
+<p>实现文本和图片的嵌入到特征空间, 实现对齐. 从而衡量文本和图像的相似性</p>
+<p>在训练过程中，我们使用CLIP的图像编码器（CLIP image encoder）来获得图像嵌入（image embeddings）。然后，将这些图像嵌入作为文本的提示词（prompt）</p>
+<p>在SAM的推理阶段，当用户提供一个文本输入，比如&quot;cat&quot;，SAM会使用CLIP的文本编码器（CLIP text encoder）来生成文本嵌入（text embeddings）。然后，将这些文本嵌入作为文本提示词传递给SAM的提示词编码器</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/" data-id="cmsvp7so40000egv43g1b16rp" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2026/08/15/2026%E5%B9%B48%E6%9C%8815%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A303-Deeplab/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2026年8月15日 nnModel详解03-Deeplab</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>190</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>46</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2025 - 2026 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
