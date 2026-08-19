@@ -121,23 +121,23 @@
 <img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/image-20260816113220260.png" alt="image-20260816113220260" style="zoom:50%;">
 <p>SAM的内部结构。模型由3个主要部分组成：提示词编码器、图像编码器和一个轻量级的掩码解码器。</p>
 <h1 id="2-细节"><a class="markdownIt-Anchor" href="#2-细节"></a> 2 细节</h1>
-<h2 id="21-prompt"><a class="markdownIt-Anchor" href="#21-prompt"></a> 2.1 prompt</h2>
+<h2 id="21-prompt-encoder"><a class="markdownIt-Anchor" href="#21-prompt-encoder"></a> 2.1 prompt encoder</h2>
 <h3 id="1-prompt处理"><a class="markdownIt-Anchor" href="#1-prompt处理"></a> 1 prompt处理</h3>
 <p>这里的提示信息可以是mask、points、box或者是text，</p>
 <p>如果是mask的话则使用卷积来进行表示，<br>
 如果是其余的三种提示词则使用位置编码的形式来进行表示，其中text可以通过clip一类的模型获取词嵌入</p>
 <p><img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/cba841f470aeedd426d117d0e8b47bfa.png" alt="image-20240808233331811"></p>
 <h3 id="2-encoder"><a class="markdownIt-Anchor" href="#2-encoder"></a> 2 encoder</h3>
+<img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-74a646d339bfd3119e0a0941f09f3b48_1440w.jpg" alt="img" style="zoom:50%;">
 <img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-451e76db9dce6cfece36621e66887697_1440w.jpg" alt="img" style="zoom: 50%;">
 <p>首先，mask提示允许我们直接在原像上指示感兴趣区域来引导模型。这些mask通过卷积操作被转换为与图像嵌入空间相匹配的特征，然后与图像嵌入相加结合，为模型提供分割的精确位置信息。如果没有使用mask提示，则用一组可学习向量(no_mask_embed, 1×256) expand为256×64×64后替代。</p>
 <p>而文本提示，利用了CLIP的文本编码器，将描述性的语言输入转换为模型可以理解的嵌入向量。比如输入“黑耳朵的猫”，文本编码器就能将这些词转换为一个强大的特征描述，引导模型聚焦于具有这些特征的图像区域。</p>
-<h2 id="22-图像"><a class="markdownIt-Anchor" href="#22-图像"></a> 2.2 图像</h2>
+<h2 id="22-image-encoder"><a class="markdownIt-Anchor" href="#22-image-encoder"></a> 2.2 image encoder</h2>
 <h3 id="1-图像预处理"><a class="markdownIt-Anchor" href="#1-图像预处理"></a> 1 图像预处理</h3>
 <img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-b01690c25be5f84e309aaa59a4716f7d_r.jpg" alt="img" style="zoom: 25%;">
 <p>首先，我们以保持图像的宽高比的方式将图像最长边放缩到1024。</p>
 <p>接下来是颜色归一化。通过从每个像素中减去平均值并除以标准差，颜色归一化的目的是为了统一不同图像的颜色范围，减少照明条件和设备差异对模型训练的影响，从而提高模型的泛化能力和加快训练速度。</p>
 <p>最后，我们会应用填充（Padding），以确保所有的图像都有相同的维度即1024*1024.</p>
-<img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-74a646d339bfd3119e0a0941f09f3b48_1440w.jpg" alt="img" style="zoom:50%;">
 <h3 id="2-image-encoder"><a class="markdownIt-Anchor" href="#2-image-encoder"></a> 2 image encoder</h3>
 <img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-e12c8423d16455c4c6f7b13c66a287a9_r.jpg" alt="img" style="zoom:33%;">
 <p>这部分使用VIT, 主要是SAM理解图像的重要部分</p>
@@ -172,7 +172,7 @@ mask tokens的角色是作为预测具体分割掩码的占位符，之所以有
 <p>另一分支则使用前面MLP的输出作为查询，执行token到图像的注意力（token to image attention）操作，生成两个输出流：一个是IoU输出token（1×256），它经过一个MLP层后，可以预测每个预测掩码与真实掩码间的交并比（IoU）；另一个输出是每个掩码的输出token（4×256），经过四个MLP层后得到(1+3)×32的张量。</p>
 <h2 id="24-output"><a class="markdownIt-Anchor" href="#24-output"></a> 2.4 output</h2>
 <h3 id="1-mask-postprocess"><a class="markdownIt-Anchor" href="#1-mask-postprocess"></a> 1 mask postprocess</h3>
-<img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-368b731f213aa3c4724e1bd7e2aa25c2_1440w.jpg" alt="img" style="zoom:33%;">
+<img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-368b731f213aa3c4724e1bd7e2aa25c2_1440w.jpg" alt="img" style="zoom: 50%;">
 <h3 id="2-anything"><a class="markdownIt-Anchor" href="#2-anything"></a> 2 anything</h3>
 <p><img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-058439b4335f20de64ddbc3e4fb740eb_1440w.jpg" alt="img"></p>
 <p>预先在图像上均匀分布32×32个点; 点是并行处理, 每个点的处理都是独立的, 每个点都独立地引导SAM去理解和解析图像的不同部分.  最后，去重保留剩下的mask，作为模型的最终输出。</p>
@@ -204,6 +204,76 @@ mask tokens的角色是作为预测具体分割掩码的占位符，之所以有
 <p>实现文本和图片的嵌入到特征空间, 实现对齐. 从而衡量文本和图像的相似性</p>
 <p>在训练过程中，我们使用CLIP的图像编码器（CLIP image encoder）来获得图像嵌入（image embeddings）。然后，将这些图像嵌入作为文本的提示词（prompt）</p>
 <p>在SAM的推理阶段，当用户提供一个文本输入，比如&quot;cat&quot;，SAM会使用CLIP的文本编码器（CLIP text encoder）来生成文本嵌入（text embeddings）。然后，将这些文本嵌入作为文本提示词传递给SAM的提示词编码器</p>
+<h1 id="4-sam2"><a class="markdownIt-Anchor" href="#4-sam2"></a> 4 sam2</h1>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/718534459">https://zhuanlan.zhihu.com/p/718534459</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/1934197096749208793">https://zhuanlan.zhihu.com/p/1934197096749208793</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_52694742/article/details/156659534">https://blog.csdn.net/weixin_52694742/article/details/156659534</a></p>
+</blockquote>
+<p>主要是添加视频支持以及工程推理优化</p>
+<h2 id="41-主要改进"><a class="markdownIt-Anchor" href="#41-主要改进"></a> 4.1 主要改进</h2>
+<ol>
+<li>增视频/动态序列分割能力，支持帧间掩码跟踪与增量推理；</li>
+<li>优化推理效率，ViT-B backbone在消费级GPU上可达10+ FPS，满足机器人实时性要求；</li>
+<li>增强交互性，支持“时序提示”（如前一帧的掩码作为后一帧提示），适配机器人自主修正分割结果的需求；</li>
+<li>支持全景分割、实例分割、语义分割的统一输出，覆盖机器人视觉的多维度场景需求。</li>
+</ol>
+<h2 id="42-细节"><a class="markdownIt-Anchor" href="#42-细节"></a> 4.2 细节</h2>
+<h3 id="1-prompt-encoder"><a class="markdownIt-Anchor" href="#1-prompt-encoder"></a> 1 Prompt Encoder</h3>
+<p>核心功能：将多模态提示（点、框、掩码、文本、时序掩码）编码为与图像特征对齐的向量；</p>
+<p>关键创新（时序提示）：</p>
+<ul>
+<li>支持“历史掩码提示”：机器人视觉中，前一帧分割的掩码可作为后一帧的提示，避免重复标注，提升跟踪分割的稳定性；</li>
+<li>提示优先级机制：工程上可自定义“框&gt;点&gt;时序掩码”的优先级，适配机器人抓取场景中“先框选目标，再用点修正边缘”的交互逻辑。</li>
+</ul>
+<h3 id="2-image-encoder-2"><a class="markdownIt-Anchor" href="#2-image-encoder-2"></a> 2 Image Encoder</h3>
+<p>基础架构：基于改进的Vision Transformer（ViT），提供ViT-H/L/B三种backbone（分别对应高/中/低精度，工程上机器人视觉常用ViT-B平衡速度与精度）；</p>
+<p>改进：</p>
+<ul>
+<li>**新增动态patch embedding：**支持可变输入分辨率（如机器人相机常见的640x480、1280x720），无需强制缩放至1024x1024，减少无效计算；</li>
+<li>**轻量化分支：**针对边缘设备（如Jetson Nano/Xavier），提供裁剪版ViT-B（减少注意力头数），算力需求降低40%。</li>
+</ul>
+<h3 id="3-mask-decoder"><a class="markdownIt-Anchor" href="#3-mask-decoder"></a> 3 Mask Decoder</h3>
+<p>核心重构：SAM1的掩码解码器仅支持单帧静态推理，SAM2新增<strong>循环掩码解码器（Recurrent Mask Decoder）</strong> 和<strong>记忆缓存（Memory Cache）</strong></p>
+<ul>
+<li>循环注意力层：建模帧间特征关联，仅<strong>更新帧间变化的区域特征</strong>，而非全帧重算，推理速度提升2-3倍；</li>
+<li>记忆缓存：缓存前N帧的关键特征（N可配置，默认5），机器人视觉中可根据帧率调整（如10 FPS场景下N=3），平衡内存占用与跟踪精度；</li>
+</ul>
+<p>输出优化：新增掩码质量评分（0-1），工程上可设置阈值（如0.7）过滤低质量掩码，避免机器人抓取错误目标。</p>
+<h2 id="43-memory-attention"><a class="markdownIt-Anchor" href="#43-memory-attention"></a> 4.3 memory attention</h2>
+<p>这是实现<strong>跨帧信息融合</strong>的关键。它是一个 Transformer 模块，能够让当前帧的特征与记忆库中存储的过去帧的特征进行交叉注意力计算。通过这种方式，模型在处理当前帧时，能够“回顾”目标对象在过去的样子和位置，从而更好地处理遮挡、形变等挑战。</p>
+<img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-a23023042b17c004a69e86ad4b95e6b8_1440w.jpg" alt="img" style="zoom:50%;">
+<p><strong>记忆编码器 (Memory Encoder)：</strong></p>
+<p>负责将当前帧的预测结果和图像编码器的特征进行融合，生成新的记忆，并存入记忆库中。</p>
+<p><strong>记忆库 (Memory Bank)：</strong></p>
+<p>SAM 2 的“长期记忆”与“短期记忆”中心。它以先进先出（FIFO）队列的形式，存储着两种关键信息：包含用户提示的历史帧 和 近期处理过的历史帧<br>
+这些记忆不仅有空间特征图，还包括从掩码解码器输出中提取的、代表对象高级语义的轻量级“对象指针”。<br>
+将<strong>时间位置信息</strong>嵌入到近期处理过的历史帧中，允许模型表示短期物体运动，但<strong>不包含到提示帧</strong>的记忆中，因为提示帧更稀疏且时间步也不一致 。<br>
+当处理单张图像时，记忆库为空，该模型就退化为与初代 SAM 类似的工作模式，从而实现了图像和视频任务的统一。</p>
+<p><strong>目标指针Object pointers:</strong></p>
+<h1 id="5-sam3"><a class="markdownIt-Anchor" href="#5-sam3"></a> 5 sam3</h1>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2511.16719">https://arxiv.org/abs/2511.16719</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/1975890913717940797">https://zhuanlan.zhihu.com/p/1975890913717940797</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/1982454759479862342">https://zhuanlan.zhihu.com/p/1982454759479862342</a></p>
+</blockquote>
+<p><strong>SM3 (Segment Anything with Concepts)</strong> 则是一次<strong>语义与视觉的深度融合</strong>。从 <strong>可提示视觉分割（PVS）</strong> 到 <strong>可提示概念分割（PCS）</strong> 的转型</p>
+<h2 id="51-主要改进"><a class="markdownIt-Anchor" href="#51-主要改进"></a> 5.1 主要改进</h2>
+<ol>
+<li>传统的 SAM 模型虽然能分割“一切”，但它往往不知道分割出来的是“什么”。SAM3 引入了<strong>Concept</strong> 的概念，旨在解决“在这个类别下，分割出所有实例”的难题。</li>
+<li>设计了一个统一的模型，同时作为<strong>检测器 (Detector) 和 跟踪器 (Tracker)。</strong></li>
+<li>SAM3 对<strong>文本提示 (Text Prompt)</strong> 的理解能力大幅提升与<strong>处理歧义</strong></li>
+<li>跟踪能力提升: <strong>周期性再提示（periodic re-prompting）</strong> 的机制</li>
+</ol>
+<h2 id="52-细节"><a class="markdownIt-Anchor" href="#52-细节"></a> 5.2 细节</h2>
+<h3 id="0-共享骨干网络感知编码器-perception-encoder"><a class="markdownIt-Anchor" href="#0-共享骨干网络感知编码器-perception-encoder"></a> <strong>0 共享骨干网络（感知编码器 Perception Encoder）</strong></h3>
+<p><img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-90a8d90d7fda73686623fcaeb5c94ba8_1440w.jpg" alt="img"></p>
+<h3 id="1-共享视觉编码器-shared-vision-encoder"><a class="markdownIt-Anchor" href="#1-共享视觉编码器-shared-vision-encoder"></a> 1 <strong>共享视觉编码器 (Shared Vision Encoder)</strong></h3>
+<p>检测和跟踪任务共享同一个强大的视觉 Backbone，大幅减少了计算冗余，提升了推理效率。</p>
+<p><img src="/2026/08/16/2026%E5%B9%B48%E6%9C%8816%E6%97%A5-nnModel%E8%AF%A6%E8%A7%A304-SAM/v2-4f46fc5d18904eda0a72c2e43bfbdd6a_1440w.jpg" alt="img"></p>
+<h3 id="2-视频跟踪器video-tracker"><a class="markdownIt-Anchor" href="#2-视频跟踪器video-tracker"></a> 2 视频跟踪器（Video Tracker）</h3>
+<h3 id="3-presence-token"><a class="markdownIt-Anchor" href="#3-presence-token"></a> 3  <strong>Presence Token</strong></h3>
+<p>引入了一个新的 token 机制，专门用于判断目标物体“是否存在”于当前画面中。这对于处理视频中的遮挡、消失与重现（Re-identification）至关重要。</p>
 
       
     </div>
