@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2026年8月26日 MRtrix3命令 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="数据查看     数据  .bval 弥散梯度下收集的数据  .bvec 施加的弥散梯度方向  .json 相位编码方向  mif格式 包含所有文件     命令  mrinfo   data 这些数据有什么区别?   流程  做了什么步骤?    步骤 执行命令 做了什么？ 目的与关键产物     [1&#x2F;8] 格式转换 mrconvert 将 NIfTI 格式转换为 MRtrix 专用的 MI">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2026年8月26日 MRtrix3命令">
+<meta property="og:url" content="https://shakewely.github.io/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="数据查看     数据  .bval 弥散梯度下收集的数据  .bvec 施加的弥散梯度方向  .json 相位编码方向  mif格式 包含所有文件     命令  mrinfo   data 这些数据有什么区别?   流程  做了什么步骤?    步骤 执行命令 做了什么？ 目的与关键产物     [1&#x2F;8] 格式转换 mrconvert 将 NIfTI 格式转换为 MRtrix 专用的 MI">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260831143521182.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260831144200588.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260831144520412.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260831145024149.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260831143816063.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826195340098.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826203659229.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826204042661.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826204125109.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826204424510.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826203014518.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826203038074.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826203042550.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826202911787.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826202902657.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826202907442.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826203209119.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826203201284.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826203156486.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826203244060.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826203248791.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826203252806.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826203329645.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826203338568.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826203343409.png">
+<meta property="article:published_time" content="2026-08-26T11:49:17.000Z">
+<meta property="article:modified_time" content="2026-08-31T15:20:00.838Z">
+<meta property="article:author" content="Weakliy">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shakewely.github.io/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260831143521182.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>194</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>46</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2026年8月26日-MRtrix3命令" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/" class="article-date">
+  <time class="post-time" datetime="2026-08-26T11:49:17.000Z" itemprop="datePublished">
+    <span class="post-month">8月</span><br/>
+    <span class="post-day">26</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2026年8月26日 MRtrix3命令
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="数据查看"><a class="markdownIt-Anchor" href="#数据查看"></a> 数据查看</h1>
+<h2 id><a class="markdownIt-Anchor" href="#"></a> </h2>
+<p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260831143521182.png" alt="image-20260831143521182"></p>
+<blockquote>
+<p>数据</p>
+</blockquote>
+<p><strong>.bval</strong></p>
+<p>弥散梯度下收集的数据</p>
+<p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260831144200588.png" alt="image-20260831144200588"></p>
+<p><strong>.bvec</strong></p>
+<p>施加的弥散梯度方向</p>
+<p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260831144520412.png" alt="image-20260831144520412"></p>
+<p><strong>.json</strong></p>
+<p>相位编码方向</p>
+<h2 id="mif格式"><a class="markdownIt-Anchor" href="#mif格式"></a> mif格式</h2>
+<p>包含所有文件</p>
+<p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260831145024149.png" alt="image-20260831145024149"></p>
+<h2 id="-2"><a class="markdownIt-Anchor" href="#-2"></a> </h2>
+<h1 id="命令"><a class="markdownIt-Anchor" href="#命令"></a> 命令</h1>
+<h3 id="mrinfo"><a class="markdownIt-Anchor" href="#mrinfo"></a> mrinfo</h3>
+<p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260831143816063.png" alt="image-20260831143816063"></p>
+<h2 id="data"><a class="markdownIt-Anchor" href="#data"></a> data</h2>
+<p>这些数据有什么区别?<br>
+<img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826195340098.png" alt="image-20260826195340098"></p>
+<h1 id="流程"><a class="markdownIt-Anchor" href="#流程"></a> 流程</h1>
+<h3 id="做了什么步骤"><a class="markdownIt-Anchor" href="#做了什么步骤"></a> 做了什么步骤?</h3>
+<table>
+<thead>
+<tr>
+<th><strong>步骤</strong></th>
+<th><strong>执行命令</strong></th>
+<th><strong>做了什么？</strong></th>
+<th><strong>目的与关键产物</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>[1/8] 格式转换</strong></td>
+<td><code>mrconvert</code></td>
+<td>将 NIfTI 格式转换为 MRtrix 专用的 MIF 格式，并将 <code>.bvec</code> / <code>.bval</code> 写入文件头。</td>
+<td>产出 <code>dwi_raw.mif</code>。MIF 格式处理弥散梯度信息更高效、不易丢失方向信息。</td>
+</tr>
+<tr>
+<td><strong>[2/8] 热噪声去除</strong></td>
+<td><code>dwidenoise</code></td>
+<td>使用 MP-PCA（Marchenko-Pastur 随机矩阵理论）算法评估并去除图像中的热噪声。</td>
+<td>产出 <code>dwi_denoised.mif</code> 和 <code>dwi_noise.mif</code>（噪声图）。在不损失空间分辨率的前提下显著提升信噪比（SNR）。</td>
+</tr>
+<tr>
+<td><strong>[3/8] 吉布斯环状伪影去除</strong></td>
+<td><code>mrdegibbs</code></td>
+<td>利用亚像素偏移算法去除 k-空间截断导致的吉布斯环状伪影（Gibbs Ringing）。</td>
+<td>产出 <code>dwi_unring.mif</code>。主要消除组织交界处（如脑脊液与脑组织边缘）的明暗相间条纹。</td>
+</tr>
+<tr>
+<td><strong>[4/8] 偏置场校正</strong></td>
+<td><code>dwibiascorrect ants</code></td>
+<td>调用 ANTs N4 算法，去除 MRI 磁场不均匀导致的低频信号强度不均（Bias Field）。</td>
+<td>产出 <code>dwi_bias.mif</code> 和 <code>bias_field.mif</code>。保证全脑同类组织的信号强度具有可比性。</td>
+</tr>
+<tr>
+<td><strong>[5/8] 脑掩膜提取与 b0 均值</strong></td>
+<td><code>dwi2mask</code> <code>dwiextract</code> + <code>mrmath</code></td>
+<td>自动剥离颅骨建立脑掩膜；提取所有 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>b</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">b=0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal">b</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 图像并计算平均 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>b</mi><mn>0</mn></msub></mrow><annotation encoding="application/x-tex">b_0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal">b</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span> 图。</td>
+<td>产出 <code>dwi_mask.mif</code>（颅脑掩膜）和 <code>mean_b0.mif</code>（结构参考图）。</td>
+</tr>
+<tr>
+<td><strong>[6/8] 弥散张量拟合 (DTI)</strong></td>
+<td><code>dwi2tensor</code> <code>tensor2metric</code></td>
+<td><strong>核心分析一</strong>：拟合传统 DTI 张量模型，计算常用标量指标。</td>
+<td>产出经典 DTI 指标（同时导出 <code>.nii.gz</code>）： • <strong>FA</strong> (<code>dti_fa</code>)：各向异性分数 • <strong>MD/ADC</strong> (<code>dti_md</code>)：平均弥散率 • <strong>AD</strong> (<code>dti_ad</code>)：轴向弥散率 • <strong>RD</strong> (<code>dti_rd</code>)：径向弥散率 • <strong>VEC</strong> (<code>dti_vec</code>)：主扩散方向矢量</td>
+</tr>
+<tr>
+<td><strong>[7/8] 多壳 CSD &amp; FOD 拟合</strong></td>
+<td><code>dwi2response dhollander</code> <code>dwi2fod msmt_csd</code> <code>mtnormalise</code></td>
+<td><strong>核心分析二</strong>：采用无监督算法估算白质/灰度/CSF 的响应函数，做<strong>多壳约束球面反演 (MSMT-CSD)</strong>，并做多组织归一化。</td>
+<td>产出 <strong>FOD（纤维方向分布）</strong> 文件：<code>fod_wm_norm.mif</code>。 为下一步（如 <code>06_tractography.sh</code> 纤维追踪）提供克服交叉纤维（Crossing Fibers）难题的高级方向数据。</td>
+</tr>
+<tr>
+<td><strong>[8/8] 导出与统计</strong></td>
+<td><code>mrconvert</code> <code>mrstats</code></td>
+<td>将关键 MIF 文件转回标准的 <code>.nii.gz</code>（方便 AFNI/FSL/ITK-SNAP 查看），并输出全脑 FA/MD 统计值。</td>
+<td>产出 <code>stats_fa.txt</code>、<code>stats_md.txt</code> 等日志，并在控制台直接打印全脑 FA/MD 平均值。</td>
+</tr>
+</tbody>
+</table>
+<h1 id="-3"><a class="markdownIt-Anchor" href="#-3"></a> </h1>
+<h1 id="分析"><a class="markdownIt-Anchor" href="#分析"></a> 分析</h1>
+<hr>
+<hr>
+<h3 id="05-图fa-md-mask-现有-afni-容器"><a class="markdownIt-Anchor" href="#05-图fa-md-mask-现有-afni-容器"></a> 05 图（FA / MD / mask）— 现有 AFNI 容器</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /opt/project_1/derivatives/v2/dwi</span><br><span class="line"></span><br><span class="line">afni mean_b0.nii.gz dti_fa.nii.gz dti_md.nii.gz dti_ad.nii.gz dti_rd.nii.gz dwi_mask.nii.gz tdi.nii.gz</span><br></pre></td></tr></table></figure>
+<p>Underlay 用 <code>mean_b0</code>，Overlay 用 <code>dti_fa</code>（白质亮、脑室暗）。<code>tdi</code> 是 06 的纤维密度图。</p>
+<p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826203659229.png" alt="image-20260826203659229"></p>
+<p>把 07 配到 T1 的图画在一起：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">AW=/opt/project_1/derivatives/v2/anat_aw/sub-1908021_aw</span><br><span class="line">QC=/opt/project_1/derivatives/v2/dwi/qc_aw</span><br><span class="line"></span><br><span class="line">afni \</span><br><span class="line">  <span class="variable">$&#123;AW&#125;</span>/sub-1908021_anat_ns.nii.gz \</span><br><span class="line">  <span class="variable">$&#123;QC&#125;</span>/mean_b0_in_t1.nii.gz \</span><br><span class="line">  <span class="variable">$&#123;QC&#125;</span>/dti_fa_in_t1.nii.gz \</span><br><span class="line">  <span class="variable">$&#123;QC&#125;</span>/dti_md_in_t1.nii.gz \</span><br><span class="line">  <span class="variable">$&#123;QC&#125;</span>/dwi_mask_in_t1_bin.nii.gz \</span><br><span class="line">  <span class="variable">$&#123;QC&#125;</span>/dti_fa_in_nmt.nii.gz</span><br></pre></td></tr></table></figure>
+<p>Underlay：<code>sub-1908021_anat_ns</code>；Overlay：<code>dti_fa_in_t1</code>。</p>
+<p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826204042661.png" alt="image-20260826204042661"></p>
+<hr>
+<h3 id="06-纤维-mrview"><a class="markdownIt-Anchor" href="#06-纤维-mrview"></a> 06 纤维 — <code>mrview</code></h3>
+<p><strong>看子集</strong> <code>tracks_view.tck</code>（2 万条），不要一上来开 20 万条的 <code>tracks_200000.tck</code>。</p>
+<p>新开一个 Git Bash（不要用已经在跑 AFNI 的那个）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> MSYS_NO_PATHCONV=1</span><br><span class="line"></span><br><span class="line">docker run --<span class="built_in">rm</span> -it \</span><br><span class="line">  -e DISPLAY=host.docker.internal:0.0 \</span><br><span class="line">  -v <span class="string">&quot;F:/MRI:/opt/workspace&quot;</span> \</span><br><span class="line">  -w /opt/workspace/project_1/derivatives/v2/dwi \</span><br><span class="line">  mrtrix3/mrtrix3:latest \</span><br><span class="line">  mrview dti_fa.nii.gz -tractography.load tracks_view.tck</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> MSYS_NO_PATHCONV=1</span><br><span class="line"></span><br><span class="line">docker run --<span class="built_in">rm</span> -it \</span><br><span class="line">  -e DISPLAY=host.docker.internal:0.0 \</span><br><span class="line">  -v <span class="string">&quot;E:/MRI/project_2_v4:/opt/workspace&quot;</span> \</span><br><span class="line">  -w /opt/workspace/sub-092390/ses-01/dwi \</span><br><span class="line">  mrtrix3/mrtrix3:latest \</span><br><span class="line">  mrview dti_fa.nii.gz -tractography.load tracks_view.tck</span><br></pre></td></tr></table></figure>
+<p>底图是 FA，纤维应沿白质走，不要大量穿出脑外。</p>
+<p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826204125109.png" alt="image-20260826204125109"></p>
+<p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826204424510.png" alt="image-20260826204424510"></p>
+<h3 id="07-质检先看这个"><a class="markdownIt-Anchor" href="#07-质检先看这个"></a> 07 质检（先看这个）</h3>
+<p>资源管理器直接打开：</p>
+<p><code>F:\MRI\project_1\derivatives\v2\dwi\qc_aw\</code></p>
+<table>
+<thead>
+<tr>
+<th>图</th>
+<th>看什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>qc_fa_on_t1.*.png</code></td>
+<td>FA 叠在 T1 上，白质应贴解剖</td>
+</tr>
+<tr>
+<td><code>qc_b0_on_t1.*.png</code></td>
+<td>mean b0 和 T1 轮廓</td>
+</tr>
+<tr>
+<td><code>qc_fa_on_nmt.*.png</code></td>
+<td>FA 已经变到 NMT</td>
+</tr>
+<tr>
+<td><code>qc_dwimask_on_t1.*.png</code></td>
+<td>DWI 掩膜有没有切脑</td>
+</tr>
+<tr>
+<td><code>qc_WMmask_on_b0.*.png</code></td>
+<td>SEG 白质是否落在 b0 上</td>
+</tr>
+</tbody>
+</table>
+<p>文字：<code>dice_dwi_t1.txt</code>（这次 Dice <strong>0.89</strong>）、<code>stats_roi_fa_md.txt</code>。</p>
+<h4 id="1-fa-叠在-t1-上白质应贴解剖"><a class="markdownIt-Anchor" href="#1-fa-叠在-t1-上白质应贴解剖"></a> 1. FA 叠在 T1 上，白质应贴解剖</h4>
+<blockquote>
+<p>看着还可以</p>
+</blockquote>
+<p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826203014518.png" alt="image-20260826203014518"></p>
+<p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826203038074.png" alt="image-20260826203038074"></p>
+<p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826203042550.png" alt="image-20260826203042550"></p>
+<h4 id="2-mean-b0-和-t1-轮廓"><a class="markdownIt-Anchor" href="#2-mean-b0-和-t1-轮廓"></a> 2. mean b0 和 T1 轮廓</h4>
+<p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826202911787.png" alt="image-20260826202911787"></p>
+<p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826202902657.png" alt></p>
+<p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826202907442.png" alt="image-20260826202907442"></p>
+<h4 id="3-fa-已经变到-nmt"><a class="markdownIt-Anchor" href="#3-fa-已经变到-nmt"></a> 3. FA 已经变到 NMT</h4>
+<p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826203209119.png" alt="image-20260826203209119"></p>
+<p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826203201284.png" alt="image-20260826203201284"></p>
+<p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826203156486.png" alt="image-20260826203156486"></p>
+<h4 id="4-dwi-掩膜有没有切脑"><a class="markdownIt-Anchor" href="#4-dwi-掩膜有没有切脑"></a> 4. DWI 掩膜有没有切脑</h4>
+<p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826203244060.png" alt="image-20260826203244060"></p>
+<p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826203248791.png" alt="image-20260826203248791"></p>
+<p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826203252806.png" alt="image-20260826203252806"></p>
+<h4 id="5-seg-白质是否落在-b0-上"><a class="markdownIt-Anchor" href="#5-seg-白质是否落在-b0-上"></a> 5. SEG 白质是否落在 b0 上</h4>
+<p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826203329645.png" alt="image-20260826203329645"></p>
+<p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826203338568.png" alt="image-20260826203338568"></p>
+<p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826203343409.png" alt="image-20260826203343409"></p>
+<hr>
+<h3 id="和-05-06-07-的对应"><a class="markdownIt-Anchor" href="#和-05-06-07-的对应"></a> 和 05 / 06 / 07 的对应</h3>
+<table>
+<thead>
+<tr>
+<th>脚本</th>
+<th>看什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>05</td>
+<td><code>dti_fa.nii.gz</code>、<code>mean_b0.nii.gz</code>、<code>stats_fa.txt</code></td>
+</tr>
+<tr>
+<td>06</td>
+<td><code>mrview</code> + <code>tracks_view.tck</code>，或 AFNI 里的 <code>tdi.nii.gz</code></td>
+</tr>
+<tr>
+<td>07</td>
+<td><code>qc_aw</code> 里的 png，以及 <code>dti_fa_in_t1</code></td>
+</tr>
+</tbody>
+</table>
+<p><code>run-mrtrix3.sh</code> 默认挂的是整个 <code>F:/MRI</code>，且<strong>没设 DISPLAY</strong>，不适合直接开 GUI。看纤维用上面那条带 <code>DISPLAY</code> 的 <code>docker run</code>。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/" data-id="cmthdxgxk0001c8v44wgf5ghq" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2026/08/29/2026%E5%B9%B48%E6%9C%8829%E6%97%A5-MRI-week3/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          2026年8月29日 MRI_week3
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2026/08/25/2026%E5%B9%B48%E6%9C%8825%E6%97%A5-anfi%E5%91%BD%E4%BB%A4/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2026年8月25日 anfi命令</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>194</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>46</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2025 - 2026 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>
