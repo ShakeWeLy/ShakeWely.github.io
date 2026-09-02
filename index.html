@@ -109,27 +109,76 @@
 <p>神经细胞细胞体+神经</p>
 <p>水分子沿着神经细胞轴突方向进行弥散 --&gt; 神经细胞轴突走向</p>
 </blockquote>
-<h4 id="b值"><a class="markdownIt-Anchor" href="#b值"></a> b值?</h4>
+<h2 id="b值"><a class="markdownIt-Anchor" href="#b值"></a> b值</h2>
+<p>MRI 会施加一组特殊的 diffusion gradient（扩散梯度），让 MRI 对水分子的运动变得敏感。</p>
+<p>b 值就是描述：</p>
+<blockquote>
+<p><strong>这一次采集对扩散有多强的“惩罚/敏感程度”。</strong></p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">b值</span><br><span class="line"> ↓</span><br><span class="line">扩散敏感程度</span><br><span class="line"></span><br><span class="line">b=0       几乎不看扩散</span><br><span class="line"> │</span><br><span class="line">b=500     开始敏感</span><br><span class="line"> │</span><br><span class="line">b=1000    常见</span><br><span class="line"> │</span><br><span class="line">b=2000    更敏感</span><br><span class="line"> │</span><br><span class="line">b=3000    非常敏感</span><br></pre></td></tr></table></figure>
+<p>所以：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">b=0</span><br></pre></td></tr></table></figure>
+<p>通常信号比较强。</p>
+<p>而：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">b=1000</span><br></pre></td></tr></table></figure>
+<p>如果水分子扩散得比较厉害，信号就会衰减。</p>
 <p><img src="/2026/08/31/2026%E5%B9%B48%E6%9C%8831%E6%97%A5-MRI-Week4/image-20260831141114008.png" alt="image-20260831141114008"></p>
 <blockquote>
 <p>提高b值影响信噪比</p>
 </blockquote>
-<h2 id="相位编码方向"><a class="markdownIt-Anchor" href="#相位编码方向"></a> ? 相位编码方向</h2>
-<h3 id="fa-叠在-t1-上白质应贴解剖"><a class="markdownIt-Anchor" href="#fa-叠在-t1-上白质应贴解剖"></a> ? FA?  叠在 T1 上，白质应贴解剖</h3>
-<h3 id="弥散像配准到t1"><a class="markdownIt-Anchor" href="#弥散像配准到t1"></a> ? 弥散像配准到T1</h3>
+<h4 id="b0平均"><a class="markdownIt-Anchor" href="#b0平均"></a> b0平均</h4>
+<blockquote>
+<p>沿着第 4 维，把多个 b0 求平均。</p>
+</blockquote>
+<p>得到：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mean_b0</span><br></pre></td></tr></table></figure>
+<p>为什么要平均？</p>
+<p>因为单个 b0 可能有：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">噪声</span><br><span class="line">运动</span><br><span class="line">局部伪影</span><br></pre></td></tr></table></figure>
+<p>多个 b0 平均以后通常更加稳定。</p>
+<h2 id="相位编码方向"><a class="markdownIt-Anchor" href="#相位编码方向"></a> 相位编码方向</h2>
+<p>相位编码方向决定“EPI 图像发生畸变时，主要往哪个方向变形”。</p>
+<p>DWI 通常使用 <strong>EPI（Echo Planar Imaging）</strong> 快速采集。</p>
+<p>EPI 有一个很麻烦的问题：</p>
+<blockquote>
+<p><strong>对磁场不均匀非常敏感。</strong></p>
+</blockquote>
+<p>于是图像可能发生拉伸、压缩。</p>
+<p>关键是：</p>
+<blockquote>
+<p><strong>这种畸变主要沿着 phase-encoding（相位编码）方向发生。</strong></p>
+</blockquote>
+<h2 id="fa-叠在-t1-上白质应贴解剖"><a class="markdownIt-Anchor" href="#fa-叠在-t1-上白质应贴解剖"></a> FA?  叠在 T1 上，白质应贴解剖</h2>
+<blockquote>
+<h4 id="fa图是什么"><a class="markdownIt-Anchor" href="#fa图是什么"></a> FA图是什么?</h4>
+<p><strong>分数各向异性。</strong></p>
+<p>它衡量的是：</p>
+<blockquote>
+<p>一个 voxel 里的水分子扩散是不是具有明显的“方向性”。</p>
+</blockquote>
+<p>白质纤维排列比较有方向性水分子更倾向于沿着纤维方向扩散，因此 <strong>FA 较高</strong>。而灰质、CSF 的扩散方向性相对弱：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">高 FA</span><br><span class="line">  ↓</span><br><span class="line">比较可能是有序白质纤维区域</span><br><span class="line"></span><br><span class="line">低 FA</span><br><span class="line">  ↓</span><br><span class="line">灰质 / CSF / 各向同性区域</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>把 FA 图叠加到 T1 上，看 DTI 得到的白质分布是否和 T1 的解剖结构对应。</p>
+<p>如果你叠加之后发现：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">T1白质：       ███████</span><br><span class="line">FA高信号：        ███████</span><br><span class="line">                 ↑</span><br><span class="line">              错开了</span><br></pre></td></tr></table></figure>
+<p>那就说明可能存在：</p>
+<p><strong>DWI ↔ T1 配准问题。</strong></p>
+<h2 id="弥散像配准到t1"><a class="markdownIt-Anchor" href="#弥散像配准到t1"></a> 弥散像配准到T1</h2>
 <p>fsl软件</p>
 <p><img src="/2026/08/31/2026%E5%B9%B48%E6%9C%8831%E6%97%A5-MRI-Week4/image-20260831153559706.png" alt="image-20260831153559706"></p>
 <p><img src="/2026/08/31/2026%E5%B9%B48%E6%9C%8831%E6%97%A5-MRI-Week4/image-20260831153322812.png" alt="image-20260831153322812"></p>
 <p><img src="/2026/08/31/2026%E5%B9%B48%E6%9C%8831%E6%97%A5-MRI-Week4/image-20260831153342257.png" alt="image-20260831153342257"></p>
-<h2 id="free-进行大脑分区-roi纤维束分析"><a class="markdownIt-Anchor" href="#free-进行大脑分区-roi纤维束分析"></a> ? free 进行大脑分区+ ROI纤维束分析</h2>
+<h2 id="free-进行-大脑分区-roi纤维束分析"><a class="markdownIt-Anchor" href="#free-进行-大脑分区-roi纤维束分析"></a> free 进行 大脑分区+ ROI纤维束分析</h2>
 <blockquote>
 <p>运行会大于7小时</p>
 </blockquote>
 <p><img src="/2026/08/31/2026%E5%B9%B48%E6%9C%8831%E6%97%A5-MRI-Week4/image-20260831153704348.png" alt="image-20260831153704348"></p>
-<h2 id="五组织分区"><a class="markdownIt-Anchor" href="#五组织分区"></a> ? 五组织分区</h2>
+<h2 id="五-组织分区"><a class="markdownIt-Anchor" href="#五-组织分区"></a> 五 组织分区</h2>
 <p><img src="/2026/08/31/2026%E5%B9%B48%E6%9C%8831%E6%97%A5-MRI-Week4/image-20260831154026213.png" alt="image-20260831154026213"></p>
 <p><img src="/2026/08/31/2026%E5%B9%B48%E6%9C%8831%E6%97%A5-MRI-Week4/image-20260831154045665.png" alt="image-20260831154045665"></p>
-<h2 id="脑掩膜提取"><a class="markdownIt-Anchor" href="#脑掩膜提取"></a> ? 脑掩膜提取</h2>
+<h2 id="seg"><a class="markdownIt-Anchor" href="#seg"></a> <code>SEG</code>?</h2>
+<p>是 AW 产生的<strong>组织分割</strong></p>
 <h2 id="kan分类器增强非线性-2025年最大的学术正确-把最后那个全连接层换成kan就叫创新了"><a class="markdownIt-Anchor" href="#kan分类器增强非线性-2025年最大的学术正确-把最后那个全连接层换成kan就叫创新了"></a> ? <strong>“KAN分类器增强非线性”</strong> —— <strong>2025年最大的学术正确。</strong> 把最后那个全连接层换成KAN就叫创新了？</h2>
 <h2 id="功能脑网络和结构脑网络"><a class="markdownIt-Anchor" href="#功能脑网络和结构脑网络"></a> ? 功能脑网络和结构脑网络</h2>
 <h2 id="图卷积网络"><a class="markdownIt-Anchor" href="#图卷积网络"></a> ? 图卷积网络</h2>
@@ -328,7 +377,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="数据查看"><a class="markdownIt-Anchor" href="#数据查看"></a> 数据查看</h1>
-<h2 id><a class="markdownIt-Anchor" href="#"></a> </h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">sub001/</span><br><span class="line">├── dwi/</span><br><span class="line">│   ├── sub001_dwi.nii.gz</span><br><span class="line">│   ├── sub001_dwi.bval</span><br><span class="line">│   └── sub001_dwi.bvec</span><br><span class="line">└── anat/</span><br><span class="line">    └── sub001_T1w.nii.gz</span><br></pre></td></tr></table></figure>
 <p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260831143521182.png" alt="image-20260831143521182"></p>
 <blockquote>
 <p>数据</p>
@@ -344,7 +393,68 @@
 <h2 id="mif格式"><a class="markdownIt-Anchor" href="#mif格式"></a> mif格式</h2>
 <p>包含所有文件</p>
 <p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260831145024149.png" alt="image-20260831145024149"></p>
-<h2 id="-2"><a class="markdownIt-Anchor" href="#-2"></a> </h2>
+<h2 id="弥散张量"><a class="markdownIt-Anchor" href="#弥散张量"></a> 弥散张量</h2>
+<img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260901133200311.png" alt="image-20260901133200311" style="zoom:80%;">
+<p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260901133126961.png" alt="image-20260901133126961"></p>
+<p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260901133311816.png" alt="image-20260901133311816" style="zoom:33%;"><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260901133407382.png" alt="image-20260901133407382" style="zoom:33%;"><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260901133457637.png" alt="image-20260901133457637" style="zoom:33%;"></p>
+<blockquote>
+<p>各项同性和各项异性</p>
+</blockquote>
+<h3 id="1-fa"><a class="markdownIt-Anchor" href="#1-fa"></a> 1 fa</h3>
+<h2 id="csd"><a class="markdownIt-Anchor" href="#csd"></a> CSD</h2>
+<p>一个体素有多个纤维束</p>
+<img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260901133556614.png" alt="image-20260901133556614" style="zoom: 67%;">
+<h3 id="1-dwi2response"><a class="markdownIt-Anchor" href="#1-dwi2response"></a> 1 dwi2response</h3>
+<p>白质 b=0, 1000, 2000</p>
+<p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260901134153749.png" alt="image-20260901134153749" style="zoom:50%;"> <img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260901134138665.png" alt="image-20260901134138665" style="zoom:33%;"><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260901134147502.png" alt="image-20260901134147502">&gt;</p>
+<blockquote>
+<p>高B值各向异性</p>
+</blockquote>
+<p>灰质</p>
+<p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260901134309501.png" alt="image-20260901134254888" style="zoom:33%;"><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260901134320959.png" alt="image-20260901134320959" style="zoom:33%;"><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260901134325736.png" alt="image-20260901134325736" style="zoom:33%;"></p>
+<blockquote>
+<p>灰质下都是各项同性的</p>
+</blockquote>
+<p>脑脊液csf</p>
+<img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260901134426335.png" alt="image-20260901134426335" style="zoom: 50%;">
+<blockquote>
+<p>幅度很小–&gt; 区分脑脊液和灰质</p>
+</blockquote>
+<h3 id="2-dwi2fod"><a class="markdownIt-Anchor" href="#2-dwi2fod"></a> 2 dwi2fod</h3>
+<p>纤维走向分布</p>
+<img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260901140314841.png" alt="image-20260901140314841" style="zoom:33%;">
+<blockquote>
+<p>交叉纤维</p>
+</blockquote>
+<h2 id="纤维束追踪"><a class="markdownIt-Anchor" href="#纤维束追踪"></a> 纤维束追踪</h2>
+<h3 id="1-tckgen"><a class="markdownIt-Anchor" href="#1-tckgen"></a> 1 tckgen</h3>
+<img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260901140847202.png" alt="image-20260901140847202" style="zoom: 33%;">
+<h3 id="2-roi-追踪"><a class="markdownIt-Anchor" href="#2-roi-追踪"></a> 2 roi 追踪</h3>
+<img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260901141236342.png" alt="image-20260901141236342" style="zoom:50%;">
+<h2 id="分区连接"><a class="markdownIt-Anchor" href="#分区连接"></a> 分区连接</h2>
+<p><strong>分区模版</strong></p>
+<ol>
+<li>atlas模版</li>
+<li>…</li>
+</ol>
+<h3 id="1-labelconvert"><a class="markdownIt-Anchor" href="#1-labelconvert"></a> 1 labelconvert</h3>
+<h3 id="2-tck2connectome"><a class="markdownIt-Anchor" href="#2-tck2connectome"></a> 2 tck2connectome</h3>
+<h3 id="3-tcksample"><a class="markdownIt-Anchor" href="#3-tcksample"></a> 3 tcksample</h3>
+<blockquote>
+<p>使用强度或者平均值sample进行连接</p>
+</blockquote>
+<h3 id><a class="markdownIt-Anchor" href="#"></a> </h3>
+<h3 id="4-python-画图"><a class="markdownIt-Anchor" href="#4-python-画图"></a> 4 python 画图</h3>
+<h3 id="-2"><a class="markdownIt-Anchor" href="#-2"></a> </h3>
+<h2 id="评估"><a class="markdownIt-Anchor" href="#评估"></a> 评估</h2>
+<pre><code>             DTI
+              │
+    ┌─────────┼─────────┐
+    ↓         ↓         ↓
+   FA         MD        AD
+方向性强弱   平均扩散程度   主方向扩散程度
+</code></pre>
+<p>FA 看“扩散有没有方向性”，MD 看“总体扩散得厉不厉害”。 <code>AD</code> 沿着主要扩散方向的扩散程度。</p>
 <h1 id="命令"><a class="markdownIt-Anchor" href="#命令"></a> 命令</h1>
 <h3 id="mrinfo"><a class="markdownIt-Anchor" href="#mrinfo"></a> mrinfo</h3>
 <p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260831143816063.png" alt="image-20260831143816063"></p>
@@ -352,7 +462,9 @@
 <p>这些数据有什么区别?<br>
 <img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826195340098.png" alt="image-20260826195340098"></p>
 <h1 id="流程"><a class="markdownIt-Anchor" href="#流程"></a> 流程</h1>
-<h3 id="做了什么步骤"><a class="markdownIt-Anchor" href="#做了什么步骤"></a> 做了什么步骤?</h3>
+<h3 id="流程图"><a class="markdownIt-Anchor" href="#流程图"></a> 流程图</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">原始 DWI</span><br><span class="line">   ↓</span><br><span class="line">DWI 预处理</span><br><span class="line">   ↓</span><br><span class="line">去噪 / 去 Gibbs / 偏置场校正 / eddy 等</span><br><span class="line">   ↓</span><br><span class="line">得到“预处理后的 DWI”</span><br><span class="line">   │</span><br><span class="line">   ├──────────────→ DTI → FA / MD / AD / RD</span><br><span class="line">   │                         ↓</span><br><span class="line">   │                    配准到 T1</span><br><span class="line">   │                         ↓</span><br><span class="line">   │                    配准到 NMT</span><br><span class="line">   │                         ↓</span><br><span class="line">   │                    ROI统计</span><br><span class="line">   │</span><br><span class="line">   └──────────────→ CSD → FOD → Tractography</span><br><span class="line">                              ↓</span><br><span class="line">                         纤维束追踪</span><br></pre></td></tr></table></figure>
+<h3 id="预处理步骤"><a class="markdownIt-Anchor" href="#预处理步骤"></a> 预处理步骤?</h3>
 <table>
 <thead>
 <tr>
@@ -413,7 +525,43 @@
 </tr>
 </tbody>
 </table>
-<h1 id="-3"><a class="markdownIt-Anchor" href="#-3"></a> </h1>
+<h4 id="其他操作"><a class="markdownIt-Anchor" href="#其他操作"></a> 其他操作</h4>
+<blockquote>
+<p><strong>Bias correction：修“亮度不均”。</strong><br>
+<strong>Eddy：修“每个 DWI volume 动了/被涡流拉了”。</strong><br>
+<strong>Topup：修“整个 EPI 被磁场扭曲了”。</strong></p>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>修什么</th>
+<th>主要改变</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dwibiascorrect</code></td>
+<td>Bias Field</td>
+<td><strong>信号强度</strong></td>
+</tr>
+<tr>
+<td><code>eddy</code></td>
+<td>运动 + 涡流</td>
+<td><strong>volume之间的位置/形状</strong></td>
+</tr>
+<tr>
+<td><code>topup</code></td>
+<td>susceptibility distortion</td>
+<td><strong>EPI整体几何形变</strong></td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p>1 偏置场校正</p>
+<p>2 运动/涡流校正</p>
+<p>3 susceptibility 畸变校正</p>
+<h3 id="纤维束追踪操作"><a class="markdownIt-Anchor" href="#纤维束追踪操作"></a> 纤维束追踪操作</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">fod_wm_norm.mif</span><br><span class="line">      │</span><br><span class="line">      │ WM FOD</span><br><span class="line">      ↓</span><br><span class="line">FA &gt; 0.2</span><br><span class="line">      +</span><br><span class="line">DWI mask</span><br><span class="line">      ↓</span><br><span class="line">seed_wm.mif</span><br><span class="line">      │</span><br><span class="line">      ↓</span><br><span class="line">    tckgen</span><br><span class="line">    iFOD2</span><br><span class="line">      │</span><br><span class="line">      ↓</span><br><span class="line">200,000 条 streamlines</span><br><span class="line">      │</span><br><span class="line">      ├── tracks_200000.tck</span><br><span class="line">      │</span><br><span class="line">      ├── tdi.mif</span><br><span class="line">      │</span><br><span class="line">      └── tracks_view.tck</span><br></pre></td></tr></table></figure>
 <h1 id="分析"><a class="markdownIt-Anchor" href="#分析"></a> 分析</h1>
 <hr>
 <hr>
@@ -426,15 +574,7 @@
 <p>Underlay：<code>sub-1908021_anat_ns</code>；Overlay：<code>dti_fa_in_t1</code>。</p>
 <p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826204042661.png" alt="image-20260826204042661"></p>
 <hr>
-<h3 id="06-纤维-mrview"><a class="markdownIt-Anchor" href="#06-纤维-mrview"></a> 06 纤维 — <code>mrview</code></h3>
-<p><strong>看子集</strong> <code>tracks_view.tck</code>（2 万条），不要一上来开 20 万条的 <code>tracks_200000.tck</code>。</p>
-<p>新开一个 Git Bash（不要用已经在跑 AFNI 的那个）：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> MSYS_NO_PATHCONV=1</span><br><span class="line"></span><br><span class="line">docker run --<span class="built_in">rm</span> -it \</span><br><span class="line">  -e DISPLAY=host.docker.internal:0.0 \</span><br><span class="line">  -v <span class="string">&quot;F:/MRI:/opt/workspace&quot;</span> \</span><br><span class="line">  -w /opt/workspace/project_1/derivatives/v2/dwi \</span><br><span class="line">  mrtrix3/mrtrix3:latest \</span><br><span class="line">  mrview dti_fa.nii.gz -tractography.load tracks_view.tck</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> MSYS_NO_PATHCONV=1</span><br><span class="line"></span><br><span class="line">docker run --<span class="built_in">rm</span> -it \</span><br><span class="line">  -e DISPLAY=host.docker.internal:0.0 \</span><br><span class="line">  -v <span class="string">&quot;E:/MRI/project_2_v4:/opt/workspace&quot;</span> \</span><br><span class="line">  -w /opt/workspace/sub-092390/ses-01/dwi \</span><br><span class="line">  mrtrix3/mrtrix3:latest \</span><br><span class="line">  mrview dti_fa.nii.gz -tractography.load tracks_view.tck</span><br></pre></td></tr></table></figure>
-<p>底图是 FA，纤维应沿白质走，不要大量穿出脑外。</p>
-<p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826204125109.png" alt="image-20260826204125109"></p>
-<p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826204424510.png" alt="image-20260826204424510"></p>
-<h3 id="07-质检先看这个"><a class="markdownIt-Anchor" href="#07-质检先看这个"></a> 07 质检（先看这个）</h3>
+<h3 id="06-配准到t1质检"><a class="markdownIt-Anchor" href="#06-配准到t1质检"></a> 06 配准到T1质检</h3>
 <p>资源管理器直接打开：</p>
 <p><code>F:\MRI\project_1\derivatives\v2\dwi\qc_aw\</code></p>
 <table>
@@ -467,7 +607,129 @@
 </tr>
 </tbody>
 </table>
-<p>文字：<code>dice_dwi_t1.txt</code>（这次 Dice <strong>0.89</strong>）、<code>stats_roi_fa_md.txt</code>。</p>
+<blockquote>
+<p><strong>第一层：看原始 DWI / 预处理前后有没有明显问题</strong></p>
+<p>首先看：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mean_b0</span><br></pre></td></tr></table></figure>
+<p>检查：</p>
+<ul>
+<li>有没有明显信号缺失</li>
+<li>有没有严重运动伪影</li>
+<li>有没有条纹</li>
+<li>有没有脑外大量噪声</li>
+<li>左右、前后方向有没有异常</li>
+<li>脑是否完整</li>
+</ul>
+<p>如果你的 <code>05_dwi_mrtrix.sh</code> 里面做了：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">denoise</span><br><span class="line">degibbs</span><br><span class="line">bias correction</span><br><span class="line">eddy</span><br><span class="line">topup</span><br></pre></td></tr></table></figure>
+<p>最好比较：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">raw b0</span><br><span class="line">    ↓</span><br><span class="line">preprocessed b0</span><br></pre></td></tr></table></figure>
+<p>看看预处理之后有没有明显改善。</p>
+<p>特别是猴脑数据，头动和 EPI 畸变都值得注意。</p>
+<hr>
+<p><strong>第二层：检查 Brain Mask</strong></p>
+<p>你现在已经有：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dwi_mask.nii.gz</span><br></pre></td></tr></table></figure>
+<p>这个要看：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mean_b0</span><br><span class="line">    +</span><br><span class="line">dwi_mask</span><br></pre></td></tr></table></figure>
+<p>也就是你脚本里的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">qc_WMmask_on_b0</span><br></pre></td></tr></table></figure>
+<p>以及：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">qc_dwimask_on_t1</span><br></pre></td></tr></table></figure>
+<p>重点观察：</p>
+<blockquote>
+<p>mask 有没有把整个脑包住？</p>
+</blockquote>
+<p>比如正常：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">   _________</span><br><span class="line"> /           \</span><br><span class="line">|   ███████   |</span><br><span class="line">|  █████████  |</span><br><span class="line">|   ███████   |</span><br><span class="line"> \___________/</span><br></pre></td></tr></table></figure>
+<p>不应该出现：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">   _________</span><br><span class="line"> /           \</span><br><span class="line">|   █████     |</span><br><span class="line">|  ████       | ← 少了一块脑</span><br><span class="line">|             |</span><br><span class="line"> \___________/</span><br></pre></td></tr></table></figure>
+<p>或者：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">    mask</span><br><span class="line">     ↓</span><br><span class="line">██████████████</span><br><span class="line">      脑</span><br></pre></td></tr></table></figure>
+<p>mask 大量跑到脑外。</p>
+<hr>
+<p><strong>第三层：DWI → T1 配准</strong></p>
+<p>这个是你现在最需要关注的。</p>
+<p>你的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Dice = 0.9093</span><br></pre></td></tr></table></figure>
+<p>说明：</p>
+<blockquote>
+<p>DWI mask 和 T1 mask 的整体重叠很好。</p>
+</blockquote>
+<p>这是一个很好的指标。</p>
+<p>但还需要看：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">qc_b0_on_t1</span><br></pre></td></tr></table></figure>
+<p>也就是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">T1</span><br><span class="line"> +</span><br><span class="line">mean b0</span><br></pre></td></tr></table></figure>
+<p>看脑轮廓是否一致。</p>
+<p>然后看：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">qc_fa_on_t1</span><br></pre></td></tr></table></figure>
+<p>这个更加重要。</p>
+<p>因为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">T1</span><br><span class="line"> +</span><br><span class="line">FA</span><br></pre></td></tr></table></figure>
+<p>可以检查：</p>
+<blockquote>
+<p><strong>DWI 的扩散结构是不是落在正确的解剖位置。</strong></p>
+</blockquote>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">T1：</span><br><span class="line"></span><br><span class="line">皮层</span><br><span class="line">██████████████</span><br><span class="line"></span><br><span class="line">白质</span><br><span class="line"> ▓▓▓▓▓▓▓▓▓▓▓▓</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">FA：</span><br><span class="line"></span><br><span class="line">低 FA</span><br><span class="line">██████████████</span><br><span class="line"></span><br><span class="line">高 FA</span><br><span class="line"> ▓▓▓▓▓▓▓▓▓▓▓▓</span><br></pre></td></tr></table></figure>
+<p>如果位置基本一致，就很好。</p>
+<hr>
+<p><strong>第四层：看 FA / MD 的组织差异</strong></p>
+<p>你已经做了：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">WM FA ≈ 0.37</span><br><span class="line">GM FA ≈ 0.15</span><br></pre></td></tr></table></figure>
+<p>这其实是非常有意义的 QC。</p>
+<p>可以继续看：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">WM</span><br><span class="line">GM</span><br><span class="line">scGM</span><br><span class="line">CSF</span><br></pre></td></tr></table></figure>
+<p>分别的：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">FA mean</span><br><span class="line">FA median</span><br><span class="line">FA std</span><br><span class="line"></span><br><span class="line">MD mean</span><br><span class="line">MD median</span><br><span class="line">MD std</span><br></pre></td></tr></table></figure>
+<p>你的脚本已经自动输出：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stats_roi_fa_md.txt</span><br></pre></td></tr></table></figure>
+<p>例如最终可能是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">FA_WM   0.37 ...</span><br><span class="line">FA_GM   0.15 ...</span><br><span class="line">FA_scGM ...</span><br><span class="line">FA_CSF ...</span><br><span class="line"></span><br><span class="line">MD_WM   ...</span><br><span class="line">MD_GM   ...</span><br></pre></td></tr></table></figure>
+<p>这里主要看：</p>
+<blockquote>
+<p><strong>WM 和 GM 是否存在合理的 FA 差异。</strong></p>
+</blockquote>
+<p>通常应该：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">WM FA &gt; GM FA &gt; CSF FA</span><br></pre></td></tr></table></figure>
+<p>但不要把这个当成绝对规律，尤其不同数据采集参数、分辨率、b值、动物年龄、预处理方法都会影响数值。</p>
+<hr>
+<p><strong>第五层：看 FA 图本身</strong></p>
+<p>你可以把 FA 当成一张“白质质量地图”。</p>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">FA</span><br><span class="line"></span><br><span class="line">0 ─────────────────── 低</span><br><span class="line">      灰质</span><br><span class="line"></span><br><span class="line">      白质</span><br><span class="line">       ↑</span><br><span class="line">       │</span><br><span class="line">      高 FA</span><br><span class="line"></span><br><span class="line">1 ─────────────────── 高</span><br></pre></td></tr></table></figure>
+<p>重点观察：</p>
+<blockquote>
+<p>高 FA 是否主要位于白质。</p>
+</blockquote>
+<p>你现在：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">WM ≈ 0.37</span><br><span class="line">GM ≈ 0.15</span><br></pre></td></tr></table></figure>
+<p>已经说明这一点。</p>
+<p>但是还要看有没有：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">异常高 FA</span><br></pre></td></tr></table></figure>
+<p>比如脑外突然出现：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FA = 0.8</span><br></pre></td></tr></table></figure>
+<p>那通常就不太正常。</p>
+<hr>
+<p><strong>第六层：看 MD</strong></p>
+<p>MD 和 FA 是互补的。</p>
+<p>FA：</p>
+<blockquote>
+<p><strong>水扩散是否具有方向性</strong></p>
+</blockquote>
+<p>MD：</p>
+<blockquote>
+<p><strong>总体扩散程度有多大</strong></p>
+</blockquote>
+<p>所以：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">FA</span><br><span class="line"> ↓</span><br><span class="line">方向性</span><br><span class="line"></span><br><span class="line">MD</span><br><span class="line"> ↓</span><br><span class="line">扩散大小</span><br></pre></td></tr></table></figure>
+<p>你的脚本已经计算：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dti_md.nii.gz</span><br></pre></td></tr></table></figure>
+<p>所以也应该：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MD + T1</span><br></pre></td></tr></table></figure>
+<p>看看有没有异常区域。</p>
+</blockquote>
 <h4 id="1-fa-叠在-t1-上白质应贴解剖"><a class="markdownIt-Anchor" href="#1-fa-叠在-t1-上白质应贴解剖"></a> 1. FA 叠在 T1 上，白质应贴解剖</h4>
 <blockquote>
 <p>看着还可以</p>
@@ -491,6 +753,15 @@
 <p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826203329645.png" alt="image-20260826203329645"></p>
 <p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826203338568.png" alt="image-20260826203338568"></p>
 <p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826203343409.png" alt="image-20260826203343409"></p>
+<hr>
+<h3 id="07-纤维-mrview"><a class="markdownIt-Anchor" href="#07-纤维-mrview"></a> 07 纤维 — <code>mrview</code></h3>
+<p><strong>看子集</strong> <code>tracks_view.tck</code>（2 万条），不要一上来开 20 万条的 <code>tracks_200000.tck</code>。</p>
+<p>新开一个 Git Bash（不要用已经在跑 AFNI 的那个）：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> MSYS_NO_PATHCONV=1</span><br><span class="line"></span><br><span class="line">docker run --<span class="built_in">rm</span> -it \</span><br><span class="line">  -e DISPLAY=host.docker.internal:0.0 \</span><br><span class="line">  -v <span class="string">&quot;F:/MRI:/opt/workspace&quot;</span> \</span><br><span class="line">  -w /opt/workspace/project_2_v4/sub-092390/ses-01/dwi \</span><br><span class="line">  mrtrix3/mrtrix3:latest \</span><br><span class="line">  mrview dti_fa.nii.gz -tractography.load tracks_view.tck</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">export</span> MSYS_NO_PATHCONV=1</span><br><span class="line"></span><br><span class="line">docker run --<span class="built_in">rm</span> -it \</span><br><span class="line">  -e DISPLAY=host.docker.internal:0.0 \</span><br><span class="line">  -v <span class="string">&quot;E:/MRI/project_2_v4:/opt/workspace&quot;</span> \</span><br><span class="line">  -w /opt/workspace/sub-092390/ses-01/dwi \</span><br><span class="line">  mrtrix3/mrtrix3:latest \</span><br><span class="line">  mrview dti_fa.nii.gz -tractography.load tracks_view.tck</span><br></pre></td></tr></table></figure>
+<p>底图是 FA，纤维应沿白质走，不要大量穿出脑外。</p>
+<p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826204125109.png" alt="image-20260826204125109"></p>
+<p><img src="/2026/08/26/2026%E5%B9%B48%E6%9C%8826%E6%97%A5-MRtrix3%E5%91%BD%E4%BB%A4/image-20260826204424510.png" alt="image-20260826204424510"></p>
 <hr>
 <h3 id="和-05-06-07-的对应"><a class="markdownIt-Anchor" href="#和-05-06-07-的对应"></a> 和 05 / 06 / 07 的对应</h3>
 <table>

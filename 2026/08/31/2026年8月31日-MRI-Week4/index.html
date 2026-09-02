@@ -5,12 +5,12 @@
   
   <title>2026年8月31日 MRI Week4 | Weakliy_Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="灰质和白质  神经细胞细胞体+神经 水分子沿着神经细胞轴突方向进行弥散 --&gt; 神经细胞轴突走向   b值?   提高b值影响信噪比   ? 相位编码方向  ? FA?  叠在 T1 上，白质应贴解剖  ? 弥散像配准到T1 fsl软件     ? free 进行大脑分区+ ROI纤维束分析  运行会大于7小时    ? 五组织分区    ? 脑掩膜提取  ? “KAN分类器增强非线性”">
+  <meta name="description" content="灰质和白质  神经细胞细胞体+神经 水分子沿着神经细胞轴突方向进行弥散 --&gt; 神经细胞轴突走向   b值 MRI 会施加一组特殊的 diffusion gradient（扩散梯度），让 MRI 对水分子的运动变得敏感。 b 值就是描述：  这一次采集对扩散有多强的“惩罚&#x2F;敏感程度”。  12345678910111213b值 ↓扩散敏感程度b&#x3D;0       几乎不看扩散 │b&#x3D;500">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2026年8月31日 MRI Week4">
 <meta property="og:url" content="https://shakewely.github.io/2026/08/31/2026%E5%B9%B48%E6%9C%8831%E6%97%A5-MRI-Week4/index.html">
 <meta property="og:site_name" content="Weakliy_Blog">
-<meta property="og:description" content="灰质和白质  神经细胞细胞体+神经 水分子沿着神经细胞轴突方向进行弥散 --&gt; 神经细胞轴突走向   b值?   提高b值影响信噪比   ? 相位编码方向  ? FA?  叠在 T1 上，白质应贴解剖  ? 弥散像配准到T1 fsl软件     ? free 进行大脑分区+ ROI纤维束分析  运行会大于7小时    ? 五组织分区    ? 脑掩膜提取  ? “KAN分类器增强非线性”">
+<meta property="og:description" content="灰质和白质  神经细胞细胞体+神经 水分子沿着神经细胞轴突方向进行弥散 --&gt; 神经细胞轴突走向   b值 MRI 会施加一组特殊的 diffusion gradient（扩散梯度），让 MRI 对水分子的运动变得敏感。 b 值就是描述：  这一次采集对扩散有多强的“惩罚&#x2F;敏感程度”。  12345678910111213b值 ↓扩散敏感程度b&#x3D;0       几乎不看扩散 │b&#x3D;500">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://shakewely.github.io/2026/08/31/2026%E5%B9%B48%E6%9C%8831%E6%97%A5-MRI-Week4/image-20260831140629081.png">
 <meta property="og:image" content="https://shakewely.github.io/2026/08/31/2026%E5%B9%B48%E6%9C%8831%E6%97%A5-MRI-Week4/image-20260831141114008.png">
@@ -22,7 +22,7 @@
 <meta property="og:image" content="https://shakewely.github.io/2026/08/31/2026%E5%B9%B48%E6%9C%8831%E6%97%A5-MRI-Week4/image-20260831154045665.png">
 <meta property="og:image" content="https://shakewely.github.io/2026/08/31/2026%E5%B9%B48%E6%9C%8831%E6%97%A5-MRI-Week4/image-20260831204455750.png">
 <meta property="article:published_time" content="2026-08-31T06:06:15.000Z">
-<meta property="article:modified_time" content="2026-08-31T14:03:40.979Z">
+<meta property="article:modified_time" content="2026-09-01T02:43:55.972Z">
 <meta property="article:author" content="Weakliy">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://shakewely.github.io/2026/08/31/2026%E5%B9%B48%E6%9C%8831%E6%97%A5-MRI-Week4/image-20260831140629081.png">
@@ -121,27 +121,76 @@
 <p>神经细胞细胞体+神经</p>
 <p>水分子沿着神经细胞轴突方向进行弥散 --&gt; 神经细胞轴突走向</p>
 </blockquote>
-<h4 id="b值"><a class="markdownIt-Anchor" href="#b值"></a> b值?</h4>
+<h2 id="b值"><a class="markdownIt-Anchor" href="#b值"></a> b值</h2>
+<p>MRI 会施加一组特殊的 diffusion gradient（扩散梯度），让 MRI 对水分子的运动变得敏感。</p>
+<p>b 值就是描述：</p>
+<blockquote>
+<p><strong>这一次采集对扩散有多强的“惩罚/敏感程度”。</strong></p>
+</blockquote>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">b值</span><br><span class="line"> ↓</span><br><span class="line">扩散敏感程度</span><br><span class="line"></span><br><span class="line">b=0       几乎不看扩散</span><br><span class="line"> │</span><br><span class="line">b=500     开始敏感</span><br><span class="line"> │</span><br><span class="line">b=1000    常见</span><br><span class="line"> │</span><br><span class="line">b=2000    更敏感</span><br><span class="line"> │</span><br><span class="line">b=3000    非常敏感</span><br></pre></td></tr></table></figure>
+<p>所以：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">b=0</span><br></pre></td></tr></table></figure>
+<p>通常信号比较强。</p>
+<p>而：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">b=1000</span><br></pre></td></tr></table></figure>
+<p>如果水分子扩散得比较厉害，信号就会衰减。</p>
 <p><img src="/2026/08/31/2026%E5%B9%B48%E6%9C%8831%E6%97%A5-MRI-Week4/image-20260831141114008.png" alt="image-20260831141114008"></p>
 <blockquote>
 <p>提高b值影响信噪比</p>
 </blockquote>
-<h2 id="相位编码方向"><a class="markdownIt-Anchor" href="#相位编码方向"></a> ? 相位编码方向</h2>
-<h3 id="fa-叠在-t1-上白质应贴解剖"><a class="markdownIt-Anchor" href="#fa-叠在-t1-上白质应贴解剖"></a> ? FA?  叠在 T1 上，白质应贴解剖</h3>
-<h3 id="弥散像配准到t1"><a class="markdownIt-Anchor" href="#弥散像配准到t1"></a> ? 弥散像配准到T1</h3>
+<h4 id="b0平均"><a class="markdownIt-Anchor" href="#b0平均"></a> b0平均</h4>
+<blockquote>
+<p>沿着第 4 维，把多个 b0 求平均。</p>
+</blockquote>
+<p>得到：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mean_b0</span><br></pre></td></tr></table></figure>
+<p>为什么要平均？</p>
+<p>因为单个 b0 可能有：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">噪声</span><br><span class="line">运动</span><br><span class="line">局部伪影</span><br></pre></td></tr></table></figure>
+<p>多个 b0 平均以后通常更加稳定。</p>
+<h2 id="相位编码方向"><a class="markdownIt-Anchor" href="#相位编码方向"></a> 相位编码方向</h2>
+<p>相位编码方向决定“EPI 图像发生畸变时，主要往哪个方向变形”。</p>
+<p>DWI 通常使用 <strong>EPI（Echo Planar Imaging）</strong> 快速采集。</p>
+<p>EPI 有一个很麻烦的问题：</p>
+<blockquote>
+<p><strong>对磁场不均匀非常敏感。</strong></p>
+</blockquote>
+<p>于是图像可能发生拉伸、压缩。</p>
+<p>关键是：</p>
+<blockquote>
+<p><strong>这种畸变主要沿着 phase-encoding（相位编码）方向发生。</strong></p>
+</blockquote>
+<h2 id="fa-叠在-t1-上白质应贴解剖"><a class="markdownIt-Anchor" href="#fa-叠在-t1-上白质应贴解剖"></a> FA?  叠在 T1 上，白质应贴解剖</h2>
+<blockquote>
+<h4 id="fa图是什么"><a class="markdownIt-Anchor" href="#fa图是什么"></a> FA图是什么?</h4>
+<p><strong>分数各向异性。</strong></p>
+<p>它衡量的是：</p>
+<blockquote>
+<p>一个 voxel 里的水分子扩散是不是具有明显的“方向性”。</p>
+</blockquote>
+<p>白质纤维排列比较有方向性水分子更倾向于沿着纤维方向扩散，因此 <strong>FA 较高</strong>。而灰质、CSF 的扩散方向性相对弱：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">高 FA</span><br><span class="line">  ↓</span><br><span class="line">比较可能是有序白质纤维区域</span><br><span class="line"></span><br><span class="line">低 FA</span><br><span class="line">  ↓</span><br><span class="line">灰质 / CSF / 各向同性区域</span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>把 FA 图叠加到 T1 上，看 DTI 得到的白质分布是否和 T1 的解剖结构对应。</p>
+<p>如果你叠加之后发现：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">T1白质：       ███████</span><br><span class="line">FA高信号：        ███████</span><br><span class="line">                 ↑</span><br><span class="line">              错开了</span><br></pre></td></tr></table></figure>
+<p>那就说明可能存在：</p>
+<p><strong>DWI ↔ T1 配准问题。</strong></p>
+<h2 id="弥散像配准到t1"><a class="markdownIt-Anchor" href="#弥散像配准到t1"></a> 弥散像配准到T1</h2>
 <p>fsl软件</p>
 <p><img src="/2026/08/31/2026%E5%B9%B48%E6%9C%8831%E6%97%A5-MRI-Week4/image-20260831153559706.png" alt="image-20260831153559706"></p>
 <p><img src="/2026/08/31/2026%E5%B9%B48%E6%9C%8831%E6%97%A5-MRI-Week4/image-20260831153322812.png" alt="image-20260831153322812"></p>
 <p><img src="/2026/08/31/2026%E5%B9%B48%E6%9C%8831%E6%97%A5-MRI-Week4/image-20260831153342257.png" alt="image-20260831153342257"></p>
-<h2 id="free-进行大脑分区-roi纤维束分析"><a class="markdownIt-Anchor" href="#free-进行大脑分区-roi纤维束分析"></a> ? free 进行大脑分区+ ROI纤维束分析</h2>
+<h2 id="free-进行-大脑分区-roi纤维束分析"><a class="markdownIt-Anchor" href="#free-进行-大脑分区-roi纤维束分析"></a> free 进行 大脑分区+ ROI纤维束分析</h2>
 <blockquote>
 <p>运行会大于7小时</p>
 </blockquote>
 <p><img src="/2026/08/31/2026%E5%B9%B48%E6%9C%8831%E6%97%A5-MRI-Week4/image-20260831153704348.png" alt="image-20260831153704348"></p>
-<h2 id="五组织分区"><a class="markdownIt-Anchor" href="#五组织分区"></a> ? 五组织分区</h2>
+<h2 id="五-组织分区"><a class="markdownIt-Anchor" href="#五-组织分区"></a> 五 组织分区</h2>
 <p><img src="/2026/08/31/2026%E5%B9%B48%E6%9C%8831%E6%97%A5-MRI-Week4/image-20260831154026213.png" alt="image-20260831154026213"></p>
 <p><img src="/2026/08/31/2026%E5%B9%B48%E6%9C%8831%E6%97%A5-MRI-Week4/image-20260831154045665.png" alt="image-20260831154045665"></p>
-<h2 id="脑掩膜提取"><a class="markdownIt-Anchor" href="#脑掩膜提取"></a> ? 脑掩膜提取</h2>
+<h2 id="seg"><a class="markdownIt-Anchor" href="#seg"></a> <code>SEG</code>?</h2>
+<p>是 AW 产生的<strong>组织分割</strong></p>
 <h2 id="kan分类器增强非线性-2025年最大的学术正确-把最后那个全连接层换成kan就叫创新了"><a class="markdownIt-Anchor" href="#kan分类器增强非线性-2025年最大的学术正确-把最后那个全连接层换成kan就叫创新了"></a> ? <strong>“KAN分类器增强非线性”</strong> —— <strong>2025年最大的学术正确。</strong> 把最后那个全连接层换成KAN就叫创新了？</h2>
 <h2 id="功能脑网络和结构脑网络"><a class="markdownIt-Anchor" href="#功能脑网络和结构脑网络"></a> ? 功能脑网络和结构脑网络</h2>
 <h2 id="图卷积网络"><a class="markdownIt-Anchor" href="#图卷积网络"></a> ? 图卷积网络</h2>
