@@ -17,7 +17,7 @@
 <meta property="og:image" content="https://shakewely.github.io/2026/08/25/2026%E5%B9%B48%E6%9C%8825%E6%97%A5-anfi%E5%91%BD%E4%BB%A4/image-20260826212450858.png">
 <meta property="og:image" content="https://shakewely.github.io/2026/08/25/2026%E5%B9%B48%E6%9C%8825%E6%97%A5-anfi%E5%91%BD%E4%BB%A4/image-20260826212726329.png">
 <meta property="article:published_time" content="2026-08-25T14:09:54.000Z">
-<meta property="article:modified_time" content="2026-08-28T14:40:17.194Z">
+<meta property="article:modified_time" content="2026-09-09T13:12:45.539Z">
 <meta property="article:author" content="Weakliy">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://shakewely.github.io/2026/08/25/2026%E5%B9%B48%E6%9C%8825%E6%97%A5-anfi%E5%91%BD%E4%BB%A4/image-20260825233323032.png">
@@ -52,9 +52,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>194</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>203</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>46</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>47</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -357,71 +357,7 @@ D99，分区更细，同样已在 NMT 空间。看法同 CHARM。额极/眶额�
 里面有头动、censor 比例、TSNR。这次大约是：296 TR 全保留、平均位移 ~0.009 mm、TSNR ~226。</p>
 <hr>
 <p><strong>03 单独就算完整 AP。</strong> 04 只是额外的种子相关演示；不做视觉/听觉，流程在 03 结束即可。后面 DTI 的 05–07 和 AP 无关。</p>
-<h2 id="04种子相关后处理"><a class="markdownIt-Anchor" href="#04种子相关后处理"></a> 04：种子相关（后处理）</h2>
-<p><strong>作用：</strong> 在 03 的 <code>errts</code> 上问一个具体问题：和某个种子球同步的体素在哪。</p>
-<p><strong>做了什么：</strong></p>
-<ol>
-<li>在 NMT 上放两个 2.5 mm 种子球（视 <code>0 -22 18</code>，听 <code>12 -8 18</code>）</li>
-<li>取出种子平均时序</li>
-<li><code>3dTcorr1D</code>：全脑每个体素与该时序相关</li>
-<li>Fisher Z（<code>zcorr_*</code>）方便看图</li>
-</ol>
-<p><strong>核心产物：</strong> <code>derivatives/v2/func_rest/postproc/</code><br>
-<code>zcorr_vis</code> / <code>zcorr_aud</code>、种子球、运动摘要。</p>
-<p>04 <strong>不</strong>再做去噪、配准、平滑。</p>
-<hr>
-<h3 id="区别一句话"><a class="markdownIt-Anchor" href="#区别一句话"></a> 区别（一句话）</h3>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>03 AP</th>
-<th>04 种子相关</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>阶段</td>
-<td>预处理</td>
-<td>分析 / 后处理</td>
-</tr>
-<tr>
-<td>输入</td>
-<td>原始 <code>task-rest_bold</code> + 02 的 warp</td>
-<td>03 的 <code>errts</code></td>
-</tr>
-<tr>
-<td>输出</td>
-<td>全脑残差 4D + QC</td>
-<td>两张相关图</td>
-</tr>
-<tr>
-<td>对应 demo</td>
-<td><code>do_20_ap_vox</code></td>
-<td>更像 30 的“用残差做连接”，但是种子点不是 ROI 矩阵</td>
-</tr>
-<tr>
-<td>没 03 行不行</td>
-<td>必须先跑</td>
-<td>不能单独当预处理</td>
-</tr>
-</tbody>
-</table>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">原始 EPI --[03 AP]--&gt; errts（NMT 空间）</span><br><span class="line">errts    --[04]------&gt; 视觉/听觉种子相关图</span><br></pre></td></tr></table></figure>
-<hr>
-<p>在 GUI 容器里用这一条，视觉、听觉和 AP 质检图会一起进 AFNI：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> /opt/project_1/derivatives/v2/func_rest</span><br><span class="line"></span><br><span class="line">RES=sub-1908021.rest.results</span><br><span class="line">PP=postproc</span><br><span class="line"></span><br><span class="line">afni \</span><br><span class="line">  <span class="variable">$&#123;RES&#125;</span>/anat_final.sub-1908021.rest+tlrc \</span><br><span class="line">  <span class="variable">$&#123;RES&#125;</span>/mask_epi_anat.sub-1908021.rest+tlrc \</span><br><span class="line">  <span class="variable">$&#123;RES&#125;</span>/full_mask.sub-1908021.rest+tlrc \</span><br><span class="line">  <span class="variable">$&#123;RES&#125;</span>/TSNR.sub-1908021.rest+tlrc \</span><br><span class="line">  <span class="variable">$&#123;RES&#125;</span>/errts.sub-1908021.rest.tproject+tlrc \</span><br><span class="line">  <span class="variable">$&#123;RES&#125;</span>/all_runs.sub-1908021.rest+tlrc \</span><br><span class="line">  <span class="variable">$&#123;PP&#125;</span>/seed_vis+tlrc \</span><br><span class="line">  <span class="variable">$&#123;PP&#125;</span>/seed_aud+tlrc \</span><br><span class="line">  <span class="variable">$&#123;PP&#125;</span>/corr_vis+tlrc \</span><br><span class="line">  <span class="variable">$&#123;PP&#125;</span>/corr_aud+tlrc \</span><br><span class="line">  <span class="variable">$&#123;PP&#125;</span>/zcorr_vis+tlrc \</span><br><span class="line">  <span class="variable">$&#123;PP&#125;</span>/zcorr_aud+tlrc</span><br></pre></td></tr></table></figure>
-<p>想把 CHARM 也叠上看种子落在哪一叶，再加：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">afni \</span><br><span class="line">  <span class="variable">$&#123;RES&#125;</span>/anat_final.sub-1908021.rest+tlrc \</span><br><span class="line">  <span class="variable">$&#123;RES&#125;</span>/mask_epi_anat.sub-1908021.rest+tlrc \</span><br><span class="line">  <span class="variable">$&#123;RES&#125;</span>/full_mask.sub-1908021.rest+tlrc \</span><br><span class="line">  <span class="variable">$&#123;RES&#125;</span>/TSNR.sub-1908021.rest+tlrc \</span><br><span class="line">  <span class="variable">$&#123;RES&#125;</span>/errts.sub-1908021.rest.tproject+tlrc \</span><br><span class="line">  <span class="variable">$&#123;RES&#125;</span>/all_runs.sub-1908021.rest+tlrc \</span><br><span class="line">  <span class="variable">$&#123;PP&#125;</span>/seed_vis+tlrc \</span><br><span class="line">  <span class="variable">$&#123;PP&#125;</span>/seed_aud+tlrc \</span><br><span class="line">  <span class="variable">$&#123;PP&#125;</span>/corr_vis+tlrc \</span><br><span class="line">  <span class="variable">$&#123;PP&#125;</span>/corr_aud+tlrc \</span><br><span class="line">  <span class="variable">$&#123;PP&#125;</span>/zcorr_vis+tlrc \</span><br><span class="line">  <span class="variable">$&#123;PP&#125;</span>/zcorr_aud+tlrc \</span><br><span class="line">  /opt/project_1/derivatives/v2/anat_aw/sub-1908021_aw/CHARM_in_NMT_v2.0_sym_05mm.nii.gz \</span><br><span class="line">  /opt/project_1/derivatives/v2/anat_aw/sub-1908021_aw/D99_atlas_in_NMT_v2.0_sym_05mm.nii.gz</span><br></pre></td></tr></table></figure>
-<p>打开后：</p>
-<ol>
-<li><strong>Underlay</strong> 选 <code>anat_final</code></li>
-<li><strong>Overlay</strong> 先选 <code>zcorr_vis</code>，再换成 <code>zcorr_aud</code></li>
-<li>看种子落点：Overlay 换成 <code>seed_vis</code> / <code>seed_aud</code></li>
-<li>相关图阈值：Overlay 色条 <code>Reds_and_Blues</code>，约 <code>|Z| &gt; 0.3</code></li>
-<li>其他图：<code>TSNR</code>（信噪比）、<code>mask_epi_anat</code>（分析掩膜）、<code>errts</code>（残差时序，Switch 到 Graph）</li>
-</ol>
-<p><code>corr_*</code> 是原始 r，<code>zcorr_*</code> 是 Fisher Z，目视用 <strong>zcorr</strong> 即可。</p>
+<h2 id="04pp"><a class="markdownIt-Anchor" href="#04pp"></a> 04：pp</h2>
 
       
     </div>
@@ -496,9 +432,9 @@ D99，分区更细，同样已在 NMT 空间。看法同 CHARM。额极/眶额�
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>194</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>203</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>46</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>47</strong><br>标签</div></a>
     </div>
 
 

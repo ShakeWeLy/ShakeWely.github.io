@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2026年9月23日 训练日志记录 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="训练  1 怎么区分过拟合还是欠拟合 过拟合就是 train比较高0.7但是val低0.4, 主要看是不是相差大. 然后train还很低(不是0.8, 0.9),还说明模型有提升空间, 如果说Val 先升后降，那就非常支持过拟合。 欠拟合就是train和val都比较低   小目标没检测到不属于欠拟合吗?   可能是 也可能是类别不平衡导致的 123                 Train">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2026年9月23日 训练日志记录">
+<meta property="og:url" content="https://shakewely.github.io/2026/09/23/2026%E5%B9%B49%E6%9C%8823%E6%97%A5-%E8%AE%AD%E7%BB%83%E6%97%A5%E5%BF%97%E8%AE%B0%E5%BD%95/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="训练  1 怎么区分过拟合还是欠拟合 过拟合就是 train比较高0.7但是val低0.4, 主要看是不是相差大. 然后train还很低(不是0.8, 0.9),还说明模型有提升空间, 如果说Val 先升后降，那就非常支持过拟合。 欠拟合就是train和val都比较低   小目标没检测到不属于欠拟合吗?   可能是 也可能是类别不平衡导致的 123                 Train">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2026/09/23/2026%E5%B9%B49%E6%9C%8823%E6%97%A5-%E8%AE%AD%E7%BB%83%E6%97%A5%E5%BF%97%E8%AE%B0%E5%BD%95/image-20260924142016928.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/09/23/2026%E5%B9%B49%E6%9C%8823%E6%97%A5-%E8%AE%AD%E7%BB%83%E6%97%A5%E5%BF%97%E8%AE%B0%E5%BD%95/image-20260924210804318.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/09/23/2026%E5%B9%B49%E6%9C%8823%E6%97%A5-%E8%AE%AD%E7%BB%83%E6%97%A5%E5%BF%97%E8%AE%B0%E5%BD%95/image-20260924213351649.png">
+<meta property="article:published_time" content="2026-09-23T13:29:28.000Z">
+<meta property="article:modified_time" content="2026-10-01T05:33:50.679Z">
+<meta property="article:author" content="Weakliy">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shakewely.github.io/2026/09/23/2026%E5%B9%B49%E6%9C%8823%E6%97%A5-%E8%AE%AD%E7%BB%83%E6%97%A5%E5%BF%97%E8%AE%B0%E5%BD%95/image-20260924142016928.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>203</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>47</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2026年9月23日-训练日志记录" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/09/23/2026%E5%B9%B49%E6%9C%8823%E6%97%A5-%E8%AE%AD%E7%BB%83%E6%97%A5%E5%BF%97%E8%AE%B0%E5%BD%95/" class="article-date">
+  <time class="post-time" datetime="2026-09-23T13:29:28.000Z" itemprop="datePublished">
+    <span class="post-month">9月</span><br/>
+    <span class="post-day">23</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2026年9月23日 训练日志记录
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="训练"><a class="markdownIt-Anchor" href="#训练"></a> 训练</h1>
+<h2 id="1-怎么区分过拟合还是欠拟合"><a class="markdownIt-Anchor" href="#1-怎么区分过拟合还是欠拟合"></a> 1 怎么区分过拟合还是欠拟合</h2>
+<p>过拟合就是 train比较高0.7但是val低0.4, 主要看是不是相差大. 然后train还很低(不是0.8, 0.9),还说明模型有提升空间, 如果说Val 先升后降，那就非常支持过拟合。</p>
+<p>欠拟合就是train和val都比较低</p>
+<blockquote>
+<ol>
+<li>小目标没检测到不属于欠拟合吗?</li>
+</ol>
+<blockquote>
+<p>可能是</p>
+<p>也可能是类别不平衡导致的</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">                 Train       Val</span><br><span class="line">Liver             0.95       0.90</span><br><span class="line">Gallbladder       0.35       0.30</span><br></pre></td></tr></table></figure>
+<p>这才是类别层面的欠拟合</p>
+</blockquote>
+</blockquote>
+<p>总结:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">                 Train高       Train低</span><br><span class="line">Val高            正常/很好      可能欠拟合但泛化不错</span><br><span class="line">Val低            过拟合        欠拟合/数据或任务问题</span><br></pre></td></tr></table></figure>
+<h2 id="2-为什么attunet训练比psc训练慢那么多"><a class="markdownIt-Anchor" href="#2-为什么attunet训练比psc训练慢那么多"></a> 2 为什么attunet训练比PSC训练慢那么多</h2>
+<h2 id="3-训练结果问题"><a class="markdownIt-Anchor" href="#3-训练结果问题"></a> 3 训练结果问题</h2>
+<h3 id="31-有误识别的"><a class="markdownIt-Anchor" href="#31-有误识别的"></a> 3.1 有误识别的🤔</h3>
+<p><img src="/2026/09/23/2026%E5%B9%B49%E6%9C%8823%E6%97%A5-%E8%AE%AD%E7%BB%83%E6%97%A5%E5%BF%97%E8%AE%B0%E5%BD%95/image-20260924142016928.png" alt="image-20260924142016928"></p>
+<h3 id="32-类别崩塌class-collapse"><a class="markdownIt-Anchor" href="#32-类别崩塌class-collapse"></a> 3.2 类别崩塌（class collapse</h3>
+<p>这是典型的 类别崩塌（class collapse）：模型几乎学不会胰腺，却把大量背景/不确定区域都判成胰腺。</p>
+<h3 id="33-predict指标"><a class="markdownIt-Anchor" href="#33-predict指标"></a> 3.3 predict指标</h3>
+<blockquote>
+<p>给test在添加+ IoU + Precision + Recall相关的测试和可视化</p>
+<p>FP ratio = FP / (FP + TN)</p>
+<p>FN ratio = FN / (TP + FN)</p>
+<p>以及GT volume / area</p>
+<p>Prediction volume / area</p>
+<p>Prediction / GT</p>
+<p>​	GT 占比	预测占比</p>
+<p>需要总体和个体的指标个体能再叠在png吗</p>
+</blockquote>
+<h2 id="4-训练前期lever和spleen的dice很高-其他的dice一般般-会不会导致训练后期出现问题"><a class="markdownIt-Anchor" href="#4-训练前期lever和spleen的dice很高-其他的dice一般般-会不会导致训练后期出现问题"></a> 4 训练前期lever和spleen的dice很高, 其他的dice一般般, 会不会导致训练后期出现问题</h2>
+<p>主要还是看是不是难样本, 如果后期other class 也提升了, 那么久没什么问题, 如果上不去, 那可能是数据学习困难, 数据分布的问题</p>
+<p>模型先学会了容易分割的大器官，然后梯度和优化逐渐被这些容易类别主导，其他小器官/边界复杂器官学得比较慢。</p>
+<blockquote>
+<p>但是如果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Epoch 30</span><br><span class="line">Liver       0.93</span><br><span class="line">Spleen      0.91</span><br><span class="line">Others      0.60</span><br><span class="line"></span><br><span class="line">Epoch 60</span><br><span class="line">Liver       0.97</span><br><span class="line">Spleen      0.96</span><br><span class="line">Others      0.61</span><br><span class="line"></span><br><span class="line">Epoch 100</span><br><span class="line">Liver       0.98</span><br><span class="line">Spleen      0.97</span><br><span class="line">Others      0.59</span><br></pre></td></tr></table></figure>
+<p>那就比较值得警惕了。</p>
+<p>因为这时候可能发生的是：</p>
+<p><strong>模型越来越擅长“把大器官分好”，但没有真正解决困难类别。</strong></p>
+</blockquote>
+<h2 id="5-batch-size-也是会有影响的吧-如果一个batch-size-包含的难样本多一些-或者说包含的class-area有大有小-那么就比较好-是这样吗"><a class="markdownIt-Anchor" href="#5-batch-size-也是会有影响的吧-如果一个batch-size-包含的难样本多一些-或者说包含的class-area有大有小-那么就比较好-是这样吗"></a> 5 batch size 也是会有影响的吧, 如果一个batch size 包含的难样本多一些, 或者说包含的class area有大有小, 那么就比较好, 是这样吗&gt;?</h2>
+<p>一个 batch 内样本的类别/目标面积分布，会影响这一轮梯度的统计和方向</p>
+<blockquote>
+<p>你可以把它理解成：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">一个 batch</span><br><span class="line">    ↓</span><br><span class="line">多个 2D slice</span><br><span class="line">    ↓</span><br><span class="line">计算每张 slice 的 loss</span><br><span class="line">    ↓</span><br><span class="line">loss 聚合</span><br><span class="line">    ↓</span><br><span class="line">得到一个 batch gradient</span><br><span class="line">    ↓</span><br><span class="line">更新模型参数</span><br></pre></td></tr></table></figure>
+<p>所以如果 batch 里的样本构成发生变化，<strong>这一次参数更新的方向也会发生变化</strong>。</p>
+<p>比如你现在的多器官分割：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Batch A</span><br><span class="line">────────────────</span><br><span class="line">slice 1: liver 很大</span><br><span class="line">slice 2: liver 很大</span><br><span class="line">slice 3: spleen</span><br><span class="line">slice 4: liver</span><br><span class="line">slice 5: spleen</span><br><span class="line">slice 6: liver</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>那么这个 batch 的梯度可能明显偏向：</p>
+<blockquote>
+<p>“把 liver / spleen 分得更好。”</p>
+</blockquote>
+<p>而：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Batch B</span><br><span class="line">────────────────</span><br><span class="line">slice 1: gallbladder</span><br><span class="line">slice 2: kidney</span><br><span class="line">slice 3: esophagus</span><br><span class="line">slice 4: small organ</span><br><span class="line">slice 5: liver</span><br><span class="line">slice 6: kidney</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>这个 batch 对模型的要求就完全不一样。</p>
+<p>所以你说的：</p>
+<blockquote>
+<p>“一个 batch size 包含的难样本多一些”</p>
+</blockquote>
+<p>确实会影响训练。</p>
+<p>但这里有一个很重要的区别：</p>
+<p><strong>不是“难样本越多越好”。</strong></p>
+<p>例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Batch 1:</span><br><span class="line">80% 极难样本</span><br><span class="line">20% 普通样本</span><br></pre></td></tr></table></figure>
+<p>可能导致梯度噪声比较大，训练反而不稳定。</p>
+<p>更理想的是 batch 中具有一定的<strong>多样性</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">容易样本</span><br><span class="line">    +</span><br><span class="line">中等样本</span><br><span class="line">    +</span><br><span class="line">困难样本</span><br><span class="line">    +</span><br><span class="line">不同器官面积</span><br><span class="line">    +</span><br><span class="line">不同切面位置</span><br></pre></td></tr></table></figure>
+<p>这样每次更新的 gradient 会更加全面。</p>
+</blockquote>
+<hr>
+<hr>
+<h1 id="数据"><a class="markdownIt-Anchor" href="#数据"></a> 数据</h1>
+<h2 id="1-划分问题"><a class="markdownIt-Anchor" href="#1-划分问题"></a> 1 划分问题</h2>
+<p><strong>一定要确认你是按照“病例”划分，而不是按照 slice 划分。</strong></p>
+<p>正确应该类似：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Case 1 ───── train</span><br><span class="line">Case 2 ───── train</span><br><span class="line">Case 3 ───── train</span><br><span class="line">...</span><br><span class="line">Case 18 ──── val</span><br><span class="line">Case 19 ──── val</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>而不是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Case 1</span><br><span class="line"> ├─ slice 1 → train</span><br><span class="line"> ├─ slice 2 → train</span><br><span class="line"> ├─ slice 3 → val</span><br><span class="line"> ├─ slice 4 → train</span><br><span class="line"> └─ slice 5 → val</span><br></pre></td></tr></table></figure>
+<p>如果后者发生，你甚至可能得到反过来的问题——验证集和训练集高度相关。</p>
+<h2 id="2-dataloader问题"><a class="markdownIt-Anchor" href="#2-dataloader问题"></a> 2 dataloader问题</h2>
+<p>让每次batch 尽量包含所有样本. 或者说是包含难样本</p>
+<h2 id="3-难样本只数据粘粘"><a class="markdownIt-Anchor" href="#3-难样本只数据粘粘"></a> 3 难样本只数据粘粘🤔</h2>
+<img src="/2026/09/23/2026%E5%B9%B49%E6%9C%8823%E6%97%A5-%E8%AE%AD%E7%BB%83%E6%97%A5%E5%BF%97%E8%AE%B0%E5%BD%95/image-20260924210804318.png" alt="image-20260924210804318" style="zoom: 67%;">
+<h2 id="4-分割不全"><a class="markdownIt-Anchor" href="#4-分割不全"></a> 4 分割不全🤔</h2>
+<p><img src="/2026/09/23/2026%E5%B9%B49%E6%9C%8823%E6%97%A5-%E8%AE%AD%E7%BB%83%E6%97%A5%E5%BF%97%E8%AE%B0%E5%BD%95/image-20260924213351649.png" alt="image-20260924213351649"></p>
+<hr>
+<hr>
+<h1 id="loss"><a class="markdownIt-Anchor" href="#loss"></a> loss</h1>
+<h2 id="1-loss改进"><a class="markdownIt-Anchor" href="#1-loss改进"></a> 1 loss改进</h2>
+<p><code>Cross Entropy (CE)</code> 更关注：</p>
+<blockquote>
+<p><strong>每一个像素分类得对不对。</strong></p>
+</blockquote>
+<p><code>Dice Loss</code> 更关注：</p>
+<blockquote>
+<p><strong>预测出来的整个区域，和 GT 重不重合。</strong></p>
+</blockquote>
+<p><code>Focal Loss</code> 更关注：</p>
+<blockquote>
+<p><strong>那些模型容易错、难分类的像素。</strong></p>
+</blockquote>
+<h2 id="2-混淆均值"><a class="markdownIt-Anchor" href="#2-混淆均值"></a> 2 混淆均值</h2>
+<p>TN TP FP FN</p>
+<p>先计算每一个类的TP</p>
+<p>比如A</p>
+<p>TP: 正确预测为A<br>
+FP: <s>正确为A但是预测为其他类</s> : 真实不是 A，但模型预测为 A<br>
+<strong>TN</strong>: <s>不是A,正确预测为其他类</s> 真实不是 A，模型也预测不是 A<br>
+FN: <s>不是A,  却预测为A了</s> : 真实是 A，但模型预测不是 A</p>
+<blockquote>
+<p>P就是模型预测的是不是该类</p>
+</blockquote>
+<h2 id="3-ce-loos"><a class="markdownIt-Anchor" href="#3-ce-loos"></a> 3 CE loos</h2>
+<p>就是交叉熵函数</p>
+<p>一开始是用于二分类,</p>
+<p>计算步骤为, 先进行<s>softmax</s><strong>sigmoid</strong> , 计算出类别概率</p>
+<p>然后按照公式计算:</p>
+<p>loss = log(p)+log(1-p)</p>
+<p>如果是多分类<br>
+先对 logits 做 <strong>softmax</strong></p>
+<p><s>则计算每一类的log(p) 然后加权求和</s></p>
+<p>只计算这个正确类的概率, 然后在batch进行求平均</p>
+<h2 id="4-dice"><a class="markdownIt-Anchor" href="#4-dice"></a> 4 Dice</h2>
+<p>直观解释就是衡量重叠程度</p>
+<p>用混淆矩阵的 TP、FP、FN 表示：</p>
+<p class="katex-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>D</mi><mi>i</mi><mi>c</mi><mi>e</mi><mo>=</mo><mn>2</mn><mi>T</mi><mi>P</mi><mi mathvariant="normal">/</mi><mn>2</mn><mi>T</mi><mi>P</mi><mo>+</mo><mi>F</mi><mi>P</mi><mo>+</mo><mi>F</mi><mi>N</mi></mrow><annotation encoding="application/x-tex">Dice=2TP/2TP+FP+FN
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mord mathnormal">i</span><span class="mord mathnormal">c</span><span class="mord mathnormal">e</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">2</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mord">/</span><span class="mord">2</span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">F</span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">F</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span></span></span></span></span></p>
+<p>对于多分类</p>
+<p>先计算每一个class 的dice, 然后进行宏平均(每个类的Dice求和取平均)或者微平均(先把所有类别的 TP、FP、FN 分别累加, 再计算总Dice)</p>
+<h2 id="5-l2正则化"><a class="markdownIt-Anchor" href="#5-l2正则化"></a> 5 L2正则化</h2>
+<p>是什么<br>
+<s>是一种模型训练时防止过拟合的手段, 主要是通过给梯度添加限制来实现, 从而减少loss的数值下降太快</s></p>
+<p>在loss函数里, 加一项权重的平方和, 以此来惩罚过大的权重</p>
+<p class="katex-block"><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mo>∗</mo><mi>L</mi><mo>∗</mo><mo>=</mo><mo>∗</mo><mi>L</mi><mo>∗</mo><mi>d</mi><mi>a</mi><mi>t</mi><mi>a</mi><mo>+</mo><mn>2</mn><mo>∗</mo><mi>λ</mi><mo>∗</mo><mo>∗</mo><mi>i</mi><mo>∗</mo><mo>∑</mo><mo>∗</mo><mi>w</mi><mo>∗</mo><mo>∗</mo><mi>i</mi><mo>∗</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">*L*=*L*data+2*λ**i*∑*w**i*2
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord">∗</span><span class="mord mathnormal">L</span><span class="mord">∗</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord">∗</span><span class="mord mathnormal">L</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.77777em;vertical-align:-0.08333em;"></span><span class="mord mathnormal">d</span><span class="mord mathnormal">a</span><span class="mord mathnormal">t</span><span class="mord mathnormal">a</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathnormal">λ</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord">∗</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1.6000100000000002em;vertical-align:-0.55001em;"></span><span class="mop op-symbol large-op" style="position:relative;top:-0.000004999999999977245em;">∑</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">∗</span><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord">∗</span><span class="mord mathnormal">i</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span></span></span></span></span></p>
+<p>这样就能实现对权重进行缩放</p>
+<p>梯度dl/dw = dy/dw + aw  -&gt;  w = w -r(dl/dw) =&gt; w = w(1-ar) - r*dy/dw</p>
+<p>为什么<br>
+<s>正常的梯度下降公式w = w - lr x dt<br>
+添加L2正则化后, 会给dt 做限制, 显示通过一个参数a: 使得dt = dt + a x dt</s></p>
+<ol>
+<li>
+<p>权重大容易记住噪声🤔</p>
+</li>
+<li>
+<p>权重小票-&gt; 函数平滑 -&gt; 泛化更好</p>
+<blockquote>
+<p>因为权重数值大, 跳跃就大, 会导致优化方向波动大, 难优化</p>
+<p>权重大小直接决定了：</p>
+<blockquote>
+<p>输入变一点，输出会变多少。</p>
+</blockquote>
+<ul>
+<li><em>w</em> 很大 → 输入稍微变一点，输出剧烈变化 → 函数<strong>陡峭、敏感</strong></li>
+<li><em>w</em> 很小 → 输入变一点，输出变化很小 → 函数<strong>平缓、平滑</strong></li>
+</ul>
+</blockquote>
+</li>
+</ol>
+<p>用在哪?<br>
+<s>用在loss函数里, 减缓loss只下降过快</s></p>
+<h2 id="6-l1正则化"><a class="markdownIt-Anchor" href="#6-l1正则化"></a> 6 L1正则化</h2>
+<p><strong>是什么</strong></p>
+<p>给loss加w --&gt; 梯度而外加一个符号函数, 使得大于0的+1, 小于0的-1(后面会乘上一个<em>λ</em>)</p>
+<p><strong>为什么</strong></p>
+<ul>
+<li>当 w&gt;0，梯度里多一个 +λ，每次更新都往 0 推 ηλ (减去)</li>
+<li>当 w&lt;0，梯度里多一个 −λ，每次更新也往 0 推 ηλ</li>
+</ul>
+<p><strong>用在哪🤔</strong></p>
+<ul>
+<li><strong>特征选择</strong>：稀疏权重意味着很多特征被完全忽略</li>
+<li><strong>高维稀疏数据</strong>：比如文本分类，特征几万维，L1 能选出少数重要特征</li>
+<li><strong>可解释性要求高</strong>：想知道哪些特征真正有用</li>
+</ul>
+<h2 id="7-学习率steplr"><a class="markdownIt-Anchor" href="#7-学习率steplr"></a> 7 学习率StepLR</h2>
+<h1 id="过拟合"><a class="markdownIt-Anchor" href="#过拟合"></a> 过拟合</h1>
+<h2 id="1-添加dropout"><a class="markdownIt-Anchor" href="#1-添加dropout"></a> 1 添加dropout</h2>
+<p>是什么dropout?</p>
+<p>就是随机丢弃一些网络的连接, 防止模型产生路径依赖, (<strong>神经元之间产生复杂的共适应（co-adaptation）</strong>)<br>
+比如A神经元是提取特征的, B神经元可能就直接从A获取, 而不是直接学习到特征, (使得A消失的时候, B也能正常工作)</p>
+<p>dropout用在哪里?</p>
+<ol>
+<li>常见的是在learner层里, 随机丢弃一些神经元</li>
+<li>是在卷积里, 训练时丢弃一些通道特征</li>
+</ol>
+<p>训练时:<br>
+神经元以p概率输出置0</p>
+<p>推理时:<br>
+每一个<strong>神经元都保留</strong></p>
+<h2 id="2"><a class="markdownIt-Anchor" href="#2"></a> 2</h2>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/09/23/2026%E5%B9%B49%E6%9C%8823%E6%97%A5-%E8%AE%AD%E7%BB%83%E6%97%A5%E5%BF%97%E8%AE%B0%E5%BD%95/" data-id="cmvqoj6dx0009hgv4cunibyuo" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2026/10/01/2026%E5%B9%B410%E6%9C%881%E6%97%A5-%E6%A8%A1%E5%9E%8B%E6%9E%84%E5%BB%BA%E6%97%A5%E5%BF%97/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          2026年10月1日 模型构建日志
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2026/09/22/2026%E5%B9%B49%E6%9C%8822%E6%97%A5-torch%E5%8E%9F%E7%90%861/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2026年9月22日 torch原理1</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>203</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>47</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2025 - 2026 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

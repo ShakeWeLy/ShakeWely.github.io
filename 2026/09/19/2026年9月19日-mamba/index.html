@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2026年9月19日 mamba | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="状态空间表示 状态空间模型由两个主要部分组成：  状态方程（State Equation）：描述系统的状态如何从一个时刻转移到下一个时刻。 其中：   是在时刻t的状态向量 是状态转移矩阵 是控制输入向量 是控制输入矩阵 是过程噪声，通常假设为高斯噪声   观测方程（Observation Equation）：描述如何从系统的状态生成观测数据。 其中：   是在时刻t的观测向量 是观测矩阵 是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2026年9月19日 mamba">
+<meta property="og:url" content="https://shakewely.github.io/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="状态空间表示 状态空间模型由两个主要部分组成：  状态方程（State Equation）：描述系统的状态如何从一个时刻转移到下一个时刻。 其中：   是在时刻t的状态向量 是状态转移矩阵 是控制输入向量 是控制输入矩阵 是过程噪声，通常假设为高斯噪声   观测方程（Observation Equation）：描述如何从系统的状态生成观测数据。 其中：   是在时刻t的观测向量 是观测矩阵 是">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/image-20260919100716487.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/image-20260919100900605.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/v2-1ed2722667907773e1d6bd3fae5d25dc_1440w.jpg">
+<meta property="og:image" content="https://shakewely.github.io/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/image-20260919101014940.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/image-20260919101514893.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/image-20260919101522509.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/image-20260919101642944.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/image-20260919102034801.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/image-20260919102618789.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/image-20260919102708011.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/image-20260919103725016.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/image-20260919104033600.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/image-20260919104229620.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/image-20260919104246019.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/image-20260919104649268.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/image-20260919105008796.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/v2-c8f8b0a28b84be872ff638c81bb9f24c_1440w.jpg">
+<meta property="og:image" content="https://shakewely.github.io/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/v2-5ad1c18af54a7b4d648926290a82060b_1440w.jpg">
+<meta property="og:image" content="https://shakewely.github.io/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/v2-76f3a20ef03aa48e451f0821ec8f3aa3_1440w.jpg">
+<meta property="og:image" content="https://shakewely.github.io/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/v2-0f75a412108865fc425e84686005f48a_1440w-1789795926437-23.jpg">
+<meta property="og:image" content="https://shakewely.github.io/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/v2-659a455a3e0ebd039fe9eacb392df5c1_1440w.jpg">
+<meta property="og:image" content="https://shakewely.github.io/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/v2-75ad0bef0d2986ffbce9b2ee041f80ed_1440w.jpg">
+<meta property="og:image" content="https://shakewely.github.io/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/v2-0d0560c88714d2db89fe2f9fc2fa7926_1440w.jpg">
+<meta property="article:published_time" content="2026-09-19T01:35:04.000Z">
+<meta property="article:modified_time" content="2026-09-19T06:23:27.533Z">
+<meta property="article:author" content="Weakliy">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shakewely.github.io/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/image-20260919100716487.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>203</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>47</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2026年9月19日-mamba" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/" class="article-date">
+  <time class="post-time" datetime="2026-09-19T01:35:04.000Z" itemprop="datePublished">
+    <span class="post-month">9月</span><br/>
+    <span class="post-day">19</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2026年9月19日 mamba
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<h3 id="状态空间表示"><a class="markdownIt-Anchor" href="#状态空间表示"></a> 状态空间表示</h3>
+<p>状态空间模型由两个主要部分组成：</p>
+<ol>
+<li><strong><a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=245006245&amp;content_type=Article&amp;match_order=1&amp;q=%E7%8A%B6%E6%80%81%E6%96%B9%E7%A8%8B&amp;zhida_source=entity">状态方程</a>（State Equation）</strong>：描述系统的状态如何从一个时刻转移到下一个时刻。<br>
+其中：</li>
+</ol>
+<ul>
+<li>是在时刻t的状态向量</li>
+<li>是<a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=245006245&amp;content_type=Article&amp;match_order=1&amp;q=%E7%8A%B6%E6%80%81%E8%BD%AC%E7%A7%BB%E7%9F%A9%E9%98%B5&amp;zhida_source=entity">状态转移矩阵</a></li>
+<li>是控制输入向量</li>
+<li>是控制输入矩阵</li>
+<li>是过程噪声，通常假设为<a target="_blank" rel="noopener" href="https://zhida.zhihu.com/search?content_id=245006245&amp;content_type=Article&amp;match_order=1&amp;q=%E9%AB%98%E6%96%AF%E5%99%AA%E5%A3%B0&amp;zhida_source=entity">高斯噪声</a></li>
+</ul>
+<ol>
+<li><strong>观测方程（Observation Equation）</strong>：描述如何从系统的状态生成观测数据。<br>
+其中：</li>
+</ol>
+<ul>
+<li>是在时刻t的观测向量</li>
+<li>是观测矩阵</li>
+<li>是观测噪声矩阵</li>
+<li>是观测噪声，通常假设为高斯噪声</li>
+</ul>
+</blockquote>
+<h1 id="一-前言"><a class="markdownIt-Anchor" href="#一-前言"></a> 一 前言</h1>
+<blockquote>
+<p>RNN是非线性递归模型，通过利用隐藏状态中存储的历史知识有效地捕获时间模式。</p>
+</blockquote>
+<blockquote></blockquote>
+<blockquote>
+<p>SSMs通过一组隐藏变量，即“状态”，来体现系统的行为，使其能够有效地捕获时间数据依赖性。与RNNs不同，SSMs是线性模型，具有关联属性。</p>
+</blockquote>
+<h2 id="1-状态空间模型"><a class="markdownIt-Anchor" href="#1-状态空间模型"></a> 1 状态空间模型</h2>
+<p><img src="/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/image-20260919100716487.png" alt="image-20260919100716487"></p>
+<p><img src="/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/image-20260919100900605.png" alt="image-20260919100900605"></p>
+<p><img src="/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/v2-1ed2722667907773e1d6bd3fae5d25dc_1440w.jpg" alt="img"></p>
+<p>时不变</p>
+<p><img src="/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/image-20260919101014940.png" alt="image-20260919101014940"></p>
+<ol>
+<li>不随时间和输入变化而变化</li>
+</ol>
+<h2 id="2-离散状态空间模型"><a class="markdownIt-Anchor" href="#2-离散状态空间模型"></a> 2. 离散状态空间模型</h2>
+<img src="/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/image-20260919101514893.png" alt="image-20260919101514893" style="zoom:50%;">
+<p><img src="/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/image-20260919101522509.png" alt="image-20260919101522509"></p>
+<blockquote>
+<p>输入零阶保持器变成连续数据, 输出重采样变成离散数据</p>
+</blockquote>
+<p>AB变化离散数据</p>
+<p><img src="/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/image-20260919101642944.png" alt="image-20260919101642944"></p>
+<ol>
+<li>零阶保持器</li>
+<li></li>
+</ol>
+<h3 id="扩展为卷积核"><a class="markdownIt-Anchor" href="#扩展为卷积核"></a> 扩展为卷积核</h3>
+<p>因为时不变的性质</p>
+<p><img src="/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/image-20260919102034801.png" alt="image-20260919102034801"></p>
+<p><img src="/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/image-20260919102618789.png" alt="image-20260919102618789"></p>
+<p>最终</p>
+<p><img src="/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/image-20260919102708011.png" alt="image-20260919102708011"></p>
+<blockquote>
+<p>训练用CNN, 推理用RNN</p>
+</blockquote>
+<h2 id="4-结构化状态空间模型s4"><a class="markdownIt-Anchor" href="#4-结构化状态空间模型s4"></a> 4 结构化状态空间模型S4</h2>
+<p>1 解决长序列遗忘问题</p>
+<img src="/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/image-20260919103725016.png" alt="image-20260919103725016" style="zoom:33%;">
+<ol>
+<li>初始化A方法</li>
+<li>初始化B方 法</li>
+</ol>
+<h2 id="5-mamba选择性"><a class="markdownIt-Anchor" href="#5-mamba选择性"></a> 5 mamba选择性</h2>
+<p><img src="/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/image-20260919104033600.png" alt="image-20260919104033600"></p>
+<ol>
+<li>ABC固定后无法动态更新语义信息, 无法动态计算和更新</li>
+</ol>
+<h3 id="1-bc维度升级"><a class="markdownIt-Anchor" href="#1-bc维度升级"></a> 1 BC维度升级</h3>
+<p><img src="/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/image-20260919104229620.png" alt="image-20260919104229620" style="zoom:33%;"><img src="/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/image-20260919104246019.png" alt="image-20260919104246019" style="zoom:50%;"></p>
+<h3 id="2-并行关联扫描算法"><a class="markdownIt-Anchor" href="#2-并行关联扫描算法"></a> 2 并行关联扫描算法</h3>
+<p><img src="/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/image-20260919104649268.png" alt="image-20260919104649268"></p>
+<p><img src="/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/image-20260919105008796.png" alt="image-20260919105008796"></p>
+<h1 id="三-vim"><a class="markdownIt-Anchor" href="#三-vim"></a> 三 Vim</h1>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/hustvl/Vim">https://github.com/hustvl/Vim</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_50645064/article/details/146078396">https://blog.csdn.net/qq_50645064/article/details/146078396</a></p>
+</blockquote>
+<img src="/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/v2-c8f8b0a28b84be872ff638c81bb9f24c_1440w.jpg" alt="img" style="zoom: 67%;">
+<img src="/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/v2-5ad1c18af54a7b4d648926290a82060b_1440w.jpg" alt="img" style="zoom:67%;">
+<p><img src="/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/v2-76f3a20ef03aa48e451f0821ec8f3aa3_1440w.jpg" alt="img"></p>
+<p>ViM 的编码器可以向前和向后方向处理标记</p>
+<h2 id="vmamba"><a class="markdownIt-Anchor" href="#vmamba"></a> VMamba</h2>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/678809370">https://zhuanlan.zhihu.com/p/678809370</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/v_JULY_v/article/details/134923301">https://blog.csdn.net/v_JULY_v/article/details/134923301</a></p>
+</blockquote>
+<img src="/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/v2-0f75a412108865fc425e84686005f48a_1440w-1789795926437-23.jpg" alt="img" style="zoom: 67%;">
+<h3 id="1-csm"><a class="markdownIt-Anchor" href="#1-csm"></a> 1 CSM</h3>
+<p>交叉扫描模块（Cross-Scan Module，CSM）。我们选择沿行和列展开图像补丁成序列（扫描扩展），然后沿四个不同方向进行扫描：从左上到右下，从右下到左上，从右上到左下，从左下到右上。这样，任何像素（如图 2 中的中心像素）都会从不同方向的所有其他像素中集成信息。然后，我们将每个序列重新整形成单个图像</p>
+<blockquote>
+<p>这个模块主要代替了Transformer中的注意力机制，在保留全局感知的情况下保持了线性的计算复杂度。</p>
+<p>四向扫描就是把 2D 特征图 <code>(H, W)</code> 用 4 种不同顺序 展成长度为 <code>L = H×W</code> 的 1D 序列，分别跑一遍 SSM，再把结果 对齐回同一像素坐标 后相加</p>
+<h3 id="1-ssm-天然是-1d-因果的"><a class="markdownIt-Anchor" href="#1-ssm-天然是-1d-因果的"></a> 1. SSM 天然是 1D 因果的</h3>
+<p>单向扫描时，像素 A 能影响 B，但 B 影响不了 A（取决于谁先谁后）。单方向会有 方向偏差——左上影响右下，反之不行。</p>
+<h3 id="2-四向-从四个方向聚合上下文"><a class="markdownIt-Anchor" href="#2-四向-从四个方向聚合上下文"></a> 2. 四向 = 从四个方向聚合上下文</h3>
+<p>单向 HW：  像素 15 能看到 ← 左边、上边来的信息</p>
+<p>反向 HW：  像素 15 能看到 → 右边、下边来的信息</p>
+<p>WH + 反向 WH：补上「列方向」的上下左</p>
+</blockquote>
+<img src="/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/v2-659a455a3e0ebd039fe9eacb392df5c1_1440w.jpg" alt="img" style="zoom:50%;">
+<h3 id="2-ss2d"><a class="markdownIt-Anchor" href="#2-ss2d"></a> 2 SS2D</h3>
+<p><img src="/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/v2-75ad0bef0d2986ffbce9b2ee041f80ed_1440w.jpg" alt="img"></p>
+<blockquote>
+<p>最大的区别就在于将Attention替换成了SSD二维选择性扫描CSM。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">Transformer Block:</span><br><span class="line">  MultiHeadAttention  ← 全局交互</span><br><span class="line">  FFN                 ← 逐 token 变换</span><br><span class="line"></span><br><span class="line">Mamba Block:</span><br><span class="line">  S6 (selective scan)  ← 替代 Attention，全局/长程交互</span><br><span class="line">  门控 MLP            ← 替代 FFN</span><br><span class="line"></span><br><span class="line">VMamba VSSBlock:</span><br><span class="line">  SS2D (2D S6 + 四向扫描)  ← 替代 Attention</span><br><span class="line">  MLP                       ← 替代 FFN</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h2 id="vm-unet"><a class="markdownIt-Anchor" href="#vm-unet"></a> VM UNet</h2>
+<blockquote></blockquote>
+<p><img src="/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/v2-0d0560c88714d2db89fe2f9fc2fa7926_1440w.jpg" alt="img"></p>
+<h2 id="u-mamba"><a class="markdownIt-Anchor" href="#u-mamba"></a> U-Mamba</h2>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://github.com/bowang-lab/U-Mamba/tree/main">https://github.com/bowang-lab/U-Mamba/tree/main</a></p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/09/19/2026%E5%B9%B49%E6%9C%8819%E6%97%A5-mamba/" data-id="cmvqoj6de0004hgv49oi22qii" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2026/09/22/2026%E5%B9%B49%E6%9C%8822%E6%97%A5-MRI-Week7/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          2026年9月22日 MRI Week7
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2026/09/17/2026%E5%B9%B49%E6%9C%8817%E6%97%A5-Transformer/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2026年9月17日 Transformer</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>203</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>47</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2025 - 2026 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

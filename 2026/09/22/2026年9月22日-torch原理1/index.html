@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>2026年9月22日 torch原理1 | Weakliy_Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="官方仓库学习   使用 torch.autograd 进行自动微分   设置这些张量的 requires_grad 属   构建计算图的函数实际上是类 Function 的一个对象 12z &#x3D; torch.matmul(x, w)+bloss &#x3D; torch.nn.functional.binary_cross_entropy_with_logits(z, y) torch.matmul是一个F">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2026年9月22日 torch原理1">
+<meta property="og:url" content="https://shakewely.github.io/2026/09/22/2026%E5%B9%B49%E6%9C%8822%E6%97%A5-torch%E5%8E%9F%E7%90%861/index.html">
+<meta property="og:site_name" content="Weakliy_Blog">
+<meta property="og:description" content="官方仓库学习   使用 torch.autograd 进行自动微分   设置这些张量的 requires_grad 属   构建计算图的函数实际上是类 Function 的一个对象 12z &#x3D; torch.matmul(x, w)+bloss &#x3D; torch.nn.functional.binary_cross_entropy_with_logits(z, y) torch.matmul是一个F">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2026/09/22/2026%E5%B9%B49%E6%9C%8822%E6%97%A5-torch%E5%8E%9F%E7%90%861/image-20260922203917668.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/09/22/2026%E5%B9%B49%E6%9C%8822%E6%97%A5-torch%E5%8E%9F%E7%90%861/image-20260922203533183.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/09/22/2026%E5%B9%B49%E6%9C%8822%E6%97%A5-torch%E5%8E%9F%E7%90%861/image-20260922210205003.png">
+<meta property="og:image" content="https://shakewely.github.io/2026/09/22/2026%E5%B9%B49%E6%9C%8822%E6%97%A5-torch%E5%8E%9F%E7%90%861/image-20260922212931489.png">
+<meta property="article:published_time" content="2026-09-22T11:17:41.000Z">
+<meta property="article:modified_time" content="2026-10-08T15:14:57.009Z">
+<meta property="article:author" content="Weakliy">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shakewely.github.io/2026/09/22/2026%E5%B9%B49%E6%9C%8822%E6%97%A5-torch%E5%8E%9F%E7%90%861/image-20260922203917668.png">
+  
+    <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+<link rel="stylesheet" href="/plugin/bganimation/bg.css">
+
+  
+
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css" rel="stylesheet" type="text/css">
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <div class="outer">
+        <div class="widget-wrap mobile-header">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>203</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>47</strong><br>标签</div></a>
+    </div>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+        <section id="main"><article id="post-2026年9月22日-torch原理1" class="wow slideInRight article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2026/09/22/2026%E5%B9%B49%E6%9C%8822%E6%97%A5-torch%E5%8E%9F%E7%90%861/" class="article-date">
+  <time class="post-time" datetime="2026-09-22T11:17:41.000Z" itemprop="datePublished">
+    <span class="post-month">9月</span><br/>
+    <span class="post-day">22</span>
+  </time>
+</a>
+   
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      2026年9月22日 torch原理1
+    </h1>
+  
+
+        <div>
+          
+          
+              
+
+          
+        </div>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>官方仓库学习</p>
+</blockquote>
+<h2 id="使用-torchautograd-进行自动微分"><a class="markdownIt-Anchor" href="#使用-torchautograd-进行自动微分"></a> 使用 <code>torch.autograd</code> 进行自动微分</h2>
+<ol>
+<li>
+<p>设置这些张量的 <code>requires_grad</code> 属</p>
+</li>
+<li>
+<p>构建计算图的函数实际上是类 <code>Function</code> 的一个对象</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">z = torch.matmul(x, w)+b</span><br><span class="line">loss = torch.nn.functional.binary_cross_entropy_with_logits(z, y)</span><br></pre></td></tr></table></figure>
+<p>torch.matmul是一个<code>Function</code>, +也是<code>Function</code>, 都有自己的forward和backward,</p>
+<p>同理, loss 也是, 所以loss.backward() 会一步步计算到matmul和<code>+</code>的grad</p>
+</li>
+</ol>
+<h1 id="优化器"><a class="markdownIt-Anchor" href="#优化器"></a> 优化器</h1>
+<ol>
+<li>注册优化器, 传入model参数, optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)</li>
+<li>使用<code>zero_grad</code> 进行梯度清零,</li>
+<li>使用loss.backward()计算梯度,</li>
+<li>之后使用optimizer.step()来调整参数</li>
+</ol>
+<blockquote>
+<p><code>optimizer.step()</code> 能知道每个参数的 <code>grad</code>，核心在于<strong>每个参数在 PyTorch 中都是一个 <code>torch.Tensor</code> 对象，且 Gradient（梯度）被直接绑定到了参数对象本身的 <code>.grad</code> 属性上</strong>。</p>
+<p>整个过程的协同机制如下：</p>
+<h3 id="1-参数绑定初始化时的注册"><a class="markdownIt-Anchor" href="#1-参数绑定初始化时的注册"></a> 1. 参数绑定：初始化时的“注册”</h3>
+<p>当你执行：</p>
+<p>Python</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">optimizer = torch.optim.SGD(model.parameters(), lr=learning_rate)</span><br></pre></td></tr></table></figure>
+<p>优化器传入了 <code>model.parameters()</code>，这实际上是一个包含了模型所有可训练参数 (<code>Tensor</code>) 的<strong>引用列表</strong>。优化器会在内部维护这些 Tensor 的内存引用，而不是拷贝一份值。</p>
+<h3 id="2-梯度计算自动填充-grad"><a class="markdownIt-Anchor" href="#2-梯度计算自动填充-grad"></a> 2. 梯度计算：自动填充 <code>.grad</code></h3>
+<p>在执行优化器更新之前，你会先调用：</p>
+<p>Python</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">loss.backward()</span><br></pre></td></tr></table></figure>
+<p>PyTorch 的反向传播引擎（Autograd）会根据计算图反向计算每一个设置了 <code>requires_grad=True</code> 的参数的偏导数。计算完成后，Autograd 会<strong>直接将梯度值写入该 Tensor 对象的 <code>.grad</code> 属性中</strong>（即 <code>param.grad = gradient_value</code>）。</p>
+<h3 id="3-梯度更新读取-grad-并修改原内存"><a class="markdownIt-Anchor" href="#3-梯度更新读取-grad-并修改原内存"></a> 3. 梯度更新：读取 <code>.grad</code> 并修改原内存</h3>
+<p>当执行：</p>
+<p>Python</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">optimizer.step()</span><br></pre></td></tr></table></figure>
+<p><code>optimizer.step()</code> 的内部实现逻辑简化后如下：</p>
+<p>Python</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># SGD 内部的 step() 简化实现</span><br><span class="line">for param in self.param_groups[0][&#x27;params&#x27;]:</span><br><span class="line">    if param.grad is not None:</span><br><span class="line">        # 1. 直接通过 param.grad 获取该参数的梯度</span><br><span class="line">        # 2. 原地更新参数内存: param = param - lr * param.grad</span><br><span class="line">        param.data.add_(param.grad, alpha=-self.lr)</span><br></pre></td></tr></table></figure>
+</blockquote>
+<h2 id="叶子节点"><a class="markdownIt-Anchor" href="#叶子节点"></a> 叶子节点</h2>
+<p><img src="/2026/09/22/2026%E5%B9%B49%E6%9C%8822%E6%97%A5-torch%E5%8E%9F%E7%90%861/image-20260922203917668.png" alt="image-20260922203917668"></p>
+<p>如果一个节点不是由带有 <code>requires_grad=True</code> 的输入张量进行的操作而生成的（例如 <code>x</code>、<code>W</code>、<code>b</code> 和 <code>y</code>），PyTorch 就会将其视为<em>叶子</em>（leaf）；其他所有节点都是<em>非叶子</em>（non-leaf）（例如 <code>z</code>、<code>y_pred</code> 和 <code>loss</code>）。您可以通过探查张量的 <code>is_leaf</code> 属性来以编程方式验证这一点。</p>
+<p><img src="/2026/09/22/2026%E5%B9%B49%E6%9C%8822%E6%97%A5-torch%E5%8E%9F%E7%90%861/image-20260922203533183.png" alt="image-20260922203533183"></p>
+<p><code>retain_grad()</code></p>
+<p>现在让我们看看一个中间非叶子节点</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">print(f&quot;&#123;z.grad=&#125;&quot;)</span><br></pre></td></tr></table></figure>
+<p>PyTorch 返回梯度的 <code>None</code>，并警告我们正在访问一个非叶子节点的 <code>grad</code> 属性。虽然 autograd 必须计算中间梯度以使反向传播工作，但它默认您在事后不需要访问这些值。若要更改此行为，我们可以在张量上使用 <code>retain_grad()</code> 函数。这会告知 autograd 引擎在调用 <code>backward()</code> 后填充该张量的 <code>grad</code>。</p>
+<h2 id="异步"><a class="markdownIt-Anchor" href="#异步"></a> 异步</h2>
+<p><img src="/2026/09/22/2026%E5%B9%B49%E6%9C%8822%E6%97%A5-torch%E5%8E%9F%E7%90%861/image-20260922210205003.png" alt="image-20260922210205003"></p>
+<h1 id="数据加载优化"><a class="markdownIt-Anchor" href="#数据加载优化"></a> 数据加载优化</h1>
+<p>数据加载往往是深度学习流水线中的关键瓶颈。虽然 GPU 可以极快地处理批次，但低效的数据加载可能会导致昂贵的硬件闲置，等待下一批数据。本教程涵盖了优化数据加载配置以最大化训练吞吐量的最佳实践和一些技术。</p>
+<img src="/2026/09/22/2026%E5%B9%B49%E6%9C%8822%E6%97%A5-torch%E5%8E%9F%E7%90%861/image-20260922212931489.png" alt="image-20260922212931489" style="zoom:67%;">
+<h2 id="工作进程数量-num_workers"><a class="markdownIt-Anchor" href="#工作进程数量-num_workers"></a> 工作进程数量 (<code>num_workers</code>)</h2>
+<p>The <code>num_workers</code> 参数控制用于数据加载的子进程数量。这对于并行化高开销的数据变换至关重要。</p>
+<p><strong>工作原理</strong></p>
+<ul>
+<li>每个工作进程都维护一个批次队列（由 <code>prefetch_factor</code> 控制）</li>
+<li>工作进程并行准备批次，并将其传输给主进程</li>
+<li>如果 <code>in_order=True</code>（默认），批次将按顺序返回</li>
+</ul>
+<p><strong>何时增加 <code>num_workers</code></strong></p>
+<ul>
+<li>当变换的计算开销很大时（如数据增强、解码）</li>
+<li>当数据从慢速存储器（网络驱动器、机械硬盘）加载时</li>
+<li>当您观察到由于数据加载导致的 GPU 闲置时间时</li>
+</ul>
+<p><strong>何时 <code>num_workers=0</code> 可能会更快</strong></p>
+<ul>
+<li>当变换的开销很低时（如简单的张量操作）</li>
+<li>当数据已经存在于内存中时</li>
+<li>进程间通信 (IPC) 的开销超过了并行化的收益</li>
+</ul>
+<h2 id="理解-pin_memory"><a class="markdownIt-Anchor" href="#理解-pin_memory"></a> 理解 <code>pin_memory</code></h2>
+<p>The <code>pin_memory</code> 参数通过使用锁页（pinned）内存来实现更快的 CPU 到 GPU 数据传输。</p>
+<p><strong>最佳实践</strong></p>
+<ol>
+<li>在 DataLoader 中使用 <code>pin_memory=True</code>（推荐方法）</li>
+<li>在将数据移动 to GPU 时结合使用 <code>non_blocking=True</code></li>
+<li>避免手动调用 <code>tensor.pin_memory()</code> 接着调用 <code>.to(device, non_blocking=True)</code> - 这样更慢，因为 <code>pin_memory()</code> 是阻塞的</li>
+</ol>
+<h2 id="持久化工作进程-persistent-workers"><a class="markdownIt-Anchor" href="#持久化工作进程-persistent-workers"></a> 持久化工作进程 (Persistent Workers)</h2>
+<p>默认情况下，工作进程会在不同的 epoch 之间关闭并重新启动。这会在每个 epoch 边界上引入启动开销（导入模块、分支进程、重新初始化数据集）。</p>
+<p>将 <code>persistent_workers=True</code> 设置为 True 可以使工作进程在多个 epoch 之间保持活动状态，从而消除重复的启动成本。</p>
+<p><strong>在什么情况下最有效</strong></p>
+<ul>
+<li>在较小的数据集上训练许多 epoch</li>
+<li>当数据集 <code>__init__</code> 开销很大时（例如加载元数据）</li>
+<li>当与较高的 <code>num_workers</code> 结合使用时</li>
+</ul>
+<p>让我们对比在多个 epoch 中使用和不使用持久化工</p>
+<blockquote>
+<p>然后看 <code>__next__()</code>。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">torch.cuda.current_stream().wait_stream(self.stream)</span><br></pre></td></tr></table></figure>
+<p>这一句特别重要。</p>
+<p>它的意思不是：</p>
+<blockquote>
+<p>等整个 GPU 空闲。</p>
+</blockquote>
+<p>而是：</p>
+<blockquote>
+<p><strong>当前计算 stream 必须等 prefetch stream 把下一个 batch 搬完。</strong></p>
+</blockquote>
+<p>因为你马上要用：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">data = self.next_data</span><br></pre></td></tr></table></figure>
+<p>如果 Batch 2 还没传完，当然不能开始计算 Batch 2。</p>
+<p><strong>不是用了这个 Prefetcher 就一定更快。</strong></p>
+<p>如果你的情况是：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GPU计算：100 ms</span><br><span class="line">H2D：2 ms</span><br></pre></td></tr></table></figure>
+<p>那么最多也就隐藏约 2 ms。</p>
+<p>收益非常小。</p>
+<p>但如果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GPU计算：10 ms</span><br><span class="line">H2D：8 ms</span><br></pre></td></tr></table></figure>
+<p>那就可能明显有价值。</p>
+<p>甚至如果：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GPU计算：2 ms</span><br><span class="line">H2D：8 ms</span><br></pre></td></tr></table></figure>
+<p>数据传输就很可能成为瓶颈。</p>
+</blockquote>
+<h2 id="数据集级别的优化__getitems__"><a class="markdownIt-Anchor" href="#数据集级别的优化__getitems__"></a> 数据集级别的优化：<code>__getitems__</code></h2>
+<p>除了调整 DataLoader 参数，您还可以优化数据集本身。PyTorch 的 DataLoader 支持通过 <code>__getitems__</code> 机制进行批量获取协议：如果您的数据集定义了此方法，获取器会使用索引列表对其进行一次调用，而不是针对每个样本重复调用 <code>__getitem__</code>。</p>
+<p><strong>工作原理</strong></p>
+<ul>
+<li>默认获取器的操作是：<code>[dataset[idx] for idx in batch_indices]</code></li>
+<li>使用 <code>__getitems__</code>：<code>dataset.__getitems__(batch_indices)</code></li>
+</ul>
+<p><strong>在什么情况下会有帮助</strong></p>
+<ul>
+<li>当单样本的开销很大时（例如打开连接、解析标头、获取锁）</li>
+<li>当能够更高效地批量获取数据时（例如，使用一次 SQL 查询获取 N 行，而不是执行 N 次查询；或者向量化张量生成）</li>
+<li>当变换具有可以分摊到整个批次中的固定设置成本时</li>
+</ul>
+<h1 id="dropout"><a class="markdownIt-Anchor" href="#dropout"></a> Dropout</h1>
+<h2 id="共适应co-adaptation"><a class="markdownIt-Anchor" href="#共适应co-adaptation"></a> <strong>共适应（Co-adaptation）</strong></h2>
+<p>是指在深度神经网络中，<strong>某些神经元过度依赖其他特定的神经元来共同完成特征提取，导致它们“绑定”在一起工作，无法独立发挥作用的现象。</strong></p>
+<p>你可以把它理解为“团队里的依赖症”<strong>或</strong>“抱团偷懒”。</p>
+<h3 id="1-为什么会出现共适应"><a class="markdownIt-Anchor" href="#1-为什么会出现共适应"></a> 1. 为什么会出现共适应？</h3>
+<p>神经网络本质上是通过梯度下降来“找捷径”的。如果在训练过程中没有任何干预：</p>
+<ul>
+<li><strong>神经元 A</strong> 学习到了一个非常强的特征（比如识别狗的耳朵）。</li>
+<li><strong>神经元 B</strong> 发现：“只要我每次都顺着 A 的输出做微调，就能把 Loss 降下去，那我干脆不用自己去学新特征了。”</li>
+<li>结果：<strong>B 变成了 A 的附庸</strong>。B 并没有学会独立识别“狗的眼睛”或“狗的鼻子”，它只是学会了“如何纠正 A 的微调误差”。</li>
+</ul>
+<p>一旦进入测试阶段，输入的图片稍微有些噪点，导致神经元 A 识别失误，依赖 A 的神经元 B 会瞬间跟着崩溃，整个网络的泛化能力大幅下降（即产生了过拟合）。</p>
+<h3 id="3-dropout-是如何消除共适应的"><a class="markdownIt-Anchor" href="#3-dropout-是如何消除共适应的"></a> 3. Dropout 是如何消除共适应的？</h3>
+<p>正如你引用的这段话所描述的：</p>
+<blockquote>
+<ul>
+<li>在训练期间，以概率 <span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi></mrow><annotation encoding="application/x-tex">p</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathnormal">p</span></span></span></span> 随机将输入张量中的一些元素归零。</li>
+<li>在每次前向传播调用中，被清零的元素都是独立选择的。</li>
+</ul>
+</blockquote>
+<p>当 Dropout 随机把某些神经元的输出清零（杀掉）时：</p>
+<ol>
+<li><strong>阻断依赖链条：</strong> 神经元 B 无法预测每一个 Step 神经元 A 是否还在。它不能再寄希望于“抱 A 的大腿”，必须自己学习具备独立表达能力的特征。</li>
+<li><strong>解耦特征组合：</strong> 迫使网络中的每一个神经元与周围不同的神经元随机组合（Form randomized ensembles）。每个神经元都被要求在各种不同的“残缺上下文”中都能正常工作。</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://shakewely.github.io/2026/09/22/2026%E5%B9%B49%E6%9C%8822%E6%97%A5-torch%E5%8E%9F%E7%90%861/" data-id="cmvqoj6e1000bhgv4fgoe3t14" class="article-share-link">分享</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2026/09/23/2026%E5%B9%B49%E6%9C%8823%E6%97%A5-%E8%AE%AD%E7%BB%83%E6%97%A5%E5%BF%97%E8%AE%B0%E5%BD%95/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">上一篇</strong>
+      <div class="article-nav-title">
+        
+          2026年9月23日 训练日志记录
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2026/09/22/2026%E5%B9%B49%E6%9C%8822%E6%97%A5-MRI-Week7/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">2026年9月22日 MRI Week7</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <h1 class="blog-title">Weakliy_Blog</h1>
+    <h2 class="blog-subtitle"></h2>
+    <ul class="blog-link">
+     
+          <a href="/" title="Home">
+            <li>主页</li>
+          </a>
+        
+          <a href="/archives" title="Archives">
+            <li>归档</li>
+          </a>
+        
+          <a href="/categories" title="Categories">
+            <li>分类</li>
+          </a>
+        
+          <a href="/tags" title="Tags">
+            <li>标签</li>
+          </a>
+        
+    </ul>
+  </div>
+</div>
+
+  
+    <div class="widget-wrap">
+  <h3 class="widget-title"></h3>
+  <div class="widget">
+    <img class="avatar" src="https://raw.githubusercontent.com/ShakeWeLy/Weakliy.github.io/main/%E5%A4%B4%E5%83%8F/mmexport1683194148817.png">
+    <h2 class="author">Weakliy</h2>
+    <h3 class="description"></h3>
+    <div class="count-box">
+      <a href="/archives"><div><strong>203</strong><br>文章</div></a>
+      <a href="/categories"><div><strong>0</strong><br>分类</div></a>
+      <a href="/tags"><div><strong>47</strong><br>标签</div></a>
+    </div>
+
+
+
+    <div class="social-link">
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="Github">
+          Github
+        </a>
+      
+    </div>
+
+    <div class="friend-link">
+      <h2>联系我</h2>
+      
+        <a class="hvr-bounce-in" href="https://github.com/ShakeWeLy" target="_blank" title="ShanaMaid">
+          ShanaMaid
+        </a>
+      
+    </div>
+  </div>
+</div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy;2025 - 2026 Weakliy<br>
+      由<a href="http://hexo.io/" target="_blank">Hexo</a>强力驱动 | 
+      主题-<a target="_blank" rel="noopener" href="https://github.com/ShanaMaid/hexo-theme-shana">Shana</a>
+      
+    </div>
+    
+  </div>
+</footer>
+    </div>
+    
+
+<script src="//apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="//apps.bdimg.com/libs/wow/0.1.6/wow.min.js"></script>
+<script>
+new WOW().init();
+</script>   
+
+
+  
+<link rel="stylesheet" href="/plugin/fancybox/jquery.fancybox.css">
+
+  
+<script src="/plugin/fancybox/jquery.fancybox.pack.js"></script>
+
+
+
+
+  
+<link rel="stylesheet" href="/plugin/galmenu/GalMenu.css">
+
+  
+<script src="/plugin/galmenu/GalMenu.js"></script>
+
+  <div class="GalMenu GalDropDown">
+      <div class="circle" id="gal">
+        <div class="ring">
+          
+            <a href="/" title="" class="menuItem">首页</a>
+          
+            <a href="/tags" title="" class="menuItem">标签</a>
+          
+            <a href="/categories" title="" class="menuItem">分类</a>
+          
+            <a href="/archives" title="" class="menuItem">总览</a>
+          
+            <a href="/xxxxxxxxx" title="" class="menuItem">xxx</a>
+          
+            <a href="/xxxxxxx" title="" class="menuItem">xxxx</a>
+          
+        </div>
+        
+          <audio id="audio" src="#"></audio>
+        
+      </div> 
+</div>
+<div id="overlay" style="opacity: 1; cursor: pointer;"></div>
+  <script type="text/javascript">var items = document.querySelectorAll('.menuItem');
+    for (var i = 0,
+    l = items.length; i < l; i++) {
+      items[i].style.left = (50 - 35 * Math.cos( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%";
+      items[i].style.top = (50 + 35 * Math.sin( - 0.5 * Math.PI - 2 * (1 / l) * i * Math.PI)).toFixed(4) + "%"
+    }</script>
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('body').GalMenu({
+      'menu': 'GalDropDown'
+    })
+  });
+</script>
+
+  <section class="hidden-xs"> 
+  <ul class="cb-slideshow"> 
+    <li><span>苟利</span></li> 
+    <li><span>国家</span></li> 
+    <li><span>生死以</span></li> 
+    <li><span>岂能</span></li> 
+    <li><span>祸福</span></li> 
+    <li><span>趋避之</span></li> 
+  </ul>
+</section>
+
+<script src="/js/script.js"></script>
+
+
+
+
+  </div>
+</body>
+</html>

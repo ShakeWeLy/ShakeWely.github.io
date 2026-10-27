@@ -5,18 +5,20 @@
   
   <title>2025年5月5日 torch汇总 | Weakliy_Blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Module mymodule&#x3D; MyModule() Mymodule.bn.weight mymodule.bn.weight.data  parameters 卷积核（nn.Conv2d）的权重维度是 [out_channels, in_channels, kernel_height, kernel_width]  RuntimeError: Given groups&#x3D;1, weight">
+  <meta name="description" content="4. 存在的问题（按严重程度排序） 严重：这些问题会导致网络实际行为与设计不符   GAT 的注意力参数实际上没有被学习。 gatAttention.py 的 forward 中每次都重新创建 self.n &#x3D; nn.Parameter(torch.zeros(...))。它初始化为全 0，所以注意力分数 exp(0)&#x3D;1 恒定，注意力退化为均匀权重。这个参数也不在构造时创建的优化器里，所以永">
 <meta property="og:type" content="article">
 <meta property="og:title" content="2025年5月5日 torch汇总">
 <meta property="og:url" content="https://shakewely.github.io/2025/05/05/2025%E5%B9%B45%E6%9C%885%E6%97%A5-torch%E6%B1%87%E6%80%BB/index.html">
 <meta property="og:site_name" content="Weakliy_Blog">
-<meta property="og:description" content="Module mymodule&#x3D; MyModule() Mymodule.bn.weight mymodule.bn.weight.data  parameters 卷积核（nn.Conv2d）的权重维度是 [out_channels, in_channels, kernel_height, kernel_width]  RuntimeError: Given groups&#x3D;1, weight">
+<meta property="og:description" content="4. 存在的问题（按严重程度排序） 严重：这些问题会导致网络实际行为与设计不符   GAT 的注意力参数实际上没有被学习。 gatAttention.py 的 forward 中每次都重新创建 self.n &#x3D; nn.Parameter(torch.zeros(...))。它初始化为全 0，所以注意力分数 exp(0)&#x3D;1 恒定，注意力退化为均匀权重。这个参数也不在构造时创建的优化器里，所以永">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://shakewely.github.io/2025/05/05/2025%E5%B9%B45%E6%9C%885%E6%97%A5-torch%E6%B1%87%E6%80%BB/image-20260918212222314.png">
 <meta property="article:published_time" content="2025-05-05T02:35:44.000Z">
-<meta property="article:modified_time" content="2026-01-27T08:52:11.683Z">
+<meta property="article:modified_time" content="2026-10-20T12:41:39.494Z">
 <meta property="article:author" content="Weakliy">
 <meta property="article:tag" content="dl,pyhton">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://shakewely.github.io/2025/05/05/2025%E5%B9%B45%E6%9C%885%E6%97%A5-torch%E6%B1%87%E6%80%BB/image-20260918212222314.png">
   
     <link rel="alternate" href="/atom.xml" title="Weakliy_Blog" type="application/atom+xml">
   
@@ -48,9 +50,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>194</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>203</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>46</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>47</strong><br>标签</div></a>
     </div>
     <ul class="blog-link">
      
@@ -106,7 +108,200 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="module"><a class="markdownIt-Anchor" href="#module"></a> Module</h1>
+        <blockquote>
+<h3 id="4-存在的问题按严重程度排序"><a class="markdownIt-Anchor" href="#4-存在的问题按严重程度排序"></a> 4. 存在的问题（按严重程度排序）</h3>
+<p>严重：这些问题会导致网络实际行为与设计不符</p>
+<ol>
+<li>
+<p>GAT 的注意力参数实际上没有被学习。 <code>gatAttention.py</code> 的 <code>forward</code> 中每次都重新创建 <code>self.n = nn.Parameter(torch.zeros(...))</code>。它初始化为全 0，所以注意力分数 <code>exp(0)=1</code> 恒定，注意力退化为均匀权重。这个参数也不在构造时创建的优化器里，所以永远不会被训练。</p>
+<blockquote>
+<ol>
+<li>nn.Parameter 应该是batch内样本共享</li>
+<li>并不能写在forward</li>
+<li><code>nn.init.xavier_uniform_(self.n)</code> 是 PyTorch 的参数初始化函数</li>
+</ol>
+</blockquote>
+</li>
+<li>
+<p>多头注意力的实现有 bug。 <code>forward</code> 里外层先写了 <code>k = torch.zeros(...)</code>，内层 <code>for k in range(self.heads)</code> 又把 <code>k</code> 覆盖成整数，<code>k += e</code> 实际变成 <code>(heads-1) + e_last</code>。结果是只用到最后一个 head，并且多加了一个常数 <code>heads-1</code>。<code>gat_heads</code> 参数基本没有实际作用。</p>
+<blockquote>
+<ol>
+<li>代码写错了…小bug</li>
+<li>需要对多头结果进行平均, 不然会线性增大<code>out = k / self.heads</code></li>
+<li>[改进] 进行add, 而是concat后连接linear进行降维</li>
+</ol>
+</blockquote>
+</li>
+<li>
+<p>注意力归一化和掩码错误。</p>
+<ul>
+<li><code>atten_sum[j]</code> 按列 j 归一化，而标准 GAT 应该对每个节点 i 沿邻居 j 归一化。</li>
+<li><code>atten_sum</code> 的初始化使用的是 <code>sum(adj, dim=1)</code>，即行和，但后面又按列 j 索引，行列混用。</li>
+<li>之后对整行 <code>softmax</code>，非邻居位置的值为 0，但仍会得到 <code>exp(0)</code> 的权重，邻接掩码没有生效。</li>
+</ul>
+<blockquote>
+<ol>
+<li>
+<p><strong>归一化方向错误</strong>: 权重 <code>α_ij</code> 应该沿 <code>j</code> 归一化，即对每个 <code>i</code> 对其所有邻居求和为 1。</p>
+</li>
+<li>
+<p>复杂度为n^2</p>
+</li>
+<li>
+<p><strong><code>adj[i, j] != 0</code> 的判断</strong></p>
+<p>如果 <code>adj</code> 是浮点 tensor，直接 <code>!= 0</code> 做条件判断可行但不够稳健（浮点误差）</p>
+</li>
+<li>
+<p><code>torch.zeros</code> 默认 <strong>dtype/device 问题</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">concat_matrix = torch.zeros(size=(x.size(0), x.size(0)))</span><br></pre></td></tr></table></figure>
+<p>默认是 <code>float32</code> 且在 CPU 上，而 <code>x</code>、<code>adj</code>、<code>n</code> 可能在 GPU 或 <code>float64</code>。应该：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">concat_matrix = torch.zeros(N, N, dtype=x.dtype, device=x.device)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li>
+<p>如果某一行 <code>i</code> 的所有 <code>adj[i, j]</code> 都为 0（孤立节点），<code>atten_sum[i] = 0</code>，除法会产生 <code>nan</code> 或 <code>inf</code>。需要加保护</p>
+</li>
+<li>
+<p>冗余的softmax</p>
+</li>
+</ol>
+</blockquote>
+</li>
+</ol>
+<p>中等：影响效率、可用性和可维护性</p>
+<ol>
+<li>
+<p>Python 三重循环，速度极慢。 <code>concat_attention_adjacency_matrix</code> 和 <code>atten_matrix</code> 对 N×N 做逐元素循环，在 <code>B × heads × (T+1)</code> 上重复执行，并且 <code>gat_2</code> 也是逐时间步循环。<code>FSC_Personalized</code> 还对 batch 维做了 Python 循环，没有向量化。</p>
+<blockquote>
+<ol>
+<li>向量化&gt;&gt;&gt;</li>
+<li>循环的计算量本身并不大，主要浪费在 Python 调度上。???<br>
+有四处 Python 循环，每个循环里又嵌套小张量运算，开销主要在解释器和小算子调度上</li>
+<li>einsum求内积i,i-&gt;</li>
+<li>FSC_Personalized 是如何做到支持 batch? 以后要怎么写才能支持batch而不是写循环?<br>
+切片时显式保留第 0 维（batch）<br>
+维度用负索引：用 <code>dim=-1</code>、<code>dim=-2</code>，不要写死 <code>dim=0</code>，也不要用 <code>x.size(0)</code> 假设 batch 位置。</li>
+</ol>
+</blockquote>
+</li>
+<li>
+<p>设备不兼容。 <code>GATAttention</code> 中多处用 <code>torch.zeros(...)</code> 创建 CPU 张量，GPU 上会报设备不匹配错误。</p>
+<blockquote>
+<p>不在函数里手动创建张量，而是用输入张量推导出的运算生成结果（<code>einsum</code>、<code>exp</code>、<code>mask</code> 等），这样结果自动跟随输入的设备。</p>
+</blockquote>
+</li>
+<li>
+<p><code>gat_2</code> 的邻接没有稀疏化。 它直接用相关矩阵作为邻接，只要元素非零就视为相连。相关值可以为负，实际等价于稠密全连接图，和 <code>gat_1</code> 使用 top-30% 稀疏邻接的设计不一致。</p>
+<blockquote></blockquote>
+</li>
+<li>
+<p>Transformer 的维度是隐式耦合的。 <code>transformer_embed_dim</code> 默认是 20，而 token 的维度是 <code>features_dim</code>，两者必须相等，否则 <code>MultiHeadAttention</code> 会报错。另外类名叫 <code>Decoder</code>，实际只是 encoder 式的自注意力，没有 cross-attention 和 causal mask。</p>
+<blockquote></blockquote>
+</li>
+<li>
+<p>序列长度为 <code>(2T+1)·N</code>，注意力复杂度为 O(L²)。 对于 N=90 或 116 的脑图谱，加上 T 个时间步，显存压力会很大。</p>
+<blockquote></blockquote>
+</li>
+<li>
+<p>输出已经是 softmax 概率。 如果训练时直接接 <code>nn.CrossEntropyLoss</code>，会重复 softmax。应该改为输出 logits，或者使用 <code>NLLLoss(log(out))</code>。</p>
+<blockquote></blockquote>
+</li>
+<li>
+<p>GAT 的参数依赖节点数 N。 <code>GATAttention</code> 的 <code>Linear(N→D)</code> 与 <code>self.n</code> 的形状都绑定到 N，换脑图谱（节点数变化）就需要重新训练。</p>
+<blockquote></blockquote>
+</li>
+<li>
+<p><code>nn.Parameter</code> 的形状里不应该出现 batch 维，因为参数是模型的权重，不随样本变化。</p>
+<blockquote>
+<p>不用“每对节点独立的参数”<br>
+过拟合风险：脑网络样本数通常很少，每对节点的参数很难从少量样本里学好。<br>
+参数量随 N² 增长</p>
+</blockquote>
+</li>
+</ol>
+<p>轻微：代码整洁性</p>
+<ol>
+<li><code>filter_topk_global</code> 只保留正值最大的 30%，负相关全部被丢弃。这可能是有意的，需要确认。</li>
+</ol>
+</blockquote>
+<h1 id="广播"><a class="markdownIt-Anchor" href="#广播"></a> 广播</h1>
+<h2 id="1-怎么给计算带上batch"><a class="markdownIt-Anchor" href="#1-怎么给计算带上batch"></a> 1 怎么给计算带上batch</h2>
+<h1 id="细节"><a class="markdownIt-Anchor" href="#细节"></a> 细节</h1>
+<h2 id="1-linear-是对什么维度操作"><a class="markdownIt-Anchor" href="#1-linear-是对什么维度操作"></a> 1. <code>Linear</code> 是对什么维度操作？</h2>
+<p><img src="/2025/05/05/2025%E5%B9%B45%E6%9C%885%E6%97%A5-torch%E6%B1%87%E6%80%BB/image-20260918212222314.png" alt="image-20260918212222314"></p>
+<h2 id="2-view-是怎么操作的维度顺序是什么"><a class="markdownIt-Anchor" href="#2-view-是怎么操作的维度顺序是什么"></a> 2. <code>view</code> 是怎么操作的？维度顺序是什么？</h2>
+<p><code>view</code> 不改变内存里的数据顺序，只重新解释形状。数据按 行优先（C 风格） 排：最后一个维度变化最快。</p>
+<p><code>view</code> 不会打乱这段内存，只是给同一段<strong>数据贴上新的「维度标签」</strong>。</p>
+<p>假设 <code>H=8, W=8, window_size=4, C=1</code>，原图坐标和内存顺序如下（行优先，最后一个维度 <code>C</code> 变化最快）：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">原图 [B, H, W, C] 在内存里等价于按这个顺序排:</span><br><span class="line"></span><br><span class="line">(H=0,W=0) (H=0,W=1) ... (H=0,W=7)</span><br><span class="line"></span><br><span class="line">(H=1,W=0) (H=1,W=1) ... (H=1,W=7)</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">(H=7,W=0) ...            (H=7,W=7)</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">正确的 view</span><br><span class="line">x.view(B, nH=2, ws=4, nW=2, ws=4, C)</span><br><span class="line">#      [B,  2,   4,   2,   4,  C]</span><br><span class="line">内存第 1 段 16 个元素 → 被解释成 nH=0, nW=0 这个 4×4 窗口</span><br><span class="line">内存第 2 段 16 个元素 → 被解释成 nH=0, nW=1</span><br><span class="line">内存第 3 段 → nH=1, nW=0</span><br><span class="line">内存第 4 段 → nH=1, nW=1</span><br><span class="line"></span><br><span class="line">对应关系：</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">例如：</span><br><span class="line">x = torch.arange(24)</span><br><span class="line">x.view(2, 3, 4)</span><br><span class="line">就是：</span><br><span class="line"></span><br><span class="line">24 个元素</span><br><span class="line">↓</span><br><span class="line">2 个大 block</span><br><span class="line">↓</span><br><span class="line">每个大 block 有 3 个小 block</span><br><span class="line">↓</span><br><span class="line">每个小 block 有 4 个元素</span><br></pre></td></tr></table></figure>
+<h2 id="3-问题"><a class="markdownIt-Anchor" href="#3-问题"></a> 3 问题</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">1. 主要理解这个: view 不改变内存里的数据顺序，只重新解释形状。就是说内存里不变, 只是说哪一部分变成了nH的1,2 哪部分变成了ws的4</span><br><span class="line">2. 如果我view改写成x = x.view(</span><br><span class="line">        batch_size,</span><br><span class="line">        window_size,</span><br><span class="line">        height // window_size,</span><br><span class="line">        window_size,</span><br><span class="line">        width // window_size,</span><br><span class="line">        channels,</span><br><span class="line">    )会怎么样</span><br><span class="line">3. 如果我故意写成第一个是2*window_size, 第二个是window_size//2, 那么原本的W,H 就会不够且, 会怎么处理</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="1-内存不变只重新解释形状是什么意思"><a class="markdownIt-Anchor" href="#1-内存不变只重新解释形状是什么意思"></a> 1. 「内存不变，只重新解释形状」是什么意思？</h3>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">假设 `H=8, W=8, window_size=4, C=1`，原图坐标和内存顺序如下（行优先，最后一个维度 `C` 变化最快）：</span><br><span class="line"></span><br><span class="line">原图 [B, H, W, C] 在内存里等价于按这个顺序排:</span><br><span class="line"></span><br><span class="line">(H=0,W=0) (H=0,W=1) ... (H=0,W=7)</span><br><span class="line"></span><br><span class="line">(H=1,W=0) (H=1,W=1) ... (H=1,W=7)</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">(H=7,W=0) ...              (H=7,W=7)</span><br><span class="line"></span><br><span class="line">`view` 不会打乱这段内存，只是给同一段数据贴上新的「维度标签」。</span><br><span class="line"></span><br><span class="line">### 正确的 view</span><br><span class="line"></span><br><span class="line">x.view(B, nH=2, ws=4, nW=2, ws=4, C)</span><br><span class="line"></span><br><span class="line">*#      [B,  2,   4,   2,   4,  C]*</span><br><span class="line"></span><br><span class="line">内存第 1 段 16 个元素 → 被解释成 `nH=0, nW=0` 这个 4×4 窗口</span><br><span class="line">内存第 2 段 16 个元素 → 被解释成 `nH=0, nW=1`</span><br><span class="line">内存第 3 段 → `nH=1, nW=0`</span><br><span class="line">内存第 4 段 → `nH=1, nW=1`</span><br><span class="line"></span><br><span class="line">对应关系：</span><br><span class="line"></span><br><span class="line">nH=0, ws=0~3, nW=0, ws=0~3  →  原图 H=0~3, W=0~3  (左上窗口)</span><br><span class="line"></span><br><span class="line">nH=0, ws=0~3, nW=1, ws=0~3  →  原图 H=0~3, W=4~7  (右上)</span><br><span class="line"></span><br><span class="line">nH=1, ws=0~3, nW=0, ws=0~3  →  原图 H=4~7, W=0~3  (左下)</span><br><span class="line"></span><br><span class="line">nH=1, ws=0~3, nW=1, ws=0~3  →  原图 H=4~7, W=4~7  (右下)</span><br><span class="line"></span><br><span class="line">所以：</span><br><span class="line"></span><br><span class="line">- 哪部分变成 `nH=0/1`：由 `view` 时 `nH` 和 `ws` 在维度顺序中的位置决定</span><br><span class="line">- 哪部分变成 `ws=0~3`：是 `nH` 下面那一层，每个窗口内的 4 行</span><br><span class="line"></span><br><span class="line">`view` 只改「怎么读」，不改「怎么存」。</span><br></pre></td></tr></table></figure>
+<h2 id="4-如果改成-viewb-ws-nh-ws-nw-c-会怎样"><a class="markdownIt-Anchor" href="#4-如果改成-viewb-ws-nh-ws-nw-c-会怎样"></a> 4. 如果改成 view(B, ws, nH, ws, nW, C) 会怎样？</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"># 你提议的写法</span><br><span class="line">x.view(B, window_size, height//window_size, window_size, width//window_size, C)</span><br><span class="line">#         [B,     4,            2,              4,            2,          C]</span><br><span class="line">元素总数仍对得上（4×2×4×2 = 8×8），但语义完全错了。</span><br><span class="line"></span><br><span class="line">内存里前 4 个「H 方向」元素会被当成 ws=0,1,2,3，而它们实际来自原图第一行的 4 个不同 W，不是同一个 4×4 窗口。</span><br><span class="line"></span><br><span class="line">你以为的窗口:          实际被读成:</span><br><span class="line">┌────┬────┐           ┌────────────────┐</span><br><span class="line">│ W0 │ W1 │           │ 原图第0行 4 点 │  ← 被当成一个&quot;窗口&quot;</span><br><span class="line">├────┼────┤           ├────────────────┤</span><br><span class="line">│ W2 │ W3 │           │ 原图第1行 4 点 │  ← 又一个&quot;窗口&quot;</span><br><span class="line">└────┴────┘           └────────────────┘</span><br><span class="line">结果：</span><br><span class="line"></span><br><span class="line">不会报错（总元素数一致）</span><br><span class="line">每个「窗口」里混的是跨行的条带，不是空间上相邻的 4×4 块</span><br><span class="line">Attention 在错误的邻域上计算，模型学不到正确的局部结构</span><br><span class="line">结论：view 各维乘积必须等于原 shape，但维度顺序决定语义；Swin 必须用 (nH, ws, nW, ws) 这种顺序，不能把 ws 和 nH 随便对调。</span><br></pre></td></tr></table></figure>
+<blockquote>
+<ol>
+<li>行优先</li>
+<li></li>
+</ol>
+</blockquote>
+<h2 id="5-是不是view之后一定要加contiguous-那我以后都改用reshape好了-contiguous写在那些位置"><a class="markdownIt-Anchor" href="#5-是不是view之后一定要加contiguous-那我以后都改用reshape好了-contiguous写在那些位置"></a> 5 是不是view之后一定要加contiguous? 那我以后都改用reshape好了, contiguous写在那些位置</h2>
+<blockquote>
+<p><strong>不是。</strong> <code>contiguous()</code> 要写在 <strong><code>view</code> 之前</strong>，不是之后。</p>
+<h3 id="规则"><a class="markdownIt-Anchor" href="#规则"></a> 规则</h3>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>需要 contiguous？</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>view</code></td>
+<td>是：非连续内存会报错，先 <code>.contiguous()</code> 再 <code>.view()</code></td>
+</tr>
+<tr>
+<td><code>reshape</code></td>
+<td>否：能 view 就 view，不能就自动拷一份</td>
+</tr>
+<tr>
+<td><code>transpose</code> / <code>permute</code></td>
+<td>结果通常<strong>非连续</strong></td>
+</tr>
+<tr>
+<td><code>matmul</code> / 多数算子</td>
+<td>一般不强制你手写 contiguous</td>
+</tr>
+</tbody>
+</table>
+<p>所以：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 对：transpose 后要 view，先 contiguous</span></span><br><span class="line">t.transpose(<span class="number">1</span>, <span class="number">2</span>).contiguous().view(...)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 错：view 成功后再 contiguous 没解决 view 的前置条件</span></span><br><span class="line">t.transpose(<span class="number">1</span>, <span class="number">2</span>).view(...).contiguous()  <span class="comment"># 若中间 view 已失败就到不了这步</span></span><br></pre></td></tr></table></figure>
+<h3 id="用-reshape-可以吗"><a class="markdownIt-Anchor" href="#用-reshape-可以吗"></a> 用 <code>reshape</code> 可以吗？</h3>
+<p>可以，很多时候更省事：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 等价于「必要时 contiguous + view」</span></span><br><span class="line">t.transpose(<span class="number">1</span>, <span class="number">2</span>).reshape(B, C, H, W)</span><br></pre></td></tr></table></figure>
+<p>你这段可以写成：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">to_map</span>(<span class="params">t</span>):  <span class="comment"># (B, N, C) -&gt; (B, C, H, W)</span></span><br><span class="line">    <span class="keyword">return</span> t.transpose(<span class="number">1</span>, <span class="number">2</span>).reshape(B, -<span class="number">1</span>, H, W)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">to_seq</span>(<span class="params">t</span>):  <span class="comment"># (B, C, H, W) -&gt; (B, N, C)</span></span><br><span class="line">    <span class="keyword">return</span> t.reshape(B, t.shape[<span class="number">1</span>], -<span class="number">1</span>).transpose(<span class="number">1</span>, <span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+<p><code>to_seq</code> 里对已是 <code>(B,C,H,W)</code> 的卷积输出，本身多半已连续，<strong>不必</strong>先 <code>contiguous()</code>；<code>to_map</code> 里 <code>transpose</code> 之后才是必须处理连续性问题的地方——用 <code>reshape</code> 就够了。</p>
+<h3 id="以后怎么选"><a class="markdownIt-Anchor" href="#以后怎么选"></a> 以后怎么选</h3>
+<ul>
+<li><strong>习惯用 <code>reshape</code></strong>：少踩 <code>view</code> 的坑，日常模块里够用。</li>
+<li><strong>仍要写 <code>contiguous()</code> 的场景</strong>：你明确要「强制拷成连续内存再交给某个只认 contiguous 的 API / 自定义 CUDA」，或想保证后续 <code>view</code> 一定成功且不隐式拷贝时机不清楚时。</li>
+<li><strong>别到处加</strong>：多余的 <code>contiguous()</code> 可能多一次拷贝，没收益。</li>
+</ul>
+</blockquote>
+<h1 id="实现"><a class="markdownIt-Anchor" href="#实现"></a> 实现</h1>
+<h2 id="1-怎么获取四个resnet-的layer的特征"><a class="markdownIt-Anchor" href="#1-怎么获取四个resnet-的layer的特征"></a> 1 怎么获取四个resnet 的layer的特征</h2>
+<p>给 <code>ResNet34</code> 加一个 <code>forward_features</code>，避免在外面拆 <code>layer*</code>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 写在 ResNet34 里</span><br><span class="line">def forward_features(self, x: torch.Tensor) -&gt; list[torch.Tensor]:</span><br><span class="line">    x = self.layer1(x)</span><br><span class="line">    feats = []</span><br><span class="line">    for i in range(2, 6):</span><br><span class="line">        x = getattr(self, f&quot;layer&#123;i&#125;&quot;)(x)</span><br><span class="line">        feats.append(x)</span><br><span class="line">    return feats  # [c1, c2, c3, c4]</span><br></pre></td></tr></table></figure>
+<p><code>SLR_Unet</code> 里：<code>c1, c2, c3, c4 = self.resnet.forward_features(x)</code>。</p>
+<h2 id="2-怎么加载resnet权重但是不冻结模型"><a class="markdownIt-Anchor" href="#2-怎么加载resnet权重但是不冻结模型"></a> 2 怎么加载resnet权重但是不冻结模型</h2>
+<p>加载 ≠ 冻结。 <code>load_state_dict</code> 默认所有参数仍是 <code>requires_grad=True</code>，会继续训练；只有显式 <code>p.requires_grad = False</code> 或像 <code>SAM3FeatureExtractor(freeze=True)</code> 才会冻。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">self.resnet = ResNet34()</span><br><span class="line">ckpt = torch.load(<span class="string">&quot;resnet34.pth&quot;</span>, map_location=<span class="string">&quot;cpu&quot;</span>)  <span class="comment"># 或 ckpt[&quot;state_dict&quot;]</span></span><br><span class="line">missing, unexpected = self.resnet.load_state_dict(ckpt, strict=<span class="literal">False</span>)</span><br><span class="line"><span class="comment"># 不要写下面这种，除非真要冻：</span></span><br><span class="line"><span class="comment"># for p in self.resnet.parameters():</span></span><br><span class="line"><span class="comment">#     p.requires_grad = False</span></span><br></pre></td></tr></table></figure>
+<h2 id="3-zip方法遍历层"><a class="markdownIt-Anchor" href="#3-zip方法遍历层"></a> 3 zip方法遍历层</h2>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 调用已注册的 ffb_*，不要 setattr 覆盖成 tuple</span></span><br><span class="line">ffbs = (self.ffb_1, self.ffb_2, self.ffb_3, self.ffb_4)</span><br><span class="line">fused = [ffb(c, t) <span class="keyword">for</span> ffb, c, t <span class="keyword">in</span> <span class="built_in">zip</span>(ffbs, c_feats, t_feats)]</span><br></pre></td></tr></table></figure>
+<h1 id="module"><a class="markdownIt-Anchor" href="#module"></a> Module</h1>
 <p>mymodule= MyModule()</p>
 <p><code>Mymodule.bn.weight</code></p>
 <p>mymodule.bn.weight.data</p>
@@ -158,6 +353,9 @@
 </blockquote>
 <p><code>.data</code></p>
 <h1 id="tensor"><a class="markdownIt-Anchor" href="#tensor"></a> tensor</h1>
+<blockquote>
+<p>1 flatten方法</p>
+</blockquote>
 <p>1️⃣ view(shape)✅<br>
 改变张量形状（reshape），但不改变内存布局。</p>
 <p>例子：</p>
@@ -166,17 +364,17 @@
 <p>2️⃣ <strong>reshape(shape)</strong><br>
 类似 <code>view</code>，但更灵活，支持非连续内存。</p>
 <p>例子：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x = torch.randn(2,3,4)</span><br><span class="line">y = x.reshape(6,4)</span><br><span class="line">print(y.shape)  # torch.Size([6, 4])</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x = torch.randn(2,3,4)</span><br><span class="line">y = x.reshape(6,4)</span><br><span class="line">print(y.shape)  # torch.Size([6, 4])</span><br></pre></td></tr></table></figure>
 <hr>
 <p>3️⃣ <strong>squeeze(dim=None)</strong><br>
 去掉所有为1的维度，或者指定维度的1。</p>
 <p>例子：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x = torch.randn(2,1,3)</span><br><span class="line">y = x.squeeze()</span><br><span class="line">print(y.shape)  # torch.Size([2,3])</span><br><span class="line">y2 = x.squeeze(1)</span><br><span class="line">print(y2.shape)  # torch.Size([2,3])</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">x = torch.randn(2,1,3)</span><br><span class="line">y = x.squeeze()</span><br><span class="line">print(y.shape)  # torch.Size([2,3])</span><br><span class="line">y2 = x.squeeze(1)</span><br><span class="line">print(y2.shape)  # torch.Size([2,3])</span><br></pre></td></tr></table></figure>
 <hr>
 <p>4️⃣ <strong>unsqueeze(dim)</strong><br>
 在指定位置插入维度1。</p>
 <p>例子：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x = torch.randn(2,3)</span><br><span class="line">y = x.unsqueeze(1)</span><br><span class="line">print(y.shape)  # torch.Size([2,1,3])</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x = torch.randn(2,3)</span><br><span class="line">y = x.unsqueeze(1)</span><br><span class="line">print(y.shape)  # torch.Size([2,1,3])</span><br></pre></td></tr></table></figure>
 <hr>
 <p>5️⃣ **transpose(dim0, dim1)**✅<br>
 只交换两个维度。</p>
@@ -201,78 +399,78 @@
 <p>9️⃣ <strong>cpu() / cuda()</strong><br>
 简写版的 to(‘cpu’) 或 to(‘cuda’)</p>
 <p>例子：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x = torch.randn(2,3).cuda()</span><br><span class="line">y = x.cpu()</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x = torch.randn(2,3).cuda()</span><br><span class="line">y = x.cpu()</span><br></pre></td></tr></table></figure>
 <hr>
 <p>🔟 <strong>clone()</strong><br>
 复制 tensor（新开内存）。</p>
 <p>例子：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x = torch.randn(2,3)</span><br><span class="line">y = x.clone()</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x = torch.randn(2,3)</span><br><span class="line">y = x.clone()</span><br></pre></td></tr></table></figure>
 <hr>
 <p>1️⃣1️⃣ <strong>detach()</strong><br>
 返回一个不参与计算图的新 tensor。</p>
 <p>例子：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x = torch.randn(2,3, requires_grad=True)</span><br><span class="line">y = x.detach()</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x = torch.randn(2,3, requires_grad=True)</span><br><span class="line">y = x.detach()</span><br></pre></td></tr></table></figure>
 <hr>
 <p>1️⃣2️⃣ <strong>item()</strong><br>
 返回单元素 tensor 的 python 数值。</p>
 <p>例子：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x = torch.tensor([3.14])</span><br><span class="line">v = x.item()  # 3.14 (float)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x = torch.tensor([3.14])</span><br><span class="line">v = x.item()  # 3.14 (float)</span><br></pre></td></tr></table></figure>
 <hr>
 <p>1️⃣3️⃣ <strong>numpy()</strong><br>
 转为 numpy 数组（共享内存）。</p>
 <p>例子：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x = torch.randn(2,3)</span><br><span class="line">arr = x.numpy()</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x = torch.randn(2,3)</span><br><span class="line">arr = x.numpy()</span><br></pre></td></tr></table></figure>
 <hr>
 <p>1️⃣4️⃣ <strong>size(dim=None)</strong><br>
 返回维度大小，dim=None 返回全部 shape。</p>
 <p>例子：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x = torch.randn(2,3,4)</span><br><span class="line">print(x.size())     # torch.Size([2,3,4])</span><br><span class="line">print(x.size(1))    # 3</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x = torch.randn(2,3,4)</span><br><span class="line">print(x.size())     # torch.Size([2,3,4])</span><br><span class="line">print(x.size(1))    # 3</span><br></pre></td></tr></table></figure>
 <hr>
 <p>1️⃣5️⃣ <strong>shape</strong><br>
 属性，等价于 <code>size()</code>。</p>
 <p>例子：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x = torch.randn(2,3,4)</span><br><span class="line">print(x.shape)  # torch.Size([2,3,4])</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x = torch.randn(2,3,4)</span><br><span class="line">print(x.shape)  # torch.Size([2,3,4])</span><br></pre></td></tr></table></figure>
 <hr>
 <p>1️⃣6️⃣ <strong>numel()</strong><br>
 张量元素总数。</p>
 <p>例子：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python复制编辑x = torch.randn(2,3,4)</span><br><span class="line">print(x.numel())  # 24</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x = torch.randn(2,3,4)</span><br><span class="line">print(x.numel())  # 24</span><br></pre></td></tr></table></figure>
 <h1 id="torchcuda"><a class="markdownIt-Anchor" href="#torchcuda"></a> torch.cuda</h1>
 <p>1️⃣ <strong>torch.cuda.is_available()</strong><br>
 检查当前 PyTorch 是否可以使用 GPU。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">torch.cuda.is_available()  # True / False</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">torch.cuda.is_available()  # True / False</span><br></pre></td></tr></table></figure>
 <hr>
 <p>2️⃣ <strong>torch.cuda.device_count()</strong><br>
 返回可用的 GPU 数量。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">torch.cuda.device_count()  # 如 2</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">torch.cuda.device_count()  # 如 2</span><br></pre></td></tr></table></figure>
 <hr>
 <p>3️⃣ <strong>torch.cuda.get_device_name(device=0)</strong><br>
 获取指定 GPU 的名称。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">torch.cuda.get_device_name(0)  # &#x27;NVIDIA GeForce RTX 4090&#x27;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">torch.cuda.get_device_name(0)  # &#x27;NVIDIA GeForce RTX 4090&#x27;</span><br></pre></td></tr></table></figure>
 <hr>
 <p>4️⃣ <strong>torch.cuda.current_device()</strong><br>
 返回当前默认设备的索引（int）。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">torch.cuda.current_device()  # 如 0</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">torch.cuda.current_device()  # 如 0</span><br></pre></td></tr></table></figure>
 <hr>
 <p>5️⃣ <strong>torch.cuda.set_device(device)</strong><br>
 设置当前默认使用的 GPU。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">torch.cuda.set_device(1)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">torch.cuda.set_device(1)</span><br></pre></td></tr></table></figure>
 <hr>
 <p>6️⃣ <strong>torch.cuda.memory_allocated(device=0)</strong><br>
 返回当前分配给张量的显存大小（单位：字节）。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">torch.cuda.memory_allocated(0) / 1024**2  # 单位：MB</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">torch.cuda.memory_allocated(0) / 1024**2  # 单位：MB</span><br></pre></td></tr></table></figure>
 <hr>
 <p>7️⃣ <strong>torch.cuda.memory_reserved(device=0)</strong><br>
 返回为分配预留的显存（用于缓存机制）。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">torch.cuda.memory_reserved(0) / 1024**2  # 单位：MB</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">torch.cuda.memory_reserved(0) / 1024**2  # 单位：MB</span><br></pre></td></tr></table></figure>
 <hr>
 <p>8️⃣ <strong>torch.cuda.empty_cache()</strong><br>
 释放未使用的显存缓存（不会释放已使用的显存）。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">torch.cuda.empty_cache()</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">torch.cuda.empty_cache()</span><br></pre></td></tr></table></figure>
 <hr>
 <p>9️⃣ <strong>torch.cuda.synchronize(device=None)</strong><br>
 等待所有 GPU 操作完成（用于计时时精准）。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">python</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">复制编辑</span><br><span class="line">torch.cuda.synchronize()</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">torch.cuda.synchronize()</span><br></pre></td></tr></table></figure>
 <hr>
 <p>🔟 <strong>torch.cuda.Stream / torch.cuda.Event</strong><br>
 用于手动控制 CUDA 操作顺序（高级用法）。</p>
@@ -491,6 +689,24 @@
 </table>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br></pre></td><td class="code"><pre><span class="line">🌟 深度学习中，哪些因素和内存（memory，占比）有关？</span><br><span class="line">这里说的内存主要指 显存（GPU memory），但有些原则也适用于 CPU 内存。</span><br><span class="line"></span><br><span class="line">我们可以把它拆成几部分：</span><br><span class="line"></span><br><span class="line">✅ 1. 模型参数（parameters）</span><br><span class="line">包含权重、偏置（weights, biases），每个参数通常用 float32（4字节）、float16（2字节）等存储。</span><br><span class="line"></span><br><span class="line">只要模型加载到 GPU，就占用固定显存。</span><br><span class="line"></span><br><span class="line">例子：</span><br><span class="line"></span><br><span class="line">YOLOv8n → ~3M 参数，约 12MB (float32)</span><br><span class="line"></span><br><span class="line">YOLOv8x → ~70M 参数，约 280MB (float32)</span><br><span class="line"></span><br><span class="line">→ 和模型规模直接相关，占固定部分显存。</span><br><span class="line"></span><br><span class="line">✅ 2. 中间特征图（feature maps / activations）</span><br><span class="line">网络前向推理中每层产生的输出张量。</span><br><span class="line"></span><br><span class="line">在训练中需要保存这些特征图来做反向传播，因此训练显存需求大约是推理的 2~3 倍。</span><br><span class="line"></span><br><span class="line">这是训练中主要吃显存的部分。</span><br><span class="line"></span><br><span class="line">影响因素：</span><br><span class="line"></span><br><span class="line">输入图像大小（H × W）</span><br><span class="line"></span><br><span class="line">batch size</span><br><span class="line"></span><br><span class="line">模型的通道数、分辨率、层数</span><br><span class="line"></span><br><span class="line">例子：</span><br><span class="line">640×640 图像，batch=1，YOLOv8n 占用 ≈12GB</span><br><span class="line">640×640 图像，batch=8，YOLOv8n 占用 ≈810GB</span><br><span class="line"></span><br><span class="line">✅ 3. 梯度（gradients）</span><br><span class="line">训练时需要为每个参数存储梯度，用于优化器更新权重。</span><br><span class="line"></span><br><span class="line">通常大小 ≈ 参数大小。</span><br><span class="line"></span><br><span class="line">推理时不需要。</span><br><span class="line"></span><br><span class="line">例子：</span><br><span class="line"></span><br><span class="line">参数 100MB → 梯度也大约 100MB</span><br><span class="line"></span><br><span class="line">✅ 4. 优化器状态（optimizer state）</span><br><span class="line">只有训练时才有，例如 Adam 优化器要存动量和方差。</span><br><span class="line"></span><br><span class="line">通常是参数的 2~4 倍大小。</span><br><span class="line"></span><br><span class="line">例子：</span><br><span class="line"></span><br><span class="line">Adam 优化器，100MB 参数 → 额外约 200MB 优化器状态</span><br><span class="line"></span><br><span class="line">✅ 5. 输入数据缓存（data loading buffer）</span><br><span class="line">如果用 dataloader 预加载数据（比如 PyTorch DataLoader 的 num_workers 大、pin_memory=True），可能占用比较多 CPU 内存。</span><br><span class="line"></span><br><span class="line">对 GPU 内存影响较小，但需要注意。</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">占用来源	主要和什么有关</span><br><span class="line">模型权重	模型规模（n、s、m、l、x）</span><br><span class="line">输入数据缓存	batch_size, num_workers, 图像分辨率</span><br><span class="line">数据增强	增强方式、复杂程度</span><br><span class="line">推理输出缓存	推理任务规模、是否及时落盘</span><br><span class="line">框架开销	框架本身（PyTorch, TensorFlow）</span><br><span class="line">系统多进程/线程	任务数、进程数、线程数</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>F.</p>
+<h1 id="nn组件"><a class="markdownIt-Anchor" href="#nn组件"></a> nn组件</h1>
+<h3 id="1-nnlinear"><a class="markdownIt-Anchor" href="#1-nnlinear"></a> 1. nn.Linear</h3>
+<h1 id="优化器"><a class="markdownIt-Anchor" href="#优化器"></a> 优化器</h1>
+<h1 id="模型保存"><a class="markdownIt-Anchor" href="#模型保存"></a> 模型保存</h1>
+<h2 id="保存和加载模型权重"><a class="markdownIt-Anchor" href="#保存和加载模型权重"></a> 保存和加载模型权重</h2>
+<p>通过 <code>torch.save</code> 方法进行持久化。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">model = models.vgg16(weights=&#x27;IMAGENET1K_V1&#x27;)</span><br><span class="line">torch.save(model.state_dict(), &#x27;model_weights.pth&#x27;)</span><br></pre></td></tr></table></figure>
+<p>然后使用 <code>load_state_dict()</code> 方法加载参数。</p>
+<p>设置 <code>weights_only=True</code></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">model = models.vgg16() # we do not specify ``weights``, i.e. create untrained model</span><br><span class="line">model.load_state_dict(torch.load(&#x27;model_weights.pth&#x27;, weights_only=True))</span><br><span class="line">model.eval()</span><br></pre></td></tr></table></figure>
+<h3 id="state_dict"><a class="markdownIt-Anchor" href="#state_dict"></a> <code>state_dict()</code></h3>
+<p>参数存储</p>
+<h3 id="load_state_dict"><a class="markdownIt-Anchor" href="#load_state_dict"></a> <code>load_state_dict()</code></h3>
+<h2 id="保存和加载带结构"><a class="markdownIt-Anchor" href="#保存和加载带结构"></a> 保存和加载带结构</h2>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">torch.save(model, &#x27;model.pth&#x27;)</span><br></pre></td></tr></table></figure>
+<p>然后，我们可以像下面演示的那样加载模型。</p>
+<p>如 <a target="_blank" rel="noopener" href="https://pytorch.ac.cn/docs/stable/notes/serialization.html#saving-and-loading-torch-nn-modules">保存和加载 torch.nn.Modules</a> 中所述，保存 <code>state_dict</code> 被视为最佳实践。但是，下面我们使用了 <code>weights_only=False</code>，因为这涉及加载整个模型，这是 <code>torch.save</code> 的遗留用例。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">model = torch.load(&#x27;model.pth&#x27;, weights_only=False)</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -567,9 +783,9 @@
     <h2 class="author">Weakliy</h2>
     <h3 class="description"></h3>
     <div class="count-box">
-      <a href="/archives"><div><strong>194</strong><br>文章</div></a>
+      <a href="/archives"><div><strong>203</strong><br>文章</div></a>
       <a href="/categories"><div><strong>0</strong><br>分类</div></a>
-      <a href="/tags"><div><strong>46</strong><br>标签</div></a>
+      <a href="/tags"><div><strong>47</strong><br>标签</div></a>
     </div>
 
 
